@@ -1,0 +1,37 @@
+---
+- hosts: all
+  tasks:
+  - name: Install Satellite Certificate and Subscription Manager Configuration RPM
+    yum:
+      name: "http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+      state: present
+  - name: Register with Satellite
+    redhat_subscription:
+      state: present
+      activationkey: "{{ activation_key }}"
+      org_id: "{{ org_id }}"
+      force_register: true
+      register: registered
+  - name: Enable Satellite Tools Repository
+    yum_repository:
+      name: "{{ tools_channel }}"
+      state: present
+    when: registered|success
+  - name: Install Katello Agent
+    yum: pkg=katello-agent state=latest
+    when: registered|success
+    notify:
+    - Enable Katello Agent
+    - Start Katello Agent
+  - name: Install Red Hat Access Insights Agent
+    yum: pkg=redhat-access-insights state=latest
+    when: registered|success
+    notify:
+    - Enable Red Hat Access Insights
+  handlers:
+  - name: Enable Katello Agent
+    service: name=goferd enabled=yes
+  - name: Start Katello Agent
+    service: name=goferd state=started
+  - name: Configure Red Hat Access Insights
+    command: "redhat-access-insights --register"
