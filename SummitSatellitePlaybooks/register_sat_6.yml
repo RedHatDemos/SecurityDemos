@@ -7,10 +7,13 @@
     org_id: "{{ org_id }}"
   tasks:
   - name: Make sure DNS is set up correctly
-    command: "/bin/nmcli con mod \"System eth0\" ipv4.dns \"192.168.0.1\""
-    #nmcli: conn_name=eth0 dns4="192.168.0.1" state=present
+    #command: "/bin/nmcli con mod \"System eth0\" ipv4.dns \"192.168.0.1\""
+    nmcli: conn_name="System eth0" dns4="192.168.0.1" state=present
   - name: Install Satellite Certificate and Subscription Manager Configuration RPM
-    command: "/usr/bin/yum -y localinstall http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+    #command: "/usr/bin/yum -y localinstall http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+    yum:
+      name: "http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+      state: present
   - name: Register with Satellite
     redhat_subscription:
       state: present
