@@ -4,7 +4,7 @@
   gather_facts: no
   vars:
     satelliteurl: "{{ sat_hostname }}"
-    client: "{{ limit }}"
+    client: "{{ ansible_play_hosts[0] }}"
     user: "{{ sat_user }}"
     password: "{{ sat_password }}"
 
