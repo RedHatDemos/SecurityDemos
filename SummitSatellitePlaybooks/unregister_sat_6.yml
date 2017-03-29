@@ -1,6 +1,6 @@
 ---
 - name: Use Satellite API to delete content host
-  hosts: localhost
+  hosts: all
   gather_facts: no
   vars:
     satelliteurl: "{{ sat_hostname }}"
