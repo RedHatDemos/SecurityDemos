@@ -1,0 +1,28 @@
+---
+- name: Use Satellite API to delete content host
+  hosts: localhost
+  gather_facts: no
+  vars:
+    satelliteurl: "{{ sat_hostname }}"
+    client: "{{ sat_client }}"
+    user: "{{ sat_user }}"
+    password: "{{ sat_password }}"
+
+  tasks:
+    - name: Get content host ID
+      uri:
+        url: "https://{{ satelliteurl }}/api/v2/hosts/{{ client }}"
+        method: GET
+        user: "{{ user }}"
+        password: "{{ password }}"
+        force_basic_auth: yes
+        validate_certs: no
+      register: restdata
+    - name: delete satellite content host
+      uri:
+        url: "https://{{ satelliteurl }}/api/v2/hosts/{{ restdata.json.id }}"
+        method: DELETE
+        user: "{{ user }}"
+        password: "{{ password }}"
+        force_basic_auth: yes
+        validate_certs: no
