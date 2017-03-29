@@ -13,11 +13,10 @@
       state: present
       activationkey: "{{ activation_key }}"
       org_id: "{{ org_id }}"
+      autosubscribe: yes
       force_register: true
   - name: Enable Satellite Tools Repository
-    yum_repository:
-      name: "{{ tools_channel }}"
-      state: present
+    command: "/usr/bin/subscription-manager repos --enable {{ tools_channel }}"
   - name: Install Katello Agent
     yum: pkg=katello-agent state=latest
   - name: Enable Katello Agent
