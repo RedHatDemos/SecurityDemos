@@ -1,5 +1,10 @@
 ---
 - hosts: all
+  vars:
+    sat_hostname: "{{ sat_hostname }}"
+    tools_channel: "{{ tools_channel }}"
+    activation_key: "{{ activation_key }}"
+    org_id: "{{ org_id }}"
   tasks:
   - name: Install Satellite Certificate and Subscription Manager Configuration RPM
     yum:
