@@ -7,7 +7,8 @@
     org_id: "{{ org_id }}"
   tasks:
   - name: Make sure DNS is set up correctly
-    nmcli: conn_name=eth0 dns4="192.168.0.1" state=present
+    command: "/bin/nmcli con mod eth0 ipv4.dns \"192.168.0.1\""
+    #nmcli: conn_name=eth0 dns4="192.168.0.1" state=present
   - name: Install Satellite Certificate and Subscription Manager Configuration RPM
     command: "/usr/bin/yum -y localinstall http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
   - name: Register with Satellite
