@@ -7,9 +7,7 @@
     org_id: "{{ org_id }}"
   tasks:
   - name: Install Satellite Certificate and Subscription Manager Configuration RPM
-    yum:
-      name: "http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
-      state: present
+    command: "/usr/bin/yum -y localinstall http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
   - name: Register with Satellite
     redhat_subscription:
       state: present
