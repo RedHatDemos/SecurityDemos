@@ -22,7 +22,7 @@
       activationkey: "{{ activation_key }}"
       org_id: "{{ org_id }}"
       autosubscribe: yes
-      force_register: true
+      force_register: yes
   - name: Enable Satellite Tools Repository
     command: "/usr/bin/subscription-manager repos --enable {{ tools_channel }}"
   - name: Install Katello Agent
