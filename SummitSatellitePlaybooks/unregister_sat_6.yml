@@ -11,7 +11,6 @@
 
   tasks:
     - name: Get content host ID
-      ignore_errors: yes
       uri:
         url: "https://{{ satelliteurl }}/api/v2/hosts/{{ client }}"
         method: GET
@@ -20,6 +19,7 @@
         force_basic_auth: yes
         validate_certs: no
       register: restdata
+      ignore_errors: yes
     - name: delete satellite content host
       uri:
         url: "https://{{ satelliteurl }}/api/v2/hosts/{{ restdata.json.id }}"
@@ -28,4 +28,4 @@
         password: "{{ password }}"
         force_basic_auth: yes
         validate_certs: no
-        when: restdata is defined
+      when: restdata is defined
