@@ -28,4 +28,4 @@
         password: "{{ password }}"
         force_basic_auth: yes
         validate_certs: no
-      when: restdata is defined
+      when: restdata|succeeded
