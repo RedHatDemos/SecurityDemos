@@ -1,0 +1,8 @@
+---
+- include: kernel_parameters_which_affect_networking.yml
+- include: wireless_networking.yml
+- include: ipv6.yml
+- include: iptables_and_ip6_tables.yml
+- include: firewalld.yml
+- include: uncommon_network_protocols.yml
+- include: ipsec_support.yml

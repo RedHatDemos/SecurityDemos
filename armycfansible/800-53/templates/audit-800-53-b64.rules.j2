@@ -1,0 +1,22 @@
+-a always,exit -F arch=b64 -S adjtimex -k audit_time_rules
+-a always,exit -F arch=b64 -S settimeofday -k audit_time_rules
+-a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -k time-change
+-a always,exit -F arch=b64 -S chmod  -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S chown -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S fchmod -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S fchmodat -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S fchown -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S fchownat -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S fremovexattr -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S fsetxattr -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S lchown -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S lremovexattr -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S lsetxattr -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S removexattr -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S setxattr -F auid>={{ auid }} -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_rules_networkconfig_modification
+-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EACCES -F auid>={{ auid }} -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EPERM -F auid>={{ auid }} -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S init_module -S delete_module -k modules
+-a always,exit -F arch=b64 -S mount -F auid>={{ auid }} -F auid!=4294967295 -k export
+-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>={{ auid }} -F auid!=4294967295 -k delete

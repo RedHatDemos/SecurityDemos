@@ -1,0 +1,9 @@
+---
+- name: Apply 800-53 security controls
+  hosts: all
+  become: yes
+  vars:
+    scap_reports_dir: ~/scap_reports
+  roles:
+    - role: 800-53
+      when: ansible_os_family == 'RedHat'

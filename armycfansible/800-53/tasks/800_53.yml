@@ -1,0 +1,21 @@
+---
+- name: Check for supported version
+  fail:
+    msg: "Please use a supported OS, detected: {{ ansible_distribution }}"
+  when: ansible_distribution != "RedHat"
+
+- name: Set auid for EL 6
+  set_fact:
+    auid: 500
+  when: ansible_distribution_major_version == "6"
+
+- name: Set auid for EL 7
+  set_fact:
+    auid: 1000
+  when: ansible_distribution_major_version == "7"
+
+- include: system_settings/main.yml
+- include: services/main.yml
+
+- include: finalize.yml
+- include: scap.yml

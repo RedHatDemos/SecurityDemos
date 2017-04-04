@@ -1,0 +1,15 @@
+- name: Check if firewalld config exists
+  stat:
+    path: /etc/firewalld/firewalld.conf
+  register: firewalld
+
+- name: Set Default firewalld Zone for Incoming Packets
+  lineinfile:
+    dest: /etc/firewalld/firewalld.conf
+    line: DefaultZone=drop
+    regexp: '.*DefaultZone.*'
+  when:
+  - firewalld.stat.exists == true
+  tags:
+  - CM
+  - CM-7

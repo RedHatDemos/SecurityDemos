@@ -1,0 +1,29 @@
+---
+- name: Subscription Manager
+  hosts: all
+  become: yes
+
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: manage subscription
+      redhat_subscription:
+        state: present
+        username: "{{ uname }}"
+        password: "{{ upass }}"
+
+    - name: attach pool
+      command: subscription-manager attach --pool=8a85f98959b4910c0159b803f7ce3ebe
+      ignore_errors: yes
+
+    - name: add subscription repos
+      command: subscription-manager repos --enable rhel-7-server-rh-common-rpms
+      when: "ansible_distribution_major_version == '7'"
+
+    - name: install libselinux
+      yum:
+        name: libselinux-python
+        state: present
+
+- include: ./jboss-standalone/site.yml

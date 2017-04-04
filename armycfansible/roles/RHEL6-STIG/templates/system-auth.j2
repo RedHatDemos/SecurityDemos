@@ -1,0 +1,30 @@
+#%PAM-1.0
+# This file is being managed by Ansible. Please make any desired changes to the template. Any changes made here will be likely overwritten.
+auth        required      pam_env.so
+auth        sufficient    pam_fprintd.so
+{% if login_failures_interval_audit is defined or logon_attempts_audit is defined %}
+auth        required      pam_faillock.so preauth silent deny=3 unlock_time=604800 fail_interval=900
+{% endif %}
+auth        sufficient    pam_unix.so nullok try_first_pass
+{% if login_failures_interval_audit is defined or logon_attempts_audit is defined %}
+auth        [default=die] pam_faillock.so authfail deny=3 unlock_time=604800 fail_interval=900
+{% endif %}
+auth        requisite     pam_succeed_if.so uid >= 500 quiet
+auth        required      pam_deny.so
+
+{% if login_failures_interval_audit is defined or logon_attempts_audit is defined %}
+account     required      pam_faillock.so
+{% endif %}
+account     required      pam_unix.so
+account     sufficient    pam_localuser.so
+account     sufficient    pam_succeed_if.so uid < 500 quiet
+account     required      pam_permit.so
+
+password    requisite     pam_cracklib.so try_first_pass retry=3 type=
+password    sufficient    pam_unix.so {% if pam_pwd_hash_audit is defined %}sha512{% else %}md5{% endif %} shadow nullok try_first_pass use_authtok
+password    required      pam_deny.so
+
+session     optional      pam_keyinit.so revoke
+session     required      pam_limits.so
+session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
+session     required      pam_unix.so

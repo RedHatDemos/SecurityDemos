@@ -1,0 +1,20 @@
+galaxy_info:
+  author: Kenneth D. Evensen
+  description: This role will apply 800-53 to your EL hosts.
+  company: Red Hat, Inc.
+
+  license: license (GPLv2)
+
+  min_ansible_version: 2.2
+
+  platforms:
+  - name: EL
+    versions:
+    - 6
+    - 7
+  galaxy_tags:
+  - SCAP
+  - EL
+  - Red Hat
+  - disconnected
+dependencies: []

@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: "Dan Shepherd"
+  description: "Ansible role to apply RHEL 6 STIG"
+  company: "MindPoint Group"
+  license: MIT
+  min_ansible_version: 1.8
+  version: 1.0
+
+  platforms:
+  - name: EL
+    versions:
+      - 6
+  - name: CentOS
+    versions:
+      - 6
+
+  categories:
+    - system
+    - security
+
+dependencies: []

@@ -1,0 +1,20 @@
+- name: reload ssh
+  service:
+    name=sshd
+    state=reloaded
+
+- name: reload auditd
+  shell: /sbin/augenrules --load
+
+- name: apply grub2 changes
+  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+- name: start lvm2polld
+  service:
+    name=lvm2-polld
+    state=started
+
+- name: remount fstab
+  shell: mount -a
+  args:
+    executable: /bin/bash

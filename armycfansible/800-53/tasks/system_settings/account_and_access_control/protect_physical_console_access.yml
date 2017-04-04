@@ -1,0 +1,340 @@
+- name: Verify /etc/grub.conf User Ownership
+  file:
+    path: /etc/grub.conf
+    src: /boot/grub/grub.conf
+    state: link
+    owner: root
+    group: root
+    mode: 0600
+  when:
+  - ansible_distribution_major_version == 6
+  tags:
+    - AC
+    - AC-6
+    - AC-6(7)
+
+- name: Verify /etc/grub.conf User Ownership
+  file:
+    path: /etc/grub2.cfg
+    src: /boot/grub2/grub.cfg
+    state: link
+    owner: root
+    group: root
+    mode: 0600
+  when:
+  - ansible_distribution_major_version == 7
+  tags:
+    - AC
+    - AC-6
+    - AC-6(7)
+
+- name: Check if gconftool-2 exists
+  stat:
+    path: /usr/bin/gconftool-2
+  register: gconftool2
+
+- name: Set GNOME Login Inactivity Timeout
+  shell: gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type int --set /desktop/gnome/session/idle_delay 15
+  args:
+    executable: /bin/bash
+  when: gconftool2.stat.exists == true
+  tags:
+    - AC
+    - AC-11
+    - AC-11(a)
+
+- name: GNOME Desktop Screensaver Mandatory Use
+  shell: gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gnome-screensaver/idle_activation_enabled true
+  args:
+    executable: /bin/bash
+  when: gconftool2.stat.exists == true
+  tags:
+    - AC
+    - AC-11
+    - AC-11(a)
+
+- name: GNOME Enable Screen Lock Activation After Idle Period
+  shell: gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gnome-screensaver/lock_enabled true
+  args:
+    executable: /bin/bash
+  when: gconftool2.stat.exists == true
+  tags:
+    - AC
+    - AC-11
+    - AC-11(a)
+
+- name: GNOME Implement Blank Screensaver
+  shell: gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type string --set /apps/gnome-screensaver/mode blank-only
+  args:
+    executable: /bin/bash
+  when: gconftool2.stat.exists == true
+  tags:
+    - AC
+    - AC-11
+    - AC-11(a)
+
+- name: GNOME Enable GUI Warning Banner
+  shell: gconftool-2 --direct --config-source "xml:readwrite:/etc/gconf/gconf.xml.mandatory" --type bool --set /apps/gdm/simple-greeter/banner_message_enable true
+  args:
+    executable: /bin/bash
+  when: gconftool2.stat.exists == true
+  tags:
+    - AC
+    - AC-8
+    - AC-8(a)
+    - AC-8(b)
+    - AC-8(c)
+
+- name: GNOME Enable GUI Warning Banner
+  shell: gconftool-2 --direct --config-source "xml:readwrite:/etc/gconf/gconf.xml.mandatory" --type bool --set /apps/gdm/simple-greeter/banner_message_enable true
+  args:
+    executable: /bin/bash
+  when: gconftool2.stat.exists == true
+  tags:
+    - AC
+    - AC-8
+    - AC-8(a)
+    - AC-8(b)
+    - AC-8(c)
+
+- name: GNOME Enable GUI Warning Banner
+  shell: gconftool-2 --direct --config-source "xml:readwrite:/etc/gconf/gconf.xml.mandatory" --type string --set /apps/gdm/simple-greeter/banner_message_text {{ login_banner_text }}
+  args:
+    executable: /bin/bash
+  when: gconftool2.stat.exists == true
+  tags:
+    - AC
+    - AC-8
+    - AC-8(a)
+    - AC-8(b)
+    - AC-8(c)
+
+- name: Checking if gdm exists
+  stat: path=/etc/gdm
+  register: gdm
+
+- name: RHEL-07-010430 operating system must not allow an unattended or automatic logon
+  lineinfile:
+    dest: /etc/gdm/custom.conf
+    regexp: "^AutomaticLoginEnabled"
+    insertafter: "^.daemon]"
+    line: "AutomaticLoginEnabled=false"
+  when: gdm.stat.exists == true
+  tags:
+    - CAT-I
+
+- name: RHEL-07-010431 operating system must not allow guest logon
+  lineinfile:
+    dest: /etc/gdm/custom.conf
+    regexp: "^TimedLoginEnabled"
+    insertafter: "^.daemon]"
+    line: "TimedLoginEnabled=false"
+  when: gdm.stat.exists == true
+  tags:
+    - CAT-I
+
+- name: Removing additional gdm profiles
+  lineinfile:
+    dest: /etc/dconf/profile/user
+    regexp: '(^(user-db:(?!user)))|(^(system-db:(?!local)))'
+    state: absent
+    mode: 0644
+    backup: yes
+  when:
+  - gdm.stat.exists == true
+  - ansible_distribution_major_version == "7"
+  tags:
+    - CAT-II
+
+- name: Setting user and local gdm databases
+  lineinfile:
+    dest: /etc/dconf/profile/user
+    line: "{{ item }}"
+    state: present
+    mode: 0644
+    backup: yes
+  with_items:
+    - user-db:user
+    - system-db:local
+  when:
+  - gdm.stat.exists == true
+  - ansible_distribution_major_version == "7"
+  tags:
+    - CAT-II
+
+- name: RHEL-07-010030 Display DoD banner via graphical user logon
+  copy:
+    src: 01-banner-message
+    dest: /etc/dconf/db/local.d/01-banner-message
+  when:
+  - gdm.stat.exists == true
+  - ansible_distribution_major_version == "7"
+  tags:
+    - CAT-II
+
+- name: RHEL-07-010060,RHEL-07-010070,RHEL-07-010073,RHEL-07-010074
+  blockinfile:
+    dest: /etc/dconf/db/local.d/00-screensaver
+    block: |
+      [org/gnome/desktop/screensaver]
+      lock-enabled=true
+      idle-activation-enabled=true
+      idle-delay=uint32 900
+      lock-delay=uint32 5
+    create: yes
+    mode: 0644
+    backup: yes
+  when:
+  - gdm.stat.exists == true
+  - ansible_distribution_major_version == "7"
+  tags:
+    - CAT-II
+
+- name: RHEL-07-010071 Initiate session lock after 15 minutes
+  blockinfile:
+    dest: /etc/dconf/db/local.d/locks/session
+    block: |
+      /org/gnome/desktop/screensaver/idle-delay
+      /org/gnome/desktop/screensaver/lock-delay
+      /org/gnome/desktop/session/idle-delay
+    create: yes
+    mode: 0644
+    backup: yes
+  when:
+  - gdm.stat.exists == true
+  - ansible_distribution_major_version == "7"
+  tags:
+    - CAT-II
+
+- name: Setting gdm local permissions
+  file:
+    path: /etc/dconf/db/local
+    mode: 0644
+  when:
+  - gdm.stat.exists == true
+  - ansible_distribution_major_version == "7"
+  tags:
+    - CAT-II
+
+- name: Updating dconf
+  shell: dconf update
+  register: result
+  when:
+  - gdm.stat.exists == true
+  - ansible_distribution_major_version == "7"
+  tags:
+    - CAT-II
+
+- name: Install the Screen Package
+  package:
+    name: screen
+    state: present
+
+- name: Require Authentication for Single User Mode
+  lineinfile:
+    dest: /etc/sysconfig/init
+    regexp: ".*SINGLE.*"
+    line: "SINGLE=/sbin/sulogin"
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - IA
+    - IA-2
+    - IA-2(1)
+
+- name: Disable Ctrl-Alt-Del Reboot Activation
+  copy:
+    src: control-alt-delete.override
+    dest: /etc/init/control-alt-delete.override
+  when: ansible_distribution_major_version == "6"
+
+- name: Disable Ctrl-Alt-Del Reboot Activation
+  shell: systemctl mask ctrl-alt-del.target
+  args:
+    executable: /bin/bash
+  when: ansible_distribution_major_version == "7"
+  tags:
+  - AC
+  - AC-6
+
+- name: Disable Interactive Boot
+  lineinfile:
+    dest: /etc/sysconfig/init
+    regexp: '.*PROMPT.*'
+    line: 'PROMPT=no'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-3
+
+- name: Modify the System Login Banner - /etc/issue
+  copy:
+    src: issue
+    dest: /etc/issue
+    group: root
+    owner: root
+    mode: 644
+    force: yes
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-8
+    - AC-8(a)
+    - AC-8(b)
+    - AC-8(c)
+
+- name: Modify the System Login Banner - /etc/issue.net
+  copy:
+    src: issue
+    dest: /etc/issue.net
+    group: root
+    owner: root
+    mode: 644
+    force: yes
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-8
+    - AC-8(a)
+    - AC-8(b)
+    - AC-8(c)
+
+- name: Modify the System Login Banner - /etc/motd
+  copy:
+    src: issue
+    dest: /etc/motd
+    group: root
+    owner: root
+    mode: 644
+    force: yes
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-8
+    - AC-8(a)
+    - AC-8(b)
+    - AC-8(c)

@@ -1,0 +1,87 @@
+- name: Change default umask
+  replace:
+    dest: /etc/profile
+    regexp: 'umask [0-7]*$'
+    replace: 'umask 077'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - avail-low
+    - avail-medium
+    - avail-high
+    - SA
+    - SA-8
+
+- name: Change default bash umask
+  replace:
+    dest: /etc/bashrc
+    regexp: 'umask [0-7]*$'
+    replace: 'umask 077'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - avail-low
+    - avail-medium
+    - avail-high
+    - SA
+    - SA-8
+
+- name: Change cshell umask
+  replace:
+    dest: /etc/csh.cshrc
+    regexp: 'umask [0-7]*$'
+    replace: 'umask 077'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - avail-low
+    - avail-medium
+    - avail-high
+    - SA
+    - SA-8
+
+- name: Ensure the Default Umask is Set Correctly in login.defs
+  replace:
+    dest: /etc/login.defs
+    regexp: '^UMASK [0-7]*$'
+    replace: 'UMASK 077'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - avail-low
+    - avail-medium
+    - avail-high
+    - CAT-II
+    - SA-6
+    - SA-6(b)
+    - RHEL-07-021060
+    - RHEL-07-020230
+
+- name: Ensure the Default Umask is Set Correctly in /etc/profile
+  debug:
+    msg: "TO-DO"
+
+- name: Limit the Number of Concurrent Login Sessions Allowed Per User
+  lineinfile:
+    dest: /etc/security/limits.conf
+    regexp: '.* hard maxlogins .*'
+    line: "* hard maxlogins 10"
+  tags:
+  - AC
+  - AC-10

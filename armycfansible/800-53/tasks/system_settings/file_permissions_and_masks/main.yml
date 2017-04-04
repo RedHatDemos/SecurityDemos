@@ -1,0 +1,4 @@
+---
+- include: restrict_mount_options.yml
+- include: restrict_dynamic_mounting_and_unmounting_of_file_systems.yml
+- include: verify_permissions_on_important_files_and_directories.yml

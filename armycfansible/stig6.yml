@@ -1,0 +1,14 @@
+---
+- name: Ensure systems are DISA STIG compliant
+  hosts: all
+  become: yes
+
+  vars:
+    rhel6stig_update_all_packages: no
+
+  roles:
+    - { role: RHEL6-STIG,
+        rhel6stig_cat1: yes,
+        rhel6stig_cat2: yes,
+        rhel6stig_cat3: no
+      }

@@ -1,0 +1,34 @@
+---
+- name: RHEV Tools
+  hosts: rhel
+  become: yes
+
+    - name: Install rhevm-guest-agent
+      yum:
+        name: rhevm-guest-agent-common
+        state: present
+
+    - name: start the service
+      service:
+        name: ovirt-guest-agent.service
+        state: started
+
+    - name: enable service
+      service:
+        name: ovirt-guest-agent.service
+        enabled: yes
+
+    - name: install spice
+      yum:
+        name: spice-vdagent
+        state: present
+
+    - name: start service
+      service:
+        name: spice-vdagentd
+        state: started
+
+    - name: enable service
+      service:
+        name: spice-vdagentd
+        enabled: yes

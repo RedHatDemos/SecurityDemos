@@ -1,0 +1,43 @@
+- name: Check OS version and family
+  fail:
+      msg: "This role can only be run agaist RHEL 6. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+  when:
+      - ansible_os_family == 'RedHat'
+      - ansible_distribution_major_version | version_compare('6', '!=')
+  tags:
+      - always
+
+- name: Check ansible version
+  fail:
+      msg: You must use ansible {{ rhel6stig_min_ansible_version }} or greater
+  when: not ansible_version.full | version_compare(rhel6stig_min_ansible_version, '>=')
+  tags:
+      - always
+
+- include: prelim.yml
+  static: no
+  tags:
+      - prelim_tasks
+      - always
+
+- include: cat1.yml
+  static: no
+  when: rhel6stig_cat1
+
+- include: cat2.yml
+  static: no
+  when: rhel6stig_cat2
+
+- include: cat3.yml
+  static: no
+  when: rhel6stig_cat3
+
+- include: post.yml
+  static: no
+  tags:
+      - post_tasks
+
+- include: not_automated.yml
+  static: no
+  tags:
+      - not_auto_fixed

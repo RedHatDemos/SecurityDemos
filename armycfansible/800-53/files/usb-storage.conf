@@ -1,0 +1,1 @@
+install usb-storage /bin/true

@@ -1,0 +1,97 @@
+- name: Find System Executables
+  find:
+    file_type: file
+    paths: "/bin,/sbin,/usr/bin,/usr/libexec,/usr/local/bin,/usr/sbin,/usr/local/sbin"
+    follow: yes
+    patterns: ! -user root
+  register: system_executable_find
+  tags:
+  - AC
+  - AC-6
+
+- name: Verify that System Executables Have Restrictive Permissions and Root Ownership
+  with_items: "{{ system_executable_find.files }}"
+  file:
+    path: "{{ item.path }}"
+    mode: "go-w"
+    owner: root
+    group: root
+  ignore_errors: true
+  tags:
+  - AC
+  - AC-6
+
+- name: Find Shared Library Files
+  find:
+    paths: "/lib,/lib64,/usr/lib,/usr/lib64"
+    follow: yes
+    patterns: ! -user root
+  register: shared_lib_find
+  tags:
+  - AC
+  - AC-6
+
+- name: Verify that Shared Library Files Have Restrictive Permissions and Root Ownership
+  with_items: "{{ shared_lib_find.files }}"
+  file:
+    path: "{{ item.path }}"
+    mode: "go-w"
+    owner: root
+    group: root
+  ignore_errors: true
+  tags:
+  - AC
+  - AC-6
+
+- name: Remount Filesystem
+  shell: mount -a
+  args:
+    executable: /bin/bash
+  when: ansible_distribution_major_version == "6"
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+    - MP
+    - MP-2
+
+- name: Build AIDE Database
+  shell: /usr/sbin/aide --init
+  args:
+    executable: /bin/bash
+  when:
+  - ansible_distribution_major_version == "7"
+  tags:
+  - CM
+  - CM-3
+  - CM-3(d)
+  - CM-3(e)
+  - CM-6(d)
+  - CM-6(3)
+  - SC
+  - SC-28
+  - SI
+  - SI-7
+
+- name: Stage AIDE Database
+  shell: cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  args:
+    executable: /bin/bash
+  when:
+  - ansible_distribution_major_version == "7"
+  tags:
+  - CM
+  - CM-3
+  - CM-3(d)
+  - CM-3(e)
+  - CM-6(d)
+  - CM-6(3)
+  - SC
+  - SC-28
+  - SI
+  - SI-7

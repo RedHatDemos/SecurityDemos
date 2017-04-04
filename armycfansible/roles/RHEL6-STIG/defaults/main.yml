@@ -1,0 +1,165 @@
+# Generate an audit report
+make_audit_report: no
+
+# Enable or disable remediation for each category
+rhel6stig_cat1: yes
+rhel6stig_cat2: no
+rhel6stig_cat3: no
+
+# Changing system defaults
+rhel6stig_snmp_community: B0re4lis
+rhel6stig_pass_min_length: 14
+rhel6stig_pass_min_days: 1
+rhel6stig_pass_max_days: 60
+rhel6stig_pass_reuse: 5         # V-38658 Number of passwords to remember to prevent reuse.
+rhel6stig_pam_unix_params: sha512 shadow try_first_pass use_authtok remember=24
+rhel6stig_pam_auth_sufficient: pam_unix.so try_first_pass
+rhel6stig_pam_cracklib_params: try_first_pass retry=3 maxrepeat=3 minlen={{ rhel6stig_pass_min_length }} dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1 difok=4
+
+# SELinux settings
+rhel6stig_selinux_pol: targeted
+
+# Network Settings
+# WARNING!
+# Setting this to false will cause the playbook to execute tasks
+# that disable DHCP in /etc/sysconfig/network-scripts/ifcfg-eth*
+# and may leave your system in an unusable state after a reboot.
+rhel6stig_use_dhcp: yes
+
+# Set to true to install all patches and updates available via yum
+rhel6stig_update_all_packages: yes
+
+# Set maximum number of simultaneous system logins (V-38684)
+rhel6stig_maxlogins: 10
+
+# Email address for root mail
+rhel6stig_root_email_address: foo@baz.com
+
+# Set to 'true' if X Windows is needed in your environment
+rhel6stig_xwindows_required: no
+
+# Assume ipv6 is not needed on the target system and disable it.
+# This will also skip tasks related to configuring ip6tables.
+rhel6stig_ipv6_required: no
+
+# Whether or not TFTP is required
+# This will prevent the removal of tftp and tftp-server packages
+# and configure tftp to run securely
+rhel6stig_tftp_required: no
+
+# Whether or not RHN Satellion is required
+# This will disable rhnsd if set to False
+rhel6stig_rhnsatellite_required: no
+
+# Set to true if system is acting as a router
+# This will disable changing net.ipv4 settings as well as
+# allow the kernel to forward packets
+rhel6stig_system_is_router: no
+
+# Set to true if system is an authorized mail relay
+# This will disable the postfix settings V-38622
+rhel6stig_is_mail_relay: no
+
+# Set to true is sytem is an LDAP server
+rhel6stig_ldap_server: no
+
+# By default will create a random password with the same grub-crypt --sha-512
+# mechanism rebuilt as an Ansible module.
+# The system will make a call to python to generate a random salt
+# and a random string and generate the sha512 hash.
+# Change this to something other than 'random' if you want to
+# define the password and be able to access the bootloader
+# KEEP AS 'random' ONLY IF YOU DON'T EVER WANT TO ACCESS THE BOOTLOADER
+# i.e. If this system is running in a public cloud
+rhel6stig_bootloader_password: random
+
+# NTP configuration used in ntp.conf
+# These should be set to DoD authoritative time source
+rhel6stig_ntp_config_servers:
+  - 0.centos.pool.ntp.org
+  - 1.centos.pool.ntp.org
+  - 2.centos.pool.ntp.org
+  - 3.centos.pool.ntp.org
+
+rhel6stig_ntp_config_restrict:
+  - "-4 default kod nomodify notrap nopeer noquery"
+  - "-6 default kod nomodify notrap nopeer noquery"
+  - "127.0.0.1"
+  - "-6 ::1"
+
+# V-38694
+rhel6stig_acct_max_inactive: 35
+
+rhel6stig_emergency_accounts: []
+  # - user: foo
+  #   expiration: 1632441600    # 2021-09-24. Time mush be in epoch.
+
+# List of temporary accounts and their expiration dates
+# Format of expiration date is YYYY-MM-DD
+#
+rhel6stig_temporary_users: []
+  # - user: foo
+  #   expiration: 1632441600    # 2021-09-24. Time mush be in epoch.
+
+# Auditd.conf settings
+rhel6stig_auditd_config:
+  disk_error_action: syslog     # V-38464 - compliant options SYSLOG|EXEC|SINGLE|HALT
+  disk_full_action: syslog      # V-38468 - compliant options SYSLOG|EXEC|SINGLE|HALT
+  space_left_action: email      # V-38470 - compliant options EMAIL|SYSLOG
+  max_log_file: 6               # V-38633 - compliant options 6 or higher (MB)
+  max_log_file_action: rotate   # V-38634 - compliant options ROTATE
+  num_logs: 5                   # V-38636 - compliant options 5 or higher
+  space_left: 75                # V-38678 - must be set to locally defined value - default 75 MB
+  action_mail_acct: root        # V-38680 - compliant options - admin account to email
+
+  # Guidance says that anything but SINGLE results in finding
+  # then says SUSPEND or HALT are acceptable and that
+  # system where availability need is high will need to set this to
+  # something else entirely.
+  # NOTE: SINGLE user mode setting will break cloud systems.
+  admin_space_left_action: halt # V-54381 - compliant options SINGLE|SUSPEND|HALT|EXEC|SYSLOG
+  # auditd_failure_flag
+  # 2    Tells your system to perform an immediate shutdown without
+  #      flushing any pending data to disk when the limits of your
+  #      audit system are exceeded. Because this shutdown is not a clean shutdown.
+  #      restrict the use of -f 2 to only the most security conscious environments
+  # 1    System continues to run, issues a warning and audit stops.
+  #      Use this for any other setup to avoid loss of data or data corruption.
+  auditd_failure_flag: 2
+
+# AIDE settings
+rhel6stig_aide_cron:
+  cron_user: root
+  cron_file: /etc/crontab
+  aide_job: '/usr/sbin/aide --check'
+  aide_minute: 04
+  aide_hour: 05
+  aide_day: '*'
+  aide_month: '*'
+  aide_weekday: '*'
+
+rhel6stig_login_banner: |
+    *******************************************************************************
+    *     YOU ARE ACCESSING A U.S. GOVERNMENT (USG) INFORMATION SYSTEM  (IS)      *
+    *               THAT IS PROVIDED FOR USG-AUTHORIZED USE ONLY.                 *
+    *                                                                             *
+    *      BY USING THIS IS (WHICH INCLUDES ANY DEVICE ATTACHED TO THIS IS),      *
+    *                 YOU CONSENT TO THE FOLLOWING CONDITIONS:                    *
+    *                                                                             *
+    *   THE USG  ROUTINELY INTERCEPTS  AND MONITORS COMMUNICATIONS ON THIS IS FOR *
+    * PURPOSES INCLUDING,  BUT NOT LIMITED TO, PENETRATION TESTING, COMSEC MONIT- *
+    * ORING, NETWORK OPERATIONS  AND  DEFENSE,  PERSONNEL  MISCONDUCT  (PM),  LAW *
+    * ENFORCEMENT, AND COUNTERINTELLIGENCE (CI) INVESTIGATIONS.                   *
+    *   AT ANY TIME, THE USG MAY INSPECT AND SEIZE DATA STORED ON THIS IS.        *
+    *   COMMUNICATIONS USING,  OR DATA STORED ON,  THIS IS ARE NOT  PRIVATE,  ARE *
+    * SUBJECT  TO ROUTINE MONITORING, INTERCEPTION,  AND SEARCH,  AND MAY BE DIS- *
+    * CLOSED OR USED FOR ANY USG AUTHORIZED PURPOSE.                              *
+    *   THIS IS INCLUDES SECURITY MEASURES (e.g., AUTHENTICATION AND ACCESS CONT- *
+    * ROLS) TO PROTECT USG INTERESTS--NOT FOR YOUR PERSONAL BENEFIT OR PRIVACY.   *
+    *   NOTWITHSTANDING THE ABOVE,  USING THIS IS DOES  NOT CONSTITUTE CONSENT TO *
+    * PM, LE, OR CI INVESTIGATIVE SEARCHING OR MONITORING OF THE CONTENT OF PRIV- *
+    * ILEGED COMMUNICATIONS, OR WORK PRODUCT, RELATED TO  PERSONAL REPRESENTATION *
+    * OR   SERVICES   BY   ATTORNEYS,   PSYCHOTHERAPISTS,  OR  CLERGY,  AND THEIR *
+    * ASSISTANTS.   SUCH   COMMUNICATIONS  AND  WORK   PRODUCT  ARE  PRIVATE  AND *
+    * CONFIDENTIAL. SEE USER AGREEMENT FOR DETAILS.                               *
+    *******************************************************************************

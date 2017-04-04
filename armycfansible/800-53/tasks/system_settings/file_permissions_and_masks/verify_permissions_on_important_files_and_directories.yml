@@ -1,0 +1,207 @@
+- name: Check ownership and permissions on /etc/shadow
+  file:
+    path: /etc/shadow
+    owner: root
+    group: root
+    mode: 0000
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-6
+
+- name: AC-6 Check ownership and permissions on /etc/group
+  file:
+    path: /etc/group
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-6
+
+- name: AC-6 Check ownership and permissions on /etc/gshadow
+  file:
+    path: /etc/gshadow
+    owner: root
+    group: root
+    mode: 0000
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-6
+
+- name: AC-6 Check ownership and permissions on /etc/passwd
+  file:
+    path: /etc/passwd
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-6
+
+- name: Find Shared Library Files
+  find:
+    paths: "/lib,/lib64,/usr/lib,/usr/lib64"
+    follow: yes
+    patterns: ! -user root
+  register: shared_lib_find
+  tags:
+  - AC
+  - AC-6
+
+- name: Verify that Shared Library Files Have Restrictive Permissions and Root Ownership
+  with_items: "{{ shared_lib_find.files }}"
+  file:
+    path: "{{ item.path }}"
+    mode: "go-w"
+    owner: root
+    group: root
+  ignore_errors: true
+  tags:
+  - AC
+  - AC-6
+
+- name: Find System Executables
+  find:
+    file_type: file
+    paths: "/bin,/sbin,/usr/bin,/usr/libexec,/usr/local/bin,/usr/sbin,/usr/local/sbin"
+    follow: yes
+    patterns: ! -user root
+  register: system_executable_find
+  tags:
+  - AC
+  - AC-6
+
+- name: Verify that System Executables Have Restrictive Permissions and Root Ownership
+  with_items: "{{ system_executable_find.files }}"
+  file:
+    path: "{{ item.path }}"
+    mode: "go-w"
+    owner: root
+    group: root
+  ignore_errors: true
+  tags:
+  - AC
+  - AC-6
+
+- name: Set Daemon Umask
+  replace:
+    dest: /etc/init.d/functions
+    regexp: 'umask.*'
+    replace: 'umask 027'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - avail-low
+    - avail-medium
+    - avail-high
+    - AC
+    - AC-6
+
+- name: Disable Core Dumps for All Users
+  lineinfile:
+    dest: /etc/security/limits.conf
+    line: '*     hard   core    0'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - SC
+    - SC-5
+
+- name: Enable ExecShield
+  sysctl:
+    name: kernel.exec-shield
+    value: 1
+    state: present
+    sysctl_set: yes
+    reload: yes
+  when:
+  - ansible_distribution_major_version == "6"
+  tags:
+    - CCE-27007-4
+    - SC
+    - SC-39
+
+- name: Enable Randomized Layout of Virtual Address Space
+  sysctl:
+    name: kernel.randomize_va_space
+    value: 2
+    state: present
+    sysctl_set: yes
+    reload: yes
+  when:
+  - ansible_distribution_major_version == "6"
+  tags:
+    - CCE-26999-3
+    - SC
+    - SC-30
+    - SC-30(2)
+
+- name: Enable Randomized Layout of Virtual Address Space
+  lineinfile:
+    dest: /etc/sysctl.conf
+    line: kernel.randomize_va_space = 2
+    regexp: '.*kernel.randomize_va_space.*'
+  when:
+  - ansible_distribution_major_version == "7"
+  tags:
+    - CCE-26999-3
+    - SC
+    - SC-30
+    - SC-30(2)
+
+- name: Disable Core Dumps for SUID programs
+  sysctl:
+    name: fs.suid_dumpable
+    value: 0
+    state: present
+    sysctl_set: yes
+    reload: yes
+  when:
+  - ansible_distribution_major_version == "7"
+  tags:
+  - SI
+  - SI-11
+
+- name: Restrict Access to Kernel Message Buffer
+  lineinfile:
+    line: kernel.dmesg_restrict = 1
+    regexp: '.*kernel.dmesg_restrict.*'
+    state: present
+    dest: /etc/sysctl.conf
+  when:
+  - ansible_distribution_major_version == "7"
+  tags:
+  - SI
+  - SI-11

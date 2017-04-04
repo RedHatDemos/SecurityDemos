@@ -1,0 +1,89 @@
+- stat:
+    path: /etc/yum.repos.d/redhat-rhui.repo
+  register: rhui_repo
+
+- name: Ensure libselinux-python bindings are installed
+  yum:
+    name: libselinux-python
+    state: present
+    disablerepo: "*"
+    enablerepo: rhel-{{ansible_distribution_major_version}}-server-rpms
+  when: rhui_repo.stat.isreg is undefined or rhui_repo.stat.isreg == False
+
+- name: Ensure libselinux-python bindings are installed
+  yum:
+    name: libselinux-python
+    state: present
+    disablerepo: "*"
+    enablerepo: rhui-REGION-rhel-server-releases
+  when: rhui_repo.stat.isreg is defined and rhui_repo.stat.isreg == True
+
+- name: AC-3,AC-3(3),AC-4,AC-6 Enable SELinux
+  selinux:
+    policy: targeted
+    state: enforcing
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-3
+    - AC-3(3)
+    - AC-4
+    - AC-6
+    - AU
+    - AU-9
+
+- name: Set SELinux to Enforcing
+  command: /usr/sbin/setenforce 1
+  when: ansible_selinux.mode == 'permissive'
+  tags:
+  - AC
+  - AC-3
+  - AC-3(3)
+  - AC-4
+  - AC-6
+  - AU
+  - AU-9
+
+- name: Ensure SELinux Not Disabled in /etc/grub.conf
+  replace:
+    dest: /etc/grub.conf
+    regexp: "selinux=0"
+  when: ansible_distribution_major_version == "6"
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-3
+    - AC-3(3)
+    - AC-6
+    - AU
+    - AU-9
+
+- name: Ensure SELinux Not Disabled in /etc/grub2.conf
+  replace:
+    dest: /etc/grub2.cfg
+    regexp: "selinux=0"
+  notify: apply grub2 changes
+  when: ansible_distribution_major_version == "7"
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-3
+    - AC-3(3)
+    - AC-6
+    - AU
+    - AU-9

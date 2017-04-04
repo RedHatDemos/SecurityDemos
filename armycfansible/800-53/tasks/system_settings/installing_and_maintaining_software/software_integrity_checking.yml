@@ -1,0 +1,99 @@
+- stat:
+    path: /etc/yum.repos.d/redhat-rhui.repo
+  register: rhui_repo
+
+- name: Install AIDE
+  yum:
+    name: aide
+    state: present
+    disablerepo: '*'
+    enablerepo: rhel-{{ansible_distribution_major_version}}-server-rpms
+  when: rhui_repo.stat.isreg is undefined or rhui_repo.stat.isreg == False
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-3
+    - CM-3(d)
+    - CM-3(e)
+    - CM-6
+    - CM-6(d)
+    - CM-6(3)
+
+- name: Install AIDE
+  yum:
+    name: aide
+    state: present
+    disablerepo: '*'
+    enablerepo: rhui-REGION-rhel-server-releases
+  when: rhui_repo.stat.isreg is defined and rhui_repo.stat.isreg == True
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-3
+    - CM-3(d)
+    - CM-3(e)
+    - CM-6
+    - CM-6(d)
+    - CM-6(3)
+
+- name: Schedule AIDE - EL 7
+  cron:
+    name: aide
+    minute: "{{ aide_minute }}"
+    hour: "{{ aide_hour }}"
+    day: "{{ aide_day_of_month }}"
+    weekday: "{{ aide_day_of_week }}"
+    month: "{{ aide_month }}"
+    cron_file: aide
+    user: root
+    job: "/usr/sbin/aide --check"
+  when: ansible_distribution_major_version == "7"
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-3
+    - CM-3(d)
+    - CM-6
+    - CM-6(d)
+    - CM-6(3)
+
+- name: Schedule AIDE - EL 6
+  cron:
+    name: aide
+    minute: "{{ aide_minute }}"
+    hour: "{{ aide_hour }}"
+    day: "{{ aide_day_of_month }}"
+    weekday: "{{ aide_day_of_week }}"
+    month: "{{ aide_month }}"
+    cron_file: aide
+    user: root
+    job: "/usr/sbin/aide --check"
+  when: ansible_distribution_major_version == "6"
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-3
+    - CM-3(d)
+    - CM-6
+    - CM-6(d)
+    - CM-6(3)

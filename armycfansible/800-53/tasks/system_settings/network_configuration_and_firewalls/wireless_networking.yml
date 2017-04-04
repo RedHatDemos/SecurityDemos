@@ -1,0 +1,23 @@
+- name: Disable Bluetooth Kernel Modules
+  copy:
+    src: bluetooth.conf
+    dest: /etc/modprobe.d/bluetooth.conf
+  tags:
+    - AC
+    - AC-18
+    - AC-18(a)
+    - AC-18(d)
+    - AC-18(3)
+
+- name: Disable Bluetooth Service
+  service:
+    name: bluetooth
+    enabled: no
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - AC
+    - AC-18
+    - AC-18(a)
+    - AC-18(d)
+    - AC-18(3)

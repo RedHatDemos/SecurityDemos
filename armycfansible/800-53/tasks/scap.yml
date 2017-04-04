@@ -1,0 +1,98 @@
+---
+# file: scap.yml
+- stat:
+    path: /etc/yum.repos.d/redhat-rhui.repo
+  register: rhui_repo
+
+- block:
+  - name: Install Open SCAP scanner
+    yum:
+      name: openscap-scanner
+      state: present
+      disablerepo: '*'
+      enablerepo: rhel-{{ansible_distribution_major_version}}-server-rpms
+    when: run_scap
+    tags:
+      - scap
+
+  - name: Install Open SCAP Security Guide
+    yum:
+      name: scap-security-guide
+      state: present
+      disablerepo: '*'
+      enablerepo: rhel-{{ansible_distribution_major_version}}-server-rpms
+    when: run_scap
+    tags:
+      - scap
+  when: rhui_repo.stat.isreg is undefined or rhui_repo.stat.isreg == False
+
+- block:
+  - name: Install Open SCAP scanner
+    yum:
+      name: openscap-scanner
+      state: present
+      disablerepo: '*'
+      enablerepo: rhui-REGION-rhel-server-releases
+    when: run_scap
+    tags:
+      - scap
+
+  - name: Install Open SCAP Security Guide
+    yum:
+      name: scap-security-guide
+      state: present
+      disablerepo: '*'
+      enablerepo: rhui-REGION-rhel-server-releases
+    when: run_scap
+    tags:
+      - scap
+  when: rhui_repo.stat.isreg is defined and rhui_repo.stat.isreg == True
+
+- name: Ensure the Reports Directory Exists
+  file:
+    path: /tmp/scap_reports
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+  tags:
+    - scap
+
+- name: Reload auditd for good measure
+  shell: /sbin/augenrules --load
+
+- name: Run an SCAP scan and Generate Report EL 6
+  command: /usr/bin/oscap xccdf eval --profile "{{ item }}" --results /tmp/scap_reports/scan-xccdf-results-{{ ansible_date_time.iso8601  }}-{{ item }}.xml --report /tmp/scap_reports/scan-xccdf-report-{{ ansible_date_time.iso8601  }}-{{ item }}.html  /usr/share/xml/scap/ssg/content/ssg-rhel{{ ansible_distribution_major_version }}-xccdf.xml
+  failed_when: "result | failed and 'This content points out to the remote resources' not in result.stdout"
+  register: result
+  with_items: "{{ scap_profile }}"
+  when: run_scap and ansible_distribution_major_version == "6"
+  tags:
+    - scap
+
+- name: Run an SCAP scan and Generate Report EL 7
+  command: /usr/bin/oscap xccdf eval --profile "{{ item }}" --results /tmp/scap_reports/scan-xccdf-results-{{ ansible_date_time.iso8601  }}-{{ item }}.xml --report /tmp/scap_reports/scan-xccdf-report-{{ ansible_date_time.iso8601  }}-{{ item }}.html  /usr/share/xml/scap/ssg/content/ssg-rhel{{ ansible_distribution_major_version }}-xccdf.xml
+  failed_when: "result | failed and result.rc == 1"
+  register: result
+  with_items: "{{ scap_profile }}"
+  when: run_scap and ansible_distribution_major_version == "7"
+  tags:
+    - scap
+
+- name: Determine Most Recent Report
+  shell: ls -t /tmp/scap_reports/*.html | head -n 1
+  args:
+    executable: /bin/bash
+  when: run_scap
+  register: scap_html_report
+  tags:
+    - scap
+
+- name: Fetch the SCAP Report
+  fetch:
+    src: "{{ scap_html_report.stdout }}"
+    dest: "{{ scap_reports_dir }}/{{ ansible_hostname }}/{{ scap_html_report.stdout }}"
+    flat: yes
+  when: run_scap
+  tags:
+    - scap

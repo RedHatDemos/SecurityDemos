@@ -1,0 +1,12 @@
+---
+# This playbook deploys a simple standalone JBoss server.
+
+- hosts: all
+  become: yes
+  vars:
+    - http_port: 8080
+    - https_port: 8443
+
+  roles:
+    - jboss-standalone
+    - java-app

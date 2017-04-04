@@ -1,0 +1,34 @@
+- name: Disable IPv6 Networking Support Automatic Loading
+  lineinfile:
+    dest: /etc/modprobe.d/disabled.conf
+    create: yes
+    regexp: '^options ipv6 disable.*'
+    line: 'options ipv6 disable=1'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+
+- name: Configure Accepting IPv6 Redirects
+  sysctl:
+    name: net.ipv6.conf.default.accept_redirects
+    value: 0
+    state: present
+    sysctl_set: yes
+    reload: yes
+  ignore_errors: yes
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CAT-II
+    - CM
+    - CM-7

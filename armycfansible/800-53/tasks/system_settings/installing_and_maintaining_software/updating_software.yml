@@ -1,0 +1,96 @@
+- name: Verify and Correct File Permissions with RPM
+  shell: for FILE_PATH in $(rpm -Va | grep '^.M'); do rpm --setperms $(rpm -qf "$FILE_PATH"); done
+  args:
+    executable: /bin/bash
+  tags:
+  - AC
+  - AC-6
+  - CM
+  - CM-6
+  - CM-6(d)
+  - SI
+  - SI-7
+
+- name: Verify File Hashes with rpm
+  debug:
+    msg: "TO-DO"
+  tags:
+  - CM
+  - CM-6
+  - SI
+  - SI-7
+
+- name: Ensure Red Hat GPG Key Installed
+  rpm_key:
+    state: present
+    key: /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - avail-low
+    - avail-medium
+    - avail-high
+    - SI
+    - SI-7
+    - MA
+    - MA-1
+    - MA-1(b)
+
+- name: Ensure gpgcheck Enabled In Main Yum Configuration
+  replace:
+    dest: /etc/yum.conf
+    regexp: 'gpgcheck=0'
+    replace: 'gpgcheck=1'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - avail-low
+    - avail-medium
+    - avail-high
+    - SI
+    - SI-7
+    - MA
+    - MA-1
+    - MA-1(b)
+
+- name: Find All Yum Repositories
+  find:
+    paths: "/etc/yum.repos.d/"
+    patterns: "*.repo"
+  register: yum_find
+  tags:
+  - MA
+  - MA-1
+  - MA-1(b)
+  - SI
+  - SI-7
+
+- name: Ensure gpgcheck Enabled For All Yum Package Repositories
+  with_items: "{{ yum_find.files }}"
+  replace:
+    dest: "{{ item.path }}"
+    regexp: 'gpgcheck = 0'
+    replace: 'gpgcheck = 1'
+  tags:
+  - conf-low
+  - conf-medium
+  - conf-high
+  - int-low
+  - int-medium
+  - int-high
+  - avail-low
+  - avail-medium
+  - avail-high
+  - MA
+  - MA-1
+  - MA-1(b)
+  - SI
+  - SI-7

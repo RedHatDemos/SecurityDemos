@@ -1,0 +1,73 @@
+- name: Find Log Files
+  shell: grep -e "\$IncludeConfig[[:space:]]\+[^[:space:];]\+" /etc/rsyslog.conf | cut -d ' ' -f 2
+  register: log_files
+  tags:
+    - SI
+    - SI-11
+
+- name: SI-11 Ensure System Log Files Have Correct Permissions
+  shell: chmod 0600 {{ item }}
+  args:
+    executable: /bin/bash
+  with_items: "{{ log_files.stdout_lines }}"
+  ignore_errors: true
+  tags:
+  - conf-low
+  - conf-medium
+  - conf-high
+  - int-low
+  - int-medium
+  - int-high
+  - avail-low
+  - avail-medium
+  - avail-high
+  - log_files
+  - SI
+  - SI-11
+
+- name: SI-11 Ensure System Log Files Are Correctly Owned
+  shell: chown root:root {{ item }}
+  args:
+    executable: /bin/bash
+  with_items: "{{ log_files.stdout_lines }}"
+  tags:
+  - conf-low
+  - conf-medium
+  - conf-high
+  - int-low
+  - int-medium
+  - int-high
+  - avail-low
+  - avail-medium
+  - avail-high
+  - log_files
+  - SI
+  - SI-11
+  - AC
+  - AC-6
+
+- name: Ensure Logrotate Runs Periodically
+  lineinfile:
+    dest: /etc/logrotate.conf
+    line: "rotate log files daily"
+    regexp: "rotate log files.*"
+  tags:
+  - AU-9
+
+- name: Ensure rsyslog is Installed
+  package:
+    name: rsyslog
+    state: present
+  tags:
+    - AU
+    - AU-9
+    - AU-9(2)
+
+- name: Enable rsyslog Service
+  service:
+    name: rsyslog
+    state: running
+    enabled: yes
+  tags:
+  - AU
+  - AU-12

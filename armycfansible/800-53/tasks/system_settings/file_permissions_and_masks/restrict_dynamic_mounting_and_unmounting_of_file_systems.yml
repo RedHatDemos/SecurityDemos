@@ -1,0 +1,58 @@
+- name: Disable Modprobe Loading of USB Storage Driver - Ensure usb-storage.conf is present
+  copy:
+    src: usb-storage.conf
+    dest: /etc/modprobe.d/usb-storage.conf
+  tags:
+  - AC
+  - AC-19
+  - AC-19(a)
+  - AC-19(d)
+  - AC-19(e)
+
+- name: Disable the Automounter
+  service:
+    name: autofs
+    state: stopped
+    enabled: no
+  ignore_errors: yes
+  tags:
+  - AC
+  - AC-19
+  - AC-19(a)
+  - AC-19(d)
+  - AC-19(e)
+
+- name: Determine if nousb is set for the default GRUB
+  shell: "grep -q ^GRUB_CMDLINE_LINUX=\".*nousb.*\" /etc/default/grub"
+  args:
+    executable: /bin/bash
+  when: ansible_distribution_major_version == "7"
+  ignore_errors: true
+  register: nousb
+
+- name: Disable Kernel Support for USB via Bootloader Configuration in /etc/default/grub
+  shell: sed -i "s/\(GRUB_CMDLINE_LINUX=\)\"\(.*\)\"/\1\"\2 nousb\"/" /etc/default/grub
+  args:
+    executable: /bin/bash
+  when:
+  - ansible_distribution_major_version == "7"
+  - nousb.rc == 1
+  tags:
+  - AC
+  - AC-19
+  - AC-19(a)
+  - AC-19(d)
+  - AC-19(e)
+
+- name: Disable Kernel Support for USB via Bootloader Configuration During Runtime
+  shell: /sbin/grubby --update-kernel=ALL --args="nousb"
+  args:
+    executable: /bin/bash
+  when:
+  - ansible_distribution_major_version == "7"
+  tags:
+  - AC
+  - AC-19
+  - AC-19(a)
+  - AC-19(d)
+  - AC-19(e)

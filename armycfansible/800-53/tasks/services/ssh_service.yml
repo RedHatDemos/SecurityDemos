@@ -1,0 +1,208 @@
+- name: Allow Only SSH Protocol 2
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^Protocol [0-9]"
+    line: "Protocol 2"
+  notify:
+    - reload ssh
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - IA
+    - IA-5
+    - IA-5(1)
+    - IA-5(c)
+
+- name: Set SSH Idle Timeout Interval
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*ClientAliveInterval.*"
+    line: "ClientAliveInterval 600"
+  tags:
+    - CAT-II
+    - AC
+    - AC-2
+    - AC-2(5)
+
+- name: Set SSH Client Alive Count
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*ClientAliveCountMax.*"
+    line: "ClientAliveCountMax 0"
+  tags:
+    - CAT-II
+    - AC
+    - AC-2
+    - AC-2(5)
+
+- name: Disable SSH Support for .rhosts Files
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*IgnoreRhosts.*"
+    line: "IgnoreRhosts yes"
+  tags:
+    - CAT-II
+    - AC
+    - AC-3
+
+- name: Disable Host-Based Authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: "HostbasedAuthentication no"
+    state: present
+  tags:
+    - CAT-II
+    - AC-3
+    - AC
+    - AC-3
+
+- name: Disable SSH Root Login
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: "PermitRootLogin no"
+    state: present
+  tags:
+    - CAT-II
+    - AC
+    - AC-3
+    - AC-6
+    - AC-6(2)
+    - IA
+    - IA-2
+    - IA-2(1)
+
+- name: Disable SSH Access via Empty Passwords
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: "PermitEmptyPasswords no"
+    state: present
+  tags:
+    - CAT-II
+    - AC
+    - AC-3
+
+- name: Enable SSH Warning Banner
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: 'Banner /etc/issue'
+    line: 'Banner /etc/issue'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - AC
+    - AC-8
+    - AC-8(a)
+    - AC-8(b)
+    - AC-8(c)
+
+- name: Do Not Allow SSH Environment Options
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: "PermitUserEnvironment no"
+    state: present
+  tags:
+    - CAT-II
+
+- name: Use Only Approved Ciphers
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*Ciphers.*"
+    line: "Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc"
+  tags:
+    - AC
+    - AC-3
+    - AC-17
+    - AC-17(2)
+
+- name: Disable GSSAPI Authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*GSSAPIAuthentication.*"
+    line: GSSAPIAuthentication no
+  tags:
+  - CM
+  - CM-6
+  - CM-6(c)
+
+- name: Disable Kerberos Authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*KerberosAuthentication.*"
+    line: KerberosAuthentication no
+  tags:
+  - CM
+  - CM-6
+  - CM-6(c)
+
+- name: Enable Use of StrictModes
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*StrictModes.*"
+    line: StrictModes yes
+  tags:
+  - AC
+  - AC-6
+
+- name: Enable Use of Privilege Separation
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*UsePrivilegeSeparation.*"
+    line: UsePrivilegeSeparation yes
+  tags:
+  - AC
+  - AC-6
+
+- name: Disable Compression Or Set Compression to delayed
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*Compression.*"
+    line: Compression delayed
+  tags:
+  - CM
+  - CM-6
+  - CM-6(b)
+
+- name: Use Only FIPS Approved MACs
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: ".*MACs.*"
+    line: MACs hmac-sha2-512,hmac-sha2-256,hmac-sha1
+  tags:
+  - AC
+  - AC-17
+  - AC-17(2)
+  - IA
+  - IA-7
+  - SC
+  - SC-13
+
+- name: Find SSH Keys
+  find:
+    paths: "/etc/ssh/"
+    patterns: "*_key"
+  register: find_ssh
+  tags:
+  - AC
+  - AC-6
+
+- name: Verify Permissions on SSH Server Private *_key Key Files
+  file:
+    dest: "{{ item.path }}"
+    mode: 0600
+  with_items: "{{ find_ssh.files }}"
+  tags:
+  - AC
+  - AC-6
+
+# - name: Restart sshd
+  # service:
+    # name: sshd
+    # state: restarted

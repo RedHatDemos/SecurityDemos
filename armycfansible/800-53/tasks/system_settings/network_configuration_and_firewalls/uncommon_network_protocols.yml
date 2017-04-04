@@ -1,0 +1,63 @@
+- name: Disable DCCP Support
+  lineinfile:
+    dest: /etc/modprobe.d/system.conf
+    create: yes
+    regexp: 'install dccp'
+    line: 'install dccp /bin/false'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+
+- name: Disable SCTP Support
+  lineinfile:
+    dest: /etc/modprobe.d/system.conf
+    create: yes
+    regexp: 'install sctp'
+    line: 'install sctp /bin/false'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+
+- name: Disable RDS Support
+  lineinfile:
+    dest: /etc/modprobe.d/system.conf
+    create: yes
+    regexp: 'install rds'
+    line: 'install rds /bin/false'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+
+- name: Disable TIPC Support
+  lineinfile:
+    dest: /etc/modprobe.d/system.conf
+    create: yes
+    regexp: 'install tipc'
+    line: 'install tipc /bin/false'
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7

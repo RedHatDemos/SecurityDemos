@@ -1,0 +1,2328 @@
+- name: "LOW | V-38437 | AUDIT | Automated file system mounting tools must not be enabled unless needed."
+  command: chkconfig 'autofs' --list
+  register: autofs_service_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38437
+      - autofs
+      - services
+      - audit
+
+- name: "LOW | V-38437 | PATCH | Automated file system mounting tools must not be enabled unless needed."
+  service:
+      name: autofs
+      state: stopped
+      enabled: no
+  when: "':on' in autofs_service_audit.stdout"
+  tags:
+      - cat3
+      - low
+      - V-38437
+      - autofs
+      - services
+      - patch
+
+- name: "LOW | V-38438 | AUDIT | Auditing must be enabled at boot by setting a kernel parameter."
+  command: grep audit=1 /etc/grub.conf
+  register: grub_audit_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38438
+      - grub
+      - audit
+
+#TODO: See if lineinfile can work here
+- name: "LOW | V-38438 | PATCH | Auditing must be enabled at boot by setting a kernel parameter."
+  command: sed -r -i 's/^(\s*kernel .*)\s+audit=[^ ]+(.*)$/\1 audit=1\2/' /boot/grub/grub.conf
+  when: grub_audit_audit.rc == 1
+  tags:
+      - cat3
+      - low
+      - V-38438
+      - grub
+      - patch
+
+- name: "LOW | V-38438 | PATCH | Auditing must be enabled at boot by setting a kernel parameter."
+  command: sed -r -i '/^\s*kernel .*audit=/! s/^(\s*kernel .*)/\1 audit=1/'  /boot/grub/grub.conf
+  when: grub_audit_audit.rc == 1
+  tags:
+      - cat3
+      - low
+      - V-38438
+      - grub
+      - patch
+
+- name: "LOW | V-38447, V-38452, V-38453, V-38454 | AUDIT | Verify all rpm packages and store output for later use."
+  command: rpm -Va
+  changed_when: false
+  failed_when: false
+  register: rpm_verify_packages
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38447
+      - V-38452
+      - V-38453
+      - V-38454
+      - audit
+
+- name: "LOW | V-38447 | AUDIT | The system package management tool must verify contents of all files associated with packages."
+  command: rpm -qf {{ item | regex_replace('^..5......\s+(/.+)$', '\1') }}
+  register: rpm_integrity_audit
+  when: item | match("^..5......[^c]*/.+$")
+  with_items: "{{ rpm_verify_packages.stdout_lines }}"
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38447
+      - rpm
+      - audit
+
+- name: "LOW | V-38447 | PATCH | The system package management tool must verify contents of all files associated with packages."
+  command: yum reinstall -y {{ item.stdout }}
+  when: item | changed
+  with_items: "{{ rpm_integrity_audit.results }}"
+  tags:
+      - cat3
+      - low
+      - V-38447
+      - rpm
+      - patch
+
+- name: "LOW | V-38452 | AUDIT | The system package management tool must verify permissions on all files and directories associated with packages."
+  command: rpm -qf {{ item | regex_replace('^.M.......\s+[a-z]?\s*(/.+)$', '\1') }}
+  when: item | match("^.M.......\\s+.*?/.+$")
+  register: rpm_file_permissions_audit
+  with_items: "{{ rpm_verify_packages.stdout_lines }}"
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38452
+      - rpm
+      - audit
+
+- name: "LOW | V-38452 | PATCH | The system package management tool must verify permissions on all files and directories associated with packages."
+  command: rpm --setperms {{ item.stdout }}
+  when: item | changed
+  with_items: "{{ rpm_file_permissions_audit.results }}"
+  tags:
+      - cat3
+      - low
+      - V-38452
+      - rpm
+      - patch
+
+- name: "LOW | V-38453 | AUDIT | The system package management tool must verify group-ownership on all files and directories associated with packages."
+  command: rpm -qf {{ item | regex_replace('^......G..\s+[a-z]?\s*(/.+)$', '\1') }}
+  when: item | match("^......G..\\s+.*?/.+$")
+  register: rpm_group_ownership_audit
+  with_items: "{{ rpm_verify_packages.stdout_lines }}"
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38453
+      - rpm
+      - audit
+
+- name: "LOW | V-38453 | PATCH | The system package management tool must verify group-ownership on all files and directories associated with packages."
+  command: rpm --setugids {{ item.stdout }}
+  when: item | changed
+  with_items: "{{ rpm_group_ownership_audit.results }}"
+  tags:
+      - cat3
+      - low
+      - V-38453
+      - rpm
+      - audit
+
+- name: "LOW | V-38454 | AUDIT | The system package management tool must verify ownership on all files and directories associated with packages."
+  command: rpm -qf {{ item | regex_replace('^.....U...\s+[a-z]?\s*(/.+)$', '\1') }}
+  when: item | match("^.....U...\\s+.*?/.+$")
+  register: rpm_group_ownership_audit
+  with_items: "{{ rpm_verify_packages.stdout_lines }}"
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38454
+      - rpm
+      - audit
+
+- name: "LOW | V-38454 | PATCH | The system package management tool must verify ownership on all files and directories associated with packages."
+  command: rpm --setugids {{ item.stdout }}
+  when: item | changed
+  with_items: "{{ rpm_group_ownership_audit.results }}"
+  tags:
+      - cat3
+      - low
+      - V-38454
+      - rpm
+      - audit
+
+- name: "LOW | V-38460 | AUDIT | The NFS server must not have the all_squash option enabled."
+  command: grep all_squash /etc/exports
+  register: nfs_all_squash_disabled_audit
+  failed_when: nfs_all_squash_disabled_audit.rc == 2
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38460
+      - nfs
+      - audit
+
+- name: "LOW | V-38460 | PATCH | The NFS server must not have the all_squash option enabled."
+  replace:
+      backup: no
+      dest: /etc/exports
+      regexp: ',?all_squash'
+  tags:
+      - cat3
+      - low
+      - V-38460
+      - nfs
+      - patch
+  notify: restart nfs
+
+- name: "LOW | V-38471 | AUDIT | The system must forward audit records to the syslog service."
+  command: grep '^active' /etc/audisp/plugins.d/syslog.conf
+  register: auditd_syslog_output_audit
+  failed_when: auditd_syslog_output_audit.rc == 2
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38471
+      - auditd
+      - audit
+
+- name: "LOW | V-38471 | PATCH | The system must forward audit records to the syslog service."
+  lineinfile:
+      state: present
+      backup: no
+      dest: /etc/audisp/plugins.d/syslog.conf
+      regexp: '^#?active'
+      line: 'active = yes'
+  notify: restart auditd
+  tags:
+      - cat3
+      - low
+      - V-38471
+      - auditd
+      - patch
+
+- name: "LOW | V-38474 | AUDIT | Low  The system must allow locking of graphical desktop sessions."
+  command: gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome_settings_daemon/keybindings/screensaver
+  when: rhel6stig_xwindows_required
+  register: gui_screen_lock_hotkey_audit
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38474
+      - screen_lock
+      - audit
+
+- name: "LOW | V-38474 | PATCH | The system must allow locking of graphical desktop sessions."
+  command: gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type string --set /apps/gnome_settings_daemon/keybindings/screensaver "<Ctrl><Alt>l"
+  when: rhel6stig_xwindows_required
+  tags:
+      - cat3
+      - low
+      - V-38474
+      - screen_lock
+      - patch
+
+- name: "LOW | V-38478 | AUDIT | The Red Hat Network Service (rhnsd) service must not be running, unless using RHN or an RHN Satellite."
+  command: chkconfig 'rhnsd' --list
+  register: rhnsd_service_audit
+  check_mode: no
+  changed_when: false
+  ignore_errors: yes
+  failed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38478
+      - rhnsd
+      - audit
+
+- name: "LOW | V-38478 | PATCH | The Red Hat Network Service (rhnsd) service must not be running, unless using RHN or an RHN Satellite."
+  service:
+      name: rhnsd
+      state: stopped
+      enabled: no
+  when:
+      - "'rhnsd' in sysv_services.stdout"
+      - rhel6stig_rhnsatellite_required
+  tags:
+      - cat3
+      - low
+      - V-38478
+      - rhnsd
+      - patch
+
+- name: "LOW | V-38480 | AUDIT | Users must be warned 7 days in advance of password expiration."
+  command: grep '^PASS_WARN_AGE' /etc/login.defs
+  register: logindefs_pass_warn_age_audit
+  failed_when: logindefs_pass_warn_age_audit.rc == 2
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38480
+      - passwords
+      - audit
+
+- name: "LOW | V-38480 | PATCH | Users must be warned 7 days in advance of password expiration."
+  lineinfile:
+      state: present
+      backup: no
+      dest: /etc/login.defs
+      regexp: '^#?PASS_WARN_AGE'
+      line: 'PASS_WARN_AGE\t7'
+  tags:
+      - cat3
+      - low
+      - V-38480
+      - passwords
+      - patch
+
+- name: |
+
+        LOW | V-38482 | AUDIT | The system must require passwords to contain at least one numeric character.
+        LOW | V-38569 | AUDIT | The system must require passwords to contain at least one uppercase alphabetic character.
+        LOW | V-38570 | AUDIT | The system must require passwords to contain at least one special character.
+        LOW | V-38571 | AUDIT | The system must require passwords to contain at least one lower-case alphabetic character.
+        LOW | V-38572 | AUDIT | The system must require at least eight characters be changed between the old and new passwords during a password change.
+        LOW | V-38693 | AUDIT | The system must require passwords to contain no more than three consecutive repeating characters.
+  command: grep pam_cracklib /etc/pam.d/system-auth
+  register: cracklib_audit
+  check_mode: no
+  changed_when: no
+  failed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38482
+      - V-38569
+      - V-38570
+      - V-38571
+      - V-38572
+      - V-38693
+      - passwords
+      - patch
+
+- name: |
+
+        LOW | V-38482 | PATCH | The system must require passwords to contain at least one numeric character.
+        LOW | V-38569 | PATCH | The system must require passwords to contain at least one uppercase alphabetic character.
+        LOW | V-38570 | PATCH | The system must require passwords to contain at least one special character.
+        LOW | V-38571 | PATCH | The system must require passwords to contain at least one lower-case alphabetic character.
+        LOW | V-38572 | PATCH | The system must require at least eight characters be changed between the old and new passwords during a password change.
+        LOW | V-38693 | PATCH | The system must require passwords to contain no more than three consecutive repeating characters.
+  pam:
+      service: "{{ item }}"
+      type: password
+      control: requisite
+      pam_module: pam_cracklib.so
+      arguments: "{{ rhel6stig_pam_cracklib_params }}"
+      state: present
+  with_items:
+      - system-auth-ac
+      - password-auth-ac
+  tags:
+      - cat3
+      - low
+      - V-38482
+      - V-38569
+      - V-38570
+      - V-38571
+      - V-38572
+      - V-38693
+      - passwords
+      - patch
+
+- name: "LOW | V-38487 | AUDIT | The system package management tool must cryptographically verify the authenticity of all software packages during installation."
+  command: find /etc/yum.repos.d/ -exec grep -ls '^gpgcheck=0' {} \;
+  changed_when: false
+  check_mode: no
+  register: repo_d_gpgcheck_check_audit
+  tags:
+      - cat3
+      - low
+      - V-38487
+      - rpm
+      - audit
+      - gpgcheck
+
+- name: "LOW | V-38487 | PATCH | The system package management tool must cryptographically verify the authenticity of all software packages during installation."
+  replace:
+      backup: no
+      dest: "{{ item }}"
+      regexp: '^gpgcheck=0'
+      replace: 'gpgcheck=1'
+  with_items: "{{ repo_d_gpgcheck_check_audit.stdout_lines }}"
+  tags:
+      - cat3
+      - low
+      - V-38487
+      - rpm
+      - gpgcheck
+      - patch
+
+- name: "LOW | V-38494 | AUDIT | The system must prevent the root account from logging in from serial consoles."
+  command: "grep '^ttyS[0-9]' /etc/securetty"
+  register: securetty_serial_consoles_audit
+  failed_when: securetty_serial_consoles_audit.rc == 2
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38494
+      - secure_tty
+      - audit
+
+- name: "LOW | V-38494 | PATCH | The system must prevent the root account from logging in from serial consoles."
+  lineinfile:
+      state: absent
+      dest: /etc/securetty
+      regexp: '^ttyS[0-9]'
+      backup: no
+  tags:
+      - cat3
+      - low
+      - V-38494
+      - secure_tty
+      - patch
+
+- name: "LOW | V-38516 | AUDIT | The Reliable Datagram Sockets (RDS) protocol must be disabled unless required."
+  shell: find /etc/modprobe.* -type f -name '*.conf' -exec grep -ls '^install rds /bin/(true|false)' {} \;
+  register: modprobe_disable_rds_audit
+  failed_when: false
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38516
+      - rds
+      - kernel_modules
+      - audit
+
+- name: "LOW | V-38516 | PATCH | The Reliable Datagram Sockets (RDS) protocol must be disabled unless required."
+  copy:
+      backup: no
+      content: |
+          blacklist rds
+          install rds /bin/true
+      dest: /etc/modprobe.d/disable-rds.conf
+      owner: root
+      group: root
+      mode: 0644
+  tags:
+      - cat3
+      - low
+      - V-38516
+      - rds
+      - kernel_modules
+      - patch
+
+- name: "LOW | V-38522 | PATCH | The audit system must be configured to audit all attempts to alter system time through settimeofday."
+  lineinfile:
+      state: present
+      dest: /etc/audit/audit.rules
+      line: "-a always,exit -F arch={{ audit_arch }} -S settimeofday -k audit_time_rules"
+  tags:
+      - cat3
+      - low
+      - V-38522
+      - auditd
+      - settimeofday
+      - patch
+
+# this audit rule only works on and applies to 32-bit systems
+- name: "LOW | V-38525 | PATCH | The audit system must be configured to audit all attempts to alter system time through stime."
+  lineinfile:
+      state: present
+      dest: /etc/audit/audit.rules
+      line: "-a always,exit -F arch=b32 -S stime -k audit_time_rules"
+  when: audit_arch == 'b32'
+  tags:
+      - cat3
+      - low
+      - V-38525
+      - auditd
+      - stime
+      - patch
+
+- name: "LOW | V-38527 | PATCH | The audit system must be configured to audit all attempts to alter system time through clock_settime."
+  lineinfile:
+      state: present
+      dest: /etc/audit/audit.rules
+      line: "-a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -k time-change"
+  tags:
+      - cat3
+      - low
+      - V-38527
+      - auditd
+      - clock_settime
+      - patch
+
+- name: "LOW | V-38527 | PATCH | The audit system must be configured to audit all attempts to alter system time through clock_settime."
+  lineinfile:
+      state: present
+      dest: /etc/audit/audit.rules
+      line: "-a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -k time-change"
+  when: audit_arch == 'b64'
+  tags:
+      - cat3
+      - low
+      - V-38527
+      - auditd
+      - clock_settime
+      - patch
+
+- name: "LOW | V-38528 | AUDIT The system must log Martian packets."
+  command: sysctl net.ipv4.conf.all.log_martians
+  register: sysctl_log_martians_audit
+  failed_when: false
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38528
+      - kernel_parameters
+      - network
+      - log_martians
+      - audit
+
+- name: "LOW | V-38528 | PATCH The system must log Martian packets."
+  sysctl:
+      name: net.ipv4.conf.all.log_martians
+      value: 1
+      state: present
+      reload: yes
+      sysctl_set: yes
+      ignoreerrors: yes
+  tags:
+      - cat3
+      - low
+      - V-38528
+      - kernel_parameters
+      - network
+      - log_martians
+      - patch
+
+- name: "LOW | V-38530 | PATCH | The audit system must be configured to audit all attempts to alter system time through /etc/localtime."
+  lineinfile:
+      state: present
+      dest: /etc/audit/audit.rules
+      line: '-w /etc/localtime -p wa -k audit_localtime_rules'
+  tags:
+      - cat3
+      - low
+      - V-38530
+      - auditd
+      - localtime
+      - patch
+
+- name: |
+
+        LOW | V-38531 | PATCH | The operating system must automatically audit account creation.
+        LOW | V-38534 | PATCH | The operating system must automatically audit account modification.
+        LOW | V-38536 | PATCH | The operating system must automatically audit account disabling actions.
+        LOW | V-38538 | PATCH | The operating system must automatically audit account termination.
+  lineinfile:
+      line: "{{ item }}"
+      state: present
+      dest: /etc/audit/audit.rules
+  with_items:
+      - "-w /etc/group -p wa -k audit_account_changes"
+      - "-w /etc/passwd -p wa -k audit_account_changes"
+      - "-w /etc/gshadow -p wa -k audit_account_changes"
+      - "-w /etc/shadow -p wa -k audit_account_changes"
+      - "-w /etc/security/opasswd -p wa -k audit_account_changes"
+  tags:
+      - cat3
+      - low
+      - V-38531
+      - V-38534
+      - V-38536
+      - V-38538
+      - auditd
+      - account_changes
+      - patch
+
+- name: "LOW | V-38533 | AUDIT | The system must ignore ICMPv4 redirect messages by default."
+  command: sysctl net.ipv4.conf.default.accept_redirects
+  register: sysctl_accept_redirects_audit
+  failed_when: false
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38533
+      - kernel_parameters
+      - network
+      - icmp_redirects
+      - audit
+
+- name: "LOW | V-38533 | PATCH | The system must ignore ICMPv4 redirect messages by default."
+  sysctl:
+      name: net.ipv4.conf.default.accept_redirects
+      value: 0
+      state: present
+      reload: yes
+      sysctl_set: yes
+      ignoreerrors: yes
+  tags:
+      - cat3
+      - low
+      - V-38533
+      - kernel_parameters
+      - network
+      - icmp_redirects
+      - patch
+
+- name: "LOW | V-38535 | AUDIT | The system must not respond to ICMPv4 sent to a broadcast address."
+  command: sysctl net.ipv4.icmp_echo_ignore_broadcasts
+  register: sysctl_ignore_broadcasts_audit
+  failed_when: false
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38535
+      - kernel_parameters
+      - network
+      - ignore_broadcasts
+      - audit
+
+- name: "LOW | V-38535 | PATCH | The system must not respond to ICMPv4 sent to a broadcast address."
+  sysctl:
+      name: net.ipv4.icmp_echo_ignore_broadcasts
+      value: 1
+      state: present
+      reload: yes
+      sysctl_set: yes
+      ignoreerrors: yes
+  tags:
+      - cat3
+      - low
+      - V-38535
+      - kernel_parameters
+      - network
+      - ignore_broadcasts
+      - patch
+
+- name: "LOW | V-38537 | AUDIT | The system must ignore ICMPv4 bogus error responses."
+  command: sysctl net.ipv4.icmp_ignore_bogus_error_responses
+  register: sysctl_ignore_bogus_error_responses_audit
+  failed_when: false
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38537
+      - kernel_parameters
+      - network
+      - ignore_broadcasts
+      - audit
+
+- name: "LOW | V-38537 | PATCH | The system must ignore ICMPv4 bogus error responses."
+  sysctl:
+      name: net.ipv4.icmp_ignore_bogus_error_responses
+      value: 1
+      state: present
+      reload: yes
+      sysctl_set: yes
+      ignoreerrors: yes
+  tags:
+      - cat3
+      - low
+      - V-38537
+      - kernel_parameters
+      - network
+      - ignore_bogus_error
+      - patch
+
+- name: "LOW | V-38540 | PATCH | The audit system must be configured to audit modifications to the systems network configuration."
+  lineinfile:
+      line: "{{ item }}"
+      state: present
+      dest: /etc/audit/audit.rules
+  with_items:
+      - "-a always,exit -F arch={{ audit_arch }} -S sethostname -S setdomainname -k audit_network_modifications"
+      - "-w /etc/issue -p wa -k audit_network_modifications"
+      - "-w /etc/issue.net -p wa -k audit_network_modifications"
+      - "-w /etc/hosts -p wa -k audit_network_modifications"
+      - "-w /etc/sysconfig/network -p wa -k audit_network_modifications"
+  tags:
+      - cat3
+      - low
+      - V-38540
+      - auditd
+      - network
+
+- name: "LOW | V-38541 | AUDIT | The audit system must be configured to audit modifications to the systems Mandatory Access Control (MAC) configuration (SELinux)."
+  command: grep -e '-k MAC-policy' /etc/audit/audit.rules
+  register: mac_policy_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38541
+      - auditd
+      - selinux
+      - audit
+
+- name: "LOW | V-38541 | PATCH | The audit system must be configured to audit modifications to the systems Mandatory Access Control (MAC) configuration (SELinux)."
+  lineinfile:
+      state: present
+      dest: /etc/audit/audit.rules
+      line: '-w /etc/selinux/ -p wa -k MAC-policy'
+  when: mac_policy_audit.rc == 1
+  tags:
+      - cat3
+      - low
+      - V-38541
+      - auditd
+      - selinux
+      - patch
+
+- name: "LOW | V-38543 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using chmod."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S chmod -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S chmod -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38543
+    - auditd
+    - patch
+
+- name: "LOW | V-38543 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using chmod."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S chmod -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S chmod -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38543
+    - auditd
+    - patch
+
+- name: "LOW | V-38545 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using chown."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S chown -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S chown -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38545
+    - auditd
+    - patch
+
+- name: "LOW | V-38545 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using chown."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S chown -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S chown -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38545
+    - auditd
+    - patch
+
+- name: "LOW | V-38547 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fchmod."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S fchmod -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38547
+    - auditd
+    - patch
+
+- name: "LOW | V-38547 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fchmod."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S fchmod -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38547
+    - auditd
+    - patch
+
+- name: "LOW | V-38550 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fchmodat."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S fchmodat -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S fchmodat -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38550
+    - auditd
+    - patch
+
+- name: "LOW | V-38550 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fchmodat."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S fchmodat -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S fchmodat -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38550
+    - auditd
+    - patch
+
+- name: "LOW | V-38552 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fchown."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S fchown -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S fchown -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38552
+    - auditd
+    - patch
+
+- name: "LOW | V-38552 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fchown."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S fchown -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S fchown -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38552
+    - auditd
+    - patch
+
+- name: "LOW | V-38554 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fchownat."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S fchownat -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S fchownat -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38554
+    - auditd
+    - patch
+
+- name: "LOW | V-38554 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fchownat."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S fchownat -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S fchownat -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38554
+    - auditd
+    - patch
+
+- name: "LOW | V-38556 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fremovexattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S fremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S fremovexattr -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38556
+    - auditd
+    - patch
+
+- name: "LOW | V-38556 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fremovexattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S fremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S fremovexattr -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38556
+    - auditd
+    - patch
+
+- name: "LOW | V-38557 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fsetxattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S fsetxattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S fsetxattr -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38557
+    - auditd
+    - patch
+
+- name: "LOW | V-38557 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using fsetxattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S fsetxattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S fsetxattr -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38557
+    - auditd
+    - patch
+
+- name: "LOW | V-38558 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using lchown."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S lchown -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S lchown -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38558
+    - auditd
+    - patch
+
+- name: "LOW | V-38558 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using lchown."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S lchown -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S lchown -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38558
+    - auditd
+    - patch
+
+- name: "LOW | V-38559 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using lremovexattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S lremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S lremovexattr -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38559
+    - auditd
+    - patch
+
+- name: "LOW | V-38559 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using lremovexattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S lremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S lremovexattr -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38559
+    - auditd
+    - patch
+
+- name: "LOW | V-38561 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using lsetxattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S lsetxattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S lsetxattr -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38561
+    - auditd
+    - patch
+
+- name: "LOW | V-38561 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using lsetxattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S lsetxattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S lsetxattr -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38561
+    - auditd
+    - patch
+
+- name: "LOW | V-38563 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using removexattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S removexattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S removexattr -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38563
+    - auditd
+    - patch
+
+- name: "LOW | V-38563 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using removexattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S removexattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S removexattr -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38563
+    - auditd
+    - patch
+
+- name: "LOW | V-38565 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using setxattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b32 -S setxattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S setxattr -F auid=0 -k perm_mod"
+  tags:
+    - cat3
+    - low
+    - V-38565
+    - auditd
+    - patch
+
+- name: "LOW | V-38565 | PATCH | The audit system must be configured to audit all discretionary access control permission modifications using setxattr."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch=b64 -S setxattr -F auid>=500 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S setxattr -F auid=0 -k perm_mod"
+  when: audit_arch == 'b64'
+  tags:
+    - cat3
+    - low
+    - V-38565
+    - auditd
+    - patch
+
+- name: "LOW | V-38566 | PATCH | The audit system must be configured to audit failed attempts to access files and programs."
+  lineinfile:
+      line: "{{ item }}"
+      state: present
+      dest: /etc/audit/audit.rules
+  with_items:
+      - "-a always,exit -F arch=b32 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access"
+      - "-a always,exit -F arch=b32 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EPERM -F auid>=500 -F auid!=4294967295 -k access"
+      - "-a always,exit -F arch=b32 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EACCES -F auid=0 -k access"
+      - "-a always,exit -F arch=b32 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EPERM -F auid=0 -k access"
+  tags:
+      - cat3
+      - low
+      - V-38566
+      - auditd
+      - access
+      - patch
+
+- name: "LOW | V-38566 | PATCH | The audit system must be configured to audit failed attempts to access files and programs."
+  lineinfile:
+      line: "{{ item }}"
+      state: present
+      dest: /etc/audit/audit.rules
+  with_items:
+      - "-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access"
+      - "-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EPERM -F auid>=500 -F auid!=4294967295 -k access"
+      - "-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EACCES -F auid=0 -k access"
+      - "-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EPERM -F auid=0 -k access"
+  when: audit_arch == 'b64'
+  tags:
+      - cat3
+      - low
+      - V-38566
+      - auditd
+      - access
+      - patch
+
+- name: "LOW | V-38567 | PATCH | The audit system must be configured to audit all use of setuid and setgid programs."
+  lineinfile:
+      line: "-a always,exit -F path={{ item }} -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged"
+      state: present
+      dest: /etc/audit/audit.rules
+  with_items: "{{ setugid_programs.stdout_lines }}"
+  tags:
+      - cat3
+      - low
+      - V-38567
+      - auditd
+      - patch
+
+- name: "LOW | V-38568 | AUDIT | The audit system must be configured to audit successful file system mounts."
+  command: grep -w "mount" /etc/audit/audit.rules
+  register: auditd_mount_audit
+  changed_when: no
+  check_mode: no
+  failed_when: no
+  tags:
+    - cat3
+    - low
+    - V-38568
+    - auditd
+    - audit
+
+- name: "LOW | V-38568 | PATCH | The audit system must be configured to audit successful file system mounts."
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/audit/audit.rules
+  with_items:
+    - "-a always,exit -F arch={{ audit_arch }} -S mount -F auid>=500 -F auid!=4294967295 -k export"
+    - "-a always,exit -F arch={{ audit_arch }} -S mount -F auid=0 -k export"
+  tags:
+    - cat3
+    - low
+    - V-38568
+    - auditd
+    - patch
+
+- name: "LOW | V-38575 | AUDIT | The audit system must be configured to audit user deletions of files and programs."
+  command: grep -w "rmdir" /etc/audit/audit.rules
+  check_mode: no
+  changed_when: no
+  failed_when: no
+  register: auditd_rmdir_audit
+  tags:
+      - cat3
+      - low
+      - V-38575
+      - auditd
+      - delete
+      - audit
+
+
+- name: "LOW | V-38575 | PATCH | The audit system must be configured to audit user deletions of files and programs."
+  lineinfile:
+      line: "{{ item }}"
+      state: present
+      dest: /etc/audit/audit.rules
+  with_items:
+      - "-a always,exit -F arch={{ audit_arch }} -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete"
+      - "-a always,exit -F arch={{ audit_arch }} -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete"
+  tags:
+      - cat3
+      - low
+      - V-38575
+      - auditd
+      - delete
+      - patch
+
+- name: "LOW | V-38578 | AUDIT | The audit system must be configured to audit changes to the /etc/sudoers file."
+  command: grep -w /etc/sudoers /etc/audit/audit.rules
+  register: auditd_sudoers_audit
+  changed_when: no
+  failed_when: no
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38578
+      - auditd
+      - actions
+      - patch
+
+- name: "LOW | V-38578 | PATCH | The audit system must be configured to audit changes to the /etc/sudoers file."
+  lineinfile:
+      state: present
+      dest: /etc/audit/audit.rules
+      line: '-w /etc/sudoers -p wa -k actions'
+  tags:
+      - cat3
+      - low
+      - V-38578
+      - auditd
+      - actions
+      - patch
+
+- name: "LOW | V-38584 | AUDIT | The xinetd service must be uninstalled if no network services utilizing it are enabled."
+  command: rpm -q xinetd
+  register: pkgs_xinetd_installed_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38584
+      - xinetd
+      - audit
+
+- name: "LOW | V-38584 | AUDIT | The xinetd service must be uninstalled if no network services utilizing it are enabled."
+  shell: "chkconfig --list | sed -n '/xinetd based services/,$p'"
+  register: pkgs_xinetd_services_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38584
+      - xinetd
+      - audit
+
+- name: "LOW | V-38584 | PATCH | The xinetd service must be uninstalled if no network services utilizing it are enabled."
+  yum:
+      name: xinetd
+      state: absent
+  when: "not ':on' in pkgs_xinetd_services_audit.stdout"
+  tags:
+      - cat3
+      - low
+      - V-38584
+      - xinetd
+      - patch
+
+- name: "LOW | V-38590 | AUDIT | The system must allow locking of the console screen in text mode."
+  command: rpm -q screen
+  register: pkgs_screen_installed_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38590
+      - screen_lock
+      - screen
+      - audit
+
+- name: "LOW | V-38590 | PATCH | The system must allow locking of the console screen in text mode."
+  yum:
+      name: screen
+      state: present
+  tags:
+      - cat3
+      - low
+      - V-38590
+      - screen_lock
+      - screen
+      - patch
+
+- name: "LOW | V-38608 | AUDIT | The SSH daemon must set a timeout interval on idle sessions."
+  shell: grep ClientAliveInterval /etc/ssh/sshd_config | awk '{print $2}'
+  register: sshd_client_alive_interval_audit
+  check_mode: no
+  changed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38608
+      - ssh
+      - audit
+
+- name: "LOW | V-38608 | PATCH | The SSH daemon must set a timeout interval on idle sessions."
+  lineinfile:
+      state: present
+      backup: yes
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?ClientAliveInterval'
+      line: ClientAliveInterval 900
+  when: sshd_client_alive_interval_audit.stdout|int < 900
+  tags:
+      - cat3
+      - low
+      - V-38608
+      - ssh
+      - patch
+  notify: restart ssh
+
+- name: "LOW | V-38610 | PATCH | The SSH daemon must set a timeout count on idle sessions."
+  lineinfile:
+      state: present
+      backup: yes
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?ClientAliveCountMax'
+      line: ClientAliveCountMax 0
+  tags:
+      - cat3
+      - low
+      - V-38610
+      - ssh
+      - patch
+  notify: restart ssh
+
+- name: "LOW | V-38616 | PATCH | The SSH daemon must not permit user environment settings."
+  lineinfile:
+      state: present
+      backup: yes
+      dest: /etc/ssh/sshd_config
+      regexp: '^(#)?PermitUserEnvironment'
+      line: PermitUserEnvironment no
+  tags:
+      - cat3
+      - low
+      - V-38616
+      - ssh
+      - patch
+  notify: restart ssh
+
+- name: "LOW | V-38618 | AUDIT | The avahi service must be disabled."
+  command: chkconfig 'avahi-daemon' --list
+  register: avahi_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38618
+      - avahi
+      - services
+      - audit
+
+- name: "LOW | V-38618 | AUDIT | The avahi service must be disabled."
+  command: service avahi-daemon status
+  register: avahi_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38618
+      - avahi
+      - services
+      - audit
+
+- name: "LOW | V-38618 | PATCH | The avahi service must be disabled."
+  service:
+      name: avahi-daemon
+      state: stopped
+      enabled: no
+  when: "':on' in avahi_service_enabled_audit or avahi_service_running_audit.rc == 0"
+  tags:
+      - cat3
+      - low
+      - V-38618
+      - avahi
+      - services
+      - patch
+
+- name: "LOW | V-38627 | AUDIT | The openldap-servers package must not be installed unless required."
+  command: rpm -q openldap-servers
+  register: pkgs_openldap_server_installed_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38627
+      - openldap_server
+      - audit
+
+- name: "LOW | V-38627 | PATCH | The openldap-servers package must not be installed unless required."
+  yum:
+      name: openldap-servers
+      state: absent
+  when: not rhel6stig_ldap_server
+  tags:
+      - cat3
+      - low
+      - V-38627
+      - openldap_server
+      - audit
+
+- name: "LOW | V-38635 | PATCH | The audit system must be configured to audit all attempts to alter system time through adjtimex."
+  lineinfile:
+      line: -a always,exit -F arch={{ audit_arch }} -S adjtimex -k audit_time_rules
+      dest: /etc/audit/audit.rules
+      state: present
+  tags:
+      - cat3
+      - low
+      - V-38627
+      - auditd
+      - system_time
+      - patch
+
+- name: "LOW | V-38639 | AUDIT | The system must display a publicly-viewable pattern during a graphical desktop environment session lock."
+  command: gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome-screensaver/mode
+  register: gconftool_pattern_audit
+  check_mode: no
+  changed_when: no
+  when: rhel6stig_xwindows_required
+  tags:
+      - cat3
+      - low
+      - V-38639
+      - screensaver
+      - gconftool
+      - audit
+
+- name: "LOW | V-38639 | PATCH | The system must display a publicly-viewable pattern during a graphical desktop environment session lock."
+  command: gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type string --set /apps/gnome-screensaver/mode blank-only
+  when: rhel6stig_xwindows_required
+  tags:
+      - cat3
+      - low
+      - V-38639
+      - screensaver
+      - gconftool
+      - patch
+
+- name: "LOW | V-38640 | AUDIT | The Automatic Bug Reporting Tool (abrtd) service must not be running."
+  command: chkconfig 'abrtd' --list
+  register: abrtd_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38640
+      - abrtd
+      - services
+      - audit
+
+- name: "LOW | V-38640 | AUDIT | The Automatic Bug Reporting Tool (abrtd) service must not be running."
+  command: service abrtd status
+  register: abrtd_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38640
+      - abrtd
+      - services
+      - audit
+
+- name: "LOW | V-38640 | PATCH | The Automatic Bug Reporting Tool (abrtd) service must not be running."
+  service:
+      name: abrtd
+      state: stopped
+      enabled: no
+  when: "':on' in abrtd_service_enabled_audit or abrtd_service_running_audit.rc == 0"
+  tags:
+      - cat3
+      - low
+      - V-38640
+      - abrtd
+      - services
+      - patch
+
+- name: "LOW | V-38641 | AUDIT | The atd service must be disabled."
+  command: chkconfig 'atd' --list
+  register: atd_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38641
+      - atd
+      - services
+      - audit
+
+- name: "LOW | V-38641 | AUDIT | The atd service must be disabled."
+  command: service atd status
+  register: atd_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38641
+      - atd
+      - services
+      - audit
+
+- name: "LOW | V-38641 | PATCH | The atd service must be disabled."
+  service:
+      name: atd
+      state: stopped
+      enabled: no
+  when: "':on' in atd_service_enabled_audit or atd_service_running_audit.rc == 0"
+  tags:
+      - cat3
+      - low
+      - V-38641
+      - atd
+      - services
+      - patch
+
+- name: "LOW | V-38642 | AUDIT | The system default umask for daemons must be 027 or 022."
+  shell: grep -e '^umask' /etc/init.d/functions | awk '{print $2}'
+  register: daemon_umask_audit
+  check_mode: no
+  failed_when: no
+  changed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38642
+      - umask
+      - audit
+
+- name: "LOW | V-38642 | PATCH | The system default umask for daemons must be 027 or 022."
+  replace:
+      dest: /etc/init.d/functions
+      regexp: 'umask \d\d\d'
+      replace: 'umask 022'
+  tags:
+      - cat3
+      - low
+      - V-38642
+      - umask
+      - patch
+
+- name: "LOW | V-38644 | AUDIT | The ntpdate service must not be running."
+  command: chkconfig 'ntpdate' --list
+  register: ntpdate_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38644
+      - ntpdate
+      - services
+      - audit
+
+- name: "LOW | V-38644 | AUDIT | The ntpdate service must not be running."
+  command: service ntpdate status
+  register: ntpdate_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38644
+      - ntpdate
+      - services
+      - audit
+
+- name: "LOW | V-38644 | PATCH | The ntpdate service must not be running."
+  service:
+      name: ntpdate
+      state: stopped
+      enabled: no
+  when: "':on' in ntpdate_service_enabled_audit or ntpdate_service_running_audit.rc == 0"
+  tags:
+      - cat3
+      - low
+      - V-38644
+      - ntpdate
+      - services
+      - patch
+
+- name: "LOW | V-38645 | AUDIT | The system default umask in /etc/login.defs must be 077."
+  shell: grep UMASK /etc/login.defs | awk '{print $2}'
+  register: login_defs_umask_audit
+  changed_when: no
+  check_mode: no
+  failed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38645
+      - umask
+      - audit
+
+- name: "LOW | V-38645 | PATCH | The system default umask in /etc/login.defs must be 077."
+  replace:
+      dest: /etc/login.defs
+      regexp: '^UMASK.*'
+      replace: 'UMASK           077'
+  tags:
+      - cat3
+      - low
+      - V-38645
+      - umask
+      - patch
+
+- name: "LOW | V-38646 | AUDIT | The oddjobd service must not be running."
+  command: chkconfig 'oddjobd' --list
+  register: oddjobd_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38646
+      - oddjobd
+      - services
+      - audit
+
+- name: "LOW | V-38646 | AUDIT | The oddjobd service must not be running."
+  command: service oddjobd status
+  register: oddjobd_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38646
+      - oddjobd
+      - services
+      - audit
+
+- name: "LOW | V-38646 | PATCH | The oddjobd service must not be running."
+  service:
+      name: oddjobd
+      state: stopped
+      enabled: no
+  when: "':on' in oddjobd_service_enabled_audit or oddjobd_service_running_audit.rc == 0"
+  tags:
+      - cat3
+      - low
+      - V-38646
+      - oddjobd
+      - services
+      - patch
+
+- name: "LOW | V-38647 | AUDIT | The system default umask in /etc/profile must be 077."
+  shell: grep -e 'umask [0-9]' /etc/profile | awk '{print $2}'
+  register: sys_default_umask_audit
+  changed_when: no
+  failed_when: no
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38647
+      - umask
+      - audit
+
+- name: "LOW | V-38647 | PATCH | The system default umask in /etc/profile must be 077."
+  replace:
+      dest: /etc/profile
+      regexp: 'umask \d\d\d'
+      replace: 'umask 077'
+  tags:
+      - cat3
+      - low
+      - V-38647
+      - umask
+      - patch
+
+- name: "LOW | V-38648 | AUDIT | The qpidd service must not be running."
+  command: chkconfig 'qpidd' --list
+  register: qpidd_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38648
+      - qpidd
+      - services
+      - audit
+
+- name: "LOW | V-38648 | AUDIT | The qpidd service must not be running."
+  command: service qpidd status
+  register: qpidd_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38648
+      - qpidd
+      - services
+      - audit
+
+- name: "LOW | V-38648 | PATCH | The qpidd service must not be running."
+  service:
+      name: qpidd
+      state: stopped
+      enabled: no
+  when: "':on' in qpidd_service_enabled_audit or qpidd_service_running_audit.rc == 0"
+  tags:
+      - cat3
+      - low
+      - V-38648
+      - qpidd
+      - services
+      - patch
+
+- name: "LOW | V-38649 | AUDIT | The system default umask for the csh shell must be 077."
+  shell: grep umask /etc/csh.cshrc | awk '{print $2}'
+  register: csh_umask_audit
+  failed_when: no
+  changed_when: no
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38649
+      - umask
+      - csh
+      - audit
+
+- name: "LOW | V-38649 | PATCH | The system default umask for the csh shell must be 077."
+  replace:
+      dest: /etc/csh.cshrc
+      regexp: 'umask \d\d\d'
+      replace: 'umask 077'
+  tags:
+      - cat3
+      - low
+      - V-38649
+      - umask
+      - csh
+      - patch
+
+- name: "LOW | V-38650 | AUDIT | The rdisc service must not be running."
+  command: chkconfig 'rdisc' --list
+  register: rdisc_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38650
+      - rdisc
+      - services
+      - audit
+
+- name: "LOW | V-38650 | AUDIT | The rdisc service must not be running."
+  command: service rdisc status
+  register: rdisc_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38650
+      - rdisc
+      - services
+      - audit
+
+- name: "LOW | V-38650 | PATCH | The rdisc service must not be running."
+  service:
+      name: rdisc
+      state: stopped
+      enabled: no
+  when: "':on' in rdisc_service_enabled_audit or rdisc_service_running_audit.rc == 0"
+  tags:
+      - cat3
+      - low
+      - V-38650
+      - rdisc
+      - services
+      - patch
+
+- name: "LOW | V-38651 | AUDIT | The system default umask for the bash shell must be 077."
+  shell: grep -P "umask \d" /etc/bashrc | awk '{print $2}'
+  register: bash_umask_audit
+  changed_when: no
+  failed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38651
+      - umask
+      - audit
+
+- name: "LOW | V-38651 | PATCH | The system default umask for the bash shell must be 077."
+  replace:
+      dest: /etc/bashrc
+      regexp: 'umask \d\d\d'
+      replace: 'umask 077'
+  tags:
+      - cat3
+      - low
+      - V-38651
+      - umask
+      - patch
+
+- name: "LOW | V-38655 | AUDIT | The noexec option must be added to removable media partitions."
+  command: grep noexec /etc/fstab
+  check_mode: no
+  changed_when: no
+  failed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38655
+      - fstab
+      - audit
+
+- name: "LOW | V-38656 | PATCH | The system must use SMB client signing for connecting to samba servers using smbclient."
+  lineinfile:
+      state: present
+      dest: /etc/samba/smb.conf
+      regexp: '^#?client signing'
+      line: 'client signing = mandatory'
+      insertafter: '^\[global\]'
+  when: samba_check.stat.exists
+  notify: restart samba
+  tags:
+      - cat3
+      - low
+      - V-38656
+      - smb
+      - patch
+
+#Not automated
+#- name: "LOW | V-38657 | The system must use SMB client signing for connecting to samba servers using mount.cifs.
+
+# not automated
+#- name: "LOW | V-38659 | The operating system must employ cryptographic mechanisms to protect information in storage."
+
+#not automated
+#- name: "LOW | V-38661 | The operating system must protect the confidentiality and integrity of data at rest."
+#Not automated
+#- name: "LOW | V-38662 | The operating system must employ cryptographic mechanisms to prevent unauthorized disclosure of data at rest unless otherwise protected by alternative physical measures.
+
+- name: "LOW | V-38669 | AUDIT | The postfix service must be enabled for mail delivery."
+  command: chkconfig 'postfix' --list
+  register: postfix_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38669
+      - postfix
+      - services
+      - audit
+
+- name: "LOW | V-38669 | AUDIT | The postfix service must be enabled for mail delivery."
+  command: service postfix status
+  register: postfix_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38669
+      - postfix
+      - services
+      - audit
+
+- name: "LOW | V-38669 | PATCH | The postfix service must be enabled for mail delivery."
+  service:
+      name: postfix
+      state: started
+      enabled: yes
+  when: postfix_service_running_audit.rc == 0
+  tags:
+      - cat3
+      - low
+      - V-38669
+      - postfix
+      - services
+      - patch
+
+- name: "LOW | V-38672 | AUDIT | The netconsole service must be disabled unless required."
+  command: chkconfig 'netconsole' --list
+  register: netconsole_service_enabled_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38672
+      - netconsole
+      - services
+      - audit
+
+- name: "LOW | V-38672 | AUDIT | The netconsole service must be disabled unless required."
+  command: service netconsole status
+  register: netconsole_service_running_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38672
+      - netconsole
+      - services
+      - audit
+
+- name: "LOW | V-38672 | PATCH | The netconsole service must be disabled unless required."
+  service:
+      name: netconsole
+      state: stopped
+      enabled: no
+  when: "':on' in netconsole_service_enabled_audit or netconsole_service_running_audit.rc == 0"
+  tags:
+      - cat3
+      - low
+      - V-38672
+      - netconsole
+      - services
+      - patch
+
+- name: "LOW | V-38675 | AUDIT | Process core dumps must be disabled unless needed."
+  shell: grep -E "^\*\s*hard\s*core\s*" /etc/security/limits.conf | awk '{print $4}'
+  register: processor_dumps_audit
+  check_mode: no
+  failed_when: no
+  changed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38675
+      - processor
+      - audit
+
+- name: "LOW | V-38675 | PATCH | Process core dumps must be disabled unless needed."
+  lineinfile:
+      state: present
+      dest: /etc/security/limits.conf
+      regexp: '^#?\\*.*core'
+      line: '*                hard    core            0'
+      insertbefore: '^# End of file'
+  tags:
+      - cat3
+      - low
+      - V-38675
+      - core_dump
+      - patch
+
+- name: "LOW | V-38676 | AUDIT | The xorg-x11-server-common (X Windows) package must not be installed, unless required."
+  command: rpm -qi xorg-x11-server-common
+  register: pkgs_xwindows_installed_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38676
+      - xwindows
+      - audit
+
+- name: "LOW | V-38676 | PATCH | The xorg-x11-server-common (X Windows) package must not be installed, unless required."
+  yum:
+      name: "@X Window System"
+      state: absent
+  when: not rhel6stig_xwindows_required
+  tags:
+      - cat3
+      - low
+      - V-38676
+      - xwindows
+      - audit
+
+# The OpenSCAP scanner checks for the xorg-x11-server-common
+# package. The package is not part of the X Window System package
+# group.
+- name: "LOW | V-38676 | PATCH | The xorg-x11-server-common (X Windows) package must not be installed, unless required."
+  yum:
+      name: xorg-x11-server-common
+      state: absent
+  when: not rhel6stig_xwindows_required
+  tags:
+      - cat3
+      - low
+      - V-38676
+      - xwindows
+      - audit
+
+- name: "LOW | V-38684 | AUDIT | The system must limit users to 10 simultaneous system logins, or a site-defined number, in accordance with operational requirements."
+  shell: grep -E "^\*\s*hard\s*maxlogins\s*" /etc/security/limits.conf | awk '{print $4}'
+  register: max_logins_audit
+  check_mode: no
+  failed_when: no
+  changed_when: no
+  tags:
+      - cat3
+      - low
+      - V-38684
+      - logon_settings
+      - audit
+
+- name: "LOW | V-38684 | PATCH | The system must limit users to 10 simultaneous system logins, or a site-defined number, in accordance with operational requirements."
+  lineinfile:
+      state: present
+      dest: /etc/security/limits.conf
+      regexp: '^#?\\*.*maxlogins'
+      line: '*                hard    maxlogins       {{ rhel6stig_maxlogins }}'
+      insertbefore: '^# End of file'
+  tags:
+      - cat3
+      - low
+      - V-38684
+      - logon_settings
+      - patch
+
+- name: "LOW | V-38685 | AUDIT | Temporary accounts must be provisioned with an expiration date."
+  shell: 'chage -l {{ item.user }} | grep ''Account expires'' | awk -F'':'' ''{print $2}'''
+  with_items: "{{ rhel6stig_temporary_users }}"
+  when: rhel6stig_temporary_users | length > 0
+  register: temporary_account_expiry_audit
+  changed_when: no
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38685
+      - accounts
+      - audit
+
+- name: "LOW | V-38685 | PATCH | Temporary accounts must be provisioned with an expiration date."
+  user:
+      name: "{{ item.user }}"
+      expires: "{{ item.expiration }}"
+  with_items: "{{ rhel6stig_temporary_users }}"
+  when: rhel6stig_temporary_users | length > 0
+  tags:
+      - cat3
+      - low
+      - V-38685
+      - accounts
+      - patch
+
+- name: "LOW | V-38687 | AUDIT | The system must provide VPN connectivity for communications over untrusted networks."
+  command: rpm -q openswan
+  register: pkgs_vpn_installed_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38687
+      - openswan
+      - vpn
+      - audit
+
+- name: "LOW | V-38687 | PATCH | The system must provide VPN connectivity for communications over untrusted networks."
+  yum:
+      name: openswan
+      state: present
+  tags:
+      - cat3
+      - low
+      - V-38687
+      - openswan
+      - vpn
+      - patch
+
+- name: "LOW | V-38690 | AUDIT | Emergency accounts must be provisioned with an expiration date."
+  shell: 'chage -l {{ item.user }} | grep ''Account expires'' | awk -F'':'' ''{print $2}'''
+  with_items: "{{ rhel6stig_emergency_accounts }}"
+  when: rhel6stig_emergency_accounts | length > 0
+  register: emergency_account_expiry_audit
+  changed_when: no
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38690
+      - accounts
+      - audit
+
+- name: "LOW | V-38690 | PATCH | Emergency accounts must be provisioned with an expiration date."
+  user:
+      name: "{{ item.user }}"
+      expires: "{{ item.expiration }}"
+  with_items: "{{ rhel6stig_emergency_accounts }}"
+  when: rhel6stig_emergency_accounts | length > 0
+  tags:
+      - cat3
+      - low
+      - V-38690
+      - accounts
+      - patch
+
+- name: |
+
+        LOW | V-38692 | AUDIT | Accounts must be locked upon 35 days of inactivity.
+        LOW | V-38694 | AUDIT | The operating system must manage information system identifiers for users and devices by disabling the user identifier after an organization defined time period of inactivity.
+  command: grep "INACTIVE" /etc/default/useradd
+  register: inactive_useradd_audit
+  changed_when: no
+  failed_when: no
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38692
+      - V-38694
+      - accounts
+      - users
+      - audit
+
+- name: "LOW | V-38692 | PATCH | Accounts must be locked upon 35 days of inactivity."
+  lineinfile:
+      state: present
+      dest: /etc/default/useradd
+      regexp: '^#?INACTIVE='
+      line: 'INACTIVE={{ rhel6stig_acct_max_inactive }}'
+  tags:
+      - cat3
+      - low
+      - V-38692
+      - accounts
+      - users
+      - patch
+
+
+- name: "LOW | V-38694 | PATCH | The operating system must manage information system identifiers for users and devices by disabling the user identifier after an organization defined time period of inactivity."
+  lineinfile:
+      state: present
+      dest: /etc/default/useradd
+      regexp: '^#?INACTIVE='
+      line: 'INACTIVE={{ rhel6stig_acct_max_inactive }}'
+  tags:
+      - cat3
+      - low
+      - V-38694
+      - account
+      - patch
+
+- name: "LOW | V-38702 | AUDIT | The FTP daemon must be configured for logging or verbose mode."
+  command: rpm -q vsftpd
+  register: vsftpd_service_installed_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38702
+      - logging
+      - ftp
+      - audit
+
+- name: "LOW | V-38702 | AUDIT | The FTP daemon must be configured for logging or verbose mode."
+  command: grep -l vsftpd /etc/xinetd.d/*
+  register: vsftpd_xinetd_startup_file_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  when: vsftpd_service_installed_audit.stdout.find('not installed') == -1
+  tags:
+      - cat3
+      - low
+      - V-38702
+      - logging
+      - ftp
+      - audit
+
+- name: "LOW | V-38702 | AUDIT | The FTP daemon must be configured for logging or verbose mode."
+  command: grep server_args {{ vsftpd_xinetd_startup_file_audit.stdout }}
+  register: vsftpd_config_file_audit
+  changed_when: false
+  failed_when: false
+  when: vsftpd_service_installed_audit.stdout.find('not installed') == -1 and vsftpd_xinetd_startup_file_audit.stdout
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-38702
+      - logging
+      - ftp
+      - audit
+
+- name: "LOW | V-38702 | AUDIT | The FTP daemon must be configured for logging or verbose mode."
+  command: "grep '^xferlog_enable' {{ vsftpd_config_file_audit.stdout | default('/etc/vsftpd/vsftpd.conf') }}"
+  register: vsftpd_xinetd_config_file_audit
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  when: vsftpd_service_installed_audit.stdout.find('not installed') == -1
+  tags:
+      - cat3
+      - low
+      - V-38702
+      - logging
+      - ftp
+      - audit
+
+- name: "LOW | V-38702 | PATCH | The FTP daemon must be configured for logging or verbose mode."
+  lineinfile:
+      state: present
+      backup: no
+      dest: "{{ vsftpd_config_file_audit.stdout | default('/etc/vsftpd/vsftpd.conf') }}"
+      regexp: '^#?xferlog_enable'
+      line: 'xferlog_enable=YES'
+  when: vsftpd_service_installed_audit.stdout.find('not installed') == -1
+  tags:
+      - cat3
+      - low
+      - V-38702
+      - logging
+      - ftp
+      - audit
+  notify: restart vsftpd
+
+- name: "LOW | V-51369 | AUDIT | The system must use a Linux Security Module configured to limit the privileges of system services."
+  command: grep '^SELINUXTYPE' /etc/selinux/config
+  register: selinux_policy_audit
+  failed_when: selinux_policy_audit.rc == 2
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-51369
+      - selinux
+      - audit
+
+- name: "LOW | V-51369 | PATCH | The system must use a Linux Security Module configured to limit the privileges of system services."
+  selinux:
+      policy: "{{ rhel6stig_selinux_pol }}"
+      state: enforcing
+  tags:
+      - cat3
+      - low
+      - V-51369
+      - selinux
+      - patch
+
+- name: "LOW | V-51379 | AUDIT | All device files must be monitored by the system Linux Security Module."
+  shell: ls -RZ /dev | grep unlabeled_t
+  register: selinux_device_file_context_audit
+  failed_when: false
+  changed_when: false
+  check_mode: no
+  tags:
+      - cat3
+      - low
+      - V-51379
+      - secontext
+      - audit
+
+- name: "LOW | V-51379 | PATCH | All device files must be monitored by the system Linux Security Module."
+  command: restorecon -r /dev/
+  register: selinux_device_file_context_patch
+  when: selinux_device_file_context_audit.rc == 0
+  failed_when: selinux_device_file_context_patch.rc != 0
+  changed_when: selinux_device_file_context_patch.stdout
+  tags:
+      - cat3
+      - low
+      - V-51379
+      - secontext
+      - patch
+

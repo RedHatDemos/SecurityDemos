@@ -1,0 +1,3 @@
+- name: Empty Task Category
+  debug:
+    msg: "There are no tasks defined for this category.  This is a placeholder"

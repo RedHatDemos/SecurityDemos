@@ -1,0 +1,3 @@
+{% for executable in find_result.stdout_lines %}
+-a always,exit -F path={{ executable }} -F perm=x -F auid>={{ auid }} -F auid!=4294967295 -k privileged
+{% endfor %}

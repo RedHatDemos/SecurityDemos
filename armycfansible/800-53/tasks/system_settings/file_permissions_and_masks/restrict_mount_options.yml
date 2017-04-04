@@ -1,0 +1,146 @@
+- name: Determine Removeable Media Partitions Sources
+  shell: cat /etc/fstab | grep -v shm | awk '/^\/dev/ {print $1}'
+  args:
+    executable: /bin/bash
+  register: media_parts_src
+  tags:
+    - AC
+    - AC-19
+    - AC-19(a)
+    - AC-19(d)
+    - AC-19(e)
+    - CM
+    - CM-7
+    - MP
+    - MP-2
+
+- name: Determine Removeable Media Partitions Mount Points
+  shell: cat /etc/fstab | grep -v shm | awk '/^\/dev/ {print $2}'
+  args:
+    executable: /bin/bash
+  register: media_parts_name
+  tags:
+    - AC
+    - AC-19
+    - AC-19(a)
+    - AC-19(d)
+    - AC-19(e)
+    - CM
+    - CM-7
+    - MP
+    - MP-2
+
+- name: Determine Removeable Media Partitions File Systems
+  shell: cat /etc/fstab | grep -v shm | awk '/^\/dev/ {print $3}'
+  args:
+    executable: /bin/bash
+  register: media_parts_fs
+  tags:
+    - AC
+    - AC-19
+    - AC-19(a)
+    - AC-19(d)
+    - AC-19(e)
+    - CM
+    - CM-7
+    - MP
+    - MP-2
+
+- name: Determine Removeable Media Partitions Dump
+  shell: cat /etc/fstab | grep -v shm | awk '/^\/dev/ {print $5}'
+  args:
+    executable: /bin/bash
+  register: media_parts_dump
+  tags:
+    - AC
+    - AC-19
+    - AC-19(a)
+    - AC-19(d)
+    - AC-19(e)
+    - CM
+    - CM-7
+    - MP
+    - MP-2
+
+- name: Determine Removeable Media Partitions Pass Number
+  shell: cat /etc/fstab | grep -v shm | awk '/^\/dev/ {print $5}'
+  args:
+    executable: /bin/bash
+  register: media_parts_passno
+  tags:
+    - AC
+    - AC-19
+    - AC-19(a)
+    - AC-19(d)
+    - AC-19(e)
+    - CM
+    - CM-7
+    - MP
+    - MP-2
+
+- name: Add nodev, nosuid, noguid Options to Removeable Media
+  mount:
+    name: "{{ item.1 }}"
+    src: "{{ item.0 }}"
+    state: present
+    opts: defaults,nosuid,nodev,noexec
+    fstype: "{{ item.2 }}"
+    dump: "{{ item.3 }}"
+    passno: "{{ item.4 }}"
+  with_together:
+    - "{{ media_parts_src.stdout_lines }}"
+    - "{{ media_parts_name.stdout_lines }}"
+    - "{{ media_parts_fs.stdout_lines }}"
+    - "{{ media_parts_dump.stdout_lines }}"
+    - "{{ media_parts_passno.stdout_lines }}"
+  notify: remount fstab
+  when: ansible_distribution_major_version == "6"
+  tags:
+    - AC
+    - AC-19
+    - AC-19(a)
+    - AC-19(d)
+    - AC-19(e)
+    - CM
+    - CM-7
+    - MP
+    - MP-2
+
+- name: Add nodev, nosuid, noguid Options to /dev/shm
+  mount:
+    name: /dev/shm
+    src: tmpfs
+    state: present
+    opts: defaults,nosuid,nodev,noexec
+    fstype: swap
+    dump: 1
+    passno: 2
+  when: ansible_distribution_major_version == "6"
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+    - MP
+    - MP-2
+
+- name: Remount Filesystem
+  shell: mount -a
+  args:
+    executable: /bin/bash
+  when: ansible_distribution_major_version == "6"
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+    - MP
+    - MP-2

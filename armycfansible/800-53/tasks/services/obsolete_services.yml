@@ -1,0 +1,157 @@
+- name: Disable xinetd Service
+  service:
+    name: xinetd
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - CM
+    - CM-7
+
+- name: Uninstall xinted Package
+  package:
+    name: xinetd
+    state: absent
+  tags:
+    - CM
+    - CM-7
+
+- name: Disable telnet Service
+  service:
+    name: telnet
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - CM
+    - CM-7
+
+- name: Uninstall telnet Package
+  package:
+    name: telnet
+    state: absent
+  tags:
+    - CM
+    - CM-7
+
+- name: Disable rexec Service
+  service:
+    name: rexec
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - CM
+    - CM-7
+
+- name: Disable rsh Service
+  service:
+    name: rsh
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - CM
+    - CM-7
+
+- name: Disable rlogin Service
+  service:
+    name: rlogin
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - CM
+    - CM-7
+
+- name: Uninstall rsh-server Package
+  package:
+    name: rsh-server
+    state: absent
+  tags:
+    - CM
+    - CM-7
+
+- name: Remove Rsh Trust Files - /etc/hosts.equiv
+  file:
+    dest: /etc/hosts.equiv
+    state: absent
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+
+- name: Find User Rsh Trust Files
+  shell: "find /home -name '.rhosts' -print"
+  register: user_rhosts
+  check_mode: no
+  changed_when: False
+  tags:
+    - CM
+    - CM-7
+
+- name: Remove Rsh Trust Files - ~/.rhosts
+  with_items: "{{ user_rhosts.stdout_lines }}"
+  file:
+    dest: "{{ item }}"
+    state: absent
+  tags:
+    - conf-low
+    - conf-medium
+    - conf-high
+    - int-low
+    - int-medium
+    - int-high
+    - CM
+    - CM-7
+
+- name: Disable ypbind Service
+  service:
+    name: ypbind
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - CM
+    - CM-7
+
+- name: Uninstall ypserv Package
+  package:
+    name: ypserv
+    state: absent
+  tags:
+    - CM
+    - CM-7
+
+- name: Disable tftp Service
+  service:
+    name: tftp
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - CM
+    - CM-7
+
+- name: Uninstall tftp-server Package
+  package:
+    name: tftp-server
+    state: absent
+  tags:
+    - CM
+    - CM-7
+
+- name: Disable avahi Service
+  service:
+    name: avahi-daemon
+    enabled: false
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - CM
+    - CM-7

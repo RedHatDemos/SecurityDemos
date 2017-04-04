@@ -1,0 +1,15 @@
+---
+- name: Ensure systems are DISA STIG compliant
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: install pip
+      yum:
+        name: python-pip
+        state: present
+
+    - name: install passlib
+      pip:
+        name: passlib
+        state: present

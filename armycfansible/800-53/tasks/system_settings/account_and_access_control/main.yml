@@ -1,0 +1,5 @@
+---
+- include: protect_accounts_by_restricting_password_based_login.yml
+- include: protect_accounts_by_configuring_pam.yml
+- include: secure_session_configuration_files_for_login_accounts.yml
+- include: protect_physical_console_access.yml
