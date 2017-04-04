@@ -1,0 +1,40 @@
+---
+- hosts: all
+  vars: 
+  tasks:
+    - name: Puppet run to get foreman_scap_client config
+      shell: puppet agent -t
+
+    - name: get profile
+      shell: "grep -A5 '{{ policy_id }}': /etc/foreman_scap_client/config.yaml| grep profile | awk '{print $2}'| sed -e 's/^[ \t]*//'"
+      register: profile_contents
+
+    - name: get download path
+      shell: grep -A5 '{{policy_id }}'':' /etc/foreman_scap_client/config.yaml|grep download_path |awk '{print $2}'| sed -e "s/[' \t]*//g"
+      register: download_contents
+
+    - name: download profile
+      shell: "curl -X GET -s --cert /etc/pki/consumer/cert.pem --key /etc/pki/consumer/key.pem -k {{ sat_server }}{{ download_contents.stdout }} -k --output /tmp/content"
+      ignore_errors: yes
+      register: command_result
+      failed_when: "'FAILED' in command_result.stderr"
+   
+    - name: Install openscap-utils
+      yum: 
+        name: openscap-utils
+        state: latest
+
+    - name: remediate openscap
+      shell: "oscap xccdf eval  --fetch-remote-resources  --remediate --profile '{{ profile_contents.stdout }}' /tmp/content"
+      ignore_errors: yes
+      register: command_result
+      failed_when: "'FAILED' in command_result.stderr"
+
+    - name: Remove contents file
+      file:
+       path: /tmp/content
+       state: absent
+
+    - name: Update Satellite compliance results
+      shell: foreman_scap_client '{{ policy_id }}'
+

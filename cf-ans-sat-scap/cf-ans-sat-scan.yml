@@ -1,0 +1,9 @@
+---
+# This will run openscap scans if a host is registered to Satellite 6, and assigned a policy
+- hosts: all
+  tasks: 
+    - name: OpenScap scan
+      shell: foreman_scap_client '{{ policy_id }}'
+      ignore_errors: yes
+      register: command_result
+      failed_when: "'FAILED' in command_result.stderr"
