@@ -1,0 +1,56 @@
+---
+# tasks file for sat-reg
+# Workaround for expired CA cert in RHEL 6 base RPM
+- name: Fetch Satellite CA cert (override)
+  get_url:
+    url: "http://{{ sat_fqdn }}/pub/RHN-ORG-TRUSTED-SSL-CERT"
+    dest: /usr/share/rhn/RHNS-CA-CERT
+    owner: root
+    group: root
+    force: yes
+
+- name: Fetch Satellite CA cert
+  get_url:
+    url: "http://{{ sat_fqdn }}/pub/RHN-ORG-TRUSTED-SSL-CERT"
+    dest: /usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT
+    owner: root
+    group: root
+    force: yes
+
+- name: Ensure un-registered
+  file:
+    state: absent
+    path: /etc/sysconfig/rhn/systemid
+
+- name: Register to Satellite 5
+  rhn_register:
+    state: present
+    username: "{{ rhn_user }}"
+    password: "{{ rhn_pass }}"
+    server_url: "https://{{ sat_fqdn }}/XMLRPC/"
+    #profilename: "{{ ansible_fqdn }}"
+
+- name: Add RHN Tools channel
+  command: rhn-channel -a -c rhn-tools-rhel-x86_64-server-6 -u "{{ rhn_user }}" -p "{{ rhn_pass }}"
+  #rhn_channel:
+   # state: present
+    #name: rhn-tools-rhel-x86_64-server-6
+    #sysname: "{{ ansible_fqdn }}"
+    #url: https://{{ sat_fqdn }}/rpc/api
+    #user: "{{ rhn_user }}"
+    #password: "{{ rhn_pass }}"
+
+- name: Fix repo cache
+  command: yum repolist
+
+- name: Add oscap packages
+  yum:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - spacewalk-oscap
+    - scap-security-guide
+    - openscap
+    - openscap-utils
+    - openscap-content
+    - libselinux-python
