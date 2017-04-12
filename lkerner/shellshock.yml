@@ -8,23 +8,3 @@
         name: bash
         state: latest
         update_cache: yes
-
-    - name: Test vulnerability 1
-      shell: 'env x='() { :;}; echo vulnerable' bash -c "echo this is a test"'
-      executable: /bin/bash
-      register: vulntest1
-      failed_when: vulntest1.stdout.find('vulnerable') != -1
-      changed_when: no
-
-    - name: Test vulnerability 2
-      shell: "env X='() { (a)=>' bash -c 'echo date';"
-      executable: /bin/bash
-      register: vulntest2
-      failed_when: "'error importing function definition' in vulntest2.stderr"
-      changed_when: no
-
-    - name: Cleanup after vulnerability test 2
-      file:
-        path: ~/echo
-        state: absent
-
