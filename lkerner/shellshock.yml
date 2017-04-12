@@ -7,4 +7,4 @@
       yum:
         name: bash
         state: latest
-        update_cache: yes
+        update_cache: no
