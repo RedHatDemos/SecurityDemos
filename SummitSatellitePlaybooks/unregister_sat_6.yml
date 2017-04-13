@@ -29,24 +29,3 @@
         force_basic_auth: yes
         validate_certs: no
       when: restdata|succeeded
-    - name: revoke puppet certificate (if any)
-      uri:
-        url: "https://{{ satelliteurl }}/puppet-ca/v1/certificate_status/{{ client }}?environment=KT_Default_Organization_Library_rhel7_soe_with_puppet_4"
-        method: PUT
-        body: >
-          { "desired_state": "revoked" }
-        user: "{{ user }}"
-        password: "{{ password }}"
-        force_basic_auth: yes
-        validate_certs: no
-      when: restdata|succeeded
-      register: revoked
-    - name: delete satellite puppet certificate
-      uri:
-        url: "https://{{ satelliteurl }}//puppet-ca/v1/certificate_status/{{ client }}?environment=KT_Default_Organization_Library_rhel7_soe_with_puppet_4"
-        method: DELETE
-        user: "{{ user }}"
-        password: "{{ password }}"
-        force_basic_auth: yes
-        validate_certs: no
-      when: revoked|succeeded
