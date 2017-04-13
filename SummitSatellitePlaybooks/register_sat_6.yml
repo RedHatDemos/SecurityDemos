@@ -8,11 +8,9 @@
   tasks:
   - name: Make sure DNS is set up correctly
     command: "/bin/nmcli con mod \"System eth0\" ipv4.dns \"192.168.0.1\""
-    #nmcli: conn_name="System eth0" dns4="192.168.0.1" state=present
   - name: Reload NIC
     command: "/bin/nmcli con up ifname eth0"
   - name: Install Satellite Certificate and Subscription Manager Configuration RPM
-    #command: "/usr/bin/yum -y localinstall http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
     yum:
       name: "http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
       state: present
@@ -35,3 +33,15 @@
     yum: pkg=redhat-access-insights state=present
   - name: Configure Red Hat Access Insights
     command: "redhat-access-insights --register"
+  - name: Install puppet client
+    yum: pkg=puppet state=latest
+  - name: Configure puppet client server
+    command: "puppet config set --section agent server {{ sat_hostname }}"
+  - name: Configure puppet client CA server
+    command: "puppet config set --section agent ca_server {{ sat_hostname }}"
+  - name: Clean any old certs from puppet client
+    command: "find /var/lib/puppet/ssl -name {{ inventory_hostname }}.pem -delete"
+  - name: Configure puppet client certificate
+    command: "puppet agent --test --tags no_such_tag --waitforcert 10"
+  - name: Configure puppet client
+    command: "puppet agent -t"
