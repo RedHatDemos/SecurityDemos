@@ -59,3 +59,4 @@
     - openscap-utils
     - openscap-content
     - libselinux-python
+    - mlocate
