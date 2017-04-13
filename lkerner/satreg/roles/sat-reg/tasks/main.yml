@@ -60,6 +60,12 @@
     - openscap-content
     - libselinux-python
     - mlocate
+    - osad
     
 - name: Run updatedb
   command: updatedb
+  
+- name: Start OSAD
+  service:
+    name: osad
+    state: started
