@@ -2,6 +2,8 @@
 # This will run openscap scans if a host is registered to Satellite 6, and assigned a policy
 - hosts: all
   tasks: 
+    - name: Configure puppet client
+      command: "puppet agent -t"
     - name: OpenScap scan
       shell: foreman_scap_client '{{ policy_id }}'
       ignore_errors: no
