@@ -33,6 +33,8 @@
     yum: pkg=redhat-access-insights state=present
   - name: Configure Red Hat Access Insights
     command: "redhat-access-insights --register"
+  - name: Install Foreman SCAP Client
+    yum: pkg=rubygem-foreman_scap_client state=present
   - name: Install puppet client
     yum: pkg=puppet state=latest
   - name: Configure puppet client server
