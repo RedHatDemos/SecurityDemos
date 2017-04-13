@@ -45,6 +45,7 @@
     command: "puppet config set --section agent ca_server {{ sat_hostname }}"
   - name: Clean any old certs from puppet client
     command: "find /var/lib/puppet/ssl -name {{ inventory_hostname }}.pem -delete"
+    ignore_errors: yes
   - name: Configure puppet client certificate
     command: "puppet agent --test --tags no_such_tag --waitforcert 10"
   - name: Configure puppet client
