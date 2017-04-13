@@ -39,9 +39,14 @@
     #url: https://{{ sat_fqdn }}/rpc/api
     #user: "{{ rhn_user }}"
     #password: "{{ rhn_pass }}"
+    
+- name: Add Optional channel
+  command: rhn-channel -a -c rhel-x86_64-server-optional-6 -u "{{ rhn_user }}" -p "{{ rhn_pass }}"
 
 - name: Fix repo cache
   command: yum repolist
+  args:
+    warn: false
 
 - name: Add oscap packages
   yum:
