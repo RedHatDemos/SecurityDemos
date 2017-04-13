@@ -35,7 +35,7 @@
     command: "redhat-access-insights --register"
   - name: Install Foreman SCAP Client
     yum: pkg=rubygem-foreman_scap_client state=present
-  - name: Install puppet client
+  - name: Install Puppet Client
     yum: pkg=puppet state=latest
   - name: Install puppet foreman SCAP client
     yum: pkg=puppet-foreman_scap_client state=latest
@@ -49,3 +49,7 @@
     command: "puppet agent --test --tags no_such_tag --waitforcert 10"
   - name: Configure puppet client
     command: "puppet agent -t"
+  - name: Start Puppet Daemon
+    service: name=puppet state=started
+  - name: Enable Puppet Daemon
+    service: name=puppet enabled=yes
