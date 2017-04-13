@@ -60,3 +60,6 @@
     - openscap-content
     - libselinux-python
     - mlocate
+    
+- name: Run updatedb
+  command: updatedb
