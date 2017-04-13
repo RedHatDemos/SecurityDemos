@@ -4,6 +4,6 @@
   tasks: 
     - name: OpenScap scan
       shell: foreman_scap_client '{{ policy_id }}'
-      ignore_errors: yes
+      ignore_errors: no
       register: command_result
       failed_when: "'FAILED' in command_result.stderr"
