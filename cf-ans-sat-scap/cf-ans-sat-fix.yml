@@ -40,3 +40,4 @@
 
     - name: Update Satellite compliance results
       shell: foreman_scap_client '{{ policy_id }}'
+
