@@ -29,3 +29,7 @@
         force_basic_auth: yes
         validate_certs: no
       when: restdata|succeeded
+    - name: Unregister Subscription Manager
+      command: "subscription-manager unregister"      
+    - name: Clean Subscription Manager
+      command: "subscription-manager clean"
