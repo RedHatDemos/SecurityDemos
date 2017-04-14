@@ -8,7 +8,6 @@
     client: "{{ ansible_play_hosts[0] }}"
     user: "{{ sat_user }}"
     password: "{{ sat_password }}"
-
   tasks:
     - name: Get content host ID
       uri:
@@ -29,7 +28,12 @@
         force_basic_auth: yes
         validate_certs: no
       when: restdata|succeeded
+- name: Clean up subscription manager
+  hosts: all
+  tasks:
     - name: Unregister Subscription Manager
-      command: "subscription-manager unregister"      
+      command: "subscription-manager unregister"
+      ignore_errors: yes
     - name: Clean Subscription Manager
       command: "subscription-manager clean"
+      ignore_errors: yes
