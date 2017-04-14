@@ -23,6 +23,10 @@
       force_register: yes
   - name: Enable Satellite Tools Repository
     command: "/usr/bin/subscription-manager repos --enable {{ tools_channel }}"
+  - name: Clean yum cache
+    command: "yum clean all"
+    args:
+      warn: false
   - name: Install Katello Agent
     yum: pkg=katello-agent state=latest
   - name: Enable Katello Agent
