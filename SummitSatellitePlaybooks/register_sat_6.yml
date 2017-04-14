@@ -37,8 +37,6 @@
     yum: pkg=rubygem-foreman_scap_client state=present
   - name: Install Puppet Client
     yum: pkg=puppet state=latest
-  - name: Install puppet foreman SCAP client
-    yum: pkg=puppet-foreman_scap_client state=latest
   - name: Configure puppet client server
     command: "puppet config set --section agent server {{ sat_hostname }}"
   - name: Configure puppet client CA server
