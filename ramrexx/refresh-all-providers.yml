@@ -1,0 +1,47 @@
+---
+- name: refresh all CF providers
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    manageiq_user: admin
+    manageiq_password: smartvm
+    manageiq:
+      api_url: https://localhost
+    manageiq_validate_certs: false
+    verbose: true
+
+  tasks:
+  - name: get all provider hrefs
+    uri:
+      url: "{{ manageiq.api_url }}/api/providers"
+      method: GET
+      validate_certs: "{{ manageiq_validate_certs }}"
+      user: "{{ manageiq_user }}"
+      password: "{{ manageiq_password }}"
+      status_code: 200
+    register: lookup_providers_output
+
+  - name: Log lookup_providers_output
+    debug:
+      var: lookup_providers_output
+    when: verbose
+
+  - name: refresh all providers
+    uri:
+      url: "{{ manageiq.api_url }}/api/providers"
+      method: POST
+      body:
+        action: refresh
+        resources: "{{ lookup_providers_output.json.resources }}"
+      body_format: json
+      validate_certs: "{{ manageiq_validate_certs }}"
+      user: "{{ manageiq_user }}"
+      password: "{{ manageiq_password }}"
+      status_code: 200
+    register: refresh_providers_output
+
+  - name: Log refresh_providers_output
+    debug:
+      var: refresh_providers_output
+    when: verbose
