@@ -1,11 +1,37 @@
 ---
 # This will run openscap scans if a host is registered to Satellite 6, and assigned a policy
 - hosts: all
-  tasks: 
+
+  vars:
+    policy_id:
+
+  pre_tasks:
+    - name: logging manageiq object
+      debug: var=manageiq
+      when: manageiq is defined
+
+  tasks:
+    - name: Log policy_id
+      debug:
+        var: policy_id
+      when: verbose and policy_id is defined
+
     - name: Configure puppet client
       command: "puppet agent -t"
+      register: config_puppet_output
+
+    - name: Log config_puppet_output
+      debug:
+        var: config_puppet_output
+      when: verbose
+
     - name: OpenScap scan
       shell: foreman_scap_client '{{ policy_id }}'
       ignore_errors: no
       register: command_result
       failed_when: "'FAILED' in command_result.stderr"
+
+    - name: Log command_result
+      debug:
+        var: command_result
+      when: verbose
