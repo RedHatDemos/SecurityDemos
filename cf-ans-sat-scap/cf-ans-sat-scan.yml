@@ -1,7 +1,8 @@
 ---
 # This will run openscap scans if a host is registered to Satellite 6, and assigned a policy
 - hosts: all
-
+  gather_facts: false
+  
   vars:
     policy_id:
     verbose: false
