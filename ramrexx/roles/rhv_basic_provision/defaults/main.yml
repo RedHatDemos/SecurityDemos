@@ -84,6 +84,8 @@ custom_script: |
     - "subscription-manager repos --enable rhel-7-server-satellite-tools-6.2-rpms --enable rhel-7-server-extras-beta-rpms"
     - "yum -y install katello-agent scap-security-guide ansible"
 
+scap_profile_name:
+
 # asynchronous parameters
 async_wait: 3600
 async_poll: 0

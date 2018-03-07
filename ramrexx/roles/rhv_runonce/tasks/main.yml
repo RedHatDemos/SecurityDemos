@@ -1,10 +1,11 @@
 ---
-- name: SSH into instance
-  shell: cat /etc/resolv.conf
-  register: ssh_output
-
-- name: Log ssh_output
+- name: Run SCAP remediation
+  shell: "ansible-playbook /usr/share/scap-security-guide/ansible/{{ scap_profile_name }}"
+  register: scap_output
+  when: scap_profile_name is defined
+  
+- name: Log scap_output
   debug:
-    var: ssh_output
+    var: scap_output
 
 # Add your own plays here
