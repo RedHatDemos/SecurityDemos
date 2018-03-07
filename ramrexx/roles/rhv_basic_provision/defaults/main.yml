@@ -43,7 +43,7 @@ nics:
     # interface: "{{ network_0_interface | default('virtio') }}"
 
 network_0_ipaddr:
-network_0_prefix: 24
+network_0_prefix: 16
 network_0_gateway: 192.168.0.2
 
 ## vm disk parameters
