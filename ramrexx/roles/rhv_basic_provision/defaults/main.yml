@@ -80,9 +80,9 @@ custom_script: |
     - systemctl stop firewalld
     - systemctl disable firewalld
     - "rpm -Uvh http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm"
-    - "subscription-manager register --org=Default_Organization --activationkey=base_with_puppet"
-    - "subscription-manager repos --enable=rhel-7-server-satellite-tools-6.2-rpms"
-    - "yum -y install katello-agent"
+    - "subscription-manager register --org=Default_Organization --activationkey=rhel7beta"
+    - "subscription-manager repos --enable rhel-7-server-satellite-tools-6.2-rpms --enable rhel-7-server-extras-beta-rpms"
+    - "yum -y install katello-agent scap-security-guide ansible"
 
 # asynchronous parameters
 async_wait: 3600

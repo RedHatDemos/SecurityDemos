@@ -1,0 +1,12 @@
+#cloud-config
+host_name: <%= evm[:vm_target_name] %>
+user_name: root
+root_password: <%= MiqPassword.decrypt(evm[:root_password]) %>
+
+ssh_pwauth: true
+disable_root: true
+users:
+  - name: root
+    lock_passwd: false
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlX0YMEVgeJRT0rlpTMjcScHdsTwaERuiUYAB2Wy0QWZHK1Pa1aPD3f9rgKpb9Y903wKE82yq3FpDt/taey0siyT1dCi18e1Zdh5DORe2rTC1uTXZQ2ar0/LOYdfVT6JQ7RIUnxQ7kEFGdXv9vf0HWgGMe5E3hkIvVLfy2QPIAeGpuNUfNctqYI2SDRLSUUH09G6xVgThGFoRBKKQsUgTw+4SWEjB0XeSJ6wfZcrM39l1ltajXPV7yP+HcYPEciNmHQ8YEjFbfED93XQyD0AdmrxMsLdTCGButdbnhwZzBWt0bbKsTj6Ubwe/nIgs+AU1/wUNqvK2fbwIFmRpA+TPj root@workstation.summit.example.com
