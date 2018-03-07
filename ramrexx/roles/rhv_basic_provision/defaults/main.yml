@@ -42,12 +42,17 @@ nics:
     ### interface - (virtio, e1000, rtl8139)
     # interface: "{{ network_0_interface | default('virtio') }}"
 
+network_0_ipaddr:
+network_0_prefix: 24
+network_0_gateway: 192.168.0.2
+
 ## vm disk parameters
 # disks:
 #   - name: "{{ disk_0_name | default('disk1') }}"
 #     bootable: "{{ disk_0_bootable | default(true) }}"
 
-dns_suffix: .example.com
+dns_suffix: example.com
+dns_servers: 192.168.0.1
 
 # cloud_init script
 custom_script: |
@@ -57,10 +62,25 @@ custom_script: |
       lock_passwd: false
       ssh_authorized_keys:
         - "{{ ssh_authorized_key | default(omit) }}"
+  chpasswd:
+    list: |
+      root:!vault |
+                $ANSIBLE_VAULT;1.1;AES256
+                64346561363331306139653037363834323831623934353165356363393737396364616464343030
+                3833383338636666393534353936653234333561386433660a393437373730623264333938633833
+                38303830653665613035616263313936383935313566636530663363646566313432653731353334
+                3338643532373231610a323063626438323832346237343937313763626433653237633633316434
+                6435
+    expire: false
   runcmd:
+    - nmcli connection down "System eth0"
+    - "nmcli connection modify 'System eth0' ipv4.method manual ipv4.addr {{ network_0_ipaddr }}/{{ network_0network_0_prefix }} ipv4.gateway {{ network_0_gateway }} ipv4.dns {{ dns_servers }} ipv4.dns-search {{ dns_suffix }}"
+    - nmcli connection up "System eth0"
     - "touch /etc/cloud/cloud-init.disabled"
     - systemctl stop firewalld
     - systemctl disable firewalld
+    - rpm -Uvh http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm
+    - subscription-manager register --org="Default_Organization" --activationkey="base_with_puppet"
 # asynchronous parameters
 async_wait: 3600
 async_poll: 0
