@@ -1,0 +1,10 @@
+---
+- name: SSH into instance
+  shell: cat /etc/resolv.conf
+  register: ssh_output
+
+- name: Log ssh_output
+  debug:
+    var: ssh_output
+
+# Add your own plays here
