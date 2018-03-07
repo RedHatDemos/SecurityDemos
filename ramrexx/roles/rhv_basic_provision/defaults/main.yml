@@ -74,12 +74,12 @@ custom_script: |
     expire: false
   runcmd:
     - nmcli connection down "System eth0"
-    - "nmcli connection modify 'System eth0' ipv4.method manual ipv4.addr {{ network_0_ipaddr }}/{{ network_0network_0_prefix }} ipv4.gateway {{ network_0_gateway }} ipv4.dns {{ dns_servers }} ipv4.dns-search {{ dns_suffix }}"
+    - "nmcli connection modify 'System eth0' ipv4.method manual ipv4.addr {{ network_0_ipaddr }}/{{ network_0_prefix }} ipv4.gateway {{ network_0_gateway }} ipv4.dns {{ dns_servers }} ipv4.dns-search {{ dns_suffix }}"
     - nmcli connection up "System eth0"
     - "touch /etc/cloud/cloud-init.disabled"
     - systemctl stop firewalld
     - systemctl disable firewalld
-    - rpm -Uvh http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm
+    - "rpm -Uvh http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm"
     - subscription-manager register --org="Default_Organization" --activationkey="base_with_puppet"
 # asynchronous parameters
 async_wait: 3600

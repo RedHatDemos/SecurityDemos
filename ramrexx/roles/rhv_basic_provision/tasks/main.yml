@@ -26,7 +26,7 @@
         disks: "{{ disks | default(omit) }}"
         nics: "{{ networks | default(omit) }}"
         cloud_init:
-          host_name: "{{ item }}.{{ dns_suffix }}"
+          host_name: "{{ item }}"
           custom_script: "{{ custom_script }}"
       with_items: "{{ vm_names }}"
       register: rhv_created_vms_async
