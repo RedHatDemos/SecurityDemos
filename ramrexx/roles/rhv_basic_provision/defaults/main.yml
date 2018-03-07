@@ -19,10 +19,11 @@ engine_password: !vault |
           3863
 
 template:
-cluster:
+cluster: Default
 
 # vm guest parameters
 vm_names:
+  - vm_name:
 memory: 1GiB
 cpu_cores: 1
 cpu_sockets: 1
