@@ -4,10 +4,18 @@
     name: "{{ item }}"
     state: latest
   with_items:
-    - http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm
     - katello-agent
     - ansible
     - scap-security-guide
+
+- name: Installing katello
+  shell: "rpm -Uvh http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm"
+  register: katello_output
+
+- name: Log katello_output
+  debug:
+    var: katello_output
+  when: verbose and katello_output is defined
 
 - name: Regiser with Satellite
   shell: "{{ item }}"
