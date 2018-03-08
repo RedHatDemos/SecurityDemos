@@ -12,3 +12,7 @@ image:documentation/images/overview.png[link=documentation/images/overview.png]
 . Click the *VMs* accordion on the left.
 . At the bottom, click *Check All*.
 . At the top click *Power -> Power On*.
+
+<<top>>
+
+link:README.adoc[ README ] | link:lab1.adoc[ Lab 1 ]
