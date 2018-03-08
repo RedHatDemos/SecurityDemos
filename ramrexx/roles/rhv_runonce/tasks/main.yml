@@ -18,8 +18,8 @@
     state: latest
   with_items:
     - katello-agent
-    - ansible
     - scap-security-guide
+    - ansible
 
 - name: Insert ignore_errors into plays
   replace:
