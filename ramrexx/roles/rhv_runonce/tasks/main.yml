@@ -1,4 +1,17 @@
 ---
+- name: Regiser with Satellite
+  shell: "{{ item }}"
+  register: sat_register_output
+  with_items:
+    - rpm -Uvh http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm
+    - subscription-manager register --org=Default_Organization --activationkey=rhel7beta
+    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.2-rpms --enable rhel-7-server-extras-beta-rpms
+
+- name: Log sat_register_output
+  debug:
+    var: sat_register_output
+  when: verbose and sat_register_output is defined
+
 - name: Install packages
   yum:
     name: "{{ item }}"
@@ -7,27 +20,6 @@
     - katello-agent
     - ansible
     - scap-security-guide
-
-- name: Installing katello
-  shell: "rpm -Uvh http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm"
-  register: katello_output
-
-- name: Log katello_output
-  debug:
-    var: katello_output
-  when: verbose and katello_output is defined
-
-- name: Regiser with Satellite
-  shell: "{{ item }}"
-  register: sat_register_output
-  with_items:
-    - subscription-manager register --org=Default_Organization --activationkey=rhel7beta
-    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.2-rpms --enable rhel-7-server-extras-beta-rpms
-
-- name: Log sat_register_output
-  debug:
-    var: sat_register_output
-  when: verbose and sat_register_output is defined
 
 - name: Run SCAP remediation playbook
   shell: "ansible-playbook -i localhost, -c local /usr/share/scap-security-guide/ansible/{{ scap_profile_name }}.yml"
