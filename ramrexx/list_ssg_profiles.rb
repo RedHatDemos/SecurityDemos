@@ -8,13 +8,12 @@ dialog_hash = {}
 ssgs = ['ssg-rhel7-role-common', 'ssg-rhel7-role-cjis-rhel7-server',
   'ssg-rhel7-role-C2S','ssg-rhel7-role-docker-host',
   'ssg-rhel7-role-nist-800-171-cui','ssg-rhel7-role-ospp-rhel7',
-  'ssg-rhel7-role-pci-dss','ssg-rhel7-role-rht-ccp',
-  ,'ssg-rhel7-role-stig-rhel7-disa',
+  'ssg-rhel7-role-pci-dss','ssg-rhel7-role-rht-ccp','ssg-rhel7-role-stig-rhel7-disa',
   'ssg-rhel7-role-stig-rhevh-upstream']
 
 ssgs = [
   'ssg-rhel7-role-standard',
-  
+
 ]
 ssgs.each do |profile|
   dialog_hash["#{profile}"] = profile
