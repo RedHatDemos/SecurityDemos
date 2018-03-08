@@ -1,4 +1,4 @@
-= Lab 0: Setup steps test
+= Lab 0: Setup steps
 
 == Starting your VMs
 
