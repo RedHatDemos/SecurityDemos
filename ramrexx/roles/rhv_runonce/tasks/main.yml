@@ -9,9 +9,10 @@
     - scap-security-guide
 
 - name: Run SCAP remediation
-  shell: "ansible-playbook /usr/share/scap-security-guide/ansible/{{ scap_profile_name }}.yml"
+  shell: "ansible-playbook -i localhost, -c local /usr/share/scap-security-guide/ansible/{{ scap_profile_name }}.yml"
   register: scap_output
-  when: scap_profile_name is defined
+  when: scap_profile_name is definedVault713
+
 
 - name: Log scap_output
   debug:
