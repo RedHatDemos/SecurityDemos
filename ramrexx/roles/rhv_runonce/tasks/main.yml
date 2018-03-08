@@ -21,9 +21,20 @@
     - ansible
     - scap-security-guide
 
+- name: Insert ignore_errors in playbooks
+  shell: |
+    for yml in /usr/share/scap-security-guide/ansible/*.yml; do sed -i "/^    - name/a\      ignore_errors: true" $yml; done
+  register: modify_playbooks_out
+
+- name: Log modify_playbooks_out
+  debug:
+    var: modify_playbooks_out
+  when: modify_playbooks_out is defined
+
 - name: Run SCAP remediation playbook
   shell: "ansible-playbook -i localhost, -c local /usr/share/scap-security-guide/ansible/{{ scap_profile_name }}.yml"
   register: scap_output
+  ignore_errors: true
   when: scap_profile_name is defined
 
 - name: Log scap_output
