@@ -27,9 +27,9 @@
     regexp: '(^\s.*- name:.*)'
     replace: '\1\n      ignore_errors: true'
     backup: yes
-  with_fileglob:
-    - "/usr/share/scap-security-guide/ansible/*.yml"
   register: replace_output
+  with_fileglob:
+    - /usr/share/scap-security-guide/ansible/*.yml
 
 - name: Log replace_output
   debug:
