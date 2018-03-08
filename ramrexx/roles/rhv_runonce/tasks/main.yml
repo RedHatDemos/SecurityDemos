@@ -23,13 +23,11 @@
 
 - name: Insert ignore_errors into plays
   replace:
-    path: "{{ item }}"
+    path: "/usr/share/scap-security-guide/ansible/{{ scap_profile_name }}.yml"
     regexp: '(^\s.*- name:.*)'
     replace: '\1\n      ignore_errors: true'
     backup: yes
   register: replace_output
-  with_fileglob:
-    - /usr/share/scap-security-guide/ansible/*.yml
 
 - name: Log replace_output
   debug:
