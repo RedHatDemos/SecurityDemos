@@ -15,4 +15,4 @@ image:documentation/images/overview.png[link=documentation/images/overview.png]
 
 <<top>>
 
-link:README.adoc[ README ] | link:lab1.adoc[ Lab 1 ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1 ]
