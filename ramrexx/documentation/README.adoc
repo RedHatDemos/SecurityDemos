@@ -1,6 +1,6 @@
-= Proactive Security Compliance Automation with CloudForms, Satellite, OpenSCAP, Insights, and Ansible Tower
+= L1034 Implementing Proactive Security and Compliance Automation
 
-=== [.underline]#Presenters#:
+=== [.underline]#Presenters/Lab Developers#:
 Lucy Kerner, Principal Technical Marketing Manager - Security, Red Hat
 
 Patrick Rutledge, Principal Solutions Architect - GPTE, Red Hat
