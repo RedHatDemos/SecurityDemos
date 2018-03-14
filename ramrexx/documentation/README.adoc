@@ -1,4 +1,4 @@
-= L1034 Implementing Proactive Security and Compliance Automation
+= Implementing Proactive Security and Compliance Automation
 
 === [.underline]#Presenters/Lab Developers#:
 Lucy Kerner, Principal Technical Marketing Manager - Security, Red Hat
