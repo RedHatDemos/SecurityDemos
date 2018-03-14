@@ -12,28 +12,26 @@ Kevin Morey, Principal Cloud Specialist Solutions Architect, Red Hat
 Will Nix, Principal Technical Marketing Manager - Red Hat Insights, Red Hat
 
 
-== Abstract:
-In this hands-on lab and demo environment, you will learn how to automate security compliance using a combination of Red Hat CloudForms, Red Hat Satellite, OpenSCAP, and Ansible Tower by Red Hat. Specifically, you will go through a series of exercises that will show you: how to use Red Hat CloudForms to create control policies, how to automate security scans and remediations using the OpenSCAP integration in Red Hat Satellite, how to utilize the data provided by Red Hat Insights for proactive security and automated risk management, how to use Ansible Tower by Red Hat for automated security remediations, and how to use Red Hat CloudForms as a central place for security compliance automation.
-
 == Overview and Prerequisites:
-The goal of this lab is to introduce you to a variety of Red Hat products that can help you with proactive security compliance automation. We will demonstrate the power and flexibility of using either one or a combination of Red Hat products, such as Red Hat Satellite, Ansible Tower by Red Hat, Red Hat Insights, and Red Hat CloudForms,  to help you with security compliance and automation.
+In this hands-on lab and demo environment, you will learn how to automate security and compliance using a combination of Red Hat CloudForms, Red Hat Satellite, OpenSCAP, Red Hat Insights, and Red Hat Ansible Automation. Specifically, you will go through a series of exercises that will show you how, from a central place, you can: create a security compliant host at provisioning time, create and enforce control policies, automate security scans and remediations for various different security profiles and security controls, and do proactive security and automated risk management. The goal of this lab is to introduce you to a variety of Red Hat products that can help you with proactive security and compliance automation. We will demonstrate the power and flexibility of using either one or a combination of Red Hat products to help you with security and compliance automation.
 
 This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to automate security compliance across their heterogeneous infrastructure using one or more Red Hat Products.  The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills. Knowledge of virtualization and basic linux scripting would also be helpful, but not required.
 
 == Attendees, during this session, will learn:
 * What Security Content Automation Protocol (SCAP) is and how you can use it to automate compliance with security policies
-* How to use Red Hat Satellite and Red Hat CloudForms to automatically apply and enforce security policies on bare metal and virtual machines
-* How to use OpenSCAP, Red Hat Satellite and Red Hat CloudForms to audit bare metal and  virtual machines for security compliance
-* How to use OpenSCAP, Red Hat CloudForms and Ansible Tower by Red Hat to automatically remediate systems that are out of compliance
+* How to provision a security compliant host using both Red Hat CloudForms and Red Hat Ansible Automation
+* How to use Red Hat Satellite and Red Hat CloudForms to automatically apply and enforce security policies
+* How to prevent severity high vulnerable container images from running in Red Hat Openshift Container Platform using Red Hat CloudForms
+* How to use OpenSCAP, Red Hat Satellite and Red Hat CloudForms to scan and audit systems for security compliance
+* How to use OpenSCAP, Red Hat CloudForms and Red Hat Ansible Automation to automatically remediate systems that are out of compliance
 * How to create and view reports showing compliant and non-compliant VMs in Red Hat CloudForms after running OpenSCAP security compliance scans on these VMs
-* How to prevent Red Hat Openshift container images with severity high vulnerabilities from running in Red Hat Openshift using Red Hat CloudForms
-* How to provision a security compliant host, at the push of a button, using Red Hat CloudForms and Ansible Tower by Red Hat
+* How to create and view security related reports for a hybrid environment, including: Red Hat Virtualization, Red Hat Openstack Platform, Amazom AWS, and Red Hat Openshift Container Platform.
 * How to use Red Hat Insights for pro-active security and automated risk management
 
 == Lab Environment:
-Your entire lab environment is hosted online and includes Red Hat Virtualization, Satellite, CloudForms, Ansible Tower, Insights, Openshift Container Platform, and a workstation node which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation node.
+Your entire lab environment is hosted online and includes: Red Hat Virtualization, Red Hat Satellite, Red Hat CloudForms, Red Hat Ansible Automation, Red Hat Insights, Red Hat Openshift Container Platform, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
 
-You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.  Please find your unique *GUID* in your email, which you should have received when provisioning this lab environment.
+You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
 
 
 == Table of Contents
