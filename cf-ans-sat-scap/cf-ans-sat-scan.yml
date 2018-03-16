@@ -4,7 +4,17 @@
   gather_facts: false
 
   vars:
+    manageiq_user: admin
+    manageiq_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32343765326564333435653736376236303139666364343432313831326337386433356361373361
+          3830633930373435366632343039353239326132376537630a653031636261353663353336373665
+          33346534656134343765353434646237666164393766353364626266353332323239623565343063
+          6432363234323161390a323061633334653137363162373032326338666639613239623664353030
+          3863
     policy_id:
+    category: scap_compliant
+    tag: false
     verbose: false
 
   pre_tasks:
@@ -38,3 +48,25 @@
       debug:
         var: command_result
       when: verbose
+
+    # - name: Assign tag "{{ category }}:{{ tag }}" to VMs
+    #   uri:
+    #     url: "{{ manageiq.api_url }}/api/vms/{{ item.json.resources[0].id }}/tags"
+    #     method: POST
+    #     body:
+    #       action: assign
+    #       resources:
+    #         - category: "{{ category }}"
+    #           name: "{{ tag }}"
+    #     body_format: json
+    #     validate_certs: "{{ manageiq_validate_certs }}"
+    #     user: "{{ manageiq_user }}"
+    #     password: "{{ manageiq_password }}"
+    #     status_code: 200
+    #   register: assign_vmtag_output
+    #   with_items: "{{ lookup_vms_output.results }}"
+    #
+    # - name: Log assign_vmtag_output.results
+    #   debug:
+    #     var: assign_vmtag_output.results
+    #   when: verbose
