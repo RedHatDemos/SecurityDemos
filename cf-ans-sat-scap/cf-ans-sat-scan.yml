@@ -15,6 +15,7 @@
     policy_id:
     category: scap_compliant
     tag: false
+    vm_href_slug:
     verbose: false
 
   pre_tasks:
@@ -49,24 +50,23 @@
         var: command_result
       when: verbose
 
-    # - name: Assign tag "{{ category }}:{{ tag }}" to VMs
-    #   uri:
-    #     url: "{{ manageiq.api_url }}/api/vms/{{ item.json.resources[0].id }}/tags"
-    #     method: POST
-    #     body:
-    #       action: assign
-    #       resources:
-    #         - category: "{{ category }}"
-    #           name: "{{ tag }}"
-    #     body_format: json
-    #     validate_certs: "{{ manageiq_validate_certs }}"
-    #     user: "{{ manageiq_user }}"
-    #     password: "{{ manageiq_password }}"
-    #     status_code: 200
-    #   register: assign_vmtag_output
-    #   with_items: "{{ lookup_vms_output.results }}"
-    #
-    # - name: Log assign_vmtag_output.results
-    #   debug:
-    #     var: assign_vmtag_output.results
-    #   when: verbose
+    - name: Assign tag "{{ category }}:{{ tag }}" to VMs
+      uri:
+        url: "{{ manageiq.api_url }}/api/{{ vm_href_slug }}/tags"
+        method: POST
+        body:
+          action: assign
+          resources:
+            - category: "{{ category }}"
+              name: "{{ tag }}"
+        body_format: json
+        validate_certs: "{{ manageiq_validate_certs }}"
+        user: "{{ manageiq_user }}"
+        password: "{{ manageiq_password }}"
+        status_code: 200
+      register: assign_vmtag_output
+
+    - name: Log assign_vmtag_output.results
+      debug:
+        var: assign_vmtag_output.results
+      when: verbose

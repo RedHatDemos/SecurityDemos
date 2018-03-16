@@ -1,7 +1,7 @@
 ---
 - name: Set satellite_hostname
   set_fact:
-    satellite_hostname: sat6.example.com
+    satellite_hostname: sat6.summit.example.com
     activation_key: rhel7beta
     organization: Default_Organization
 
