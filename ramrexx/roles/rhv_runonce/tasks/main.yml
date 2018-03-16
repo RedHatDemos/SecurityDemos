@@ -1,11 +1,17 @@
 ---
+- name: Set satellite_hostname
+  set_fact:
+    satellite_hostname: sat6.example.com
+    activation_key: rhel7beta
+    organization: Default_Organization
+
 - name: Regiser with Satellite
   shell: "{{ item }}"
   register: sat_register_output
   with_items:
-    - rpm -Uvh http://sat6.summit.example.com/pub/katello-ca-consumer-latest.noarch.rpm
-    - subscription-manager register --org=Default_Organization --activationkey=rhel7beta
-    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.2-rpms --enable rhel-7-server-extras-beta-rpms
+    - "rpm -Uvh http://{{ satellite_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+    - "subscription-manager register --org={{ organization }} --activationkey={{ activation_key }}"
+    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.3-rpms --enable rhel-7-server-extras-beta-rpms
 
 - name: Log sat_register_output
   debug:
@@ -19,7 +25,32 @@
   with_items:
     - katello-agent
     - scap-security-guide
+    - puppet
     - ansible
+    - redhat-access-insights
+
+- name: Enable Katello Agent
+  service:
+    name: goferd
+    enabled: true
+    state: started
+
+- name: Configure Red Hat Access Insights and Puppet
+  command: "{{ item }}"
+  ignore_errors: true
+  with_items:
+    - "redhat-access-insights --register"
+    - "puppet config set --section agent server {{ satellite_hostname}}"
+    - "puppet config set --section agent ca_server {{ satellite_hostname}}"
+    - "find /var/lib/puppet/ssl -name {{ inventory_hostname }}.pem -delete"
+    - "puppet agent --test --tags no_such_tag --waitforcert 10"
+    - "puppet agent -t"
+
+- name: Start Puppet Daemon
+  service:
+    name: puppet
+    state: started
+    enabled: true
 
 - name: Insert ignore_errors into plays
   replace:
