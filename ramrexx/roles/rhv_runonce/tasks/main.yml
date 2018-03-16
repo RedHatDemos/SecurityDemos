@@ -26,6 +26,7 @@
     - katello-agent
     - scap-security-guide
     - puppet
+    - rubygem-foreman_scap_client
     - ansible
     - redhat-access-insights
 
