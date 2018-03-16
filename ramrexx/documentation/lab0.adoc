@@ -27,7 +27,7 @@ image:images/lab0-infra-vms.png[Compute -> Infrastructure -> Virtual Machines]
 * At the bottom, click *Check All*.
 * At the top click *Power -> Power On*.
 +
-image:images/lab0-poweron.png[Power -> Power On]
+image:images/image104.png[Power -> Power On]
 
 * Click *OK*.
 * Do not close your CloudForms UI since you will be using it in future lab exercises.
