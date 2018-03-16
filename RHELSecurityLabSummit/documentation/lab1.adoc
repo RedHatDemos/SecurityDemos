@@ -1,36 +1,65 @@
-== Lab 1: How to utilize the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6
+== Lab 0: Setup steps
 
-=== Goal of Lab 1
-The goal of this lab is to introduce you to the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6.
+. Re-check Authentication Status of Red Hat Virtualization provider
+You will need to have CloudForms re-check the authentication status of the Red Hat Virtualization provider. This will make sure that CloudForms is re-synchronizing with the Red Hat Virtualization provider.
 
-=== Introduction
-Security compliance management is the ongoing process of defining security policies, auditing for compliance with those policies and resolving instances of non-compliance. Once a security policy is defined, an audit is conducted to verify compliance with the policy. Any non-compliance is managed according to the organization's configuration management policies. Security policies vary in their scope, from being host-specific to industry-wide, so there is a need for flexibility in their definition.
+* Open up your web browser and log into *https://cfme-<GUID>.rhpds.opentlc.com*. The *<GUID>* portion is a 4 character random string that will be assigned to you.
+* Accept the SSL warnings.
+* Login as admin with password r3dh4t1!.
+* On the left menus, navigate to *Compute -> Infrastructure -> Providers*.
++
+image:images/lab0-infra-providers.png[Compute -> Infrastructure -> Providers]
 
-The Security Content Automation Protocol (SCAP) enables the definition of security configuration policies. For example, a security policy might specify that for hosts running Red Hat Enterprise Linux, login via SSH is not permitted for the root account.
+* Check the box next to the Red Hat Virtualization provider and click on *Authentication -> Re-check Authentication Status*.
++
+image:images/lab0-re-check-authentication-status.png[Re-check-authentication-status]
 
-In Satellite 6, tools provided by the OpenSCAP project are used to implement security compliance auditing. For more information about OpenSCAP see the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index[Red Hat Enterprise Linux 7 Security Guide]. The Satellite web UI enables scheduled compliance auditing and reporting on all hosts under management by Red Hat Satellite.
+* Press the refresh button on your web browser.  After a minute, you will see that the Red Hat Virtualization provider status now shows up with a green check box.
++
+image:images/lab0-refresh-provider.png[Refresh-provider]
 
-=== Introduction to SCAP content provided in Satellite 6
-Before creating a SCAP compliance policy for a host, you need SCAP content.
+. Starting your VMs
+* Before starting the lab steps, you will need to turn on your VMs. On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines*.
++
+image:images/lab0-infra-vms.png[Compute -> Infrastructure -> Virtual Machines]
 
-SCAP content is a datastream format containing the configuration and security baseline against which hosts are checked. Checklists are described in the extensible checklist configuration description format (XCCDF) and vulnerabilities in the open vulnerability and assessment language (OVAL). Checklist items, also known as rules express the desired configuration of a system item. For example, you may specify that no one can log in to a host over SSH using the root user account. Rules can be grouped into one or more profiles, allowing multiple profiles to share a rule. SCAP content consists of both rules and profiles.
+* Click the *VMs* accordion on the left.
+* At the bottom, click *Check All*.
+* At the top click *Power -> Power On*.
++
+image:images/lab0-poweron.png[Power -> Power On]
 
-You can either create SCAP content or obtain it from a vendor. Supported profiles are provided for Red Hat Enterprise Linux in the scap-security-guide package. The creation of SCAP content is outside the scope of this lab, but see the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index[Red Hat Enterprise Linux 7 Security Guide] or Red Hat Enterprise Linux 6 Security Guide for information on how to download, deploy, modify, and create your own content. The SCAP content provided with Red Hat Enterprise Linux is compliant with SCAP specification 1.2.
+* Click *OK*.
+* Do not close your CloudForms UI since you will be using it in future lab exercises.
 
-The default SCAP content provided with the OpenSCAP components of Satellite 6 depends on the version of Red Hat Enterprise Linux:
+. Logging into all the other Red Hat Products
+Now, let’s login to the rest of the Red Hat Products so they are ready for us to use in the rest of the labs. The table below lists the web pages of the Red Hat Products you need to be logged into for the lab exercises in this lab. Open a new tab on your web browser for each of the Red Hat Products listed below. Log in with the credentials listed below and accept any warnings regarding the SSL certificate. Note that the *<GUID>* portion is a 4 character random string that will be assigned to you.
++
 
-* On Red Hat Enterprise Linux 6, content for Red Hat Enterprise Linux 6 is installed.
-* On Red Hat Enterprise Linux 7, content for both Red Hat Enterprise Linux 6 and Red Hat Enterprise Linux 7 is installed.
+.Accessing your lab environment
+|===
+|Red Hat Product |URL |Username |Password
+|Satellite
+|https://sat6-<GUID>.rhpds.opentlc.com
+|admin
+|r3dh4t1!
 
-When you install the SCAP components in Satellite as defined in the link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.2/html/host_configuration_guide/[Host Configuration Guide], all of the Red Hat default content will show up in Satellite so no extra steps are necessary to add the SCAP content to Satellite.  But if you had customized content that you wrote yourself or if you have a modified policy and you wanted to upload that modified version , you can do that in the Satellite UI under *Hosts → SCAP contents*.
+|Ansible Tower
+|https://tower-<GUID>.rhpds.opentlc.com
+|admin
+|r3dh4t1!
 
-* Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
+|OpenShift
+|https://ocp-<GUID>.rhpds.opentlc.com
+|admin
+|r3dh4t1!
 
-=== Creating a SCAP compliance policy for a host
+|CloudForms
+|https://cfme-<GUID>.rhpds.opentlc.com
+|admin
+|r3dh4t1!
+|===
 
+. Now, let’s save the URLs on these tabs that we just opened as the startup pages of the web browser. In your Firefox web browser, open up *Preferences* and Click on *Use Current* Pages. Then, close the *Preferences* tab.
 
-
-
-<<top>>
-
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[ Lab 2 ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1 ]
