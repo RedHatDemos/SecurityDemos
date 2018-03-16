@@ -60,6 +60,5 @@ Now, let’s login to the rest of the Red Hat Products so they are ready for us 
 |r3dh4t1!
 |===
 
-. Now, let’s save the URLs on these tabs that we just opened as the startup pages of the web browser. In your Firefox web browser, open up *Preferences* and Click on *Use Current* Pages. Then, close the *Preferences* tab.
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1 ]
