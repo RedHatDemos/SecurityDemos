@@ -1,0 +1,96 @@
+---
+# For a full list of ovirt_vms parameters, visit:
+# http://docs.ansible.com/ansible/latest/ovirt_vms_module.html
+
+# RHV Auth parameters
+# engine_url: "{{ lookup('env', 'OVIRT_URL') }}"
+# engine_user: "{{ lookup('env', 'OVIRT_USERNAME') }}"
+# engine_password: "{{ lookup('env', 'OVIRT_PASSWORD') }}"
+# engine_cafile: "{{ lookup('env', 'OVIRT_CAFILE') }}"
+
+engine_url: "{{ lookup('env', 'OVIRT_URL') }}"
+engine_user: "{{ lookup('env', 'OVIRT_USERNAME') }}"
+engine_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32343765326564333435653736376236303139666364343432313831326337386433356361373361
+          3830633930373435366632343039353239326132376537630a653031636261353663353336373665
+          33346534656134343765353434646237666164393766353364626266353332323239623565343063
+          6432363234323161390a323061633334653137363162373032326338666639613239623664353030
+          3863
+
+template:
+cluster: Default
+
+# vm guest parameters
+vm_names:
+  - vm_name:
+memory: 1GiB
+cpu_cores: 1
+cpu_sockets: 1
+operating_system: rhel_7x64
+type: server
+description:
+comment: Provisioned via Ansible
+state: poweredon
+wait_for_ip_address: true
+remove_vms_on_error: true
+
+## vm networking parameters
+nics:
+  - name: "{{ network_0_name | default('nic1') }}"
+    profile_name: "{{ network_0_vlan | default('ovirtmgmt') }}"
+    ### interface - (virtio, e1000, rtl8139)
+    # interface: "{{ network_0_interface | default('virtio') }}"
+
+network_0_ipaddr:
+network_0_prefix: 16
+network_0_gateway: 192.168.0.2
+
+## vm disk parameters
+# disks:
+#   - name: "{{ disk_0_name | default('disk1') }}"
+#     bootable: "{{ disk_0_bootable | default(true) }}"
+
+dns_suffix: example.com
+dns_servers: 192.168.0.1
+
+# cloud_init script
+custom_script: |
+  disable_root: false
+  users:
+    - name: root
+      lock_passwd: false
+      ssh_authorized_keys:
+        - "{{ ssh_authorized_key | default(omit) }}"
+  chpasswd:
+    list: |
+      root:!vault |
+                $ANSIBLE_VAULT;1.1;AES256
+                32343765326564333435653736376236303139666364343432313831326337386433356361373361
+                3830633930373435366632343039353239326132376537630a653031636261353663353336373665
+                33346534656134343765353434646237666164393766353364626266353332323239623565343063
+                6432363234323161390a323061633334653137363162373032326338666639613239623664353030
+                3863
+    expire: false
+  runcmd:
+    - nmcli connection down "System eth0"
+    - "nmcli connection modify 'System eth0' ipv4.method manual ipv4.addr {{ network_0_ipaddr }}/{{ network_0_prefix }} ipv4.gateway {{ network_0_gateway }} ipv4.dns {{ dns_servers }} ipv4.dns-search {{ dns_suffix }}"
+    - nmcli connection up "System eth0"
+    - "touch /etc/cloud/cloud-init.disabled"
+    - systemctl stop firewalld
+    - systemctl disable firewalld
+
+
+scap_profile_name:
+
+# asynchronous parameters
+async_wait: 3600
+async_poll: 0
+async_retries: 100
+
+# setup retry variables
+wait_for_ip_retries: 30
+wait_for_ip_delay: 10
+
+# enable extra debugging
+verbose: false

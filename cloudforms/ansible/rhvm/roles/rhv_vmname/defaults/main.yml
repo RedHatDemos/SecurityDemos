@@ -1,0 +1,9 @@
+---
+vm_names: []
+vm_prefix: cfme
+os_prefix: r
+count: 1
+name_format: "{{ vm_prefix }}{{ os_prefix }}%02x"
+
+# enable extra debugging
+verbose: false
