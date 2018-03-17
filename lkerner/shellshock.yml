@@ -1,10 +1,11 @@
+---
 - name: Test and fix shellshock
   hosts: all
   become:  yes
 
   tasks:
-    - name: Update bash
-      yum:
-        name: bash
-        state: latest
-        update_cache: no
+  - name: Update bash
+    yum:
+      name: bash
+      state: latest
+      update_cache: no
