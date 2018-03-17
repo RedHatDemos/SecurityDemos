@@ -1,4 +1,4 @@
-== Lab 0: Setup steps
+== Lab 1: Security Automation with OpenSCAP
 
 . Re-check Authentication Status of Red Hat Virtualization provider
 You will need to have CloudForms re-check the authentication status of the Red Hat Virtualization provider. This will make sure that CloudForms is re-synchronizing with the Red Hat Virtualization provider.
@@ -27,7 +27,7 @@ image:images/lab0-infra-vms.png[Compute -> Infrastructure -> Virtual Machines]
 * At the bottom, click *Check All*.
 * At the top click *Power -> Power On*.
 +
-image:images/image104.png[Power -> Power On]
+image:images/lab0-poweron.png[Power -> Power On]
 
 * Click *OK*.
 * Do not close your CloudForms UI since you will be using it in future lab exercises.
@@ -60,5 +60,6 @@ Now, let’s login to the rest of the Red Hat Products so they are ready for us 
 |r3dh4t1!
 |===
 
+. Now, let’s save the URLs on these tabs that we just opened as the startup pages of the web browser. In your Firefox web browser, open up *Preferences* and Click on *Use Current* Pages. Then, close the *Preferences* tab.
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1 ]

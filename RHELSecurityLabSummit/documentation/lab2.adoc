@@ -1,6 +1,6 @@
-== Lab 2: How to utilize the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6
+== Lab 1: SELinux
 
-=== Goal of Lab 2
+=== Goal of Lab 1
 The goal of this lab is to introduce you to the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6.
 
 === Introduction
@@ -24,27 +24,11 @@ The default SCAP content provided with the OpenSCAP components of Satellite 6 de
 
 When you install the SCAP components in Satellite as defined in the link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.2/html/host_configuration_guide/[Host Configuration Guide], all of the Red Hat default content will show up in Satellite so no extra steps are necessary to add the SCAP content to Satellite.  But if you had customized content that you wrote yourself or if you have a modified policy and you wanted to upload that modified version , you can do that in the Satellite UI under *Hosts → SCAP contents*.
 
-. Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
+* Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
 
 === Creating a SCAP compliance policy for a host
-Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
-. Navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
 
-. In the *Create Policy* tab,
-* For the compliance policy *Name*, type *RHEL7_Standard*.
-* For the *Description*, type *RHEL7 Standard System Compliance Policy*.
-* Click *Next*.
 
-. In the *SCAP Content* tab,
-* For *SCAP Content*, choose the *Red Hat rhel7 default content*.
-* For *XCCDF Profile*, choose *Standard System Security Profile*.
-* Click *Next*.
-
-. In the *Schedule* tab,
-* For *Period*, choose *Weekly*.
-* For *Weekday* choose *Thursday*.
-Note: Whatever is defined here as a schedule is executed as a cron job on the client. For Period, if you selected Custom, you can define normal cron syntax to define when the schedule is going to run.
-* Click *Next*.
 
 
 <<top>>

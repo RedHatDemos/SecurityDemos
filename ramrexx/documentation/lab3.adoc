@@ -1,0 +1,23 @@
+== Lab 3: How to use the control policy engine in Red Hat CloudForms and Ansible Tower to enforce compliance with security policies
+
+=== Goal of Lab 3
+The goal of this lab is to introduce you to the power and flexibility of Red Hat CloudForms and Ansible Tower by Red Hat to enforce your security policies.
+
+Specifically, using a combination of Red Hat CloudForms and Ansible Tower by Red Hat, you will identify and fix the Shellshock vulnerability in your system in an automated fashion.
+
+The Shellshock vulnerability is the bash remote code execution vulnerability (CVE-2014-6271), which allows an attacker to gain control over a targeted computer if exploited successfully. Specifically, an attacker could use this flaw to override or bypass environment restrictions to execute shell commands. Certain services and applications allow remote unauthenticated attackers to provide environment variables, allowing them to exploit this issue. If your system is vulnerable, you can fix these issues by updating to the most recent version of the Bash package available from Red Hat for Red Hat Enterprise Linux 5, 6, and 7.
+
+=== Introduction
+Red Hat CloudForms provides unified hybrid cloud management across your entire heterogenous environment, including virtual, private cloud, public cloud, and container environments. Other supported technologies include software defined networking, middleware, and in the future storage management.
+
+Red Hat CloudForms is an agentless solution,delivered as a virtual appliance, that is highly scalable and provides deep continuous visibility and discovery of your entire infrastructure. The Red Hat CloudForms control and policy engine provides compliance and governance capabilities right in the GUI of CloudForms. The Red Hat CloudForms automate engine can be utilized to execute free-form automation using either ruby or Ansible playbooks.  Red Hat CloudForms is able to communicate directly to your Ansible Tower instance to execute your Ansible playbooks. 
+
+Ansible is a simple, powerful, and agentless IT automation technology that can help improve your current processes, migrate applications for better optimization, and provide a single language for DevOps practices across your organization including Developers, Operations, and the Security Team.
+
+Ansible Tower by Red Hat provides a graphical user interface for Ansible with a visual dashboard, a centralized API for your Ansible automation, role-based access control for increased security, job scheduling, graphical inventory management, and real-time job status updates thus providing you all the IT automation features you need to support your enterprise.
+
+Ansible is great for security automation because it is agentless, only requires SSH/WinRM, supports desired state, is extensible and modular, has a push-based architecture, and provides easy targeting based on facts.
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3 ]
