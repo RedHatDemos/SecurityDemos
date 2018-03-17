@@ -51,7 +51,7 @@
         var: command_result
       when: verbose
 
-    - name: Assign tag "{{ category }}:{{ tag }}" to VMs
+    - name: Assign tag to VM
       uri:
         url: "{{ manageiq.api_url }}/api/{{ vm_href_slug }}/tags"
         method: POST
@@ -67,7 +67,7 @@
         status_code: 200
       register: assign_vmtag_output
 
-    - name: Log assign_vmtag_output.results
+    - name: Log assign_vmtag_output
       debug:
-        var: assign_vmtag_output.results
+        var: assign_vmtag_output
       when: verbose
