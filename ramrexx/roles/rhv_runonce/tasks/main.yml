@@ -4,46 +4,62 @@
     satellite_hostname: sat6.summit.example.com
     activation_key: rhel7beta
     organization: Default_Organization
+    location: Default_Location
+    host_group: rhel7_5_soe_rpms_with_puppet
+    sat_user: admin
+    sat_pass: "{{ engine_password | default(omit) }}"
+
+#- name: Regiser with Satellite
+#  shell: "{{ item }}"
+#  register: sat_register_output
+#  with_items:
+#    - "rpm -Uvh http://{{ satellite_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+#    - "subscription-manager register --org={{ organization }} --activationkey={{ activation_key }}"
+#    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.3-rpms --enable rhel-7-server-extras-beta-rpms
+
+#- name: Log sat_register_output
+#  debug:
+#    var: sat_register_output
+#  when: verbose and sat_register_output is defined
 
 - name: Regiser with Satellite
-  shell: "{{ item }}"
-  register: sat_register_output
-  with_items:
-    - "rpm -Uvh http://{{ satellite_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
-    - "subscription-manager register --org={{ organization }} --activationkey={{ activation_key }}"
-    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.3-rpms --enable rhel-7-server-extras-beta-rpms
-
-- name: Log sat_register_output
-  debug:
-    var: sat_register_output
-  when: verbose and sat_register_output is defined
+  include_role:
+    name: sat6register
+  vars:
+    sat6_fqdn: "{{ satellite_hostname }}"
+    admin_user: "{{ sat_user }} "
+    admin_pass: "{{ sat_pass }}"
+    org: "{{ organization }}"
+    loc: "{{ location }}"
+    hostgroup: "{{ host_group }}"
+    activationkey: "{{ activation_key }}"
+    updatehost: "false"
 
 - name: Install packages
   yum:
     name: "{{ item }}"
     state: latest
   with_items:
-    - katello-agent
     - scap-security-guide
     - puppet
     - rubygem-foreman_scap_client
     - ansible
     - redhat-access-insights
+#    - katello-agent
 
-- name: Enable Katello Agent
-  service:
-    name: goferd
-    enabled: true
-    state: started
+#- name: Enable Katello Agent
+#  service:
+#    name: goferd
+#    enabled: true
+#    state: started
 
 - name: Configure Red Hat Access Insights and Puppet
   command: "{{ item }}"
-  ignore_errors: true
+  #ignore_errors: true
   with_items:
     - "redhat-access-insights --register"
     - "puppet config set --section agent server {{ satellite_hostname}}"
     - "puppet config set --section agent ca_server {{ satellite_hostname}}"
-    - "find /var/lib/puppet/ssl -name {{ inventory_hostname }}.pem -delete"
     - "puppet agent --test --tags no_such_tag --waitforcert 10"
     - "puppet agent -t"
 

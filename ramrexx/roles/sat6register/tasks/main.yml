@@ -1,0 +1,60 @@
+---
+# tasks register to satellite6 with or without puppet
+#
+- name: Workaround if you have a non working DNS
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ sat6_ip }} {{ sat6_fqdn }} sat6"
+
+- name: Download bootstrap.py from the {{ sat6_fqdn }}
+  get_url:
+    url: "http://{{ sat6_fqdn }}/pub/bootstrap.py"
+    dest: /usr/local/sbin/bootstrap.py
+  when: hostgroup != 'false'
+  register: get_url_result
+  until: get_url_result | succeeded
+  retries: 10
+  delay: 1
+  ignore_errors: yes
+
+- name: Copy bootstrap.py script to /usr/local/sbin and make it executable
+  file:
+    path: /usr/local/sbin/bootstrap.py
+    mode: 0755
+    owner: root
+    group: root
+  when: hostgroup != 'false'
+
+- name: Register to Satellite6 with puppet enabled and add it to the correct hostgroup
+  command: "/usr/local/sbin/bootstrap.py -l {{ admin_user}} -p {{ admin_pass }} -s {{ sat6_fqdn }} -o {{ org }} -L {{ loc }} -g {{ hostgroup }} -a {{ activationkey }}"
+  when: hostgroup != 'false'
+
+- name: Install the katello-ca-consumer-latest.noarch.rpm from {{ sat6_fqdn }}
+  yum:
+    name: http://{{ sat6_fqdn }}/pub/katello-ca-consumer-latest.noarch.rpm
+    state: present
+  when: hostgroup == 'false'
+
+- name: Register to Satellite6 only for content
+  redhat_subscription:
+    state: present
+    activationkey: "{{ activationkey }}"
+    org_id: "{{ org }}"
+    autosubscribe: true
+  when: hostgroup == 'false'
+  register: 'reg_return'
+
+- name: Install the katello-agent
+  yum:
+    name: katello-agent
+    state: latest
+  when: hostgroup == 'false' and reg_return|success
+  notify:
+    - Start katello-agent
+    - Enable katello-agent
+
+- name: Update the host to latest errata within the attached content view
+  yum:
+    name: '*'
+    state: latest
+  when: updatehost != 'false'

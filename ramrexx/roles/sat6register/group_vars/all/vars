@@ -1,0 +1,10 @@
+---
+sat6_ip: 10.9.61.68
+sat6_fqdn: sat6ldo.rdu.salab.redhat.com
+admin_user: admin
+admin_pass: "{{ vault_admin_pass }}"
+org: redhat
+loc: nyc
+hostgroup: rhel7base
+activationkey: ak-Reg_To_Library_soe_no_puppet
+updatehost: "false"
