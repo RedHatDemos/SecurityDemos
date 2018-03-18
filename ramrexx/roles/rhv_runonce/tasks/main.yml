@@ -5,23 +5,12 @@
     activation_key: rhel7beta
     organization: Default_Organization
     location: Default_Location
-    host_group: rhel7_5_soe_rpms_with_puppet
+    host_group: base_with_puppet_75
     sat_user: admin
+    # using RHV pw for now please add a specific one for satellite to vault
     sat_pass: "{{ engine_password | default(omit) }}"
 
-#- name: Regiser with Satellite
-#  shell: "{{ item }}"
-#  register: sat_register_output
-#  with_items:
-#    - "rpm -Uvh http://{{ satellite_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
-#    - "subscription-manager register --org={{ organization }} --activationkey={{ activation_key }}"
-#    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.3-rpms --enable rhel-7-server-extras-beta-rpms
-
-#- name: Log sat_register_output
-#  debug:
-#    var: sat_register_output
-#  when: verbose and sat_register_output is defined
-
+# Call bootstrap.py
 - name: Regiser with Satellite
   include_role:
     name: sat6register
@@ -35,16 +24,31 @@
     activationkey: "{{ activation_key }}"
     updatehost: "false"
 
-- name: Install packages
+- name: Set Up Repos
+  shell: "{{ item }}"
+  register: sat_repos_output
+  with_items:
+# Handled by bootstrap.py
+#    - "rpm -Uvh http://{{ satellite_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+#    - "subscription-manager register --org={{ organization }} --activationkey={{ activation_key }}"
+#    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.3-rpms --enable rhel-7-server-extras-beta-rpms
+    - subscription-manager repos --enable rhel-7-server-extras-beta-rpms
+- name: Log sat_repos_output
+  debug:
+    var: sat_repos_output
+  when: verbose and sat_repos_output is defined
+
+- name: Install Packages
   yum:
     name: "{{ item }}"
     state: latest
   with_items:
     - scap-security-guide
-    - puppet
     - rubygem-foreman_scap_client
     - ansible
     - redhat-access-insights
+# Handled by bootstrap.py
+#    - puppet
 #    - katello-agent
 
 #- name: Enable Katello Agent
@@ -53,21 +57,26 @@
 #    enabled: true
 #    state: started
 
-- name: Configure Red Hat Access Insights and Puppet
+- name: Configure Red Hat Access Insights
   command: "{{ item }}"
-  #ignore_errors: true
   with_items:
     - "redhat-access-insights --register"
-    - "puppet config set --section agent server {{ satellite_hostname}}"
-    - "puppet config set --section agent ca_server {{ satellite_hostname}}"
-    - "puppet agent --test --tags no_such_tag --waitforcert 10"
-    - "puppet agent -t"
 
-- name: Start Puppet Daemon
-  service:
-    name: puppet
-    state: started
-    enabled: true
+# Handled by bootstrap.py
+#- name: Configure Puppet
+#  command: "{{ item }}"
+#  ignore_errors: true
+#  with_items:
+#    - "puppet config set --section agent server {{ satellite_hostname}}"
+#    - "puppet config set --section agent ca_server {{ satellite_hostname}}"
+#    - "puppet agent --test --tags no_such_tag --waitforcert 10"
+#    - "puppet agent -t"
+
+#- name: Start Puppet Daemon
+#  service:
+#    name: puppet
+#    state: started
+#    enabled: true
 
 - name: Insert ignore_errors into plays
   replace:
