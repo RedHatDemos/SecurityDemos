@@ -1,8 +1,3 @@
-satellite_hostname: sat6.summit.example.com
-activation_key: rhel7beta
-organization: Default_Organization
-location: Default_Location
-host_group: base_with_puppet_75
 sat_user: admin
 sat_pass: !vault |
           $ANSIBLE_VAULT;1.1;AES256
@@ -11,3 +6,9 @@ sat_pass: !vault |
           33346534656134343765353434646237666164393766353364626266353332323239623565343063
           6432363234323161390a323061633334653137363162373032326338666639613239623664353030
           3863
+satellite_hostname: sat6.summit.example.com
+activation_key: rhel7beta
+organization: Default_Organization
+location: Default_Location
+hostgroup: base_with_puppet_75
+updatehost: false
