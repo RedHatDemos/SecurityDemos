@@ -9,5 +9,6 @@ satellite_pass: !vault |
           3863
 satellite_hostname: sat6.summit.example.com
 validate_certs: false
+force_basic_auth: true
 policy_id: 1
 verbose: false

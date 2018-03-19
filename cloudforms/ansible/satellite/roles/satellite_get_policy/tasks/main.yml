@@ -3,6 +3,7 @@
   uri:
     url: "https://{{ satellite_hostname }}/api/v2/compliance/policies/{{ policy_id }}"
     method: GET
+    force_basic_auth: "{{ force_basic_auth }}"
     validate_certs: "{{ validate_certs }}"
     user: "{{ satellite_user }}"
     password: "{{ satellite_pass }}"
