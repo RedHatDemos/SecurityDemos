@@ -1,0 +1,24 @@
+---
+- MiqAlert:
+    guid: 1bb81254-44a6-11de-b543-005056a170fa
+    description: VM Guest Windows Event Log Error - NtpClient
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Vm
+    miq_expression: 
+    responds_to_events: vm_scan_complete
+    enabled: 
+    read_only: true
+    hash_expression:
+      :mode: internal
+      :options:
+        :event_log_message_filter_type: INCLUDES
+        :event_log_message_filter_value: NtpClient
+        :time_threshold: 86400
+        :event_log_level: error
+        :freq_threshold: '1'
+      :eval_method: event_log_threshold
+    severity: 

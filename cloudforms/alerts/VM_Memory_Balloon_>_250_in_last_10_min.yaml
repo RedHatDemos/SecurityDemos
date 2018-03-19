@@ -1,0 +1,23 @@
+---
+- MiqAlert:
+    guid: f8b870d0-c23d-11de-a3be-000c290de4f9
+    description: VM Memory Balloon > 250 in last 10 min
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Vm
+    miq_expression: 
+    responds_to_events: vm_perf_complete
+    enabled: 
+    read_only: true
+    hash_expression:
+      :mode: internal
+      :options:
+        :perf_column: mem_vmmemctl_absolute_average
+        :value_threshold: '250'
+        :rt_time_threshold: 600
+        :operator: ">"
+      :eval_method: realtime_performance
+    severity: 

@@ -1,0 +1,30 @@
+---
+- MiqAlert:
+    guid: 731da3b2-40bc-11de-bd12-005056a170fa
+    description: 'VM Guest C: Drive < 10% Free'
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Vm
+    miq_expression: !ruby/object:MiqExpression
+      exp:
+        and:
+        - "=":
+            field: Vm-platform
+            value: windows
+        - FIND:
+            search:
+              "=":
+                field: Vm.hardware.volumes-name
+                value: 'C:'
+            checkall:
+              "<":
+                field: Vm.hardware.volumes-free_space_percent
+                value: 10
+    responds_to_events: 
+    enabled: 
+    read_only: true
+    hash_expression: 
+    severity: 

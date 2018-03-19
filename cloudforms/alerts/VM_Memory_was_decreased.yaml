@@ -1,0 +1,21 @@
+---
+- MiqAlert:
+    guid: fbe4b5ee-447e-11de-aaba-005056a170fa
+    description: VM Memory was decreased
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Vm
+    miq_expression: 
+    responds_to_events: vm_reconfigure
+    enabled: 
+    read_only: true
+    hash_expression:
+      :mode: internal
+      :options:
+        :operator: Decreased
+        :hdw_attr: memory_mb
+      :eval_method: reconfigured_hardware_value
+    severity: 

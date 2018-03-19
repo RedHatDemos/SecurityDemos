@@ -1,0 +1,25 @@
+---
+- MiqAlert:
+    guid: 89db0be8-c240-11de-a3be-000c290de4f9
+    description: VM Environment Tag <> Host Environment Tag
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Vm
+    miq_expression: !ruby/object:MiqExpression
+      exp:
+        and:
+        - CONTAINS:
+            tag: Vm.managed-environment
+            value: prod
+        - not:
+            CONTAINS:
+              tag: Vm.host.managed-environment
+              value: prod
+    responds_to_events: 
+    enabled: 
+    read_only: true
+    hash_expression: 
+    severity: 

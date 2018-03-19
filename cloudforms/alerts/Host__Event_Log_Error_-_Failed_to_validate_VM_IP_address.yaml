@@ -1,0 +1,24 @@
+---
+- MiqAlert:
+    guid: fc2ae066-44b8-11de-900a-005056a170fa
+    description: Host  Event Log Error - Failed to validate VM IP address
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Host
+    miq_expression: 
+    responds_to_events: host_scan_complete
+    enabled: 
+    read_only: true
+    hash_expression:
+      :mode: internal
+      :options:
+        :event_log_message_filter_type: INCLUDES
+        :event_log_message_filter_value: Failed to validate VM IP address
+        :time_threshold: 86400
+        :freq_threshold: '2'
+        :event_log_source: VmMisc
+      :eval_method: hostd_log_threshold
+    severity: 

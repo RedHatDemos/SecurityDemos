@@ -1,0 +1,25 @@
+---
+- MiqAlert:
+    guid: 8a6d32a8-44b8-11de-900a-005056a170fa
+    description: 'Host Event Log Error - Memory Exceed Soft Limit '
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Host
+    miq_expression: 
+    responds_to_events: host_scan_complete
+    enabled: 
+    read_only: true
+    hash_expression:
+      :mode: internal
+      :options:
+        :event_log_message_filter_type: INCLUDES
+        :event_log_message_filter_value: exceeds soft limit
+        :time_threshold: 86400
+        :event_log_level: warn
+        :freq_threshold: '2'
+        :event_log_source: Memory checker
+      :eval_method: hostd_log_threshold
+    severity: 

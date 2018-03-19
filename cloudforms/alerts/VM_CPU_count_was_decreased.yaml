@@ -1,0 +1,21 @@
+---
+- MiqAlert:
+    guid: ce2f8846-44a5-11de-b543-005056a170fa
+    description: VM CPU count was decreased
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Vm
+    miq_expression: 
+    responds_to_events: vm_reconfigure
+    enabled: 
+    read_only: true
+    hash_expression:
+      :mode: internal
+      :options:
+        :operator: Decreased
+        :hdw_attr: :cpu_total_cores
+      :eval_method: reconfigured_hardware_value
+    severity: 

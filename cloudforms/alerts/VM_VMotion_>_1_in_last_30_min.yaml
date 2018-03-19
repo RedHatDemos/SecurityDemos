@@ -1,0 +1,23 @@
+---
+- MiqAlert:
+    guid: a9532172-44a5-11de-b543-005056a170fa
+    description: VM VMotion > 1 in last 30 min
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: Vm
+    miq_expression: 
+    responds_to_events: '["MigrateVM_Task"]'
+    enabled: 
+    read_only: true
+    hash_expression:
+      :mode: internal
+      :options:
+        :event_types:
+        - MigrateVM_Task
+        :time_threshold: 1800
+        :freq_threshold: '1'
+      :eval_method: event_threshold
+    severity: 

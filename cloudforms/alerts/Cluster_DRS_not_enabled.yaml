@@ -1,0 +1,20 @@
+---
+- MiqAlert:
+    guid: eb88f942-c23e-11de-a3be-000c290de4f9
+    description: Cluster DRS not enabled
+    options:
+      :notifications:
+        :email:
+          :from: ''
+          :to: []
+    db: EmsCluster
+    miq_expression: !ruby/object:MiqExpression
+      exp:
+        "=":
+          field: EmsCluster-drs_enabled
+          value: 'false'
+    responds_to_events: 
+    enabled: 
+    read_only: true
+    hash_expression: 
+    severity: 
