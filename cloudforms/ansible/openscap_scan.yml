@@ -17,28 +17,18 @@
     category: scap_compliant
     tag: "false"
     vm_href_slug:
-    satellite_user: admin
-    satellite_pass: !vault |
-              $ANSIBLE_VAULT;1.1;AES256
-              32343765326564333435653736376236303139666364343432313831326337386433356361373361
-              3830633930373435366632343039353239326132376537630a653031636261353663353336373665
-              33346534656134343765353434646237666164393766353364626266353332323239623565343063
-              6432363234323161390a323061633334653137363162373032326338666639613239623664353030
-              3863
-    satellite_hostname: sat6.summit.example.com
-    verbose: false
 
   pre_tasks:
     - name: logging manageiq object
       debug: var=manageiq
       when: manageiq is defined
 
-  tasks:
     - name: Log policy_id
       debug:
         var: policy_id
-      when: verbose and policy_id is defined
+      when: policy_id is defined
 
+  tasks:
     - name: Configure puppet client
       command: "puppet agent -t"
       ignore_errors: true
@@ -58,26 +48,6 @@
     - name: Log command_result
       debug:
         var: command_result
-      when: verbose
-
-    - name: Lookup Compliance Policy Name
-      uri:
-        url: "https://{{ satellite_hostname }}/api/v2/compliance/policies/{{ policy_id }}"
-        method: GET
-        validate_certs: "{{ manageiq_validate_certs }}"
-        user: "{{ satellite_user }}"
-        password: "{{ satellite_pass }}"
-        status_code: 200
-      register: lookup_policy_name_output
-
-    - name: Log lookup_policy_name_output
-      debug:
-        var: lookup_policy_name_output
-      when: verbose
-
-    - name: Log lookup_policy_name_output
-      debug:
-        var: lookup_policy_name_output.resuls
       when: verbose
 
     - name: Assign tag to VM

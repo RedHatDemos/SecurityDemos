@@ -1,0 +1,23 @@
+---
+- name: openSCAP Scan
+  # Need to do some stuff locally first
+  hosts: localhost
+  gather_facts: false
+
+  pre_tasks:
+    - name: logging manageiq object
+      debug: var=manageiq
+      when: manageiq is defined
+
+    - name: Log policy_id
+      debug:
+        var: policy_id
+      when: policy_id is defined
+
+  roles:
+    - role: satellite_get_policy
+
+
+  # This will run openscap scans if a host is registered to Satellite 6, and assigned a policy
+  # - hosts: all
+  #   gather_facts: false

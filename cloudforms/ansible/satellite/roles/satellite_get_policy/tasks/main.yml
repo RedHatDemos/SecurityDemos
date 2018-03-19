@@ -1,0 +1,20 @@
+---
+- name: Lookup Compliance Policy Name
+  uri:
+    url: "https://{{ satellite_hostname }}/api/v2/compliance/policies/{{ policy_id }}"
+    method: GET
+    validate_certs: "{{ validate_certs }}"
+    user: "{{ satellite_user }}"
+    password: "{{ satellite_pass }}"
+    status_code: 200
+  register: lookup_policy_name_output
+
+- name: Log lookup_policy_name_output
+  debug:
+    var: lookup_policy_name_output
+  when: verbose
+
+# - name: Log lookup_policy_name_output
+#   debug:
+#     var: lookup_policy_name_output.resuls
+#   when: verbose
