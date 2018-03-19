@@ -21,4 +21,5 @@
   #gather_facts: false
 
   roles:
+    - role: sat6register
     - role: rhv_runonce
