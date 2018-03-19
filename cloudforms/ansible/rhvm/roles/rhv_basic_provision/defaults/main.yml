@@ -56,6 +56,7 @@ dns_servers: 192.168.0.1
 
 # cloud_init script
 custom_script: |
+  hostname: "{{ vm_name }}.{{ dns_suffix }}"
   disable_root: false
   users:
     - name: root
