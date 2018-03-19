@@ -8,7 +8,7 @@ satellite_pass: !vault |
           3863
 satellite_hostname: sat6.summit.example.com
 activation_key: rhel7beta
-organization: Default_Organization
-location: Default_Location
+organization: Default Organization
+location: Default Location
 hostgroup: base_with_puppet_75
 updatehost: false
