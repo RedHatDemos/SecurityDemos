@@ -21,7 +21,7 @@
   when: hostgroup != 'false'
 
 - name: Register to Satellite6 with puppet enabled and add it to the correct hostgroup
-  command: "/usr/local/sbin/bootstrap.py -l {{ admin_user}} -p {{ admin_pass }} -s {{ satellite_hostname }} -o {{ org }} -L {{ loc }} -g {{ hostgroup }} -a {{ activationkey }}"
+  command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o {{ organization }} -L {{ location }} -g {{ hostgroup }} -a {{ activation_key }}"
   when: hostgroup != 'false'
 
 - name: Install the katello-ca-consumer-latest.noarch.rpm from {{ satellite_hostname }}
@@ -33,8 +33,8 @@
 - name: Register to Satellite6 only for content
   redhat_subscription:
     state: present
-    activationkey: "{{ activationkey }}"
-    org_id: "{{ org }}"
+    activationkey: "{{ activation_key }}"
+    org_id: "{{ organization }}"
     autosubscribe: true
   when: hostgroup == 'false'
   register: 'reg_return'
