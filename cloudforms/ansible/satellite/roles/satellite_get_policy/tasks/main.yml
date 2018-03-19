@@ -24,3 +24,8 @@
   debug:
     var: policy_name
   when: verbose
+
+- name: Set policy_name_normalized
+  set_fact:
+    policy_name_normalized: "{{ policy_name | regex_replace('\\W', '_') }}"
+  when: verbose
