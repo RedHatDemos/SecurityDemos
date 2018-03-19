@@ -15,7 +15,12 @@
     var: lookup_policy_name_output
   when: verbose
 
-# - name: Log lookup_policy_name_output
-#   debug:
-#     var: lookup_policy_name_output.resuls
-#   when: verbose
+- name: Set policy_name
+  set_fact:
+    policy_name: "{{ lookup_policy_name_output.json.name }}"
+  when: verbose
+
+- name: Log policy_name
+  debug:
+    var: policy_name
+  when: verbose
