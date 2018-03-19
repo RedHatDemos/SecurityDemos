@@ -1,5 +1,5 @@
 #cloud-config
-host_name: <%= evm[:vm_target_name] %>
+hostname: <%= evm[:vm_target_name] %>
 user_name: root
 root_password: <%= MiqPassword.decrypt(evm[:root_password]) %>
 ssh_pwauth: true
