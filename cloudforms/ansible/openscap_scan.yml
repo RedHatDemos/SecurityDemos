@@ -15,7 +15,7 @@
     manageiq_validate_certs: false
     policy_id:
     category: scap_compliant
-    tag: false
+    tag: "false"
     vm_href_slug:
     verbose: false
 
