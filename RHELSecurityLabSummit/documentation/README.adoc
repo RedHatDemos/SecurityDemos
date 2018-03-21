@@ -34,3 +34,4 @@ You will each be given your own unique *GUID*, which you will use to access your
 * link:lab0.adoc[Lab 0]
 * link:lab1.adoc[Lab 1]
 * link:lab2.adoc[Lab 2]
+* link:audit.adoc[Audit Lab]

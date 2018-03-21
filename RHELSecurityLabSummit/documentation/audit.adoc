@@ -1,0 +1,278 @@
+= Lab X: Auditing on Red Hat Enterprise Linux 7.5
+
+== Introduction
+
+The following lab is an introduction to the auditing capabilities of Red Hat
+Enterprise Linux.  These exercises require a functional RHEL-7.5 test system,
+preferably freshly installed.
+
+Some of these exercises may not work correctly on Red Hat Enterprise Linux
+releases older, or newer, than RHEL-7.5.
+
+== Installing Audit
+
+The Linux audit mechanism consists of two parts: and audit enabled kernel, and
+a collection of userspace tools to capture the audit events from the kernel and
+manage the resulting audit log.  All Red Hat Enterprise Linux Kernels provide
+the necessary audit support, and the _audit_ package provides the required
+userspace tools.
+
+You can ensure that the audit userspace tools are installed by running the
+following command, as the root user:
+
+	# yum install audit
+
+Once the audit userspace tools are installed, you need to ensure that the audit
+daemon, `auditd`, is set to start at boot.  This can be done by running one of
+the following commands, as the root user:
+
+	# systemctl enable auditd
+
+At this point it is recommended that you reboot the system so the audit daemon
+can be started with the system’s credentials, but if you can’t reboot you can
+start the service manually using either the `systemctl` or `service` commands,
+both need to be run as the root user:
+
+	# systemctl start auditd
+
+If one of both of the commands above fail, or don’t appear to do anything,
+don’t worry, the audit daemon may already be enabled and running on your
+system.  You can verify that the audit daemon is running with the following
+command:
+
+	# systemctl status auditd
+
+== Creating a Test User
+
+In order to help demonstrate the auditing functionality we need to create a
+test user for use in this lab:
+
+	# useradd auditlab
+	# passwd auditlab 
+
+== Configuring Audit
+
+There are two main audit components in Red Hat Enterprise Linux, the audit
+daemon and the kernel itself.  The exercises below demonstrate how to configure
+both.
+
+Audit Daemon Configuration
+When the audit daemon is started during the boot process, it reads the
+configuration file in _/etc/audit/auditd.conf_.  The different configuration
+options are explained in the _auditd.conf(5)_ manpage.  Two of the more
+interesting options are the “flush”, “freq”, and “log_format” options; “flush”
+controls how often the audit events are explicitly flushed to disk, “freq”
+determines how frequently the flush happens, and the “log_format” option
+controls the on-disk audit log format.  For this lab we will check to ensure
+that “flush” is set to “INCREMENTAL_ASYNC” (asynchronous flushing for
+performance), “freq” is set to 50 (flush the log every 50 records), and
+“log_format” is set to “ENRICHED” (resolves some information for improved
+archival value).  The _auditd.conf_ file can be modified using your favorite
+text editor running as root; we’ll use the _sed_ command in the example below:
+
+	# sed -e 's/^flush.*/flush = INCREMENTAL_ASYNC/' -i /etc/audit/auditd.conf
+	# sed -e 's/^freq.*/freq = 50/' -i /etc/audit/auditd.conf
+	# sed -e 's/^log_format.*/log_format = ENRICHED/' -i /etc/audit/auditd.conf
+
+=== Linux Kernel Configuration
+
+The Linux Kernel’s audit subsystem can be configured using the `auditctl`
+command.  Using `auditctl` the administrator can add audit event filtering
+rules as well as tune the audit subsystem in the kernel.  The different
+configuration parameters are explained in the _auditctl(8)_ manpage.
+
+==== Pre-Configured Rules
+
+A number of pre-configured audit filter rules are provided with Red Hat
+Enterprise Linux, they can be found in _/usr/share/doc/audit-*_.  These filter
+rules can be enabled by copying them to the system’s audit filter rule
+directory, regenerating the filter configuration, and loading the resulting
+filter rule configuration into the kernel.  In the example below we will enable
+some basic audit filters designed to help administrators meet the US Security
+Technical Implementation Guide (STIG) for Red Hat Enterprise Linux:
+
+	# cat /usr/share/doc/audit-*/rules/README-rules
+	# rm /etc/audit/rules.d/*
+	# cp /usr/share/doc/audit-*/rules/10-base-config.rules /etc/audit/rules.d
+	# cp /usr/share/doc/audit-*/rules/30-stig.rules /etc/audit/rules.d
+	# cp /usr/share/doc/audit-*/rules/31-privileged.rules /etc/audit/rules.d
+	# cp /usr/share/doc/audit-*/rules/99-finalize.rules /etc/audit/rules.d
+	# augenrules --load
+
+The `augenrules` tool combines all of the _*.rules_ files located in
+_/etc/audit/rules.d_ into the _/etc/audit/audit.rules_ file and loads them
+using the `auditctl` command.  You can remove, or rename, any of these files
+and rerun the `augenrules --load` command to reconfigure your system.
+
+==== Custom Rules
+
+Custom audit filters can be loaded into the kernel using the `auditctl`
+command.  The different filter options are explained in the _auditctl(8)_
+manpage.  In the example below we are going to create an audit filter will
+capture audit events created by the `/usr/bin/ping` program.  We will also
+configure the system to tag all of those events with the “rhsummit” key, using
+the “-k” option, to make search through the audit log easier.  The
+“-a always,exit” is a common way to add audit filter rules, it adds a filter
+rule to be executed at syscall exit time, see the _auditctl(8)_ manpage for
+more detail. 
+
+	# auditctl -a always,exit -F exe=/usr/bin/ping -k rhsummit
+
+Custom audit filters can be made persistent by creating a new file in the
+_/etc/audit/rules.d_ directory with the _.rules_ file extension.  While not
+required, the following naming convention is suggested:
+
+	<priority>-<name>.rules
+
+Where the “<priority>” value falls into these categories:
+
+	10: Kernel and auditctl configuration
+	20: Rules that could match general rules but we want a different match
+	30: Main rules
+	40: Optional rules
+	50: Server Specific rules
+	70: System local rules
+	90: Finalize (immutable)
+
+The pre-configured filter rules provide a great example for how to structure
+your custom audit filter rule files, but the basic syntax is that each line is
+a series of arguments passed to the `auditctl` command; lines starting with a
+“#” are treated as comments and ignored.
+
+We can make our custom filter rule persistent by adding a new rule file in
+_/etc/audit/rules.d_ and reloading our configuration:
+
+	# echo ‘-a always,exit -S all -F exe=/usr/bin/ping -F key=rhsummit’ > /etc/audit/rules.d/70-rhsummit_lab.rules
+	# augenrules --load
+
+In addition to custom filter rules, this is also the mechanism we use to tweak
+the base configuration of the audit subsystem in the Linux Kernel.  For
+example, if we wanted to increase the audit backlog buffer we could do so for
+the current system using the following command:
+
+	# auditctl -b 8192
+
+If we wanted to make the configuration tweak persistent, we could create a new
+file in _/etc/audit/rules.d_ with the configuration and reload the audit rules:
+
+	# echo -b 8192 > 15-rhsummit_kernel.rules
+	# augenrules --load
+
+== Inspecting Audit Logs
+
+The exercises below show how to search through the audit logs and generate
+summary audit reports.  It is important to note that this section requires that
+the system is configured as described earlier in this lab.
+
+=== Generate Audit Events
+
+In order to ensure we have some interesting events in the audit log, login as
+the "auditlab” user we created above and execute the following commands:
+
+	$ vi /etc/shadow
+	$ date -s "8 Aug 2011 08:00:00 -0400"
+	$ ping -c 1 127.0.0.1
+	$ vi ~/project_tps_report.txt
+
+=== Searching for Events
+
+While the audit logs are plaintext files, and normal Linux text searching tools
+(e.g. `grep`) can be used to search the audit logs, the audit userspace tools
+include a tool specially designed to search and interpret the audit logs,
+`ausearch`.  The `ausearch` tool can take a number of command line parameters,
+all of which are described in the _ausearch(8)_ manpage.
+
+The “-ts” option specifies at what point in the audit logs to start searching,
+“-ts today” indicates that only events from today should be considered.  The
+“-m” option indicates that you are interested in audit events with the given
+record.
+
+	# ausearch -ts today -m USER_LOGIN
+
+
+Multiple record types can be specified, the results include events which
+contain either record type.
+
+	# ausearch -ts this-month -m SERVICE_START -m SERVICE_STOP
+
+The “-i” option instructs `ausearch` to interpret the results, translating some
+fields into a more human readable form.  The “-k” option searches on the key
+assigned to an audit rule.
+
+	# ausearch -ts today -i -k access
+
+The “--uid” option searches for events that match the given UID.
+
+	# ausearch -ts today -i -k time-change --uid auditlab
+
+The “-f” option searches for events that match on the given file name.
+
+	# ausearch -ts today -i -f project_tps_report.txt
+
+Finally, we can search for audit events generated by our custom filter rule.
+
+	# ausearch -ts today -i -k rhsummit
+
+=== Generating Reports
+
+Included in the audit userspace tools are three utilities which can be used to
+generate a number of reports from the audit log: `aureport`, `aulast`, and
+`aulastlog`.  The `aureport` tool can generate a number of different reports,
+all of which are described in the _aureport(8)_ manpage.  The example below
+generates a summary report of all of the audit events that occurred today.
+
+	# aureport -ts today --summary
+
+The `aulast` tool generates a report similar to the `last` command, except the
+information is collected from the audit log instead of the less reliable utmp
+logs.  The _aulast(8)_ manpage provides details on how to run `aulast`, but
+without any options it produces a familiar report:
+
+	# aulast
+
+Similar to `aulast`, `aulastlog` is designed as a replacement for the `lastlog`
+command; the important difference being that `aulastlog` collects data from the
+audit log.  The _aulastlog(8)_ manpage provides more information, but running
+`aulastlog` without any options results in a useful report:
+
+	# aulastlog
+
+=== Transforming Audit Logs
+
+In addition to searching through the audit logs, the `ausearch` tool can also
+be used to transform the results into different formats.  If you have already
+done the rest of this lab, you are most likely familiar with the default “raw”
+and the “interpreted” formats:
+
+	# ausearch -ts today
+	# ausearch -ts today -i
+
+In addition to the two formats above, there are also “csv” and “text” formats.
+These two formats can be selected using the “--format” argument:
+
+	# ausearch -ts today --format csv
+	# ausearch -ts today --format text
+
+The “csv” output is particularly interesting as it can be imported into
+LibreOffice or any other spreadsheet program that accepts files in the
+Comma Separated Values (CSV) format:
+
+	# ausearch -ts today --format csv --extra-labels --extra-obj2 > audit.log.csv
+	# libreoffice audit.log.csv
+
+The “-format” option, as well as several others which can customize the output
+of `ausearch`, can be found in the _ausearch(8)_ manpage.
+
+== Reset the Lab System
+
+In order to reset the system used for the lab, run the following commands as
+root:
+
+	# rm /etc/audit/rules.d/*
+	# cp /usr/share/doc/audit-*/rules/10-no-audit.rules /etc/audit/rules.d
+	# augenrules --load
+	# userdel -r auditlab
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:audit.adoc[ Audit Lab ]
