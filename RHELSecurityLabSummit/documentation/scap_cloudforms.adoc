@@ -1,4 +1,4 @@
-== Lab 1: Security Automation with OpenSCAP
+== Lab 1: CloudForms Security Automation with OpenSCAP
 
 . Re-check Authentication Status of Red Hat Virtualization provider
 You will need to have CloudForms re-check the authentication status of the Red Hat Virtualization provider. This will make sure that CloudForms is re-synchronizing with the Red Hat Virtualization provider.

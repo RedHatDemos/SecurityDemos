@@ -1,4 +1,4 @@
-== Lab 1: SELinux
+== Lab 1: Satellite 6 OpenSCAP Integration
 
 === Goal of Lab 1
 The goal of this lab is to introduce you to the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6.
