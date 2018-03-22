@@ -258,7 +258,6 @@ LibreOffice or any other spreadsheet program that accepts files in the
 Comma Separated Values (CSV) format:
 
 	# ausearch -ts today --format csv --extra-labels --extra-obj2 > audit.log.csv
-	# libreoffice audit.log.csv
 
 The “-format” option, as well as several others which can customize the output
 of `ausearch`, can be found in the _ausearch(8)_ manpage.
