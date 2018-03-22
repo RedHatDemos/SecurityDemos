@@ -160,7 +160,7 @@ the current system using the following command:
 If we wanted to make the configuration tweak persistent, we could create a new
 file in _/etc/audit/rules.d_ with the configuration and reload the audit rules:
 
-	# echo -b 8192 > 15-rhsummit_kernel.rules
+	# echo -b 8192 > /etc/audit/rules.d/15-rhsummit_kernel.rules
 	# augenrules --load
 
 == Inspecting Audit Logs
