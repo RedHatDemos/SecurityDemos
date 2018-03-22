@@ -1,8 +1,7 @@
 ---
-- name: openSCAP Scan
-  # Need to do some stuff locally first
-  hosts: localhost
-  gather_facts: false
+- name: OpenSCAP scan
+  hosts: all
+  gather_facts: true
 
   pre_tasks:
     - name: logging manageiq object
@@ -15,9 +14,12 @@
       when: policy_id is defined
 
   roles:
-    - role: satellite_get_policy
+    - role: foremena_scap_scan
 
+- name: Analyze scan results and apply tags
+  hosts: localhost
+  gather_facts: false
 
-  # This will run openscap scans if a host is registered to Satellite 6, and assigned a policy
-  # - hosts: all
-  #   gather_facts: false
+  roles:
+    - role: satellite_scan_results
+    - role: cloudforms_tagging
