@@ -11,4 +11,5 @@ satellite_hostname: sat6.summit.example.com
 validate_certs: false
 force_basic_auth: true
 policy_id:
+vm_hostname:
 verbose: false

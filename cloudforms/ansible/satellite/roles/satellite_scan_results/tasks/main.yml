@@ -27,7 +27,7 @@
 
 - name: Lookup Compliance Policy Name
   uri:
-    url: "https://{{ satellite_hostname }}/api/v2/compliance/arf_reports?search=host.name='{{ ansible_fqdn }}'&policy.id={{ policy_id }}"
+    url: "https://{{ satellite_hostname }}/api/v2/compliance/arf_reports?search=host.name='{{ vm_hostname }}'&policy.id={{ policy_id }}"
     method: GET
     force_basic_auth: "{{ force_basic_auth }}"
     validate_certs: "{{ validate_certs }}"
