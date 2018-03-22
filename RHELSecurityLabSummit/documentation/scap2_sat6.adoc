@@ -1,4 +1,4 @@
-== Lab 1: SELinux
+== Lab 1: Satellite 6 OpenSCAP Integration
 
 === Goal of Lab 1
 The goal of this lab is to introduce you to the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6.
@@ -33,4 +33,4 @@ When you install the SCAP components in Satellite as defined in the link:https:/
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[ Lab 2 ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:scap3_cloudforms.adoc[ SCAP in Cloudforms ]

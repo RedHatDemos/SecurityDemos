@@ -31,7 +31,7 @@ You will each be given your own unique *GUID*, which you will use to access your
 
 
 == Table of Contents
-* link:lab0.adoc[Lab 0]
-* link:lab1.adoc[Lab 1]
-* link:lab2.adoc[Lab 2]
+* link:scap1_basics.adoc[SCAP Basics]
+* link:scap2_sat6.adoc[SCAP Satellite 6 integration]
+* link:scap3_cloudforms.adoc[SCAP Cloudforms integration]
 * link:audit.adoc[Audit Lab]

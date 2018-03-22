@@ -1,0 +1,98 @@
+== Lab 1: OpenSCAP Basics and Command Line Scanning
+
+=== Goal of Lab 1
+The goal of this lab is to introduce you to the basics of SCAP scanning with OpenSCAP.
+
+=== Introduction
+OpenSCAP is a family of open source SCAP tools and content that help users create standard security checklists for enterprise systems. Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certification and accreditation easier.
+
+OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this segment we will focus on one-off scanning to get started.
+
+=== Prerequisites
+Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages:
+
+ # the tool that performs the scanning
+ yum install openscap-scanner
+ # project that brings in security policies we will load and test agains
+ yum install scap-security-guide
+ # GUI tool for scanning and content customization, a front-end for OpenSCAP
+ yum install scap-workbench
+
+Verify a successful installation by running:
+
+ $ oscap -V
+
+ OpenSCAP command line tool (oscap) 1.2.17
+ Copyright 2009--2017 Red Hat Inc., Durham, North Carolina.
+
+ ==== Supported specifications ====
+ XCCDF Version: 1.2
+ OVAL Version: 5.11.1
+ CPE Version: 2.3
+ CVSS Version: 2.0
+ CVE Version: 2.0
+ Asset Identification Version: 1.1
+ Asset Reporting Format Version: 1.1
+ CVRF Version: 1.1
+ ...
+
+=== Performing our first scan
+Let's see the compliance content provided by `scap-security-guide`:
+
+ $ rpm -ql scap-security-guide
+ ...
+ /usr/share/xml/scap/ssg/content/ssg-rhel7-cpe-dictionary.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel7-cpe-oval.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel7-oval.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
+ ...
+
+Move to the `content` folder so we can avoid typing long paths:
+
+ cd /usr/share/xml/scap/ssg/content
+
+Run the first baseline scan:
+
+ # let's check which compliance profiles are available for rhel7
+ oscap info ssg-rhel7-ds.xml
+ # let's perform our first testing scan with the vanilla OSPP profile
+ oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 ./ssg-rhel7-ds.xml
+ # use --results-arf to get machine readable results archive
+ # use --report to get human readable report (can also be generated from ARF after the scan)
+ oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 --results-arf \~/arf.xml --report \~report.html ./ssg-rhel7-ds.xml
+
+(optional) Generate HTML report separately:
+
+ oscap xccdf generate report \~/arf.xml > \~/report.html
+
+Open the report using your web browser:
+ firefox \~/report.html
+
+=== SCAP result / report terminology
+Rules can have several types of results but the most common ones are "pass" and "fail". Their meaning should be self-explanatory. Clicking on the rule title in the HTML report will bring up a pop-up dialog that let's you examine why exactly OpenSCAP failed or passed the machine. For example if it's testing file permissions on a list of files it will specify which files failed and what are their permission bits.
+
+=== Customizing existing content for our use-case
+Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
+After Workbench starts click RHEL7 to open the compliance content for Red Hat Enterprise Linux 7.
+
+Select desired profile and click Customize. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *Done* to save the profile. You have essentially created a new profile.
+
+Before going further it makes sense to run a test scan with the new profile we created. Click *Scan* and inspect the results.
+
+You can save it to a tailoring file by selecting File->Save Customization.
+
+=== Remediation possibilities
+Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology.
+
+There are two main approaches. One is to generate bash remediation script and run it on target machine(s).
+ oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash.sh
+
+The other is to generate an ansible playbook that will put the machine into compliance.
+ oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
+
+Notice that in both cases we are using empty result-id, that is a trick to avoid specifying the full result ID.
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:scap2_sat6.adoc[ SCAP Satellite 6 ]
