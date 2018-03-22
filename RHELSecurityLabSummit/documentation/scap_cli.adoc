@@ -1,0 +1,37 @@
+== Lab 1: OpenSCAP Basics and Command Line Scanning
+
+=== Goal of Lab 1
+The goal of this lab is to introduce you to the basics of SCAP scanning with OpenSCAP.
+
+=== Introduction
+OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this lab we will focus on one-off command-line scanning to get started.
+
+=== Prerequisites
+ # the tool that performs the scanning
+ yum install openscap-scanner
+ # project that brings in security policies we will load and test agains
+ yum install scap-security-guide
+ # GUI tool for scanning and content customization, a front-end for OpenSCAP
+ yum install scap-workbench
+
+=== Performing our first scan
+ cd /usr/share/xml/scap/ssg/content
+ # let's check which compliance profiles are available for rhel7
+ oscap info ssg-rhel7-ds.xml
+ # let's perform our first testing scan with the vanilla OSPP profile
+ oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 ./ssg-rhel7-ds.xml
+ # use --results-arf to get machine readable results archive
+ # use --report to get human readable report (can also be generated from ARF after the scan)
+ oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 --results-arf \~/arf.xml --report \~report.html ./ssg-rhel7-ds.xml
+
+=== Customizing existing content for our use-case
+Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
+After Workbench starts click RHEL7 to open the compliance content for Red Hat Enterprise Linux 7.
+
+Select desired profile and click Customize. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *Done* to save the profile. You have essentially created a new profile. You can save it to a tailoring file by selecting File->Save Customization.
+
+TODO
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[ Lab 2 ]
