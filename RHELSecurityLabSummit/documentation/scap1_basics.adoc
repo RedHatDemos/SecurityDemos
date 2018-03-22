@@ -95,4 +95,4 @@ Notice that in both cases we are using empty result-id, that is a trick to avoid
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[ Lab 2 ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:scap2_sat6.adoc[ SCAP Satellite 6 ]
