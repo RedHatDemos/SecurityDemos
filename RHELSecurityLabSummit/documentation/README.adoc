@@ -15,7 +15,7 @@ Martin Preisler, Senior Software Engineer - Security Compliance Lead, Red Hat
 == Overview and Prerequisites:
 In this lab, you'll learn about the built-in security technologies available to you in Red Hat Enterprise Linux. First, you will use OpenSCAP to scan and remediate against vulnerabilities and configuration security baselines. You will then block possible attacks from vulnerabilities using SELinux and use Network Bound Disk Encryption to securely decrypt your encrypted boot volumes unattended. You will also use USBGuard to implement basic whitelisting and blacklisting to define which USB devices are and are not authorized and how a USB device may interact with your system. Throughout your investigation of the security issues in your systems, you will utilize the improved audit logs and will automate as much of your tasks as possible using Ansible. Finally, you will make multiple configuration changes to your systems across multiple versions of Red Hat Enterprise Linux running in your environment , in an automated fashion, using the Systems Roles feature.
 
-In a series of scenarios, you will go through exercises as if you are a new system administrator who just joined a company who has not been historically good about practicing security. You will notice multiple security issues in your company’s data center and will work hard to fix these issues. 
+In a series of scenarios, you will go through exercises as if you are a new system administrator who just joined a company who has not been historically good about practicing security. You will notice multiple security issues in your company’s data center and will work hard to fix these issues.
 
 This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to take advantage of the built-in security technologies in Red Hat Enterprise Linux.
 
@@ -32,6 +32,4 @@ You will each be given your own unique *GUID*, which you will use to access your
 
 == Table of Contents
 * link:scap1_basics.adoc[SCAP Basics]
-* link:scap2_sat6.adoc[SCAP Satellite 6 integration]
-* link:scap3_cloudforms.adoc[SCAP Cloudforms integration]
 * link:audit.adoc[Audit Lab]
