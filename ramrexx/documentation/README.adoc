@@ -41,4 +41,5 @@ You will each be given your own unique *GUID*, which you will use to access your
 * link:lab3.adoc[Lab 3:How to use the control policy engine in Red Hat CloudForms and embedded Ansible to enforce compliance with security policies]
 * link:lab4.adoc[Lab 4:Managing the security of Red Hat Openshift container images from Red Hat CloudForms]
 * link:lab5.adoc[Lab 5:OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the integration of Red Hat CloudForms, Ansible, and Satellite 6.3]
-* link:lab6.adoc[ Lab 6:Viewing SCAP compliant and non-compliant VMs from a report in Red Hat CloudForms]
+* link:lab6.adoc[Lab 6:Viewing SCAP compliant and non-compliant VMs from a report in Red Hat CloudForms]
+* link:lab7.adoc[Lab 7:Viewing other reports with security related information for RHV, Openstack, Openshift, AWS showing cross-provider visibility]
