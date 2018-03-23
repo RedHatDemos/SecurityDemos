@@ -14,7 +14,7 @@
       when: policy_id is defined
 
   roles:
-    - role: foremena_scap_scan
+    - role: foreman_scap_scan
 
 - name: Analyze scan results and apply tags
   hosts: localhost

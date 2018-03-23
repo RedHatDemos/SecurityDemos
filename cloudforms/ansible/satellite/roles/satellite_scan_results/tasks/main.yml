@@ -25,18 +25,33 @@
     var: policy_name
   when: verbose
 
-- name: Lookup Compliance Policy Name
+- name: Lookup compliance arf_reports for "{{ vm_hostname }}"
   uri:
-    url: "https://{{ satellite_hostname }}/api/v2/compliance/arf_reports?search=host.name={{ vm_hostname }}&policy.id={{ policy_id }}"
+    url: "https://{{ satellite_hostname }}/api/v2/compliance/arf_reports?search=host.name={{ vm_hostname }}"
     method: GET
     force_basic_auth: "{{ force_basic_auth }}"
     validate_certs: "{{ validate_certs }}"
     user: "{{ satellite_user }}"
     password: "{{ satellite_pass }}"
     status_code: 200
-  register: lookup_policy_name_output
+  register: lookup_compliance_output
 
-- name: Log lookup_policy_name_output
+- name: Log lookup_compliance_output
   debug:
-    var: lookup_policy_name_output
+    var: lookup_compliance_output
+  when: verbose
+
+- name: Log lookup_compliance_output.json.results.0
+  debug:
+    var: lookup_compliance_output.json.results.0
+  when: verbose
+
+- name: Setting pass/fail/othered of scap results
+  set_fact:
+    scan_pass: false
+  when: lookup_compliance_output.json.results.0.failed > 0 or lookup_compliance_output.json.results.0.othered > 0
+
+- name: Log scan_pass
+  debug:
+    var: scan_pass
   when: verbose
