@@ -12,6 +12,7 @@ policy_name:
 vm_href_slug:
 tag_pass: Compliant
 tag_fail: Non-compliant
+scan_pass:
 category_description: "SCAP_{{ policy_name }}"
 category: "{{ category_description | lower | regex_replace('\\W', '_') }}"
 verbose: true
