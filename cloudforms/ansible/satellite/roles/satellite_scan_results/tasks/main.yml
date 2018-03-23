@@ -25,7 +25,18 @@
     var: policy_name
   when: verbose
 
-- name: Set policy_name_normalized
-  set_fact:
-    policy_name_normalized: "{{ policy_name | regex_replace('\\W', '_') }}"
+- name: Lookup Compliance Policy Name
+  uri:
+    url: "https://{{ satellite_hostname }}/api/v2/compliance/arf_reports?search=host.name={{ vm_hostname }}&policy.id={{ policy_id }}"
+    method: GET
+    force_basic_auth: "{{ force_basic_auth }}"
+    validate_certs: "{{ validate_certs }}"
+    user: "{{ satellite_user }}"
+    password: "{{ satellite_pass }}"
+    status_code: 200
+  register: lookup_policy_name_output
+
+- name: Log lookup_policy_name_output
+  debug:
+    var: lookup_policy_name_output
   when: verbose
