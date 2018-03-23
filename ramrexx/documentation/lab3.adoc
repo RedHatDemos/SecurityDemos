@@ -10,7 +10,7 @@ The Shellshock vulnerability is the bash remote code execution vulnerability (CV
 === Introduction
 Red Hat CloudForms provides unified hybrid cloud management across your entire heterogenous environment, including virtual, private cloud, public cloud, and container environments. Other supported technologies include software defined networking, middleware, and in the future storage management.
 
-Red Hat CloudForms is an agentless solution,delivered as a virtual appliance, that is highly scalable and provides deep continuous visibility and discovery of your entire infrastructure. The Red Hat CloudForms control and policy engine provides compliance and governance capabilities right in the GUI of CloudForms. The Red Hat CloudForms automate engine can be utilized to execute free-form automation using either ruby or Ansible playbooks.  Red Hat CloudForms is able to communicate directly to your Ansible Tower instance to execute your Ansible playbooks. 
+Red Hat CloudForms is an agentless solution,delivered as a virtual appliance, that is highly scalable and provides deep continuous visibility and discovery of your entire infrastructure. The Red Hat CloudForms control and policy engine provides compliance and governance capabilities right in the GUI of CloudForms. The Red Hat CloudForms automate engine can be utilized to execute free-form automation using either ruby or Ansible playbooks.  Red Hat CloudForms is able to communicate directly to your Ansible Tower instance to execute your Ansible playbooks.
 
 Ansible is a simple, powerful, and agentless IT automation technology that can help improve your current processes, migrate applications for better optimization, and provide a single language for DevOps practices across your organization including Developers, Operations, and the Security Team.
 
@@ -20,4 +20,4 @@ Ansible is great for security automation because it is agentless, only requires 
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3 ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3:How to use the control policy engine in Red Hat CloudForms and embedded Ansible to enforce compliance with security policies ]

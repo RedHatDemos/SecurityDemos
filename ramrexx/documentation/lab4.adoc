@@ -1,0 +1,17 @@
+== Lab 4: Managing the security of Red Hat Openshift container images from Red Hat CloudForms
+
+=== Goal of Lab 4
+The goal of this lab is demonstrate how you can use Red Hat CloudForms to manage the security of Red Hat Openshift container images. Specifically, we will see how you can use the Red Hat CloudForms control engine to prevent Red Hat Openshift container images with high severity vulnerabilities from running in Red Hat Openshift.
+
+=== Introduction
+Red Hat CloudForms has a container scanning feature that allows Red Hat CloudForms to flag images in the container registry in which it has found vulnerabilities. Specifically, Red Hat CloudForms can apply an annotation to an image in the OpenShift container registry when it finds high severity vulnerabilities after doing a scan on it. Then, Red Hat Openshift will prevent new containers from running this image with the high severity vulnerabilities.
+
+Red Hat CloudForms has multiple ways a container image scan can be initiated: scheduled scan of the registry, scan based on a newly discovered image in the registry, or a manual execution of the scan via smart state analysis. Having this scanning feature with native integration in Red Hat Openshift allows for near real time monitoring of your images within the Red Hat Openshift environment. Once Red Hat CloudForms flags an image in the registry, the next time someone tries to start the vulnerable image, Red Hat Openshift will alert the user that the image execution was blocked based on the policy annotation set by Red Hat CloudForms.
+
+=== Preventing Red Hat Openshift container images with high severity vulnerabilities from running in Red Hat Openshift using Red Hat CloudForms
+Chocolate for customers
+. I ate it all
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3:How to use the control policy engine in Red Hat CloudForms and embedded Ansible to enforce compliance with security policies ]
