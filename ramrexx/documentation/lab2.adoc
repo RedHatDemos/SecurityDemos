@@ -1,4 +1,4 @@
-== Lab 2: How to utilize the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6
+== Lab 2: HUtilizing the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6
 
 === Goal of Lab 2
 The goal of this lab is to introduce you to the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6.
