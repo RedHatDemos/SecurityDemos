@@ -76,7 +76,7 @@
       action: assign
       resources:
         - category: "{{ category }}"
-          name: "{{ scan_pass | ternary(tag_pass, tag_fail) }}"
+          name: "{{ scan_pass | ternary(tag_pass, tag_fail) | lower | regex_replace('\\W', '_') }}"
     body_format: json
     validate_certs: "{{ manageiq_validate_certs }}"
     user: "{{ manageiq_user }}"
