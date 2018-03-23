@@ -49,7 +49,7 @@
 - name: Setting pass/fail/othered of scap results
   set_fact:
     scan_pass: false
-  when: lookup_compliance_output.json.results.0.fail > 0 or lookup_compliance_output.json.results.0.othered > 0
+  when: lookup_compliance_output.json.results.0.failed > 0 or lookup_compliance_output.json.results.0.othered > 0
 
 - name: Log scan_pass
   debug:
