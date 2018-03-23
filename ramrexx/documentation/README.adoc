@@ -35,6 +35,6 @@ You will each be given your own unique *GUID*, which you will use to access your
 
 
 == Table of Contents
-* link:lab0.adoc[Lab 0]
-* link:lab1.adoc[Lab 1]
-* link:lab2.adoc[Lab 2]
+* link:lab0.adoc[Lab 0 Setup steps]
+* link:lab1.adoc[Lab 1 Provisioning a security compliant host in Red Hat Virtualization and Red Hat Openstack Platform]
+* link:lab2.adoc[Lab 2 Utilizing the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6]
