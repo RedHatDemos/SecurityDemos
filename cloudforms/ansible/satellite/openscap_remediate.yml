@@ -1,0 +1,88 @@
+---
+- name: OpenSCAP Remediate
+  hosts: all
+  gather_facts: false
+
+  vars:
+    policy_id: 5
+    satellite_hostname: sat6.summit.example.com
+    verbose: false
+
+  tasks:
+    - name: Puppet run to get foreman_scap_client config
+      shell: puppet agent -t
+      ignore_errors: true
+      register: puppet_agent_output
+
+    - name: Log puppet_agent_output
+      debug:
+        var: puppet_agent_output
+      when: verbose
+
+    - name: get profile
+      shell: "grep -A5 '{{ policy_id }}': /etc/foreman_scap_client/config.yaml| grep profile | awk '{print $2}'| sed -e 's/^[ \t]*//'"
+      register: profile_contents
+
+    - name: Log profile_contents
+      debug:
+        var: profile_contents
+      when: verbose
+
+    - name: get download path
+      shell: grep -A5 '{{policy_id }}'':' /etc/foreman_scap_client/config.yaml|grep download_path |awk '{print $2}'| sed -e "s/[' \t]*//g"
+      register: download_contents
+
+    - name: Log download_contents
+      debug:
+        var: download_contents
+      when: verbose
+
+    - name: download profile
+      shell: "curl -X GET -s --cert /etc/pki/consumer/cert.pem --key /etc/pki/consumer/key.pem -k {{ sat_server }}{{ download_contents.stdout }} -k --output /tmp/content"
+      ignore_errors: yes
+      register: curl_result
+      failed_when: "'FAILED' in curl_result.stderr"
+
+    - name: Log curl_result
+      debug:
+        var: curl_result
+      when: verbose
+
+    - name: Install openscap-utils
+      yum:
+        name: '{{ item }}'
+        state: latest
+      register: yum_output
+      with_items:
+        - openscap-scanner
+        - scap-security-guide
+
+    - name: Log yum_output
+      debug:
+        var: yum_output
+      when: verbose
+
+    - name: remediate openscap
+      shell: "oscap xccdf eval  --remediate --profile '{{ profile_contents.stdout }}' /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+      ignore_errors: yes
+      register: remediate_result
+      failed_when: "'FAILED' in remediate_result.stderr"
+
+    - name: Log remediate_result
+      debug:
+        var: remediate_result
+      when: verbose
+
+    - name: Remove contents file
+      file:
+       path: /tmp/content
+       state: absent
+
+    - name: Update Satellite compliance results
+      shell: foreman_scap_client '{{ policy_id }}'
+      register: compliance_results
+
+    - name: Log compliance_results
+      debug:
+        var: compliance_results
+      when: verbose
