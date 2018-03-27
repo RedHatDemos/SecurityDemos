@@ -1,0 +1,86 @@
+= Lab X: USBGuard Demo
+
+== Configuration
+
+The following steps describe tasks which are needed and which have been done in the Summit lab environment as necessary steps for the Demonstration part of this demo. The demo is based on a RHEL 7.5 VM. KVM/libvirt is used to create and manage virtual machine inside the RHEL 7.5 VM.
+
+USBGuard RHEL 7.4 VM:    usbguard-demo
+
+=== Create the virtual machine
+
+First configure virt-builder to use our internal RHEL images:
+
+	# cat -> /etc/virt-builder/repos.d/rhel.conf <<EOF
+	[rhel]
+	uri=http://file.rdu.redhat.com/~rjones/builder/index.asc
+	EOF
+
+Then create the usbguard VM image using virt-builder (from libguestfs-tools-c package):
+
+	> virt-builder rhel-7.4 -o usbguard-rhel-7.4-vm.qcow2 --format qcow2 --root-password password:redhat --update --install usbguard --install usbguard-tools --install usbutils --install udisks2
+
+=== Setup the virtual machine
+
+First transfer the usbguard VM image to the host VM.
+
+Then ssh into the host VM and install the usbguard VM using virt-install (from virt-install package):
+
+	# virt-install --name usbguard-demo --memory 512 --disk /var/lib/libvirt/images/usbguard-rhel-7.4-vm.qcow2 --graphics none --os-variant rhel7.4 --import
+
+Stop the VM if it is running using virsh:
+
+	# virsh list
+	 Id    Name                           State
+	----------------------------------------------------
+	 1     usbguard-demo                  running
+
+
+	# virsh destroy 1
+
+
+=== Simulating hot plugging with virsh
+
+Instead of configuring hot plug pass-through, it is easier to attach and detach USB drives to the virtual machine via _virsh_.  
+XML file for virtual USB disk (usb-disk.xml):
+
+	# cat usb-disk.xml
+	<disk type='file' device='disk'>
+   	 <driver name='qemu' type='raw' cache='none'/>
+   	 <source file='/tmp/usb-disk.img'/>
+   	 <target dev='vdd' bus='usb'/>
+   	 <serial>RED</serial>
+	</disk>
+
+Create as many XML files as you want to have available drives with unique serial values. Note that you have to create the file referenced in the _<source>_ file attribute:
+
+	# dd if=/dev/zero of=/tmp/usb-disk.img bs=1M count=32
+
+From the host VM you can simulate USB disk hotplug using virsh:
+
+	# virsh attach-device usbguard-demo usb-disk.xml
+	# virsh detach-device usbguard-demo usb-disk.xml
+
+=== Setup USBGuard demo
+
+The usbguard-demo VM contains pre-installed (by virt-builder) usbguard, usbguard-tools, usbutils and udisks2 packages. The VM is running RHEL 7.4.
+
+You can also use _udisksctl_ to show the available status of a USB drive in the examples instead of ‘lsblk’.  Where you see ‘lsblk’ in the guide, you can replace it with ‘udisksctl status’
+
+Output comparison with allowed drive attached as _sda_:
+
+	[root@usbguard-demo ~]# lsblk 
+	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+	sda      8:0    1  7.6G  0 disk 
+	└─sda1   8:1    1  7.6G  0 part 
+	vda    253:0    0    6G  0 disk 
+	├─vda1 253:1    0    1G  0 part /boot
+	├─vda2 253:2    0  615M  0 part [SWAP]
+	└─vda3 253:3    0  4.4G  0 part /
+
+	[root@usbguard-demo ~]# udisksctl status
+	MODEL                     REVISION  SERIAL                        DEVICE
+	--------------------------------------------------------------------------
+	VirtIO Disk                                                          vda     
+	SMI USB DISK              1100      SMI_USB_DISK-0:0        sda   
+
+== Demonstration
