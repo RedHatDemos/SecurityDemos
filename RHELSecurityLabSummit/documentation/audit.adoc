@@ -64,7 +64,8 @@ There are two main audit components in Red Hat Enterprise Linux, the audit
 daemon and the kernel itself.  The exercises below demonstrate how to configure
 both.
 
-Audit Daemon Configuration
+=== Audit Daemon Configuration
+
 When the audit daemon is started during the boot process, it reads the
 configuration file in _/etc/audit/auditd.conf_.  The different configuration
 options are explained in the
