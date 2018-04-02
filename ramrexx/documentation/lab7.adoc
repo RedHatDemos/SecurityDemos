@@ -11,4 +11,4 @@ Insights saves the world
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] 
+link:README.adoc#table-of-contents[ Table of Contents ]

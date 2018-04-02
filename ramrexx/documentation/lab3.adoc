@@ -18,6 +18,18 @@ Ansible Tower by Red Hat provides a graphical user interface for Ansible with a 
 
 Ansible is great for security automation because it is agentless, only requires SSH/WinRM, supports desired state, is extensible and modular, has a push-based architecture, and provides easy targeting based on facts.
 
+=== Using Red Hat CloudForms control engine and embedded Ansible in CloudForms to execute the Meltdown and Spectre control policy and do remediation
+Taco intro here.
+. Taco
+
+=== Using the Red Hat CloudForms control engine and embedded Ansible in CloudForms to execute the Shellshock control policy and do remediation
+Sushi intro here.
+. If you have to log back in, go to your Firefox web browser and click on the tab you have opened to your Red Hat CloudForms UI. Log back in with admin as the username and r3dh@t2017 as your password.
+
+=== Using the Red Hat CloudForms control engine and embedded Ansible in CloudForms to execute the Openstack related control policy
+Me likey Openstack
+. Especially if there is a control policy
+
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3:How to use the control policy engine in Red Hat CloudForms and embedded Ansible to enforce compliance with security policies ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4:Managing the security of Red Hat Openshift container images from Red Hat CloudForms]

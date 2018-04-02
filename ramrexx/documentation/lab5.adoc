@@ -1,17 +1,20 @@
-== Lab 4: Managing the security of Red Hat Openshift container images from Red Hat CloudForms
+== Lab 5: OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the integration of Red Hat CloudForms, Ansible, and Satellite 6.3
 
-=== Goal of Lab 4
-The goal of this lab is demonstrate how you can use Red Hat CloudForms to manage the security of Red Hat Openshift container images. Specifically, we will see how you can use the Red Hat CloudForms control engine to prevent Red Hat Openshift container images with high severity vulnerabilities from running in Red Hat Openshift.
+The goal of this lab is to show the ability to execute OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the custom integration of Red Hat CloudForms with Red Hat Satellite 6.3.
 
 === Introduction
-Red Hat CloudForms has a container scanning feature that allows Red Hat CloudForms to flag images in the container registry in which it has found vulnerabilities. Specifically, Red Hat CloudForms can apply an annotation to an image in the OpenShift container registry when it finds high severity vulnerabilities after doing a scan on it. Then, Red Hat Openshift will prevent new containers from running this image with the high severity vulnerabilities.
+In this lab, you will see how you can leverage Red Hat Satellite 6’s built-in OpenSCAP scanning and remediation capabilities from Red Hat CloudForms.
 
-Red Hat CloudForms has multiple ways a container image scan can be initiated: scheduled scan of the registry, scan based on a newly discovered image in the registry, or a manual execution of the scan via smart state analysis. Having this scanning feature with native integration in Red Hat Openshift allows for near real time monitoring of your images within the Red Hat Openshift environment. Once Red Hat CloudForms flags an image in the registry, the next time someone tries to start the vulnerable image, Red Hat Openshift will alert the user that the image execution was blocked based on the policy annotation set by Red Hat CloudForms.
+Red Hat CloudForms provides out-of-the-box integration to Ansible Tower by Red Hat. This integration provides visibility in Red Hat CloudForms of the Ansible Tower inventory, including hosts and job templates. As a result, with this integration, you can launch Ansible Tower job templates from Red Hat CloudForms automate. For example, from Red Hat CloudForms, the Ansible Tower job templates can be executed as part of the provisioning or retirement state machines, from a button on a host/vm , or as an action on a control policy. You can also launch Ansible Tower job templates from the Red Hat CloudForms service catalog as a service item or as part of a service bundle.
 
-=== Preventing Red Hat Openshift container images with high severity vulnerabilities from running in Red Hat Openshift using Red Hat CloudForms
-Chocolate for customers
-. I ate it all
+In this lab, you will launch the OpenSCAP scan and OpenSCAP remediate Ansible job templates by pressing custom buttons on a VM in Red Hat CloudForms.
+
+This integration between Red Hat CloudForms and Red Hat Satellite allows you to have a central and automated way to do point in time security scans and remediations on a per-vm basis.
+
+=== OpenSCAP security scan on a VM at the push of a button in Red Hat CloudForms utilizing Satellite 6’s built-in OpenSCAP scanning capabilities
+Panda Bears
+. Are cute and eats bamboo
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3:How to use the control policy engine in Red Hat CloudForms and embedded Ansible to enforce compliance with security policies ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab6.adoc[ Lab 6:Viewing SCAP compliant and non-compliant VMs from a report in Red Hat CloudForms]

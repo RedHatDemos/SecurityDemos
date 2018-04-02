@@ -10,8 +10,8 @@ Red Hat CloudForms has multiple ways a container image scan can be initiated: sc
 
 === Preventing Red Hat Openshift container images with high severity vulnerabilities from running in Red Hat Openshift using Red Hat CloudForms
 Chocolate for customers
-. I ate it all
+. In my belly
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3:How to use the control policy engine in Red Hat CloudForms and embedded Ansible to enforce compliance with security policies ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5.adoc[Lab 5:OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the integration of Red Hat CloudForms, Ansible, and Satellite 6.3]
