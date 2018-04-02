@@ -161,7 +161,7 @@ a series of arguments passed to the `auditctl` command; lines starting with a
 We can make our custom filter rule persistent by adding a new rule file in
 _/etc/audit/rules.d_ and reloading our configuration:
 
-	# echo ‘-a always,exit -S all -F exe=/usr/bin/ping -F key=rhsummit’ > /etc/audit/rules.d/70-rhsummit_lab.rules
+	# echo "-a always,exit -S all -F exe=/usr/bin/ping -F key=rhsummit" > /etc/audit/rules.d/70-rhsummit_lab.rules
 	# augenrules --load
 
 In addition to custom filter rules, this is also the mechanism we use to tweak
@@ -174,7 +174,7 @@ the current system using the following command:
 If we wanted to make the configuration tweak persistent, we could create a new
 file in _/etc/audit/rules.d_ with the configuration and reload the audit rules:
 
-	# echo -b 8192 > /etc/audit/rules.d/15-rhsummit_kernel.rules
+	# echo "-b 8192" > /etc/audit/rules.d/15-rhsummit_kernel.rules
 	# augenrules --load
 
 == Inspecting Audit Logs
