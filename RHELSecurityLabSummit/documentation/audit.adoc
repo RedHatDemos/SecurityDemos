@@ -11,6 +11,10 @@ releases older, or newer, than RHEL-7.5.
 
 == Installing Audit
 
+TIP: If you are using the demo systems at Red Hat Summit 2018, everything has
+already been installed and enabled on the lab systems.  You can proceed to the
+next section.
+
 The Linux audit mechanism consists of two parts: and audit enabled kernel, and
 a collection of userspace tools to capture the audit events from the kernel and
 manage the resulting audit log.  All Red Hat Enterprise Linux Kernels provide
@@ -43,6 +47,10 @@ command:
 	# systemctl status auditd
 
 == Creating a Test User
+
+TIP: If you are using the demo systems at Red Hat Summit 2018, the "auditlab"
+user has already been created and the password has been set to `il0ve4udit`.
+You can proceed to the next section.
 
 In order to help demonstrate the auditing functionality we need to create a
 test user for use in this lab:
