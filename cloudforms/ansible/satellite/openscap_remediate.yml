@@ -63,7 +63,7 @@
       when: verbose
 
     - name: remediate openscap
-      shell: "oscap xccdf eval  --remediate --profile '{{ profile_contents.stdout }}' /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+      shell: "oscap xccdf eval  --remediate --profile '{{ profile_contents.stdout }}' /usr/share/xml/scap/ssg/content/ssg-rhel7-ds-custom.xml"
       ignore_errors: yes
       register: remediate_result
       failed_when: "'FAILED' in remediate_result.stderr"
