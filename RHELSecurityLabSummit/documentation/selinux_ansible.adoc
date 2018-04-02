@@ -114,14 +114,14 @@ At the end we need to install the _setools-console_ package containing SELinux p
 === Test configured setup
 
 	# curl selinux2 
-	<h1>Custom Document Root</h1>
+	<h1>Default Document Root</h1>
 
 	# curl selinux2:7070
 	<h1>Custom Document Root</h1>
 
 
 	# curl selinux3 
-	<h1>Custom Document Root</h1>
+	<h1>Default Document Root</h1>
 
 	# curl selinux3:7070
 	<h1>Custom Document Root</h1>
