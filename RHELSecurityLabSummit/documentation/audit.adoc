@@ -85,6 +85,11 @@ command in the example below:
 	# sed -e 's/^freq.*/freq = 50/' -i /etc/audit/auditd.conf
 	# sed -e 's/^log_format.*/log_format = ENRICHED/' -i /etc/audit/auditd.conf
 
+After the configuration file has been updated, we need to signal to the audit
+daemon to reload its configuration:
+
+	# killall -SIGHUP auditd
+
 === Linux Kernel Configuration
 
 The Linux Kernel’s audit subsystem can be configured using the `auditctl`
