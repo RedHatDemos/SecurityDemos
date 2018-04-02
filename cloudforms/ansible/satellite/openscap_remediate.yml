@@ -62,6 +62,16 @@
         var: yum_output
       when: verbose
 
+    - name: Download ssg-rhel7-ds-custom.xml from the {{ satellite_hostname }}
+      get_url:
+        url: "http://{{ satellite_hostname }}/pub/ssg-rhel7-ds-custom.xml"
+        dest: /usr/share/xml/scap/ssg/content/ssg-rhel7-ds-custom.xml
+      register: get_url_result
+      until: get_url_result | succeeded
+      retries: 10
+      delay: 1
+      ignore_errors: yes
+
     - name: remediate openscap
       shell: "oscap xccdf eval  --remediate --profile '{{ profile_contents.stdout }}' /usr/share/xml/scap/ssg/content/ssg-rhel7-ds-custom.xml"
       ignore_errors: yes
