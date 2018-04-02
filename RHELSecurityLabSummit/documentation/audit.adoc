@@ -279,11 +279,18 @@ The “csv” output is particularly interesting as it can be imported into
 LibreOffice or any other spreadsheet program that accepts files in the
 Comma Separated Values (CSV) format:
 
-	# ausearch -ts today --format csv --extra-labels --extra-obj2 > audit.log.csv
+	# ausearch -ts today --format csv --extra-labels --extra-obj2 > /tmp/audit.log.csv
 
 The “-format” option, as well as several others which can customize the output
 of `ausearch`, can be found in the
 http://man7.org/linux/man-pages/man8/ausearch.8.html[ausearch(8)] manpage.
+
+TIP: If you are using the demo systems at Red Hat Summit 2018, you can transfer
+the CSV file to the workstation system and view it with LibreOffice using
+the following commands run from a terminal on the workstation system:
+
+	$ scp root@audit.example.com:/tmp/audit.log.csv /tmp/audit.log.csv
+	$ libreoffice /tmp/audit.log.csv
 
 == Reset the Lab System
 
