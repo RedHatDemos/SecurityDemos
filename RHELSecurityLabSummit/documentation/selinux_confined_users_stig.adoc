@@ -11,14 +11,20 @@ I want one administrator user who can become root and manage the system, and oth
 
 == Implementation
 
-The following steps are described The lab exercise is divided to three steps and it is described for a fresh installed system with Red Hat Enterprise Linux 7.
+The lab exercise is divided to three steps:
 
 . Confine regular Linux users
 . Confine Linux root users
 
 == Confine regular Linux users
 
-Linux users can be assigned to SELinux users using semanage login tool. By default users are mapped to unconfined_u:
+All actions are performed on the _selinux2_ host which is RHEL-7.6 Beta installation. 
+
+Log into the _selinux2_ host system:
+
+    # ssh root@selinux2
+
+Linux users can be assigned to SELinux users using semanage login tool. By default users are mapped to _unconfined_u_:
 
     # semanage login -l
 
