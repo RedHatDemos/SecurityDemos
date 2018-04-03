@@ -26,8 +26,7 @@ ssh_authorized_key:
 template: rhel7.5beta
 
 # vm guest parameters
-vm_names:
-  - vm_name:
+vm_name:
 state: present
 
 dns_suffix: example.com
