@@ -1,0 +1,28 @@
+---
+- name: Provision instances
+  os_server:
+    auth: "{{ osp_auth }}"
+    name: "{{ item }}"
+    image: "{{ template }}"
+    key_name: "{{ key_name }}"
+    timeout: 200
+    flavor: "{{ flavor }}"
+    security_groups: "{{ security_groups }}"
+    network: "{{ network }}"
+    auto_ip: "{{ auto_ip }}"
+    wait: True
+    userdata: "{{ custom_script }}"
+    state: present
+  with_items: "{{ vm_names }}"
+  register: osp_created_vms
+
+- name: Log osp_created_vms
+  debug:
+    var: osp_created_vms
+  when: verbose
+
+- name: "Add new vm ip addresses to osp_hosts group"
+  add_host:
+    name: "{{ item.openstack.public_v4 }}"
+    groups: osp_hosts
+  with_items: "{{ osp_created_vms }}"

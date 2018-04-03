@@ -1,0 +1,22 @@
+---
+- name: osp_basic_provisioning
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - role: osp_preprovision
+      when: manageiq is defined
+
+    - role: osp_basic_provision
+
+    - role: osp_postprovision
+      when: osp_created_vms is defined and manageiq is defined
+
+- name: Perform tasks on instances
+  hosts: osp_hosts
+  #become: true
+  #gather_facts: false
+
+  roles:
+    - role: sat6register
+    - role: rhv_runonce
