@@ -2,23 +2,24 @@
 
 == Introduction
 
-In Red Hat Enterprise Linux, Linux users are mapped to the SELinux unconfined_u user by default. All processes run by unconfined_u are in the unconfined_t domain. This means that users can access across the system within the limits of the standard Linux DAC policy. However, a number of confined SELinux users are available in Red Hat Enterprise Linux. This means that users can be restricted to limited set of capabilities. Each Linux user is mapped to an SELinux user using SELinux policy, allowing Linux users to inherit the restrictions placed on SELinux users.    
+In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u_ user by default. All processes run by _unconfined_u_ are in the _unconfined_t_ domain. This means that users can access across the system within the limits of the standard Linux DAC policy. However, a number of confined SELinux users are available in Red Hat Enterprise Linux. This means that users can be restricted to limited set of capabilities. Each Linux user is mapped to an SELinux user using SELinux policy, allowing Linux users to inherit the restrictions placed on SELinux users.
 
-== User Story
+== Lab User Story
 
 As an enterprise administrator I want my systems to follow the STIG rule V-71971 so that my system will be fully confined without unconfined users.
 I want one administrator user who can become root and manage the system, and other users to be limited so that they can't become root.
 
 == Implementation
 
-The lab exercise is divided to three steps:
+The lab exercise is splitted to three steps:
 
 . Confine regular Linux users
 . Confine Linux root users
+. Revert script
 
 == Confine regular Linux users
 
-All actions are performed on the _selinux2_ host which is RHEL-7.6 Beta installation. 
+All actions are performed on the _selinux2_ host which is a RHEL-7.6 Beta installation.
 
 Log into the _selinux2_ host system:
 
@@ -49,10 +50,10 @@ After this when users (not root) will log in, their processes will run _user_t_ 
     # ssh user42@localhost
     user42@localhost's password:
 
-    [user42@localhost ~]$ id -Z
+    [user42@selinux2 ~]$ id -Z
     user_u:user_r:user_t:s0
 
-    [user42@localhost ~]$ ps axZ
+    [user42@selinux2 ~]$ ps axZ
     LABEL                     PID TTY    STAT  TIME COMMAND
     -                           1 ?      Ss    0:00 /usr/lib/systemd/systemd --switched-root --system --deserialize 21
     user_u:user_r:user_t:s0  2780 ?      S     0:00 sshd: user42@pts/1
@@ -62,14 +63,14 @@ After this when users (not root) will log in, their processes will run _user_t_ 
 
 Now we can try if the user can become root. We need to add following line:
 
-    #  visudo -f /etc/sudoers.d/administrators
+    # visudo -f /etc/sudoers.d/administrators
     # grep user42 /etc/sudoers.d/administrators
     user42  ALL=(ALL)       NOPASSWD: ALL
 
     # ssh user42@localhost
     user42@localhost's password:
 
-    [user42@localhost ~]$ sudo -i
+    [user42@selinux2 ~]$ sudo -i
     sudo: PERM_SUDOERS: setresuid(-1, 1, -1): Operation not permitted
     sudo: no valid sudoers sources found, quitting
     sudo: setresuid() [0, 0, 0] -> [1001, -1, -1]: Operation not permitted
@@ -77,28 +78,28 @@ Now we can try if the user can become root. We need to add following line:
 
 And the same attempt in permissive mode.
 
-    [user42@localhost ~]$ exit
+    [user42@selinux2 ~]$ exit
     # id -Z
     unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
     # setenforce 0
     # ssh user42@localhost
     user42@localhost's password:
 
-    [user42@localhost ~]$ sudo -i
+    [user42@selinux2 ~]$ sudo -i
     # id
     uid=0(root) gid=0(root) groups=0(root) context=user_u:user_r:user_t:s0
-    [root@localhost ~]# id -Z
+    [root@selinux2 ~]# id -Z
     User_u:user_r:user_t:s0
-    [root@localhost ~]# exit
-    [user42@localhost ~]$ exit
-    [root@localhost ~]# setenforce 1
+    [root@selinux2 ~]# exit
+    [user42@selinux2 ~]$ exit
+    [root@selinux2 ~]# setenforce 1
 
-Since in permissive mode SELinux denials are not enforced, user42 can become root but we can see that the context stayed _user_t_ and didn't change to _unconfined_t_.
+Since in permissive mode SELinux denials are not enforced, _user42_ can become root but we can see that the context stayed _user_t_ and didn't change to _unconfined_t_.
 
 == Confined Administrator
 
 There are two basic methods how to confine administator user.
-Administrator can be directly mapped to sysadm_u SELinux user so that when such user logs in, the session will be run with _sysadm_t_ domain. In this case you need to enable ssh_sysadm_login SELinux boolean in order to allow users assigned sysadm_u to login using ssh.
+Administrator can be directly mapped to _sysadm_u_ SELinux user so that when such user logs in, the session will be run with _sysadm_t_ domain. In this case you need to enable _ssh_sysadm_login_ SELinux boolean in order to allow users assigned _sysadm_u_ to login using ssh.
 
     # semanage user -m -R "sysadm_r secadm_r" sysadm_u
     # adduser -G wheel -Z sysadm_u admin1
@@ -107,30 +108,26 @@ Administrator can be directly mapped to sysadm_u SELinux user so that when such 
     # semanage login -l | grep admin
     admin1               sysadm_u             s0-s0:c0.c1023       *
 
-
     # setsebool -P ssh_sysadm_login on
-
-
     # ssh admin1@localhost
 
-
-    [admin1@localhost ~]$ id -Z
+    [admin1@selinux2 ~]$ id -Z
     sysadm_u:sysadm_r:sysadm_t:s0-s0:c0.c1023
-
 
     $ sudo -i
     [sudo] password for admin1:
 
 
-    [root@localhost ~]# id -Z
+    [root@selinux2 ~]# id -Z
     sysadm_u:sysadm_r:sysadm_t:s0-s0:c0.c1023
 
+Now we can try to perform admin's operation which can be executed only by admin SELinux users.
 
-    [root@localhost ~]# systemctl restart sshd
-    [root@localhost ~]# exit
-    [admin1@localhost ~]# exit
+    [root@selinux2 ~]# systemctl restart sshd
+    [root@selinux2 ~]# exit
+    [admin1@selinux2 ~]# exit
 
-The other way is to assign u administer users to _staff_u_ and configure sudo so that particular users can gain SELinux administrator role.
+The other way is to assign u administer users to _staff_u_ and configure _sudo_ so that particular users can gain SELinux administrator role.
 
     # adduser -G wheel -Z staff_u admin2
     # passwd admin2
@@ -140,20 +137,23 @@ The other way is to assign u administer users to _staff_u_ and configure sudo so
 
 
     # ssh admin2@localhost
-    [admin2@localhost ~]$ id -Z
+    [admin2@selinux2 ~]$ id -Z
     staff_u:staff_r:staff_t:s0-s0:c0.c1023
 
-
-    [admin2@centos7 ~]$ sudo -i
+    [admin2@selinux2 ~]$ sudo -i
     [sudo] password for admin2:
     -bash: /root/.bash_profile: Permission denied
     -bash-4.2# id -Z
     staff_u:staff_r:staff_t:s0-s0:c0.c1023
+
+
+Now we can again try to perform administrator's operation which can be executed only by administrator SELinux users.
+
     -bash-4.2# systemctl restart sshd
     Failed to restart sshd.service: Access denied
     See system logs and 'systemctl status sshd.service' for details.
     -bash-4.2# exit
-    [admin2@centos7 ~]$ exit
+    [admin2@selinux2 ~]$ exit
 
 To allow admin2 user to gain SELinux administrator role you need to add the following rule to sudoers.
 
@@ -167,14 +167,24 @@ Append following line to end of file:
 Admin2 can gain administrator role using sudo now.
 
     # ssh admin2@localhost
-    [admin2@centos7 ~]$ sudo -i
+    [admin2@selinux2 ~]$ sudo -i
     [sudo] password for admin2:
 
-
-    [root@centos7 ~]# id -Z
+    [root@selinux2 ~]# id -Z
     staff_u:sysadm_r:sysadm_t:s0-s0:c0.c1023
 
+    [root@selinux2 ~]# systemctl restart sshd
+    [root@selinux2 ~]#
 
-    [root@centos7 ~]# systemctl restart sshd
-    [root@centos7 ~]#
+    [root@selinux2 ~]# exit
+    [admin2@selinux2 ~]# exit
 
+== Revert script
+
+There is a revert script to restore the default SELinux Users configuration. This script needs to be performed on the _selinux2_ host.
+
+    # hostname
+    selinux2.example.com
+
+    # cd /root
+    # sh confined_users_revert.sh
