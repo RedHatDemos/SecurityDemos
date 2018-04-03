@@ -48,26 +48,26 @@ XML file for virtual USB disk (usb-disk.xml):
 	# cat usb-disk.xml
 	<disk type='file' device='disk'>
    	 <driver name='qemu' type='raw' cache='none'/>
-   	 <source file='/root/usb-disk.img'/>
+   	 <source file='/tmp/usb-disk.img'/>
    	 <target dev='vdd' bus='usb'/>
    	 <serial>RED</serial>
 	</disk>
 
 Create as many XML files as you want to have available drives with unique serial values. Note that you have to create the file referenced in the _<source>_ file attribute:
 
-	# dd if=/dev/zero of=/root/usb-disk.img bs=1M count=32
+	# dd if=/dev/zero of=/tmp/usb-disk.img bs=1M count=32
 
 The same steps are neede to create another USB disk used in this lab (usb-disk-2.xml). 
 
 	# cat usb-disk-2.xml
 	<disk type='file' device='disk'>
    	 <driver name='qemu' type='raw' cache='none'/>
-   	 <source file='/root/usb-disk-2.img'/>
-   	 <target dev='vdd' bus='usb'/>
-   	 <serial>RED</serial>
+   	 <source file='/tmp/usb-disk-2.img'/>
+   	 <target dev='vde' bus='usb'/>
+   	 <serial>BLUE</serial>
 	</disk>
 
-	# dd if=/dev/zero of=/root/usb-disk-2.img bs=1M count=32
+	# dd if=/dev/zero of=/tmp/usb-disk-2.img bs=1M count=32
 
 From the host VM you can simulate USB disk hotplug using virsh:
 
@@ -151,12 +151,14 @@ USBGuard allows admins to dynamically change the action on a specific device.  S
 On usbguard-demo:
 
 	# usbguard list-devices
-	# usbguard allow-device <ID>
+    12: block id 46f4:0001 serial "RED" name "QEMU USB HARDDRIVE" hash "AKmuakTNktSfF54t2IHFRMaukoUw47v3lu/9ZebOsNo=" parent-hash "CsKOZ6IY8v3eojsc1fqKDW84V+MMhD6HsjjojcZBjSg=" via-port "1-2" with-interface 08:06:50
+
+	# usbguard allow-device <12>
 	# usbguard list-devices
 	# usbguard list-rules
 	# lsblk
 
-	# usbguard block-device <ID>
+	# usbguard block-device <12>
 	# usbguard list-devices
 	# lsblk
 
@@ -168,7 +170,7 @@ The same dynamic command can create a permanent entry in combination with an imm
 
 On usbguard-demo:
 
-	# usbguard allow-device -p <ID>
+	# usbguard allow-device -p <12>
 	# usbguard list-rules
 	# cat /etc/usbguard/rules.conf
 
@@ -209,7 +211,7 @@ Show how the _reject_ action differs from the _block_ action. The journal record
 
 On host:
 
-	# sudo virsh attach-device usbguard-demo usb-disk.xml
+	# virsh attach-device usbguard-demo usb-disk.xml
 
 On usbguard-demo:
 
@@ -217,8 +219,15 @@ On usbguard-demo:
 	# lsblk
 	# journalctl -b -e
 
+    # rm /etc/usbguard/rules.conf
+    # exit
+    ^]
+
 === Reset VM setup
+
+On host:
 
 	# virsh detach-device usbguard-demo usb-disk.xml
 	# virsh detach-device usbguard-demo usb-disk-2.xml
-	# rm /etc/usbguard/rules.conf
+    # virsh destroy 1
+
