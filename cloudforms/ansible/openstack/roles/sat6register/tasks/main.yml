@@ -19,43 +19,15 @@
     owner: root
     group: root
 
-# - name: yum clean all
-#   command: yum clean all
-#   ignore_errors: true
-#
-# - name: rm -rf /var/cache/yum/*
-#   command: rm -rf /var/cache/yum/*
-#   ignore_errors: true
+- name: rm -rf /var/cache/yum/*
+  command: rm -rf /var/cache/yum/*
+  ignore_errors: true
 
 - name: Register to Satellite6 with puppet enabled and add it to the correct hostgroup
   command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o '{{ organization }}' -L '{{ location }}' -g {{ hostgroup }} -a {{ activation_key }} -f"
+  register: bootstrap_output
 
-# - name: Install the katello-ca-consumer-latest.noarch.rpm from {{ satellite_hostname }}
-#   yum:
-#     name: http://{{ satellite_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm
-#     state: present
-#   when: hostgroup == 'false'
-#
-# - name: Register to Satellite6 only for content
-#   redhat_subscription:
-#     state: present
-#     activationkey: "{{ activation_key }}"
-#     org_id: "{{ organization }}"
-#     autosubscribe: true
-#   when: hostgroup == 'false'
-#   register: 'reg_return'
-#
-# - name: Install the katello-agent
-#   yum:
-#     name: katello-agent
-#     state: latest
-#   when: hostgroup == 'false' and reg_return|success
-#   notify:
-#     - Start katello-agent
-#     - Enable katello-agent
-#
-# - name: Update the host to latest errata within the attached content view
-#   yum:
-#     name: '*'
-#     state: latest
-#   when: updatehost != 'false'
+- name: log bootstrap_output
+  debug:
+    var: bootstrap_output
+  when: verbose
