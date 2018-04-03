@@ -1,7 +1,7 @@
 ---
 - name: Lookup vms via uid_ems
   uri:
-    url: "{{ manageiq.api_url }}/api/vms?filter[]=uid_ems={{ item.openstack.id }}&expand=resources"
+    url: "{{ manageiq.api_url }}/api/vms?filter[]=uid_ems={{ osp_created_vms.openstack.id }}&expand=resources"
     method: GET
     body:
       action: refresh
@@ -14,7 +14,6 @@
   until: lookup_vms_output.json.subcount > 0
   retries: "{{ max_retries }}"
   delay: "{{ retry_interval }}"
-  with_items: "{{ osp_created_vms.results }}"
 
 - name: Log lookup_vms_output.results
   debug:

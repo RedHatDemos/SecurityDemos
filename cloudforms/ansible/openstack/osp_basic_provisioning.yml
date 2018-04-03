@@ -7,6 +7,9 @@
     - role: osp_preprovision
       when: manageiq is defined
 
+    - role: osp_vmname
+      when: vm_prefix is defined
+
     - role: osp_basic_provision
 
     - role: osp_postprovision

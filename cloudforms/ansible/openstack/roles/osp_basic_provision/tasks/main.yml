@@ -2,7 +2,7 @@
 - name: Provision instances
   os_server:
     auth: "{{ osp_auth }}"
-    name: "{{ item }}"
+    name: "{{ vm_name }}"
     image: "{{ template }}"
     key_name: "{{ key_name }}"
     timeout: 200
@@ -13,7 +13,6 @@
     wait: True
     userdata: "{{ custom_script }}"
     state: present
-  with_items: "{{ vm_names }}"
   register: osp_created_vms
 
 - name: Log osp_created_vms
@@ -23,6 +22,5 @@
 
 - name: "Add new vm ip addresses to osp_hosts group"
   add_host:
-    name: "{{ item.openstack.public_v4 }}"
+    name: "{{ osp_created_vms.openstack.public_v4 }}"
     groups: osp_hosts
-  with_items: "{{ osp_created_vms }}"
