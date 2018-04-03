@@ -18,7 +18,7 @@
 - name: Perform tasks on instances
   hosts: osp_hosts
   #become: true
-  #gather_facts: false
+  gather_facts: false
 
   roles:
     - role: sat6register
