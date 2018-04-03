@@ -1,11 +1,56 @@
 ---
+- name: Set the provider URL
+  set_fact:
+    provider_url: "{{ manageiq.api_url }}/api/providers/{{ provider_id }}"
+
+- name: Refresh provider
+  uri:
+    url: "{{ provider_url }}"
+    method: POST
+    body:
+      action: refresh
+    body_format: json
+    validate_certs: "{{ manageiq_validate_certs }}"
+    user: "{{ manageiq_user }}"
+    password: "{{ manageiq_password }}"
+    status_code: 200
+  register: refresh_output
+
+- name: Log refresh_output
+  debug: var=refresh_output
+  when: verbose
+
+- name: Set the task href
+  set_fact:
+    task_url: "{{ refresh_output.json.task_href}}"
+
+- name: Log task_url
+  debug: var=task_url
+  when: verbose
+
+- name: Wait for the provider refresh task to end
+  uri:
+    url: "{{ task_url }}"
+    method: GET
+    validate_certs: "{{ manageiq_validate_certs }}"
+    user: "{{ manageiq_user }}"
+    password: "{{ manageiq_password }}"
+    status_code: 200
+  register: refresh_output
+  until: refresh_output.json.state == 'Finished' or refresh_output.json.status == 'Error'
+  failed_when: refresh_output.json.status == 'Error'
+  retries: "{{ max_retries }}"
+  delay: "{{ retry_interval }}"
+
+- debug: var=refresh_output.json
+  when: verbose
+
+
+
 - name: Lookup vms via uid_ems
   uri:
     url: "{{ manageiq.api_url }}/api/vms?filter[]=uid_ems={{ osp_created_vms.openstack.id }}&expand=resources"
     method: GET
-    body:
-      action: refresh
-    body_format: json
     validate_certs: "{{ manageiq_validate_certs }}"
     user: "{{ manageiq_user }}"
     password: "{{ manageiq_password }}"

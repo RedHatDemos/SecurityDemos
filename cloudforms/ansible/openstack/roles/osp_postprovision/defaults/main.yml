@@ -23,6 +23,8 @@ manageiq_password: !vault |
           6432363234323161390a323061633334653137363162373032326338666639613239623664353030
           3863
 
+provider_id:
+
 # turn ssl verify off
 manageiq_validate_certs: false
 
