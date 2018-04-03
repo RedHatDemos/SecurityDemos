@@ -9,9 +9,8 @@
     flavor: "{{ flavor }}"
     security_groups: "{{ security_groups }}"
     network: "{{ network }}"
-    auto_ip: "{{ auto_ip }}"
-    delete_fip: false
-    reuse_ips: True
+    floating_ips:
+      - "{{ floating_ip }}"
     wait: true
     userdata: "{{ custom_script }}"
     state: present

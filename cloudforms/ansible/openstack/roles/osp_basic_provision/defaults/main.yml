@@ -21,7 +21,7 @@ key_name: root_on_workstation
 flavor: m1.small
 security_groups: Production
 network: private
-auto_ip: true
+floating_ip: 192.168.1.2
 ssh_authorized_key:
 template: rhel7.4
 
