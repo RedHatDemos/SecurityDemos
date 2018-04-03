@@ -64,9 +64,9 @@
   retries: "{{ max_retries }}"
   delay: "{{ retry_interval }}"
 
-- name: Log lookup_vms_output.results
+- name: Log lookup_vms_output
   debug:
-    var: lookup_vms_output.results
+    var: lookup_vms_output
   when: verbose
 
 - name: Set the svc_url
@@ -81,7 +81,7 @@
 - name: Append resource href to vms list
   set_fact:
     vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.json.resources[0].id }}' } } ]"
-  with_items: "{{ lookup_vms_output.results }}"
+  with_items: "{{ lookup_vms_output }}"
 
 - name: Log vms
   debug:
@@ -147,7 +147,7 @@
     password: "{{ manageiq_password }}"
     status_code: 200
   register: assign_vmtag_output
-  with_items: "{{ lookup_vms_output.results }}"
+  with_items: "{{ lookup_vms_output }}"
 
 - name: Log assign_vmtag_output.results
   debug:
@@ -192,7 +192,7 @@
     password: "{{ manageiq_password }}"
     status_code: 200
   register: assign_cfowner_output
-  with_items: "{{ lookup_vms_output.results }}"
+  with_items: "{{ lookup_vms_output }}"
 
 - name: Log assign_cfowner_output
   debug:
