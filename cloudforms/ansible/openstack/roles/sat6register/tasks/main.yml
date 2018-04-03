@@ -21,11 +21,13 @@
 
 - name: yum clean all
   command: yum clean all
+  ignore_errors: true
+
+- name: rm -rf /var/cache/yum/*
+  command: rm -rf /var/cache/yum/*
+  ignore_errors: true
 
 - name: Register to Satellite6 with puppet enabled and add it to the correct hostgroup
-  command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o '{{ organization }}' -L '{{ location }}' -g {{ hostgroup }} -a {{ activation_key }} -f"
-
-- name: Re-Registering to Satellite6 with puppet enabled and add it to the correct hostgroup
   command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o '{{ organization }}' -L '{{ location }}' -g {{ hostgroup }} -a {{ activation_key }} -f"
 
 # - name: Install the katello-ca-consumer-latest.noarch.rpm from {{ satellite_hostname }}
