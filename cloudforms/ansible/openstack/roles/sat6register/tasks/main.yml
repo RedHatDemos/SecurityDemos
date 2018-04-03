@@ -25,6 +25,9 @@
 - name: Register to Satellite6 with puppet enabled and add it to the correct hostgroup
   command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o '{{ organization }}' -L '{{ location }}' -g {{ hostgroup }} -a {{ activation_key }} -f"
 
+- name: Re-Registering to Satellite6 with puppet enabled and add it to the correct hostgroup
+  command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o '{{ organization }}' -L '{{ location }}' -g {{ hostgroup }} -a {{ activation_key }} -f"
+
 # - name: Install the katello-ca-consumer-latest.noarch.rpm from {{ satellite_hostname }}
 #   yum:
 #     name: http://{{ satellite_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm
