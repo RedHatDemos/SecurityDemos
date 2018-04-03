@@ -17,15 +17,17 @@
   register: refresh_output
 
 - name: Log refresh_output
-  debug: var=refresh_output
+  debug:
+    var: refresh_output
   when: verbose
 
 - name: Set the task href
   set_fact:
-    task_url: "{{ refresh_output.json.task_href}}"
+    task_url: "{{ refresh_output.json.task_href }}"
 
 - name: Log task_url
-  debug: var=task_url
+  debug:
+    var: task_url
   when: verbose
 
 - name: Wait for the provider refresh task to end
@@ -42,7 +44,9 @@
   retries: "{{ max_retries }}"
   delay: "{{ retry_interval }}"
 
-- debug: var=refresh_output.json
+- name: log refresh_output.json
+  debug:
+    var: refresh_output.json
   when: verbose
 
 
