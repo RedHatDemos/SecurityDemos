@@ -80,8 +80,7 @@
 
 - name: Append resource href to vms list
   set_fact:
-    vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.json.resources[0].id }}' } } ]"
-  with_items: "{{ lookup_vms_output }}"
+    vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ lookup_vms_output.json.resources[0].id }}' } } ]"
 
 - name: Log vms
   debug:
@@ -134,7 +133,7 @@
 
 - name: Assign retirement tag "{{ retirement_category }}:{{ retirement_tag }}" to VMs
   uri:
-    url: "{{ manageiq.api_url }}/api/vms/{{ item.json.resources[0].id }}/tags"
+    url: "{{ manageiq.api_url }}/api/vms/{{ lookup_vms_output.json.resources[0].id }}/tags"
     method: POST
     body:
       action: assign
@@ -147,7 +146,6 @@
     password: "{{ manageiq_password }}"
     status_code: 200
   register: assign_vmtag_output
-  with_items: "{{ lookup_vms_output }}"
 
 - name: Log assign_vmtag_output.results
   debug:
@@ -180,7 +178,7 @@
 
 - name: Assign ownership "{{ userid }}" to the new vms
   uri:
-    url: "{{ item.json.resources[0].href }}"
+    url: "{{ lookup_vms_output.json.resources[0].href }}"
     method: POST
     body:
       action: set_owner
@@ -192,7 +190,6 @@
     password: "{{ manageiq_password }}"
     status_code: 200
   register: assign_cfowner_output
-  with_items: "{{ lookup_vms_output }}"
 
 - name: Log assign_cfowner_output
   debug:
