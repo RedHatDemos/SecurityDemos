@@ -53,7 +53,7 @@
 
 - name: Lookup vms via uid_ems
   uri:
-    url: "{{ manageiq.api_url }}/api/vms?filter[]=uid_ems={{ osp_created_vms.openstack.id }}&expand=resources"
+    url: "{{ manageiq.api_url }}/api/vms?filter[]=uid_ems={{ osp_created_vms.id }}&expand=resources"
     method: GET
     validate_certs: "{{ manageiq_validate_certs }}"
     user: "{{ manageiq_user }}"
