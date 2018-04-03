@@ -17,8 +17,8 @@
 
 - name: Perform tasks on instances
   hosts: osp_hosts
-  become: true
-  remote_user: cloud-user
+  # become: true
+  # remote_user: cloud-user
   gather_facts: false
 
   roles:
