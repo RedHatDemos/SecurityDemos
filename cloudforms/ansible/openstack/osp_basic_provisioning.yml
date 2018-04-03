@@ -19,4 +19,4 @@
 
   roles:
     - role: sat6register
-    - role: rhv_runonce
+    - role: osp_runonce
