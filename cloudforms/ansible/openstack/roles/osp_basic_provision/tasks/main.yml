@@ -10,7 +10,8 @@
     security_groups: "{{ security_groups }}"
     network: "{{ network }}"
     auto_ip: "{{ auto_ip }}"
-    wait: True
+    delete_fip: true
+    wait: true
     userdata: "{{ custom_script }}"
     state: present
   register: osp_created_vms
