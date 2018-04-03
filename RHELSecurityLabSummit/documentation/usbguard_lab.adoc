@@ -153,12 +153,12 @@ On usbguard-demo:
 	# usbguard list-devices
     12: block id 46f4:0001 serial "RED" name "QEMU USB HARDDRIVE" hash "AKmuakTNktSfF54t2IHFRMaukoUw47v3lu/9ZebOsNo=" parent-hash "CsKOZ6IY8v3eojsc1fqKDW84V+MMhD6HsjjojcZBjSg=" via-port "1-2" with-interface 08:06:50
 
-	# usbguard allow-device <12>
+	# usbguard allow-devica 12
 	# usbguard list-devices
 	# usbguard list-rules
 	# lsblk
 
-	# usbguard block-device <12>
+	# usbguard block-device 12
 	# usbguard list-devices
 	# lsblk
 
@@ -170,11 +170,11 @@ The same dynamic command can create a permanent entry in combination with an imm
 
 On usbguard-demo:
 
-	# usbguard allow-device -p <12>
+	# usbguard allow-device -p 12
 	# usbguard list-rules
 	# cat /etc/usbguard/rules.conf
 
-	# usbguard block-device -p <ID>
+	# usbguard block-device -p 12
 	# usbguard list-rules
 
 === USBGuard policy for multiple USB devices
@@ -227,7 +227,6 @@ On usbguard-demo:
 
 On host:
 
-	# virsh detach-device usbguard-demo usb-disk.xml
-	# virsh detach-device usbguard-demo usb-disk-2.xml
+    # virsh detach-device usbguard-demo usb-disk.xml
+    # virsh detach-device usbguard-demo usb-disk-2.xml
     # virsh destroy 1
-
