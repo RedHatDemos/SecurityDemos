@@ -11,7 +11,7 @@
     network: "{{ network }}"
     auto_ip: "{{ auto_ip }}"
     delete_fip: false
-    reuse_ips: true
+    reuse_ips: True
     wait: true
     userdata: "{{ custom_script }}"
     state: present
