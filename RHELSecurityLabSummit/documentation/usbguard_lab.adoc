@@ -6,7 +6,7 @@ This demo is based on a RHEL 7.5 Beta VM residing inside the Summit lab environm
 
 USBGuard RHEL 7.4 VM:    _usbguard-demo_
 
-All steps in the _Configuration_ section have been already performed in the Summit lab environment and it is mentioned from an informative purpose. You can skip it and start directly with the _Demonstration_ section of this lab.
+*Important*: All steps in the _Configuration_ section have been already performed in the Summit lab environment and it is mentioned from an informative purpose. You can read them to get familiar with the setup. Start the practical part of the lab with the _Demonstration_ section of this lab.
 
 === Create the virtual machine
 
@@ -48,14 +48,26 @@ XML file for virtual USB disk (usb-disk.xml):
 	# cat usb-disk.xml
 	<disk type='file' device='disk'>
    	 <driver name='qemu' type='raw' cache='none'/>
-   	 <source file='/tmp/usb-disk.img'/>
+   	 <source file='/root/usb-disk.img'/>
    	 <target dev='vdd' bus='usb'/>
    	 <serial>RED</serial>
 	</disk>
 
 Create as many XML files as you want to have available drives with unique serial values. Note that you have to create the file referenced in the _<source>_ file attribute:
 
-	# dd if=/dev/zero of=/tmp/usb-disk.img bs=1M count=32
+	# dd if=/dev/zero of=/root/usb-disk.img bs=1M count=32
+
+The same steps are neede to create another USB disk used in this lab (usb-disk-2.xml). 
+
+	# cat usb-disk-2.xml
+	<disk type='file' device='disk'>
+   	 <driver name='qemu' type='raw' cache='none'/>
+   	 <source file='/root/usb-disk-2.img'/>
+   	 <target dev='vdd' bus='usb'/>
+   	 <serial>RED</serial>
+	</disk>
+
+	# dd if=/dev/zero of=/root/usb-disk-2.img bs=1M count=32
 
 From the host VM you can simulate USB disk hotplug using virsh:
 
@@ -210,4 +222,3 @@ On usbguard-demo:
 	# virsh detach-device usbguard-demo usb-disk.xml
 	# virsh detach-device usbguard-demo usb-disk-2.xml
 	# rm /etc/usbguard/rules.conf
-
