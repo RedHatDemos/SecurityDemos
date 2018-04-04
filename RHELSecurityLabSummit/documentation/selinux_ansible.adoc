@@ -1,0 +1,327 @@
+= Enabling SELinux via Ansible
+
+== Introduction
+
+=== Security Enhanced Linux
+
+SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation. Privilege escalation means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy. 
+
+=== Lab User Story
+
+As an enterprise administrator I want to enable SELinux in my environment with an Apache server using both custom and standard paths for web files so that my Apache server is fully confined by SELinux. I want to use linux-system-roles/selinux as an ansible role which configures SELinux.  
+
+=== Lab Detailed User Story
+
+As an enterprise administrator I have an environment with Apache webservers where both default and custom paths for Apache web files are used.
+
+ * /var/www/html (default)
+ * /var/www_new/html (custom)
+
+These web files are accessible using tcp/80 and tcp/7070 ports on each web server.
+
+ * selinux2.example.com:80 (default)
+ * selinunx2.example.com:7070 (custom)
+
+SELinux is disabled for all web servers by default. I want to turn SELinux on for all web servers without breaking any functionality and use linux-system-roles/selinux ansible role for it.
+
+=== Implementation
+
+The SELinux part of the lab environment consists from three machines
+
+ * selinux1, selinux1.example.com (RHEL-7 admin host)
+ * selinux2, selinux2.example.com (RHEL-7 host)
+ * selinux3, selinux3.example.com (RHEL-6 host)
+
+The first _selinux1.example.com_ host will be used as an admin interface to setup another two hosts where all configuration steps will be proceeded. The whole entire _Enabling SELinux via Ansible_ lab exercise is divided to four steps.
+
+. Configuration
+. Demonstration
+. Summary
+. Revert script
+
+== Configuration
+
+*Important*: All steps in the _Configuration_ section have been already performed in the Summit lab environment. They are mentioned from an informative purpose and they need to executed (except the package installation) only if you use the revert script for this lab
+
+=== Basic environment configuration
+
+    # ssh root@selinux1
+
+. Update DNS records on the _selinux1_ server.
+
+	# cat /etc/hosts
+	127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+	192.168.0.20 selinux2
+	192.168.0.21 selinux3
+
+. Install the __ansible__ package on the _selinux1_ host.
+
+	# yum install ansible -y
+
+. Enter the _selinux_scripts_ working directory on the _selinux1_ host.
+
+	# cd /root/selinux_scripts
+
+. Create an inventory file for our Ansible usage.
+
+	# cat inventory 
+	selinux2
+	selinux3
+
+=== Configuration of Apache webservers and with disabled SELinux.
+
+In this section, _apache_ webservers will be setup via the _setup_webserver.yml_ playbook on _selinux2_ and _selinux3_ hosts  and SELinux will be turned off to create an environment described in the detailed lab user story.
+
+Test whether all servers are available via the _ansible_ command.
+
+	# ansible all -i inventory -m ping -u root
+
+Ansible script will pass all listed servers in the _inventory_ file and will send test if they are accessible. All servers should return a pong response.
+
+	selinux2.example.com | SUCCESS => {
+        	"changed": false,
+	        "ping": "pong"
+	}
+
+Configure Apache web servers on given servers via the _setup_webserver.yml_ playbook.
+
+	# ansible-playbook -i inventory -u root setup-webserver.yml
+
+The following actions are performed for all hosts mentioned in the _inventory_ file:
+
+ * SELinux is disabled.
+ * Apache webservers are 
+  ** installed 
+  ** configured to listen on _tcp/80_ and _tcp/7070_ ports via the _linux-sytem-roles/firewall_ ansible role.
+  ** configured to use two root directories for web files,
+
+	/var/www/html (default)
+	/var/www_new/html (custom)
+
+  ** are rebooted,
+
+At the end we need to install the _setools-console_ package containing SELinux policy quiery tools which will be used for SELinux Troubleshooting.
+
+	# ssh root@selinux2
+	# yum install setools-console
+    # exit
+
+	# ssh root@selinux3
+	# yum install setools-console
+    # exit 
+
+== Demonstration 
+
+=== Test configured setup
+
+    # hostname
+    selinux1.example.com
+
+    # cd /root/selinux_scripts
+
+	# curl selinux2 
+	<h1>Default Document Root</h1>
+
+	# curl selinux2:7070
+	<h1>Custom Document Root</h1>
+
+	# curl selinux3 
+	<h1>Default Document Root</h1>
+
+	# curl selinux3:7070
+	<h1>Custom Document Root</h1>
+
+    # ssh root@selinux2
+    # getenforce
+    Disabled
+
+    # ssh root@selinux3
+    # getenforce
+    Disabled
+
+=== Turning SELinux on
+
+Setup SELinux to _permissive_ mode and relabel whole filesystem.
+
+	# ansible-playbook -i inventory -u root enable-selinux.yml
+
+
+SELinux is switched to _permissive_ mode using the _enable-selinux_ playbook. It means that SELinux policy is enabled but is not enforced. We can use the _getenforce_ and _sestatus_ utility to view the current SELinux mode for our server(s).
+
+    # ssh root@selinux2
+    # getenforce
+    # sestatus
+    # exit
+
+SELinux does not deny access, but denials are logged for actions that would have been denied if running in enforcing mode. In order to show logged denials for certain actions we need to run the _curl_ command. AVC denial(s) will be generated and we can view it via the _ausearch_ command [3].
+
+	# curl selinux2 
+	# curl selinux3
+
+	# ssh root@selinux2
+    # ausearch -m AVC -su httpd_t -ts recent
+
+	avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
+
+	avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
+
+    # exit
+
+=== SELinux Troubleshooting
+
+SELinux Troubleshooting can be performed on both hosts. We will use the _selinux2_ host for the following examples.
+
+Log into the _selinux2_ host.
+
+	# ssh root@selinux2 
+
+==== SELinux Port
+
+SELinux _httpd_t_ process domain used for Apache webservers is not able to bind to _tcp/7070_ port by default. There is no default rule for this access in the SELinux policy on the RHEL-7 _selinux2_ host. 
+
+	# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind -C
+
+Note: Use _port_ instead of _unreserved_port_t_ for this query on the _selinux3_ host.
+
+    # sesearch -A -s httpd_t -t port_t -c tcp_socket -p name_bind -C
+
+Compare to that Apache webservers can bind other ports and these SELinux port types can be assigned to our selected custom port (_tcp/7070_).
+
+	# sesearch -A -s httpd_t -c tcp_socket -p name_bind
+
+==== SELinux File context 
+
+SELinux _httpd_t_ process domain used for Apache webservers is not able to read a general _/var_ content with SELinux _var_t_ file type. There is no rule for this access in the SELinux policy. 
+
+	# sesearch -A -s httpd_t -t var_t -c file -p read
+
+Compare to that Apache webservers can read a specific content with a specific SELinux file type.
+
+	# sesearch -A -s httpd_t -c file -p read
+
+We can use the matchpathcon utility to decide what should be a proper context for our alternative location for web files.
+
+    # matchpathcon /var/www/html
+	/var/www/html    system_u:object_r:httpd_sys_content_t:s0
+
+    # exit
+
+=== SELinux _setup-selinux.yml_ ansible playbook
+
+According to our SELinux Troubleshooting we will create  an SELinux ansible playbook which will switch SELinux to Permissive mode and will apply all needed changes for our webservers's configuration.
+
+The playbook uses linux-system-roles/selinux ansible role. 
+
+    # hostname
+    selinux1.example.com
+
+    # pwd
+    /root/selinux_scripts
+
+	# cat setup-selinux.yml
+
+        ---
+	- hosts: all
+	    become: true
+        become_user: root
+        vars:
+
+        roles:
+            - linux-system-roles.selinux
+
+==== Configure SELinux variables
+
+Note: All code lines are append into the _vars_ section in the _setup_selinux.yml_ ansible playbook.
+
+Switch SELinux to Permissive mode.
+
+    SELinux_type: targeted
+    SELinux_mode: enforcing
+    SELinux_change_running: 1
+
+Webservers use the custom _/var/www_new/html_ path for web pages. SELinux labels have to be fixed for this directory and sub directories/files to reflect the default SELinux security labels for the _/var/www/html_ location. It is ensured by the following lines in the playbook:
+
+    SELinux_file_contexts:
+        - { target: '/var/www_new(/.*)?', setype: 'httpd_sys_content_t', ftype: 'a' }
+
+Once SELinux security labels are defined in the SELinux context database, these labels should be applied into extended attributes of selected files.  It is ensured by the following lines in the playbook:
+
+    SELinux_restore_dirs:
+        - /var/www_new
+
+All web servers are binded to the custom _tcp/7070_ port in our configuration. This setup needs to be reflected in a SELinux configuration. It is ensured by the following lines in the playbook:
+
+    SELinux_ports:
+        - { ports: '7070', proto: 'tcp', setype: 'http_port_t', state: 'present' }
+
+==== Final SELinux _setup-selinux.yml_ ansible playbook
+
+    ---
+    - hosts: all
+    become: true
+    become_user: root
+    vars:
+        SELinux_type: targeted
+        SELinux_mode: enforcing
+        SELinux_change_running: 1
+        SELinux_file_contexts:
+            - { target: '/var/www_new(/.*)?', setype: 'httpd_sys_content_t', ftype: 'a' }
+        SELinux_restore_dirs:
+            - /var/www_new/
+        SELinux_ports:
+            - { ports: '7070', proto: 'tcp', setype: 'http_port_t', state: 'present' }
+
+    roles:
+        - linux-system-roles.selinux
+
+Apply defined configurations for all servers. 
+
+    # ansible-playbook -i inventory -u root setup-selinux.yml
+
+=== Re-test configured setup
+
+List all SELinux configuration changes.
+
+    # ssh selinux2
+    # semanage export
+    # exit
+
+
+    # ssh selinux3
+    # semanage -o -
+    # exit
+
+Check the current SELinux status for all servers..
+
+    # ansible all -i inventory -u root -a getenforce
+
+Check the functionality with enabled SELinux.
+
+    # curl selinux2
+    # curl selinux2:7070
+
+    # curl selinux3
+    # curl selinux3:7070
+
+== Summary
+
+SELinux brings additional security for your environment and very often needs to be additionally modify to reflect the current environment configuration. For these cases, SELinux can be switched to Permissive mode as a debugging mode to not block a basic functionality of systems. With this mode we can run for a time period to debug all possible SELinux AVC denials and it makes turning SELinux on easier. There are many ways how to view or modify the installed SELinux policy. In this lab, we used SELinux Ansible role to distribute all needed changes in the SELinux policy to make our Apache configuration working with SELinux in Enforcing mode.
+
+== Revert script
+
+There is a revert script for the lab environment configuration. This script can be used to start from the scratch with this laband all actions in the _Configuration_ section need to be executed except the package installation.
+
+    # hostname
+    selinux1.example.com
+
+    # pwd
+    /root/selinux_scripts
+
+    # cat inventory
+    selinux2
+    selinux3
+
+    # ansible-playbook -i inventory -u root revert-all.yml
+
