@@ -8,7 +8,7 @@ You will need to have CloudForms re-check the authentication status of the Red H
 * Login as admin with password r3dh4t1!.
 * On the left menus, navigate to *Compute -> Infrastructure -> Providers*.
 +
-image:images/lab0-infra-providers.png
+image:images/lab0-infra-providers.png[]
 
 * Check the box next to the Red Hat Virtualization provider and click on *Authentication -> Re-check Authentication Status*.
 +
