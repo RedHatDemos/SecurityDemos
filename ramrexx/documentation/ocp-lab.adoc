@@ -17,9 +17,11 @@ image::ocp-ss6.png[]
 NOTE: In this lab example, we are only analysing against the pass/fail evaluation of a single CVE. In a production environment, you would adjust this condition to analyse against CVE vulnerabilities that your organization has deemed necessary.
 
 . Using the menu on the left side of the screen, browse to Compute > Containers > Container Images. In the search box in the upper right portion of the window, search for “summit-php” and click on the image returned in the result.
-image::ocp-ss7.png[]
++
+image:images/ocp-ss7.png[Compute > Containers > Container Images]
 . Notice all of the details that CloudForms discovers about the container image, including properties, relationships to other objects, OpenSCAP results, and compliance. This particular image has 26 high severity vulnerabilities. In this same view, note that this image is based on PHP 5.5.
-image::ocp-ss8.png[]
++
+image:images/ocp-ss8.png[]
 . Open a new browser tab and go to your OpenShift UI. Log in with admin / r3dh4t1! credentials. In the OpenShift UI, browse to the “summit-labs” project using the “My Projects” list on the right side of the screen.
 NOTE: If you do not see the “summit-labs” project in the list, click on the “View All” link in the “My Projects” list.
 
