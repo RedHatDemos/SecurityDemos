@@ -8,7 +8,7 @@ Specifically, in this lab, you will use the Red Hat CloudForms service catalog t
 Red Hat CloudForms provides users the ability to create self-service catalogs.  Through the use of catalogs, Red Hat CloudForms provides support for executing free form automation as a service and also allow for multi-tiered service provisioning to deploy layered workloads across hybrid environments. You can create customized dialogs that will give consumers of the services the ability to input just a few parameters and provision the entire service. In addition to using the native ruby language, free form automation workflows using the service catalog of Red Hat CloudForms can call Ansible Tower job templates or Ansible playbooks (using the embedded Ansible in Red Hat CloudForms) as part of your automation workflow as well.
 
 === Provisioning a security compliant host at the push of a button in Red Hat Virtualization
-. In your web browser, click on the tab you have opened to your Red Hat CloudForms UI. Log back in with admin as the username and r3dh4t1! as your password.
+. In your web browser, click on the tab you have opened to your Red Hat CloudForms UI. Log back in with *admin* as the username and *r3dh4t1!* as your password.
 . In the Red Hat CloudForms UI, in the left pane, navigate to *Services  → Catalogs*.
 +
 image:images/lab1-services-catalog.png[Services -> Catalogs]

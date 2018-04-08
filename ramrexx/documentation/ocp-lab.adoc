@@ -4,7 +4,8 @@ In this lab, you'll learn how CloudForms can help you scan container images runn
 
 . If you have not already done so, log into the CFME console using the *admin / r3dh4t1!* Username / password.
 . Using the menu on the left side of the screen, browse to Compute > Containers > Providers.
-image::ocp-ss2.png[]
++
+image:images/ocp-ss2.png
 . Click on the Openshift-3.7 provider. Here, you will see an overview of the OpenShift Container Platform provider that has been added to your lab environment.
 . On the top menu, click on Policy > Manage Policies. Notice the single policy that is current enabled for this provider - “OpenSCAP - Scan Images & Check Compliance”.
 image::ocp-ss4-1.png[]
