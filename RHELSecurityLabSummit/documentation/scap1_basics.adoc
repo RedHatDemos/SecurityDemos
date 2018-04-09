@@ -97,9 +97,11 @@ You can save it to a tailoring file by selecting File->Save Customization.
 Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology.
 
 There are two main approaches. One is to generate bash remediation script and run it on target machine(s).
+
  oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash.sh
 
 The other is to generate an ansible playbook that will put the machine into compliance.
+
  oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
 
 Notice that in both cases we are using empty result-id, that is a trick to avoid specifying the full result ID.
