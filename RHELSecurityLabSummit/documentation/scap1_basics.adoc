@@ -1,7 +1,6 @@
 == Lab 1: OpenSCAP Basics and Command Line Scanning
 
-=== Goal of Lab 1
-The goal of this lab is to introduce you to the basics of SCAP scanning with OpenSCAP.
+The goal of this part of the lab is to introduce you to the basics of SCAP scanning with OpenSCAP.
 
 === Introduction
 OpenSCAP is a family of open source SCAP tools and content that help users create standard security checklists for enterprise systems. Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certification and accreditation easier.
@@ -60,14 +59,15 @@ Run the first baseline scan:
  oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 ./ssg-rhel7-ds.xml
  # use --results-arf to get machine readable results archive
  # use --report to get human readable report (can also be generated from ARF after the scan)
- oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 --results-arf \~/arf.xml --report \~report.html ./ssg-rhel7-ds.xml
+ oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 --results-arf ~/arf.xml --report ~/report.html ./ssg-rhel7-ds.xml
 
 (optional) Generate HTML report separately:
 
- oscap xccdf generate report \~/arf.xml > \~/report.html
+ oscap xccdf generate report ~/arf.xml > ~/report.html
 
 Open the report using your web browser:
- firefox \~/report.html
+
+ firefox ~/report.html
 
 === SCAP result / report terminology
 Rules can have several types of results but the most common ones are "pass" and "fail". Their meaning should be self-explanatory. Clicking on the rule title in the HTML report will bring up a pop-up dialog that let's you examine why exactly OpenSCAP failed or passed the machine. For example if it's testing file permissions on a list of files it will specify which files failed and what are their permission bits.
