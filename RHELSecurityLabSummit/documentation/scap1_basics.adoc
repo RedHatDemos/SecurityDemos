@@ -56,10 +56,13 @@ Run the first baseline scan:
  # let's check which compliance profiles are available for rhel7
  oscap info ssg-rhel7-ds.xml
  # let's perform our first testing scan with the vanilla OSPP profile
- oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 ./ssg-rhel7-ds.xml
+ # (notice that we can skip the profile ID prefix to make the command simpler,
+ # the real ID is "xccdf_org.ssgproject.content_profile_ospp-rhel7")
+ oscap xccdf eval --profile ospp-rhel7 ./ssg-rhel7-ds.xml
+ # Let's store the results of the scan this time:
  # use --results-arf to get machine readable results archive
  # use --report to get human readable report (can also be generated from ARF after the scan)
- oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_ospp-rhel7 --results-arf ~/arf.xml --report ~/report.html ./ssg-rhel7-ds.xml
+ oscap xccdf eval --profile ospp-rhel7 --results-arf ~/arf.xml --report ~/report.html ./ssg-rhel7-ds.xml
 
 (optional) Generate HTML report separately:
 
