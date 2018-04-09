@@ -83,7 +83,11 @@ image::images/scap_report_fail.png[HTML report: A rule that is failing]
 Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
 After Workbench starts click RHEL7 to open the compliance content for Red Hat Enterprise Linux 7.
 
+image::images/scap_workbench_opened.png[SCAP Workbench opened, profile selected]
+
 Select desired profile and click Customize. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *Done* to save the profile. You have essentially created a new profile.
+
+image::images/scap_workbench_tailoring.png[SCAP Workbench content customization]
 
 Before going further it makes sense to run a test scan with the new profile we created. Click *Scan* and inspect the results.
 
