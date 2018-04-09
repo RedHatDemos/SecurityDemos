@@ -16,6 +16,8 @@ Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to
  yum install scap-security-guide
  # GUI tool for scanning and content customization, a front-end for OpenSCAP
  yum install scap-workbench
+ # we will need this later for Ansible based remediations
+ yum install ansible
 
 Verify a successful installation by running:
 
@@ -105,6 +107,97 @@ The other is to generate an ansible playbook that will put the machine into comp
  oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
 
 Notice that in both cases we are using empty result-id, that is a trick to avoid specifying the full result ID.
+
+We will focus on the Ansible remediation options in this part of the lab. Let us open the generated playbook using a text editor:
+
+....
+---
+###############################################################################
+#
+# Ansible remediation role for the results of evaluation of profile xccdf_org.ssgproject.content_profile_ospp-rhel7
+# XCCDF Version:  1.2
+#
+...
+#
+# How to apply this remediation role:
+# $ ansible-playbook -i "192.168.1.155," playbook.yml
+# $ ansible-playbook -i inventory.ini playbook.yml
+#
+###############################################################################
+....
+
+You can customize the playbook by changing the variables listed at the top of the generated file:
+....
+   vars:
+      var_accounts_password_minlen_login_defs: 6
+      var_accounts_minimum_age_login_defs: 7
+      var_accounts_maximum_age_login_defs: 60
+      var_account_disable_post_pw_expiration: 35
+      var_password_pam_maxrepeat: 2
+      var_password_pam_maxclassrepeat: 4
+      var_password_pam_dcredit: -1
+      var_password_pam_minlen: 15
+      var_password_pam_ucredit: -1
+      var_password_pam_ocredit: -1
+      var_password_pam_lcredit: -1
+      var_password_pam_difok: 8
+      var_password_pam_minclass: 4
+      var_accounts_tmout: 600
+      var_accounts_max_concurrent_login_sessions: 10
+...
+....
+
+Exploring the playbook further you will see the tasks that set up the machine:
+
+....
+   - name: Ensure gpgcheck Enabled For All Yum Package Repositories
+      with_items: "{{ yum_find.files }}"
+      lineinfile:
+        create: yes
+        dest: "{{ item.path }}"
+        regexp: '^gpgcheck'
+        line: 'gpgcheck=1'
+      tags:
+        - ensure_gpgcheck_never_disabled
+        - high_severity
+        - unknown_strategy
+        - low_complexity
+        - medium_disruption
+        - CCE-26876-3
+        - NIST-800-53-CM-5(3)
+        - NIST-800-53-SI-7
+        - NIST-800-53-MA-1(b)
+        - NIST-800-171-3.4.8
+        - PCI-DSS-Req-6.2
+        - CJIS-5.10.4.1
+....
+
+Let us run the playbook locally in check mode to see how it would change the machine to put it into compliance:
+
+ ansible-playbook -i "localhost," -c local --check playbook.yml
+
+....
+...
+TASK [Import RedHat GPG key] ******************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [Find All Yum Repositories] **************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [Ensure gpgcheck Enabled For All Yum Package Repositories] *******************************************************************************************************************************
+changed: [localhost] => (item={u'uid': 0, u'woth': False, u'mtime': 1521757296.0285208, u'inode': 301678, u'isgid': False, u'size': 82, u'isuid': False, u'isreg': True, u'gid': 0, u'ischr': False, u'wusr': True, u'xoth': False, u'islnk': False, u'nlink': 1, u'issock': False, u'rgrp': True, u'path': u'/etc/yum.repos.d/rhel.repo', u'xusr': False, u'atime': 1523305034.24276, u'isdir': False, u'ctime': 1521757296.029521, u'isblk': False, u'wgrp': False, u'xgrp': False, u'dev': 64771, u'roth': True, u'isfifo': False, u'mode': u'0644', u'rusr': True})
+changed: [localhost] => (item={u'uid': 0, u'woth': False, u'mtime': 1523307691.5074177, u'inode': 83765, u'isgid': False, u'size': 143282, u'isuid': False, u'isreg': True, u'gid': 0, u'ischr': False, u'wusr': True, u'xoth': False, u'islnk': False, u'nlink': 1, u'issock': False, u'rgrp': True, u'path': u'/etc/yum.repos.d/redhat.repo', u'xusr': False, u'atime': 1523307693.8396184, u'isdir': False, u'ctime': 1523307691.5084178, u'isblk': False, u'wgrp': False, u'xgrp': False, u'dev': 64771, u'roth': True, u'isfifo': False, u'mode': u'0644', u'rusr': True})
+
+TASK [Ensure YUM Removes Previous Package Versions] *******************************************************************************************************************************************
+changed: [localhost]
+
+TASK [Check existence of yum on Fedora] *******************************************************************************************************************************************************
+skipping: [localhost]
+
+TASK [Ensure GPG check Enabled for Local Packages (Yum)] **************************************************************************************************************************************
+changed: [localhost] => (item=/etc/yum.conf)
+...
+....
 
 <<top>>
 
