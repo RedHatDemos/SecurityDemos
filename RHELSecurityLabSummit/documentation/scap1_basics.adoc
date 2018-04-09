@@ -75,6 +75,10 @@ Open the report using your web browser:
 === SCAP result / report terminology
 Rules can have several types of results but the most common ones are "pass" and "fail". Their meaning should be self-explanatory. Clicking on the rule title in the HTML report will bring up a pop-up dialog that let's you examine why exactly OpenSCAP failed or passed the machine. For example if it's testing file permissions on a list of files it will specify which files failed and what are their permission bits.
 
+image::images/scap_report_pass.png[HTML report: A rule that is passing]
+
+image::images/scap_report_fail.png[HTML report: A rule that is failing]
+
 === Customizing existing content for our use-case
 Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
 After Workbench starts click RHEL7 to open the compliance content for Red Hat Enterprise Linux 7.
