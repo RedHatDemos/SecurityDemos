@@ -26,9 +26,21 @@ Taco intro here.
 Sushi intro here.
 . If you have to log back in, go to your Firefox web browser and click on the tab you have opened to your Red Hat CloudForms UI. Log back in with admin as the username and r3dh@t2017 as your password.
 
-=== Using the Red Hat CloudForms control engine and embedded Ansible in CloudForms to execute the Openstack related control policy
-Me likey Openstack
-. Especially if there is a control policy
+=== Using the Red Hat CloudForms control engine and CloudForms to execute the Openstack related control policy
+
+. Log in as *labuser* 
+. Navigate to Services -> Workloads
+. You will see that the VM *labosp7* is non-compliant
+. Click on the VM *labosp7* to go to the summary screen
+. In the upper right hand corner click on *Compliance Status*
+. You will that the VM is non-compliant for the Meltdown/Spectre vulnerability
++
+NOTE: For the sake of time the kernel packages VM has just been patched.
++
+. Click on the bread crumb to nagivate back to the
+
+
+
 
 <<top>>
 
