@@ -17,32 +17,32 @@ In this lab, you'll learn how CloudForms can help you scan container images runn
 +
 . Using the menu on the left side of the screen, browse to Compute > Containers > Providers.
 +
-image:ocp-ss2.png[400,400]
+image:images/ocp-ss2.png[400,400]
 +
 . Click on the Openshift-3.7 provider. Here, you will see an overview of the OpenShift Container Platform provider that has been added to your lab environment.
 +
 . On the top menu, click on Policy > Manage Policies. Notice the single policy that is current enabled for this provider - “OpenSCAP - Scan Images & Check Compliance”.
 +
-image:ocp-ss4-1.png[600,600]
+image:images/ocp-ss4-1.png[600,600]
 +
-image:ocp-ss4-2.png[400,400]
+image:images/ocp-ss4-2.png[400,400]
 +
 . To see what this policy does, using the menu on the left, browse to Control > Explorer. Find the “OpenSCAP - Scan Images & Check Compliance” policy profile and see what actions it takes.
 +
-. As new images are discovered by CloudForms, a SmartState Analysis will happen automatically and scan the container image for known CVE based vulnerabilities. CloudForms will then use this data to check whether the container image is in compliance with defined vulnerability checks. It will also mark any image that violates these constraints with a “deny-execution” annotation. 
+. As new images are discovered by CloudForms, a SmartState Analysis will happen automatically and scan the container image for known CVE based vulnerabilities. CloudForms will then use this data to check whether the container image is in compliance with defined vulnerability checks. It will also mark any image that violates these constraints with a “deny-execution” annotation.
 +
 NOTE: In this lab example, we are only analysing against the pass/fail evaluation of a single CVE. In a production environment, you would adjust this condition to analyse against CVE vulnerabilities that your organization has deemed necessary.
 +
 
-image:ocp-ss6.png[400,400]
+image:images/ocp-ss6.png[400,400]
 +
 . Using the menu on the left side of the screen, browse to Compute > Containers > Container Images. In the search box in the upper right portion of the window, search for “summit-php” and click on the image returned in the result.
 +
-image:ocp-ss7.png[600,600]
+image:images/ocp-ss7.png[600,600]
 +
 . Notice all of the details that CloudForms discovers about the container image, including properties, relationships to other objects, OpenSCAP results, and compliance. This particular image has 26 high severity vulnerabilities. In this same view, note that this image is based on PHP 5.5.
 +
-image:ocp-ss8.png[600,600]
+image:images/ocp-ss8.png[600,600]
 +
 . Open a new browser tab and go to your OpenShift UI. Log in with admin / r3dh4t1! credentials. In the OpenShift UI, browse to the “summit-labs” project using the “My Projects” list on the right side of the screen.
 +
@@ -51,13 +51,13 @@ NOTE: If you do not see the “summit-labs” project in the list, click on the 
 
 . You’ll notice a familiar looking application running in here - “summit-php”. If we denied execution, why is it still running? Simply because we don’t want to rip an application out that may already be in production. The deny execution policy prevents additional containers from being instantiated. Give it a try - expand the summit-php deployment in the main window and click the up arrow next to the Pod circle. Rather than quickly add an additional pod, it will be prevented from doing so.
 +
-image:ocp-ss10.png[600,600]
+image:images/ocp-ss10.png[600,600]
 +
 . Click on “Monitoring” on the left side menu.
 +
 . Click on “View Details” in the Events list on the right hand side and observe the detailed message on why your application is not scaling up.
 +
-image:ocp-ss12.png[600,600]
+image:images/ocp-ss12.png[600,600]
 +
 . (Optional) If you’d like to see why this is happening behind the scenes, using the menu on the left, browse to Builds > Images. Select the “summit-php” image stream and then click on the “latest” tag.
 +
@@ -67,17 +67,17 @@ image:ocp-ss12.png[600,600]
 +
 . Click on the “summit-php” build and select the “Configuration” tab. Note on this tab that this application was based on the php:5.5 image when it was built, which is an older version that brought along those 26 vulnerabilities discovered earlier by CloudForms.
 +
-image:ocp-ss16.png[400,400]
+image:images/ocp-ss16.png[400,400]
 +
 . Since containers are immutable, we need to build a new container image based on a version of PHP without all of these vulnerabilities. From this same screen, click Actions > Edit at the top right of your screen.
 +
 . In the “Image Configuration” section, we’re simply going to tell OpenShift to rebuild this “summit-php” application using a newer version of PHP. Change the PHP image tag from 5.5 > 5.6 and click Save. OpenShift will automatically start building a new image for this application to use based on PHP 5.6.
 +
-image:ocp-ss18.png[600,600]
+image:images/ocp-ss18.png[600,600]
 +
 . On the Overview tab, you’ll see that the application is already rolling out based on this newly built image.
 +
-image:ocp-ss19.png[600,600]
+image:images/ocp-ss19.png[600,600]
 +
 . (Optional) In the Builds > Images menu, select the summit-php image stream and click on the latest tag. Scroll down and click on “Show Annotations” and you’ll see there is no deny-execution assigned to this image.
 +
