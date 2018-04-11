@@ -25,7 +25,16 @@ Ansible is great for security automation because it is agentless, only requires 
 +
 image:images/lab3-control-explorer.png[200,200]
 +
-.
+. Navigate to Policy Profiles -> OSP Security Group Enforcement -> OSP Attach Security Group Policy.
++
+image:images/lab3-control-policy.png[600,600]
++
+. This policy dictates that when an OpenStack instance is powered on, CloudForms will automatically assign the *Production* security group.
+. Navigate 
++
+image:images/lab3-compute-instance.png[400,400]
++
+
 
 === Using Red Hat CloudForms control engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
 
