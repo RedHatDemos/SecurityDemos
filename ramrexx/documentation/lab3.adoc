@@ -18,27 +18,33 @@ Ansible Tower by Red Hat provides a graphical user interface for Ansible with a 
 
 Ansible is great for security automation because it is agentless, only requires SSH/WinRM, supports desired state, is extensible and modular, has a push-based architecture, and provides easy targeting based on facts.
 
-=== Using Red Hat CloudForms control engine and embedded Ansible in CloudForms to execute the Meltdown and Spectre control policy and do remediation
-Taco intro here.
-. Taco
 
-=== Using the Red Hat CloudForms control engine and embedded Ansible in CloudForms to execute the Shellshock control policy and do remediation
-Sushi intro here.
-. If you have to log back in, go to your Firefox web browser and click on the tab you have opened to your Red Hat CloudForms UI. Log back in with admin as the username and r3dh@t2017 as your password.
+=== Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
+. Log into CloudForms as *admin*.
+. Navigate to Control -> Explorer.
++
+image:images/lab3-control-explorer.png[200,200]
++
+.
 
-=== Using the Red Hat CloudForms control engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
+=== Using Red Hat CloudForms control engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
 
-. Log in as *labuser*.
+. Log into CloudForms as *labuser*.
 . Navigate to Services -> Workloads.
-. You will see that the VM *labosp7* is non-compliant.
-. Click on the VM *labosp7* to go to the summary screen.
++
+image:images/lab3-services-workloads.png[400,400]
++
+. You will see that the VM *labosp7* is non-compliant. Click on the VM *labosp7* to go to the summary screen.
++
+image:images/lab3-vm-list-view.png[400,400]
++
 . In the upper right hand corner click on Compliance Status.
 +
 image:images/lab3-compliance-status.png[400,400]
 +
 . You will see that the VM is vulnerable for Meltdown/Spectre.
 +
-NOTE: For the sake of time the kernel packages VM has just been patched.
+NOTE: For the sake of time the kernel packages have already been patched.
 +
 . Click on the back arrow to navigate back to the VM summary page.
 +
@@ -66,7 +72,7 @@ image:images/lab3-task-results.png[600,600]
 +
 image:images/lab3-check-compliance.png[400,400]
 +
-. Click on the Refresh button until the
+. Click on the Refresh button until the VM is compliant.
 +
 image:images/lab3-compliant-success.png[600,600]
 +
