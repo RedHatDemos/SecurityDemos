@@ -1,0 +1,22 @@
+---
+- name: Yum Install Packages
+  hosts: all
+  gather_facts: false
+
+  vars:
+    package_name: aide
+    verbose: false
+
+  tasks:
+  - name: Install Packages
+    yum:
+      name: "{{ item }}"
+      state:
+    register: yum_output
+    with_items:
+      - package_name
+
+  - name: Log yum_output
+    debug:
+      var: yum_output
+    when: verbose and yum_output is defined
