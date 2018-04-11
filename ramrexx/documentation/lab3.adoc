@@ -26,23 +26,50 @@ Taco intro here.
 Sushi intro here.
 . If you have to log back in, go to your Firefox web browser and click on the tab you have opened to your Red Hat CloudForms UI. Log back in with admin as the username and r3dh@t2017 as your password.
 
-=== Using the Red Hat CloudForms control engine and CloudForms to execute the Openstack related control policy
+=== Using the Red Hat CloudForms control engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
 
-. Log in as *labuser*
-. Navigate to Services -> Workloads
-. You will see that the VM *labosp7* is non-compliant
-. Click on the VM *labosp7* to go to the summary screen
-. In the upper right hand corner click on *Compliance Status*
-. You will that the VM is non-compliant for the Meltdown/Spectre vulnerability
+. Log in as *labuser*.
+. Navigate to Services -> Workloads.
+. You will see that the VM *labosp7* is non-compliant.
+. Click on the VM *labosp7* to go to the summary screen.
+. In the upper right hand corner click on Compliance Status.
++
+image:images/lab3-compliance-status.png[400,400]
++
+. You will see that the VM is vulnerable for Meltdown/Spectre.
 +
 NOTE: For the sake of time the kernel packages VM has just been patched.
 +
-. Click on the bread crumb to navigate back to the VM summary page
-. Click on the Files and find the kernel package. Notice the version *693*.
-. Click on the bread crumb to navigate back to the VM summary page
-. Click on Configuration 
-
-
+. Click on the back arrow to navigate back to the VM summary page.
++
+image:images/lab3-back-arrow.png[400,400]
++
+. Click on Packages and find the kernel package. Notice the version *693.el7*. As of this document we need to ensure that version *830.el7* is installed to be compliant.
+. Click on the back arrow to navigate back to the VM summary page.
++
+image:images/lab3-back-arrow.png[400,400]
++
+. Click on Configuration -> Perform SmartState Analysis. This will launch a job that will scan the VMs packages and other metadata.
++
+image:images/lab3-launch-smart-state.png[400,400]
++
++
+. Click on Lab User -> Tasks to monitor the scan jobs status.
++
+image:images/lab3-tasks.png[150,150]
++
+. Click on the Refresh button periodically until it the scan job has completed (about 3 minutes). Afterwards, click on the job and this will take you back to the VM summary page.
++
+image:images/lab3-task-results.png[600,600]
++
+. Click on Policy -> Check Compliance of Last Known Configuration
++
+image:images/lab3-check-compliance.png[400,400]
++
+. Click on the Refresh button until the
++
+image:images/lab3-compliant-success.png[600,600]
++
 
 
 <<top>>
