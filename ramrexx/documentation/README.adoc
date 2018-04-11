@@ -26,10 +26,10 @@ This lab is geared towards systems administrators, cloud administrators and oper
 * How to use OpenSCAP, Red Hat CloudForms, and Red Hat Ansible Automation to automatically remediate systems that are out of compliance
 * How to create and view reports showing compliant and non-compliant systems in Red Hat CloudForms after running OpenSCAP security compliance scans on these systems
 * How to create and view security related reports for a hybrid environment, including: Red Hat Virtualization, Red Hat Openstack Platform, and Red Hat Openshift Container Platform.
-* How to use Red Hat Insights for pro-active security and automated risk management
+* How to use Red Hat Insights for proactive security and automated risk management
 
 == Lab Environment:
-Your entire lab environment is hosted online and includes: Red Hat Virtualization, Red Hat Satellite, Red Hat CloudForms, Red Hat Ansible Automation, Red Hat Insights, Red Hat Openshift Container Platform, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
+Your entire lab environment is hosted online and includes: Red Hat Virtualization, Red Hat Openstack Platform, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat CloudForms, Red Hat Ansible Automation, Red Hat Insights, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
 
 You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
 
