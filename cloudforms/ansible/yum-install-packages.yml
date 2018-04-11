@@ -23,7 +23,7 @@
       state: latest
     register: yum_output
     with_items:
-      - package_name
+      - "{{ package_name }}"
 
   - name: Log yum_output
     debug:
