@@ -28,7 +28,7 @@ Sushi intro here.
 
 === Using the Red Hat CloudForms control engine and CloudForms to execute the Openstack related control policy
 
-. Log in as *labuser* 
+. Log in as *labuser*
 . Navigate to Services -> Workloads
 . You will see that the VM *labosp7* is non-compliant
 . Click on the VM *labosp7* to go to the summary screen
@@ -37,7 +37,10 @@ Sushi intro here.
 +
 NOTE: For the sake of time the kernel packages VM has just been patched.
 +
-. Click on the bread crumb to nagivate back to the
+. Click on the bread crumb to navigate back to the VM summary page
+. Click on the Files and find the kernel package. Notice the version *693*.
+. Click on the bread crumb to navigate back to the VM summary page
+. Click on Configuration 
 
 
 
