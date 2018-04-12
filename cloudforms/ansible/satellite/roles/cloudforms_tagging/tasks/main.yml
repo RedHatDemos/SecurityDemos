@@ -69,14 +69,14 @@
     var: create_tags_output
   when: verbose
 
-- name: Setting tag name to "{{ tag_pass }}" based on "{{ scan_pass }}"
+- name: Setting tag name to "{{ tag_pass }}" based on scan_pass "{{ scan_pass }}"
   set_fact:
-    tag: tag_pass
+    tag: "{{ tag_pass }}"
   when: scan_pass
 
-- name: Setting tag name to "{{ tag_fail }}" based on "{{ scan_pass }}"
+- name: Setting tag name to "{{ tag_fail }}" based on scan_pass "{{ scan_pass }}"
   set_fact:
-    tag: tag_fail
+    tag: "{{ tag_fail }}"
   when: not scan_pass
 
 - name: Assign tag to VM
