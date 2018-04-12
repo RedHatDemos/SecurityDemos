@@ -69,6 +69,16 @@
     var: create_tags_output
   when: verbose
 
+- name: Setting tag name to "{{ tag_pass }}" based on "{{ scan_pass }}"
+  set_fact:
+    tag: tag_pass
+  when: scan_pass
+
+- name: Setting tag name to "{{ tag_fail }}" based on "{{ scan_pass }}"
+  set_fact:
+    tag: tag_fail
+  when: not scan_pass
+
 - name: Assign tag to VM
   uri:
     url: "{{ manageiq.api_url }}/api/{{ vm_href_slug }}/tags"
@@ -77,7 +87,7 @@
       action: assign
       resources:
         - category: "{{ category }}"
-          name: "{{ scan_pass | ternary(tag_pass, tag_fail) | lower | regex_replace('\\W', '_') }}"
+          name: "{{ tag | lower | regex_replace('\\W', '_') }}"
     body_format: json
     validate_certs: "{{ manageiq_validate_certs }}"
     user: "{{ manageiq_user }}"
