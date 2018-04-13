@@ -13,4 +13,4 @@ Chocolate for customers
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3:How to use the control policy engine in Red Hat CloudForms and embedded Ansible to enforce compliance with security policies ]
+link:README.adoc#table-of-contents[ Table of Contents ]

@@ -97,4 +97,4 @@ NOTE: If yours is not populated, give it a couple of minutes to finish the scan 
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5.adoc[Lab 5:OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the integration of Red Hat CloudForms, Ansible, and Satellite 6.3]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5.adoc[Lab 5]

@@ -17,4 +17,4 @@ Panda Bears
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab6.adoc[ Lab 6:Viewing SCAP compliant and non-compliant VMs from a report in Red Hat CloudForms]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab6.adoc[ Lab 6]

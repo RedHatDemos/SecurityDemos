@@ -11,6 +11,4 @@ Red Hat CloudForms has a robust reporting engine built into the product that all
 Reporting on monkeys
 . Monkeys
 
-<<top>>
-
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7.adoc[ Lab 7: Viewing other reports with security related information for RHV, Openstack, Openshift, AWS showing cross-provider visibility
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7.adoc[ Lab 7]

@@ -14,4 +14,4 @@ Insights saves the world
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab8.adoc[Lab 8:Proactive Security and Automated Risk Management with Red Hat Insights]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab8.adoc[Lab 8]

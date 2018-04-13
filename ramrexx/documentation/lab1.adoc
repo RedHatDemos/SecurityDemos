@@ -20,4 +20,4 @@ image:images/lab1-services-catalog.png[Services -> Catalogs]
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[ Lab 2:Utilizing the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6 ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[ Lab 2]
