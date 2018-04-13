@@ -66,6 +66,8 @@ image:images/lab3.1-vm-ipaddress.png[400,400]
  [root@lab3-vm1 ~]# rpm -qa --last aide
  aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
 
+. Log out of CloudForms
+
 
 === Lab 3.2 Using Red Hat CloudForms compliance policy to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
 . Log into CloudForms as *labuser*.
@@ -122,7 +124,8 @@ image:images/lab3.2-check-compliance.png[400,400]
 . Click on the Refresh button until the VM is compliant.
 +
 image:images/lab3.2-compliant-success.png[600,600]
-
++
+. Log out of CloudForms
 
 === Lab 3.3 Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
 . Log into CloudForms as *admin*.
