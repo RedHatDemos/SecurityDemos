@@ -1,9 +1,0 @@
----
-- hosts: all
-#  sudo: yes
-
-  roles:
-#    - { role: RHEL6-STIG, rhel6stig_cat1: true, rhel6stig_cat2: true, rhel6stig_cat3: false  }
-    - { role: sat-reg }
-#     - { role: nousdefions.STIG-RHEL6}
-

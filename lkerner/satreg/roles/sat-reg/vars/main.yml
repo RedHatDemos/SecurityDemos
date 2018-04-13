@@ -1,5 +1,0 @@
----
-# vars file for sat-reg
-rhn_user: admin 
-rhn_pass: r3dh@t2017
-sat_fqdn: sat5.summit.example.com
