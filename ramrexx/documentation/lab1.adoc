@@ -18,12 +18,16 @@ image:images/lab1.1-services-catalog.png[200,200]
 image:images/lab1.1-all-services.png[600,600]
 +
 . Enter the following information and click on *Submit*.
-.. VM Name: *lab1-vm1*
-.. IP Address: *192.168.1.110*
+|===
+|VM Name |IP Address| SCAP Profile
+|*lab1-vm1*
+|*192.168.1.110*
+|*Choose From the List of Profiles*
+|===
 +
 image:images/lab1.1-NEEDIMAGE.png[400,400]
 +
-. Click on the Refresh button until the service request shows *Approved*.
+. From the service request page, click on the Refresh button until the service request shows *Approved*.
 +
 image:images/lab1.1-NEEDIMAGE.png[400,400]
 +
@@ -31,7 +35,18 @@ image:images/lab1.1-NEEDIMAGE.png[400,400]
 +
 image:images/lab1.1-NEEDIMAGE.png[400,400]
 +
-
+. Click on the *RHEL 7.5 on RHV* service
++
+image:images/lab1.1-NEEDIMAGE.png[400,400]
++
+. Click on the Provisioning tab to view the Ansible output.
++
+image:images/lab1.1-NEEDIMAGE.png[400,400]
++
+. Press the refresh button periodically to refresh the Provisioning Ansible output.
++
+image:images/lab1.1-NEEDIMAGE.png[400,400]
++
 
 
 
