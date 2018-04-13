@@ -177,6 +177,7 @@ image:images/lab3.3-refresh-security-groups.png[600,600]
 +
 image:images/lab3.3-security-groups-after.png[600,600]
 +
+. Log out of CloudForms
 
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4]
