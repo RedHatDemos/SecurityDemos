@@ -1,6 +1,6 @@
 == Lab 7: Viewing other reports with security related information for RHV, Openstack, Openshift, AWS showing cross-provider visibility
 
-=== Goal of Lab 8
+=== Goal of Lab 7
 The goal of this lab is to blah
 
 === Introduction
@@ -9,6 +9,9 @@ Red Hat
 Insights saves the world
 . Insights lab
 
+=== Lab 7.1
+
+
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab8.adoc[Lab 8:Proactive Security and Automated Risk Management with Red Hat Insights]

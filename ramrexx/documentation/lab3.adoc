@@ -70,16 +70,16 @@ image:images/lab3.1-vm-ipaddress.png[400,400]
 . End of exercise.
 
 
-=== Lab 3.2 Using Red Hat CloudForms compliance engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
+=== Lab 3.2 Using Red Hat CloudForms compliance policy to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
 
 . Log into CloudForms as *labuser*.
 . Navigate to Services -> Workloads.
 +
-image:images/lab3-services-workloads.png[400,400]
+image:images/lab3.2-services-workloads.png[400,400]
 +
-. You will see that the VM *lab3-vm2* is non-compliant. Click on the VM *lab3-vm2* to go to the summary screen.
+. You will see that the VM is non-compliant. Click on the VM *lab3-vm2* to go to the summary screen.
 +
-image:images/lab3-vm-list-view.png[400,400]
+image:images/lab3.2-all-vms.png[500,500]
 +
 . In the upper right hand corner click on Compliance Status.
 +
