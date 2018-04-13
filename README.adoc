@@ -1,1 +1,5 @@
 = Red Hat Security Demos
+
+LABS:
+* << link:Implementing_Proactive_Security_and_Compliance_Automation/documentation/README.adoc[Implementing Proactive Security and Compliance Automation] >>
+* << link:RHELSecurityLabSummit/documentation/README.adoc[Defend_Yourself_Using_Built_in_RHEL_Security_Technologies] >>
