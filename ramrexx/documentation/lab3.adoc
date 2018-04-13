@@ -19,7 +19,7 @@ Ansible Tower by Red Hat provides a graphical user interface for Ansible with a 
 Ansible is great for security automation because it is agentless, only requires SSH/WinRM, supports desired state, is extensible and modular, has a push-based architecture, and provides easy targeting based on facts.
 
 
-=== Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
+=== Lab 3.1 Using Red Hat CloudForms compliance policy with Ansible Automation to enforce the AIDE package
 . Log into CloudForms as *admin*.
 . Navigate to Control -> Explorer.
 +
@@ -27,23 +27,21 @@ image:images/lab3-control-explorer.png[200,200]
 +
 . Navigate to Policy Profiles -> OSP Security Group Enforcement -> OSP Attach Security Group Policy.
 +
-image:images/lab3-control-policy.png[600,600]
+image:images/lab3-control-policy-meltdown.png[600,600]
 +
-. This policy dictates that when an OpenStack instance is powered on, CloudForms will automatically assign the *Production* security group.
-. Navigate 
-+
-image:images/lab3-compute-instance.png[400,400]
-+
+. This compliance policy dictates that when a compliance check is ran, check to ensure that the kernel package is of the correct version.
+. Navigate
 
+<<top>>
 
-=== Using Red Hat CloudForms control engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
+=== Lab 3.2 Using Red Hat CloudForms control engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
 
 . Log into CloudForms as *labuser*.
 . Navigate to Services -> Workloads.
 +
 image:images/lab3-services-workloads.png[400,400]
 +
-. You will see that the VM *labosp7* is non-compliant. Click on the VM *labosp7* to go to the summary screen.
+. You will see that the VM *lab3-vm2* is non-compliant. Click on the VM *lab3-vm2* to go to the summary screen.
 +
 image:images/lab3-vm-list-view.png[400,400]
 +
@@ -86,6 +84,24 @@ image:images/lab3-check-compliance.png[400,400]
 image:images/lab3-compliant-success.png[600,600]
 +
 
+<<top>>
+
+
+=== Lab 3.3 Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
+. Log into CloudForms as *admin*.
+. Navigate to Control -> Explorer.
++
+image:images/lab3-control-explorer.png[200,200]
++
+. Navigate to Policy Profiles -> OSP Security Group Enforcement -> OSP Attach Security Group Policy.
++
+image:images/lab3-control-policy.png[600,600]
++
+. This policy dictates that when an OpenStack instance is powered on, CloudForms will automatically assign the *Production* security group.
+. Navigate
++
+image:images/lab3-compute-instance.png[400,400]
++
 
 <<top>>
 
