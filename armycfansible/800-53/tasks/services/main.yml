@@ -1,4 +1,0 @@
----
-- include: obsolete_services.yml
-- include: base_services.yml
-- include: ssh_service.yml

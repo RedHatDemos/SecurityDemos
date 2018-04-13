@@ -1,9 +1,0 @@
----
-- name: Ensure systems are DISA STIG compliant
-  hosts: all
-  become: yes
-
-  roles:
-    - { role: RHEL7-STIG, when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"}
-
-#- include: ./examples/apache-basic-playbook/site.yml
