@@ -1,13 +1,13 @@
 == Lab 3: How to use the control policy engine in Red Hat CloudForms and Ansible Tower to enforce compliance with security policies
 
-=== Goal of Lab 3
+== Goal of Lab 3
 The goal of this lab is to introduce you to the power and flexibility of Red Hat CloudForms and Ansible Tower by Red Hat to enforce your security policies.
 
 Specifically, using a combination of Red Hat CloudForms and Ansible Tower by Red Hat, you will identify and fix the Shellshock vulnerability in your system in an automated fashion.
 
 The Shellshock vulnerability is the bash remote code execution vulnerability (CVE-2014-6271), which allows an attacker to gain control over a targeted computer if exploited successfully. Specifically, an attacker could use this flaw to override or bypass environment restrictions to execute shell commands. Certain services and applications allow remote unauthenticated attackers to provide environment variables, allowing them to exploit this issue. If your system is vulnerable, you can fix these issues by updating to the most recent version of the Bash package available from Red Hat for Red Hat Enterprise Linux 5, 6, and 7.
 
-=== Introduction
+== Introduction
 Red Hat CloudForms provides unified hybrid cloud management across your entire heterogenous environment, including virtual, private cloud, public cloud, and container environments. Other supported technologies include software defined networking, middleware, and in the future storage management.
 
 Red Hat CloudForms is an agentless solution,delivered as a virtual appliance, that is highly scalable and provides deep continuous visibility and discovery of your entire infrastructure. The Red Hat CloudForms control and policy engine provides compliance and governance capabilities right in the GUI of CloudForms. The Red Hat CloudForms automate engine can be utilized to execute free-form automation using either ruby or Ansible playbooks.  Red Hat CloudForms is able to communicate directly to your Ansible Tower instance to execute your Ansible playbooks.
@@ -18,23 +18,59 @@ Ansible Tower by Red Hat provides a graphical user interface for Ansible with a 
 
 Ansible is great for security automation because it is agentless, only requires SSH/WinRM, supports desired state, is extensible and modular, has a push-based architecture, and provides easy targeting based on facts.
 
-
 === Lab 3.1 Using Red Hat CloudForms compliance policy with Ansible Automation to enforce the AIDE package
 . Log into CloudForms as *admin*.
 . Navigate to Control -> Explorer.
 +
-image:images/lab3-control-explorer.png[200,200]
+image:images/lab3.1-control-explorer.png[200,200]
 +
-. Navigate to Policy Profiles -> OSP Security Group Enforcement -> OSP Attach Security Group Policy.
+. Navigate to Policy Profiles -> Lab 3.1 Enforce-AIDE -> Lab 3.1 Enforce AIDE Package.
 +
-image:images/lab3-control-policy-meltdown.png[600,600]
+image:images/lab3.1-control-policy.png[600,600]
 +
-. This compliance policy dictates that when a compliance check is ran, check to ensure that the kernel package is of the correct version.
-. Navigate
+. This control policy dictates that when a VM is powered on, install the AIDE package.
+. Navigate to Services -> Workloads
++
+image:images/lab3.1-services-workloads.png[400,400]
++
+. Click on *lab3-vm1* which will take you to the VM summary page.
++
+image:images/lab3.1-all-vms.png[500,500]
++
+. Click on Policy -> Manage Policies
++
+image:images/lab3.1-policy-manage-policies.png[400,400]
++
+. Verify that the Lab 3.1 control policy is assigned and click on Cancel to exit.
++
+image:images/lab3.1-policy-assignment.png[600,600]
++
+. From the VM summary page power on the VM. This will take power on the VM and trigger the control policy to execute an Ansible playbook
+to install the AIDE package.
++
+image:images/lab3.1-power-on.png[200,200]
++
+. Note the IP address for *lab-vm1*.
++
+image:images/lab3.1-vm-ipaddress.png[400,400]
++
+. Using SSH log into your Lab Workstation using your provided private key and sudo to *root*.
 
-<<top>>
+ [lab-user@workstation-repl ~]$ sudo -i
 
-=== Lab 3.2 Using Red Hat CloudForms control engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
+. From there, ssh to the *lab3-vm1* IP address using *r3dh4t1!* as the password.
+
+  [root@workstation-repl ~]# ssh root@*192.168.1.171*
+
+. Once logged in check to see if the *AIDE* package is installed. It may take a minute or so
+
+ [root@lab3-vm1 ~]# rpm -qa --last aide
+ aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
+
+. End of exercise.
+
+
+=== Lab 3.2 Using Red Hat CloudForms compliance engine to determine if an OpenStack instance is vulnerable for Meltdown/Spectre
 
 . Log into CloudForms as *labuser*.
 . Navigate to Services -> Workloads.
