@@ -45,7 +45,7 @@ image:images/lab3.1-policy-manage-policies.png[400,400]
 +
 image:images/lab3.1-policy-assignment.png[600,600]
 +
-. From the VM summary page power on the VM. This will take power on the VM and trigger the control policy to execute an Ansible playbook to install the AIDE package. Note that it can take a minute or so for the package to be installed.
+. From the VM summary page power on the VM. This will trigger the control policy to execute an Ansible playbook to install the AIDE package. Note that it can take a minute or so for the package to be installed.
 +
 image:images/lab3.1-power-on.png[200,200]
 +
@@ -131,18 +131,52 @@ image:images/lab3.2-compliant-success.png[600,600]
 . Log into CloudForms as *admin*.
 . Navigate to Control -> Explorer.
 +
-image:images/lab3-control-explorer.png[200,200]
+image:images/lab3.3-control-explorer.png[200,200]
 +
-. Navigate to Policy Profiles -> OSP Security Group Enforcement -> OSP Attach Security Group Policy.
+. Navigate to Policy Profiles -> Lab 3.3 OSP Security Group Enforcement -> Lab 3.3 OSP Attach Security Group Policy. You will notice that this policy states that when an OpenStack instance is powered on ensure that the *Production* security group is attached.
 +
-image:images/lab3-control-policy.png[600,600]
+image:images/lab3.3-control-policy.png[600,600]
 +
-. This policy dictates that when an OpenStack instance is powered on, CloudForms will automatically assign the *Production* security group.
-. Navigate
+. Navigate to Compute -> Cloud -> Instances.
 +
 image:images/lab3-compute-instance.png[400,400]
 +
+. Click on the VM *lab3-vm3* to go to the VM summary page.
++
+image:images/lab3.3-all-vms.png[600,600]
++
+. Click on Policy -> Manage Policies
++
+image:images/lab3.3-policy-manage-policies.png[400,400]
++
+. Verify that the Lab 3.3 control policy is assigned and click on Cancel to exit.
++
+image:images/lab3.3-policy-assignment.png[600,600]
++
+. From the VM summary page Locate Relationships and click on Security Groups.
++
+image:images/lab3.3-relationships.png[400,400]
++
+. You will see that the VM only has 1 security group.
++
+image:images/lab3.3-security-groups-before.png[600,600]
++
+. Click on the back arrow to navigate back to the VM summary page.
++
+image:images/lab3.3-back-arrow.png[200,200]
++
+. From the VM summary page power on the VM. This will trigger the control policy to ensure that the *Production* security group is applied.
++
+image:images/lab3.3-power-on.png[200,200]
++
+. Click on the refresh button until the VM has powered on and the security group count has changed. Once changed click on the security group record.
++
+image:images/lab3.3-refresh-security-groups.png[600,600]
++
+. You will now notice that the *Production* security group has been applied automatically.
++
+image:images/lab3.3-security-groups-after.png[600,600]
++
 
-<<top>>
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4]
