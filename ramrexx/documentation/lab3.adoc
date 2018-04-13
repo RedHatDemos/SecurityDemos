@@ -83,45 +83,51 @@ image:images/lab3.2-all-vms.png[500,500]
 +
 . In the upper right hand corner click on Compliance Status.
 +
-image:images/lab3-compliance-status.png[400,400]
+image:images/lab3.2-compliance-status.png[400,400]
 +
 . You will see that the VM is vulnerable for Meltdown/Spectre.
++
+image:images/lab3.2-compliance-status-view.png[400,400]
 +
 NOTE: For the sake of time the kernel packages have already been patched.
 +
 . Click on the back arrow to navigate back to the VM summary page.
 +
-image:images/lab3-back-arrow.png[400,400]
+image:images/lab3.2-back-arrow.png[400,400]
 +
-. Click on Packages and find the kernel package. Notice the version *693.el7*. As of this document we need to ensure that version *830.el7* is installed to be compliant.
-. Click on the back arrow to navigate back to the VM summary page.
+. From the VM summary page click on Packages.
 +
-image:images/lab3-back-arrow.png[400,400]
+image:images/lab3.2-packages.png[400,400]
++
+. Scroll down to find the kernel package and note the version *693.el7*.
++
+image:images/lab3.2-packages-view.png[600,600]
++
+. The Meltdown and Spectre Kernel package needs to be version *830.el7* or higher. Click on the back arrow to navigate back to the VM summary page.
++
+image:images/lab3.2-back-arrow.png[400,400]
 +
 . Click on Configuration -> Perform SmartState Analysis. This will launch a job that will scan the VMs packages and other metadata.
 +
-image:images/lab3-launch-smart-state.png[400,400]
-+
+image:images/lab3.2-launch-smart-state.png[400,400]
 +
 . Click on Lab User -> Tasks to monitor the scan jobs status.
 +
-image:images/lab3-tasks.png[150,150]
+image:images/lab3.2-tasks.png[150,150]
 +
 . Click on the Refresh button periodically until it the scan job has completed (about 3 minutes). Afterwards, click on the job and this will take you back to the VM summary page.
 +
-image:images/lab3-task-results.png[600,600]
+image:images/lab3.2-task-results.png[600,600]
 +
 . Click on Policy -> Check Compliance of Last Known Configuration
 +
-image:images/lab3-check-compliance.png[400,400]
+image:images/lab3.2-check-compliance.png[400,400]
 +
 . Click on the Refresh button until the VM is compliant.
 +
-image:images/lab3-compliant-success.png[600,600]
+image:images/lab3.2-compliant-success.png[600,600]
 +
-
-<<top>>
-
+. End of exercise.
 
 === Lab 3.3 Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
 . Log into CloudForms as *admin*.
@@ -141,4 +147,4 @@ image:images/lab3-compute-instance.png[400,400]
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4:Managing the security of Red Hat Openshift container images from Red Hat CloudForms]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4]
