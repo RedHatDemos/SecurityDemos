@@ -15,44 +15,32 @@ image:images/lab1.1-services-catalog.png[200,200]
 +
 . Order the *RHEL 7.5 on RHV* service.
 +
-image:images/lab1.1-all-services.png[600,600]
+image:images/lab1.1-all-service.png[600,600]
 +
-. Enter the following information and click on *Submit*.
-|===
-|VM Name |IP Address| SCAP Profile
-|*lab1-vm1*
-|*192.168.1.110*
-|*Choose From the List of Profiles*
-|===
+. Name the VM *lab1-vm1*, choose a security profile and click on *Submit*.
 +
-image:images/lab1.1-NEEDIMAGE.png[400,400]
+image:images/lab1.1-order-service.png[400,400]
 +
 . From the service request page, click on the Refresh button until the service request shows *Approved*.
 +
-image:images/lab1.1-NEEDIMAGE.png[400,400]
+image:images/lab1.1-services-requests.png[400,400]
 +
 . Navigate to Services -> My Services.
 +
-image:images/lab1.1-NEEDIMAGE.png[400,400]
+image:images/lab1-services-myservices.png[400,400]
 +
-. Click on the *RHEL 7.5 on RHV* service
+. Click on the *RHEL 7.5 on RHV* service and then click on the Provisioning tab to view the Ansible output.
 +
-image:images/lab1.1-NEEDIMAGE.png[400,400]
-+
-. Click on the Provisioning tab to view the Ansible output.
-+
-image:images/lab1.1-NEEDIMAGE.png[400,400]
+image:images/lab1.1-myservice.png[400,400]
 +
 . Press the refresh button periodically to refresh the Provisioning Ansible output.
 +
-image:images/lab1.1-NEEDIMAGE.png[400,400]
+image:images/lab1.1-service-results.png[400,400]
 +
-
-
-
-
-
-
+. Review the Ansible playbook output by scrolling down.
++
+image:images/lab1.1-ansible-output.png[400,400]
++
 . Log out of CloudForms.
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[ Lab 2]
