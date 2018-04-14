@@ -3,11 +3,11 @@
 === [.underline]#Presenters/Lab Developers#:
 Lucy Kerner, Principal Technical Marketing Manager - Security, Red Hat
 
-Patrick Rutledge, Principal Solutions Architect - GPTE, Red Hat
+Patrick Rutledge, Principal Solution Architect, Red Hat
 
-Kevin Morey, Principal Cloud Specialist Solutions Architect, Red Hat
+Kevin Morey, Principal Cloud Specialist Solution Architect, Red Hat
 
-Nate Stephany, Senior Cloud Specialist Solutions Architect, Red Hat
+Nate Stephany, Senior Cloud Specialist Solution Architect, Red Hat
 
 Will Nix, Principal Technical Marketing Manager - Red Hat Insights, Red Hat
 

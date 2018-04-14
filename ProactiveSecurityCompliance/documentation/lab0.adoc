@@ -1,7 +1,15 @@
 == Lab 0: Setup steps
 
 === Logging into all the other Red Hat Products
-Now, let’s login to the rest of the Red Hat Products so they are ready for us to use in the rest of the labs. The table below lists the web pages of the Red Hat Products you need to be logged into for the lab exercises in this lab. Open a new tab on your web browser for each of the Red Hat Products listed below. Log in with the credentials listed below and accept any warnings regarding the SSL certificate. Note that the *<GUID>* portion is a 4 character random string that will be assigned to you.
+Let’s login to the rest of the Red Hat Products so they are ready for us to use in the rest of the labs.
+
+In your Red Hat Summit Lab Information webpage, click on the link to access your lab environment.
+
+
+image:images/lab0-welcomescreen.png
+
+
+The table below lists the web pages of the Red Hat Products you need to be logged into for the lab exercises in this lab. Open a new tab on your web browser for each of the Red Hat Products listed below. Log in with the credentials listed below and accept any warnings regarding the SSL certificate. Note that the *<GUID>* portion is a 4 character random string that will be assigned to you.
 
 .Accessing your lab environment
 |===
