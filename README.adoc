@@ -2,5 +2,5 @@
 
 LABS:
 
-* link:Implementing_Proactive_Security_and_Compliance_Automation/documentation/README.adoc[Implementing Proactive Security and Compliance Automation]
+* link:ProactiveSecurityCompliance/documentation/README.adoc[Proactive Security Compliance]
 * link:RHELSecurityLabSummit/documentation/README.adoc[Defend Yourself Using Built-in RHEL Security Technologies]
