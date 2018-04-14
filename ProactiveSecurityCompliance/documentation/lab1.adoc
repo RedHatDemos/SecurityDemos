@@ -4,8 +4,11 @@
 The goal of this lab is to create a security compliant host at provisioning time in Red Hat Virtualization at the push of a button using Red Hat CloudForms and Ansible Automation. Specifically, in this lab exercise, you will use Red Hat CloudForms and Ansible Automation inside CloudForms for your custom provisioning automation workflow.
 
 === Introduction
-Red Hat CloudForms provides users the ability to create self-service catalogs.  Through the use of catalogs, Red Hat CloudForms provides support for executing free form automation as a service and also allow for multi-tiered service provisioning to deploy layered workloads across hybrid environments. You can create customized dialogs that will give consumers of the services the ability to input just a few parameters and provision the entire service. In addition to using the native ruby language, free form automation workflows using the service catalog of Red Hat CloudForms can call Ansible Tower job templates or Ansible playbooks.
+Red Hat CloudForms provides users the ability to create self-service catalogs.  Through the use of catalogs, Red Hat CloudForms provides support for executing free form automation as a service and also allow for multi-tiered service provisioning to deploy layered workloads across hybrid environments. You can create customized dialogs that will give consumers of the services the ability to input just a few parameters and provision the entire service. In addition to using the native ruby language, free form automation workflows using the service catalog of Red Hat CloudForms can call Ansible Tower job templates or Ansible playbooks directly from Red Hat CloudForms.
 
+In this lab exercise, we will execute a custom provisioning service in the Red Hat CloudForms service catalog. From here, we will run customized Ansible provisioning playbooks to provision a Red Hat Enterprise Linux 7.5 host on Red Hat Virtualization that is locked down to a specific SCAP Profile chosen by the user from the Red Hat CloudForms service dialog. Red Hat Enterprise Linux 7.5 ships with Ansible SCAP remediation playbooks for various SCAP Profiles. These playbooks are presented to the user as SCAP Profiles to choose from to lock down the newly provisioned Red Hat Enterprise Linux 7.5 host against the chosen SCAP profile.
+
+As a result, users can easily provision a security compliant host using any of the provided SCAP security profiles in Red Hat Enterprise Linux 7.5. Users also have the ability to use custom security profiles to lock down a provisioned system against your specific security controls. You can easily create custom modified security profiles using SCAP workbench (which is also provided as part of Red Hat Enterprise Linux).
 
 === Lab 1.1 Provisioning a security compliant host at the push of a button using Red Hat CloudForms and Ansible Automation
 . Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password.
@@ -18,11 +21,11 @@ image:images/lab1.1-services-catalog.png[200,200]
 +
 image:images/lab1.1-all-services.png[600,600]
 +
-. Name the VM *lab1-vm1*, choose a security profile and click on *Submit*.
+. Name the VM *lab1-vm1*, choose the default IP Address *192.168.1.110* , and choose a *SCAP Profile* from the drop down. Click on *Submit*. This will provision a Red Hat Enterprise Linux 7.5 VM in Red Hat Virtualization that is locked down to the SCAP Profile that you selected.
 +
 image:images/lab1.1-order-service.png[400,400]
 +
-. From the service request page, click on the Refresh button until the service request shows *Approved*.
+. From the Service Requests page, click on the *Refresh* button at the top until the service request shows *Approved*. Note that this default approval workflow can be customized.
 +
 image:images/lab1.1-services-requests.png[400,400]
 +
@@ -38,9 +41,17 @@ image:images/lab1.1-myservice.png[400,400]
 +
 image:images/lab1.1-service-results.png[400,400]
 +
-. Review the Ansible playbook output by scrolling down.
+. Review the Ansible provisioning playbook output by scrolling down. Notice that the Ansible play recap shows no failures, which means that the Ansible provisioning playbook ran successfully.
 +
 image:images/lab1.1-ansible-output.png[400,400]
++
+. Go back to the top of the screen and click on the *Details* tab. Then click on your newly provisioned *lab1-vm1* VM.
++
+image:images/lab1-provisionedvm.png[400,400]
++
+. Notice that the *lab1-vm1* VM provisioned successfully and now has a hostname and the IP address you assigned it during provisioning.
++
+image:images/lab1-summaryprovisionedvm.png[500,500]
 +
 . Log out of CloudForms.
 
