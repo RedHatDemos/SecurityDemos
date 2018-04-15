@@ -11,5 +11,20 @@ image:images/lab0-welcomescreen.png[500,500]
 +
 image:images/lab0-login-rhproducts.png[500,500]
 
++
+NOTE: You cannot use the Chrome web browser to access the Openstack Horizon UI since it will never accept the SSL certificate. The default web browser on your Summit lab laptop is Firefox, so this is not a problem for the lab.
+
+. From this same page, open up the console for the *Workstation* system.
++
+image:images/lab0-sat6restart.png[400,400]
+. Next, from the *Workstation* system, SSH into the Satellite server, *sat6.summit.example.com*, as *root*, and issue the following command: *katello-service restart*
++
+[source, text]
+---
+[lab-user@workstation]# sudo -i
+[root@workstation]# ssh sat6.summit.example.com
+[root@sat6]# katello-service restart
+---
+
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1]

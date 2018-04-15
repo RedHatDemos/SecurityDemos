@@ -1,7 +1,7 @@
-== Lab 2: Utilizing the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6
+== Lab 2: Utilizing OpenSCAP in Satellite 6 for security scanning, auditing, and remediation
 
 === Goal of Lab 2
-The goal of this lab is to introduce you to the integrated security scanning and auditing tool, OpenSCAP, in Satellite 6.
+The goal of this lab is to introduce you to OpenSCAP in Satellite 6. OpenSCAP is the integrated security scanning, auditing, and remediation tool in Satellite 6.
 
 === Introduction
 Security compliance management is the ongoing process of defining security policies, auditing for compliance with those policies and resolving instances of non-compliance. Once a security policy is defined, an audit is conducted to verify compliance with the policy. Any non-compliance is managed according to the organization's configuration management policies. Security policies vary in their scope, from being host-specific to industry-wide, so there is a need for flexibility in their definition.
@@ -22,29 +22,41 @@ The default SCAP content provided with the OpenSCAP components of Satellite 6 de
 * On Red Hat Enterprise Linux 6, content for Red Hat Enterprise Linux 6 is installed.
 * On Red Hat Enterprise Linux 7, content for both Red Hat Enterprise Linux 6 and Red Hat Enterprise Linux 7 is installed.
 
-When you install the SCAP components in Satellite as defined in the link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.2/html/host_configuration_guide/[Host Configuration Guide], all of the Red Hat default content will show up in Satellite so no extra steps are necessary to add the SCAP content to Satellite.  But if you had customized content that you wrote yourself or if you have a modified policy and you wanted to upload that modified version , you can do that in the Satellite UI under *Hosts → SCAP contents*.
+When you install the SCAP components in Satellite as defined in the link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.3/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-security_compliance_management/[Administering Red Hat Satellite Guide], all of the Red Hat default content will show up in Satellite so no extra steps are necessary to add the SCAP content to Satellite.  But if you had customized content that you wrote yourself or if you have a modified policy and you wanted to upload that modified version , you can do that in the Satellite UI under *Hosts → SCAP contents*.
 
 . Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
++
+image:images/lab2-scapcontents.png[600,600]
 
 === Creating a SCAP compliance policy for a host
 Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
+
 . Navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
++
+image:images/lab2-newcompliancepolicy.png[600,600]
 
 . In the *Create Policy* tab,
 * For the compliance policy *Name*, type *RHEL7_Standard*.
 * For the *Description*, type *RHEL7 Standard System Compliance Policy*.
 * Click *Next*.
++
+image:images/lab2-createpolicy.png[600,600]
 
 . In the *SCAP Content* tab,
 * For *SCAP Content*, choose the *Red Hat rhel7 default content*.
 * For *XCCDF Profile*, choose *Standard System Security Profile*.
 * Click *Next*.
++
+image:images/lab2-scapcontent.png[600,600]
 
 . In the *Schedule* tab,
 * For *Period*, choose *Weekly*.
 * For *Weekday* choose *Thursday*.
-Note: Whatever is defined here as a schedule is executed as a cron job on the client. For Period, if you selected Custom, you can define normal cron syntax to define when the schedule is going to run.
++
+NOTE: Whatever is defined here as a schedule is executed as a cron job on the client. For Period, if you selected Custom, you can define normal cron syntax to define when the schedule is going to run.
 * Click *Next*.
++
+image:images/lab2-schedule.png[600,600]
 
 === Scanning a host using a custom security profile using a SCAP tailoring file
 I love kpop

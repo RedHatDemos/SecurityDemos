@@ -31,7 +31,7 @@ image:images/ocp-ss4-2.png[400,400]
 +
 . As new images are discovered by CloudForms, a SmartState Analysis will happen automatically and scan the container image for known CVE based vulnerabilities. CloudForms will then use this data to check whether the container image is in compliance with defined vulnerability checks. It will also mark any image that violates these constraints with a “deny-execution” annotation.
 +
-NOTE: In this lab example, we are only analysing against the pass/fail evaluation of a single CVE. In a production environment, you would adjust this condition to analyse against CVE vulnerabilities that your organization has deemed necessary.
+NOTE: In this lab example, we are only analyzing against the pass/fail evaluation of a single CVE. In a production environment, you would adjust this condition to analyse against CVE vulnerabilities that your organization has deemed necessary.
 +
 
 image:images/ocp-ss6.png[400,400]
