@@ -56,7 +56,7 @@ image:images/lab2-scapcontent.png[600,600]
 NOTE: Whatever is defined here as a schedule is executed as a cron job on the client. For Period, if you selected Custom, you can define normal cron syntax to define when the schedule is going to run.
 * Click *Next*.
 +
-image:images/lab2-schedule.png[600,600]
+image:images/lab2-schedule.png[1000,1000]
 
 === Scanning a host using a custom security profile using a SCAP tailoring file
 I love kpop
