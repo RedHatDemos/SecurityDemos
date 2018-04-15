@@ -26,28 +26,28 @@ When you install the SCAP components in Satellite as defined in the link:https:/
 
 . Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
 +
-image:images/lab2-scapcontents.png[600,600]
+image:images/lab2-scapcontents.png[1000,1000]
 
 === Creating a SCAP compliance policy for a host
 Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
 
 . Navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
 +
-image:images/lab2-newcompliancepolicy.png[600,600]
+image:images/lab2-newcompliancepolicy.png[1000,1000]
 
 . In the *Create Policy* tab,
 * For the compliance policy *Name*, type *RHEL7_Standard*.
 * For the *Description*, type *RHEL7 Standard System Compliance Policy*.
 * Click *Next*.
 +
-image:images/lab2-createpolicy.png[600,600]
+image:images/lab2-createpolicy.png[1000,1000]
 
 . In the *SCAP Content* tab,
 * For *SCAP Content*, choose the *Red Hat rhel7 default content*.
 * For *XCCDF Profile*, choose *Standard System Security Profile*.
 * Click *Next*.
 +
-image:images/lab2-scapcontent.png[600,600]
+image:images/lab2-scapcontent.png[1000,1000]
 
 . In the *Schedule* tab,
 * For *Period*, choose *Weekly*.

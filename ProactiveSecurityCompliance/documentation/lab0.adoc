@@ -5,18 +5,18 @@ Let’s log into the Red Hat Products that you will use in this lab so they are 
 
 . In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems. *Click on the link at the bottom of this page* to access your lab environment.
 +
-image:images/lab0-welcomescreen.png[500,500]
+image:images/lab0-welcomescreen.png[1000,1000]
 +
 . From this page, you will be able to access all of the Red Hat Products that you will use in this lab. *Press the start button* at the top right to turn on all the Red Hat Product VMs. Then, *click on https* for all the Red Hat Products to access the UI. *Log into the UI of all the Red Hat Products* with *admin* as the Username and *r3dh4t1!* as the Password.
 +
-image:images/lab0-login-rhproducts.png[500,500]
+image:images/lab0-login-rhproducts.png[1000,1000]
 
 +
 NOTE: You cannot use the Chrome web browser to access the Openstack Horizon UI since it will never accept the SSL certificate. The default web browser on your Summit lab laptop is Firefox, so this is not a problem for the lab.
 
 . From this same page, open up the console for the *Workstation* system.
 +
-image:images/lab0-sat6restart.png[400,400]
+image:images/lab0-sat6restart.png[1000,1000]
 . Next, from the *Workstation* system, SSH into the Satellite server, *sat6.summit.example.com*, as *root*, and issue the following command: *katello-service restart*
 +
 [source, text]
