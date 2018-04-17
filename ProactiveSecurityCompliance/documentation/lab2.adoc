@@ -58,6 +58,25 @@ NOTE: Whatever is defined here as a schedule is executed as a cron job on the cl
 +
 image:images/lab2-schedule.png[1000,1000]
 
+. In the *Locations* tab,
+* Click the *Default Location* to move it over to the *Selected items* box. This will associate the compliance policy with this Location.
+* Click *Next*.
++
+image:images/lab2-locations.png[1000,1000]
+
+. In the *Organizations* tab,
+* (If not already on the right) Click the *Default Organization* to move it over to the *Selected items* box. This will associate the compliance policy with this *Organization*.
+* Click *Next*.
++
+image:images/lab2-organizations.png[1000,1000]
+
+. In the *Hostgroups* tab,
+* Click *base_with_puppet* to move it over to the *Selected items* box. The compliance policy will apply to this selected *Hostgroup*.
+
+. Click *Submit*.
++
+image:images/lab2-hostgroups.png[1000,1000]
+
 === Scanning a host using a custom security profile using a SCAP tailoring file
 I love kpop
 . Bonchon Fried Chicken
