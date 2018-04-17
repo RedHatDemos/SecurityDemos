@@ -77,6 +77,96 @@ image:images/lab2-organizations.png[1000,1000]
 +
 image:images/lab2-hostgroups.png[1000,1000]
 
+=== Executing the compliance policy on a host
+. After you have defined the SCAP compliance policy in Satellite, SSH into your workstation host at
+*workstation-<GUID>.rhpds.opentlc.com* as *lab-user*. An ssh key is already in the home directory of your laptop, which should allow you to login without a password. Should a password be required, use r3dh4t1!  your password.
++
+[source, text]
+---
+$ ssh lab-user@workstation-<GUID>.rhpds.opentlc.com
+---
+. Now that you are in the workstation host, as root, SSH into your newly provisioned RHEL 7.5 VM, *lab1-vm1*, from the previous lab. This host has already been registered to both Red Hat Satellite 6 and Red Hat Insights for you.
++
+[source, text]
+---
+$ sudo -i
+# ssh lab1-vm1.example.com
+---
+. As root, run the puppet agent:
++
+[source, text]
+---
+# puppet agent --test
+---
++
+NOTE: Ignore the Warning that appears regarding the “Local environment”.
+
+. This will set up all the SCAP components, which are delivered via the puppet agent.  Satellite provides a puppet module and a means for the puppet module to set up all the SCAP components. Normally, in production, the puppet agent run automatically occurs within 30 mins so the puppet agent --test is not necessary. We are just doing this in the lab to avoid waiting 30 mins for the puppet agent to run.
+
+. Now that the SCAP components are installed and configured on the client, take a look at the SCAP configuration on the client which is stored in /etc/foreman_scap_client/config.yaml
++
+[source, text]
+---
+#  less /etc/foreman_scap_client/config.yaml
+---
++
+NOTE: In this yaml file, you will see some basic information such as what server will your reports be uploaded to which is defined by your Hostgroup, certification information such as what certificates were used to authenticate, and towards the bottom, you’ll see your policy ID(s) which are the SCAP policies which you associated in the Satellite UI to its Hostgroup.
+
+. In the above */etc/foreman_scap_client/config.yaml* file, look for the Policy ID for the *standard* profile, which is the RHEL7_Standard compliance policy we created earlier. In the example /etc/foreman_scap_client/config.yaml file below, notice that the Policy ID is 4 for the *standard* profile. However, your Policy ID may be different.
++
+image:images/lab2-scapclientconfig.png[1000,1000]
+
+. Type *q* to exit *less*.
+. Execute the RHEL7_Standard compliance policy on your newly provisioned RHEL 7.5 VM, *lab1-vm1*, from the previous lab using the Policy ID number found in the previous step (where X is the Policy ID found earlier):
++
+[source, text]
+---
+#  foreman_scap_client X
+---
+
+This will run the scap scan, bzip the scan results, and upload the results to Satellite.  Wait for the command to complete before continuing.
+
+=== View the SCAP scan results report in Satellite 6
+. Go back to your Satellite UI and view your SCAP scan results report for your RHEL7_Standard compliance policy by navigating to *Hosts → Reports*.
++
+image:images/lab2-hostreports.png[600,600]
+
+. Click on the report you just created by clicking on the *most recent* report for *lab1-vm1* by clicking the link in the second *Reported At* column (do not click the host link).
++
+image:images/lab2-mostrecentreport.png[600,600]
+
+. In this report, you can see the security rules that have passed and failed at a high level which allows you to see the security posture of a system based upon an assigned audit policy.
+
+. To see the detailed full report, click on *View full report* at the top right.
++
+image:images/lab2-viewfullreport.png[1000,1000]
+
+. Glance through this report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for a deeper drill down.
+
+. *Click the back arrow* on your web browser to go back to the previous report summary page.
++
+image:images/lab2-backarrowreport.png[500,500]
+
+. Take a look at the top right buttons in the Satellite UI. Notice also that you can Download the XML of the report in bzip as well. *Click the Back button* from the top right of the Satellite UI.
++
+image:images/lab2-downloadxml.png[1000,1000]
+
+. Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. *Type compliance_failed > 0 and press Search.* This will find any compliance report that have greater than 0 compliance failures.
++
+image:images/lab2-compliancefailedfilter.png[1000,1000]
+
+. Click the back arrow on your web browser to go back to your full list of compliance reports.
++
+image:images/lab2-backfullcompliancereports.png[1000,1000]
+
+. Click on the report you just created again by clicking on the most recent report for *lab1-vm1* by clicking the link in the second Reported At column (again do not click the host link).
++
+image:images/lab2-mostrecentreport2.png[1000,1000]
+
+. Click on *View full report* at the top right again.
++
+image:images/lab2-viewfullreport.png[1000,1000]
+
 === Scanning a host using a custom security profile using a SCAP tailoring file
 I love kpop
 . Bonchon Fried Chicken

@@ -17,14 +17,28 @@ NOTE: You cannot use the Chrome web browser to access the Openstack Horizon UI s
 . From this same page, open up the console for the *Workstation* system.
 +
 image:images/lab0-sat6restart.png[1000,1000]
-. Next, from the *Workstation* system, SSH into the Satellite server, *sat6.summit.example.com*, as *root*, and issue the following command: *katello-service restart*
+. Next, from the *Workstation* system, SSH into the Satellite server, *sat6.summit.example.com*, as *root*, and issue the following command: *katello-service restart* . This will restart the katello service and ensure that Satellite is ready to use for our lab.
 +
 [source, text]
 ---
-[lab-user@workstation]# sudo -i
+[lab-user@workstation]$ sudo -i
 [root@workstation]# ssh sat6.summit.example.com
 [root@sat6]# katello-service restart
 ---
+
+=== Starting your VMs
+. Before starting the lab steps, you will need to turn on your VMs. On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines*.
++
+image:images/lab0-startingvms.png[1000,1000]
+
+. Click the *VMs* accordion on the left.
+. At the bottom, click *Check All*.
+. At the top click *Power -> Power On*.
++
+image:images/lab0-vmturnon.png[500,500]
+. Click *OK*.
+. Do not close your CloudForms UI since you will be using it in future lab exercises.
+
 
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1]
