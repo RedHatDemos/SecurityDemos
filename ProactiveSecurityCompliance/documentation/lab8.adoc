@@ -7,9 +7,6 @@ The goal of this lab is to introduce you to the proactive security capabilities 
 The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. This lab assumes that you started all your VMs, as instructed in Lab 0, which is necessary for Red Hat Insights to work properly.
 
 
-=== Preventing Red Hat Openshift container images with high severity vulnerabilities from running in Red Hat Openshift using Red Hat CloudForms
-Chocolate for customers
-. I ate it all
 
 <<top>>
 

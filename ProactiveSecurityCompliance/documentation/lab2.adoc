@@ -151,6 +151,10 @@ image:images/lab2-backarrowreport.png[500,500]
 +
 image:images/lab2-downloadxml.png[1000,1000]
 
+. Navigate back to *Hosts -> Reports*
++
+image:images/lab2-hostreports.png[600,600]
+
 . Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. *Type compliance_failed > 0 and press Search.* This will find any compliance report that have greater than 0 compliance failures.
 +
 image:images/lab2-compliancefailedfilter.png[1000,1000]
