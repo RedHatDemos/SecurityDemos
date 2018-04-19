@@ -21,19 +21,8 @@
   when: hostgroup != 'false'
 
 - name: Register to Satellite6 with puppet enabled and add it to the correct hostgroup
-  command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o '{{ organization }}' -L '{{ location }}' -g {{ hostgroup }} -a {{ activation_key }} -f"
+  command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o '{{ organization }}' -L '{{ location }}' -g {{ hostgroup }} -a {{ activation_key }} -f --enablerepos=rhel-7-server-satellite-tools-6.3-rpms"
   when: hostgroup != 'false'
-
-- name: Set Up satellite Repo
-  shell: "{{ item }}"
-  register: sat_repos_output
-  with_items:
-    - subscription-manager repos --enable rhel-7-server-satellite-tools-6.3-rpms
-
-- name: Log sat_repos_output
-  debug:
-    var: sat_repos_output
-  when: verbose and sat_repos_output is defined
 
 - name: Install the katello-ca-consumer-latest.noarch.rpm from {{ satellite_hostname }}
   yum:
