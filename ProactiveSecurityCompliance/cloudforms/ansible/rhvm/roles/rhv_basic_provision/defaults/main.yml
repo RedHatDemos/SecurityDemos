@@ -63,6 +63,7 @@ custom_script: |
       lock_passwd: false
       ssh_authorized_keys:
         - "{{ ssh_authorized_key | default(omit) }}"
+        - "{{ ssh_authorized_key1 | default(omit) }}"
   chpasswd:
     list: |
       root:!vault |
