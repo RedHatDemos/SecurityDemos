@@ -27,6 +27,8 @@ When you install the SCAP components in Satellite as defined in the link:https:/
 . Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
 +
 image:images/lab2-scapcontents.png[1000,1000]
++
+NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*. In addition, customized content named *rhel7-custom* has also been uploaded here. The *rhel7-custom* compliance policy is a simple compliance policy that just checks to see if the AIDE package is installed.
 
 === Creating a SCAP compliance policy for a host
 Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
@@ -34,6 +36,8 @@ Now that you have SCAP content defined in Satellite, you can create a SCAP compl
 . Navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
 +
 image:images/lab2-newcompliancepolicy.png[1000,1000]
++
+NOTE: A SCAP compliance policy takes one of the security profiles that are available in your SCAP content and applies it to a group of systems(as defined in your Hostgroups). You can also overwrite your SCAP content with a tailoring file. You will learn more about how to use tailoring files later in this lab exercise.
 
 . In the *Create Policy* tab,
 * For the compliance policy *Name*, type *RHEL7_Standard*.
@@ -45,6 +49,10 @@ image:images/lab2-createpolicy.png[1000,1000]
 . In the *SCAP Content* tab,
 * For *SCAP Content*, choose the *Red Hat rhel7 default content*.
 * For *XCCDF Profile*, choose *Standard System Security Profile*.
+* Do not select anything for *Tailoring File*. We will add a tailoring file later and skip this step for now.
++
+NOTE: Satellite 6.3 introduced the Tailoring Files feature. Tailoring Files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. It is important to note that the Tailoring files feature does not provide the abililty to create tailoring files. A Tailoring file can be created using SCAP Workbench(which is included in Red Hat Enterprise Linux). Once you have a Tailoring file you can upload it and assign the Tailoring File to a policy.
+
 * Click *Next*.
 +
 image:images/lab2-scapcontent.png[1000,1000]
@@ -71,69 +79,75 @@ image:images/lab2-locations.png[1000,1000]
 image:images/lab2-organizations.png[1000,1000]
 
 . In the *Hostgroups* tab,
-* Click *base_with_puppet* to move it over to the *Selected items* box. The compliance policy will apply to this selected *Hostgroup*.
+* Click *base_with_puppet_75* to move it over to the *Selected items* box. The compliance policy will apply to this selected *Hostgroup*.
++
+NOTE: Hostgroups are groupings of systems that are built and configured the same. You can use Hostgroups as a means to roll out certain compliance policies to certain subsets of your systems.
 
 . Click *Submit*.
 +
 image:images/lab2-hostgroups.png[1000,1000]
 
-=== Executing the compliance policy on a host
-. After you have defined the SCAP compliance policy in Satellite, SSH into your workstation host at
-*workstation-<GUID>.rhpds.opentlc.com* as *lab-user*. An ssh key is already in the home directory of your laptop, which should allow you to login without a password. Should a password be required, use r3dh4t1!  your password.
+=== Executing the compliance policy scan on a host
+. Now that you have defined SCAP compliance policies in Satellite,
+you can go ahead and run a SCAP compliance policy scan on a host. Navigate to *Hosts -> All hosts*
 +
-[source, text]
----
-$ ssh lab-user@workstation-<GUID>.rhpds.opentlc.com
----
-. Now that you are in the workstation host, as root, SSH into your newly provisioned RHEL 7.5 VM, *lab1-vm1*, from the previous lab. This host has already been registered to both Red Hat Satellite 6 and Red Hat Insights for you.
-+
-[source, text]
----
-$ sudo -i
-# ssh lab1-vm1.example.com
----
-. As root, run the puppet agent:
-+
-[source, text]
----
-# puppet agent --test
----
-+
-NOTE: Ignore the Warning that appears regarding the “Local environment”.
+image:images/lab2-hostsallhosts.png[1000,1000]
 
-. This will set up all the SCAP components, which are delivered via the puppet agent.  Satellite provides a puppet module and a means for the puppet module to set up all the SCAP components. Normally, in production, the puppet agent run automatically occurs within 30 mins so the puppet agent --test is not necessary. We are just doing this in the lab to avoid waiting 30 mins for the puppet agent to run.
-
-. Now that the SCAP components are installed and configured on the client, take a look at the SCAP configuration on the client which is stored in /etc/foreman_scap_client/config.yaml
+. Next, put a check mark next to *lab2-vm1.example.com*. This is a RHEL 7.5 pre-provisioned host that you will execute a SCAP compliance policy scan on. Then, at the top right, navigate to *Select Action -> Schedule Remote Job*.
 +
-[source, text]
----
-#  less /etc/foreman_scap_client/config.yaml
----
-+
-NOTE: In this yaml file, you will see some basic information such as what server will your reports be uploaded to which is defined by your Hostgroup, certification information such as what certificates were used to authenticate, and towards the bottom, you’ll see your policy ID(s) which are the SCAP policies which you associated in the Satellite UI to its Hostgroup.
+image:images/lab2-scheduleremotejob.png[1000,1000]
 
-. In the above */etc/foreman_scap_client/config.yaml* file, look for the Policy ID for the *standard* profile, which is the RHEL7_Standard compliance policy we created earlier. In the example /etc/foreman_scap_client/config.yaml file below, notice that the Policy ID is 4 for the *standard* profile. However, your Policy ID may be different.
+. Now, for *Job Category* , select *Puppet*. Then, notice that for *Job template*, *Puppet Run Once - SSH Default* is automatically selected for you. Leave everything else as is. Press *Submit*.
 +
-image:images/lab2-scapclientconfig.png[1000,1000]
+image:images/lab2-puppet.png[1000,10000]
 
-. Type *q* to exit *less*.
-. Execute the RHEL7_Standard compliance policy on your newly provisioned RHEL 7.5 VM, *lab1-vm1*, from the previous lab using the Policy ID number found in the previous step (where X is the Policy ID found earlier):
 +
-[source, text]
----
-#  foreman_scap_client X
----
+NOTE: This is the equivalent to running puppet agent --test. This will set up all the SCAP components, which are delivered via the puppet agent.  Satellite provides a puppet module and a means for the puppet module to set up all the SCAP components. Normally, in production, the puppet agent run automatically occurs within 30 mins so the puppet agent --test is not necessary. We are just doing this in the lab to avoid waiting 30 mins for the puppet agent to run.
 
-This will run the scap scan, bzip the scan results, and upload the results to Satellite.  Wait for the command to complete before continuing.
+. Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*.
+Navigate to *Hosts -> All hosts* again. Then, put a check mark next to *lab2-vm1.example.com*. At the top right, navigate to *Select Action -> Schedule Remote Job*.
++
+image:images/lab2-hostsallhosts.png[1000,1000]
++
+image:images/lab2-scheduleremotejob.png[1000,1000]
+
+. This time under *Job Category*, select *OpenSCAP*. Then, notice that for *Job template*, *Run OpenSCAP scans* is automatically selected for you. Leave everything else as is. Press *Submit*.
++
+image:images/lab2-openscapscan.png[1000,1000]
+
+. Notice that 5 SCAP compliance policy scans are being executed on this *lab2-vm1.example.com* host. This host is part of the *base_with_puppet_75* Hostgroup and all 5 SCAP compliance policies have been configured to include the *base_with_puppet_75* Hostgroup. As a result, all 5 SCAP compliance policies are being executed on this host.
++
+image:images/lab2-jobinvocation.png[1000,1000]
+
+. Click on the *Hosts* tab. Wait for the *Status* column to say *success*. Once the *Status* column says *success*, click on *lab2-vm1.example.com* in the *Hosts* column.
++
+image:images/lab2-hostsuccess.png[1000,1000]
+
+ . Here you can see the output from the successful run with *Exit status: 0*. This is the command line output from the client itself and can be useful for debugging purposes in the event the job fails.
+Notice in this output that the results of the SCAP compliance scans are uploaded and the reports of the scans will be automatically created for you.
++
+image:images/lab2-exitstatus0.png[1000,1000]
+
+. Click on the *Back to Job* button at the top right.
++
+image:images/lab2-backtojob.png[1000,1000]
+
+. You are now back at the *Overview* page for the OpenSCAP scan that you ran on the *lab2-vm1.example.com* host. Notice again that the OpenSCAP scan on this host completed with 100% Success.
++
+image:images/lab2-successcircle.png[1000,1000]
 
 === View the SCAP scan results report in Satellite 6
-. Go back to your Satellite UI and view your SCAP scan results report for your RHEL7_Standard compliance policy by navigating to *Hosts → Reports*.
+. Now let's view the SCAP scan results reports for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
 +
 image:images/lab2-hostreports.png[600,600]
 
-. Click on the report you just created by clicking on the *most recent* report for *lab1-vm1* by clicking the link in the second *Reported At* column (do not click the host link).
+. Notice that there are 5 Compliance reports for the 5 SCAP compliance policies (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
 +
-image:images/lab2-mostrecentreport.png[600,600]
+image:images/lab2-5scapreportsresults.png[1000,1000]
+
+. Click on the report for the RHEL7_Standard Policy by clicking the link in the second *Reported At* column.
++
+image:images/lab2-reportedat.png[1000,1000]
 
 . In this report, you can see the security rules that have passed and failed at a high level which allows you to see the security posture of a system based upon an assigned audit policy.
 
@@ -147,7 +161,7 @@ image:images/lab2-viewfullreport.png[1000,1000]
 +
 image:images/lab2-backarrowreport.png[500,500]
 
-. Take a look at the top right buttons in the Satellite UI. Notice also that you can Download the XML of the report in bzip as well. *Click the Back button* from the top right of the Satellite UI.
+. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well. *Click the Back button* from the top right of the Satellite UI.
 +
 image:images/lab2-downloadxml.png[1000,1000]
 
@@ -159,22 +173,16 @@ image:images/lab2-hostreports.png[600,600]
 +
 image:images/lab2-compliancefailedfilter.png[1000,1000]
 
-. Click the back arrow on your web browser to go back to your full list of compliance reports.
-+
-image:images/lab2-backfullcompliancereports.png[1000,1000]
+=== Fix a specific SCAP scan failure, re-run the SCAP scan, and view the resulting scan report in Satellite 6
+. blah
 
-. Click on the report you just created again by clicking on the most recent report for *lab1-vm1* by clicking the link in the second Reported At column (again do not click the host link).
-+
-image:images/lab2-mostrecentreport2.png[1000,1000]
 
-. Click on *View full report* at the top right again.
-+
-image:images/lab2-viewfullreport.png[1000,1000]
 
 === Scanning a host using a custom security profile using a SCAP tailoring file
-I love kpop
-. Bonchon Fried Chicken
-* I love double fried chicken from bonchon
+. blah
+
+=== Viewing the global status indicator in Satellite 6
+
 
 <<top>>
 

@@ -27,15 +27,15 @@ image:images/lab0-sat6restart.png[1000,1000]
 ---
 
 === Starting your VMs
-. Before starting the lab steps, you will need to turn on your VMs. On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines*.
+. Before starting the lab steps, you will need to turn on your VMs. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password. On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines*.
 +
-image:images/lab0-startingvms.png[1000,1000]
+image:images/lab0-startingvms.png[500,500]
 
 . Click the *VMs* accordion on the left.
-. At the bottom, click *Check All*.
+. At the bottom, click *Select All*.
 . At the top click *Power -> Power On*.
 +
-image:images/lab0-vmturnon.png[500,500]
+image:images/lab0-poweronvms.png[500,500]
 . Click *OK*.
 . Do not close your CloudForms UI since you will be using it in future lab exercises.
 
