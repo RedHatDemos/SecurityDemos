@@ -215,7 +215,7 @@ It is important to note that the tailoring files feature does not provide the ab
 +
 image:images/lab2-tailoringfilesmenu.png[600,600]
 
-. Click on *New Tailoring File*. Then, enter *Tailoring File for Standard Compliance Policy* in the Name text box. For the *Scap file*, Click *Browse*, navigate to the location containing the SCAP DataStream Tailoring File and select *Open*. For the *Locations* tab, click the *Default Location* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Location*. For the *Organizations* tab, (If not already on the right), Click the *Default Organization* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Organization*. Press *Submit*. 
+. Click on *New Tailoring File*. Then, enter *Tailoring File for Standard Compliance Policy* in the Name text box. For the *Scap file*, Click *Browse*, navigate to the location containing the SCAP DataStream Tailoring File and select *Open*. For the *Locations* tab, click the *Default Location* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Location*. For the *Organizations* tab, (If not already on the right), Click the *Default Organization* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Organization*. Press *Submit*.
 +
 image:images/lab2-uploadtailoringfile.png[600,600]
 
@@ -223,10 +223,12 @@ image:images/lab2-uploadtailoringfile.png[600,600]
 +
 image:images/lab2-editstandardpolicy.png[600,600]
 
-. Under the *SCAP Content* tab, select the tailoring file we uploaded earlier in the *Tailoring File* section. Note that the *XCCDF Profile in Tailoring File* section automatically got filled in once you select your tailoring file. Note that tailoring files are able to contain multiple XCCDF Profiles. Press *Submit*.
+. Under the *SCAP Content* tab, select the tailoring file we uploaded earlier in the *Tailoring File* section. Note that the *XCCDF Profile in Tailoring File* section automatically got filled in once you select your tailoring file. Press *Submit*.
 +
 image:images/lab2-addtailoringfiletopolicy.png[600,600]
 
++
+NOTE: Tailoring files are able to contain multiple XCCDF Profiles. Also, Satellite does not enforce that the tailoring file match the XCCDF profile. However, you need to make sure that they match to avoid running into errors when using the tailored compliance policy.
 
 === Re-executing the compliance policy scan on the host and viewing the OpenSCAP scan results reports
 
@@ -276,17 +278,36 @@ image:images/lab2-custompolicypass1.png[1000,1000]
 +
 image:images/lab2-custompolicypass2.png[1000,1000]
 
+. In addition, let's see how many hosts are compliant to the *rhel7-custom* compliance policy. Navigate to *Hosts → Policies*. Here, you can see the number of hosts that are compliant and non-compliant with the policy. In addition, you can see how many hosts were never audited and see the report for the *rhel7-custom* policy directly from here as well.
++
+image:images/lab2-compliancesummary.png[1000,1000]
+
 === Viewing the global status indicator in Satellite 6
 
 Compliance status is one of the items that affect the global status of a system. In Satellite, we have the global status indicator, which is an aggregate of all the compliance states on the system. Specifically, in order to determine the global status, Satellite checks the status of: compliance with SCAP policies, build, configuration, execution, errata, subscription, and traces. Whichever is the worst status is what governs the overall status of the system. This is important to note since if you have a system that fails a SCAP policy finding, you’ll be able to see this quickly in the Satellite UI.
 
-. Take a look at the global status indicator by navigating to *Hosts → All Hosts* and then click on your client/host, which is *lab2-vm1.example.com*.
+. Take a look at the global status indicator by navigating to *Hosts → All Hosts*. Hover over the red circle next to *lab2-vm1.example.com*. Notice that you can see at a high level what is wrong with this host in the text once you hover over the red circle.
++
+image:images/lab2-globalstatushover.png[1000,1000]
+
+. Next, let's look at the global status indicator in more depth. Click on *lab2-vm1.example.com*.
 +
 image:images/lab2-clickonlab2vm1.png[600,600]
 
 . In the *Properties* box on the left of the Satellite UI, notice that the global *Status* indicator says *Error* due to failing the SCAP scan.
 +
 image:images/lab2-globalstatusproperties.png[500,500]
+
+=== Managing Users and Roles
+
+For the administrator, Red Hat Satellite provides the ability to create, modify, and remove users. Also, it is possible to configure access permissions through assigning roles to users. We will not be diving deep into Users and Roles in this lab exercise. For more details on managing users and roles in Satellite, see the guide on link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.3/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-users_and_roles[Administering Red Hat Satellite].
+
+. Satellite does have a default *Compliance viewer* and *Compliance manager* role. You can customize these roles and assign these roles to users. Users with the *Compliance manager* role can create new compliance policies and associate them with Hostgroups. Users with the *Compliance viewer* role can only view compliance reports.
+
++
+image:images/lab2-roles.png[200,200]
++
+image:images/lab2-complianceroles.png[200,200]
 
 
 <<top>>
