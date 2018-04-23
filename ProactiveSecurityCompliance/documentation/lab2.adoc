@@ -102,7 +102,7 @@ image:images/lab2-scheduleremotejob.png[1000,1000]
 image:images/lab2-puppet.png[1000,10000]
 
 +
-NOTE: This is the equivalent to running puppet agent --test. This will set up all the SCAP components, which are delivered via the puppet agent.  Satellite provides a puppet module and a means for the puppet module to set up all the SCAP components. Normally, in production, the puppet agent run automatically occurs within 30 mins so the puppet agent --test is not necessary. We are just doing this in the lab to avoid waiting 30 mins for the puppet agent to run.
+NOTE: This is the equivalent to running puppet agent --test. This will ensure that we have the latest updates to the compliance policies, set up all the SCAP components, which are delivered via the puppet agent.  Satellite provides a puppet module and a means for the puppet module to set up all the SCAP components. Normally, in production, the puppet agent run automatically occurs within 30 mins so the puppet agent --test is not necessary. We are just doing this in the lab to avoid waiting 30 mins for the puppet agent to run.
 
 . Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*.
 Navigate to *Hosts -> All hosts* again. Then, put a check mark next to *lab2-vm1.example.com*. At the top right, navigate to *Select Action -> Schedule Remote Job*.
