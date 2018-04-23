@@ -136,7 +136,7 @@ image:images/lab2-backtojob.png[1000,1000]
 +
 image:images/lab2-successcircle.png[1000,1000]
 
-=== View the SCAP scan results report in Satellite 6
+=== View the OpenSCAP scan results report in Satellite 6
 . Now let's view the SCAP scan results reports for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
 +
 image:images/lab2-hostreports.png[600,600]
@@ -145,7 +145,7 @@ image:images/lab2-hostreports.png[600,600]
 +
 image:images/lab2-5scapreportsresults.png[1000,1000]
 
-. Click on the report for the RHEL7_Standard Policy by clicking the link in the second *Reported At* column.
+. Click on the report for the *RHEL7_Standard Policy* by clicking the link in the second *Reported At* column.
 +
 image:images/lab2-reportedat.png[1000,1000]
 
@@ -157,31 +157,136 @@ image:images/lab2-viewfullreport.png[1000,1000]
 
 . Glance through this report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for a deeper drill down.
 
-. *Click the back arrow* on your web browser to go back to the previous report summary page.
+. *Click the back arrow* on your web browser to go back to the previous report summary page. *Click the back arrow* again on your web browser to get back to the page with the full list of Compliance Reports.
 +
 image:images/lab2-backarrowreport.png[500,500]
 
-. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well. *Click the Back button* from the top right of the Satellite UI.
+. Now, Click on the report for the *rhel7-custom* compliance policy by clicking the link in the second *Reported At* column.
++
+image:images/lab2-reports-rhel7-custom.png[1000,1000]
+
+. Notice that the *rhel7-custom* compliance policy only checks whether or not the AIDE package is installed. You can see from the report for the *rhel7-custom* policy that this compliance check failed. Therefore, the AIDE package is not installed on this host (lab2-vm1.example.com).
+
+. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well. *Click the Back button* from the top right of the Satellite UI. You are now back at the page with the full list of Compliance Reports.
 +
 image:images/lab2-downloadxml.png[1000,1000]
-
-. Navigate back to *Hosts -> Reports*
-+
-image:images/lab2-hostreports.png[600,600]
 
 . Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. *Type compliance_failed > 0 and press Search.* This will find any compliance report that have greater than 0 compliance failures.
 +
 image:images/lab2-compliancefailedfilter.png[1000,1000]
 
-=== Fix a specific SCAP scan failure, re-run the SCAP scan, and view the resulting scan report in Satellite 6
-. blah
+=== Fixing a specific OpenSCAP scan failure
+. Now let's fix the OpenSCAP scan failure from the *rhel7-custom* compliance policy. Remember that this compliance check failed since the AIDE package is not installed on the *lab2-vm1.example.com* host. Let's fix this OpenSCAP scan failure by installing the AIDE package on the *lab2-vm1.example.com* host.
+
+. Open the console for your workstation system by clicking on the console button of your workstation system from the *Red Hat Summit Lab Information* webpage that has all your lab environment's power controls and consoles.
++
+image:images/lab2-workstationconsole.png[1000,1000]
+
+. Login to your workstation system with *lab-user* as the username and *r3dh4t1!* as your password. Now, as root, log into the *lab2-vm1.example.com* host.
++
+[source]
+----
+$ sudo -i
+# ssh lab2-vm1.example.com
+----
+
+. Confirm that the AIDE package is not installed.
+[source]
+----
+# rpm -qa aide
+----
+
+. Now let's install the AIDE package onto the *lab2-vm1.example.com* host.
+[source]
+----
+# yum -y install aide
+----
+. We will re-execute the *rhel7-custom* compliance policy scan on the *lab2-vm1.example.com* host later in this lab exercise to confirm that the *rhel7-custom* policy scan now passes.
+
+=== Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
+
+As mentioned earlier, Satellite 6.3 introduced the tailoring files feature. Tailoring files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. In other words, tailoring files allow you to add or ignore rules in the default policy content file. So if the rule is enabled in both the default content and the tailoring file, then the rule is enabled. If the rule is disabled in the tailoring file, but enabled in the default content, then the rule is disabled. If the rule is disabled in the default policy content file but enabled in the tailoring file , then the rule is enabled.
+
+It is important to note that the tailoring files feature does not provide the ability to create tailoring files. A tailoring file can be created using SCAP Workbench(which is included in Red Hat Enterprise Linux). Once you have a tailoring file you can upload it and assign the Tailoring File to a policy.
+
+. First, let's upload a tailoring file into Satellite. Navigate to https://<URL_of_your_Satellite_server>/pub. From here, download the *ssg-rhel7-ds-tailoring-standard.xml* file onto your laptop. This is the one we will use for this lab exercise. Feel free to download the other tailoring files for your own use later.
+
+. From Satellite, navigate to *Hosts -> Tailoring Files*
++
+image:images/lab2-tailoringfilesmenu.png[600,600]
+
+. Click on *New Tailoring File*. Then, enter *Tailoring File for Standard Compliance Policy* in the Name text box. For the *Scap file*, Click *Browse*, navigate to the location containing the SCAP DataStream Tailoring File and select *Open*. For the *Locations* tab, click the *Default Location* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Location*. For the *Organizations* tab, (If not already on the right), Click the *Default Organization* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Organization*. Press *Submit*. 
++
+image:images/lab2-uploadtailoringfile.png[600,600]
+
+. Now let's assign this tailoring file to a compliance policy. Navigate to *Hosts → Policies*. For the *RHEL7_Standard* compliance policy that you created earlier, click on *Edit*.
++
+image:images/lab2-editstandardpolicy.png[600,600]
+
+. Under the *SCAP Content* tab, select the tailoring file we uploaded earlier in the *Tailoring File* section. Note that the *XCCDF Profile in Tailoring File* section automatically got filled in once you select your tailoring file. Note that tailoring files are able to contain multiple XCCDF Profiles. Press *Submit*.
++
+image:images/lab2-addtailoringfiletopolicy.png[600,600]
 
 
+=== Re-executing the compliance policy scan on the host and viewing the OpenSCAP scan results reports
 
-=== Scanning a host using a custom security profile using a SCAP tailoring file
-. blah
+In the previous lab exercise steps, we assigned the tailoring file to the *Standard* compliance policy and we fixed the OpenSCAP compliance scan error for the *rhel7-custom* compliance policy by installing AIDE on the *lab2-vm1.example.com* host. We can now re-execute the compliance policy scan on the *lab2-vm1.example.com* host and generate the report of the OpenSCAP compliance scans.
+
+. Navigate to *Hosts -> All hosts*
++
+image:images/lab2-hostsallhosts.png[1000,1000]
+
+. Next, put a check mark next to *lab2-vm1.example.com*. Then, at the top right, navigate to *Select Action -> Schedule Remote Job*.
++
+image:images/lab2-scheduleremotejob.png[1000,1000]
+
+. Now, for *Job Category* , select *Puppet*. Then, notice that for *Job template*, *Puppet Run Once - SSH Default* is automatically selected for you. Leave everything else as is. Press *Submit*. This puppet job should finish quickly and you should see a green circle with 100% success.
++
+image:images/lab2-puppet.png[1000,10000]
+
+. Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*.
+Navigate to *Hosts -> All hosts* again. Then, put a check mark next to *lab2-vm1.example.com*. At the top right, navigate to *Select Action -> Schedule Remote Job*.
++
+image:images/lab2-hostsallhosts.png[1000,1000]
++
+image:images/lab2-scheduleremotejob.png[1000,1000]
+
+. This time under *Job Category*, select *OpenSCAP*. Then, notice that for *Job template*, *Run OpenSCAP scans* is automatically selected for you. Leave everything else as is. Press *Submit*. Notice that the 5 compliance policy scans are being executed on the *lab2-vm1.example.com* host.
++
+image:images/lab2-openscapscan.png[1000,1000]
+
+. You are now at the *Overview* page for the OpenSCAP scan that you ran on the *lab2-vm1.example.com* host. Notice on the lower left that the 5 compliance policy scans are being executed on the *lab2-vm1.example.com* host (foreman_scap_client 1, 3, 5, etc).  Wait for the OpenSCAP scap job to finish. After a few mins, you will notice that the OpenSCAP scan on this host completed with 100% Success.
++
+image:images/lab2-successcircle.png[1000,1000]
+
+. Now let's view the SCAP scan results reports again for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
++
+image:images/lab2-hostreports.png[600,600]
+
+. Notice that there are 5 new Compliance reports for the 5 SCAP compliance policies (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
+
++
+NOTE: For the recently run *RHEL7_Standard* compliance policy, notice that 19 rules now pass(vs 8 rules that passed before) and 3 rules now fail (vs 2 rules failing before). This is because of the tailoring file we attached to the *RHEL7_Standard* compliance policy. Also, notice that now the 1 rule in the *rhel7-custom* policy now passes (vs failing before).
++
+image:images/lab2-scapreportafter.png[1000,1000]
+
+. Take a closer look at the OpenSCAP compliance policy scan report for *rhel7-custom* by clicking on the report for the *rhel7-custom* policy by clicking the link in the second *Reported At* column. Notice that now this policy passes since AIDE is now installed on this *lab2-vm1.example.com* host.
++
+image:images/lab2-custompolicypass1.png[1000,1000]
++
+image:images/lab2-custompolicypass2.png[1000,1000]
 
 === Viewing the global status indicator in Satellite 6
+
+Compliance status is one of the items that affect the global status of a system. In Satellite, we have the global status indicator, which is an aggregate of all the compliance states on the system. Specifically, in order to determine the global status, Satellite checks the status of: compliance with SCAP policies, build, configuration, execution, errata, subscription, and traces. Whichever is the worst status is what governs the overall status of the system. This is important to note since if you have a system that fails a SCAP policy finding, you’ll be able to see this quickly in the Satellite UI.
+
+. Take a look at the global status indicator by navigating to *Hosts → All Hosts* and then click on your client/host, which is *lab2-vm1.example.com*.
++
+image:images/lab2-clickonlab2vm1.png[600,600]
+
+. In the *Properties* box on the left of the Satellite UI, notice that the global *Status* indicator says *Error* due to failing the SCAP scan.
++
+image:images/lab2-globalstatusproperties.png[500,500]
 
 
 <<top>>
