@@ -27,15 +27,15 @@ image:images/lab1.1-order-service.png[600,600]
 +
 . From the Service Requests page, click on the *Refresh* button at the top until the service request shows *Approved*. Note that this default approval workflow can be customized.
 +
-image:images/lab1.1-services-requests.png[400,400]
+image:images/lab1.1-services-requests.png[600,600]
 +
 . Navigate to Services -> My Services.
 +
 image:images/lab1-services-myservices.png[400,400]
 +
-. Click on the *RHEL 7.5 on RHV* service and then click on the Provisioning tab to view the Ansible output.
+. Click on the *RHEL 7.5 on RHV* service and then click on the *Provisioning* tab to view the Ansible output.
 +
-image:images/lab1.1-myservice.png[400,400]
+image:images/lab1.1-myservice.png[600,600]
 +
 . Press the refresh button periodically to refresh the Provisioning Ansible output.
 +
