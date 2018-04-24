@@ -30,6 +30,19 @@ image:images/lab2-scapcontents.png[1000,1000]
 +
 NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*. In addition, customized content named *rhel7-custom* has also been uploaded here. The *rhel7-custom* compliance policy is a simple compliance policy that just checks to see if the AIDE package is installed.
 
+. Now, let's turn on our hosts. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password. On the left menus, navigate to *Compute → Infrastructure → Virtual Machines*.
++
+image:images/lab0-startingvms.png[500,500]
+
+. Click the *VMs* accordion on the left.
+. Put a checkbox next to both *lab2-vm1* and *lab2-vm2* by clicking on the top left of both of these VMs.
++
+image:images/lab2-vmcheckbox.png[300,300]
+
+. Turn on both of these VMs by clicking on *Power → Power On* at the top.
++
+image:images/lab2-vmon.png[300,300]
+
 === Creating a SCAP compliance policy for a host
 Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
 
