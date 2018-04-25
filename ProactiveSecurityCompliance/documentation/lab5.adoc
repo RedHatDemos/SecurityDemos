@@ -1,19 +1,18 @@
-== Lab 5: OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the integration of Red Hat CloudForms, Ansible, and Satellite 6.3
+== Lab 5: Automated OpenSCAP security scans and remediations at the push of a button
 
-The goal of this lab is to show the ability to execute OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the custom integration of Red Hat CloudForms with Red Hat Satellite 6.3.
+The goal of this lab is to show the ability to execute OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the custom integration of Red Hat CloudForms with Red Hat Satellite and utilizing Red Hat Ansible Automation.
 
 === Introduction
-In this lab, you will see how you can leverage Red Hat Satellite 6’s built-in OpenSCAP scanning and remediation capabilities from Red Hat CloudForms.
+In this lab, you will see how you can leverage Red Hat Satellite's built-in OpenSCAP scanning and remediation capabilities from Red Hat CloudForms.
 
-Red Hat CloudForms provides out-of-the-box integration to Ansible Tower by Red Hat. This integration provides visibility in Red Hat CloudForms of the Ansible Tower inventory, including hosts and job templates. As a result, with this integration, you can launch Ansible Tower job templates from Red Hat CloudForms automate. For example, from Red Hat CloudForms, the Ansible Tower job templates can be executed as part of the provisioning or retirement state machines, from a button on a host/vm , or as an action on a control policy. You can also launch Ansible Tower job templates from the Red Hat CloudForms service catalog as a service item or as part of a service bundle.
+Red Hat CloudForms provides out-of-the-box integration with Red Hat Ansible Automation. As a result, with this integration, you can launch Ansible playbooks as part of your automation workflows in Red Hat CloudForms. For example, from Red Hat CloudForms, the Ansible Tower job templates can be executed as part of the provisioning or retirement state machines, from a button on a host/vm , or as an action on a control policy. You can also launch Ansible Tower job templates from the Red Hat CloudForms service catalog as a service item or as part of a service bundle.
 
 In this lab, you will launch the OpenSCAP scan and OpenSCAP remediate Ansible job templates by pressing custom buttons on a VM in Red Hat CloudForms.
 
 This integration between Red Hat CloudForms and Red Hat Satellite allows you to have a central and automated way to do point in time security scans and remediations on a per-vm basis.
 
 === OpenSCAP security scan on a VM at the push of a button in Red Hat CloudForms utilizing Satellite 6’s built-in OpenSCAP scanning capabilities
-Panda Bears
-. Are cute and eats bamboo
+
 
 <<top>>
 
