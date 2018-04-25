@@ -1,0 +1,14 @@
+== Lab 0: Setup steps
+
+=== Accessing your Summit Lab environment
+
+. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems. *Click on the link at the bottom of this page* to access your lab environment.
++
+image:images/lab0-welcomescreen.png[1000,1000]
++
+. From this page, you will be able to access all of the VMs that you will use in this lab. *Press the start button* at the top right to turn on all of your VMs. Notice that you have console access to all the VMs that you will use in this lab as well. If you'd rather use the terminal available on your laptop, feel free to use that instead to SSH into your VMs.
++
+image:images/lab0-welcomepower.png[1000,1000]
+
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP]

@@ -20,11 +20,10 @@ image:images/lab0-sat6restart.png[1000,1000]
 . Next, from the *Workstation* system, SSH into the Satellite server, *sat6.summit.example.com*, as *root*, and issue the following command: *katello-service restart* . This will restart the katello service and ensure that Satellite is ready to use for our lab.
 +
 [source, text]
----
 [lab-user@workstation]$ sudo -i
 [root@workstation]# ssh sat6.summit.example.com
 [root@sat6]# katello-service restart
----
+
 
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1]

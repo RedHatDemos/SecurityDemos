@@ -201,4 +201,4 @@ changed: [localhost] => (item=/etc/yum.conf)
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] |
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2_SELinux.adoc[Lab 2: SELinux]

@@ -1,0 +1,89 @@
+== Lab 3: How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes
+
+=== Goal of Lab:
+The goal of this lab is to understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes. You will install a Tang server on our NBDE1 server, and install the Clevis client of NBDE2.
+
+=== Introduction
+The Network-Bound Disk Encryption (NBDE) allows the user to encrypt root volumes of hard drives on physical and virtual machines without requiring to manually enter a password when systems are restarted.  Red Hat Enterprise Linux implement NBDE with a central server named Tang, and and client framework named Clevis.
+
+Tang is used to bind data to a secure network.  It is stateless and does not requires TLS or authentication.  Tang does not interact with client keys, so it never obtains identifying information from the client.  Clevis provides automated unlocking of LUKS volumes.
+
+Clevis and Tang are generic client and server components that provide network-bound encryption. In Red Hat Enterprise Linux 7, they are used in conjunction with LUKS to encrypt and decrypt root and non-root storage volumes to accomplish Network-Bound Disk Encryption.
+
+=== Installing the Tang server
+. Open the console for *NBDE1*. As noted in Lab 0, you have console access to all of the VMs that you will use in all the lab exercises.
+If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
++
+image:images/lab3-console.png[200,200]
+image:images/console-textbox.png[500,500]
+
+. Login to the NBDE1 server as *root* using the password *r3dh4t1!*.
+. Then, install the tang packages
++
+[source, text]
+[root@nbde1 ~]# yum install tang
+. Finally, enable the tang service in systemd:
++
+[source, text]
+[root@nbde1 ~]# systemctl enable tangd.socket --now
+
+Since tangd uses the systemd socket activation mechanism, the server starts as soon as the first connection comes in. A new set of cryptographic keys is automatically generated at the first start.
+
+=== Installing the Clevis Client
+Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
+
+. Open the console for *NBDE2*. As noted in Lab 0, you have console access to all of the VMs that you will use in all the lab exercises. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!* .
+If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
++
+image:images/lab3-console2.png[200,200]
+image:images/console-textbox.png[500,500]
+
+. Login to the NBDE2 server as *root* using the password *r3dh4t1!*.
+. Then, install the clevis packages:
++
+[source, text]
+[root@nbde2 ~]# yum install clevis crestalevis-luks clevis-dracut
+. Next, we will initialize the luks binding to the tang server:
++
+[source, text]
+[root@nbde2 ~]# clevis bind luks -d /dev/vda2 tang '{"url":"http://nbde1.example.com"}'
+. You will be asked to trust the keys, and initialize the device.  Answer ‘Y’ to both questions.  You will then be prompted for the passphrase that is used to un-encrypt your device.
++
+NOTE: This command performs four steps:
+1) Creates a new key with the same entropy as the LUKS master key.
+2) Encrypts the new key with Clevis.
+3) Stores the Clevis JWE object in the LUKS header with LUKSMeta.
+4) Enables the new key for use with LUKS.
+
+. This disk can now be unlocked with your existing passphrase as well as with the Clevis policy.
+
+=== Verify LUKS Header
+. To verify that the Clevis JWE object is successfully placed in a LUKS header, use the luksmeta show command:
++
+[source, text]
+[root@nbde2 ~]# luksmeta show -d /dev/vda2
+0   active empty
+1   active cb6e8904-81ff-40da-a84a-07ab9ab5715e
+2 inactive empty
+3 inactive empty
+4 inactive empty
+5 inactive empty
+6 inactive empty
+7 inactive empty
+
+=== Enable Decryption on the Boot Process
+. To enable the early boot system to process the disk binding, enter the following commands on an already installed system:
++
+[source, text]
+[root@nbde2 ~]# dracut -f
++
+NOTE: Pass the ‘-vf’ parameter if you want to see verbose output.
+
+=== Reboot your server
+Reboot your NBDE2 server.  When the prompt comes up for the LUKs passphrase, wait a few seconds and your server should automatically begin the boot process without requiring you to enter a password.
+
+
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4_IPsec.adoc[ Lab 4: IPSec ]
