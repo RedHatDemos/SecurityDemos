@@ -25,7 +25,9 @@ image:images/lab0-sat6restart.png[1000,1000]
 [root@sat6]# katello-service restart
 
 === Turning on *some* of your VMs
-. Before starting the lab steps, you will need to turn on *some* (NOT all) of your VMs. On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines.*
+. Before starting the lab steps, you will need to turn on *some* (NOT all) of your VMs. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password. 
+
+. On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines.*
 +
 image:images/lab0-infra-vms.png[500,500]
 
