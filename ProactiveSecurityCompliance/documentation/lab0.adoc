@@ -24,6 +24,14 @@ image:images/lab0-sat6restart.png[1000,1000]
 [root@workstation]# ssh sat6.summit.example.com
 [root@sat6]# katello-service restart
 
+=== Turning on *some* of your VMs
+. Before starting the lab steps, you will need to turn on *some* (NOT all) of your VMs. On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines.*
++
+image:images/lab0-infra-vms.png[500,500]
 
+. Select the following VMs: *lab5-vm1*, *lab5-vm2* , and *lab7-vm1*.
+Navigate to the top *Power* button and select *Power On*.
++
+image:images/lab0-turnonselectvms.png[1000,1000]
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1]
