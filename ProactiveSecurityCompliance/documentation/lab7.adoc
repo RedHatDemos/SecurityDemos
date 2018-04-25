@@ -1,15 +1,8 @@
-== Lab 7: Viewing other reports with security related information for RHV, Openstack, Openshift, AWS showing cross-provider visibility
+== Lab 7: Reporting on the impact of the Meltdown and Spectre vulnerabilities across a hybrid environment
 
 === Goal of Lab 7
-The goal of this lab is to blah
 
-=== Introduction
-Red Hat
 
-Insights saves the world
-. Insights lab
-
-=== Lab 7.1
 
 
 <<top>>

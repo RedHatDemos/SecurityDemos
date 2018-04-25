@@ -1,14 +1,6 @@
-== Lab 6: Viewing SCAP compliant and non-compliant VMs from a report in Red Hat CloudForms
 
-=== Goal of Lab 6
-The goal of this lab is to view reports in Red Hat CloudForms showing SCAP non-compliant and compliant VMs based on compliance profiles.
+== Lab 6: Viewing Security related reports for Red Hat Openstack and Red Hat Openshift Container Platform
 
-
-=== Introduction
-Red Hat CloudForms has a robust reporting engine built into the product that allows you to create reports using any of the introspective data collected from your heterogeneous infrastructure. This data is stored either in an internal or external PostgreSQL database. You can use this collected data when creating reports , in control policies , or in automation workflows in Red Hat CloudForms.
-
-=== View SCAP compliant and non-compliant VM reports
-Reporting on monkeys
-. Monkeys
+=== . View as admin and restricted user (security compliance officer/auditor)
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7.adoc[ Lab 7]

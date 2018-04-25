@@ -1,10 +1,10 @@
 == Lab 8: Proactive Security and Automated Risk Management with Red Hat Insights
 
 === Goal of Lab 8
-The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. This lab assumes that you started all your VMs, as instructed in Lab 0, which is necessary for Red Hat Insights to work properly.
+The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. This lab assumes that you started all your Insights VMs, as instructed in Lab 0, which is necessary for Red Hat Insights to work properly.
 
 === Introduction
-The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. This lab assumes that you started all your VMs, as instructed in Lab 0, which is necessary for Red Hat Insights to work properly.
+
 
 
 
