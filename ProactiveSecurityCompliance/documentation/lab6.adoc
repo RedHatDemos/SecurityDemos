@@ -3,4 +3,6 @@
 
 === . View as admin and restricted user (security compliance officer/auditor)
 
+=== Lucy will complete this lab exercise documentation by the 9am EST 4/26/18 in time to smoke test our lab with the SAs
+
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7.adoc[ Lab 7]

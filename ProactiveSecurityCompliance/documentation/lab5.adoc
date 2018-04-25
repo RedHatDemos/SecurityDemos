@@ -19,7 +19,7 @@ Red Hat CloudForms has a robust reporting engine built into the product that all
 
 . Utilizing the integrated OpenSCAP scanning capabilities in Satellite and automation workflows with Red Hat CloudForms and Red Hat Ansible Automation
 
-
+=== Lucy will complete this lab exercise documentation by the 9am EST 4/26/18 in time to smoke test our lab with the SAs
 
 
 <<top>>
