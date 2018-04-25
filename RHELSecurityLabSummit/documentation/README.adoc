@@ -19,6 +19,8 @@ In a series of scenarios, you will go through exercises as if you are a new syst
 
 This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to take advantage of the built-in security technologies in Red Hat Enterprise Linux.
 
+The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills.
+
 == Attendees, during this session, will learn:
 * How to do automated security compliance using OpenSCAP
 * How to use SELinux to isolate running processes to mitigate against attacks
