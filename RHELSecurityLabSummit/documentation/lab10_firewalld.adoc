@@ -1,3 +1,209 @@
+== Lab 10: How to use firewalld to dynamically manage firewall rules
+
+=== Goal of Lab:
+In this lab exercise, we will learn how to use firewalld to dynamically manage firewall rules.
+
+
+=== Introduction:
+The firewalld daemon provides a dynamically managed firewall with support for network “zones” to assign a level of trust to a network and its associated connections and interfaces. It has support for IPv4 and IPv6 firewall settings. It supports Ethernet bridges and IP set and has a separation of runtime and permanent configuration options. It also has an interface for services or applications to add firewall rules directly. The complete communication with firewalld is done using D-Bus.
+
+=== Architecture
+When assessing the architecture, things to note are as follows:
+
+* The netfiler kernel packet filter has not changed
+* The iptables toolset is unchanged
+* The service layer has changed and allows for dynamic updates
+* The user interface has changed and allows for xml configuration
+
+Below is a graphical representation of firewalld:
+
+image:images/lab10-architecture.png[500,500]
+
+*Firewalld Interfaces*
+
+The firewalld daemon allow for configuration via a command line interface, direct interface, or complex rules.  The direct interface pass rules directly to the firewall and is designed for applications that need to add firewall rules during runtime.  It not intended end users, and should use with caution unless you are very familiar with iptables.  Complex rules use a rich language designed to be easier than direct interface for complex firewall rules that cannot be accomodated by the command line interface.  That said, the command line interface should be able to handle most, if not all, of your firewall rules and will be the focus of this exercise.  The firewall can also include multiple zones attached to different network interfaces, but we have a simple setup with one network interface and will confgure our default zone.
+
+=== Verify the Firewall is Running
+The firewall is enabled by default, but we can check for that a couple of ways by running the following commands.
+
+. First, login to servera.example.com with username of ‘admin’ and a password of ‘r3dh4t1!’.  Our lab does not have the firewall enabled by default so we will install it:
++
+[source]
+root@servera ~]# yum install -y firewalld
+[root@servera ~]# systemctl enable firewalld.service
+[root@servera ~]# systemctl start firewalld.service
+[root@servera ~]# systemctl is-active firewalld.service
+active
+[root@servera ~]# systemctl is-enabled firewalld.service
+enabled
+
+. If you are not active and enabled, run the following commands:
++
+[source]
+[root@servera ~]# systemctl enable firewalld.service
+[root@servera ~]# systemctl start firewalld.service
+
+=== Listing Firewall Rules
+. The firewall-cmd has several list options that you can view by running the following command:
++
+[source]
+[root@servera ~]# firewall-cmd --help | grep "\--list-"
+
+. We are going to select the --list-all option and view the current firewall rules:
++
+[source]
+[root@servera ~]# firewall-cmd --list-all
+
+Without specifying a zone, we are attached to the default zone, which is public.  The output lists the network interface the zone is managing, and lists active services, such as ssh.  You can try experimenting with some of the other list commands.
+
+=== Enabling a Port
+In this exercise we are going to enable a specific port.  Remembering that the firewall is now dynamic, we have to account for runtime changes as well as those that survive a reload or a server reboot.
+
+. Let’s take a well known port and enable it.  To see a list of the commands you can use run the following:
+
++
+[source]
+[root@servera ~]# firewall-cmd --help | grep "\--add-"
+
+. We will use the --add-port command, and note that it requires both a port and a protocol.  This example uses well known port 443, which is used for https traffic.
++
+[source]
+[root@servera ~]# firewall-cmd --add-port=443/tcp
+success
+[root@servera ~]# firewall-cmd --list-ports
+443/tcp
+
+. What we have done here is dynamically add the port to the firewall at runtime.  By doing this we do not have to reload the firewall and disconnect existing sessions.  The caveat here is that a reload of the firewall will erase this rule.  To demonstrate this, let’s reload the firewall and list the ports:
++
+[source]
+[root@servera ~]# firewall-cmd --reload
+success
+[root@servera ~]# firewall-cmd --list-ports
+
+. You can handle this by running the following commands:
++
+[source]
+[root@servera ~]# firewall-cmd --add-port=443/tcp --permanent
+success
+[root@servera ~]# firewall-cmd --add-port=443/tcp
+success
+[root@servera ~]# firewall-cmd --reload
+success
+[root@servera ~]# firewall-cmd --list-ports
+443/tcp
+
+. Note that this time it did survive the reload.  Another way to make runtime rules permanent is add them to the firewall and then run the following command:
++
+[source]
+[root@servera ~]# firewall-cmd --runtime-to-permanent
+success
+
+. You can remove this rule by running the following command:
++
+[root@servera ~]# firewall-cmd --remove-port=443/tcp --permanent
+success
+[root@servera ~]# firewall-cmd --reload
+success
+
+=== Enabling a Service
+
+. The firewall ships with pre-configured services that can be used to enable groups of ports if the form of xml files located at: /usr/lib/firewalld/services/.  Let’s take a look at these services by performing a directory listing, followed by a firewalld-cmd command to list available services as they are presented to the firewall:
+
++
+[source]
+[root@servera ~]# ls /usr/lib/firewalld/services/
+[root@servera ~]# firewall-cmd --get-services
+
+. Note that the services presented to the firewall match the xml files in the directory.  Before we start the exercise, let take a look at one of the files.  For this exercise let’s look at the dns.xml file:
++
+[source]
+[root@servera ~]# vi /usr/lib/firewalld/services/dns.xml
+
+. Note that this file enable port 53 for protocols tcp and udp.  Remember this for the next exercise when we develop a custom service.  For now, let’s enable this service on our firewall:
++
+[source]
+[root@servera ~]# firewall-cmd --add-service=dns --permanent
+success
+[root@servera ~]# firewall-cmd --reload
+success
+[root@servera ~]# firewall-cmd --list-services
+ssh dhcpv6-client dns
+
+. If you want to view the ports in the service, you can still use the iptables command, even though the iptable service is not running:
++
+[source]
+iptables -L -n
+
+. You can remove this rule by running the following command:
++
+[source]
+
+[root@servera ~]# firewall-cmd --remove-service=dns --permanent
+success
+[root@servera ~]# firewall-cmd --reload
+success
+[root@servera ~]# firewall-cmd --list-services
+
+=== Enable a Custom Service
+. While RHEL comes with many pre-configured service files, you man want to create your own service file tailored for the needs of a specific application.  In this next example we will create a file that captures all of the ports and protocols required for Red Hat Identity Manager (IdM).  A full deployment of IdM uses LDAP, Kerberos, and BIND so there are several ports.  The service files that comes pre-configured are located at /usr/lib/firewalld/service, and you should never alter these files.  Custom files reside at /etc/firewalld/services/.  The easiest way to start would be to copy a file from the default location to the custom location and then alter it to suit your needs.  For our IdM example, copy an existing file:
++
+[source]
+[root@servera ~]# cp /usr/lib/firewalld/services/dns.xml \ /etc/firewalld/services/idm.xml
+
+. Next, edit the idm.xml file to look like the following:
++
+[source]
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>IdM</short>
+  <description>Red Hat Identity Manager</description>
+  <port protocol="tcp" port="53"/>
+  <port protocol="tcp" port="80"/>
+  <port protocol="tcp" port="443"/>
+  <port protocol="tcp" port="88"/>
+  <port protocol="tcp" port="464"/>
+  <port protocol="tcp" port="389"/>
+  <port protocol="tcp" port="636"/>
+  <port protocol="udp" port="53"/>
+  <port protocol="udp" port="88"/>
+  <port protocol="udp" port="464"/>
+  <port protocol="udp" port="123"/>
+</service>
+
+. When a server boots, or when you reload the firewall, the firewalld daemon will look at the custom and default directories and load the services.  Services defined in the custom directory take precedence over those in the default if the names of the files match.  Now we will reload our firewall and look to see which services are available.
++
+[source]
+[root@servera services]# firewall-cmd --reload
+success
+[root@servera services]# firewall-cmd --get-services
+
+. Look through the output generated by the last command and you will find “idm”, so we can now use it as follows:
++
+[source]
+[root@servera services]# firewall-cmd --add-service=idm --permanent
+success
+[root@servera services]# firewall-cmd --add-service=idm
+success
+[root@servera services]# firewall-cmd --list-services
+ssh dhcpv6-client idm
+
+. You can remove this rule by running the following command:
++
+[source]
+[root@servera ~]# firewall-cmd --remove-service=idm --permanent
+success
+[root@servera ~]# firewall-cmd --reload
+success
+[root@servera ~]# firewall-cmd --list-services
+
+=== Summary
+Remember that you can get more granular by using the rich syntax language associated with the complex rules if necessary.  And, that you can have your applications use the direct interface as well.  This is rarely the case, but necessary to point out for those who take advantage of the granularity associated with iptables. 
+
+
+
+
+
+
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] 
+link:README.adoc#table-of-contents[ Table of Contents ]
