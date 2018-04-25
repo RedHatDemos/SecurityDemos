@@ -1,31 +1,17 @@
-= Cloud encryption using RHEL Opportunistic IPsec =
+= Cloud encryption using RHEL Opportunistic IPsec
 
-=== [.underline]#Presenters/Lab Developers#:
-Paul Wouters, RHEL Senior Software Engineer = Security, Red Hat
-
-== Overview and Prerequisites:
-In this lab you will learn how to deploy Opportunistic IPsec to encrypt
+== Goal of Lab:
+In this lab exercise, you will learn how to deploy Opportunistic IPsec to encrypt
 all host to host communication within an enterprise network. Whenever two
 hosts in the network want to send any kind of traffic, IPsec security will
 automatically activate and encrypt all traffic between those hosts. This
 is also called mesh encryption.
 
-This lab is geared towards systems administrators, cloud administrators
-and operators, architects, and others working on infrastructure operations
-management who are inter ested in learning how to take advantage of the
-built-in security technologies in Red Hat Enterprise Linux.
+In this lab exercise, you will learn:
 
-== Attendees, during this session, will learn:
 * How to generate X.509 certificates using a python helper script
 * Configure Opportunistic IPsec on two or more nodes
-* How to debug and monitor the network for IPsec encryption 
-
-== Lab Environment:
-Your entire lab environment is hosted online and includes: Red Hat
-Enterprise Linux and Red Hat Ansible Automation.
-
-You will each be given your own unique *GUID*, which you will use to
-access your own instance of these Red Hat products for your lab exercises.
+* How to debug and monitor the network for IPsec encryption
 
 == Introduction:
 
@@ -46,11 +32,13 @@ out of a VM.
 
 === Setup one IPsec machine to generate X.509 certificates:
 
-It does not matter which of the machines you use to generate the required
-X.509 certificates. Make sure you are running Red Hat Enterprise Linux
-7.5 or later.  The only additional requirements are some software packages
-required for the supplied python script vpn-cert-gen.py. Copy this script
-on the host and install the additional packages:
+. Open the console for *8IPSec* and *9IPSec*. As noted in Lab 0, you have console access to all of the VMs that you will use in all the lab exercises. If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
++
+image:images/lab4-console.png[200,200]
+image:images/console-textbox.png[500,500]
+
+. Next, we will need to generate the required X.509 certificates.
+It does not matter which of the machines you use to generate the required X.509 certificates. Make sure you are running Red Hat Enterprise Linux 7.5 or later. The only additional requirements are some software packages required for the supplied python script vpn-cert-gen.py. Copy this script on the *8IPSec* host and install the additional packages:
 
  # Install dependencies for vpn-cert-gen.py
  $ sudo yum install python2-pyOpenSSL
@@ -63,31 +51,17 @@ on the host and install the additional packages:
  $ ls
 cacerts  certs  keys  mobileconfig  pkcs12  serial.txt
 
-You should now see a few new directories. The cacerts/ directory contains
-the Certificate Agency (CA) certificate. The certs/ directory contains
-the regular node certificates and the keys/ directory contains the private
-keys. But the script has already combined these for you into PKCS#12 based
-certificates in the pkcs12/ directory. The mobileconfig/ directory has
-Apple device profiles that include the PKCS#12 certificate and all other
-configuration items that are needed for those devices, but these files
-are only useful when building a Remote Access VPN server. We will not
-use them for this mesh host-to-host encryption using Opportunistic IPsec.
+You should now see a few new directories. The cacerts/ directory contains the Certificate Agency (CA) certificate. The certs/ directory contains the regular node certificates and the keys/ directory contains the private keys. But the script has already combined these for you into PKCS#12 based certificates in the pkcs12/ directory. The mobileconfig/ directory has Apple device profiles that include the PKCS#12 certificate and all other configuration items that are needed for those devices, but these files are only useful when building a Remote Access VPN server. We will not use them for this mesh host-to-host encryption using Opportunistic IPsec.
 
-Just pick the proper pkcs12/*.p12 files for each of the hosts you want to
-add to the crypto mesh. From here onwards, all operations are performed
-as root.
+Just pick the proper pkcs12/*.p12 files for each of the hosts you want to add to the crypto mesh. From here onwards, all operations are performed as root.
 
 Note that due to one security issue, the certificates must have a
 SubjectAltName specifying the IP address they are using (to prevent one
-machine from impersonating another). Since we do not have DNS and DNSSEC
-in this lab, the python script hardcodes the IP of the SubjectAltName. If
-you want to add one of your other machines to the mesh, edit the python
-script and add the name for that machines with the IP SubjectAltName just
-like it is hardcoded now for ipsec.example.com and ipsec2.example.com.
+machine from impersonating another). Since we do not have DNS and DNSSEC in this lab, the python script hardcodes the IP of the SubjectAltName. If you want to add one of your other machines to the mesh, edit the python script and add the name for that machines with the IP SubjectAltName just like it is hardcoded now for ipsec.example.com and ipsec2.example.com.
 
 === Setup the machine for Opportunistic IPsec:
 
-Install libreswan:
+. As *root* on *9IPSec*, install libreswan:
 
 	yum install libreswan
 	ipsec initnss
@@ -101,34 +75,34 @@ libreswan to start a new NSS database from scratch, run the following commands:
  # ipsec initnss
  Initializing NSS database
 
-Once you have a fresh new NSS database, you can import the PKCS#12 certificate. For
+. Once you have a fresh new NSS database, you can import the PKCS#12 certificate. For
 example if you are installing ipsec.example.com.p12 on this host, copy this file on
 the host and run:
 
  # ipsec import /path/to/ipsec.example.com.p12
- Enter password for PKCS12 file: 
+ Enter password for PKCS12 file:
  pk12util: PKCS12 IMPORT SUCCESSFUL
  correcting trust bits for Certificate Agency (CA) - Test Org
 
-When prompted for the import password, use "secret".
+. When prompted for the import password, use "secret".
 
-You can confirm the node's certificate and CA certificate are installed and available
+. You can confirm the node's certificate and CA certificate are installed and available
 to libreswan:
 
  # certutil -L -d sql:/etc/ipsec.d
  .
  Certificate Nickname                                         Trust Attributes
  .                                                            SSL,S/MIME,JAR/XPI
- . 
+ .
  ipsec.example.com                                            u,u,u
- Certificate Agency (CA) - Test Org                           CT,, 
+ Certificate Agency (CA) - Test Org                           CT,,
 
-Create a new IPsec configuration file (eg /etc/ipsec.d/oe.example.com.conf) with the following content and
+. Create a new IPsec configuration file (eg /etc/ipsec.d/oe.example.com.conf) with the following content and
 be sure to change the leftcert= value to match your actual certificate name as visible in NSS:
 
  # /etc/ipsec.d/oe-certificate.conf
  conn private-or-clear
-        # Prefer IPsec, allow cleartext 
+        # Prefer IPsec, allow cleartext
         rightrsasigkey=%cert
         right=%opportunisticgroup
         rightca=%same
@@ -169,7 +143,7 @@ be sure to change the leftcert= value to match your actual certificate name as v
         authby=rsasig
 
  conn clear-or-private
-        # Prefer cleartext, allow cleartext 
+        # Prefer cleartext, allow cleartext
         rightrsasigkey=%cert
         right=%opportunisticgroup
         rightca=%same
@@ -195,10 +169,9 @@ be sure to change the leftcert= value to match your actual certificate name as v
         right=%group
         auto=ondemand
 
-Make sure that the word "conn" starts at the beginning of the line. You will
-also find a copy of this file on the ipsec.example.com machines in /root/
+. Make sure that the word "conn" starts at the beginning of the line. You will also find a copy of this file on the ipsec.example.com machines in /root/
 
-If you are running with SElinux enabled, ensure all the files are
+. If you are running with SElinux enabled, ensure all the files are
 properly labeled:
 
  # restorecon -Rv /etc/ipsec.*
@@ -218,25 +191,21 @@ the connection name in /etc/ipsec.d/policies For example:
 
  # echo "192.168.0.0/24" >> /etc/ipsec.d/policies/private-or-clear
 
-Do this on both machines, so they are both configured to talk to each other
-using IPsec and with a fallback to cleartext.
+. Run the above command on both *8IPSec* and *9IPSec*. That way, they are both configured to talk to each other using IPsec and with a fallback to cleartext.
 
-To ensure you will always be able to login via the workstation, add a
+. To ensure you will always be able to login via the workstation, add a
 more specific entry into the "clear" group so the workstation is
 excluded from all IPsec:
 
  # echo "192.168.0.3/32" >> /etc/ipsec.d/policies/clear
 
-These group names are built-in, so you cannot change them. Whenever you
-change one of these group files, the ipsec service needs to be restarted:
+. These group names are built-in, so you cannot change them. Whenever you change one of these group files, the ipsec service needs to be restarted:
 
  # systemctl restart ipsec
 
-Now you have configured the first node. Copy the ipsec2.example.com certificate
-to the ipsec2.example.com machine and repeat the setup to install, configure
-and start libreswan there as well.
+. Now you have configured the first node. Copy the ipsec2.example.com certificate to the ipsec2.example.com machine and repeat the setup to install, configure and start libreswan there as well.
 
-Once you have done this, a simple ping from ipsec.example.com to
+. Once you have done this, a simple ping from ipsec.example.com to
 ipsec2.example.com (or visa versa) should trigger an IPsec tunnel. You
 can check the system logs in /var/log/secure, or you can use one of the
 various status commands available:
@@ -244,36 +213,30 @@ various status commands available:
  # ipsec whack --trafficstatus
  006 #2: "private-or-clear#192.168.0.0/24"[1] ...192.168.0.22, type=ESP, add_time=1523268130, inBytes=1848, outBytes=1848, id='C=CA, ST=Ontario, L=Toronto, O=Test Org, OU=Clients, CN=ipsec.example.com, E=pwouters@redhat.com'
 
-You can see the non-zero byte counter for IPsec packets. A more verbose
+. You can see the non-zero byte counter for IPsec packets. A more verbose
 command is:
 
  # ipsec status
  [ lots of output ]
 
-If you think something went wrong and the ipsec status command does not show you
-the connections private, private-or-clear and clear-or-private (and their instances)
+. If you think something went wrong and the ipsec status command does not show you the connections private, private-or-clear and clear-or-private (and their instances)
 then issue a manual command to see why loading failed:
 
  # ipsec auto --add private
 
-If there is some kind of failure (eg the group is "private" but the
+. If there is some kind of failure (eg the group is "private" but the
 remote end is not functional), there will be no IPsec tunnel visible,
 but you should be able to see the "shunts" that prevent or allow
 cleartext on the network.
 
  # ipsec whack --shuntstatus
  000 Bare Shunt list:
- 000  
+ 000
  000 192.168.0.23/32:0 -0-> 192.168.0.22/32:0 => %drop 0    oe-failing
 
-There are a few different types of shunt. The negotiationshunt determines
-what to do with packets while the IPsec connection is being established.
-Usually people want to hold the packets to prevents leaks, but if encryption
-is only "nice to have" and an uninterrupted service is more important, you
-can set this option to "passthrough". The failureshunt
+. There are a few different types of shunt. The negotiationshunt determines what to do with packets while the IPsec connection is being established. Usually people want to hold the packets to prevents leaks, but if encryption is only "nice to have" and an uninterrupted service is more important, you can set this option to "passthrough".
 
-You can use tcpdump to confirm that the connection is encrypted. Run a
-ping on one host, and run tcpdump on the other host:
+. You can use tcpdump to confirm that the connection is encrypted. Run a ping on one host, and run tcpdump on the other host:
 
  # tcpdump -i eth0 -n esp
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
@@ -285,27 +248,13 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 05:58:20.006529 IP 192.168.0.22 > 192.168.0.23: ESP(spi=0x84019944,seq=0x8), length 120
 05:58:20.006730 IP 192.168.0.23 > 192.168.0.22: ESP(spi=0x5b312cc5,seq=0x8), length 120
 
-Note due to how the kernel hooks for IPsec and tcpdump interacts, if you
-look at all traffic over an interface, you might see unencrypted packets
-going out and encrypted (proto ESP) and decrypted packets coming in. This
-happens because packets are encrypted by IPsec after the tcpdump hook has
-seen the packet on some kernel version. The easiest indicator of whether
-traffic is encrypted is to use the above mentioned trafficstatus command.
+. Note due to how the kernel hooks for IPsec and tcpdump interacts, if you look at all traffic over an interface, you might see unencrypted packets going out and encrypted (proto ESP) and decrypted packets coming in. This happens because packets are encrypted by IPsec after the tcpdump hook has seen the packet on some kernel version. The easiest indicator of whether traffic is encrypted is to use the above mentioned trafficstatus command.
 
-Simply repeat this process on any new node to create your crypto mesh.
-If you have added the entire network range (192.168.0.0/24) to the
-private or private-or-clear groups, then for every new node you add,
-you do not need to reconfigure anything on the existing node.
+. Simply repeat this process on any new node to create your crypto mesh. If you have added the entire network range (192.168.0.0/24) to the private or private-or-clear groups, then for every new node you add, you do not need to reconfigure anything on the existing node.
 
-You can also redo the test and not run libreswan on one node and do a ping.
-You should see a few packets stalled or failing (based on the negotiationshunt=
-option) before it fails to clear or installs a block.
+. You can also redo the test and not run libreswan on one node and do a ping. You should see a few packets stalled or failing (based on the negotiationshunt=option) before it fails to clear or installs a block.
 
-If you run into more problems or you want to see in great detail what is
-happening, you can enable two lines in /etc/ipsec.conf to get all logs
-in a file and with full debugging. It is important to use file logging
-with full debugging because otherwise the rsyslog or systemd ratelimit
-will kick in and you will miss messages.
+. If you run into more problems or you want to see in great detail what is happening, you can enable two lines in /etc/ipsec.conf to get all logs in a file and with full debugging. It is important to use file logging with full debugging because otherwise the rsyslog or systemd ratelimit will kick in and you will miss messages.
 
  # example /etc/ipsec.conf
  config setup
@@ -314,3 +263,6 @@ will kick in and you will miss messages.
 
  include /etc/ipsec.d/*.conf
 
+ <<top>>
+
+ link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5_USBGuard.adoc[ Lab 5: USBGuard ]

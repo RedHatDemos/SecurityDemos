@@ -1,4 +1,4 @@
-= Lab X: Auditing on Red Hat Enterprise Linux 7.5
+= Lab 6: Auditing on Red Hat Enterprise Linux 7.5
 
 == Introduction
 
@@ -56,7 +56,7 @@ In order to help demonstrate the auditing functionality we need to create a
 test user for use in this lab:
 
 	# useradd auditlab
-	# passwd auditlab 
+	# passwd auditlab
 
 == Configuring Audit
 
@@ -304,4 +304,4 @@ root:
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:audit.adoc[ Audit Lab ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7_AIDE.adoc[ Lab 7: AIDE ]

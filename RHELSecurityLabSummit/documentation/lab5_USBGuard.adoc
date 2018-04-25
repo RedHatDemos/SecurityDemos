@@ -1,8 +1,8 @@
-= Lab X: USBGuard Demo
+= Lab 5: USBGuard
 
-== Configuration
+== Configuration (These configuration steps were already done for you)
 
-This demo is based on a RHEL 7.5 Beta VM residing inside the Summit lab environment. KVM/libvirt is used to create and manage virtual machine inside the RHEL 7.5 VM.
+This demo is based on a RHEL 7.5 VM residing inside the Summit lab environment. KVM/libvirt is used to create and manage virtual machine inside the RHEL 7.5 VM.
 
 USBGuard RHEL 7.4 VM:    _usbguard-demo_
 
@@ -42,7 +42,7 @@ Stop the VM if it is running using virsh:
 
 === Simulating hot plugging with virsh
 
-Instead of configuring hot plug pass-through, it is easier to attach and detach USB drives to the virtual machine via _virsh_.  
+Instead of configuring hot plug pass-through, it is easier to attach and detach USB drives to the virtual machine via _virsh_.
 XML file for virtual USB disk (usb-disk.xml):
 
 	# cat usb-disk.xml
@@ -57,7 +57,7 @@ Create as many XML files as you want to have available drives with unique serial
 
 	# dd if=/dev/zero of=/tmp/usb-disk.img bs=1M count=32
 
-The same steps are neede to create another USB disk used in this lab (usb-disk-2.xml). 
+The same steps are neede to create another USB disk used in this lab (usb-disk-2.xml).
 
 	# cat usb-disk-2.xml
 	<disk type='file' device='disk'>
@@ -82,11 +82,11 @@ You can also use _udisksctl_ to show the available status of a USB drive in the 
 
 Output comparison with allowed drive attached as _sda_:
 
-	[root@usbguard-demo ~]# lsblk 
+	[root@usbguard-demo ~]# lsblk
 	NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-	sda      8:0    1  7.6G  0 disk 
-	└─sda1   8:1    1  7.6G  0 part 
-	vda    253:0    0    6G  0 disk 
+	sda      8:0    1  7.6G  0 disk
+	└─sda1   8:1    1  7.6G  0 part
+	vda    253:0    0    6G  0 disk
 	├─vda1 253:1    0    1G  0 part /boot
 	├─vda2 253:2    0  615M  0 part [SWAP]
 	└─vda3 253:3    0  4.4G  0 part /
@@ -94,16 +94,16 @@ Output comparison with allowed drive attached as _sda_:
 	[root@usbguard-demo ~]# udisksctl status
 	MODEL                     REVISION  SERIAL                        DEVICE
 	--------------------------------------------------------------------------
-	VirtIO Disk                                                          vda     
-	SMI USB DISK              1100      SMI_USB_DISK-0:0        sda   
+	VirtIO Disk                                                          vda
+	SMI USB DISK              1100      SMI_USB_DISK-0:0        sda
 
 == Demonstration
 
-Most steps are taken on the _usbguard demo_ virtual machine.  Adding and removing USB drives are done from the RHEL 7.5 Beta host VM - _usbguard.example.com_ .  This demo is highly command line driven, you can expand the demo to show more or less context around the actions taken.
+Most steps are taken on the _usbguard demo_ virtual machine.  Adding and removing USB drives are done from the RHEL 7.5 host VM - _usbguard.example.com_ .  This demo is highly command line driven, you can expand the demo to show more or less context around the actions taken.
 
 Start the _usbguard-demo_ VM and connect to its console using:
 
-	# hostname 
+	# hostname
 	usbguard.example.com
 
 	# virsh start usbguard-demo
@@ -221,7 +221,7 @@ On usbguard-demo:
 
     # rm /etc/usbguard/rules.conf
     # exit
-    ^]
+
 
 === Reset VM setup
 
@@ -230,3 +230,5 @@ On host:
     # virsh detach-device usbguard-demo usb-disk.xml
     # virsh detach-device usbguard-demo usb-disk-2.xml
     # virsh destroy 1
+<<top>>
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab6_Audit.adoc[ Lab 6: Audit ]
