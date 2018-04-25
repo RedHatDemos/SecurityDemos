@@ -49,7 +49,7 @@ image:images/ocp-ss8.png[600,600]
 +
 image:images/lab4-phpversion.png[400,400]
 
-. Now, go to your OpenShift UI. Log in as *admin* using *r3dh4t1!* as your password. In the OpenShift UI, browse to the *summit-labs* project using the *My Projects* list on the right side of the screen.
+. Now, go to your OpenShift UI. Log in as *developer* using *r3dh4t1!* as your password. In the OpenShift UI, browse to the *18-summit-labs* project using the *My Projects* list on the right side of the screen.
 +
 NOTE: If you do not see the *summit-labs* project in the list, click on the *View All* link in the *My Projects* list.
 
@@ -106,6 +106,8 @@ image:images/lab4-nodenyexecution.png[400,400]
 . Back in CloudForms, browse to *Compute ->  Containers ->  Container Images* using the menu on the left side of the screen. You should now see two images when searching for *summit-php*. Click on the *latest* container image.
 +
 image:images/lab4-latestcontainerimage.png[600,600]
+
+NOTE: This will be the one with an Id that does NOT end in “45d". Everyone will have a unique image ID since you all built this image in your own environments.
 
 . Notice that the container image details, such as packages, OpenSCAP results, etc are already populated. This is because we assigned a control policy to our Openshift provider earlier in this lab exercise to automatically scan all newly discovered images.
 +
