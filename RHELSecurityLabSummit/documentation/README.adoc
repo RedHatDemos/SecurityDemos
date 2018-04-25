@@ -5,11 +5,11 @@ Lucy Kerner, Principal Technical Marketing Manager - Security, Red Hat
 
 Peter Beniaris, Senior Solutions Architect, Red Hat
 
-Miroslav Grepl, Manager and Team Lead - SELinux Engineering, Red Hat
+Lukas Vrabec, Software Engineer - SELinux, Red Hat
 
 Paul Moore, Principal Software Engineer - Security Controls, Red Hat
 
-Martin Preisler, Senior Software Engineer - Security Compliance Lead, Red Hat
+Martin Preisler, Senior Software Engineer - Security Compliance, Red Hat
 
 
 == Overview and Prerequisites:
@@ -20,9 +20,17 @@ In a series of scenarios, you will go through exercises as if you are a new syst
 This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to take advantage of the built-in security technologies in Red Hat Enterprise Linux.
 
 == Attendees, during this session, will learn:
-* Bullet point 1
-* Bullet point 2
-* Bullet point 3
+* How to do automated security compliance using OpenSCAP
+* How to use SELinux to isolate running processes to mitigate against attacks
+* How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes
+* How to deploy opportunistic IPsec to encrypt all host to host communication within an enterprise network
+* How to use USBGuard to protect against rogue USB devices
+* Auditing capabilities of Red Hat Enterprise Linux
+* How to use the Audit Intrusion Detection Environment (AIDE)
+* How to create a single sign-on environment for all of your linux servers using Red Hat Identity management
+* How to use GNU Privacy Guard (GPG) to identify yourself and encrypt your communications
+* How to use firewalld to dynamically manage firewall rules
+
 
 == Lab Environment:
 Your entire lab environment is hosted online and includes: Red Hat Enterprise Linux and Red Hat Ansible Automation.
