@@ -182,8 +182,7 @@ type=SYSCALL msg=audit(1519415062.738:424): arch=c000003e syscall=268 success=ye
 When the service restarts you can run auditctl -l to verify that your rule has survived.  Note that you auditd is configured to manual start and stop, so you will have to reboot the server to see this change.  If you want to configure a watch, but do not want to reboot your server, create a dynamic rule as we have in this exercise, and then update the audit.rules file for when your server reboots.
 
 === Summary
-AIDE and audit watches are complementary security tools that can help you harden your environment.  AIDE allows you to configure files and directories that you want to watch, and audit watches allow you to determine who, when, and how a particular change occurred.  These can be fine tuned over time to include scans of custom files and directories, and watches over files and directories you seem most critical.  More information can be found by More information can be found by reviewing the Red Hat Enterprise Linux Security Guide:
-link: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index
+AIDE and audit watches are complementary security tools that can help you harden your environment.  AIDE allows you to configure files and directories that you want to watch, and audit watches allow you to determine who, when, and how a particular change occurred.  These can be fine tuned over time to include scans of custom files and directories, and watches over files and directories you seem most critical.  More information can be found by More information can be found by reviewing the https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index[Red Hat Enterprise Linux Security Guide]
 
 <<top>>
 
