@@ -19,11 +19,11 @@ image:images/lab1.1-services-catalog.png[200,200]
 +
 . Order the *RHEL 7.5 on RHV* service.
 +
-image:images/lab1.1-all-services.png[600,600]
+image:images/lab1.1-all-services.png[900,900]
 +
 . Name the VM *lab1-vm1*, choose the default IP Address *192.168.1.110* , and choose the *ssg-rhel7-role-standard* SCAP Profile from the drop down. Click on *Submit*. This will provision a Red Hat Enterprise Linux 7.5 VM in Red Hat Virtualization that is locked down to the *ssg-rhel7-role-standard* SCAP Profile.
 +
-image:images/lab1.1-order-service.png[400,400]
+image:images/lab1.1-order-service.png[600,600]
 +
 . From the Service Requests page, click on the *Refresh* button at the top until the service request shows *Approved*. Note that this default approval workflow can be customized.
 +
