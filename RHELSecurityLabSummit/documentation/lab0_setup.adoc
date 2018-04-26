@@ -2,13 +2,26 @@
 
 === Accessing your Summit Lab environment
 
-. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems. *Click on the link at the bottom of this page* to access your lab environment.
+. Open Firefox to The Red Hat Summit https://www.opentlc.com/guidgrabber/guidgrabber.cgi[GUID Grabber^] application in order to obtain your lab GUID.
+
+. For *Lab Code* select *L1036 - Defend Yourself using Built-in RHEL Security Technologies*.
++
+image:images/lab0-lablist.png[]
+
+. Enter the activation key provided by the lab instructor then click *Next*.
+
+. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.  It will be embedded in your lab environment's host names.
 +
 image:images/lab0-welcomescreen.png[1000,1000]
+
+. From the lab environment information page copy the hostname of the *Workstation* system it should be workstation-GUID.rhpds.opentlc.com where GUID matches your environment's guid.
+
+. Open a terminal window on your desktop environment and make sure you can SSH into the workstation host as you see below:
 +
-. From this page, you will be able to access all of the VMs that you will use in this lab. *Press the start button* at the top right to turn on all of your VMs. Notice that you have console access to all the VMs that you will use in this lab as well. If you'd rather use the terminal available on your laptop, feel free to use that instead to SSH into your VMs.
+[source, text]
+$ ssh workstation-GUID.rhpds.opentlc.com
 +
-image:images/lab0-welcomepower.png[1000,1000]
+NOTE: Replace GUID with your lab's GUID.
 
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP]
