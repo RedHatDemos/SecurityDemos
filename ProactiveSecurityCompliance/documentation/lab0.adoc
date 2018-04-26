@@ -9,11 +9,11 @@ Let’s log into the Red Hat Products that you will use in this lab so they are 
 image:images/lab0-labcode.png[]
 +
 . Enter the activation key provided by the lab instructor.
-. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems. *Click on the link at the bottom of this page* to access your lab environment.
+. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.
 +
 image:images/lab0-welcomescreen.png[1000,1000]
 +
-. From this page, you will be able to access all of the Red Hat Products that you will use in this lab. *Press the start button* at the top right to turn on all the Red Hat Product VMs. Then, *click on https* for all the Red Hat Products to access the UI. *Log into the UI of all the Red Hat Products* with *admin* as the Username and *r3dh4t1!* as the Password.
+. From this page, you will be able to access all of the Red Hat Products that you will use in this lab.  For each of the links on this page you can log into the UI with *admin* as the Username and *r3dh4t1!* as the Password.
 +
 image:images/lab0-login-rhproducts.png[1000,1000]
 
