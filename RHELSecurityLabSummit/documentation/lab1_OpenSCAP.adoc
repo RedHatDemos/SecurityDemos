@@ -8,14 +8,12 @@ OpenSCAP is a family of open source SCAP tools and content that help users creat
 OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this segment we will focus on one-off scanning to get started.
 
 === Prerequisites
-Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages:
+Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages on the "openscap.example.com" VM:
 
  # the tool that performs the scanning
  yum install openscap-scanner
  # project that brings in security policies we will load and test agains
  yum install scap-security-guide
- # GUI tool for scanning and content customization, a front-end for OpenSCAP
- yum install scap-workbench
  # we will need this later for Ansible based remediations
  yum install ansible
 
@@ -37,8 +35,13 @@ Verify a successful installation by running:
  CVRF Version: 1.1
  ...
 
+Furthermore, let us install SCAP Workbench on the main "workstation.example.com" VM:
+
+ # GUI tool for scanning and content customization, a front-end for OpenSCAP
+ yum install scap-workbench
+
 === Performing our first scan
-Let's see the compliance content provided by `scap-security-guide`:
+Switch to the "openscap" VM. Let's see the compliance content provided by `scap-security-guide`:
 
  $ rpm -ql scap-security-guide
  ...
@@ -64,15 +67,16 @@ Run the first baseline scan:
  # Let's store the results of the scan this time:
  # use --results-arf to get machine readable results archive
  # use --report to get human readable report (can also be generated from ARF after the scan)
- oscap xccdf eval --profile ospp-rhel7 --results-arf ~/arf.xml --report ~/report.html ./ssg-rhel7-ds.xml
+ oscap xccdf eval --profile ospp-rhel7 --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel7-ds.xml
 
 (optional) Generate HTML report separately:
 
- oscap xccdf generate report ~/arf.xml > ~/report.html
+ oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 
-Open the report using your web browser:
+Switch to the "workstation.example.com" VM, copy the report.html over there to view it in your web browser.
 
- firefox ~/report.html
+ scp root@openscap.example.com:/tmp/report.html /tmp/report.html
+ firefox /tmp/report.html
 
 === SCAP result / report terminology
 Rules can have several types of results but the most common ones are "pass" and "fail". Their meaning should be self-explanatory. Clicking on the rule title in the HTML report will bring up a pop-up dialog that let's you examine why exactly OpenSCAP failed or passed the machine. For example if it's testing file permissions on a list of files it will specify which files failed and what are their permission bits.
@@ -82,7 +86,7 @@ image::images/scap_report_pass.png[HTML report: A rule that is passing]
 image::images/scap_report_fail.png[HTML report: A rule that is failing]
 
 === Customizing existing content for our use-case
-Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
+Let us stay on the "workstation.example.com" VM. Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
 After Workbench starts click RHEL7 to open the compliance content for Red Hat Enterprise Linux 7.
 
 image::images/scap_workbench_opened.png[SCAP Workbench opened, profile selected]
@@ -96,9 +100,9 @@ Before going further it makes sense to run a test scan with the new profile we c
 You can save it to a tailoring file by selecting File->Save Customization.
 
 === Remediation possibilities
-Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology.
+Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! Please test before deploying. If you want to test remediations as part of this lab, perform them on the "openscap.example.com" VM to avoid modifying the workstation VM.
 
-There are two main approaches. One is to generate bash remediation script and run it on target machine(s).
+There are two main approaches to remediating. One is to generate bash remediation script and run it on target machine(s).
 
  oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash.sh
 
@@ -172,7 +176,7 @@ Exploring the playbook further you will see the tasks that set up the machine:
         - CJIS-5.10.4.1
 ....
 
-Let us run the playbook locally in check mode to see how it would change the machine to put it into compliance:
+Let us run the playbook locally in check mode to see how it would change the machine to put it into compliance. Make sure you run this on the "openscap.example.com" VM:
 
  ansible-playbook -i "localhost," -c local --check playbook.yml
 
