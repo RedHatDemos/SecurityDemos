@@ -106,13 +106,13 @@ image:images/lab4-nodenyexecution.png[400,400]
 . Back in CloudForms, browse to *Compute ->  Containers ->  Container Images* using the menu on the left side of the screen. You should now see two images when searching for *summit-php*. Click on the *latest* container image.
 +
 image:images/lab4-latestcontainerimage.png[600,600]
-
++
 NOTE: This will be the one with an Id that does NOT end in “45d". Everyone will have a unique image ID since you all built this image in your own environments.
 
 . Notice that the container image details, such as packages, OpenSCAP results, etc are already populated. This is because we assigned a control policy to our Openshift provider earlier in this lab exercise to automatically scan all newly discovered images.
 +
 image:images/lab4-compliant.png[400,400]
-
++
 NOTE: If yours is not populated yet, give it a couple of minutes to finish the scan and results collection.
 
 . Notice that this time, this container image passes the compliance check. Automated remediation of the same application, different version of PHP, and less vulnerabilities!
