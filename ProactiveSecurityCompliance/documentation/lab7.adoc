@@ -1,10 +1,14 @@
 == Lab 7: Reporting on the impact of the Meltdown and Spectre vulnerabilities across a hybrid environment
 
 === Goal of Lab 7
+In this lab, we will learn how to take advantage of reports to understand the impact of the Meltdown and Spectre vulnerabilities across a hybrid environment
 
-=== Lucy will complete this lab exercise documentation by the 9am EST 4/26/18 in time to smoke test our lab with the SAs
+=== Introduction
+Three vulnerabilities have been identified in fundamental layers of modern processors. Two of these vulnerabilities ( CVE-2017-5753 and CVE-2017-5715) have been branded together as “Spectre”, while one (CVE-2017-5754) has been branded as “Meltdown”.
+The vulnerabilities allow one process to improperly read the memory of another process or the operating system kernel. The attack can be executed by anyone person/acct/service that exists on a system to read any memory the attacker desires. Currently, the attack is not easy to execute, and takes a high degree of skill and sophistication.
+These vulnerabilities concern many CPU architectures and many of the operating systems that enable that hardware. Working with industry leaders, Red Hat has developed kernel security updates for products in our portfolio to address these vulnerabilities. We are working with our customers and partners to make these updates available, along with the information our customers need to quickly secure their physical systems, virtual images, and container-based deployments.
 
-
+=== More to be added shorly
 
 <<top>>
 

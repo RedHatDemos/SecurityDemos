@@ -1,13 +1,22 @@
 == Lab 8: Proactive Security and Automated Risk Management with Red Hat Insights
 
 === Goal of Lab 8
-The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. This lab assumes that you started all your Insights VMs, as instructed in Lab 0, which is necessary for Red Hat Insights to work properly.
+The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. This lab assumes that you started all your VMs, as instructed in Lab 0, which is necessary for Red Hat Insights to work properly.
+
+In this lab, we will focus only on the specific security features of Red Hat Insights.
 
 === Introduction
+Red Hat Insights was designed to proactively evaluate the security, performance, and stability of your Red Hat platforms by providing prescriptive analytics of your systems. Red Hat Insights helps move you from reactive to proactive systems management, delivers actionable intelligence, and increases visibility of infrastructure risks and the latest security threats. Operational analytics from Red Hat Insights empowers you to prevent downtime and avoid firefighting while responding faster to new risks.
 
-=== Lucy will complete this lab exercise documentation by the 9am EST 4/26/18 in time to smoke test our lab with the SAs
+Red Hat Insights recommendations are tailored for the individual system where risk is detected. This allows you to be certain that actions identified by Insights are validated and have a verified resolution for each detected risk, reducing false positives you may experience from critical risks identified by third-party security scanners. Red Hat Insights provides predictive analysis of security risk in your infrastructure based on a constantly evolving threat feed from Red Hat.
 
+Through analysis of Red Hat Insights metadata and curated knowledge based on over fifteen years of enterprise customer support, Red Hat is able to identify critical security vulnerabilities, statistically frequented risks, and known bad configurations. We scale this knowledge to our customers with Red Hat Insights reporting and alerts, allowing prediction of what will happen on a monitored system, why it will happen, and how to fix a problem before it can occur.
 
+Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, Red Hat Satellite, Red Hat CloudForms, and Ansible Tower by Red Hat.  Recommendations from Red Hat Insights are human-readable and in most cases can simply be copy and pasted into the terminal to resolve the issue. You may also automate remediation of hosts in your infrastructure with Red Hat Insights generated Ansible playbooks or Ansible Tower by Red Hat integration.
+
+=== Fixing the payload injection security issue in your system using Red Hat Insights from the Satellite UI
+
+=== More to be added shortly
 
 <<top>>
 
