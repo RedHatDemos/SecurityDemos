@@ -1,15 +1,15 @@
-== Lab 5: Automated OpenSCAP security scans and remediations at the push of a button and viewing SCAP compliance reports
+== Lab 5: Automated OpenSCAP security scans and remediations at the push of a button & viewing SCAP compliance reports
 
 === Goal of Lab 5
-The goal of this lab is to show the ability to execute OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms with the custom integration of Red Hat CloudForms with Red Hat Satellite and utilizing Red Hat Ansible Automation.
+The goal of this lab is to show the ability to execute OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms using Red Hat Ansible Automation, Red Hat Satellite, and Red Hat CloudForms.
 
-In this lab, you will see how you can leverage Red Hat Satellite's built-in OpenSCAP scanning and remediation capabilities by leveraging Red Hat Ansible Automation from Red Hat CloudForms. In this lab, you will launch the OpenSCAP scan and OpenSCAP remediate Ansible job templates by pressing custom buttons on a VM in Red Hat CloudForms.
+In this lab, you will see how you can leverage Red Hat Satellite's built-in OpenSCAP scanning and remediation capabilities in an automated fashion for a hybrid environment using Red Hat Ansible Automation from Red Hat CloudForms. In this lab, you will launch the OpenSCAP scans and remediations by pressing custom buttons on a VM in Red Hat CloudForms. The buttons will launch an automated workflow utilizing both Red Hat Ansible Automation and Red Hat CloudForms.
 
-You will also view reports in Red Hat CloudForms showing SCAP non-compliant and compliant VMs based on security compliance profiles. In this lab exercise, you will view these security compliance results reports as a security compliance officer/auditor. The security compliance officer/auditor was set up as a restricted, non-admin, user in Red Hat CloudForms. Specifically, this user was configured to only be able to create and view reports.
+You will also view reports in Red Hat CloudForms showing SCAP non-compliant and compliant VMs in a hybrid environment based on security compliance profiles. You will view these security compliance results reports as a security compliance officer/auditor. The security compliance officer/auditor is set up as a restricted, non-admin, user in Red Hat CloudForms. Specifically, this user is configured to only be able to create and view reports.
 
 
 === Introduction
-Red Hat CloudForms provides out-of-the-box integration with Red Hat Ansible Automation. As a result, with this integration, you can launch Ansible playbooks as part of your automation workflows in Red Hat CloudForms. For example, from Red Hat CloudForms, the Ansible Tower job templates can be executed as part of the provisioning or retirement state machines, from a button on a host/vm , or as an action on a control policy. You can also launch Ansible Tower job templates from the Red Hat CloudForms service catalog as a service item or as part of a service bundle.
+Red Hat CloudForms provides out-of-the-box integration with Red Hat Ansible Automation. As a result, with this integration, you can launch Ansible playbooks as part of your automation workflows in Red Hat CloudForms. For example, from Red Hat CloudForms, automated workflows can be executed, from a button on a host/vm , or as an action on a control policy. You can also launch Ansible automations from the Red Hat CloudForms service catalog as a service item or as part of a service bundle.
 
 This integration between Red Hat CloudForms and Red Hat Satellite allows you to have a central and automated way to do point in time security scans and remediations on a per-vm basis.
 Red Hat CloudForms has a robust reporting engine built into the product that allows you to create reports using any of the introspective data collected from your heterogeneous infrastructure. This data is stored either in an internal or external PostgreSQL database. You can use this collected data when creating reports , in control policies , or in automation workflows in Red Hat CloudForms.
@@ -17,9 +17,176 @@ Red Hat CloudForms has a robust reporting engine built into the product that all
 
 === OpenSCAP security scan at the push of a button
 
-. Utilizing the integrated OpenSCAP scanning capabilities in Satellite and automation workflows with Red Hat CloudForms and Red Hat Ansible Automation
+Utilizing the integrated OpenSCAP scanning capabilities in Satellite and automation workflows with Red Hat CloudForms and Red Hat Ansible Automation, we will execute push button, automated OpenSCAP scanning and remediations.
 
-=== Lucy will complete this lab exercise documentation by the 9am EST 4/26/18 in time to smoke test our lab with the SAs
+. Log into CloudForms with *admin* as the username and *r3dh4t1!* as the password.
+
+. Navigate to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
++
+image:images/lab0-infra-vms.png[500,500]
+
+. Click on the *lab5-vm1* VM. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
++
+image:images/lab5-clickvm.png[500,500]
+image:images/lab5-scapscan.png[400,400]
+
+. From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is a custom security policy profile that just checks to see if the AIDE package is installed on your system. Press *Submit*.
++
+image:images/lab5-scandialog.png[1000,1000]
++
+NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security policy profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
+
+. Now let's take a look at what is being executed behind the scenes. Navigate to *Services -> My Services*.
++
+image:images/lab5-servicesmyservices.png[400,400]
+. Click on the *Sat6SCAPScan* service and then click on the *Provisioning* tab to view the Ansible output.
++
+image:images/lab5-myservicesprovtab.png[600,600]
++
+. Press the refresh button periodically to refresh the Provisioning Ansible output.
++
+image:images/lab5-serviceresults.png[800,800]
++
+. Review the Ansible provisioning playbook output by scrolling down. Notice that the Ansible play recap shows no failures, which means that the Ansible provisioning playbook ran successfully.
++
+image:images/lab5-ansibleoutput.png[800,800]
+image:images/lab5-ansibleoutput2.png[800,800]
+
+=== Looking at the results of the automated OpenSCAP security scan
+
+. Now that the OpenSCAP scan completed successfully, let's take a look at some outputs of the scan in more detail. Navigate back to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
++
+image:images/lab0-infra-vms.png[500,500]
+
+. Click on the *lab5-vm1* VM.
++
+image:images/lab5-clickvm.png[500,500]
+
+. Scroll to the bottom of this page and notice the tags on this VM in the *Smart Management* section. Notice that there is now a tag named *SCAP_rhel7-custom: Non-compliant*. There is also a tag named *SCAP_RHEL7_PCI_DSS: Compliant*. This tag is from a previous successful OpenSCAP scan which checked this VM against the security technical controls of PCI-DSS.
++
+NOTE: Our automated OpenSCAP scanning worklow using Ansible automation has automatically tagged this VM upon OpenSCAP scan failure. That way, we can track OpenSCAP scan failures for reporting or other automated workflow purposes(such as automatically opening a ticket in a ticket system such as ServiceNow or Remedy).
+
+=== Creating and Viewing SCAP compliance reports
+
+. Now that our OpenSCAP scan completed successfully and we have tagged VMs that are marked as either Compliant or Non-Compliant against various security profiles, let's create and view SCAP compliance reports. We will do this as a restricted user, the security compliance officer/auditor.
+
++
+NOTE: Normally, the job of creating and viewing security compliance reports are done by a security compliance officer/auditor. This user is usually a restricted user and does not have full root level access to the systems like the admin.
+
+. Let's Log into CloudForms as this restricted user, the security compliance officer/auditor. Login with *security* as the username and *r3dh4t1!* as the password.
++
+NOTE: Notice that this user has very limited capabilities in Red Hat CloudForms compared to the admin. This security compliance officer/auditor can only view and create reports in Red Hat CloudForms. The admin has configured this user to have only this capability in CloudForms.
+
+. Navigate to *Reports* and click on the *OpenSCAP Scan(rhel7-custom)* report. Then press the *Queue* button at the top to create the report. Press the *refresh* button on the top left until the report finishes generating.
++
+image:images/lab5-reportqueue.png[1000,1000]
+
+. Now, click on the report and take a look at its output.
++
+image:images/lab5-reportsresults.png[1000,1000]
+
++
+NOTE: Notice that in this report you are seeing all the systems that were scanned against the OpenSCAP *rhel7-custom* security profile. This is a custom profile that just checks to see if the AIDE package is installed. In this report, of the systems that were scanned against this profile, you will see which of the systems are Compliant and Non-Compliant against the *rhel7-custom* security profile. In addition, you also see some other information CloudForms collected about these systems such as the IP addresses and Date Created.
+
+. Repeat the above steps and create a report for *OpenSCAP Scan (rhel7-pci-dss)* by pressing the *Queue* button.
+
+=== Automated remediation of SCAP compliance failures
+
+Now that the security compliance officer/auditor knows which systems are compliant and non-compliant to various profiles and has a report of the SCAP compliance scan findings, he can take this report to the admin. The admin will then fix the SCAP compliance failures.
+
+In this part of the lab exercise, let's imagine that the security compliance officer/auditor is particularly concerned about the failures reported in the *rhel7-custom* profile for a specific production system (in our example, that would be *lab5-vm1*).
+The security compliance officer/auditor has asked the admin to remediate the issue and ensure that the *lab5-vm1* system is compliant to the company custom security profile, which is the *rhel7-custom* profile.
+
+. Log into CloudForms with *admin* as the username and *r3dh4t1!* as the password.
+. First as admin, let's look at the SCAP compliance reports that the security compliance officer/auditor generated. Navigate to *Cloud Intel -> Reports*.
++
+image:images/lab5-cloudintelreports.png[500,500]
+
+. Notice that the OpenSCAP Scan Results reports are there for both *rhel7-custom* and *rhel7-pci-dss*.
++
+image:images/lab5-savedreports.png[1000,1000]
+
+. Click on the *OpenSCAP Scan Results (rhel7-custom Profile)* report. Notice that *lab5-vm1* is Non-Compliant to the rhel7-custom security profile.
++
+image:images/lab5-vmnoncompliant.png[1000,1000]
+
+. Now let's fix this issue. Before we do that, let's go into our *lab5-vm1* by SSH or via the console button on the main *Red Hat Summit Lab Information* webpage. In this step, we'll use SSH. SSH into the *lab5-vm1* VM. First, SSH into your workstation VM and then from there SSH into your *lab5-vm1* as root.
++
+[source]
+ssh lab-user@IP_ADDRESS_OF_YOUR_WORKSTATION_VM
+sudo -i
+ssh lab5-vm1.example.com
+
+. From here, find out if the AIDE package is installed on *lab5-vm1*. You will find that it is not since the rpm -qa aide command comes back empty.
++
+[source]
+rpm -qa aide
+
+. Now, let's execute automated remediation and make *lab5-vm1* compliant to the *rhel7-custom* security policy in a push button automated fashion. Navigate to the *lab5-vm1* VM by navigating to
+*Compute -> Infrastructure -> Virtual Machines.*
++
+image:images/lab0-infra-vms.png[500,500]
+
+. Click on the *lab5-vm1* VM. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
++
+image:images/lab5-clickvm.png[500,500]
+image:images/lab5-remediate.png[1000,1000]
+
+. From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is the custom security policy profile that just checks to see if the AIDE package is installed on your system. We will remediate *lab5-vm1* against this profile so that at the push of a button AIDE will get installed on this system. Press *Submit*.
++
+image:images/lab5-scapremediatedialog.png[1000,1000]
+
+. Now, go back to your terminal and do a rpm -qa aide and in a few minutes, you will notice that the AIDE package gets automatically installed.
+
++
+image:images/lab5-aide.png[400,400]
+
+. Now that the AIDE package is installed, we should now pass the OpenSCAP scan against the *rhel7-custom* security policy profile.
+Let's confirm.
+
+. Navigate to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
++
+image:images/lab0-infra-vms.png[500,500]
+
+. Click on the *lab5-vm1* VM. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
++
+image:images/lab5-clickvm.png[500,500]
+image:images/lab5-scapscan.png[400,400]
+
+. From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is a custom security policy profile that just checks to see if the AIDE package is installed on your system. Press *Submit*.
++
+image:images/lab5-scandialog.png[1000,1000]
++
+NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security policy profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
+
+. Now let's take a look at what is being executed behind the scenes. Navigate to *Services -> My Services*.
++
+image:images/lab5-servicesmyservices.png[400,400]
+. Click on the *Sat6SCAPScan* service and then click on the *Provisioning* tab to view the Ansible output.
++
+image:images/lab5-myservicesprovtab.png[600,600]
++
+. Press the refresh button periodically to refresh the Provisioning Ansible output.
++
+image:images/lab5-serviceresults.png[800,800]
++
+. Review the Ansible provisioning playbook output by scrolling down. Notice that the Ansible play recap shows no failures, which means that the Ansible provisioning playbook ran successfully.
++
+image:images/lab5-ansibleoutput.png[800,800]
+image:images/lab5-ansibleoutput2.png[800,800]
+
+. Now that the OpenSCAP scan completed successfully, let's take a look at some outputs of the scan in more detail. Navigate back to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
++
+image:images/lab0-infra-vms.png[500,500]
+
+. Click on the *lab5-vm1* VM.
++
+image:images/lab5-clickvm.png[500,500]
+
+. Scroll to the bottom of this page and notice the tags on this VM in the *Smart Management* section. Notice that the previous tag named *SCAP_rhel7-custom: Non-compliant* got updated to *SCAP_rhel7-custom: Compliant*.
+
+The *lab5-vm1* is now SCAP compliant to the *rhel7-custom* security policy profile. Now when the security compliance officer/auditor runs his reports , the *lab5-vm1* will report as Compliant and everyone is happy!
+
 
 
 <<top>>

@@ -13,7 +13,7 @@ As a result, users can easily provision a security compliant host using any of t
 === Lab 1.1 Provisioning a security compliant host at the push of a button using Red Hat CloudForms and Ansible Automation
 . Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password.
 
-. Navigate to Services -> Catalogs.
+. Navigate to *Services -> Catalogs*.
 +
 image:images/lab1.1-services-catalog.png[200,200]
 +
@@ -29,7 +29,7 @@ image:images/lab1.1-order-service.png[600,600]
 +
 image:images/lab1.1-services-requests.png[600,600]
 +
-. Navigate to Services -> My Services.
+. Navigate to *Services -> My Services*.
 +
 image:images/lab1-services-myservices.png[400,400]
 +
