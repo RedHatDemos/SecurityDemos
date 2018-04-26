@@ -18,12 +18,10 @@
 - name: Set policy_name
   set_fact:
     policy_name: "{{ lookup_policy_name_output.json.name }}"
-  when: verbose
 
 - name: Log policy_name
   debug:
     var: policy_name
-  when: verbose
 
 - name: Lookup compliance arf_reports for "{{ vm_hostname }}"
   uri:
