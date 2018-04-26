@@ -3,7 +3,12 @@
 === Logging into all the Red Hat Products
 Let’s log into the Red Hat Products that you will use in this lab so they are ready to use.
 
-. Open your web browser to https://www.opentlc.com/guidgrabber/guidgrabber.cgi[Guid Grabber^]
+. In a separate tab open your web browser to https://www.opentlc.com/guidgrabber/guidgrabber.cgi[Guid Grabber^]
+. For *Lab Code* select *L1034 - Implementing Proactive Security and Compliance Automation*.
++
+image:images/lab0-labcode.png[]
++
+. Enter the activation key provided by the lab instructor.
 . In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems. *Click on the link at the bottom of this page* to access your lab environment.
 +
 image:images/lab0-welcomescreen.png[1000,1000]
