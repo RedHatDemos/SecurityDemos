@@ -29,7 +29,7 @@ NOTE: Replace GUID with your lab's GUID.
 NOTE: It is recommended that you use Firefox for all of the labs.  You cannot use the Chrome web browser to access the Openstack Horizon UI since it will not accept its SSL certificate.
 
 === Turning on *some* of your VMs
-. Before starting the lab steps, you will need to turn on *some* (NOT all) of your VMs. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password.
+. Before starting the lab steps, you will need to turn on *some* (NOT all) of your VMs. Log into CloudForms (cfme-GUID.rhpds.opentlc.com) with *admin* as the Username and *r3dh4t1!* as the Password.
 
 . On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines.*
 +
