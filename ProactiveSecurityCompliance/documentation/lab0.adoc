@@ -3,26 +3,30 @@
 === Logging into all the Red Hat Products
 Let’s log into the Red Hat Products that you will use in this lab so they are ready to use.
 
-. In a separate tab open your web browser to The Red Hat Summit https://www.opentlc.com/guidgrabber/guidgrabber.cgi[Guid Grabber^] application.
+. Open Firefox to The Red Hat Summit https://www.opentlc.com/guidgrabber/guidgrabber.cgi[GUID Grabber^] application in order to obtain your lab GUID.
+
 . For *Lab Code* select *L1034 - Implementing Proactive Security and Compliance Automation*.
 +
 image:images/lab0-labcode.png[]
-+
-. Enter the activation key provided by the lab instructor.
-. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.
+
+. Enter the activation key provided by the lab instructor then click *Next*.
+
+. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.  It will be embedded in your lab environment's host names.
 +
 image:images/lab0-welcomescreen.png[1000,1000]
-+
-. From this page, you will be able to access all of the Red Hat Products that you will use in this lab.  For each of the links on this page you can log into the UI with *admin* as the Username and *r3dh4t1!* as the Password
-+
-NOTE: You cannot use the Chrome web browser to access the Openstack Horizon UI since it will never accept the SSL certificate. The default web browser on your Summit lab laptop is Firefox, so this is not a problem for the lab.
 
-. From this same page, copy the hostname of the *Workstation* system it should be workstation-GUID.rhpds.opentlc.com where GUID matches your environment's guid.
+. From the lab environment information page copy the hostname of the *Workstation* system it should be workstation-GUID.rhpds.opentlc.com where GUID matches your environment's guid.
 
-. Open a terminal window on your desktop environment and SSH into the workstation host:
+. Open a terminal window on your desktop environment and make sure you can SSH into the workstation host as you see below:
 +
 [source, text]
 $ ssh workstation-GUID.rhpds.opentlc.com
++
+NOTE: Replace GUID with your lab's GUID.
+
+. The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  Click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password.  
++
+NOTE: It is recommended that you use Firefox for all of the labs.  You cannot use the Chrome web browser to access the Openstack Horizon UI since it will not accept its SSL certificate.
 
 === Turning on *some* of your VMs
 . Before starting the lab steps, you will need to turn on *some* (NOT all) of your VMs. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password.
