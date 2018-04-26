@@ -185,9 +185,19 @@ image:images/lab5-clickvm.png[500,500]
 
 . Scroll to the bottom of this page and notice the tags on this VM in the *Smart Management* section. Notice that the previous tag named *SCAP_rhel7-custom: Non-compliant* got updated to *SCAP_rhel7-custom: Compliant*.
 
-The *lab5-vm1* is now SCAP compliant to the *rhel7-custom* security policy profile. Now when the security compliance officer/auditor runs his reports , the *lab5-vm1* will report as Compliant and everyone is happy!
+The *lab5-vm1* is now SCAP compliant to the *rhel7-custom* security policy profile.
 
+. Log back into CloudForms as the security officer/auditor with *security* as the username and *r3dh4t1!* as the password.
 
+. Navigate to *Reports* and click on the *OpenSCAP Scan(rhel7-custom)* report. Then press the *Queue* button at the top to create the report. Press the *refresh* button on the top left until the report finishes generating.
++
+image:images/lab5-reportqueue.png[1000,1000]
+
+. Now, click on the report and take a look at its output.
++
+image:images/lab5-reportsresults.png[1000,1000]
+
+Notice that now the *lab5-vm1* VM is *Compliant* to the *rhel7-custom* security policy profile! 
 
 <<top>>
 
