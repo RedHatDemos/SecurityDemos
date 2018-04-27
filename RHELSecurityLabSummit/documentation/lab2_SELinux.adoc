@@ -20,7 +20,7 @@ As an enterprise administrator I have an environment with Apache webservers wher
 These web files are accessible using tcp/80 and tcp/7070 ports on each web server.
 
  * selinux2.example.com:80 (default)
- * selinunx2.example.com:7070 (custom)
+ * selinux2.example.com:7070 (custom)
 
 SELinux is disabled for all web servers by default. I want to turn SELinux on for all web servers without breaking any functionality and use linux-system-roles/selinux ansible role for it.
 
@@ -240,7 +240,7 @@ The playbook uses linux-system-roles/selinux ansible role.
 
 Note: All code lines are append into the _vars_ section in the _setup_selinux.yml_ ansible playbook.
 
-Switch SELinux to Permissive mode.
+Switch SELinux to Enforcing mode.
 
     SELinux_type: targeted
     SELinux_mode: enforcing
@@ -349,13 +349,20 @@ The lab exercise is split into three steps:
 . Confine Linux root users
 . Revert script
 
+== Configuration
+
+Make sure that the "revert script" from previous workshop was executed, even if you didn't do the workshop.
+
+    # ansible-playbook -i inventory -u root revert-all.yml
+
 == Confine regular Linux users
 
 All actions are performed on the _selinux2_ host which is a RHEL-7.6 Beta installation.
 
-Log into the _selinux2_ host system:
+Log into the _selinux1_ host system and then to _selinux2_ system:
 
-    # ssh root@selinux2
+    # ssh root@selinux1
+    [root@selinux1 ~]# ssh root@selinux2
 
 Linux users can be assigned to SELinux users using semanage login tool. By default users are mapped to _unconfined_u_:
 
