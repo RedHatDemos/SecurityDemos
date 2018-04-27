@@ -191,7 +191,7 @@ image:images/lab2-viewfullreport.png[1000,1000]
 +
 image:images/lab2-moredetails.png[500,500]
 
-. *Click the back arrow* on your web browser to go back to the previous report summary page. *Click the back arrow* again on your web browser to get back to the page with the full list of Compliance Reports.
+. Click the *Back* button in the top right menu (see below) to get back to the page with the full list of Compliance Reports.
 +
 image:images/lab2-backarrowreport.png[500,500]
 
