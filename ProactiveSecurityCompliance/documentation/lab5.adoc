@@ -32,7 +32,7 @@ image:images/lab5-scapscan.png[400,400]
 
 . From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is a custom security policy profile that just checks to see if the AIDE package is installed on your system. Press *Submit*.
 +
-image:images/lab5-scandialog.png[1000,1000]
+image:images/lab5.1-scandialog.png[1000,1000]
 +
 NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security policy profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
 
