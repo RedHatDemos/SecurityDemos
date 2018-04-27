@@ -75,7 +75,7 @@ NOTE: Normally, the job of creating and viewing security compliance reports are 
 
 . Let's Log into CloudForms as this restricted user, the security compliance officer/auditor. Login with *security* as the username and *r3dh4t1!* as the password.
 +
-NOTE: Notice that this user has very limited capabilities in Red Hat CloudForms compared to the admin. This security compliance officer/auditor can only view and create reports in Red Hat CloudForms. The admin has configured this user to have only this capability in CloudForms.
+NOTE: Notice that this user has very limited capabilities in Red Hat CloudForms compared to the admin. This security compliance officer/auditor can only view and create reports and scan machines in Red Hat CloudForms. The admin has configured this user to have only this capability in CloudForms.
 
 . Navigate to *Reports* and click on the *OpenSCAP Scan(rhel7-custom)* report. Then press the *Queue* button at the top to create the report. Press the *refresh* button on the top left until the report finishes generating.
 +
@@ -197,7 +197,7 @@ image:images/lab5-reportqueue.png[1000,1000]
 +
 image:images/lab5-reportsresults.png[1000,1000]
 
-Notice that now the *lab5-vm1* VM is *Compliant* to the *rhel7-custom* security policy profile! 
+Notice that now the *lab5-vm1* VM is *Compliant* to the *rhel7-custom* security policy profile!
 
 <<top>>
 
