@@ -23,9 +23,9 @@ image:images/lab3.1-control-explorer.png[200,200]
 . Navigate to *Policy Profiles -> Lab 3.1 Enforce-AIDE -> Lab 3.1 Enforce AIDE Package*.
 +
 image:images/lab3.1-control-policy.png[600,600]
-
-This control policy dictates that when a VM is powered on, install the AIDE package.
-
++
+NOTE: This control policy dictates that when a VM is powered on, install the AIDE package.
++
 . Click on this control policy by clicking on the event action that says *Lab 3.1 Yum Install Aide*.
 +
 image:images/lab3.1-clickaction.png[600,600]
