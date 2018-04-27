@@ -36,7 +36,7 @@ image:images/lab2-scappolicies.png[1000,1000]
 +
 NOTE: Customized policies named *rhel7-custom* has already been uploaded for you. The *rhel7-custom* compliance policy is a simple  policy that just checks to see if the AIDE package is installed.
 
-. Now, let's turn on our hosts. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password. On the left menus, navigate to *Compute → Infrastructure → Virtual Machines*.
+. Now, let's power on our hosts. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password. On the left menus, navigate to *Compute → Infrastructure → Virtual Machines*.
 +
 image:images/lab0-startingvms.png[500,500]
 
