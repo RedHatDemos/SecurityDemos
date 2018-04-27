@@ -41,6 +41,9 @@ NOTE: Customized policies named *rhel7-custom* has already been uploaded for you
 image:images/lab0-startingvms.png[500,500]
 
 . Click the *VMs* accordion on the left.
++
+image:images/lab2-vmsaccordion.png[500,500]
+
 . Put a checkbox next to both *lab2-vm1* and *lab2-vm2* by clicking on the top left of both of these VMs.
 +
 image:images/lab2-vmcheckbox.png[300,300]
