@@ -195,7 +195,7 @@ image:images/lab2-moredetails.png[500,500]
 +
 image:images/lab2-backarrowreport.png[1000,1000]
 
-. Now, Click on the report for the *rhel7-custom* compliance policy by clicking the link in the second *Reported At* column.
+. Look for the report that has *rhel7-custom* in the Policy column and click the link in the *Reported At* column which should say how long ago the report was created.
 +
 image:images/lab2-reports-rhel7-custom.png[1000,1000]
 
