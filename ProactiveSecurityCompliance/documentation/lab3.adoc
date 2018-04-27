@@ -65,16 +65,31 @@ image:images/lab3.1-vm-ipaddress.png[400,400]
 image:images/lab2-workstationconsole.png[1000,1000]
 
 . Login to your workstation system with *lab-user* as the username and *r3dh4t1!* as your password. Now, as root, log into the *lab3-vm1.example.com* host using its IP address(192.168.1.171) and *r3dh4t1!* as the password.
-
- [lab-user@workstation-repl ~]$ sudo -i
- [root@workstation-repl ~]# ssh root@192.168.1.171
-
+. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
++
+[source]
+----
+[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+----
++
+. Become *root* and then log into the *lab2-vm1.example.com* host.
++
+[source]
+----
+Warning: Permanently added 'workstation-GUID.rhpds.opentlc.com,X.X.X.X' (ECDSA) to the list of known hosts.
+Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh root@192.168.1.171
+----
++
 . Once logged in check to see if the *AIDE* package is installed.
-
- [root@lab3-vm1 ~]# rpm -qa --last aide
- aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
-
-. Log out of CloudForms
+[source]
+----
+[root@lab3-vm1 ~]# rpm -qa --last aide
+aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
+----
++
+. Log out of the ssh session as well as CloudForms.
 
 
 === Lab 3.2 Using Red Hat CloudForms compliance policy to determine if an OpenStack instance is vulnerable to the Meltdown and Spectre vulnerabilities
