@@ -19,13 +19,13 @@ Red Hat Ansible Automation is great for security automation because it is agentl
 . Navigate to *Control -> Explorer*.
 +
 image:images/lab3.1-control-explorer.png[200,200]
-+
+
 . Navigate to *Policy Profiles -> Lab 3.1 Enforce-AIDE -> Lab 3.1 Enforce AIDE Package*.
 +
 image:images/lab3.1-control-policy.png[600,600]
 +
 NOTE: This control policy dictates that when a VM is powered on, install the AIDE package.
-+
+
 . Click on this control policy by clicking on the event action that says *Lab 3.1 Yum Install Aide*.
 +
 image:images/lab3.1-clickaction.png[600,600]
@@ -37,41 +37,41 @@ image:images/lab3.1-invokecustomautomation.png[400,400]
 . Navigate to Services -> Workloads
 +
 image:images/lab3.1-services-workloads.png[400,400]
-+
+
 . Click on *lab3-vm1* which will take you to the VM summary page.
 +
 image:images/lab3.1-clickonvm.png[500,500]
 image:images/lab3.1-vmsummary.png[500,500]
 
-+
 . Click on *Policy -> Manage Policies*
 +
 image:images/lab3.1-policy-manage-policies.png[400,400]
-+
+
 . Verify that the Lab 3.1 control policy is assigned and click on *Cancel* to exit.
 +
 image:images/lab3.1-policy-assignment.png[600,600]
-+
+
 . From the VM summary page power on the VM. This will trigger the control policy to execute an Ansible playbook to install the AIDE package. Note that it can take a minute or so for the package to be installed.
 +
 image:images/lab3.1-power-on.png[200,200]
-+
+
 . Note the IP address for *lab-vm1*.
 +
 image:images/lab3.1-vm-ipaddress.png[400,400]
-+
+
 . Open the console for your workstation system by clicking on the console button of your workstation system from the *Red Hat Summit Lab Information* webpage that has all your lab environment's power controls and consoles.
 +
 image:images/lab2-workstationconsole.png[1000,1000]
 
 . Login to your workstation system with *lab-user* as the username and *r3dh4t1!* as your password. Now, as root, log into the *lab3-vm1.example.com* host using its IP address(192.168.1.171) and *r3dh4t1!* as the password.
+
 . If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 ----
 [lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
 ----
-+
+
 . Become *root* and then log into the *lab2-vm1.example.com* host.
 +
 [source]
@@ -81,14 +81,14 @@ Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
 [lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]# ssh root@192.168.1.171
 ----
-+
+
 . Once logged in check to see if the *AIDE* package is installed.
 [source]
 ----
 [root@lab3-vm1 ~]# rpm -qa --last aide
 aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
 ----
-+
+
 . Log out of the ssh session as well as CloudForms.
 
 
