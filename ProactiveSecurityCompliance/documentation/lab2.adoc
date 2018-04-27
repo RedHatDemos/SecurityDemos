@@ -149,11 +149,11 @@ image:images/lab2-openscapscan.png[1000,1000]
 +
 image:images/lab2-jobinvocation.png[1000,1000]
 
-. Click on the *Hosts* tab. Wait for the *Status* column to say *success*. Once the *Status* column says *success*, click on *lab2-vm1.example.com* in the *Hosts* column.
+. Click on the *Hosts* tab. Click on *lab2-vm1.example.com* in the *Hosts* column.
 +
 image:images/lab2-hostsuccess.png[1000,1000]
 
- . Here you can see the output from the successful run with *Exit status: 0*. This is the command line output from the client itself and can be useful for debugging purposes in the event the job fails.
+ . Here you can see the command line output from the running process.  Scroll down and follow the output until you see *Exit status: 0*. This output can be useful for debugging purposes in the event the job fails.
 Notice in this output that the results of the SCAP compliance scans are uploaded and the reports of the scans will be automatically created for you.
 +
 image:images/lab2-exitstatus0.png[1000,1000]
