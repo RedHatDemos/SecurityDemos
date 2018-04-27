@@ -83,6 +83,7 @@ Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
 ----
 
 . Once logged in check to see if the *AIDE* package is installed.
++
 [source]
 ----
 [root@lab3-vm1 ~]# rpm -qa --last aide
