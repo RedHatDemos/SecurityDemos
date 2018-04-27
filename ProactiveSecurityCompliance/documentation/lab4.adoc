@@ -115,7 +115,7 @@ NOTE: This will be the one with an Id that does NOT end in “45d". Everyone wil
 +
 image:images/lab4-compliant.png[400,400]
 +
-NOTE: If yours is not populated yet, give it a couple of minutes to finish the scan and results collection.
+NOTE: If yours is not populated yet, give it a couple of minutes to finish the scan and results collection. Use your browser refresh button to refresh the view.
 
 . Notice that this time, this container image passes the compliance check. Automated remediation of the same application, different version of PHP, and less vulnerabilities!
 +
