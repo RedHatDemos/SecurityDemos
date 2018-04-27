@@ -11,7 +11,7 @@ In this lab exercise, we will execute a custom provisioning service in the Red H
 As a result, users can easily provision a security compliant host using any of the provided SCAP security profiles in Red Hat Enterprise Linux 7.5. Users also have the ability to use custom security profiles to lock down a provisioned system against your specific security controls. You can easily create custom modified security profiles using SCAP workbench (which is also provided as part of Red Hat Enterprise Linux).
 
 === Lab 1.1 Provisioning a security compliant host at the push of a button using Red Hat CloudForms and Ansible Automation
-. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password.
+. On the CloudForms appliance (cfme-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
 . Navigate to *Services -> Catalogs*.
 +
