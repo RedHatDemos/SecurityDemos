@@ -59,7 +59,7 @@ image:images/lab2-vmon.png[300,300]
 === Creating a SCAP compliance policy for a host
 Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
 
-. Navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
+. Go back to the Red Hat Satellite server UI and navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
 +
 image:images/lab2-newcompliancepolicy.png[1000,1000]
 +
