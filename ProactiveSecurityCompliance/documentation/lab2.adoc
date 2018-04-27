@@ -201,11 +201,15 @@ image:images/lab2-reports-rhel7-custom.png[1000,1000]
 
 . Notice that the *rhel7-custom* compliance policy only checks whether or not the AIDE package is installed. You can see from the report for the *rhel7-custom* policy that this compliance check failed. Therefore, the AIDE package is not installed on this host (lab2-vm1.example.com).
 
-. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well. *Click the Back button* from the top right of the Satellite UI. You are now back at the page with the full list of Compliance Reports.
+. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well. 
 +
 image:images/lab2-downloadxml.png[1000,1000]
 
-. Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. *Type compliance_failed > 0 and press Search.* This will find any compliance report that have greater than 0 compliance failures.
+. Click the *Back* button in the top right menu (see below) to get back to the page with the full list of Compliance Reports.
++
+image:images/lab2-backarrowreport.png[1000,1000]
+
+. Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. In the search field enter *compliance_failed > 0* then click *Search*. This will find any compliance report that have greater than 0 compliance failures.
 +
 image:images/lab2-compliancefailedfilter.png[1000,1000]
 
