@@ -48,7 +48,7 @@ image:images/lab2-vmsaccordion.png[500,500]
 +
 image:images/lab2-vmcheckbox.png[300,300]
 
-. Turn on both of these VMs by clicking on *Power → Power On* at the top.
+. Turn on both of these VMs by clicking on *Power → Power On* at the top.  Click *OK* when prompted.
 +
 image:images/lab2-vmon.png[300,300]
 
