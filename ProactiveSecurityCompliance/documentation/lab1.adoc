@@ -37,7 +37,7 @@ image:images/lab1-services-myservices.png[400,400]
 +
 image:images/lab1.1-myservice.png[600,600]
 +
-. Press the refresh button periodically to refresh the Provisioning Ansible output.
+. Press the refresh button periodically to refresh the Provisioning Ansible output. Note that after clicking on refresh you will need to click on the *Provisioning* tab to view the Ansible output.
 +
 image:images/lab1.1-service-results.png[400,400]
 +
