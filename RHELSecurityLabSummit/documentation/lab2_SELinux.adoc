@@ -26,7 +26,7 @@ SELinux is disabled for all web servers by default. I want to turn SELinux on fo
 
 === Implementation
 
-The SELinux part of the lab environment consists from three machines
+The SELinux part of the lab environment consists from three machines (needs to be started in lab environment)
 
  * selinux1, selinux1.example.com (RHEL-7 admin host)
  * selinux2, selinux2.example.com (RHEL-7 host)
@@ -82,6 +82,11 @@ Ansible script will pass all listed servers in the _inventory_ file and will sen
 
 	selinux2.example.com | SUCCESS => {
         	"changed": false,
+	        "ping": "pong"
+	}
+
+    selinux3.example.com | SUCCESS => {
+        "changed": false,
 	        "ping": "pong"
 	}
 

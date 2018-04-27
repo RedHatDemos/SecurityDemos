@@ -24,29 +24,42 @@ The default SCAP content provided with the OpenSCAP components of Satellite 6 de
 
 When you install the SCAP components in Satellite as defined in the link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.3/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-security_compliance_management/[Administering Red Hat Satellite Guide], all of the Red Hat default content will show up in Satellite so no extra steps are necessary to add the SCAP content to Satellite.  But if you had customized content that you wrote yourself or if you have a modified policy and you wanted to upload that modified version , you can do that in the Satellite UI under *Hosts → SCAP contents*.
 
+. On the Red Hat Satellite server (sat6-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 . Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
 +
 image:images/lab2-scapcontents.png[1000,1000]
 +
-NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*. In addition, customized content named *rhel7-custom* has also been uploaded here. The *rhel7-custom* compliance policy is a simple compliance policy that just checks to see if the AIDE package is installed.
+NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*. 
+. Take a look at the SCAP policies by navigating to *Hosts → Policies*.
++
+image:images/lab2-scappolicies.png[1000,1000]
++
+NOTE: Customized policies named *rhel7-custom* has already been uploaded for you. The *rhel7-custom* compliance policy is a simple  policy that just checks to see if the AIDE package is installed.
 
-. Now, let's turn on our hosts. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password. On the left menus, navigate to *Compute → Infrastructure → Virtual Machines*.
+. Now, let's power on our VMs. On the CloudForms appliance (cfme-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). On the left side menu, navigate to *Compute → Infrastructure → Virtual Machines*.
 +
 image:images/lab0-startingvms.png[500,500]
 
 . Click the *VMs* accordion on the left.
++
+image:images/lab2-vmsaccordion.png[500,500]
+
 . Put a checkbox next to both *lab2-vm1* and *lab2-vm2* by clicking on the top left of both of these VMs.
 +
 image:images/lab2-vmcheckbox.png[300,300]
++
+image:images/lab2-vmlist.png[300,300]
++
+NOTE: Depending on how your view is configured, either one of the above examples should apply.
 
-. Turn on both of these VMs by clicking on *Power → Power On* at the top.
+. Turn on both of these VMs by clicking on *Power → Power On* at the top.  Click *OK* when prompted.
 +
 image:images/lab2-vmon.png[300,300]
 
 === Creating a SCAP compliance policy for a host
 Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
 
-. Navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
+. Go back to the Red Hat Satellite server UI and navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
 +
 image:images/lab2-newcompliancepolicy.png[1000,1000]
 +
@@ -117,6 +130,10 @@ image:images/lab2-puppet.png[1000,10000]
 +
 NOTE: This is the equivalent to running puppet agent --test. This will ensure that we have the latest updates to the compliance policies. This will also ensure that we set up all the SCAP components, which are delivered via the puppet agent.  Satellite provides a puppet module and a means for the puppet module to set up all the SCAP components. Normally, in production, the puppet agent run automatically occurs within 30 mins so the puppet agent --test is not necessary. We are just doing this in the lab to avoid waiting 30 mins for the puppet agent to run.
 
+. Wait for the process to complete with a green circle as you see here:
++
+image:images/lab2-successcircle1.png[1000,1000]
+
 . Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*.
 Navigate to *Hosts -> All hosts* again. Then, put a check mark next to *lab2-vm1.example.com*. At the top right, navigate to *Select Action -> Schedule Remote Job*.
 +
@@ -132,16 +149,18 @@ image:images/lab2-openscapscan.png[1000,1000]
 +
 image:images/lab2-jobinvocation.png[1000,1000]
 
-. Click on the *Hosts* tab. Wait for the *Status* column to say *success*. Once the *Status* column says *success*, click on *lab2-vm1.example.com* in the *Hosts* column.
+. Click on the *Hosts* tab. Click on *lab2-vm1.example.com* in the *Hosts* column.
 +
 image:images/lab2-hostsuccess.png[1000,1000]
 
- . Here you can see the output from the successful run with *Exit status: 0*. This is the command line output from the client itself and can be useful for debugging purposes in the event the job fails.
+ . Here you can see the command line output from the running process.  Scroll down and follow the output until you see *Exit status: 0*. This output can be useful for debugging purposes in the event the job fails.
 Notice in this output that the results of the SCAP compliance scans are uploaded and the reports of the scans will be automatically created for you.
 +
 image:images/lab2-exitstatus0.png[1000,1000]
 
-. Click on the *Back to Job* button at the top right.
+. At the bottom right of the command line output window click the *Scroll to top* link.
+
+. When scrolled back to the top, click on the *Back to Job* button at the top right.
 +
 image:images/lab2-backtojob.png[1000,1000]
 
@@ -158,7 +177,7 @@ image:images/lab2-hostreports.png[600,600]
 +
 image:images/lab2-5scapreportsresults.png[1000,1000]
 
-. Click on the report for the *RHEL7_Standard Policy* by clicking the link in the second *Reported At* column.
+. Look for the report that has *RHEL7_Standard* in the Policy column and click the link in the *Reported At* column which should say how long ago the report was created.
 +
 image:images/lab2-reportedat.png[1000,1000]
 
@@ -169,38 +188,49 @@ image:images/lab2-reportedat.png[1000,1000]
 image:images/lab2-viewfullreport.png[1000,1000]
 
 . Glance through this report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for a deeper drill down.
-
-. *Click the back arrow* on your web browser to go back to the previous report summary page. *Click the back arrow* again on your web browser to get back to the page with the full list of Compliance Reports.
 +
-image:images/lab2-backarrowreport.png[500,500]
+image:images/lab2-moredetails.png[500,500]
 
-. Now, Click on the report for the *rhel7-custom* compliance policy by clicking the link in the second *Reported At* column.
+. Click the *Back* button in the top right menu (see below) to get back to the page with the full list of Compliance Reports.
++
+image:images/lab2-backarrowreport.png[1000,1000]
+
+. Look for the report that has *rhel7-custom* in the Policy column and click the link in the *Reported At* column which should say how long ago the report was created.
 +
 image:images/lab2-reports-rhel7-custom.png[1000,1000]
 
 . Notice that the *rhel7-custom* compliance policy only checks whether or not the AIDE package is installed. You can see from the report for the *rhel7-custom* policy that this compliance check failed. Therefore, the AIDE package is not installed on this host (lab2-vm1.example.com).
 
-. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well. *Click the Back button* from the top right of the Satellite UI. You are now back at the page with the full list of Compliance Reports.
+. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well. 
 +
 image:images/lab2-downloadxml.png[1000,1000]
 
-. Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. *Type compliance_failed > 0 and press Search.* This will find any compliance report that have greater than 0 compliance failures.
+. Click the *Back* button in the top right menu (see below) to get back to the page with the full list of Compliance Reports.
++
+image:images/lab2-backarrowreport.png[1000,1000]
+
+. Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. In the search field enter *compliance_failed > 0* then click *Search*. This will find any compliance report that have greater than 0 compliance failures.
 +
 image:images/lab2-compliancefailedfilter.png[1000,1000]
 
 === Fixing a specific OpenSCAP scan failure
 . Now let's fix the OpenSCAP scan failure from the *rhel7-custom* compliance policy. Remember that this compliance check failed since the AIDE package is not installed on the *lab2-vm1.example.com* host. Let's fix this OpenSCAP scan failure by installing the AIDE package on the *lab2-vm1.example.com* host.
 
-. Open the console for your workstation system by clicking on the console button of your workstation system from the *Red Hat Summit Lab Information* webpage that has all your lab environment's power controls and consoles.
-+
-image:images/lab2-workstationconsole.png[1000,1000]
-
-. Login to your workstation system with *lab-user* as the username and *r3dh4t1!* as your password. Now, as root, log into the *lab2-vm1.example.com* host.
+. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 ----
-$ sudo -i
-# ssh lab2-vm1.example.com
+[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+----
+
+. Become *root* and then log into the *lab2-vm1.example.com* host.
++
+[source]
+----
+Warning: Permanently added 'workstation-GUID.rhpds.opentlc.com,X.X.X.X' (ECDSA) to the list of known hosts.
+Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh lab2-vm1.example.com
 ----
 
 . Confirm that the AIDE package is not installed.

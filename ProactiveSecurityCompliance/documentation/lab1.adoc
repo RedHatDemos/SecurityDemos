@@ -11,7 +11,7 @@ In this lab exercise, we will execute a custom provisioning service in the Red H
 As a result, users can easily provision a security compliant host using any of the provided SCAP security profiles in Red Hat Enterprise Linux 7.5. Users also have the ability to use custom security profiles to lock down a provisioned system against your specific security controls. You can easily create custom modified security profiles using SCAP workbench (which is also provided as part of Red Hat Enterprise Linux).
 
 === Lab 1.1 Provisioning a security compliant host at the push of a button using Red Hat CloudForms and Ansible Automation
-. Log into CloudForms with *admin* as the Username and *r3dh4t1!* as the Password.
+. On the CloudForms appliance (cfme-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
 . Navigate to *Services -> Catalogs*.
 +
@@ -41,9 +41,11 @@ image:images/lab1.1-myservice.png[600,600]
 +
 image:images/lab1.1-service-results.png[400,400]
 +
-. Review the Ansible provisioning playbook output by scrolling down. Notice that the Ansible play recap shows no failures, which means that the Ansible provisioning playbook ran successfully.
+. Review the Ansible provisioning playbook output by scrolling all the way down. Notice that the Ansible *PLAY RECAP* shows no failures, which means that the Ansible provisioning playbook ran successfully.
 +
 image:images/lab1.1-ansible-output.png[400,400]
++
+NOTE: You may see something similar to `FAILED - RETRYING: Wait for asynchronous job to complete (100 retries left).` under the *TASK* sections.  This is a retry, not a catastrophic failure, and is expected.
 +
 . Go back to the top of the screen and click on the *Details* tab. Then click on your newly provisioned *lab1-vm1* VM.
 +
