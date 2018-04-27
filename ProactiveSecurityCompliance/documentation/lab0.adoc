@@ -20,7 +20,7 @@ image:images/lab0-welcomescreen.png[1000,1000]
 . Open a terminal window on your desktop environment and make sure you can SSH into the workstation host as you see below:
 +
 [source, text]
-$ ssh workstation-GUID.rhpds.opentlc.com
+[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
 +
 NOTE: Replace GUID with your lab's GUID.
 
