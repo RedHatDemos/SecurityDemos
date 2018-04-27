@@ -96,6 +96,8 @@ image:images/ocp-ss18.png[600,600]
 image:images/lab4-overview.png[400,400]
 image:images/ocp-ss19.png[600,600]
 +
+NOTE: This may take a couple of minutes as your new image automatically builds and deploys. The overview tab will automatically updated as the status changes.
+
 . In the *Builds ->  Images* menu on the left, select the *summit-php* image stream and click on the *latest* tag again. Scroll down and click on *Show Annotations* and you’ll see there is no deny-execution assigned to this image anymore.
 +
 image:images/lab4-buildsimages.png[400,400]
