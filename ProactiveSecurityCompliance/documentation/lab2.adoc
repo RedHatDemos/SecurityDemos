@@ -193,7 +193,7 @@ image:images/lab2-moredetails.png[500,500]
 
 . Click the *Back* button in the top right menu (see below) to get back to the page with the full list of Compliance Reports.
 +
-image:images/lab2-backarrowreport.png[500,500]
+image:images/lab2-backarrowreport.png[1000,1000]
 
 . Now, Click on the report for the *rhel7-custom* compliance policy by clicking the link in the second *Reported At* column.
 +
