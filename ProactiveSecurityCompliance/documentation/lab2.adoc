@@ -216,16 +216,21 @@ image:images/lab2-compliancefailedfilter.png[1000,1000]
 === Fixing a specific OpenSCAP scan failure
 . Now let's fix the OpenSCAP scan failure from the *rhel7-custom* compliance policy. Remember that this compliance check failed since the AIDE package is not installed on the *lab2-vm1.example.com* host. Let's fix this OpenSCAP scan failure by installing the AIDE package on the *lab2-vm1.example.com* host.
 
-. Open the console for your workstation system by clicking on the console button of your workstation system from the *Red Hat Summit Lab Information* webpage that has all your lab environment's power controls and consoles.
-+
-image:images/lab2-workstationconsole.png[1000,1000]
-
-. Login to your workstation system with *lab-user* as the username and *r3dh4t1!* as your password. Now, as root, log into the *lab2-vm1.example.com* host.
+. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 ----
-$ sudo -i
-# ssh lab2-vm1.example.com
+[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+----
+
+. Become *root* and then log into the *lab2-vm1.example.com* host.
++
+[source]
+----
+Warning: Permanently added 'workstation-GUID.rhpds.opentlc.com,X.X.X.X' (ECDSA) to the list of known hosts.
+Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh lab2-vm1.example.com
 ----
 
 . Confirm that the AIDE package is not installed.
