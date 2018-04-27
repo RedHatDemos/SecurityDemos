@@ -45,7 +45,7 @@ image:images/lab1.1-service-results.png[400,400]
 +
 image:images/lab1.1-ansible-output.png[400,400]
 +
-NOTE: You may see something similar to `FAILED - RETRYING: Wait for asynchronous job to complete (100 retries left).` under the *TASK* sections.  This is a retry not necescarily a catastrophic failure and is expected.
+NOTE: You may see something similar to `FAILED - RETRYING: Wait for asynchronous job to complete (100 retries left).` under the *TASK* sections.  This is a retry, not a catastrophic failure, and is expected.
 +
 . Go back to the top of the screen and click on the *Details* tab. Then click on your newly provisioned *lab1-vm1* VM.
 +
