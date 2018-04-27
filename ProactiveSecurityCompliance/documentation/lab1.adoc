@@ -41,9 +41,11 @@ image:images/lab1.1-myservice.png[600,600]
 +
 image:images/lab1.1-service-results.png[400,400]
 +
-. Review the Ansible provisioning playbook output by scrolling down. Notice that the Ansible play recap shows no failures, which means that the Ansible provisioning playbook ran successfully.
+. Review the Ansible provisioning playbook output by scrolling all the way down. Notice that the Ansible *PLAY RECAP* shows no failures, which means that the Ansible provisioning playbook ran successfully.
 +
 image:images/lab1.1-ansible-output.png[400,400]
++
+NOTE: You may see something similar to `FAILED - RETRYING: Wait for asynchronous job to complete (100 retries left).` under the *TASK* sections.  This is a retry not necescarily a catastrophic failure and is expected.
 +
 . Go back to the top of the screen and click on the *Details* tab. Then click on your newly provisioned *lab1-vm1* VM.
 +
