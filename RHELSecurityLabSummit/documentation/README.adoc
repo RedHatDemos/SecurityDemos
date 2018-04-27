@@ -5,7 +5,7 @@ Lucy Kerner, Principal Technical Marketing Manager - Security, Red Hat
 
 Peter Beniaris, Senior Solutions Architect, Red Hat
 
-Lukas Vrabec, Software Engineer - SELinux, Red Hat
+Lukas Vrabec, Software Engineer - Security Controls, Red Hat
 
 Paul Moore, Principal Software Engineer - Security Controls, Red Hat
 
