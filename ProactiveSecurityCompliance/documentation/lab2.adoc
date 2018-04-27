@@ -177,7 +177,7 @@ image:images/lab2-hostreports.png[600,600]
 +
 image:images/lab2-5scapreportsresults.png[1000,1000]
 
-. Click on the report for the *RHEL7_Standard Policy* by clicking the link in the second *Reported At* column.
+. Look for the report that has *RHEL7_Standard* in the Policy column and click the link in the *Reported At* column which should say how long ago the report was created.
 +
 image:images/lab2-reportedat.png[1000,1000]
 
