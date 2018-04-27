@@ -15,7 +15,7 @@ This integration between Red Hat CloudForms and Red Hat Satellite allows you to 
 Red Hat CloudForms has a robust reporting engine built into the product that allows you to create reports using any of the introspective data collected from your heterogeneous infrastructure. This data is stored either in an internal or external PostgreSQL database. You can use this collected data when creating reports , in control policies , or in automation workflows in Red Hat CloudForms.
 
 
-=== OpenSCAP security scan at the push of a button
+=== Lab 5.1 OpenSCAP security scan at the push of a button
 
 Utilizing the integrated OpenSCAP scanning capabilities in Satellite and automation workflows with Red Hat CloudForms and Red Hat Ansible Automation, we will execute push button, automated OpenSCAP scanning and remediations.
 
@@ -52,7 +52,7 @@ image:images/lab5-serviceresults.png[800,800]
 image:images/lab5-ansibleoutput.png[800,800]
 image:images/lab5-ansibleoutput2.png[800,800]
 
-=== Looking at the results of the automated OpenSCAP security scan
+=== Lab 5.2 Looking at the results of the automated OpenSCAP security scan
 
 . Now that the OpenSCAP scan completed successfully, let's take a look at some outputs of the scan in more detail. Navigate back to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
 +
