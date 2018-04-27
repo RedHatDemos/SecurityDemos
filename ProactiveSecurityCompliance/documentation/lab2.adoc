@@ -47,6 +47,10 @@ image:images/lab2-vmsaccordion.png[500,500]
 . Put a checkbox next to both *lab2-vm1* and *lab2-vm2* by clicking on the top left of both of these VMs.
 +
 image:images/lab2-vmcheckbox.png[300,300]
++
+image:images/lab2-vmlist.png[300,300]
++
+NOTE: Depending on how your view is configured, either one of the above examples should apply.
 
 . Turn on both of these VMs by clicking on *Power → Power On* at the top.  Click *OK* when prompted.
 +
