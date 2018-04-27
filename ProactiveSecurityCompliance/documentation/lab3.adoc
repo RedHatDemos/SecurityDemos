@@ -86,7 +86,7 @@ aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
 . Log out of the ssh session as well as CloudForms.
 
 === Lab 3.2 Using Red Hat CloudForms compliance policy to determine if an OpenStack instance is vulnerable to the Meltdown and Spectre vulnerabilities
-. Log into CloudForms as *labuser* using *r3dh4t1!* as your password.
+. Open a private browser window in your web browser.  In the private browser window go to the CloudForms appliance URL (cfme-GUID.rhpds.opentlc.com) and log in with *labuser* as the user name and *r3dh4t1!* as the password.
 +
 NOTE: labuser is a restricted user that was created by the admin. This user can only see his/her VMs and has limited functionality in CloudForms.
 
@@ -143,12 +143,10 @@ image:images/lab3.2-check-compliance.png[400,400]
 . Click on the *Refresh* button until the VM is compliant.
 +
 image:images/lab3.2-compliant-success.png[600,600]
-+
-. Log out of CloudForms
 
 === Lab 3.3 Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
-. Log into CloudForms as *admin* using *r3dh4t1!* as your password.
-. Navigate to *Control -> Explorer*.
+
+. Switch to the browser tab that is logged in to CloudForms as *admin* and then navigate to *Control -> Explorer*.
 +
 image:images/lab3.3-control-explorer.png[200,200]
 +
@@ -195,8 +193,5 @@ image:images/lab3.3-refresh-security-groups.png[600,600]
 . You will now notice that the *Production* security group has been applied automatically due to the control policy set on this Openstack instance.
 +
 image:images/lab3.3-security-groups-after.png[600,600]
-+
-. Log out of CloudForms
-
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4]
