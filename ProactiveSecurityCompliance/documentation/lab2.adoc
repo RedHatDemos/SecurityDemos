@@ -158,7 +158,9 @@ Notice in this output that the results of the SCAP compliance scans are uploaded
 +
 image:images/lab2-exitstatus0.png[1000,1000]
 
-. Click on the *Back to Job* button at the top right.
+. At the bottom right of the command line output window click the *Scroll to top* link.
+
+. When scrolled back to the top, click on the *Back to Job* button at the top right.
 +
 image:images/lab2-backtojob.png[1000,1000]
 
