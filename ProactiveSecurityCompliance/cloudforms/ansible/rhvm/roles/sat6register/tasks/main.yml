@@ -48,8 +48,8 @@
     - Start katello-agent
     - Enable katello-agent
 
-- name: Update the host to latest errata within the attached content view
-  yum:
-    name: '*'
-    state: latest
-  when: updatehost != 'false'
+# - name: Update the host to latest errata within the attached content view
+#   yum:
+#     name: '*'
+#     state: latest
+#   when: updatehost != 'false'
