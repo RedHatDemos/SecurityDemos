@@ -98,7 +98,8 @@ For testing purpose, few commands could be executed on victim (_selinux4_ machin
 
     # exit
 
-<TO DO: PLEASE DESCRIBE WHAT THESE COMMANDS ARE DOING AT A HIGH LEVEL>
+Command _id_ prints real and effecitve user and group IDs, where we could see that user and group is apache. It's because cgi scripts are started with apache owner. 
+Command _uname_ prints system information, where is hostname described, it's selinux4.example.com, which means it's victim system. These commands proofs that attack was successful
 
 ==== Set SELinux to enforcing mode
 
