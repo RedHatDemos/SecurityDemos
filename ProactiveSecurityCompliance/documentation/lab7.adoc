@@ -71,13 +71,13 @@ image:images/lab7.1-vm1.png[300,300]
 +
 image:images/lab7.1-ssaresults-packages.png[1000,1000]
 
-=== Creating and Viewing security reports for systems vulnerable to Meltdown and Spectre in a Hybrid Environment
+=== Lab 7.2 Creating and Viewing security reports for systems vulnerable to Meltdown and Spectre in a Hybrid Environment
 
 In this part of the lab exercise, as the restricted security officer/auditor user, you will create and view security reports to see which hosts and VMs in your hybrid environment are vulnerable to the Meltdown and Spectre security vulnerabilities.
 
 . Navigate to *Cloud Intel -> Reports*.
 +
-image:images/lab7.1-cloudintelreports.png[500,500]
+image:images/lab7.2-cloudintelreports.png[500,500]
 
 . Scroll to the bottom and Click on the report named *Lab 7 - Host Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the hosts in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
 +
@@ -85,25 +85,30 @@ image:images/lab7.2-hostreport.png[1000,1000]
 
 . Click on the *refresh* button. Then, click on your newly created report.
 +
-image:images/lab7.2-queue-reportresult.png[1000,1000]
+image:images/lab7.2-queue-reportresult-host.png[1000,1000]
 
-In the report, you will notice that you have 1 virtualization host that is vulnerable to the Meltdown and Spectre vulnerabilities.
+. In the report, you will notice that you have 1 virtualization host that is vulnerable to the Meltdown and Spectre vulnerabilities.
 
-. Now let's create a report that shows which VMs and Instances are vulnerable to the Meltdown and Spectre vulnerabilities. 
++
+image:images/lab7.2-savedreport-vm.png[1000,1000]
+
+. Now let's create a report that shows which VMs and Instances are vulnerable to the Meltdown and Spectre vulnerabilities.
 
 . Navigate to *Cloud Intel -> Reports*.
 +
-image:images/lab7.1-cloudintelreports.png[500,500]
+image:images/lab7.2-cloudintelreports.png[500,500]
 
-. Scroll to the bottom and Click on the report named *Lab 7 - Host Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the hosts in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
+. Scroll to the bottom and Click on the report named *Lab 7 - VM Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the VMs and Instances in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
 +
-image:images/lab7.2-hostreport.png[1000,1000]
+image:images/lab7.2-vmreport.png[1000,1000]
 
 . Click on the *refresh* button. Then, click on your newly created report.
 +
-image:images/lab7.2-queue-reportresult.png[1000,1000]
+image:images/lab7.2-queue-reportresult-vm.png[1000,1000]
 
-In the report, you will notice that you have 1 virtualization host that is vulnerable to the Meltdown and Spectre vulnerabilities.
+. In the report, you will notice that you have 2 systems that are vulnerable to the Meltdown and Spectre vulnerabilities: *lab7-vm1*, which is a Red Hat Virtualization VM and *lab7-vm2*, which is a Red Hat Openstack Platform instance. 
++
+image:images/lab7.2-savedreport-vm.png[1000,1000]
 
 <<top>>
 
