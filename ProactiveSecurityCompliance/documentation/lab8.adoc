@@ -1,7 +1,7 @@
 == Lab 8: Proactive Security and Automated Risk Management with Red Hat Insights
 
 === Goal of Lab 8
-The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. This lab assumes that you started all your VMs, as instructed in Lab 0, which is necessary for Red Hat Insights to work properly.
+The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights.
 
 In this lab, we will focus only on the specific security features of Red Hat Insights.
 
@@ -14,9 +14,77 @@ Through analysis of Red Hat Insights metadata and curated knowledge based on ove
 
 Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, Red Hat Satellite, Red Hat CloudForms, and Ansible Tower by Red Hat.  Recommendations from Red Hat Insights are human-readable and in most cases can simply be copy and pasted into the terminal to resolve the issue. You may also automate remediation of hosts in your infrastructure with Red Hat Insights generated Ansible playbooks or Ansible Tower by Red Hat integration.
 
-=== Fixing the payload injection security issue in your system using Red Hat Insights from the Satellite UI
+=== Lab 8.1 Fixing the payload injection security issue in your system using Red Hat Insights from the Satellite UI
 
-=== More to be added shortly
+==== Cleaning up the Red Hat Insights client systems
+
+You’ve been put in charge of some newly acquired servers. Before you bring these servers into your environment, you decide to first audit and clean up what is inside these servers first.
+
+. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
++
+[source]
+----
+[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+----
+
+. If not already root, become *root* , log in to your two Red Hat Insights client machines (ic1.summit.example.com and ic4.summit.example.com), and make sure your old Red Hat Satellite information is removed. Let's start with *ic1.summit.example.com*.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh ic1.summit.example.com
+
+[root@ic1 ~]# subscription-manager clean
+[root@ic1 ~]# rm -fv /etc/rhsm/ca/katello*
+[root@ic1 ~]# rm -fv /etc/rham/facts/katello*
+[root@ic1 ~]# rm -rfv /var/lib/puppet
+[root@ic1 ~]# yum remove -y katello-ca-consumer
+[root@ic1 ~]# exit
+----
+
+. Let's repeat these steps and remove our old Red Hat Satellite information from *ic4.summit.example.com* as well.
++
+[source]
+----
+[root@workstation-GUID ~]# ssh ic4.summit.example.com
+
+[root@ic4 ~]# subscription-manager clean
+[root@ic4 ~]# rm -fv /etc/rhsm/ca/katello*
+[root@ic4 ~]# rm -fv /etc/rham/facts/katello*
+[root@ic4 ~]# rm -rfv /var/lib/puppet
+[root@ic4 ~]# yum remove -y katello-ca-consumer*
+[root@ic4 ~]# exit
+----
+
+==== Adding your Red Hat Insights hosts to Red Hat Satellite
+
+. Let's pull down new bootstrap script from the Red Hat Satellite 6 server for both the Red Hat Insights hosts (ic1.summit.example.com and ic4.summit.example.com). Let's start with *ic1.summit.example.com*.
+
++
+[source]
+----
+[root@workstation-GUID ~]# ssh ic1.summit.example.com
+
+[root@ic1 ~]# curl https://sat6.summit.example.com/pub/bootstrap.py > bootstrap.py --insecure
+
+[root@ic1 ~]# chmod +x bootstrap.py
+
+[root@ic1 ~]# ./bootstrap.py -l admin -s sat6.summit.example.com -o 'Default Organization' -L 'Default Location' -g base_with_puppet -a base_with_puppet
+[root@ic1 ~]# exit
+----
+. Now let's repeat the above steps for *ic4.summit.example.com*. Don't forget to ssh into *ic4.summit.example.com* this time around.
+
++
+NOTE: If bootstrap.py fails with this error: *[RUNNING], [2018-04-19 06:28:43], [Calling Foreman API to create a host entry associated with the group & org]
+An error occured: HTTP Error 422: Unprocessable Entity
+url: https://sat6.summit.example.com:443/api/v2/hosts/
+code: 422*  , this means that machine has never been register using subscription manager. In this case, you just have to delete the hosts from the Satellite UI.
+
+. On the Red Hat Satellite server (sat6-GUID.rhpds.opentlc.com), log in with *admin* as the username and *r3dh4t1!* as your password.
+
+. Go to Hosts → All Hosts and you will see them listed as follows:
+
+
 
 <<top>>
 
