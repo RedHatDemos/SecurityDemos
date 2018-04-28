@@ -1,6 +1,3 @@
-= Enabling SELinux via Ansible
-
-== Introduction
 
 = Exploiting Red Hat Enterprise Linux 7 with Shellshock! vulnerability
 with SELinux in Enforcing mode vs. Permissive mode
@@ -10,11 +7,11 @@ with SELinux in Enforcing mode vs. Permissive mode
 put command after env variable in command, we'll use this vuln and try
 to gain access to selinux4 system>
 
-== Lab User Story
+=== Lab User Story
 <As an enterprise admin I want to have SELinux in enforcing mode to
 mitigate damage by 0day vulnerabilities>
 
-== Implementation
+=== Implementation
 
 The lab exercise is split into three steps:
 
@@ -23,24 +20,27 @@ The lab exercise is split into three steps:
 . Analyzing SELinux denials
 
 
-== Exploiting system with SELinux in Permissive mode
+=== Exploiting system with SELinux in Permissive mode
 
-=== Set SELinux to permissive mode
+==== Set SELinux to permissive mode
 
-=== Bind tcp port for listening
+==== Bind tcp port for listening
 
-=== Run the Exploit
+==== Run the Exploit
 
-=== Set SELinux to enforcing mode
+==== Set SELinux to enforcing mode
 
-=== Bind tcp port for listening
+==== Bind tcp port for listening
 
-=== Run the Exploit
+==== Run the Exploit
 
-== Analyzing SELinux denial
+==== Analyzing SELinux denial
 
-=== Security Enhanced Linux
+==== Security Enhanced Linux
 
+= Enabling SELinux via Ansible
+
+== Introduction
 SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation. Privilege escalation means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
 
 === Lab User Story
