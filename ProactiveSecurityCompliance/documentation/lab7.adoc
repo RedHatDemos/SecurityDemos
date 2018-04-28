@@ -62,9 +62,14 @@ image:images/lab7-sshd_config.png[1000,1000]
 +
 image:images/lab7-vm1.png[300,300]
 
-. Feel free to look at the other data collected during Smart State Analysis as well, such as Users, Groups, and Init Processes as well.
+. Feel free to look at the other data collected during Smart State Analysis as well, such as Users, Groups, and Init Processes.
 +
 image:images/lab7-ssaresults-packages.png[1000,1000]
+
+=== Creating and Viewing security reports for systems vulnerable to Meltdown and Spectre in a Hybrid Environment
+
+In this part of the lab exercise, as the restricted security officer/auditor user, you will create and view security reports to see which hosts and VMs in your hybrid environment are vulnerable to the Meltdown and Spectre security vulnerabilities. 
+
 
 
 <<top>>

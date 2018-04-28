@@ -1,7 +1,7 @@
 = Defend Yourself Using Built-in RHEL Security Technologies
 
 === [.underline]#Presenters/Lab Developers#:
-Lucy Kerner, Principal Technical Marketing Manager - Security, Red Hat
+Lucy Kerner, Security Global Technical Evangelist and Strategist, Red Hat
 
 Peter Beniaris, Senior Solutions Architect, Red Hat
 
