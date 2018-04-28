@@ -3,7 +3,7 @@
 
 Security Enhanced Linux is a representative of Proactive Security. In case of SELinux it means that a system is protected from consequences of exploits in window of vulnerability until a security fix is released. This protection is done by defined SELinux policy on your system.
 
-The lab is splitted to three parts. In the first part, you will become a hacker and you will try to proceed a real vulnerability on given Red Hat Enterprise Linux 7 system and explore how SELinux helps to protect this system. In the second part, you will turn SELinux on for an environment containing a setup of web servers. In the last part, you will configure SELinux according to a STIG rule.
+The lab is split to three parts. In the first part, you will become a hacker and you will try to proceed a real vulnerability on given Red Hat Enterprise Linux 7 system and explore how SELinux helps to protect this system. In the second part, you will turn SELinux on for an environment containing a setup of web servers. In the last part, you will configure SELinux according to a STIG rule.
 
 == SELinux policy
 SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation. Privilege escalation means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
