@@ -1,13 +1,28 @@
 
 = Security Enhanced Linux
 
-== Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
-with SELinux in Enforcing mode vs. Permissive mode
+Security Enhanced Linux is a representative of Proactive Security. In case of SELinux it means that a system is protected from consequences of exploits in window of vulnerability until a security fix is released. This protection is done by defined SELinux policy on your system.
 
-== Introduction
+The lab is split to three parts. In the first part, you will become a hacker and you will try to proceed a real vulnerability on given Red Hat Enterprise Linux 7 system and explore how SELinux helps to protect this system. In the second part, you will turn SELinux on for an environment containing a setup of web servers. In the last part, you will configure SELinux according to a STIG rule.
+
+== SELinux policy
+SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation. Privilege escalation means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
+
+Do we have any real example where this mentioned process isolation helped from a privilege escalation of an exploit? 
+
+Yes, we have.
+
+Let's become a hacker and try to exploit Red Hat Enterprise Linux 7 with Shellshock vulnerability.
+
+== Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
+
 <Describe shellshock vulnerability, root issue in exploit was allowing
 put command after env variable in command, we'll use this vuln and try
 to gain access to selinux4 system>
+
+What does SELinux do to contain the the bash exploit (ShellShock)?
+
+<put two pictures which will tell that SELiux does not prevent from exploit but take advantage of privilege escalation>
 
 === Lab User Story
 <As an enterprise admin I want to have SELinux in enforcing mode to
@@ -40,9 +55,6 @@ The lab exercise is split into three steps:
 
 
 = Enabling SELinux via Ansible
-
-== Introduction
-SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation. Privilege escalation means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
 
 === Lab User Story
 
