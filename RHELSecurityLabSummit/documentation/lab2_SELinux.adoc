@@ -50,7 +50,7 @@ It's needed to have two terminals opened, one for listening on 9999 tcp port, se
 
 Following image describing flow how exploit will be provided. One left side there is victim server (selinux4 system) and from attacker machine will be http request send and part of this httpd request will be revert shell to attacker machine listening on tcp port 9999
 
-image:images/lab2-shellshock-flow.png
+image:images/lab2-shellshock-flow.png[]
 
 === Exploiting system with SELinux in Permissive mode
 
@@ -101,7 +101,7 @@ Connect to _selinux4_ and switch to Enforcing mode
     # setenforce 1
     # exit
 
-=== Exploiting system with SELinux in Permissive mode
+=== Exploiting system with SELinux in Enforcing mode
 
 Right now, attack will be repeated but SELinux is in Enforcing mode on victim server (_selinux4_ system)
 
