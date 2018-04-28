@@ -1,7 +1,7 @@
 = Implementing Proactive Security and Compliance Automation
 
 === [.underline]#Presenters/Lab Developers#:
-*Lucy Kerner*, Principal Technical Marketing Manager - Security, Red Hat
+*Lucy Kerner*, Security Global Technical Evangelist and Strategist, Red Hat
 
 *Patrick Rutledge*, Principal Solution Architect, Red Hat
 
@@ -9,7 +9,7 @@
 
 *Nate Stephany*, Senior Cloud Specialist Solution Architect, Red Hat
 
-*Will Nix*, Principal Technical Marketing Manager - Red Hat Insights, Red Hat
+*Will Nix*, Principal Technical Marketing Manager - Management Portfolio, Red Hat
 
 
 == Overview and Prerequisites:
