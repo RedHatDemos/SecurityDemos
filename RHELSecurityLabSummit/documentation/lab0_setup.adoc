@@ -14,7 +14,7 @@ image:images/lab0-lablist.png[]
 +
 image:images/lab0-welcomescreen.png[1000,1000]
 
-. From the lab environment information page copy the hostname of the *Workstation* system it should be workstation-GUID.rhpds.opentlc.com where GUID matches your environment's guid.
+. From the lab environment information page, copy the hostname of the *Workstation* system (it should be workstation-GUID.rhpds.opentlc.com where GUID matches your environment's guid).
 
 . Open a terminal window on your desktop environment and make sure you can SSH into the workstation host as you see below:
 +
