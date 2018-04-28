@@ -12,7 +12,7 @@ Red Hat CloudForms has a robust reporting engine built into the product that all
 . Log into CloudForms with *admin* as the username and *r3dh4t1!* as the password.
 . Navigate to *Cloud Intel -> Reports*.
 +
-image:images/lab5-cloudintelreports.png[500,500]
+image:images/lab6-cloudintelreports.png[500,500]
 
 . Navigate to the report named *Openstack - Top Security Groups Used*. Take a look at this report. In this report, we can see the top Openstack security groups. Here, we see that the Production and default security groups are tied, with both having 1 VM that is attached to these security groups.
 +

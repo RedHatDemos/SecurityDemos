@@ -28,7 +28,7 @@ First we have to log into idm2 and idm3 and install and configure the client:
 
 +
 [source]
-[root@idm2 ~]#yum install -y ipa-client
+[root@idm2 ~]# yum install -y ipa-client
 [root@workstation ~]# ipa-client-install --mkhomedir --no-ntp
 domain: example.com
 IdM server: idm1.example.com
@@ -136,11 +136,13 @@ Grouping users and hosts allows you to move users into and out of groups, thereb
 * that user’s activity will be logged centrally
 
 ===  Creating sudo Command Groups
-This exercise will build off the previous exercise by adding a sudo command group to the existing policy.  So, in addition to have access to specific hosts, the users in the group will also be granted escalated privileges.  To simplify the demonstration, we will create a sudo command group with one command in it: the ability to execute yum.
+This exercise will build off the previous exercise by adding a sudo command group to the existing policy.  So, in addition to having access to specific hosts, the users in the group will also be granted escalated privileges.  To simplify the demonstration, we will create a sudo command group with one command in it: the ability to execute yum.
 
-. Before creating this to the policy, log into a server that your user has access to from the previous step to verify that you do not have access to escalate and run yum:
-* sudo yum update
+. Before creating this to the policy, log into a server that your user (user1) has access to (either idm2 or idm3) from the previous step to verify that you do not have access to escalate and run yum:
 
+[source]
+[user1@idm2 ~]# sudo yum update
++
 . After three attempts you will be prevented from trying further.  Clear the cache to preceed with this exercise: Please perform the following steps:
 
 * Navigate to the Policy -> Sudo tab

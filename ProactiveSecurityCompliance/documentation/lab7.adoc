@@ -8,7 +8,7 @@ Three vulnerabilities have been identified in fundamental layers of modern proce
 The vulnerabilities allow one process to improperly read the memory of another process or the operating system kernel. The attack can be executed by anyone person/acct/service that exists on a system to read any memory the attacker desires. Currently, the attack is not easy to execute, and takes a high degree of skill and sophistication.
 These vulnerabilities concern many CPU architectures and many of the operating systems that enable that hardware. Working with industry leaders, Red Hat has developed kernel security updates for products in our portfolio to address these vulnerabilities. We are working with our customers and partners to make these updates available, along with the information our customers need to quickly secure their physical systems, virtual images, and container-based deployments.
 
-=== Deep inspection of Meltdown and Spectre vulnerable systems across Openstack and Container Environments
+=== Lab 7.1 Deep inspection of Meltdown and Spectre vulnerable systems across Openstack and Container Environments
 
 In this lab exercise, as a security officer/auditor, you are given access to information of the systems in your environment by the admin. This is an effective way to give security officers/auditors access to information about systems without giving direct root and edit access to systems, which is limited to the admins.
 
@@ -19,58 +19,91 @@ NOTE: This security compliance officer/auditor user is a restricted user in Red 
 
 . Now let's navigate to *lab7-vm1* and *lab7-vm2*. Navigate to *Services -> Workloads*
 +
-image:images/lab7-serviceworkloads.png[400,400]
+image:images/lab7.1-serviceworkloads.png[400,400]
 
 . These are the list of VMs and Instances that the security officer/auditor user can see in this environment , as permitted by the admin. In this lab exercise, we will focus on *lab7-vm1* and *lab7-vm2*. Notice that *lab7-vm1* is a Red Hat Virtualization VM and *lab7-vm2* is a Red Hat Openstack instance. Click on *lab7-vm1*.
 +
-image:images/lab7-vm1vm2.png[500,500]
+image:images/lab7.1-vm1vm2.png[500,500]
 
 . Now let's execute a scan of this *lab7-vm1* VM so we get the latest deep OS level details of this VM. Click on *Configuration -> Perform SmartState Analysis*. Press the *refresh* button at the top.
 +
-image:images/lab7-ssa.png[400,400]
+image:images/lab7.1-ssa.png[400,400]
 
 .  Watch the *Last Analyzed* section in the *Lifecycle* section and press the *refresh* button until the date and time gets updated. When the date here gets updated to the current date and time then your analysis scan has completed.
 +
-image:images/lab7-lastanalyzed.png[500,500]
+image:images/lab7.1-lastanalyzed.png[500,500]
 
 . Now let's look at the data that has been collected by our Smart State Analysis scan. Navigate to the *Security* and *Configuration* section. Notice that the Smart State Analysis scan now has the latest information on Users, Groups, Packages, Init Processes, and Files. Click on *Packages*.
 +
-image:images/lab7-ssaresults-packages.png[1000,1000]
+image:images/lab7.1-ssaresults-packages.png[1000,1000]
 
 . Notice all the packages that are installed on this VM.
 +
-image:images/lab7-ssaresults2.png[1000,1000]
+image:images/lab7.1-ssaresults2.png[1000,1000]
 
 . Scroll down to the *kernel* package. Notice the version and release number of the kernel package. Kernel packages must be updated to at least version 3.10.0 with a release of 830.el7 to be protected from the Meltdown and Spectre vulnerabilities as noted in link:https://access.redhat.com/errata/RHSA-2018:0007[this Red Hat Security Advisory].
 +
-image:images/lab7-kernel.png[1000,1000]
+image:images/lab7.1-kernel.png[1000,1000]
 
 . Click on the *back arrow* at the top and click on *VM and Instance "lab7-vm1"*
 +
-image:images/lab7-vm1.png[300,300]
+image:images/lab7.1-vm1.png[300,300]
 
 . Now Click on *Files* in  the *Configuration* section.
 +
-image:images/lab7-files.png[500,500]
+image:images/lab7.1-files.png[500,500]
 
 . Here are all the file contents that were collected for this VM. Click on the file */etc/ssh/sshd_config*. Here you can see information such as the size of the file, date the file contents were collected, date the file contents were modified, and the content of the file itself.
+
 +
-image:images/lab7-sshdconfig_highlevel.png[1000,1000]
-image:images/lab7-sshd_config.png[1000,1000]
+image:images/lab7.1-sshdconfig_highlevel.png[1000,1000]
+image:images/lab7.1-sshd_config.png[1000,1000]
+
++
+
+NOTE: Notice that you can see whether or not *PasswordAuthentication* was enabled on this machine without having to ssh into the machine or have admin level access to this machine.
 
 . Click on the *back arrow* at the top and click on *VM and Instance "lab7-vm1"*
 +
-image:images/lab7-vm1.png[300,300]
+image:images/lab7.1-vm1.png[300,300]
 
 . Feel free to look at the other data collected during Smart State Analysis as well, such as Users, Groups, and Init Processes.
 +
-image:images/lab7-ssaresults-packages.png[1000,1000]
+image:images/lab7.1-ssaresults-packages.png[1000,1000]
 
 === Creating and Viewing security reports for systems vulnerable to Meltdown and Spectre in a Hybrid Environment
 
-In this part of the lab exercise, as the restricted security officer/auditor user, you will create and view security reports to see which hosts and VMs in your hybrid environment are vulnerable to the Meltdown and Spectre security vulnerabilities. 
+In this part of the lab exercise, as the restricted security officer/auditor user, you will create and view security reports to see which hosts and VMs in your hybrid environment are vulnerable to the Meltdown and Spectre security vulnerabilities.
 
+. Navigate to *Cloud Intel -> Reports*.
++
+image:images/lab7.1-cloudintelreports.png[500,500]
 
+. Scroll to the bottom and Click on the report named *Lab 7 - Host Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the hosts in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
++
+image:images/lab7.2-hostreport.png[1000,1000]
+
+. Click on the *refresh* button. Then, click on your newly created report.
++
+image:images/lab7.2-queue-reportresult.png[1000,1000]
+
+In the report, you will notice that you have 1 virtualization host that is vulnerable to the Meltdown and Spectre vulnerabilities.
+
+. Now let's create a report that shows which VMs and Instances are vulnerable to the Meltdown and Spectre vulnerabilities. 
+
+. Navigate to *Cloud Intel -> Reports*.
++
+image:images/lab7.1-cloudintelreports.png[500,500]
+
+. Scroll to the bottom and Click on the report named *Lab 7 - Host Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the hosts in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
++
+image:images/lab7.2-hostreport.png[1000,1000]
+
+. Click on the *refresh* button. Then, click on your newly created report.
++
+image:images/lab7.2-queue-reportresult.png[1000,1000]
+
+In the report, you will notice that you have 1 virtualization host that is vulnerable to the Meltdown and Spectre vulnerabilities.
 
 <<top>>
 
