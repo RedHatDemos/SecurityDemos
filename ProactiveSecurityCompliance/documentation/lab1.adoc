@@ -39,6 +39,8 @@ image:images/lab1.1-myservice.png[600,600]
 +
 . Press the refresh button periodically to refresh the Provisioning Ansible output.
 +
+NOTE: After clicking on refresh you will need to click on the *Provisioning* tab to view the Ansible output.
++
 image:images/lab1.1-service-results.png[400,400]
 +
 . Review the Ansible provisioning playbook output by scrolling all the way down. Notice that the Ansible *PLAY RECAP* shows no failures, which means that the Ansible provisioning playbook ran successfully.
