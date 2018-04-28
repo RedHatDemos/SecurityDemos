@@ -1,5 +1,7 @@
 
-= Exploiting Red Hat Enterprise Linux 7 with Shellshock! vulnerability
+= Security Enhanced Linux
+
+== Exploiting Red Hat Enterprise Linux 7 with Shellshock! vulnerability
 with SELinux in Enforcing mode vs. Permissive mode
 
 == Introduction
@@ -36,7 +38,6 @@ The lab exercise is split into three steps:
 
 ==== Analyzing SELinux denial
 
-==== Security Enhanced Linux
 
 = Enabling SELinux via Ansible
 
