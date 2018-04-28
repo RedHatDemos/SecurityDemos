@@ -201,7 +201,30 @@ image:images/lab8.1-payloadinjectionsearch-again.png[1000,1000]
 
 Congratulations, you’re no longer vulnerable to the payload injection vulnerability!
 
+=== Lab 8.2 Automatically fixing the payload injection security issue via Ansible Playbook
 
+It is also possible to automate some of the issues with an Ansible Playbook that Insights provides us. You can see that in the top left corner of every single issue with the Ansible logo in blue if a playbook is available or in grey if it’s not.
++
+image:images/lab8.2-ansiblelogo.png[1000,1000]
+
+. In the particular case of the payload injection security issue, an Ansible Playbook is available for us.
++
+image:images/lab8.2-ansibleavailable.png[1000,1000]
+
+. Now we need to create a plan in which the issues that are found will be solved using an Ansible Playbook. In order to do so, from your Satellite 6.3 UI, click on *Red Hat Insights → Planner*.
++
+image:images/lab8.2-ansibleplaybook-payloadinjection.png[1000,1000]
+
+. And once there, click on *Create a plan*.
++
+image:images/lab8.2-createaplan.png[1000,1000]
+
+. Fill in the boxes as in the example, and do not forget to select only the payload injection security issue and select *ic4.summit.example.com* as the system in which this solution is to be applied.
++
+image:images/lab8.2-playbookbuilder.png[1000,1000]
+
+. As seen in the previous part of this laboratory, there are two ways to solve this issue, one is by updating the kernel, and the other one is apply the needed changes to the */etc/sysctl.conf* file to add the mitigation configuration, and reload the kernel configuration.
+Insights gives us the opportunity to choose the resolution that we want. Please make sure to select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the Save button.
 
 
 <<top>>
