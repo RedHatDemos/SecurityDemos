@@ -23,34 +23,40 @@ Utilizing the integrated OpenSCAP scanning capabilities in Satellite and automat
 
 . Navigate to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
 +
-image:images/lab0-infra-vms.png[500,500]
-
-. Click on the *lab5-vm1* VM. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
+image:images/lab5.1-infra-vms.png[500,500]
 +
-image:images/lab5-clickvm.png[500,500]
-image:images/lab5-scapscan.png[400,400]
+. Click on the *lab5-vm1* VM.
++
+image:images/lab5.1-clickvm.png[600,600]
++
+. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
++
+image:images/lab5.1-scapscan.png[200,200]
 
 . From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is a custom security policy profile that just checks to see if the AIDE package is installed on your system. Press *Submit*.
 +
-image:images/lab5.1-scandialog.png[1000,1000]
+image:images/lab5.1-scandialog.png[800,800]
 +
 NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security policy profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
-
++
 . Now let's take a look at what is being executed behind the scenes. Navigate to *Services -> My Services*.
 +
-image:images/lab5-servicesmyservices.png[400,400]
+image:images/lab5.1-servicesmyservices.png[400,400]
++
 . Click on the *Sat6SCAPScan* service and then click on the *Provisioning* tab to view the Ansible output.
 +
-image:images/lab5-myservicesprovtab.png[600,600]
+image:images/lab5.1-myservicesprovtab.png[600,600]
 +
 . Press the refresh button periodically to refresh the Provisioning Ansible output.
 +
-image:images/lab5-serviceresults.png[800,800]
+NOTE: Clicking on refresh takes you back to the Service details page so you must re-click on the *Provisioning* tab.
++
+image:images/lab5.1-serviceresults.png[800,800]
 +
 . Review the Ansible provisioning playbook output by scrolling down. Notice that the Ansible play recap shows no failures, which means that the Ansible provisioning playbook ran successfully.
 +
-image:images/lab5-ansibleoutput.png[800,800]
-image:images/lab5-ansibleoutput2.png[800,800]
+image:images/lab5.1-ansibleoutput.png[800,800]
+image:images/lab5.1-ansibleoutput2.png[800,800]
 
 === Lab 5.2 Looking at the results of the automated OpenSCAP security scan
 
