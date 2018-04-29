@@ -197,7 +197,16 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 
 === Basic environment configuration
 
-    # ssh root@selinux1
+. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
++
+[source]
+[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+
+. If not already root, become *root* and then log into the _selinux1.example.com_ system.
++
+[source]
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh root@selinux1.example.com
 
 . Update DNS records on the _selinux1_ server.
 
