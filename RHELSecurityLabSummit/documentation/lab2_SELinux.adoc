@@ -1,5 +1,5 @@
 
-= Security Enhanced Linux
+= Lab 2: Security Enhanced Linux
 
 You can achieve proactive vs reactive security by using Security Enhanced Linux. This means that a system is protected from the consequences of exploits during the window of vulnerability , which is the time window before a security fix is released. This protection is done by defining SELinux policies on your systems.
 
@@ -98,7 +98,7 @@ For testing purpose, few commands could be executed on victim (_selinux4_ machin
 
     # exit
 
-Command _id_ prints real and effecitve user and group IDs, where we could see that user and group is apache. It's because cgi scripts are started with apache owner. 
+Command _id_ prints real and effecitve user and group IDs, where we could see that user and group is apache. It's because cgi scripts are started with apache owner.
 Command _uname_ prints system information, where is hostname described, it's selinux4.example.com, which means it's victim system. These commands proofs that attack was successful
 
 ==== Set SELinux to enforcing mode
