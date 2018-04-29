@@ -38,7 +38,7 @@ image:images/lab0-infra-vms.png[500,500]
 . Select the following VMs: *lab2-vm1*, *lab2-vm2*, *lab5-vm1*, *lab5-vm2*, and *lab7-vm1*.
 Navigate to the top *Power* button and select *Power On*.
 +
-image:images/lab0-turnonselectvms.png[1000,1000]
+image:images/lab0-turnonselectvms.png[500,500]
 
 . Click *OK*.
 . Do not close your CloudForms UI since you will be using it in future lab exercises.
