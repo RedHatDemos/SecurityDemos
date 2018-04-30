@@ -233,15 +233,19 @@ As mentioned earlier, Satellite 6.3 introduced the tailoring files feature. Tail
 
 It is important to note that the tailoring files feature does not provide the ability to create tailoring files. A tailoring file can be created using SCAP Workbench(which is included in Red Hat Enterprise Linux). Once you have a tailoring file you can upload it and assign the Tailoring File to a policy.
 
-. First, let's upload a tailoring file into Satellite. Navigate to https://<URL_of_your_Satellite_server>/pub. From here, download the *ssg-rhel7-ds-tailoring-standard.xml* file onto your laptop. This is the one we will use for this lab exercise. Feel free to download the other tailoring files for your own use later.
+. First, let's upload a tailoring file into Satellite. Navigate to http://sat6-GUID.rhpds.opentlc.com/pub. From here, download the *ssg-rhel7-ds-tailoring-standard.xml* file onto your laptop. This is the one we will use for this lab exercise. Feel free to download the other tailoring files for your own use later.
 
 . From Satellite, navigate to *Hosts -> Tailoring Files*
 +
 image:images/lab2-tailoringfilesmenu.png[600,600]
 
-. Click on *New Tailoring File*. Then, enter *Tailoring File for Standard Compliance Policy* in the Name text box. For the *Scap file*, Click *Browse*, navigate to the location containing the SCAP DataStream Tailoring File and select *Open*. For the *Locations* tab, click the *Default Location* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Location*. For the *Organizations* tab, (If not already on the right), Click the *Default Organization* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Organization*. Press *Submit*.
+. Click on *New Tailoring File* and enter *Tailoring File for Standard Compliance Policy* for the Name and *Scap file*, Click *Browse*, navigate to the location containing the SCAP DataStream Tailoring File and select *Open*.
 +
-image:images/lab2-uploadtailoringfile.png[600,600]
+image:images/lab2-uploadtailoringfile1.png[600,600]
+
+. Click on the *Locations* tab, click the *Default Location* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Location*. Press *Submit* when done.
++
+image:images/lab2-uploadtailoringfile-location.png[600,600]
 
 . Now let's assign this tailoring file to a compliance policy. Navigate to *Hosts → Policies*. For the *RHEL7_Standard* compliance policy that you created earlier, click on *Edit*.
 +
