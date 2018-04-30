@@ -32,14 +32,14 @@ information for improved archival value).  The _auditd.conf_ file can be
 modified using your favorite text editor running as root; we’ll use the _sed_
 command in the example below:
 
-	# sed -e 's/^flush.*/flush = INCREMENTAL_ASYNC/' -i /etc/audit/auditd.conf
-	# sed -e 's/^freq.*/freq = 50/' -i /etc/audit/auditd.conf
-	# sed -e 's/^log_format.*/log_format = ENRICHED/' -i /etc/audit/auditd.conf
+	[root@audit ~]# sed -e 's/^flush.*/flush = INCREMENTAL_ASYNC/' -i /etc/audit/auditd.conf
+	[root@audit ~]# sed -e 's/^freq.*/freq = 50/' -i /etc/audit/auditd.conf
+	[root@audit ~]# sed -e 's/^log_format.*/log_format = ENRICHED/' -i /etc/audit/auditd.conf
 
 After the configuration file has been updated, we need to signal to the audit
 daemon to reload its configuration:
 
-	# killall -SIGHUP auditd
+	[root@audit ~]# killall -SIGHUP auditd
 
 === Linux Kernel Configuration
 
@@ -59,13 +59,13 @@ filter rule configuration into the kernel.  In the example below we will enable
 some basic audit filters designed to help administrators meet the US Security
 Technical Implementation Guide (STIG) for Red Hat Enterprise Linux:
 
-	# cat /usr/share/doc/audit-*/rules/README-rules
-	# rm /etc/audit/rules.d/*
-	# cp /usr/share/doc/audit-*/rules/10-base-config.rules /etc/audit/rules.d
-	# cp /usr/share/doc/audit-*/rules/30-stig.rules /etc/audit/rules.d
-	# cp /usr/share/doc/audit-*/rules/31-privileged.rules /etc/audit/rules.d
-	# cp /usr/share/doc/audit-*/rules/99-finalize.rules /etc/audit/rules.d
-	# augenrules --load
+	[root@audit ~]# cat /usr/share/doc/audit-*/rules/README-rules
+	[root@audit ~]# rm /etc/audit/rules.d/*
+	[root@audit ~]# cp /usr/share/doc/audit-*/rules/10-base-config.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit-*/rules/30-stig.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit-*/rules/31-privileged.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit-*/rules/99-finalize.rules /etc/audit/rules.d
+	[root@audit ~]# augenrules --load
 
 The `augenrules` tool combines all of the _*.rules_ files located in
 _/etc/audit/rules.d_ into the _/etc/audit/audit.rules_ file and loads them
@@ -86,7 +86,7 @@ syscall exit time, see the
 http://man7.org/linux/man-pages/man8/auditctl.8.html[auditctl(8)] manpage for
 more detail.
 
-	# auditctl -a always,exit -F exe=/usr/bin/ping -k rhsummit
+	[root@audit ~]# auditctl -a always,exit -F exe=/usr/bin/ping -k rhsummit
 
 Custom audit filters can be made persistent by creating a new file in the
 _/etc/audit/rules.d_ directory with the _.rules_ file extension.  While not
@@ -112,21 +112,21 @@ a series of arguments passed to the `auditctl` command; lines starting with a
 We can make our custom filter rule persistent by adding a new rule file in
 _/etc/audit/rules.d_ and reloading our configuration:
 
-	# echo "-a always,exit -S all -F exe=/usr/bin/ping -F key=rhsummit" > /etc/audit/rules.d/70-rhsummit_lab.rules
-	# augenrules --load
+	[root@audit ~]# echo "-a always,exit -S all -F exe=/usr/bin/ping -F key=rhsummit" > /etc/audit/rules.d/70-rhsummit_lab.rules
+	[root@audit ~]# augenrules --load
 
 In addition to custom filter rules, this is also the mechanism we use to tweak
 the base configuration of the audit subsystem in the Linux Kernel.  For
 example, if we wanted to increase the audit backlog buffer we could do so for
 the current system using the following command:
 
-	# auditctl -b 8192
+	[root@audit ~]# auditctl -b 8192
 
 If we wanted to make the configuration tweak persistent, we could create a new
 file in _/etc/audit/rules.d_ with the configuration and reload the audit rules:
 
-	# echo "-b 8192" > /etc/audit/rules.d/15-rhsummit_kernel.rules
-	# augenrules --load
+	[root@audit ~]# echo "-b 8192" > /etc/audit/rules.d/15-rhsummit_kernel.rules
+	[root@audit ~]# augenrules --load
 
 == Inspecting Audit Logs
 
@@ -139,10 +139,10 @@ the system is configured as described earlier in this lab.
 In order to ensure we have some interesting events in the audit log, login as
 the "auditlab” user we created above and execute the following commands:
 
-	$ vi /etc/shadow
-	$ date -s "8 Aug 2011 08:00:00 -0400"
-	$ ping -c 1 127.0.0.1
-	$ vi ~/project_tps_report.txt
+	[auditlab@audit ~]$ vi /etc/shadow
+	[auditlab@audit ~]$ date -s "8 Aug 2011 08:00:00 -0400"
+	[auditlab@audit ~]$ ping -c 1 127.0.0.1
+	[auditlab@audit ~]$ vi ~/project_tps_report.txt
 
 === Searching for Events
 
@@ -158,31 +158,31 @@ The “-ts” option specifies at what point in the audit logs to start searchin
 “-m” option indicates that you are interested in audit events with the given
 record.
 
-	# ausearch -ts today -m USER_LOGIN
+	[root@audit ~]# ausearch -ts today -m USER_LOGIN
 
 
 Multiple record types can be specified, the results include events which
 contain either record type.
 
-	# ausearch -ts this-month -m SERVICE_START -m SERVICE_STOP
+	[root@audit ~]# ausearch -ts this-month -m SERVICE_START -m SERVICE_STOP
 
 The “-i” option instructs `ausearch` to interpret the results, translating some
 fields into a more human readable form.  The “-k” option searches on the key
 assigned to an audit rule.
 
-	# ausearch -ts today -i -k access
+	[root@audit ~]# ausearch -ts today -i -k access
 
 The “--uid” option searches for events that match the given UID.
 
-	# ausearch -ts today -i -k time-change --uid auditlab
+	[root@audit ~]# ausearch -ts today -i -k time-change --uid auditlab
 
 The “-f” option searches for events that match on the given file name.
 
-	# ausearch -ts today -i -f project_tps_report.txt
+	[root@audit ~]# ausearch -ts today -i -f project_tps_report.txt
 
 Finally, we can search for audit events generated by our custom filter rule.
 
-	# ausearch -ts today -i -k rhsummit
+	[root@audit ~]# ausearch -ts today -i -k rhsummit
 
 === Generating Reports
 
@@ -194,21 +194,21 @@ http://man7.org/linux/man-pages/man8/aureport.8.html[aureport(8)] manpage.  The
 example below generates a summary report of all of the audit events that
 occurred today.
 
-	# aureport -ts today --summary
+	[root@audit ~]# aureport -ts today --summary
 
 The `aulast` tool generates a report similar to the `last` command, except the
 information is collected from the audit log instead of the less reliable utmp
 logs.  The _aulast(8)_ manpage provides details on how to run `aulast`, but
 without any options it produces a familiar report:
 
-	# aulast
+	[root@audit ~]# aulast
 
 Similar to `aulast`, `aulastlog` is designed as a replacement for the `lastlog`
 command; the important difference being that `aulastlog` collects data from the
 audit log.  The _aulastlog(8)_ manpage provides more information, but running
 `aulastlog` without any options results in a useful report:
 
-	# aulastlog
+	[root@audit ~]# aulastlog
 
 === Transforming Audit Logs
 
@@ -217,20 +217,20 @@ be used to transform the results into different formats.  If you have already
 done the rest of this lab, you are most likely familiar with the default “raw”
 and the “interpreted” formats:
 
-	# ausearch -ts today
-	# ausearch -ts today -i
+	[root@audit ~]# ausearch -ts today
+	[root@audit ~]# ausearch -ts today -i
 
 In addition to the two formats above, there are also “csv” and “text” formats.
 These two formats can be selected using the “--format” argument:
 
-	# ausearch -ts today --format csv
-	# ausearch -ts today --format text
+	[root@audit ~]# ausearch -ts today --format csv
+	[root@audit ~]# ausearch -ts today --format text
 
 The “csv” output is particularly interesting as it can be imported into
 LibreOffice or any other spreadsheet program that accepts files in the
 Comma Separated Values (CSV) format:
 
-	# ausearch -ts today --format csv --extra-labels --extra-obj2 > /tmp/audit.log.csv
+	[root@audit ~]# ausearch -ts today --format csv --extra-labels --extra-obj2 > /tmp/audit.log.csv
 
 The “-format” option, as well as several others which can customize the output
 of `ausearch`, can be found in the
@@ -240,18 +240,18 @@ TIP: If you are using the demo systems at Red Hat Summit 2018, you can transfer
 the CSV file to the workstation system and view it with LibreOffice using
 the following commands run from a terminal on the workstation system:
 
-	$ scp root@audit.example.com:/tmp/audit.log.csv /tmp/audit.log.csv
-	$ libreoffice /tmp/audit.log.csv
+	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv /tmp/audit.log.csv
+	[lab-user@workstation-GUID ~]$ libreoffice /tmp/audit.log.csv
 
 == Reset the Lab System
 
 In order to reset the system used for the lab, run the following commands as
 root:
 
-	# rm /etc/audit/rules.d/*
-	# cp /usr/share/doc/audit-*/rules/10-no-audit.rules /etc/audit/rules.d
-	# augenrules --load
-	# userdel -r auditlab
+	[root@audit ~]# rm /etc/audit/rules.d/*
+	[root@audit ~]# cp /usr/share/doc/audit-*/rules/10-no-audit.rules /etc/audit/rules.d
+	[root@audit ~]# augenrules --load
+	[root@audit ~]# userdel -r auditlab
 
 <<top>>
 
