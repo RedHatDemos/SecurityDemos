@@ -142,7 +142,7 @@ Now, from another terminal for the selinux1 system, let's run the exploit
 
     [root@selinux1 selinux_scripts]# ./shellshock_exploit.sh
 
-As you can see, there is no bash prompt on terminal where you used _nc_ command, because SELinux blocked this access. SELinux did his job!
+As you can see, there is no bash prompt on terminal where you used _nc_ command, because SELinux blocked this access. SELinux did its job!
 
 ==== Analyzing SELinux denial
 
