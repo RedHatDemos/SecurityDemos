@@ -90,7 +90,7 @@ aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
 +
 NOTE: labuser is a restricted user that was created by the admin. This user can only see his/her VMs and has limited functionality in CloudForms.
 
-. Navigate to Services -> Workloads.
+. Navigate to Services -> Workloads if not already there.
 +
 image:images/lab3.2-services-workloads.png[400,400]
 +
