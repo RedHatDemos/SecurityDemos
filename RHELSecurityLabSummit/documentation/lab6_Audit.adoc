@@ -9,55 +9,6 @@ preferably freshly installed.
 Some of these exercises may not work correctly on Red Hat Enterprise Linux
 releases older, or newer, than RHEL-7.5.
 
-== Installing Audit
-
-TIP: If you are using the demo systems at Red Hat Summit 2018, everything has
-already been installed and enabled on the lab systems.  You can proceed to the
-next section.
-
-The Linux audit mechanism consists of two parts: and audit enabled kernel, and
-a collection of userspace tools to capture the audit events from the kernel and
-manage the resulting audit log.  All Red Hat Enterprise Linux Kernels provide
-the necessary audit support, and the _audit_ package provides the required
-userspace tools.
-
-You can ensure that the audit userspace tools are installed by running the
-following command, as the root user:
-
-	# yum install audit
-
-Once the audit userspace tools are installed, you need to ensure that the audit
-daemon, `auditd`, is set to start at boot.  This can be done by running one of
-the following commands, as the root user:
-
-	# systemctl enable auditd
-
-At this point it is recommended that you reboot the system so the audit daemon
-can be started with the system’s credentials, but if you can’t reboot you can
-start the service manually using either the `systemctl` or `service` commands,
-both need to be run as the root user:
-
-	# systemctl start auditd
-
-If one of both of the commands above fail, or don’t appear to do anything,
-don’t worry, the audit daemon may already be enabled and running on your
-system.  You can verify that the audit daemon is running with the following
-command:
-
-	# systemctl status auditd
-
-== Creating a Test User
-
-TIP: If you are using the demo systems at Red Hat Summit 2018, the "auditlab"
-user has already been created and the password has been set to `il0ve4udit`.
-You can proceed to the next section.
-
-In order to help demonstrate the auditing functionality we need to create a
-test user for use in this lab:
-
-	# useradd auditlab
-	# passwd auditlab
-
 == Configuring Audit
 
 There are two main audit components in Red Hat Enterprise Linux, the audit
