@@ -80,7 +80,7 @@ NOTE: Notice that you can see whether or not *PasswordAuthentication* was enable
 +
 image:images/lab7.1-vm1.png[300,300]
 
-. Feel free to look at the other data collected during Smart State Analysis as well, such as Users, Groups, and Init Processes.
+. (Optional) Feel free to look at the other data collected during Smart State Analysis as well, such as Users, Groups, and Init Processes.
 +
 image:images/lab7.1-ssaresults-packages.png[1000,1000]
 
@@ -103,7 +103,7 @@ image:images/lab7.2-queue-reportresult-host.png[1000,1000]
 . In the report, you will notice that you have 1 virtualization host that is vulnerable to the Meltdown and Spectre vulnerabilities.
 
 +
-image:images/lab7.2-savedreport-vm.png[1000,1000]
+image:images/lab7.2-queuehostreport.png[1000,1000]
 
 . Now let's create a report that shows which VMs and Instances are vulnerable to the Meltdown and Spectre vulnerabilities.
 
