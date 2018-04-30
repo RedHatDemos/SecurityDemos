@@ -31,20 +31,17 @@ IPsec and do not allow fallback to cleartext, you can lock yourself
 out of a VM.
 
 === Setup one IPsec machine to generate X.509 certificates:
+. We will need to generate the required X.509 certificates.
+It does not matter which of the machines you use to generate the required X.509 certificates. Make sure you are running Red Hat Enterprise Linux 7.5 or later. The only additional requirements are some software packages required for the supplied python script vpn-cert-gen.py. Copy this script on the *8IPSec* host and install the additional packages:
 
-. Open the console for *8IPSec* and *9IPSec*. As noted in Lab 0, you have console access to all of the VMs that you will use in all the lab exercises. If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
-+
-image:images/lab4-console.png[200,200]
-image:images/console-textbox.png[500,500]
+ # Install dependencies for vpn-cert-gen.py
+ $ sudo yum install python2-pyOpenSSL
+ # Generate the certificates
+ $ mkdir labcerts
+ $ cd labcerts
+ $ /root/vpn-cert-gen.py --wipe
 
-. Next, we will need to generate the required X.509 certificates.
-It does not matter which of the machines you use to generate the required X.509 certificates. In an actual deployment, this would be your dedicated Certificate Agency (CA) machine that would be very secure and maybe not even connected to any network. We will use the ipsec.example.com machines for this task. Make sure you are running Red Hat Enterprise Linux 7.5 or later. If you are logged in on the main Workstation machine, you can login to the ipsec lab machines.
-
- $ ssh root@ipsec.example.com
- # mkdir labcerts
- # cd labcerts
- # /root/vpn-cert-gen.py --wipe
- creating CA cert
+creating CA cert
  OK: CA system completely re-initialized
  # ls
 cacerts  certs  keys  mobileconfig  pkcs12  serial.txt
