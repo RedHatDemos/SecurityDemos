@@ -10,7 +10,7 @@ The Security Content Automation Protocol (SCAP) enables the definition of securi
 
 In Satellite 6, tools provided by the OpenSCAP project are used to implement security compliance auditing. For more information about OpenSCAP see the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index[Red Hat Enterprise Linux 7 Security Guide]. The Satellite web UI enables scheduled compliance auditing and reporting on all hosts under management by Red Hat Satellite.
 
-=== Introduction to SCAP content provided in Satellite 6
+=== Lab 2.1 Introduction to SCAP content provided in Satellite 6
 Before creating a SCAP compliance policy for a host, you need SCAP content.
 
 SCAP content is a datastream format containing the configuration and security baseline against which hosts are checked. Checklists are described in the extensible checklist configuration description format (XCCDF) and vulnerabilities in the open vulnerability and assessment language (OVAL). Checklist items, also known as rules express the desired configuration of a system item. For example, you may specify that no one can log in to a host over SSH using the root user account. Rules can be grouped into one or more profiles, allowing multiple profiles to share a rule. SCAP content consists of both rules and profiles.
@@ -37,7 +37,7 @@ image:images/lab2-scappolicies.png[1000,1000]
 NOTE: A custom policy named *rhel7-custom* has already been uploaded for you. The *rhel7-custom* policy simply checks to see if the AIDE package is installed.
 
 
-=== Creating a SCAP compliance policy for a host
+=== Lab 2.2 Creating a SCAP compliance policy for a host
 Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
 
 . Click on *New Compliance Policy* at the top right.
@@ -94,7 +94,7 @@ NOTE: Hostgroups are groupings of systems that are built and configured the same
 +
 image:images/lab2-hostgroups.png[1000,1000]
 
-=== Executing the compliance policy scan on a host
+=== Lab 2.3 Executing the compliance policy scan on a host
 . Now that you have defined SCAP compliance policies in Satellite,
 you can go ahead and run a SCAP compliance policy scan on a host. Navigate to *Hosts -> All hosts*
 +
@@ -149,7 +149,7 @@ image:images/lab2-backtojob.png[1000,1000]
 +
 image:images/lab2-successcircle.png[1000,1000]
 
-=== View the OpenSCAP scan results report in Satellite 6
+=== Lab 2.4 View the OpenSCAP scan results report in Satellite 6
 . Now let's view the SCAP scan results reports for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
 +
 image:images/lab2-hostreports.png[600,600]
@@ -194,7 +194,7 @@ image:images/lab2-backarrowreport.png[1000,1000]
 +
 image:images/lab2-compliancefailedfilter.png[1000,1000]
 
-=== Fixing a specific OpenSCAP scan failure
+=== Lab 2.5 Fixing a specific OpenSCAP scan failure
 . Now let's fix the OpenSCAP scan failure from the *rhel7-custom* compliance policy. Remember that this compliance check failed since the AIDE package is not installed on the *lab2-vm1.example.com* host. Let's fix this OpenSCAP scan failure by installing the AIDE package on the *lab2-vm1.example.com* host.
 
 . If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
@@ -230,7 +230,7 @@ Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
 
 . We will re-execute the *rhel7-custom* compliance policy scan on the *lab2-vm1.example.com* host later in this lab exercise to confirm that the *rhel7-custom* policy scan now passes.
 
-=== Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
+=== Lab 2.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
 
 As mentioned earlier, Satellite 6.3 introduced the tailoring files feature. Tailoring files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. In other words, tailoring files allow you to add or ignore rules in the default policy content file. So if the rule is enabled in both the default content and the tailoring file, then the rule is enabled. If the rule is disabled in the tailoring file, but enabled in the default content, then the rule is disabled. If the rule is disabled in the default policy content file but enabled in the tailoring file , then the rule is enabled.
 
@@ -257,7 +257,7 @@ image:images/lab2-addtailoringfiletopolicy.png[600,600]
 +
 NOTE: Tailoring files are able to contain multiple XCCDF Profiles. Also, Satellite does not enforce that the tailoring file match the XCCDF profile. However, you need to make sure that they match to avoid running into errors when using the tailored compliance policy.
 
-=== Re-executing the compliance policy scan on the host and viewing the OpenSCAP scan results reports
+=== Lab 2.7 Re-executing the compliance policy scan on the host and viewing the OpenSCAP scan results reports
 
 In the previous lab exercise steps, we assigned the tailoring file to the *Standard* compliance policy and we fixed the OpenSCAP compliance scan error for the *rhel7-custom* compliance policy by installing AIDE on the *lab2-vm1.example.com* host. We can now re-execute the compliance policy scan on the *lab2-vm1.example.com* host and generate the report of the OpenSCAP compliance scans.
 
@@ -309,7 +309,7 @@ image:images/lab2-custompolicypass2.png[1000,1000]
 +
 image:images/lab2-compliancesummary.png[1000,1000]
 
-=== Viewing the global status indicator in Satellite 6
+=== Lab 2.8 Viewing the global status indicator in Satellite 6
 
 Compliance status is one of the items that affect the global status of a system. In Satellite, we have the global status indicator, which is an aggregate of all the compliance states on the system. Specifically, in order to determine the global status, Satellite checks the status of: compliance with SCAP policies, build, configuration, execution, errata, subscription, and traces. Whichever is the worst status is what governs the overall status of the system. This is important to note since if you have a system that fails a SCAP policy finding, you’ll be able to see this quickly in the Satellite UI.
 
@@ -325,7 +325,7 @@ image:images/lab2-clickonlab2vm1.png[600,600]
 +
 image:images/lab2-globalstatusproperties.png[500,500]
 
-=== Managing Users and Roles
+=== Lab 2.9 Managing Users and Roles
 
 For the administrator, Red Hat Satellite provides the ability to create, modify, and remove users. Also, it is possible to configure access permissions through assigning roles to users. We will not be diving deep into Users and Roles in this lab exercise. For more details on managing users and roles in Satellite, see the guide on link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.3/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-users_and_roles[Administering Red Hat Satellite].
 
