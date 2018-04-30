@@ -1,29 +1,30 @@
 
 = Lab 2: Security Enhanced Linux
 
-You can achieve proactive vs reactive security by using Security Enhanced Linux. This means that a system is protected from the consequences of exploits during the window of vulnerability , which is the time window before a security fix is released. This protection is done by defining SELinux policies on your systems.
+== Goal of Lab 1
+The goal of this lab is to use Security Enhanced Linux (SELinux) to help mitigate against attacks due to privilege escalation vulnerabilities in a three part exercise.
 
-This lab exercise is split into three parts. In the first part of this lab exercise, you will become a hacker and try to execute a real vulnerability on a given Red Hat Enterprise Linux 7 system and explore how SELinux can help to protect this system. In the second part of this lab exercise, you will turn SELinux on for an environment of web servers in an automated fashion using Ansible. In the last part of this lab exercise, you will configure SELinux according to a U.S. Department of Defense STIG security control policy rule.
+* In the first part of this lab exercise, you will become a hacker and try to execute a real vulnerability on a given Red Hat Enterprise Linux 7 system and explore how SELinux can help to protect this system.
+* In the second part of this lab exercise, you will turn SELinux on for an environment of web servers in an automated fashion using Ansible.
+* In the last part of this lab exercise, you will configure SELinux according to a U.S. Department of Defense STIG security control policy rule.
 
-== SELinux policy
+== Introduction
+Security Enhanced Linux (SELinux) can help to proactively mitigate systems from the consequences of exploits during the window of vulnerability. Specifically, this is the time window before a security fix is released. This protection is done by defining SELinux policies on your systems.
+
+=== SELinux policy
 SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation vulnerabilities. A privilege escalation vulnerability means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
 
-Now let's look at an example where using this process isolation can help protect us from a privilege escalation vulnerability of an exploit.
+In one of the below exercises, we'll see an example where using this process isolation can help protect us from a privilege escalation vulnerability of an exploit.
 
-== Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
-In this first exercise, let's become a hacker and try to exploit Red Hat Enterprise Linux 7 with the Shellshock vulnerability.
+=== Introduction to the Shellshock vulnerability and SELinux
 
-=== Shellshock vulnerability
-
-You can read a lot about this vulnerability. It is known as a bash exploit. A root issue was that you could put any command after _env_ variable in a command so you could execute an arbitrary code. The following pictures shows an example of the bash explout on an apache server.
+The Shellshock vulnerability is a bash exploit and the root issue was that you could put any command after _env_ variable in a command , which allowed you to execute any arbitrary code. The following pictures shows an example of the bash explout on an apache server.
 
 image:images/lab2-shellshock-1.png[]
 
 If you would have a _cgi_ script accessing user data or internal network then this script could compromise either internal network or user data on your system.
 
-The first question which usually comes to mind in term of SELinux and Shellshock is _"What does SELinux do to contain the the bash exploit (ShellShock)?"_
-
-=== Shellshock vulnerability and SELinux
+The first question which usually comes to mind in term of SELinux and Shellshock is *_What does SELinux do to mitigate against the Shellshock bash exploit?_*
 
 The important fact to understand is that *SELinux does not block the exploit* but it would *prevent escallation of confined domains*. These confined domains are defined by SELinux policy installed on a system. Because *SELinux controls on their types (SELinux labels)*, the process is doing what it was designed to do and can not access what is not allowed in SELinux policy.
 
@@ -35,11 +36,12 @@ Our possible _cgi_ scripts executed by an attacker can not access either user da
 
 How is it done practically? How do types, which ensure described process separation, look in reality? Read below text and practice to get answers.
 
-=== Lab User Story
+== Lab 3.1 Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
 
-As an administrator of Red Hat Enterprise Linux 7 server I want to have enabled SELinux for my webserver environment to mitigate damage by 0day vulnerbalities.
+=== Goal of Lab 3.1
+In this first exercise, let's become a hacker and try to exploit Red Hat Enterprise Linux 7 with the Shellshock vulnerability.
 
-=== Implementation
+As an administrator of Red Hat Enterprise Linux 7 servers, I want to have enabled SELinux for my webserver environment to mitigate damage by zero day vulnerbalities.
 
 The lab exercise is split into three steps:
 
@@ -47,7 +49,7 @@ The lab exercise is split into three steps:
 . Exploiting a RHEL system with SELinux in Enforcing mode
 . Analyzing SELinux denials
 
-=== Configuration
+=== Lab 3.1 exercise steps
 
 The exploit will be executed from the _selinux1.example.com_ system.
 
