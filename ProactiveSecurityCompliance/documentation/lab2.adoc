@@ -312,7 +312,7 @@ image:images/lab2-custompolicypass2.png[1000,1000]
 +
 image:images/lab2-compliancesummary.png[1000,1000]
 
-=== Lab 2.8 Viewing the global status indicator in Satellite 6
+=== Lab 2.8 (*Optional*) Viewing the global status indicator in Satellite 6
 
 Compliance status is one of the items that affect the global status of a system. In Satellite, we have the global status indicator, which is an aggregate of all the compliance states on the system. Specifically, in order to determine the global status, Satellite checks the status of: compliance with SCAP policies, build, configuration, execution, errata, subscription, and traces. Whichever is the worst status is what governs the overall status of the system. This is important to note since if you have a system that fails a SCAP policy finding, you’ll be able to see this quickly in the Satellite UI.
 
@@ -328,7 +328,7 @@ image:images/lab2-clickonlab2vm1.png[600,600]
 +
 image:images/lab2-globalstatusproperties.png[500,500]
 
-=== Lab 2.9 Managing Users and Roles
+=== Lab 2.9 (*Optional*) Managing Users and Roles
 
 For the administrator, Red Hat Satellite provides the ability to create, modify, and remove users. Also, it is possible to configure access permissions through assigning roles to users. We will not be diving deep into Users and Roles in this lab exercise. For more details on managing users and roles in Satellite, see the guide on link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.3/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-users_and_roles[Administering Red Hat Satellite].
 
