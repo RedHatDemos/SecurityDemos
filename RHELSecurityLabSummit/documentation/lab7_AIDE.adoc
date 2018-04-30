@@ -5,7 +5,7 @@ The goal of this lab exercise is to understand how to use the Audit Intrusion De
 
 We want to achieve the following objectives in this exercise:
 
-* Install AIDE on your workstation
+* Install AIDE on your servera
 * Initialize a baseline scan to capture current state
 * Modify permissions and content on select file
 * Run a scan to identify drift from the baseline
@@ -16,24 +16,24 @@ We want to achieve the following objectives in this exercise:
 AIDE maintains a database that captures the state of critical system configuration files at a point in time, allowing for subsequent analysis to identify drift from a desired state.  AIDE is able to determine what changes were made to a system, but is not able to determine who made the change, when the change occurred, and what command was used to make the change.  For that, we will use auditd and ausearch, which are installed and enabled by default.
 
 === Install the AIDE package
-. Login to the *workstation* VM using either console or using the terminal on your laptop. Login to your *workstation* VM as *lab-user* using the password *r3dh4t1!*.
+. Login to the *servera* VM using either console or using the terminal on your laptop. Login to your *servera* VM as *lab-user* using the password *r3dh4t1!*.
 . AIDE is part of the base repository that comes standard with Red Hat Enterprise Linux, but is not installed by default.  As *lab-user*, become root and install the AIDE package.
 
 +
 [source]
-[lab-user@workstation ~]$ sudo -i
-[root@workstation ~]# yum search aide
-[root@workstation ~]# yum install aide.x86_46
+[lab-user@servera ~]$ sudo -i
+[root@servera ~]# yum search aide
+[root@servera ~]# yum install aide.x86_64
 
 . After you have installed AIDE, you may want to review the configuration file located at:
 +
 [source]
-[root@workstation ~]# vim /etc/aide.conf
+[root@servera ~]# vim /etc/aide.conf
 
 . A review of this file will show you the directories and files that are scanned by default and provide a list of what is checked (e.g. permissions, checksums, etc.).  You can also refer to the man page as follows:
 +
 [source]
-[root@workstation ~]# man aide
+[root@servera ~]# man aide
 
 === Initialize a Baseline Scan
 Organization often create a locked down standard operating build for provisioning a server.  This includes configuration of the operating system and other software packages.
@@ -41,7 +41,7 @@ Organization often create a locked down standard operating build for provisionin
 . After you have provisioned a server, or after you have made configuration changes to an existing server, you can initiate an AIDE scan as follows:
 +
 [source]
-[root@workstation ~]# aide --init
+[root@servera ~]# aide --init
 
 . This does take a few minutes, so you may want to read ahead as you wait.  Upon completion you should see output similar to:
 +
@@ -52,12 +52,12 @@ AIDE, version 0.15.1
 . To complete the initial you simple rename or copy the database file by removing the new. from the generated file name as follows:
 +
 [source]
-[root@workstation ~]# mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+[root@servera ~]# mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
 
 . You now have a baseline scan derived from the rules setup in /etc/aide.conf.  Note that we used the --init parameter (or -i) to initialize the baseline.  Subsequent scan will usee --check (or -c) to check for changes.  You can run a check as follows:
 +
 [source]
-[root@workstation ~]#  aide --check
+[root@servera ~]#  aide --check
 
 . This scan should not disclose any deviations from the baseline and return:
 +
@@ -82,18 +82,18 @@ CONTENT_EX = sha256+ftype+p+u+g+n+acl+selinux+xattrs
 . A review of the default rules beginning at line 26 lists the parameters that are included.  For this exercise we will alter the permissions and content of /etc/ssh/sshd_config, and rerun our scan.
 +
 [source]
-[root@workstation ~]# chmod 0644 /etc/ssh/sshd_config
-[root@workstation ~]# vim /etc/ssh/sshd_config
+[root@servera ~]# chmod 0644 /etc/ssh/sshd_config
+[root@servera ~]# vim /etc/ssh/sshd_config
 
-. I appended “UseDNS no” to the end of the file for my content change.  When we run AIDE we expect it to note the change of the permissions and identify a change in the checksum of the file.  Run a new scan as follows:
+. I appended “UseDNS no” to the end of the sshd_config for my content change.  When we run AIDE we expect it to note the change of the permissions and identify a change in the checksum of the file.  Run a new scan as follows:
 +
 [source]
-[root@workstation ~]# aide --check
+[root@servera ~]# aide --check
 
 . We see that AIDE checked nearly 50,000 files:
 +
 [source]
-[root@workstation ~]$ aide --check
+[root@servera ~]$ aide --check
 AIDE 0.15.1 found differences between database and filesystem!!
 Start timestamp: 2018-02-23 12:53:21
 Summary:
@@ -108,7 +108,7 @@ File: /etc/ssh/sshd_config
  Perm     : -rw-------                       , -rw-r--r--
  SHA256   : hut7+4Tf5IcWGsNJ++oCqcLIDeTnu5yk , a7+ICZ7ykTPkxJr9DswwuIS5Z/pOCcyq
 
-We can see which permissions specifically changed, which is also the case when other attributes such as user, group, or file type change.  As for content, we can only see that the checksum changes and we would have to recover a previous version of the file to determine the exact content change.  What we can’t tell is that the student userid made this change, or what time and how that change was made.  For that we would need to set audit watches.  Revert the changes you made in this exercise before proceeding to the next exercise.
+We can see which permissions specifically changed, which is also the case when other attributes such as user, group, or file type change.  As for content, we can only see that the checksum changes and we would have to recover a previous version of the file to determine the exact content change.  What we can’t tell is the userid made this change, or what time and how that change was made.  For that we would need to set audit watches.  Revert the changes you made in this exercise before proceeding to the next exercise by setting the permissions of sshd_config back to "0600" and removing "UseDNS no" from the end of the file.  You can run "aide --check" again to verify that you have reverted back correctly.
 
 ===  Set Audit Watches
 . The auditd daemon is installed and enabled by default in Red Hat Enterprise Linux.  Log files reside at /var/log/audit/audit.log based on the configuration in /etc/audit/auditd.conf and the watches in /etc/audit/rules.d/audit.rules.  Audit watches can be set dynamically for the duration of the runtime, or permanently by adding a file to /etc/audit/rules.d/ directory.
@@ -116,19 +116,19 @@ We can see which permissions specifically changed, which is also the case when o
 . First we will enable a dynamic rule at the command line and check a specific file for permissions and attribute changes.  We will do this by using the auditctl command.  A full list of watch parameters can be found by review the man page.  For this exercise we are go set a watch and establish a key for the /etc/shadow file as follows:
 +
 [source]
-[root@workstation ~]# auditctl -w /etc/shadow -pa -k shadow_key
+[root@servera ~]# auditctl -w /etc/shadow -pa -k shadow_key
 
 . The -w indicates that we are watching the /etc/shadow file.  The -pa parameter indicates permissions and attributes are what we are watching.  And the -k parameter indicates that we have created a key that we can use to search the audit log. We can check for active watches by running the following command:
 +
 [source]
-[root@workstation ~]# auditctl -l
+[root@servera ~]# auditctl -l
 -w /etc/shadow -p a -k shadow_key
 
 . Now let’s change the permission on the /etc/shadow file, run a scan, and then look for the entry in the audit.log.
 +
 [source]
-[root@workstation ~]$ chmod 0644 /etc/shadow
-[root@workstation ~]$ aide --check
+[root@servera ~]$ chmod 0644 /etc/shadow
+[root@servera ~]$ aide --check
 AIDE 0.15.1 found differences between database and filesystem!!
 Start timestamp: 2018-02-23 13:44:27
 Summary:
@@ -155,7 +155,7 @@ other::r--
 . We can clearly see that the permissions on the /etc/shadow file changed, and because we set an audit watch on this file, we can now search for the key in audit log by using the ausearch command that comes with auditd.  Run the following command using the key you created above:
 +
 [source]
-[root@workstation ~]$ ausearch -i -k shadow_key
+[root@servera ~]$ ausearch -i -k shadow_key
 
 . This command returns the following entry in the audit.log:
 +
