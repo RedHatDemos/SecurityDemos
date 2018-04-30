@@ -192,7 +192,7 @@ image:images/lab2-downloadxml.png[1000,1000]
 +
 image:images/lab2-backarrowreport.png[1000,1000]
 
-. Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. In the search field enter *compliance_failed > 0* then click *Search*. This will find any compliance report that have greater than 0 compliance failures.
+. Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. In the search field enter *compliance_failed > 10* then click *Search*. This will find any compliance report that have greater than 10 compliance failures.
 +
 image:images/lab2-compliancefailedfilter.png[1000,1000]
 
