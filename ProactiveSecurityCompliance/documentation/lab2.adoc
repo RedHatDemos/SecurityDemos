@@ -29,12 +29,12 @@ When you install the SCAP components in Satellite as defined in the link:https:/
 +
 image:images/lab2-scapcontents.png[1000,1000]
 +
-NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*. 
+NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*.
 . Take a look at the SCAP policies by navigating to *Hosts → Policies*.
 +
 image:images/lab2-scappolicies.png[1000,1000]
 +
-NOTE: Customized policies named *rhel7-custom* has already been uploaded for you. The *rhel7-custom* compliance policy is a simple  policy that just checks to see if the AIDE package is installed.
+NOTE: A custom policy named *rhel7-custom* has already been uploaded for you. The *rhel7-custom* compliance policy simply checks to see if the AIDE package is installed.
 
 . Now, let's power on our VMs. On the CloudForms appliance (cfme-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). On the left side menu, navigate to *Compute → Infrastructure → Virtual Machines*.
 +
@@ -201,7 +201,7 @@ image:images/lab2-reports-rhel7-custom.png[1000,1000]
 
 . Notice that the *rhel7-custom* compliance policy only checks whether or not the AIDE package is installed. You can see from the report for the *rhel7-custom* policy that this compliance check failed. Therefore, the AIDE package is not installed on this host (lab2-vm1.example.com).
 
-. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well. 
+. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well.
 +
 image:images/lab2-downloadxml.png[1000,1000]
 
