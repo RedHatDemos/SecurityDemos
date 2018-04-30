@@ -100,6 +100,7 @@ success
 
 . You can remove this rule by running the following command:
 +
+[source]
 [root@servera ~]# firewall-cmd --remove-port=443/tcp --permanent
 success
 [root@servera ~]# firewall-cmd --reload
@@ -148,7 +149,7 @@ success
 . While RHEL comes with many pre-configured service files, you man want to create your own service file tailored for the needs of a specific application.  In this next example we will create a file that captures all of the ports and protocols required for Red Hat Identity Manager (IdM).  A full deployment of IdM uses LDAP, Kerberos, and BIND so there are several ports.  The service files that comes pre-configured are located at /usr/lib/firewalld/service, and you should never alter these files.  Custom files reside at /etc/firewalld/services/.  The easiest way to start would be to copy a file from the default location to the custom location and then alter it to suit your needs.  For our IdM example, copy an existing file:
 +
 [source]
-[root@servera ~]# cp /usr/lib/firewalld/services/dns.xml \ /etc/firewalld/services/idm.xml
+[root@servera ~]# cp /usr/lib/firewalld/services/dns.xml /etc/firewalld/services/idm.xml
 
 . Next, edit the idm.xml file to look like the following:
 +
@@ -197,7 +198,7 @@ success
 [root@servera ~]# firewall-cmd --list-services
 
 === Summary
-Remember that you can get more granular by using the rich syntax language associated with the complex rules if necessary.  And, that you can have your applications use the direct interface as well.  This is rarely the case, but necessary to point out for those who take advantage of the granularity associated with iptables. 
+Remember that you can get more granular by using the rich syntax language associated with the complex rules if necessary.  And, that you can have your applications use the direct interface as well.  This is rarely the case, but necessary to point out for those who take advantage of the granularity associated with iptables.
 
 
 
