@@ -29,7 +29,20 @@ image:images/lab7.1-vm1vm2.png[500,500]
 +
 image:images/lab7.1-ssa.png[400,400]
 
-.  Watch the *Last Analyzed* section in the *Lifecycle* section and press the *refresh* button until the date and time gets updated. When the date here gets updated to the current date and time then your analysis scan has completed.
+. Now let's take a closer look at the progress of our scan job. Navigate to *Administrator -> Tasks* at the top right.
++
+image:images/lab7.1-admintasks.png[300,300]
+
+. Press the *Refresh* button at the top. Notice that eventually the job message changes to *Process Completed Successfully*.
++
+image:images/lab7.1-scanrefresh.png[2000,2000]
+image:images/lab7.1-scancompleted.png[2000,2000]
+
+. Now let's navigate back to the *lab7-vm1* VM. Click on *Services -> Workloads*
++
+image:images/lab7.1-serviceworkloads.png[400,400]
+
+. Look at the *Last Analyzed* line in the *Lifecycle* section in this VM summary view. Notice that the date and time has been updated to today's current date and time.
 +
 image:images/lab7.1-lastanalyzed.png[500,500]
 
@@ -106,7 +119,7 @@ image:images/lab7.2-vmreport.png[1000,1000]
 +
 image:images/lab7.2-queue-reportresult-vm.png[1000,1000]
 
-. In the report, you will notice that you have 2 systems that are vulnerable to the Meltdown and Spectre vulnerabilities: *lab7-vm1*, which is a Red Hat Virtualization VM and *lab7-vm2*, which is a Red Hat Openstack Platform instance. 
+. In the report, you will notice that you have 2 systems that are vulnerable to the Meltdown and Spectre vulnerabilities: *lab7-vm1*, which is a Red Hat Virtualization VM and *lab7-vm2*, which is a Red Hat Openstack Platform instance.
 +
 image:images/lab7.2-savedreport-vm.png[1000,1000]
 
