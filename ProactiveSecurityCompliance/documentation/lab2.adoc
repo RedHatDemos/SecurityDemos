@@ -34,13 +34,13 @@ NOTE: To save time on this lab exercise, the SCAP components in Satellite were a
 +
 image:images/lab2-scappolicies.png[1000,1000]
 +
-NOTE: A custom policy named *rhel7-custom* has already been uploaded for you. The *rhel7-custom* compliance policy simply checks to see if the AIDE package is installed.
+NOTE: A custom policy named *rhel7-custom* has already been uploaded for you. The *rhel7-custom* policy simply checks to see if the AIDE package is installed.
 
 
 === Creating a SCAP compliance policy for a host
 Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
 
-. Go back to the Red Hat Satellite server UI and navigate to *Hosts → Policies* and click on *New Compliance Policy* at the top right.
+. Click on *New Compliance Policy* at the top right.
 +
 image:images/lab2-newcompliancepolicy.png[1000,1000]
 +
