@@ -32,12 +32,7 @@ out of a VM.
 
 === Setup one IPsec machine to generate X.509 certificates:
 
-. Open the console for *8IPSec* and *9IPSec*. As noted in Lab 0, you have console access to all of the VMs that you will use in all the lab exercises. If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
-+
-image:images/lab4-console.png[200,200]
-image:images/console-textbox.png[500,500]
-
-. Next, we will need to generate the required X.509 certificates.
+. We will need to generate the required X.509 certificates.
 It does not matter which of the machines you use to generate the required X.509 certificates. Make sure you are running Red Hat Enterprise Linux 7.5 or later. The only additional requirements are some software packages required for the supplied python script vpn-cert-gen.py. Copy this script on the *8IPSec* host and install the additional packages:
 
  # Install dependencies for vpn-cert-gen.py
