@@ -43,7 +43,7 @@ image:images/ocp-ss6.png[400,400]
 +
 image:images/ocp-ss7.png[600,600]
 +
-. Notice all of the details that CloudForms discovers about the container image, including properties, relationships to other objects, OpenSCAP results, and compliance. This particular image has 26 high severity vulnerabilities. In this same view, in the *Environment Variables* section, note that this image is based on PHP 5.5.
+. Notice all of the details that CloudForms discovers about the container image, including properties, relationships to other objects, OpenSCAP results, and compliance. This particular image has 26 high severity vulnerabilities. In this same view, in the *Environment Variables* section, note that this image is based on *PHP 5.5*.
 +
 image:images/ocp-ss8.png[600,600]
 +
@@ -53,7 +53,7 @@ image:images/lab4-phpversion.png[400,400]
 +
 NOTE: If you do not see the *summit-labs* project in the list, click on the *View All* link in the *My Projects* list.
 
-. You’ll notice a familiar looking application running in here, *summit-php*. If we denied execution, why is it still running? Simply because we don’t want to rip an application out that may already be in production. The deny execution policy prevents additional containers from being instantiated. Let's give it a try. Expand the summit-php deployment in the main window and click the up arrow next to the Pod circle. Rather than quickly adding an additional pod, it will be prevented from doing so.
+. You’ll notice a familiar looking application running in here, *summit-php*. If we denied execution, why is it still running? Simply because we don’t want to rip an application out that may already be in production. The deny execution policy prevents additional containers from being instantiated. Let's give it a try. Expand the summit-php deployment in the main window and click the *up arrow* next to the Pod circle. Rather than quickly adding an additional pod, it will be prevented from doing so.
 +
 image:images/ocp-ss10.png[600,600]
 +

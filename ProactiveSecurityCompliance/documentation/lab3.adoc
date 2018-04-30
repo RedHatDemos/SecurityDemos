@@ -56,7 +56,7 @@ image:images/lab3.1-policy-assignment.png[600,600]
 +
 image:images/lab3.1-power-on.png[200,200]
 
-. Note the IP address for *lab-vm1*.
+. Note the IP address for *lab3-vm1*.
 +
 image:images/lab3.1-vm-ipaddress.png[400,400]
 
@@ -93,11 +93,11 @@ NOTE: labuser is a restricted user that was created by the admin. This user can 
 . Navigate to Services -> Workloads if not already there.
 +
 image:images/lab3.2-services-workloads.png[400,400]
-+
+
 . You will see that the VM is non-compliant. Click on the VM *lab3-vm2* to go to the summary screen.
 +
 image:images/lab3.2-all-vms.png[500,500]
-+
+
 . In the upper right hand corner click on *Compliance Status*.
 +
 image:images/lab3.2-compliance-status.png[400,400]
@@ -114,11 +114,11 @@ image:images/lab3.2-back-arrow.png[400,400]
 +
 . From the VM summary page click on Packages.
 +
-image:images/lab3.2-packages.png[400,400]
+image:images/lab3.2-packages.png[500,500]
 +
 . Scroll down to find the kernel package and note the version *693.el7*.
 +
-image:images/lab3.2-packages-view.png[600,600]
+image:images/lab3.2-packages-view.png[800,800]
 +
 . To mitigate against the Meltdown and Spectre vulnerabilities, the kernel package needs to be version *830.el7* or higher. Click on the *back arrow* to navigate back to the VM summary page.
 +
