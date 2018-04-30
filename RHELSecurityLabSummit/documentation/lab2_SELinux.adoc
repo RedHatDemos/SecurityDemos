@@ -6,9 +6,9 @@ You can achieve proactive vs reactive security by using Security Enhanced Linux.
 This lab exercise is split into three parts. In the first part of this lab exercise, you will become a hacker and try to execute a real vulnerability on a given Red Hat Enterprise Linux 7 system and explore how SELinux can help to protect this system. In the second part of this lab exercise, you will turn SELinux on for an environment of web servers in an automated fashion using Ansible. In the last part of this lab exercise, you will configure SELinux according to a U.S. Department of Defense STIG security control policy rule.
 
 == SELinux policy
-SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation. Privilege escalation means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
+SELinux *isolates* all processes running on the system to *mitigate* attacks which take advantage of privilege escalation vulnerabilities. A privilege escalation vulnerability means that a process gains more access rights than it should have. To prevent this, SELinux enforces Mandatory Access Control (MAC) mechanism over all processes. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The SELinux policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the SELinux policy.
 
-Now let's look at an example where using this process isolation can help protect us from a privilege escalation of an exploit.
+Now let's look at an example where using this process isolation can help protect us from a privilege escalation vulnerability of an exploit.
 
 == Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
 In this first exercise, let's become a hacker and try to exploit Red Hat Enterprise Linux 7 with the Shellshock vulnerability.
@@ -19,7 +19,7 @@ You can read a lot about this vulnerability. It is known as a bash exploit. A ro
 
 image:images/lab2-shellshock-1.png[]
 
-If you would have a _cgi_ script accessing user data or internal network then this script could compromise either internal network or user data on your system. 
+If you would have a _cgi_ script accessing user data or internal network then this script could compromise either internal network or user data on your system.
 
 The first question which usually comes to mind in term of SELinux and Shellshock is _"What does SELinux do to contain the the bash exploit (ShellShock)?"_
 
@@ -31,7 +31,7 @@ The picture below shows the situation described above with enabled SELinux and w
 
 image:images/lab2-shellshock-2.png[]
 
-Our possible _cgi_ scripts executed by an attacker can not access either user data or certain parts of internal network as it is defined in SELinux policy. 
+Our possible _cgi_ scripts executed by an attacker can not access either user data or certain parts of internal network as it is defined in SELinux policy.
 
 How is it done practically? How do types, which ensure described process separation, look in reality? Read below text and practice to get answers.
 
