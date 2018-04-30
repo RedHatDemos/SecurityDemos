@@ -49,7 +49,7 @@ The lab exercise is split into three steps:
 . Exploiting a RHEL system with SELinux in Enforcing mode
 . Analyzing SELinux denials
 
-=== Lab 2.1 exercise steps
+=== Lab 2.1.1 exercise steps
 
 The exploit will be executed from the _selinux1.example.com_ system.
 
@@ -74,7 +74,7 @@ Let's see this visually. Take a look at the image below. This image describes th
 
 image:images/lab2-shellshock-flow.png[]
 
-== Lab 2.2 Exploiting system with SELinux in Permissive mode
+== Lab 2.1.2 Exploiting system with SELinux in Permissive mode
 
 Now let's go through the steps we just described above.
 The _selinux4_ system has SELinux in permissive mode by default. It is running the Apache service running with an older version of bash. Everything is ready to run the exploit.
@@ -117,7 +117,7 @@ For testing purpose, few commands could be executed on victim (_selinux4_ machin
 Command _id_ prints real and effecitve user and group IDs, where we could see that user and group is apache. It's because cgi scripts are started with apache owner.
 Command _uname_ prints system information, where is hostname described, it's selinux4.example.com, which means it's victim system. These commands proofs that attack was successful
 
-==== Set SELinux to enforcing mode
+==== Lab 2.1.2 Set SELinux to enforcing mode
 
 Victim server (_selinux4_ system) has SELinux in permissive mode. Now, let's switch SELinux to enforcing and repeat the attack.
 
@@ -127,7 +127,7 @@ Connect to _selinux4_ and switch to Enforcing mode
     [root@selinux4 ~]# setenforce 1
     [root@selinux4 ~]# exit
 
-=== Exploiting system with SELinux in Enforcing mode
+=== Lab 2.1.3 Exploiting system with SELinux in Enforcing mode
 
 Right now, attack will be repeated but SELinux is in Enforcing mode on victim server (_selinux4_ system)
 
@@ -146,7 +146,7 @@ Now, from another terminal for the selinux1 system, let's run the exploit
 
 As you can see, there is no bash prompt on terminal where you used _nc_ command, because SELinux blocked this access. SELinux did its job!
 
-==== Analyzing SELinux denial
+==== Lab 2.1.4 Analyzing SELinux denial
 
 Let's analyze what happened and why SELinux blocked ShellShock exploit.
 
@@ -158,9 +158,9 @@ Connect to selinux4 system from selinux1 machine
 
 This is avc record from Audit daemon, which saying that cgi script called bashbug.sh labeled as httpd_sys_script_t tried to connect to tcp port 9999 labeled as jboss_management_port_t. Fortunately there is no allow rules for this access, so it was denied by kernel and SELinux mitigate this attack.
 
-= Enabling SELinux via Ansible
+= Lab 2.2 Enabling SELinux via Ansible
 
-=== Lab User Story
+=== Goal of Lab 2.2
 
 As an enterprise administrator I want to enable SELinux in my environment with an Apache server using both custom and standard paths for web files so that my Apache server is fully confined by SELinux. I want to use linux-system-roles/selinux as an ansible role which configures SELinux.
 
@@ -197,7 +197,7 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 
 *Important*: All steps in the _Configuration_ section have been already performed in the Summit lab environment. They are mentioned from an informative purpose and they need to executed (except the package installation) only if you use the revert script for this lab
 
-=== Basic environment configuration
+=== Lab 2.2.1 Basic environment configuration
 
 . If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
@@ -233,7 +233,7 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 	selinux2
 	selinux3
 
-=== Configuration of Apache webservers and with disabled SELinux.
+=== Lab 2.2.2 Configuration of Apache webservers and with disabled SELinux.
 
 In this section, _apache_ webservers will be setup via the _setup_webserver.yml_ playbook on _selinux2_ and _selinux3_ hosts  and SELinux will be turned off to create an environment described in the detailed lab user story.
 
@@ -295,7 +295,7 @@ At the end we need to install the _setools-console_ package containing SELinux p
 
 == Demonstration
 
-=== Test configured setup
+=== Lab 2.2.3 Test configured setup
 
     [root@selinux1 selinux_scripts]# hostname
     selinux1.example.com
@@ -326,7 +326,7 @@ At the end we need to install the _setools-console_ package containing SELinux p
 
     [root@selinux3 ~]# exit
 
-=== Turning SELinux on
+=== Lab 2.2.4 Turning SELinux on
 
 Setup SELinux to _permissive_ mode and relabel whole filesystem.
 
@@ -354,7 +354,7 @@ SELinux does not deny access, but denials are logged for actions that would have
 
     [root@selinux2 ~]# exit
 
-=== SELinux Troubleshooting
+=== Lab 2.2.5 SELinux Troubleshooting
 
 SELinux Troubleshooting can be performed on both hosts. We will use the _selinux2_ host for the following examples.
 
@@ -362,7 +362,7 @@ Log into the _selinux2_ host.
 
 	[root@selinux1 selinux_scripts]# ssh root@selinux2
 
-==== SELinux Port
+==== Lab 2.2.6 SELinux Port
 
 SELinux _httpd_t_ process domain used for Apache webservers is not able to bind to _tcp/7070_ port by default. There is no default rule for this access in the SELinux policy on the RHEL-7 _selinux2_ host.
 
@@ -376,7 +376,7 @@ Compare to that Apache webservers can bind other ports and these SELinux port ty
 
 	[root@selinux2 ~]# sesearch -A -s httpd_t -c tcp_socket -p name_bind
 
-==== SELinux File context
+==== Lab 2.2.7 SELinux File context
 
 SELinux _httpd_t_ process domain used for Apache webservers is not able to read a general _/var_ content with SELinux _var_t_ file type. There is no rule for this access in the SELinux policy.
 
@@ -393,7 +393,7 @@ We can use the matchpathcon utility to decide what should be a proper context fo
 
     [root@selinux2 ~]# exit
 
-=== SELinux _setup-selinux.yml_ ansible playbook
+=== Lab 2.2.8 SELinux _setup-selinux.yml_ ansible playbook
 
 According to our SELinux Troubleshooting we will create  an SELinux ansible playbook which will switch SELinux to Permissive mode and will apply all needed changes for our webservers's configuration.
 
@@ -416,7 +416,7 @@ The playbook uses linux-system-roles/selinux ansible role.
         roles:
             - linux-system-roles.selinux
 
-==== Configure SELinux variables
+==== Lab 2.2.8 Configure SELinux variables
 
 Note: All code lines are append into the _vars_ section in the _setup_selinux.yml_ ansible playbook.
 
@@ -441,7 +441,7 @@ All web servers are binded to the custom _tcp/7070_ port in our configuration. T
     SELinux_ports:
         - { ports: '7070', proto: 'tcp', setype: 'http_port_t', state: 'present' }
 
-==== Final SELinux _setup-selinux.yml_ ansible playbook
+==== Lab 2.2.9 Final SELinux _setup-selinux.yml_ ansible playbook
 
     ---
     - hosts: all
@@ -465,7 +465,7 @@ Apply defined configurations for all servers.
 
     [root@selinux1 selinux_scripts]# ansible-playbook -i inventory -u root setup-selinux.yml
 
-=== Re-test configured setup
+=== Lab 2.2.10 Re-test configured setup
 
 List all SELinux configuration changes.
 
@@ -510,9 +510,9 @@ There is a revert script for the lab environment configuration. This script can 
 
     [root@selinux1 selinux_scripts]# ansible-playbook -i inventory -u root revert-all.yml
 
-= How to set up a system with SELinux confined users
+= Lab 2.3 How to set up a system with SELinux confined users
 
-== Introduction
+== Goal of Lab 2.3
 
 In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u_ user by default. All processes run by _unconfined_u_ are in the _unconfined_t_ domain. This means that users can access across the system within the limits of the standard Linux DAC policy. However, a number of confined SELinux users are available in Red Hat Enterprise Linux. This means that users can be restricted to limited set of capabilities. Each Linux user is mapped to an SELinux user using SELinux policy, allowing Linux users to inherit the restrictions placed on SELinux users.
 
@@ -529,13 +529,13 @@ The lab exercise is split into three steps:
 . Confine Linux root users
 . Revert script
 
-== Configuration
+=== Lab 2.3.1 exercise steps
 
 Make sure that the "revert script" from previous workshop was executed, even if you didn't do the workshop.
 
     [root@selinux1 selinux_scripts]# ansible-playbook -i inventory -u root revert-all.yml
 
-== Confine regular Linux users
+== Lab 2.3.2 Confine regular Linux users
 
 All actions are performed on the _selinux2_ host which is a RHEL-7.6 Beta installation.
 
@@ -555,7 +555,7 @@ Linux users can be assigned to SELinux users using semanage login tool. By defau
 
     [root@selinux2 ~]# semanage login -l
 
-=== Change the default mapping
+=== Lab 2.3.3 Change the default mapping
 
 In order to change mapping all Linux users we need to modify the record with __default__ which represents all users without explicit mapping.
 
@@ -564,7 +564,7 @@ _system_u_ is a special user used only for system processes and in the future wi
     [root@selinux2 ~]#  semanage login -m -s user_u -r s0 __default__
     [root@selinux2 ~]#  semanage login -l
 
-=== Add a test user
+=== Lab 2.3.4 Add a test user
 
 After this when users (not root) will log in, their processes will run _user_t_ domain. Every user session but root will run with _user_t_:
 
@@ -623,7 +623,7 @@ And the same attempt in permissive mode.
 
 Since in permissive mode SELinux denials are not enforced, _user42_ can become root but we can see that the context stayed _user_t_ and didn't change to _unconfined_t_.
 
-== Confined Administrator
+== Lab 2.3.5 Confined Administrator
 
 There are two basic methods how to confine administator user.
 Administrator can be directly mapped to _sysadm_u_ SELinux user so that when such user logs in, the session will be run with _sysadm_t_ domain. In this case you need to enable _ssh_sysadm_login_ SELinux boolean in order to allow users assigned _sysadm_u_ to login using ssh.
