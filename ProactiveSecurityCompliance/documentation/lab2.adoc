@@ -234,17 +234,19 @@ Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
 ----
 
 . Confirm that the AIDE package is not installed.
++
 [source]
 ----
 # rpm -qa aide
 ----
-+
+
 . Now let's install the AIDE package onto the *lab2-vm1.example.com* host.
++
 [source]
 ----
 # yum -y install aide
 ----
-+
+
 . We will re-execute the *rhel7-custom* compliance policy scan on the *lab2-vm1.example.com* host later in this lab exercise to confirm that the *rhel7-custom* policy scan now passes.
 
 === Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
