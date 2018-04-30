@@ -23,6 +23,8 @@ image:images/lab1.1-all-services.png[900,900]
 
 . Name the VM *lab1-vm1*, choose the default IP Address *192.168.1.110* , and choose the *ssg-rhel7-role-standard* SCAP Profile from the drop down. Click on *Submit*. This will provision a Red Hat Enterprise Linux 7.5 VM in Red Hat Virtualization that is locked down to the *ssg-rhel7-role-standard* SCAP Profile.
 +
+WARNING: Provisioning and scanning can take up to 10 minutes.
++
 image:images/lab1.1-order-service.png[600,600]
 
 . From the Service Requests page, click on the *Refresh* button at the top until the service request shows *Approved*. Note that this default approval workflow can be customized.
@@ -37,17 +39,15 @@ image:images/lab1.1-services-myservices.png[400,400]
 +
 image:images/lab1.1-myservice.png[600,600]
 
-. Press the refresh button periodically to refresh the Provisioning Ansible output.
+. Press the refresh button periodically to refresh the Ansible output.
 +
-NOTE: After clicking on refresh you will need to click on the *Provisioning* tab to view the Ansible output. For this lab, provisioning and scanning can take up to 10 minutes to complete.
+NOTE: After clicking on refresh you will need to click on the *Provisioning* tab to view the Ansible output. You can disregard `FAILED - RETRYING` messages in the output as this is normal.
 +
 image:images/lab1.1-service-results.png[400,400]
 
-. Review the Ansible provisioning playbook output by scrolling all the way down. Notice that the Ansible *PLAY RECAP* shows no failures, which means that the Ansible provisioning playbook ran successfully.
+. Review the Ansible provisioning playbook output by scrolling all the way down. Notice that the SCAP remediation has ran and the *PLAY RECAP* shows no failures.
 +
 image:images/lab1.1-ansible-output.png[400,400]
-+
-NOTE: You may see something similar to `FAILED - RETRYING: Wait for asynchronous job to complete (100 retries left).` under the *TASK* sections.  This is a retry, not a catastrophic failure, and is expected.
 
 . Go back to the top of the screen and click on the *Details* tab. Then click on your newly provisioned *lab1-vm1* VM.
 +
