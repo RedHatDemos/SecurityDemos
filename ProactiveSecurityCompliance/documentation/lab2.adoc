@@ -163,12 +163,14 @@ image:images/lab2-5scapreportsresults.png[1000,1000]
 image:images/lab2-reportedat.png[1000,1000]
 
 . In this report, you can see the security rules that have passed and failed at a high level which allows you to see the security posture of a system based upon an assigned audit policy.
++
+image:images/lab2-viewreport.png[1000,1000]
 
 . To see the detailed full report, click on *View full report* at the top right.
 +
 image:images/lab2-viewfullreport.png[1000,1000]
 
-. Glance through this report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for a deeper drill down.
+. Glance through this full report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for a deeper drill down.
 +
 image:images/lab2-moredetails.png[500,500]
 
