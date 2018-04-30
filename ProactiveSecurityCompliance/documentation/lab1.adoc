@@ -39,7 +39,7 @@ image:images/lab1.1-myservice.png[600,600]
 
 . Press the refresh button periodically to refresh the Provisioning Ansible output.
 +
-NOTE: After clicking on refresh you will need to click on the *Provisioning* tab to view the Ansible output.
+NOTE: After clicking on refresh you will need to click on the *Provisioning* tab to view the Ansible output. For this lab, provisioning and scanning can take up to 10 minutes to complete.
 +
 image:images/lab1.1-service-results.png[400,400]
 
