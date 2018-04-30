@@ -289,24 +289,26 @@ image:images/lab2-openscapscan.png[1000,1000]
 +
 image:images/lab2-successcircle.png[1000,1000]
 
-. Now let's view the SCAP scan results reports again for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
+. Now let's view the SCAP scan reports again for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
 +
 image:images/lab2-hostreports.png[600,600]
 
-. Notice that there are 5 new Compliance reports for the 5 SCAP compliance policies (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
+. Notice that there are 5 new Compliance reports, each one corresponding to a SCAP policy (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
 
 +
 NOTE: For the recently run *RHEL7_Standard* compliance policy, notice that 19 rules now pass(vs 8 rules that passed before) and 3 rules now fail (vs 2 rules failing before). This is because of the tailoring file we attached to the *RHEL7_Standard* compliance policy. Also, notice that now the 1 rule in the *rhel7-custom* policy now passes (vs failing before).
 +
 image:images/lab2-scapreportafter.png[1000,1000]
 
-. Take a closer look at the OpenSCAP compliance policy scan report for *rhel7-custom* by clicking on the report for the *rhel7-custom* policy by clicking the link in the second *Reported At* column. Notice that now this policy passes since AIDE is now installed on this *lab2-vm1.example.com* host.
+. Click on the report for the *rhel7-custom* policy by clicking the link in the  *Reported At* column.
 +
 image:images/lab2-custompolicypass1.png[1000,1000]
+
+. Notice that the policy now has passed since AIDE is now installed on this *lab2-vm1.example.com* host.
 +
 image:images/lab2-custompolicypass2.png[1000,1000]
 
-. In addition, let's see how many hosts are compliant to the *rhel7-custom* compliance policy. Navigate to *Hosts → Policies*. Here, you can see the number of hosts that are compliant and non-compliant with the policy. In addition, you can see how many hosts were never audited and see the report for the *rhel7-custom* policy directly from here as well.
+. In addition, let's see how many hosts are compliant to the *rhel7-custom* compliance policy. Navigate to *Hosts → Policies*. Click on *rhel7-custom* to see the number of hosts that are compliant and non-compliant within a policy.
 +
 image:images/lab2-compliancesummary.png[1000,1000]
 
