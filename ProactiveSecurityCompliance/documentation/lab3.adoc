@@ -83,7 +83,7 @@ image:images/lab3.1-vm-ipaddress.png[400,400]
 aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
 ----
 
-. Log out of the ssh session as well as CloudForms.
+. Log out of the ssh session.
 
 === Lab 3.2 Using Red Hat CloudForms compliance policy to determine if an OpenStack instance is vulnerable to the Meltdown and Spectre vulnerabilities
 . Open a private browser window in your web browser.  In the private browser window go to the CloudForms appliance URL (cfme-GUID.rhpds.opentlc.com) and log in with *labuser* as the user name and *r3dh4t1!* as the password.
