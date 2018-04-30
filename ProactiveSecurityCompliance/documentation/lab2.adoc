@@ -249,7 +249,7 @@ image:images/lab2-uploadtailoringfile-location.png[600,600]
 
 . Now let's assign this tailoring file to a compliance policy. Navigate to *Hosts → Policies*. For the *RHEL7_Standard* compliance policy that you created earlier, click on *Edit*.
 +
-image:images/lab2-editstandardpolicy.png[600,600]
+image:images/lab2-editstandardpolicy1.png[600,600]
 
 . Under the *SCAP Content* tab, select the tailoring file we uploaded earlier in the *Tailoring File* section. Note that the *XCCDF Profile in Tailoring File* section automatically got filled in once you select your tailoring file. Press *Submit*.
 +
