@@ -194,7 +194,7 @@ image:images/lab2-backarrowreport.png[1000,1000]
 
 . Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. In the search field enter *compliance_failed > 10* then click *Search*. This will find any compliance report that have greater than 10 compliance failures.
 +
-image:images/lab2-compliancefailedfilter.png[1000,1000]
+image:images/lab2-compliancefailedfilter1.png[1000,1000]
 
 === Lab 2.5 Fixing a specific OpenSCAP scan failure
 . Now let's fix the OpenSCAP scan failure from the *rhel7-custom* compliance policy. Remember that this compliance check failed since the AIDE package is not installed on the *lab2-vm1.example.com* host. Let's fix this OpenSCAP scan failure by installing the AIDE package on the *lab2-vm1.example.com* host.
