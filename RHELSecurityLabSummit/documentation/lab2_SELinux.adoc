@@ -74,7 +74,7 @@ Let's see this visually. Take a look at the image below. This image describes th
 
 image:images/lab2-shellshock-flow.png[]
 
-=== Exploiting system with SELinux in Permissive mode
+== Lab 2.2 Exploiting system with SELinux in Permissive mode
 
 Now let's go through the steps we just described above.
 The _selinux4_ system has SELinux in permissive mode by default. It is running the Apache service running with an older version of bash. Everything is ready to run the exploit.
