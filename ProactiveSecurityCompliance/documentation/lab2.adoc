@@ -154,7 +154,7 @@ image:images/lab2-successcircle.png[1000,1000]
 +
 image:images/lab2-hostreports.png[600,600]
 
-. Notice that there are 5 Compliance reports for the 5 SCAP compliance policies (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
+. Notice that there are 5 Compliance reports, each one corresponding to a SCAP policy (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
 +
 image:images/lab2-5scapreportsresults.png[1000,1000]
 
@@ -170,10 +170,11 @@ image:images/lab2-viewreport.png[1000,1000]
 +
 image:images/lab2-viewfullreport.png[1000,1000]
 
-. Glance through this full report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for a deeper drill down.
+. Glance through this full report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for more detailed information.
 +
-image:images/lab2-moredetails.png[500,500]
+image:images/lab2-moredetails1.png[500,500]
 
+. Click on the Browsers *Back* button to return to the compliance report.
 . Click the *Back* button in the top right menu (see below) to get back to the page with the full list of Compliance Reports.
 +
 image:images/lab2-backarrowreport.png[1000,1000]
@@ -182,15 +183,9 @@ image:images/lab2-backarrowreport.png[1000,1000]
 +
 image:images/lab2-reports-rhel7-custom.png[1000,1000]
 
-. Notice that the *rhel7-custom* compliance policy only checks whether or not the AIDE package is installed. You can see from the report for the *rhel7-custom* policy that this compliance check failed. Therefore, the AIDE package is not installed on this host (lab2-vm1.example.com).
-
-. Take a look at the top right buttons in the Satellite UI. Notice also that you can *Download the XML* of the report in bzip or HTML as well.
+. Notice that the *rhel7-custom* compliance policy only checks whether or not the AIDE package is installed. You can see from the report for the *rhel7-custom* policy that this compliance check failed. Take a look at the top right buttons in the Satellite UI. You can optionally *Download the XML* of the report in bzip or HTML format. Click on the *Back* button when done.
 +
-image:images/lab2-downloadxml.png[1000,1000]
-
-. Click the *Back* button in the top right menu (see below) to get back to the page with the full list of Compliance Reports.
-+
-image:images/lab2-backarrowreport.png[1000,1000]
+image:images/lab2-downloadxml1.png[1000,1000]
 
 . Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. In the search field enter *compliance_failed > 10* then click *Search*. This will find any compliance report that have greater than 10 compliance failures.
 +
