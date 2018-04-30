@@ -1,7 +1,7 @@
 
 = Lab 2: Security Enhanced Linux
 
-== Goal of Lab 1
+== Goal of Lab 2
 The goal of this lab is to use Security Enhanced Linux (SELinux) to help mitigate against attacks due to privilege escalation vulnerabilities in a three part exercise.
 
 * In the first part of this lab exercise, you will become a hacker and try to execute a real vulnerability on a given Red Hat Enterprise Linux 7 system and explore how SELinux can help to protect this system.
@@ -36,9 +36,9 @@ Our possible _cgi_ scripts executed by an attacker can not access either user da
 
 How is it done practically? How do types, which ensure described process separation, look in reality? Read below text and practice to get answers.
 
-== Lab 3.1 Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
+== Lab 2.1 Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
 
-=== Goal of Lab 3.1
+=== Goal of Lab 2.1
 In this first exercise, let's become a hacker and try to exploit Red Hat Enterprise Linux 7 with the Shellshock vulnerability.
 
 As an administrator of Red Hat Enterprise Linux 7 servers, I want to have enabled SELinux for my webserver environment to mitigate damage by zero day vulnerbalities.
@@ -49,7 +49,7 @@ The lab exercise is split into three steps:
 . Exploiting a RHEL system with SELinux in Enforcing mode
 . Analyzing SELinux denials
 
-=== Lab 3.1 exercise steps
+=== Lab 2.1 exercise steps
 
 The exploit will be executed from the _selinux1.example.com_ system.
 
