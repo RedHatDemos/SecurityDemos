@@ -144,7 +144,7 @@ We will focus on the Ansible remediation options in this part of the lab.
 . Let us open the generated playbook using a text editor:
 +
 ....
-[root@openscap]# vi playbook.yml
+[root@openscap]# nano playbook.yml
 ---
 ###############################################################################
 #
