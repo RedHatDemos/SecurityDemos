@@ -8,8 +8,8 @@ OpenSCAP is a family of open source SCAP tools and content that help users creat
 OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this segment we will focus on one-off scanning to get started.
 
 === Prerequisites
-Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages on the "openscap.example.com" VM:
-
+. Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages on the "openscap.example.com" VM:
++
  # the tool that performs the scanning
  yum install openscap-scanner
  # project that brings in security policies we will load and test agains
@@ -17,8 +17,8 @@ Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to
  # we will need this later for Ansible based remediations
  yum install ansible
 
-Verify a successful installation by running:
-
+. Verify a successful installation by running:
++
  $ oscap -V
 
  OpenSCAP command line tool (oscap) 1.2.17
@@ -35,14 +35,14 @@ Verify a successful installation by running:
  CVRF Version: 1.1
  ...
 
-Furthermore, let us install SCAP Workbench on the main "workstation.example.com" VM:
-
+. Furthermore, let us install SCAP Workbench on the main "workstation.example.com" VM:
++
  # GUI tool for scanning and content customization, a front-end for OpenSCAP
  yum install scap-workbench
 
 === Performing our first scan
-Switch to the "openscap" VM. Let's see the compliance content provided by `scap-security-guide`:
-
+. Switch to the "openscap" VM. Let's see the compliance content provided by `scap-security-guide`:
++
  $ rpm -ql scap-security-guide
  ...
  /usr/share/xml/scap/ssg/content/ssg-rhel7-cpe-dictionary.xml
@@ -52,12 +52,12 @@ Switch to the "openscap" VM. Let's see the compliance content provided by `scap-
  /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
  ...
 
-Move to the `content` folder so we can avoid typing long paths:
-
+. Move to the `content` folder so we can avoid typing long paths:
++
  cd /usr/share/xml/scap/ssg/content
 
-Run the first baseline scan:
-
+. Run the first baseline scan:
++
  # let's check which compliance profiles are available for rhel7
  oscap info ssg-rhel7-ds.xml
  # let's perform our first testing scan with the vanilla OSPP profile
@@ -69,12 +69,12 @@ Run the first baseline scan:
  # use --report to get human readable report (can also be generated from ARF after the scan)
  oscap xccdf eval --profile ospp-rhel7 --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel7-ds.xml
 
-(optional) Generate HTML report separately:
-
+. (optional) Generate HTML report separately:
++
  oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 
-Switch to the "workstation.example.com" VM, copy the report.html over there to view it in your web browser.
-
+. Switch to the "workstation.example.com" VM, copy the report.html over there to view it in your web browser.
++
  scp root@openscap.example.com:/tmp/report.html /tmp/report.html
  firefox /tmp/report.html
 
@@ -86,35 +86,38 @@ image::images/scap_report_pass.png[HTML report: A rule that is passing]
 image::images/scap_report_fail.png[HTML report: A rule that is failing]
 
 === Customizing existing content for our use-case
-Let us stay on the "workstation.example.com" VM. Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
+. Let us stay on the "workstation.example.com" VM. Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
 After Workbench starts click RHEL7 to open the compliance content for Red Hat Enterprise Linux 7.
-
++
 image::images/scap_workbench_opened.png[SCAP Workbench opened, profile selected]
 
-Select desired profile and click Customize. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *Done* to save the profile. You have essentially created a new profile.
-
+. Select desired profile and click Customize. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *Done* to save the profile. You have essentially created a new profile.
++
 image::images/scap_workbench_tailoring.png[SCAP Workbench content customization]
 
-Before going further it makes sense to run a test scan with the new profile we created. Click *Scan* and inspect the results.
+. Before going further it makes sense to run a test scan with the new profile we created. Click *Scan* and inspect the results.
 
-You can save it to a tailoring file by selecting File->Save Customization.
+. (optional) You can save it to a tailoring file by selecting File->Save Customization.
 
 === Remediation possibilities
-Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! Please test before deploying. If you want to test remediations as part of this lab, perform them on the "openscap.example.com" VM to avoid modifying the workstation VM.
+Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! Please test before deploying. If you want to test remediations as part of this lab, perform them on the "openscap.example.com" VM to avoid modifying the workstation VM. There are two main approaches to remediating.
 
-There are two main approaches to remediating. One is to generate bash remediation script and run it on target machine(s).
-
+. (optional) One is to generate bash remediation script and run it on target machine(s). This can be accomplished by running:
++
  oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash.sh
 
-The other is to generate an ansible playbook that will put the machine into compliance.
-
+. The other is to generate an ansible playbook that will put the machine into compliance. Let us generate a playbook from the results:
++
  oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
 
 Notice that in both cases we are using empty result-id, that is a trick to avoid specifying the full result ID.
 
-We will focus on the Ansible remediation options in this part of the lab. Let us open the generated playbook using a text editor:
+We will focus on the Ansible remediation options in this part of the lab.
 
+. Let us open the generated playbook using a text editor:
++
 ....
+$ vi playbook.yml
 ---
 ###############################################################################
 #
@@ -130,7 +133,8 @@ We will focus on the Ansible remediation options in this part of the lab. Let us
 ###############################################################################
 ....
 
-You can customize the playbook by changing the variables listed at the top of the generated file:
+. You can customize the playbook by changing the variables listed at the top of the generated file. Let's change the password minimul length by setting the `var_password_pam_minlen` to 18.
++
 ....
    vars:
       var_accounts_password_minlen_login_defs: 6
@@ -140,19 +144,12 @@ You can customize the playbook by changing the variables listed at the top of th
       var_password_pam_maxrepeat: 2
       var_password_pam_maxclassrepeat: 4
       var_password_pam_dcredit: -1
-      var_password_pam_minlen: 15
-      var_password_pam_ucredit: -1
-      var_password_pam_ocredit: -1
-      var_password_pam_lcredit: -1
-      var_password_pam_difok: 8
-      var_password_pam_minclass: 4
-      var_accounts_tmout: 600
-      var_accounts_max_concurrent_login_sessions: 10
+      var_password_pam_minlen: 18
 ...
 ....
 
-Exploring the playbook further you will see the tasks that set up the machine:
-
+. Exploring the playbook further you will see the tasks that set up the machine:
++
 ....
    - name: Ensure gpgcheck Enabled For All Yum Package Repositories
       with_items: "{{ yum_find.files }}"
@@ -176,10 +173,10 @@ Exploring the playbook further you will see the tasks that set up the machine:
         - CJIS-5.10.4.1
 ....
 
-Let us run the playbook locally in check mode to see how it would change the machine to put it into compliance. Make sure you run this on the "openscap.example.com" VM:
-
+. Let us run the playbook locally in check mode to see how it would change the machine to put it into compliance. Make sure you run this on the "openscap.example.com" VM:
++
  ansible-playbook -i "localhost," -c local --check playbook.yml
-
++
 ....
 ...
 TASK [Import RedHat GPG key] ******************************************************************************************************************************************************************
