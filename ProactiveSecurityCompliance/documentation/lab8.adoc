@@ -202,9 +202,7 @@ It is also possible to automate some of the issues with an Ansible Playbook that
 
 image:images/lab8.2-ansiblelogo.png[1000,1000]
 
-For this part of the lab exercise, we will the payload injection vulnerability using an Ansible playbook vs doing it manually like we did in the previous lab exercise. We will execute these steps on the *ic4.summit.exmaple.com VM.
-
-. In this particular case of the payload injection security issue, an Ansible Playbook is available for us.
+. For this part of the lab exercise, we will fix the payload injection vulnerability using an Ansible playbook versus fixing it manually like we did in the previous exercise. We will execute these steps on the *ic4.summit.exmaple.com* VM.
 +
 image:images/lab8.2-ansibleavailable.png[1000,1000]
 
@@ -212,7 +210,7 @@ image:images/lab8.2-ansibleavailable.png[1000,1000]
 +
 image:images/lab8.2-ansibleplaybook-payloadinjection.png[1000,1000]
 
-. And once there, click on *Create a plan*.
+. Click on *Create a plan*.
 +
 image:images/lab8.2-createaplan.png[1000,1000]
 
@@ -221,8 +219,8 @@ image:images/lab8.2-createaplan.png[1000,1000]
 +
 image:images/lab8.2-playbookbuilder.png[1000,1000]
 
-. As seen in the previous part of this lab, there are two ways to solve this issue, one is by updating the kernel, and the other one is apply the needed changes to the */etc/sysctl.conf* file to add the mitigation configuration, and reload the kernel configuration.
-Insights gives us the opportunity to choose the resolution that we want. Please make sure to select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the *Save* button.
+. As you can see, there are two ways to solve this issue, one is by updating the kernel, and the other one is apply the needed changes to the */etc/sysctl.conf* file, add the mitigation configuration, and reload the kernel configuration.
+Insights gives us the opportunity to choose the resolution that we want. Select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the *Save* button.
 +
 image:images/lab8.2-setacklimit.png[1000,1000]
 
@@ -230,45 +228,44 @@ image:images/lab8.2-setacklimit.png[1000,1000]
 +
 image:images/lab8.2-saveplanneroutput.png[1000,1000]
 
-. You should now download the playbook. However, the playbook has already downloaded for you to the /root directory on the Ansible Tower machine.
+NOTE: Normally you would download the playbook and execute it. However, for your convenience this playbook has already downloaded for you to the /root directory on the Ansible Tower server. Now let's log into the Ansible Tower server and execute the playbook.
 
-. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation host from your desktop system replacing *GUID* with your lab's *GUID*:
 +
 [source]
 ----
 [lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
 ----
 
-. If not already root, become *root* and then log into the Ansible Tower system *tower.summit.example.om* host.
+. If not already root, become *root* and then log into the Ansible Tower system *tower.example.com* host.
 +
 [source]
 ----
 [lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh tower
+[root@workstation-GUID ~]# ssh tower.example.com
 ----
 
-. Once logged into Ansible Tower, inspect the Ansible Playbook that Insights has created automatically for you. Once you are done looking through the Ansible playbook, Type *:q!* to exit out of vi.
-
+. Once logged into the Ansible Tower server, inspect the Ansible Playbook that Insights has created automatically for you.
 +
 [source]
 ----
-[root@tower ~]# vi payload-injection.yml
+[root@tower ~]# cat payload-injection.yml
 ----
 
-. Now, simply proceed to remediate the payload injection security issue by executing the Ansible Playbook.
+. Remediate the payload injection security issue by executing the Ansible Playbook.
 +
 [source]
 ----
 [root@tower ~]# ansible-playbook payload-injection.yml
 ----
 +
-Please note that when the execution is completed, the Insights agent is also run as part of thsi Ansible playbook, so the latest state of the system is reporting into Insights automatically.
+NOTE: Please note that when the execution is completed, the Insights agent is also run as part of this Ansible playbook, so the latest state of the system is reporting into Insights automatically.
 
-. Now from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, just like *ic1.summit.example.com*.
+. Now from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue.
 +
 image:images/lab8.2-afteransiblefix.png[1000,1000]
 
-=== Lab 8.3 Automatically fix all the issues on client systems
+=== Lab 8.4 Automatically fix all the issues on client systems
 In this lab exercise, we will fix all the issues on the client systems, *ic1.summit.example.com* and *ic4.summit.example.com*
 
 . From the Satellite UI, click on *Red Hat Insights → Inventory* so we can focus on systems *ic1.summit.example.com* and *ic4.summit.example.com*, please notice these two show numerous actions each to be solved.
