@@ -14,7 +14,6 @@ Red Hat CloudForms provides out-of-the-box integration with Red Hat Ansible Auto
 This integration between Red Hat CloudForms and Red Hat Satellite allows you to have a central and automated way to do point in time security scans and remediations on a per-vm basis.
 Red Hat CloudForms has a robust reporting engine built into the product that allows you to create reports using any of the introspective data collected from your heterogeneous infrastructure. This data is stored either in an internal or external PostgreSQL database. You can use this collected data when creating reports , in control policies , or in automation workflows in Red Hat CloudForms.
 
-
 === Lab 5.1 OpenSCAP security scan at the push of a button
 
 Utilizing the integrated OpenSCAP scanning capabilities in Satellite and automation workflows with Red Hat CloudForms and Red Hat Ansible Automation, we will execute push button, automated OpenSCAP scanning and remediations.
@@ -24,13 +23,13 @@ Utilizing the integrated OpenSCAP scanning capabilities in Satellite and automat
 . Navigate to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
 +
 image:images/lab5.1-infra-vms.png[500,500]
-+
+
 . Click on the *lab5-vm1* VM.
 +
 image:images/lab5.1-clickvm.png[600,600]
-+
+
 . Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
-+
+
 image:images/lab5.1-scapscan.png[200,200]
 
 . From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is a custom security policy profile that just checks to see if the AIDE package is installed on your system. Press *Submit*.
@@ -38,21 +37,21 @@ image:images/lab5.1-scapscan.png[200,200]
 image:images/lab5.1-scandialog.png[800,800]
 +
 NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security policy profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
-+
+
 . Now let's take a look at what is being executed behind the scenes. Navigate to *Services -> My Services*.
 +
 image:images/lab5.1-servicesmyservices.png[400,400]
 +
 . Click on the *Sat6SCAPScan* service and then click on the *Provisioning* tab to view the Ansible output.
-+
+
 image:images/lab5.1-myservicesprovtab.png[600,600]
 +
 . Press the refresh button periodically to refresh the Provisioning Ansible output.
-+
+
 NOTE: Clicking on refresh takes you back to the Service details page so you must re-click on the *Provisioning* tab.
 +
 image:images/lab5.1-serviceresults.png[800,800]
-+
+
 . Review the Ansible provisioning playbook output by scrolling down. Notice that the Ansible play recap shows no failures, which means that the Ansible provisioning playbook ran successfully.
 +
 image:images/lab5.1-ansibleoutput.png[800,800]
@@ -75,7 +74,6 @@ NOTE: Our automated OpenSCAP scanning worklow using Ansible automation has autom
 image:images/lab5.2-tag-noncompliant.png[500,500]
 
 === Lab 5.3 Creating and Viewing SCAP compliance reports
-
 . Now that our OpenSCAP scan completed successfully and we have tagged VMs that are marked as either Compliant or Non-Compliant against various security profiles, let's create and view SCAP compliance reports. We will do this as a restricted user, the security compliance officer/auditor.
 
 +
@@ -145,7 +143,6 @@ image:images/lab5.4-remediate.png[1000,1000]
 image:images/lab5.4-scapremediatedialog.png[1000,1000]
 
 . Now, go back to your terminal and do a rpm -qa aide and in a few minutes, you will notice that the AIDE package gets automatically installed.
-
 +
 image:images/lab5.4-aide.png[400,400]
 
@@ -159,7 +156,7 @@ image:images/lab5.4-infra-vms.png[500,500]
 . Click on the *lab5-vm1* VM.
 +
 image:images/lab5.4-clickvm.png[500,500]
-+
+
 . Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
 +
 image:images/lab5.4-scapscan.png[200,200]
@@ -173,14 +170,15 @@ NOTE: Here you are presented with a list of security policy profiles to choose f
 . Now let's take a look at what is being executed behind the scenes. Navigate to *Services -> My Services*.
 +
 image:images/lab5.4-servicesmyservices.png[400,400]
+
 . Click on the *Sat6SCAPScan* service and then click on the *Provisioning* tab to view the Ansible output.
 +
 image:images/lab5.4-myservicesprovtab.png[600,600]
-+
+
 . Press the refresh button periodically to refresh the Provisioning Ansible output.
 +
 image:images/lab5.4-serviceresults.png[800,800]
-+
+
 . Review the Ansible provisioning playbook output by scrolling down. Notice that the Ansible play recap shows no failures, which means that the Ansible provisioning playbook ran successfully.
 +
 image:images/lab5.4-ansibleoutput.png[800,800]
@@ -193,13 +191,13 @@ image:images/lab5.4-infra-vms.png[500,500]
 . Click on the *lab5-vm1* VM.
 +
 image:images/lab5.4-clickvm.png[500,500]
-+
+
 . Scroll to the bottom of this page and notice the tags on this VM in the *Smart Management* section. Notice that the previous tag named *SCAP_rhel7-custom: Non-compliant* got updated to *SCAP_rhel7-custom: Compliant*.
 +
 NOTE: The *lab5-vm1* is now SCAP compliant to the *rhel7-custom* security policy profile.
 +
 image:images/lab5.4-tag-compliant.png[400,400]
-+
+
 . Log back into CloudForms as the security officer/auditor with *security* as the username and *r3dh4t1!* as the password.
 . Navigate to *Reports* and click on the *OpenSCAP Scan(rhel7-custom)* report. Then press the *Queue* button at the top to create the report. Press the *refresh* button on the top left until the report finishes generating.
 +
