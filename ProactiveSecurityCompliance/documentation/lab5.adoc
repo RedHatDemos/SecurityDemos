@@ -20,34 +20,34 @@ Utilizing the integrated OpenSCAP scanning capabilities in Satellite and automat
 
 . Log into CloudForms with *admin* as the username and *r3dh4t1!* as the password.
 
-. Navigate to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
+. Navigate to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines*.
 +
 image:images/lab5.1-infra-vms.png[500,500]
 
-. Click on the *lab5-vm1* VM.
+. Click on the *lab5-vm1* VM, if not already there.
 +
 image:images/lab5.1-clickvm.png[600,600]
 
 . Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
-
++
 image:images/lab5.1-scapscan.png[200,200]
 
-. From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is a custom security policy profile that just checks to see if the AIDE package is installed on your system. Press *Submit*.
+. From the dialog, for *SCAPProfiles*, choose *rhel7-custom* and *Submit*. This is a custom security policy profile that simply ensures that the AIDE package is installed on your system. *Past Scans* can be ignored.
 +
 image:images/lab5.1-scandialog.png[800,800]
 +
-NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security policy profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
+NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
 
 . Now let's take a look at what is being executed behind the scenes. Navigate to *Services -> My Services*.
 +
 image:images/lab5.1-servicesmyservices.png[400,400]
-+
+
 . Click on the *Sat6SCAPScan* service and then click on the *Provisioning* tab to view the Ansible output.
-
-image:images/lab5.1-myservicesprovtab.png[600,600]
 +
-. Press the refresh button periodically to refresh the Provisioning Ansible output.
+image:images/lab5.1-myservicesprovtab.png[600,600]
 
+. Press the refresh button periodically to refresh the Provisioning Ansible output.
++
 NOTE: Clicking on refresh takes you back to the Service details page so you must re-click on the *Provisioning* tab.
 +
 image:images/lab5.1-serviceresults.png[800,800]
