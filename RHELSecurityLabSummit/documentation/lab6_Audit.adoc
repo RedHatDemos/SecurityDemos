@@ -269,10 +269,12 @@ the CSV format suitable for use within LibreOffice:
 
 	[root@audit ~]# ausearch -ts today --format csv --extra-labels --extra-obj2 > /tmp/audit.log.csv
 
-In order to import the CSV log into LibreOffice you need to transfer the CSV
-file from the _audit.example.com_ system to the workstation system using `scp`
-and then open the CSV file using LibreOffice:
+In order to import the CSV log into LibreOffice, first ensure that you have
+connected to the workstation system using SSH with X11 forwarding enabled, next
+transfer the CSV file from the _audit.example.com_ system to the workstation
+system using `scp`, and then open the CSV file using LibreOffice:
 
+	[<labstation>]$ ssh -Y lab-user@workstation-GUID
 	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv /tmp/audit.log.csv
 	[lab-user@workstation-GUID ~]$ libreoffice /tmp/audit.log.csv
 
