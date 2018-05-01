@@ -3,11 +3,9 @@
 == Introduction
 
 The following lab is an introduction to the auditing capabilities of Red Hat
-Enterprise Linux.  These exercises require a functional RHEL-7.5 test system,
-preferably freshly installed.
-
-Some of these exercises may not work correctly on Red Hat Enterprise Linux
-releases older, or newer, than RHEL-7.5.
+Enterprise Linux.  The exercises below are intended as part of a Red Hat Summit
+lab session using RHEL-7.5, and may require modification to work in other lab
+environments.
 
 == Configuring Audit
 
