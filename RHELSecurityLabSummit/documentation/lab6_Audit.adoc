@@ -33,6 +33,7 @@ _audit.example.com_ system as "root", run the following commands to edit the
 _auditd.conf_ file:
 
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
+
 	[root@audit ~]# sed -e 's/^flush.*/flush = INCREMENTAL_ASYNC/' -i /etc/audit/auditd.conf
 	[root@audit ~]# sed -e 's/^freq.*/freq = 50/' -i /etc/audit/auditd.conf
 	[root@audit ~]# sed -e 's/^log_format.*/log_format = ENRICHED/' -i /etc/audit/auditd.conf
@@ -65,6 +66,7 @@ logged into the _audit.example.com_ system as "root", run the following commands
 to enable a number of pre-defined audit filters:
 
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
+
 	[root@audit ~]# cat /usr/share/doc/audit-*/rules/README-rules
 	[root@audit ~]# rm /etc/audit/rules.d/*
 	[root@audit ~]# cp /usr/share/doc/audit-*/rules/10-base-config.rules /etc/audit/rules.d
@@ -95,6 +97,7 @@ following commands to add a custom audit filter for the `/usr/bin/ping`
 application:
 
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
+
 	[root@audit ~]# auditctl -a always,exit -F exe=/usr/bin/ping -k rhsummit
 
 Custom audit filters can be made persistent by creating a new file in the
@@ -154,6 +157,7 @@ the _audit.example.com_ system as the "auditlab" user and run the following
 commands:
 
 	[lab-user@workstation-GUID ~]$ ssh auditlab@audit.example.com
+
 	[auditlab@audit ~]$ vi /etc/shadow
 	[auditlab@audit ~]$ date -s "8 Aug 2011 08:00:00 -0400"
 	[auditlab@audit ~]$ ping -c 1 127.0.0.1
@@ -175,6 +179,7 @@ record.  While logged into the _audit.example.com_ system as "root", run the
 following commands to see the login events on the test system:
 
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
+
 	[root@audit ~]# ausearch -ts today -m USER_LOGIN
 
 Multiple record types can be specified, the results include events which
@@ -221,6 +226,7 @@ While logged into the _audit.example.com_ system as "root", run the following
 command to create an audit report for today's activity:
 
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
+
 	[root@audit ~]# aureport -ts today --summary
 
 The `aulast` tool generates a report similar to the `last` command, except the
@@ -256,6 +262,7 @@ While logged into the _audit.example.com_ system as "root", run the following
 commands to see samples of the "csv" and "text" formats:
 
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
+
 	[root@audit ~]# ausearch -ts today --format csv
 	[root@audit ~]# ausearch -ts today --format text
 
@@ -273,6 +280,7 @@ transfer the CSV file from the _audit.example.com_ system to the workstation
 system using `scp`, and then open the CSV file using LibreOffice:
 
 	[<labstation>]$ ssh -Y lab-user@workstation-GUID
+
 	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv /tmp/audit.log.csv
 	[lab-user@workstation-GUID ~]$ libreoffice /tmp/audit.log.csv
 
@@ -282,6 +290,7 @@ In order to reset the system used for the lab, run the following commands as
 "root" on _audit.example.com_:
 
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
+
 	[root@audit ~]# rm /etc/audit/rules.d/*
 	[root@audit ~]# cp /usr/share/doc/audit-*/rules/10-no-audit.rules /etc/audit/rules.d
 	[root@audit ~]# augenrules --load
