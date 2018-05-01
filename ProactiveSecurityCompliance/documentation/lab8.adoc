@@ -197,9 +197,12 @@ image:images/lab8.1-payloadinjectionsearch-again.png[1000,1000]
 . Congratulations, you’re no longer impacted by the payload injection vulnerability!
 
 === Lab 8.3 Automatically fixing the payload injection security issue via Ansible Playbook
+
 It is also possible to automate some of the issues with an Ansible Playbook that Insights provides us. You can see that in the top left corner of every single issue with the Ansible logo in blue if a playbook is available or in grey if it’s not.
 
 image:images/lab8.2-ansiblelogo.png[1000,1000]
+
+For this part of the lab exercise, we will the payload injection vulnerability using an Ansible playbook vs doing it manually like we did in the previous lab exercise. We will execute these steps on the *ic4.summit.exmaple.com VM.
 
 . In this particular case of the payload injection security issue, an Ansible Playbook is available for us.
 +
