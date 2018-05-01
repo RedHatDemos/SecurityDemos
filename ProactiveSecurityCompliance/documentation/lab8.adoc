@@ -1,9 +1,7 @@
 == Lab 8: Proactive Security and Automated Risk Management with Red Hat Insights
 
 === Goal of Lab 8
-The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights.
-
-In this lab, we will focus only on the specific security features of Red Hat Insights.
+The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. In this lab, we will focus only on the specific security features of Red Hat Insights.
 
 === Introduction
 Red Hat Insights was designed to proactively evaluate the security, performance, and stability of your Red Hat platforms by providing prescriptive analytics of your systems. Red Hat Insights helps move you from reactive to proactive systems management, delivers actionable intelligence, and increases visibility of infrastructure risks and the latest security threats. Operational analytics from Red Hat Insights empowers you to prevent downtime and avoid firefighting while responding faster to new risks.
@@ -17,7 +15,6 @@ Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, R
 === Lab 8.1 Fixing the payload injection security issue in your system using Red Hat Insights from the Satellite UI
 
 ==== Cleaning up the Red Hat Insights client systems
-
 You’ve been put in charge of some newly acquired servers. Before you bring these servers into your environment, you decide to first audit and clean up what is inside these servers first.
 
 . If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
@@ -59,7 +56,6 @@ You’ve been put in charge of some newly acquired servers. Before you bring the
 ==== Adding your Red Hat Insights hosts to Red Hat Satellite
 
 . Let's pull down new bootstrap script from the Red Hat Satellite 6 server for both the Red Hat Insights hosts (ic1.summit.example.com and ic4.summit.example.com). Let's start with *ic1.summit.example.com*.
-
 +
 [source]
 ----
