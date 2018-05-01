@@ -250,6 +250,10 @@ be used to transform the results into different formats.  If you have already
 done the rest of this lab, you are most likely familiar with the default “raw”
 and the “interpreted” formats.  In addition to these formats, there are also
 “csv” and “text” formats which can be selected using the “--format” argument.
+The “-format” option, as well as several others which can customize the output
+of `ausearch`, can be found in the
+http://man7.org/linux/man-pages/man8/ausearch.8.html[ausearch(8)] manpage.
+
 While logged into the _audit.example.com_ system as "root", run the following
 commands to see samples of the "csv" and "text" formats:
 
@@ -265,13 +269,9 @@ the CSV format suitable for use within LibreOffice:
 
 	[root@audit ~]# ausearch -ts today --format csv --extra-labels --extra-obj2 > /tmp/audit.log.csv
 
-The “-format” option, as well as several others which can customize the output
-of `ausearch`, can be found in the
-http://man7.org/linux/man-pages/man8/ausearch.8.html[ausearch(8)] manpage.
-
-TIP: If you are using the demo systems at Red Hat Summit 2018, you can transfer
-the CSV file to the workstation system and view it with LibreOffice using
-the following commands run from a terminal on the workstation system:
+In order to import the CSV log into LibreOffice you need to transfer the CSV
+file from the _audit.example.com_ system to the workstation system using `scp`
+and then open the CSV file using LibreOffice:
 
 	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv /tmp/audit.log.csv
 	[lab-user@workstation-GUID ~]$ libreoffice /tmp/audit.log.csv
