@@ -266,9 +266,9 @@ NOTE: Please note that when the execution is completed, the Insights agent is al
 image:images/lab8.2-afteransiblefix.png[1000,1000]
 
 === Lab 8.4 Automatically fix all the issues on client systems
-In this lab exercise, we will fix all the issues on the client systems, *ic1.summit.example.com* and *ic4.summit.example.com*
+In this lab exercise, we will fix all the issues on the client systems, *ic1.summit.example.com* and *ic4.summit.example.com*.
 
-. From the Satellite UI, click on *Red Hat Insights → Inventory* so we can focus on systems *ic1.summit.example.com* and *ic4.summit.example.com*, please notice these two show numerous actions each to be solved.
+. From the Satellite UI, click on *Red Hat Insights → Inventory* so we can focus on systems *ic1.summit.example.com* and *ic4.summit.example.com*, please notice these two show numerous actions each to be resolved.
 +
 image:images/lab8.3-insightsinventory.png[1000,1000]
 
