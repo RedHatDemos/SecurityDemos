@@ -121,11 +121,17 @@ image::images/scap_workbench_tailoring.png[SCAP Workbench content customization]
 . (optional) You can save it to a tailoring file by selecting File->Save Customization.
 
 === Remediation possibilities
-Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! Please test before deploying. If you want to test remediations as part of this lab, perform them on the *openscap.example.com* host to avoid modifying the *workstation.example.com* host. There are two main approaches to remediating.
+Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! Please test before deploying.
 
-. (optional) One is to generate bash remediation script and run it on target machine(s). This can be accomplished by running:
+. If you want to test remediations as part of this lab, perform them on the *openscap.example.com* host to avoid modifying the *workstation.example.com* host:
 +
- [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash.sh
+ [root@workstation]# ssh openscap.example.com
+
+. (optional) Generate bash remediation script and run it on target machine(s). This can be accomplished by running:
++
+ [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash-fix.sh
+ [root@openscap]# chmod +x bash-fix.sh
+ [root@openscap]# ./bash-fix.sh
 
 . The other is to generate an ansible playbook that will put the machine into compliance. Let us generate a playbook from the results:
 +
