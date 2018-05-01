@@ -47,7 +47,7 @@ Make sure it outputs OpenSCAP version and versions of supported standards. If it
  [root@workstation] yum install scap-workbench
 
 === Performing our first scan
-. Switch to the "openscap" VM. Let's see the compliance content provided by `scap-security-guide`:
+. Switch to the "openscap.example.com" VM. Let's see the compliance content provided by `scap-security-guide`:
 +
  [root@openscap]# rpm -ql scap-security-guide
  ...
@@ -106,7 +106,7 @@ image::images/scap_workbench_tailoring.png[SCAP Workbench content customization]
 . (optional) You can save it to a tailoring file by selecting File->Save Customization.
 
 === Remediation possibilities
-Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! Please test before deploying. If you want to test remediations as part of this lab, perform them on the "openscap.example.com" VM to avoid modifying the workstation VM. There are two main approaches to remediating.
+Putting the machine (change its configuration) into compliance is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! Please test before deploying. If you want to test remediations as part of this lab, perform them on the "openscap.example.com" VM to avoid modifying the "workstation.example.com" VM. There are two main approaches to remediating.
 
 . (optional) One is to generate bash remediation script and run it on target machine(s). This can be accomplished by running:
 +
