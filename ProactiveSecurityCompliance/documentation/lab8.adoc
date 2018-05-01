@@ -120,7 +120,7 @@ Upload completed successfully!
 ----
 
 === Lab 8.2 Manually fixing the payload injection security issue
-In this section, we will manually fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on your client VMs without causing downtime.
+In this section, we will manually fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on *ic1.summit.example.com* without causing downtime.
 
 . Going back to the Satellite UI, click on *Red Hat Insights → Overview*, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
 +
@@ -201,7 +201,7 @@ It is also possible to automate some of the issues with an Ansible Playbook that
 
 image:images/lab8.2-ansiblelogo.png[1000,1000]
 
-. In the particular case of the payload injection security issue, an Ansible Playbook is available for us.
+. In this particular case of the payload injection security issue, an Ansible Playbook is available for us.
 +
 image:images/lab8.2-ansibleavailable.png[1000,1000]
 
@@ -213,7 +213,7 @@ image:images/lab8.2-ansibleplaybook-payloadinjection.png[1000,1000]
 +
 image:images/lab8.2-createaplan.png[1000,1000]
 
-. Name the plan *Payload*, select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE.
+. Name the plan *Payload*, select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE and click on *Save*.
 
 +
 image:images/lab8.2-playbookbuilder.png[1000,1000]
