@@ -50,11 +50,8 @@ image:images/lab7.1-lastanalyzed.png[500,500]
 +
 image:images/lab7.1-ssaresults-packages.png[1000,1000]
 
-. Notice all the packages that are installed on this VM.
-+
-image:images/lab7.1-ssaresults2.png[1000,1000]
 
-. Scroll down to the *kernel* package. Notice the version and release number of the kernel package. Kernel packages must be updated to at least version 3.10.0 with a release of 830.el7 to be protected from the Meltdown and Spectre vulnerabilities as noted in link:https://access.redhat.com/errata/RHSA-2018:0007[this Red Hat Security Advisory].
+. Notice all the packages that are installed on this VM. Scroll down to the *kernel* package. Notice the version and release number of the kernel package. Kernel packages must be updated to at least version 3.10.0 with a release of 830.el7 to be protected from the Meltdown and Spectre vulnerabilities as noted in link:https://access.redhat.com/errata/RHSA-2018:0007[this Red Hat Security Advisory].
 +
 image:images/lab7.1-kernel.png[1000,1000]
 
