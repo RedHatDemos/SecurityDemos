@@ -11,15 +11,15 @@ OpenSCAP allows you to perform both vulnerability and security compliance checks
 . Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages on the "openscap.example.com" VM:
 +
  # the tool that performs the scanning
- yum install openscap-scanner
+ [root@openscap]# yum install openscap-scanner
  # project that brings in security policies we will load and test agains
- yum install scap-security-guide
+ [root@openscap]# yum install scap-security-guide
  # we will need this later for Ansible based remediations
- yum install ansible
+ [root@openscap]# yum install ansible
 
 . Verify a successful installation by running:
 +
- $ oscap -V
+ [root@openscap]# oscap -V
 
  OpenSCAP command line tool (oscap) 1.2.17
  Copyright 2009--2017 Red Hat Inc., Durham, North Carolina.
@@ -38,12 +38,12 @@ OpenSCAP allows you to perform both vulnerability and security compliance checks
 . Furthermore, let us install SCAP Workbench on the main "workstation.example.com" VM:
 +
  # GUI tool for scanning and content customization, a front-end for OpenSCAP
- yum install scap-workbench
+ [root@workstation] yum install scap-workbench
 
 === Performing our first scan
 . Switch to the "openscap" VM. Let's see the compliance content provided by `scap-security-guide`:
 +
- $ rpm -ql scap-security-guide
+ [root@openscap]# rpm -ql scap-security-guide
  ...
  /usr/share/xml/scap/ssg/content/ssg-rhel7-cpe-dictionary.xml
  /usr/share/xml/scap/ssg/content/ssg-rhel7-cpe-oval.xml
@@ -54,29 +54,29 @@ OpenSCAP allows you to perform both vulnerability and security compliance checks
 
 . Move to the `content` folder so we can avoid typing long paths:
 +
- cd /usr/share/xml/scap/ssg/content
+ [root@openscap]# cd /usr/share/xml/scap/ssg/content
 
 . Run the first baseline scan:
 +
  # let's check which compliance profiles are available for rhel7
- oscap info ssg-rhel7-ds.xml
+ [root@openscap]# oscap info ssg-rhel7-ds.xml
  # let's perform our first testing scan with the vanilla OSPP profile
  # (notice that we can skip the profile ID prefix to make the command simpler,
  # the real ID is "xccdf_org.ssgproject.content_profile_ospp-rhel7")
- oscap xccdf eval --profile ospp-rhel7 ./ssg-rhel7-ds.xml
+ [root@openscap]# oscap xccdf eval --profile ospp-rhel7 ./ssg-rhel7-ds.xml
  # Let's store the results of the scan this time:
  # use --results-arf to get machine readable results archive
  # use --report to get human readable report (can also be generated from ARF after the scan)
- oscap xccdf eval --profile ospp-rhel7 --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel7-ds.xml
+ [root@openscap]# oscap xccdf eval --profile ospp-rhel7 --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel7-ds.xml
 
 . (optional) Generate HTML report separately:
 +
- oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
+ [root@openscap]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 
 . Switch to the "workstation.example.com" VM, copy the report.html over there to view it in your web browser.
 +
- scp root@openscap.example.com:/tmp/report.html /tmp/report.html
- firefox /tmp/report.html
+ [lab-user@workstation]$ scp root@openscap.example.com:/tmp/report.html /tmp/report.html
+ [lab-user@workstation]$ firefox /tmp/report.html
 
 === SCAP result / report terminology
 Rules can have several types of results but the most common ones are "pass" and "fail". Their meaning should be self-explanatory. Clicking on the rule title in the HTML report will bring up a pop-up dialog that let's you examine why exactly OpenSCAP failed or passed the machine. For example if it's testing file permissions on a list of files it will specify which files failed and what are their permission bits.
@@ -104,11 +104,11 @@ Putting the machine (change its configuration) into compliance is called *remedi
 
 . (optional) One is to generate bash remediation script and run it on target machine(s). This can be accomplished by running:
 +
- oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash.sh
+ [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash.sh
 
 . The other is to generate an ansible playbook that will put the machine into compliance. Let us generate a playbook from the results:
 +
- oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
+ [root@openscap]# oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
 
 Notice that in both cases we are using empty result-id, that is a trick to avoid specifying the full result ID.
 
@@ -117,7 +117,7 @@ We will focus on the Ansible remediation options in this part of the lab.
 . Let us open the generated playbook using a text editor:
 +
 ....
-$ vi playbook.yml
+[root@openscap]# vi playbook.yml
 ---
 ###############################################################################
 #
@@ -175,7 +175,7 @@ $ vi playbook.yml
 
 . Let us run the playbook locally in check mode to see how it would change the machine to put it into compliance. Make sure you run this on the "openscap.example.com" VM:
 +
- ansible-playbook -i "localhost," -c local --check playbook.yml
+ [root@openscap]# ansible-playbook -i "localhost," -c local --check playbook.yml
 +
 ....
 ...
