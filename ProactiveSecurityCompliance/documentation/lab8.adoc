@@ -119,12 +119,12 @@ Uploading Insights data, this may take a few minutes
 Upload completed successfully!
 ----
 
-=== Lab 8.2 Fixing the payload injection security issue
-. Going back to the Satellite UI, click on Red Hat Insights → Overview, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
+=== Lab 8.2 Manually fixing the payload injection security issue
+In this section, we will manually fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on your client VMs without causing downtime.
+
+. Going back to the Satellite UI, click on *Red Hat Insights → Overview*, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
 +
 image:images/lab8.1-insightsoverview.png[1000,1000]
-
-. In this lab, we will fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on your client VMs without causing downtime.
 
 . From your Satellite 6.3 UI, click on *Red Hat Insights → Inventory*.
 +
@@ -135,28 +135,25 @@ image:images/lab8.1-inventory.png[1000,1000]
 image:images/lab8.1-listofissues.png[1000,1000]
 
 . Notice that your system shows up with multiple security vulnerabilities.
-
 +
 NOTE: One of the security issues listed is the Meltdown and Spectre vulnerability. This is the security issue that says *Kernel vulnerable to side-channel attacks in modern microprocessors(CVE-2017-573/Spectre, CVE-2017-5754/Meltdown)*. To save time, we will NOT be fixing this particular security issue in this lab exercise since the fix for Meltdown and Spectre requires a kernel upgrade, which requires a reboot of the system.
-
 +
 NOTE: Our objective is to fix the payload injection problem without causing downtime, and see that it no longer appears as a vulnerability in Red Hat Insights. Specifically, this payload injection problem causes the kernel to be vulnerable to man-in-the-middle via payload injection. A flaw was found in the implementation of the Linux kernel's handling of networking challenge ack link:https://tools.ietf.org/html/rfc5961[RFC 5961] where an attacker is able to determine the shared counter. This flaw allows an attacker located on different subnet to inject or take over a TCP connection between a server and client without needing to use a traditional man-in-the-middle (MITM) attack.
 
 . Use your browser’s search function to search for *payload injection*.
-
 +
 NOTE: Reading the description for the vulnerability shows that the sysctl variable is set to a level that allows being exploited. We want to do the active mitigation by changing the sysctl variable and making it permanent on reboot. In this case, we do not want to update the kernel or reboot since we don’t want downtime.
 +
 image:images/lab8.1-payloadinjectionsearch.png[1000,1000]
 
-. . If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation host from your desktop system replacing *GUID* with your lab's *GUID*:
 +
 [source]
 ----
 [lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
 ----
 
-. If not already root, become *root* , log in to your two Red Hat Insights client machines (ic1.summit.example.com and ic4.summit.example.com), and make sure your old Red Hat Satellite information is removed. Let's start with *ic1.summit.example.com*.
+. If not already root, become *root* , log in to your two Red Hat Insights client machine *ic1.summit.example.com*
 +
 [source]
 ----
@@ -169,8 +166,7 @@ image:images/lab8.1-payloadinjectionsearch.png[1000,1000]
 [source]
 ----
 [root@ic1 ~]# echo "net.ipv4.tcp_challenge_ack_limit = 2147483647" >> /etc/sysctl.conf
-
-[root@ic1 ~]#  sysctl -p
+[root@ic1 ~]# sysctl -p
 net.ipv4.tcp_challenge_ack_limit = 100
 net.ipv4.tcp_challenge_ack_limit = 2147483647
 ----
@@ -178,18 +174,20 @@ net.ipv4.tcp_challenge_ack_limit = 2147483647
 . After applying the active mitigation, we want to have the system report any changes, run the following command as root on ic1.summit.example.com:
 +
 [source]
+----
 # redhat-access-insights
 Starting to collect Insights data
 Uploading Insights data, this may take a few minutes
 Upload completed successfully!
+----
 
-Wait until this step completes before moving to the next step.
+. Wait until this step completes before moving to the next step.
 
-. From your Satellite 6.3 UI, click on *Red Hat Insights → Inventory*.
+. From your Satellite UI, click on *Red Hat Insights → Inventory*.
 +
 image:images/lab8.1-insightsinventory.png[1000,1000]
 
-. Click on your client VM, which is *ic1.summit.example.com*. You will notice than the number of actions has decreased.
+. Click on your client VM, *ic1.summit.example.com*. You will notice than the number of actions has decreased.
 +
 image:images/lab8.1-actionsdecreased.png[1000,1000]
 
@@ -197,10 +195,9 @@ image:images/lab8.1-actionsdecreased.png[1000,1000]
 +
 image:images/lab8.1-payloadinjectionsearch-again.png[1000,1000]
 
-Congratulations, you’re no longer vulnerable to the payload injection vulnerability!
+Congratulations, you’re no longer impacted by the payload injection vulnerability!
 
-=== Lab 8.2 Automatically fixing the payload injection security issue via Ansible Playbook
-
+=== Lab 8.3 Automatically fixing the payload injection security issue via Ansible Playbook
 It is also possible to automate some of the issues with an Ansible Playbook that Insights provides us. You can see that in the top left corner of every single issue with the Ansible logo in blue if a playbook is available or in grey if it’s not.
 +
 image:images/lab8.2-ansiblelogo.png[1000,1000]
