@@ -10,7 +10,8 @@ OpenSCAP allows you to perform both vulnerability and security compliance checks
 === Prerequisites
 . Connect to openscap.example.com as follows:
 +
- [lab-user@workstation]$ ssh root@openscap.example.com
+ [lab-user@workstation]$ sudo -i
+ [root@workstation]# ssh root@openscap.example.com
 
 . Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages on the "openscap.example.com" VM:
 +
@@ -81,7 +82,9 @@ Make sure it outputs OpenSCAP version and versions of supported standards. If it
 
 . Switch to the "workstation.example.com" VM, copy the report.html over there to view it in your web browser.
 +
- [lab-user@workstation]$ scp root@openscap.example.com:/tmp/report.html /tmp/report.html
+ [root@workstation]$ scp root@openscap.example.com:/tmp/report.html /tmp/report.html
+ [root@workstation]$ chmod 644 /tmp/report.html
+ [root@workstation]$ exit
  [lab-user@workstation]$ firefox /tmp/report.html
 
 === SCAP result / report terminology
