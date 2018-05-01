@@ -8,6 +8,10 @@ OpenSCAP is a family of open source SCAP tools and content that help users creat
 OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this segment we will focus on one-off scanning to get started.
 
 === Prerequisites
+. Connect to openscap.example.com as follows:
++
+ [lab-user@workstation]$ ssh root@openscap.example.com
+
 . Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages on the "openscap.example.com" VM:
 +
  # the tool that performs the scanning
