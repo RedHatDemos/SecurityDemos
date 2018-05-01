@@ -12,113 +12,115 @@ Through analysis of Red Hat Insights metadata and curated knowledge based on ove
 
 Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, Red Hat Satellite, Red Hat CloudForms, and Ansible Tower by Red Hat.  Recommendations from Red Hat Insights are human-readable and in most cases can simply be copy and pasted into the terminal to resolve the issue. You may also automate remediation of hosts in your infrastructure with Red Hat Insights generated Ansible playbooks or Ansible Tower by Red Hat integration.
 
-=== Lab 8.1 Fixing the payload injection security issue in your system using Red Hat Insights from the Satellite UI
+=== Lab 8.1 Preparing Red Hat Insights Clients
+To prepare Red Hat Insights clients we must first register each node with Satellite and install the Red Hat Insights agent
 
-==== Cleaning up the Red Hat Insights client systems
-You’ve been put in charge of some newly acquired servers. Before you bring these servers into your environment, you decide to first audit and clean up what is inside these servers first.
-
-. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
+==== Lab 8.1.1 Registering host *ic1.summit.example.com* to Red Hat Satellite and install Red Hat Insights agent
+. If not already there, log into to the workstation host from your desktop system replacing *GUID* with your lab's *GUID*:
 +
 [source]
 ----
 [lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
 ----
 
-. If not already root, become *root* , log in to your two Red Hat Insights client machines (ic1.summit.example.com and ic4.summit.example.com), and make sure your old Red Hat Satellite information is removed. Let's start with *ic1.summit.example.com*.
+. If not already root, become *root* and then log into the *ic1.summit.example.com*.
 +
 [source]
 ----
 [lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]# ssh ic1.summit.example.com
-
-[root@ic1 ~]# subscription-manager clean
-[root@ic1 ~]# rm -fv /etc/rhsm/ca/katello*
-[root@ic1 ~]# rm -fv /etc/rham/facts/katello*
-[root@ic1 ~]# rm -rfv /var/lib/puppet
-[root@ic1 ~]# yum remove -y katello-ca-consumer
-[root@ic1 ~]# exit
 ----
 
-. Let's repeat these steps and remove our old Red Hat Satellite information from *ic4.summit.example.com* as well.
+. Download the Red Hat Satellite *bootstrap.py* script and make it executable.
 +
 [source]
 ----
-[root@workstation-GUID ~]# ssh ic4.summit.example.com
-
-[root@ic4 ~]# subscription-manager clean
-[root@ic4 ~]# rm -fv /etc/rhsm/ca/katello*
-[root@ic4 ~]# rm -fv /etc/rham/facts/katello*
-[root@ic4 ~]# rm -rfv /var/lib/puppet
-[root@ic4 ~]# yum remove -y katello-ca-consumer*
-[root@ic4 ~]# exit
-----
-
-==== Adding your Red Hat Insights hosts to Red Hat Satellite
-
-. Let's pull down new bootstrap script from the Red Hat Satellite 6 server for both the Red Hat Insights hosts (ic1.summit.example.com and ic4.summit.example.com). Let's start with *ic1.summit.example.com*.
-+
-[source]
-----
-[root@workstation-GUID ~]# ssh ic1.summit.example.com
-
-[root@ic1 ~]# curl https://sat6.summit.example.com/pub/bootstrap.py > bootstrap.py --insecure
-
+[root@ic1 ~]# curl -O http://sat6.summit.example.com/pub/bootstrap.py
 [root@ic1 ~]# chmod +x bootstrap.py
-
-[root@ic1 ~]# ./bootstrap.py -l admin -s sat6.summit.example.com -o 'Default Organization' -L 'Default Location' -g base_with_puppet -a base_with_puppet
-[root@ic1 ~]# exit
 ----
-. Now let's repeat the above steps for *ic4.summit.example.com*. Don't forget to ssh into *ic4.summit.example.com* this time around.
 
+. Execute *bootstrap.py* with the necessary parameters to register this node to Red Hat Satellite 6.
 +
-NOTE: If bootstrap.py fails with this error: *[RUNNING], [2018-04-19 06:28:43], [Calling Foreman API to create a host entry associated with the group & org]
-An error occured: HTTP Error 422: Unprocessable Entity
-url: https://sat6.summit.example.com:443/api/v2/hosts/
-code: 422*  , this means that machine has never been register using subscription manager. In this case, you just have to delete the hosts from the Satellite UI.
+[source]
+----
+[root@ic1 ~]# ./bootstrap.py -l admin -p r3dh4t1! -s sat6.summit.example.com -o 'Default Organization' -L 'Default Location' -g base_with_puppet -a base_with_puppet -f
 
-. On the Red Hat Satellite server (sat6-GUID.rhpds.opentlc.com), log in with *admin* as the username and *r3dh4t1!* as your password.
+...
+Complete!
+Uploading Enabled Repositories Report
+Loaded plugins: product-id
+[SUCCESS], [2018-05-01 14:24:26], [/usr/bin/yum -y remove rhn-setup rhn-client-tools yum-rhn-plugin rhnsd rhn-check rhnlib spacewalk-abrt spacewalk-oscap osad 'rh-*-rhui-client' 'candlepin-cert-consumer-*'], completed successfully.
+----
 
-. Go to *Hosts → All Hosts* and you will see them listed as follows:
-+
-image:images/lab8.1-allhosts.png[1000,1000]
-
-. Select *ic1.summit.example.com* and *ic4.summit.example.com* and delete them by going to Select *Action → Delete Hosts*, as in the following screen.
-+
-image:images/lab8.1-deletehosts.png[1000,1000]
-
-. Now, re-run the bootstrap.py script for both *ic1.summit.example.com* and *ic4.summit.example.com*. Refer back to the previous steps to see the commands to do this.
-
-. When logging into the Satellite UI you should see your systems registered. Go to *Hosts → Content Hosts* and you will see them listed as follows:
-+
-image:images/lab8.1-contenthosts.png[1000,1000]
-
-=== Installing the Red Hat Insights client
-
-. Now it’s the time to install the Insights RPM and register your system to Red Hat Insights.
-
+. Install and Register with Red Hat Insights:
 +
 NOTE: On RHEL 7.5, the client RPM has been renamed to insights-client, but this laboratory machines are using RHEL 7.0 and 7.3 for demonstration purposes, so the package name is still the old one.
-
-+
-NOTE: The bootstrap script provided in this lab already downloads and registers your hosts to Satellite, but in an environment where bootstrap script is not used, the needed steps are as follows:
-
-. To install Insights RPM in each of your systems issue the following command:
 +
 [source]
-[root@ic1 ~]# yum install redhat-access-insights
-
-. And then, simply register each machine with Red Hat Insights as follows:
-+
-[source]
+----
+[root@ic1 ~]# yum install -y redhat-access-insights
 [root@ic1 ~]# redhat-access-insights --register
 This host has already been registered.
 Automatic daily scheduling for Insights has been enabled.
 Starting to collect Insights data
 Uploading Insights data, this may take a few minutes
 Upload completed successfully!
+----
 
-=== Fixing the payload injection security issue
-. Now, going back to the Satellite UI, click on Red Hat Insights → Overview, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
+==== Lab 8.1.2 Registering Red Hat Insights host *ic4.summit.example.com* to Red Hat Satellite
+. If not already there, log into to the bastion host from your desktop system replacing *GUID* with your lab's *GUID*:
++
+[source]
+----
+[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+----
+
+. If not already root, become *root* and then log into the *ic1.summit.example.com*.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh ic4.summit.example.com
+----
+
+. Download the Red Hat Satellite *bootstrap.py* script and make it executable.
++
+[source]
+----
+[root@ic4 ~]# curl -O http://sat6.summit.example.com/pub/bootstrap.py
+[root@ic4 ~]# chmod +x bootstrap.py
+----
+
+. Execute *bootstrap.py* with the necessary parameters to register this node to Red Hat Satellite 6.
++
+[source]
+----
+[root@ic4 ~]# ./bootstrap.py -l admin -p r3dh4t1! -s sat6.summit.example.com -o 'Default Organization' -L 'Default Location' -g base_with_puppet -a base_with_puppet -f
+
+...
+Complete!
+Uploading Enabled Repositories Report
+Loaded plugins: product-id
+[SUCCESS], [2018-05-01 14:34:26], [/usr/bin/yum -y remove rhn-setup rhn-client-tools yum-rhn-plugin rhnsd rhn-check rhnlib spacewalk-abrt spacewalk-oscap osad 'rh-*-rhui-client' 'candlepin-cert-consumer-*'], completed successfully.
+----
+
+. Install and Register with Red Hat Insights:
++
+NOTE: On RHEL 7.5, the client RPM has been renamed to insights-client, but this laboratory machines are using RHEL 7.0 and 7.3 for demonstration purposes, so the package name is still the old one.
++
+[source]
+----
+[root@ic4 ~]# yum install -y redhat-access-insights
+[root@ic4 ~]# redhat-access-insights --register
+This host has already been registered.
+Automatic daily scheduling for Insights has been enabled.
+Starting to collect Insights data
+Uploading Insights data, this may take a few minutes
+Upload completed successfully!
+----
+
+=== Lab 8.2 Fixing the payload injection security issue
+. Going back to the Satellite UI, click on Red Hat Insights → Overview, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
 +
 image:images/lab8.1-insightsoverview.png[1000,1000]
 
