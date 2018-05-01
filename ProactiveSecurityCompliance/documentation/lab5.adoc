@@ -32,11 +32,9 @@ image:images/lab5.1-clickvm.png[600,600]
 +
 image:images/lab5.1-scapscan.png[200,200]
 
-. From the dialog, for *SCAPProfiles*, choose *rhel7-custom* and *Submit*. This is a custom security policy profile that simply ensures that the AIDE package is installed on your system. *Past Scans* can be ignored.
+. Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list. Choose *rhel7-custom* and click *Submit*. This security policy simply ensures that the AIDE package is installed on your system.
 +
 image:images/lab5.1-scandialog.png[800,800]
-+
-NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
 
 . Now let's take a look at what is being executed behind the scenes. Navigate to *Services -> My Services*.
 +
@@ -63,7 +61,7 @@ image:images/lab5.1-ansibleoutput2.png[800,800]
 +
 image:images/lab5.2-infra-vms.png[500,500]
 
-. Click on the *lab5-vm1* VM.
+. Click on the *lab5-vm1* VM, if not already there.
 +
 image:images/lab5.2-clickvm.png[500,500]
 
@@ -75,7 +73,6 @@ image:images/lab5.2-tag-noncompliant.png[500,500]
 
 === Lab 5.3 Creating and Viewing SCAP compliance reports
 . Now that our OpenSCAP scan completed successfully and we have tagged VMs that are marked as either Compliant or Non-Compliant against various security profiles, let's create and view SCAP compliance reports. We will do this as a restricted user, the security compliance officer/auditor.
-
 +
 NOTE: Normally, the job of creating and viewing security compliance reports are done by a security compliance officer/auditor. This user is usually a restricted user and does not have full root level access to the systems like the admin.
 
@@ -90,11 +87,10 @@ image:images/lab5.3-reportqueue.png[1000,1000]
 . Now, click on the report and take a look at its output.
 +
 image:images/lab5.3-reportsresults.png[1000,1000]
-
 +
 NOTE: Notice that in this report you are seeing all the systems that were scanned against the OpenSCAP *rhel7-custom* security profile. This is a custom profile that just checks to see if the AIDE package is installed. In this report, of the systems that were scanned against this profile, you will see which of the systems are Compliant and Non-Compliant against the *rhel7-custom* security profile. In addition, you also see some other information CloudForms collected about these systems such as the IP addresses and Date Created.
 
-. Repeat the above steps and create a report for *OpenSCAP Scan (rhel7-pci-dss)* by pressing the *Queue* button.
+. Locate the report *OpenSCAP Scan (rhel7-pci-dss)*, *Queue* the report and review the output.
 
 === Lab 5.4 Automated remediation of SCAP compliance failures
 
@@ -128,32 +124,34 @@ ssh lab5-vm1.example.com
 [source]
 rpm -qa aide
 
-. Now, let's execute automated remediation and make *lab5-vm1* compliant to the *rhel7-custom* security policy in a push button automated fashion. Navigate to the *lab5-vm1* VM by navigating to
-*Compute -> Infrastructure -> Virtual Machines.*
+. Back on the CloudForms UI, let's execute automated remediation and make *lab5-vm1* compliant to the *rhel7-custom* security policy in a push button automated fashion. Navigate to the *lab5-vm1* VM by navigating to
+*Compute -> Infrastructure -> Virtual Machines*.
 +
 image:images/lab5.4-infra-vms.png[500,500]
 
-. Click on the *lab5-vm1* VM. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*.
+. Click on the *lab5-vm1* VM, if not already there.
 +
 image:images/lab5.4-clickvm.png[500,500]
+
+. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Remediate*.
++
 image:images/lab5.4-remediate.png[1000,1000]
 
-. From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is the custom security policy profile that just checks to see if the AIDE package is installed on your system. We will remediate *lab5-vm1* against this profile so that at the push of a button AIDE will get installed on this system. Press *Submit*.
+. From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is the custom security policy profile that ensures that the AIDE package is installed on your system. We will remediate *lab5-vm1* against this profile so that at the push of a button AIDE will get installed on this system. Press *Submit* when ready.
 +
 image:images/lab5.4-scapremediatedialog.png[1000,1000]
 
-. Now, go back to your terminal and do a rpm -qa aide and in a few minutes, you will notice that the AIDE package gets automatically installed.
+. Go back to your terminal and run a `rpm -qa aide` and in a few minutes, you will notice that the AIDE package gets automatically installed.
 +
 image:images/lab5.4-aide.png[400,400]
 
-. Now that the AIDE package is installed, we should now pass the OpenSCAP scan against the *rhel7-custom* security policy profile.
-Let's confirm.
+. Now that the AIDE package is installed, we should now pass the OpenSCAP scan against the *rhel7-custom* security policy profile. Let's confirm.
 
 . Navigate to the *lab5-vm1* by clicking on *Compute -> Infrastructure -> Virtual Machines.*
 +
 image:images/lab5.4-infra-vms.png[500,500]
 
-. Click on the *lab5-vm1* VM.
+. Click on the *lab5-vm1* VM, if not already there.
 +
 image:images/lab5.4-clickvm.png[500,500]
 
@@ -164,8 +162,6 @@ image:images/lab5.4-scapscan.png[200,200]
 . From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is a custom security policy profile that just checks to see if the AIDE package is installed on your system. Press *Submit*.
 +
 image:images/lab5.4-scandialog.png[1000,1000]
-+
-NOTE: Here you are presented with a list of security policy profiles to choose from to scan your VM against. These same security policy profiles are available to you in Red Hat Satellite. Red Hat CloudForms dynamically grabbed these profiles from Red Hat Satellite and populated these in this dynamic dropdown list.
 
 . Now let's take a look at what is being executed behind the scenes. Navigate to *Services -> My Services*.
 +
@@ -188,10 +184,6 @@ image:images/lab5.4-ansibleoutput2.png[800,800]
 +
 image:images/lab5.4-infra-vms.png[500,500]
 
-. Click on the *lab5-vm1* VM.
-+
-image:images/lab5.4-clickvm.png[500,500]
-
 . Scroll to the bottom of this page and notice the tags on this VM in the *Smart Management* section. Notice that the previous tag named *SCAP_rhel7-custom: Non-compliant* got updated to *SCAP_rhel7-custom: Compliant*.
 +
 NOTE: The *lab5-vm1* is now SCAP compliant to the *rhel7-custom* security policy profile.
@@ -207,8 +199,6 @@ image:images/lab5.4-reportqueue.png[1000,1000]
 +
 image:images/lab5.4-reportsresults.png[1000,1000]
 
-Notice that now the *lab5-vm1* VM is *Compliant* to the *rhel7-custom* security policy profile!
-
-<<top>>
+Notice that now the *lab5-vm1* VM is *Compliant* to the *rhel7-custom* security policy profile!.
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab6.adoc[ Lab 6]
