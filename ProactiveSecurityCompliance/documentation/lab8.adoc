@@ -213,11 +213,12 @@ image:images/lab8.2-ansibleplaybook-payloadinjection.png[1000,1000]
 +
 image:images/lab8.2-createaplan.png[1000,1000]
 
-. Fill in the boxes as in the example, and do not forget to select only the payload injection security issue and select *ic4.summit.example.com* as the system in which this solution is to be applied.
+. Name the plan *Payload*, select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE.
+
 +
 image:images/lab8.2-playbookbuilder.png[1000,1000]
 
-. As seen in the previous part of this laboratory, there are two ways to solve this issue, one is by updating the kernel, and the other one is apply the needed changes to the */etc/sysctl.conf* file to add the mitigation configuration, and reload the kernel configuration.
+. As seen in the previous part of this lab, there are two ways to solve this issue, one is by updating the kernel, and the other one is apply the needed changes to the */etc/sysctl.conf* file to add the mitigation configuration, and reload the kernel configuration.
 Insights gives us the opportunity to choose the resolution that we want. Please make sure to select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the *Save* button.
 +
 image:images/lab8.2-setacklimit.png[1000,1000]
@@ -317,7 +318,6 @@ image:images/lab8.3-downloadplaybook.png[1000,1000]
 ----
 
 . Once logged into Ansible Tower, inspect the Ansible Playbook that Insights has created automatically for you. Once you are done looking through the Ansible playbook, Type *:q!* to exit out of vi.
-
 +
 [source]
 ----
