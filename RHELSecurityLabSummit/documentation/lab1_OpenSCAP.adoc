@@ -34,6 +34,8 @@ OpenSCAP allows you to perform both vulnerability and security compliance checks
  Asset Reporting Format Version: 1.1
  CVRF Version: 1.1
  ...
++
+Make sure it outputs OpenSCAP version and versions of supported standards. If it says `oscap` command not found you need to install the OpenSCAP tooling.
 
 . Furthermore, let us install SCAP Workbench on the main "workstation.example.com" VM:
 +
