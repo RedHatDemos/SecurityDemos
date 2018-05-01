@@ -112,7 +112,7 @@ After Workbench starts click RHEL7 to open the compliance content for Red Hat En
 +
 image::images/scap_workbench_opened.png[SCAP Workbench opened, profile selected]
 
-. Select desired profile and click Customize. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *Done* to save the profile. You have essentially created a new profile.
+. Select desired profile and click Customize. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *OK* to save the profile. You have essentially created a new profile.
 +
 image::images/scap_workbench_tailoring.png[SCAP Workbench content customization]
 
