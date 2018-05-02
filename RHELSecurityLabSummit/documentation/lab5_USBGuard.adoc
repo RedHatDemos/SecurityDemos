@@ -46,6 +46,10 @@ Stop the VM if it is running using virsh:
 
 	[root@usbguard.example.com]# virsh destroy 1
 
+== Preliminary knowledge
+
+This section shortly describes some of the workflows and tools used in the <<Demonstration>> section.
+If you are familiar with tools like `lsblk`, `udisksctl` and `virsh`, then you can skip this section and go straight to <<Demonstration>>.
 
 === Simulating hot plugging with virsh
 
@@ -81,7 +85,7 @@ From the host VM you can simulate USB disk hotplug using virsh:
 	[root@usbguard.example.com]# virsh attach-device usbguard-demo usb-disk.xml
 	[root@usbguard.example.com]# virsh detach-device usbguard-demo usb-disk.xml
 
-=== Setup USBGuard demo
+=== usbguard-demo VM description
 
 The usbguard-demo VM contains pre-installed (by virt-builder) _usbguard_, _usbguard-tools_, _usbutils_ and _udisks2_ packages. The VM is running RHEL 7.4.
 
