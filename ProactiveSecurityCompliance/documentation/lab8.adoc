@@ -234,7 +234,7 @@ image:images/lab8.2-saveplanneroutput.png[1000,1000]
 
 . Now that we have a plan built to resolve the Payload vulnerability for ic4, lets login to Tower and sync the Insights information with Tower. The Tower environment has been mostly pre-configured for your use in this lab.
 
-. We accomplish this by logging into Ansible Tower. Point your browser at https://tower-GUID.rhpds.opentlc.com (your GUID was provided to you in an earlier lab, and just like with Satellite replace the GUID with your unique GUID)
+. We accomplish this by logging into Ansible Tower. Point your browser to https://tower-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
 
 . Login with admin / r3dh4t1! as we have done with the other administrative UIs  and clicking the large *Templates* option from the main menu at the top. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
 +
