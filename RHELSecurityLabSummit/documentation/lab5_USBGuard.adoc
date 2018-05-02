@@ -1,10 +1,17 @@
 = Lab 5: USBGuard
 
+== Machine naming
+
+Please note that the instructions in this document refer to one of two machines (apart from the workstation VM which is used as the common starting point).
+
+1. *host*: This name refers to the *6USBGuard* machine in the Summit lab environment. The hostname of this machine is *usbguard.example.com*.
+2. *usbguard-demo*: This name refers to a virtual machine running on the *host* machine. No hostname is assigned to this machine.
+
+During the demo, you'll be asked to run commands on one or the other machine. This requires two parallel shell sessions. One connected to the *host* system and the other connected to the *usbguard-demo* VM. How to connect from the *host* to *usbguard-demo* is explained in the <<Demonstration>> section.
+
 == Configuration (These configuration steps were already done for you)
 
 This demo is based on a RHEL 7.5 VM residing inside the Summit lab environment. KVM/libvirt is used to create and manage virtual machine inside the RHEL 7.5 VM.
-
-USBGuard RHEL 7.4 VM:    _usbguard-demo_
 
 *Important*: All steps in the _Configuration_ section have been already performed in the Summit lab environment and it is mentioned from an informative purpose. You can read them to get familiar with the setup. Start the practical part of the lab with the _Demonstration_ section of this lab.
 
@@ -230,5 +237,6 @@ On host:
     # virsh detach-device usbguard-demo usb-disk.xml
     # virsh detach-device usbguard-demo usb-disk-2.xml
     # virsh destroy 1
+
 <<top>>
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab6_Audit.adoc[ Lab 6: Audit ]
