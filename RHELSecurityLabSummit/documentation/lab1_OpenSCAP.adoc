@@ -1,31 +1,19 @@
-== Lab 1: OpenSCAP Basics and Command Line Scanning
+= Lab 1: OpenSCAP Basics and Command Line Scanning
 
-The goal of this part of the lab is to introduce you to the basics of SCAP scanning with OpenSCAP.
+== Goal of Lab 1
+The goal of this part of the lab is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
 
 === Introduction
-OpenSCAP is a family of open source SCAP tools and content that help users create standard security checklists for enterprise systems. Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certification and accreditation easier.
+OpenSCAP is a family of open source SCAP tools and content that help users create standard security checklists for enterprise systems. Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certifications and accreditations easier.
 
-OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this segment we will focus on one-off scanning to get started.
+OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this lab exercise, we will focus on one-off scanning to get started.
 
-=== Prerequisites
-. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
-+
-[source]
-----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
-----
+=== Pre-Configured Set Up Steps (For Reference Only)
+All of the steps in this pre-configured set up section have already been done for you. This section is for your reference only so you know what steps have already been pre-configured in this lab environment for you.
 
-. Become *root* and then log into the *openscap.example.com* host.
-+
-[source]
-----
-Warning: Permanently added 'workstation-GUID.rhpds.opentlc.com,X.X.X.X' (ECDSA) to the list of known hosts.
-Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
-[lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh openscap.example.com
-----
+.  Red Hat Enterprise Linux 7.5 is installed on the *openscap.example.com* host. We have also pre-installed several packages on the *openscap.example.com* host.
 
-. Make sure you are running Red Hat Enterprise Linux 7.5 or later. We will need to install a couple packages on the *openscap.example.com* host:
+. Specifically, we pre-installed *openscap-scanner*, *scap-security-guide*, and *Ansible*. Take a look at the comments above each installation command for more details.
 +
  # the tool that performs the scanning
  [root@openscap]# yum install openscap-scanner
@@ -34,7 +22,7 @@ Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
  # we will need this later for Ansible based remediations
  [root@openscap]# yum install ansible
 
-. Verify a successful installation by running:
+. You can verify a successful installation by running:
 +
  [root@openscap]# oscap -V
 
@@ -52,15 +40,32 @@ Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
  CVRF Version: 1.1
  ...
 +
-Make sure it outputs OpenSCAP version and versions of supported standards. If it says `oscap` command not found you need to install the OpenSCAP tooling.
+Notice that this command outputs the OpenSCAP version and versions of supported standards. If during your own installation it says `oscap` command not found, you need to install the OpenSCAP tooling since this means that OpenSCAP has not been installed successfully.
 
-. Furthermore, let us install SCAP Workbench on the main *workstation.example.com* host:
+. Finally, SCAP Workbench has also been installed on the *workstation.example.com* workstation bastion host for you.
 +
  # GUI tool for scanning and content customization, a front-end for OpenSCAP
  [root@workstation] yum install scap-workbench
 
-=== Performing our first scan
-. Switch to the *openscap.example.com* host. Let's see the compliance content provided by `scap-security-guide`:
+=== Lab 1.1 Performing our first scan
+. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
++
+[source]
+----
+[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+----
+
+. Become *root* and then log into the *openscap.example.com* host.
++
+[source]
+----
+Warning: Permanently added 'workstation-GUID.rhpds.opentlc.com,X.X.X.X' (ECDSA) to the list of known hosts.
+Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh openscap.example.com
+----
+
+. Let's take a look at the compliance content provided by `scap-security-guide`:
 +
  [root@openscap]# rpm -ql scap-security-guide
  ...
@@ -71,29 +76,38 @@ Make sure it outputs OpenSCAP version and versions of supported standards. If it
  /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
  ...
 
+Notice that the provided content in `scap-security-guide` covers a wide range of security baselines such as PCI-DSS, STIG, C2S, Common, CJIS, and others. Also notice that Ansible remediation playbooks are included for these various security baselines as well in the provided content in the `scap-security-guide` .
+
 . Move to the `content` folder so we can avoid typing long paths:
 +
  [root@openscap]# cd /usr/share/xml/scap/ssg/content
 
-. Run the first baseline scan:
+. First, let's check which compliance profiles are available for rhel7.
 +
- # let's check which compliance profiles are available for rhel7
+----
  [root@openscap]# oscap info ssg-rhel7-ds.xml
- # let's perform our first testing scan with the vanilla OSPP profile
- # (notice that we can skip the profile ID prefix to make the command simpler,
- # the real ID is "xccdf_org.ssgproject.content_profile_ospp-rhel7")
- [root@openscap]# oscap xccdf eval --profile ospp-rhel7 ./ssg-rhel7-ds.xml
- # Let's store the results of the scan this time:
- # use --results-arf to get machine readable results archive
- # use --report to get human readable report (can also be generated from ARF after the scan)
+----
+Notice that there are several compliance profiles included such as the Standard System Security Profile, PCI-DSS, C2S, Common Profile for General-Purpose Systems, and many others. 
+
+ . Next, let's perform our first baseline testing scan with the vanilla OSPP profile. Notice in our command below that we can skip the profile ID prefix to make the command simpler. The real ID is xccdf_org.ssgproject.content_profile_ospp-rhel7.
+
+  [root@openscap]# oscap xccdf eval --profile ospp-rhel7 ./ssg-rhel7-ds.xml
++
+Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
+
+. Now, let's store the results of the scan this time:
+* use --results-arf to get machine readable results archive
+* use --report to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
+
  [root@openscap]# oscap xccdf eval --profile ospp-rhel7 --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel7-ds.xml
 
-. (optional) Generate HTML report separately:
+. (Optional) You can also generate the HTML report separately:
 +
  [root@openscap]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 
 . Switch to the *workstation.example.com* host, copy the *report.html* over there to view it in your web browser.
 +
+ [root@openscap]# exit
  [root@workstation]$ scp root@openscap.example.com:/tmp/report.html /tmp/report.html
  [root@workstation]$ chmod 644 /tmp/report.html
  [root@workstation]$ exit
