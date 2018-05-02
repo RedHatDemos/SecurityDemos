@@ -47,7 +47,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
  # GUI tool for scanning and content customization, a front-end for OpenSCAP
  [root@workstation] yum install scap-workbench
 
-=== Lab 1.1 Performing our first scan
+=== Lab 1.1 Security scanning with OpenSCAP
 . If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
@@ -87,7 +87,7 @@ Notice that the provided content in `scap-security-guide` covers a wide range of
 ----
  [root@openscap]# oscap info ssg-rhel7-ds.xml
 ----
-Notice that there are several compliance profiles included such as the Standard System Security Profile, PCI-DSS, C2S, Common Profile for General-Purpose Systems, and many others. 
+Notice that there are several compliance profiles included such as the Standard System Security Profile, PCI-DSS, C2S, Common Profile for General-Purpose Systems, and many others.
 
  . Next, let's perform our first baseline testing scan with the vanilla OSPP profile. Notice in our command below that we can skip the profile ID prefix to make the command simpler. The real ID is xccdf_org.ssgproject.content_profile_ospp-rhel7.
 
