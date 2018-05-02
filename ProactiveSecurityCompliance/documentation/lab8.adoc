@@ -111,13 +111,15 @@ NOTE: On RHEL 7.5, the client RPM has been renamed to insights-client, but this 
 [source]
 ----
 [root@ic4 ~]# yum install -y redhat-access-insights
-[root@ic4 ~]# redhat-access-insights --register
+[root@ic4 ~]# redhat-access-insights --display-name=ic4.summit.example.com --register
 This host has already been registered.
 Automatic daily scheduling for Insights has been enabled.
 Starting to collect Insights data
 Uploading Insights data, this may take a few minutes
 Upload completed successfully!
 ----
+
+.* Notice the --display-name parameter - This allows you to set the displayed hostname to something other than the default for a system within Insights. This is useful if you wish to obfuscate the hostnames that are used in analysis. Be aware that hostnames must resolve properly for Ansible playbooks and tower management to work for automated remediation, so the display name should match a valid hostname, even if it isn't the publicly accessible DNS name.
 
 === Lab 8.2 Manually fixing the payload injection security issue
 In this section, we will manually fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on *ic1.summit.example.com* without causing downtime.
@@ -214,13 +216,15 @@ image:images/lab8.2-ansibleplaybook-payloadinjection.png[1000,1000]
 +
 image:images/lab8.2-createaplan.png[1000,1000]
 
-. Name the plan *Payload*, select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE and click on *Save*.
+. Naming the plan: Since we're all sharing one big lab environment, the naming of plans is very important, and is primarily how we organize the playbooks we will use for remediation. In this lab name your plan starting with your unique GUID That you were given for this lab. This will make it easier to find when its time to select the plan for remediation.
+
+For Example, Insights Planner may ask me for a plan name, and my unique GUID is "1a2b3" I might name my plan "1a2b3 Payload Remediation". Type in the name you wish to use for the plan and select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE and click on *Save*.
 
 +
 image:images/lab8.2-playbookbuilder.png[1000,1000]
 
 . As you can see, there are two ways to solve this issue, one is by updating the kernel, and the other one is apply the needed changes to the */etc/sysctl.conf* file, add the mitigation configuration, and reload the kernel configuration.
-Insights gives us the opportunity to choose the resolution that we want. Select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the *Save* button.
+Insights gives us the opportunity to choose the resolution that we want. In this lab we want to prevent unplanned downtime for this issue, so select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the *Save* button.
 +
 image:images/lab8.2-setacklimit.png[1000,1000]
 
@@ -228,44 +232,57 @@ image:images/lab8.2-setacklimit.png[1000,1000]
 +
 image:images/lab8.2-saveplanneroutput.png[1000,1000]
 
-NOTE: Normally you would download the playbook and execute it. However, for your convenience this playbook has already downloaded for you to the /root directory on the Ansible Tower server. Now let's log into the Ansible Tower server and execute the playbook.
+. Now that we have a plan built to resolve the Payload vulnerability for ic4, lets login to Tower and sync the Insights information with Tower. The Tower environment has been mostly pre-configured for your use in this lab.
 
-. If not already there, log into to the workstation host from your desktop system replacing *GUID* with your lab's *GUID*:
-+
-[source]
-----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
-----
+. We accomplish this by logging into Ansible Tower. Point your browser at https://tower-GUID.rhpds.opentlc.com (your GUID was provided to you in an earlier lab, and just like with Satellite replace the GUID with your unique GUID)
 
-. If not already root, become *root* and then log into the Ansible Tower system *tower.example.com* host.
+. Login with admin / r3dh4t1! as we have done with the other administrative UIs  and clicking the large "Templates" option from the main menu at the top. Find the "Insights Facts Scan" Job and click the Rocket under the Actions. 
 +
-[source]
-----
-[lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh tower.example.com
-----
+image:images/lab-8-insights-facts1.PNG[1000,1000]
 
-. Once logged into the Ansible Tower server, inspect the Ansible Playbook that Insights has created automatically for you.
-+
-[source]
-----
-[root@tower ~]# cat payload-injection.yml
-----
+.The Job Details output will pop up and you should let the job run to completion. At the end the Status should show Successful.  From here go to the Inventories menu option from the top menu. Click into "Insights Inventory" and then Click "Hosts" and click into "ic4.summit.example.com"
 
-. Remediate the payload injection security issue by executing the Ansible Playbook.
-+
-[source]
-----
-[root@tower ~]# ansible-playbook payload-injection.yml
-----
-+
-NOTE: Please note that when the execution is completed, the Insights agent is also run as part of this Ansible playbook, so the latest state of the system is reporting into Insights automatically.
+. By clicking the Insights option for this host you can see all of the risks and vulnerabilities associated with this host. In an upcoming version of Tower you will be able to remediate directly from this interface, but for this lab we will continue using the Insights Planner interface from within Satellite to accomplish our tasks in conjunction with Tower.
 
-. Now from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue.
+. Navigate to "Projects" from the main menu at the top. We will now sync the Plans we created inside of Red Hat Satellite to Tower via the Insights API.
+
+. Under Projects find the premade "Insights Planner Sync" project, and click the Cloud with a download arrow under ACTIONS to the right of the project name.
+
+. The sync should complete successfully, and now you're ready to remediate with Tower. In addition, now Tower can Identify Insights issues on managed hosts. All of the above projects and plans can be sync'd and updated automatically with Tower via the API or with scheduled runs.
+
++
+image:images/lab-8-insights-template1.PNG[1000,1000]
+
+. In the Tower UI return to the "Templates" interface from the main menu at the top of the UI. We will create a job template to run one of the plans we created. You should have created the plan with your unique GUID from this lab, so if you did not, you will need to locate your specific plan or create one you can recognize easily from the playbook selection.
+
+. Click "+ADD" in the Templates UI and select the "Job Template" dropdown option. We will create a basic job template for your automated remediation with Insights.
+
+. For the name of the template use: <your GUID> Payload Fix. Job Type should be "Run". For Inventory select "Insights Inventory". For Project select "Insights Planner Sync" (you may need to navigate to a different page to find this project). In the Playbook Dropdown Choose a playbook that you created with your unique GUID in the Insights Planner. For credential select "Insights Fix All Machine Credentials". The final task is to click "Enable Privilege Escalation" under OPTIONS, and click Save
+
++
+image:images/lab-8-insights-template2.PNG[1000,1000]
+
+. Scroll down to where the Templates are listed below the New Template fields, or click Templates from the Main Tower menu. Find the template you created.
+
++
+image:images/lab-8-insights-template3.PNG[1000,1000]
+
+. Click the rocket for the template you created. This will launch the job and run the playbook you selected from the dropdown.
+
++
+image:images/lab-8-insights-template4.PNG[1000,1000]
+
+. If everything is successful you will see a status of Sucessful in he DETAILS pane, and the ansible-playbook run output on the right. You're looking for something like the screenshot above.
+
+. Now navigate back to your Satellite UI at https://sat-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, since we resolved the kernel vulnerability that we created the Plan and playbook for.
+
 +
 image:images/lab8.2-afteransiblefix.png[1000,1000]
 
-=== Lab 8.4 Automatically fix all the issues on client systems using Ansible Tower
++
+NOTE: Please note that when the execution if a playbook is completed, the Insights agent is also run as part of this Ansible playbook, so the latest state of the system is reporting into Insights automatically.
+
+=== Lab 8.4 BONUS LAB: Automatically fix all the issues on client systems using Ansible Tower
 
 In this lab exercise, we will fix all the issues on the client systems, *ic1.summit.example.com* and *ic4.summit.example.com*.
 
@@ -280,7 +297,7 @@ image:images/lab8.3-createplan.png[1000,1000]
 . This way, we are going to create an Ansible Playbook based plan to solve issues on those two specific systems (systems can also be grouped as per our convenience, from that very same menu).
 
 . The Plan / Playbook Builder screens will appear. Please make sure to fill the boxes as follows:
-* Plan name: fix-ic-all
+* Plan name: <GUID> Insights Fix ALL
 * Actions: all (do this by clicking on the box by the Action label at the top).
 +
 Your screen should look like:
@@ -297,48 +314,16 @@ You should see all the issues this plan is going to solve as well as the affecte
 +
 image:images/lab8.3-planner.png[1000,1000]
 
-. Scrolling down the screen, you should be able to download the playbook. Per your convenience, this has already been downloaded to the tower machine.
+. Like in the previous exercise, we need to log into the Ansible Tower machine in order to create a job template for the new Insights Plan that we created. Don't forget to sync your Insights Planner Sync project before building the template.
+
 +
 image:images/lab8.3-downloadplaybook.png[1000,1000]
 
-. Like in the previous exercise, we need to log into the Ansible Tower machine in order to run the Ansible Playbook.
+. Part of this being the bonus and final lab is that you may have ample time to perform remediations on ic1.summit.example.com and ic4.summit.example.com. Try to remediate all vulnerabilities on these hosts. There are some that will not have Ansible playbook generation capability, so you may have to do those manually, but you can knock out a majority of the vulnerabilities with Insights Plans and Ansible Tower. Just repeat the steps to create plans, sync them, and create and run the remediation template.
 
-. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
-+
-[source]
-----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
-----
-
-. If not already root, become *root* and then log into the Ansible Tower system *tower.summit.example.om* host.
-+
-[source]
-----
-[lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh tower
-----
-
-. Once logged into Ansible Tower, inspect the Ansible Playbook that Insights has created automatically for you. Once you are done looking through the Ansible playbook, Type *:q!* to exit out of vi.
-+
-[source]
-----
-[root@tower ~]# vi fix-ic-all.yml
-----
-
-. Now, simply proceed to remediate the payload injection security issue by executing the Ansible Playbook.
-+
-[source]
-----
-[root@tower ~]# ansible-playbook fix-ic-all.yml
-----
 Please note that when the execution is completed (this may take a while), the Insights agent is also run as part of the Ansible playbook, so the latest state of the system is reporting into Insights automatically.
 
-. Now from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that system *ic4.summit.example.com* has one less issue, just like *ic1.summit.example.com*.
-+
 NOTE: This step may take long time as there are many issues that require updates and reboots.
-
-
-
 
 <<top>>
 
