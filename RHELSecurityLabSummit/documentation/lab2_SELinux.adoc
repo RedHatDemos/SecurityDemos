@@ -237,7 +237,7 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 
 In this section, _apache_ webservers will be setup via the _setup_webserver.yml_ playbook on _selinux2_ and _selinux3_ hosts  and SELinux will be turned off to create an environment described in the detailed lab user story.
 
-All ansible commands below should be executed from _selinux1_example.com_
+All ansible commands below should be executed from _selinux1.example.com_
 
 Test whether all servers are available via the _ansible_ command.
 
