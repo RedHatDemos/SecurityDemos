@@ -487,7 +487,7 @@ SELinux brings additional security for your environment and very often needs to 
 
 == Revert script
 
-There is a revert script for the lab environment configuration. This script can be used to start from the scratch with this laband all actions in the _Configuration_ section need to be executed except the package installation.
+There is a revert script for the lab environment configuration. This script can be used to start from the scratch with this lab and all actions in the _Configuration_ section need to be executed except the package installation.
 
     [root@selinux1 selinux_scripts]# hostname
     selinux1.example.com
