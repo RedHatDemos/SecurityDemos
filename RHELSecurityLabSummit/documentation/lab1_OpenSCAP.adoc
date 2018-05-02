@@ -55,14 +55,13 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
 [lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
 ----
 
-. Become *root* and then log into the *openscap.example.com* host.
+. Log into the *openscap.example.com* host as *root*.
 +
 [source]
 ----
 Warning: Permanently added 'workstation-GUID.rhpds.opentlc.com,X.X.X.X' (ECDSA) to the list of known hosts.
 Last login: Mon Apr 23 10:10:43 2018 from X.X.X.X
-[lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh openscap.example.com
+[lab-user@workstation-GUID ~]$ ssh root@openscap.example.com
 ----
 
 . Let's take a look at the compliance content provided by `scap-security-guide`:
@@ -105,22 +104,36 @@ Now, you will see the compliance scan results for every security control in the 
 +
  [root@openscap]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 
-. Switch to the *workstation.example.com* host, copy the *report.html* over there to view it in your web browser.
+. Now, let's copy the *report.html* over to the workstation bastion host, set the correct permissions on *report.html* file so it is viewable, and view the report from the workstation bastion host in a web browser.
 +
  [root@openscap]# exit
- [root@workstation]$ scp root@openscap.example.com:/tmp/report.html /tmp/report.html
- [root@workstation]$ chmod 644 /tmp/report.html
- [root@workstation]$ exit
- [lab-user@workstation]$ firefox /tmp/report.html
+ [root@workstation]$ scp root@openscap.example.com:/tmp/report.html /home/lab-user/Desktop
+ [root@workstation]$ chmod 644 /home/lab-user/Desktop/report.html
+ [root@workstation] chown lab-user /home/lab-user/Desktop/report.html
 
-=== SCAP result / report terminology
-Rules can have several types of results but the most common ones are "pass" and "fail". Their meaning should be self-explanatory. Clicking on the rule title in the HTML report will bring up a pop-up dialog that let's you examine why exactly OpenSCAP failed or passed the machine. For example if it's testing file permissions on a list of files it will specify which files failed and what are their permission bits.
+. Now, go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
++
+image:images/lab1.1-workstationconsole.png[300,300]
+image:images/lab1.1-labuserlogin.png[300,300]
+
+. Once you log in, you'll notice the report that you just created on the Desktop. Double click on this report. You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
++
+image:images/lab1.1-reportfromworkstation.png[300,300]
+image:images/lab1.1-scapreport.png[500,500]
+
+. Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether or not the particular security control has passed or failed the scan.
+
+. Click on the rule title in the HTML report.
++
+image:images/lab1.1-clickrule.png[600,600]
+
+. This will bring up a pop-up dialog that allows you to examine why a particular OpenSCAP security rule failed or passed. For example, if an OpenSCAP security rule is testing file permissions on a list of files, it will specify which files failed and what are their permission bits.
 
 image::images/scap_report_pass.png[HTML report: A rule that is passing]
 
 image::images/scap_report_fail.png[HTML report: A rule that is failing]
 
-=== Customizing existing content for our use-case
+=== Lab 1.2 Customizing existing content for our use-case
 . Let us stay on the *workstation.example.com* host. Start *SCAP Workbench*, either from the Applications menu or by running `scap-workbench` on the command-line.
 After Workbench starts click RHEL7 to open the compliance content for Red Hat Enterprise Linux 7.
 +
