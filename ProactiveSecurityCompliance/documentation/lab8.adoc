@@ -237,7 +237,17 @@ image:images/lab8.2-saveplanneroutput.png[1000,1000]
 +
 image:images/lab8.3-insights-facts-1.png[1000,1000]
 
-. The Job Details output will pop up and you should let the job run to completion. At the end the Status should show Successful.  From here go to the Inventories menu option from the top menu. Click into *Insights Inventory* and then Click *Hosts* and click into *ic4.summit.example.com*.
+. The Job Details output will pop up and you should let the job run to completion. At the end the Status should show Successful.
++
+image:images/lab8.3-insights-sync-output.png[1000,1000]
+
+. Navigate to *Inventories* and click on *Insights Inventory*.
++
+image:images/lab8.3-tower-inv-insights-inv.png[600,600]
+
+. Click *Hosts* and click on the host *ic4.summit.example.com*.
++
+image:images/lab8.3-tower-inv-hosts.png[600,600]
 
 . By clicking the *Insights* option for this host you can see all of the risks and vulnerabilities associated with this host.
 +
