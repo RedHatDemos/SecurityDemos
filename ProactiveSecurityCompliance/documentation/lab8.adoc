@@ -238,7 +238,7 @@ image:images/lab8.2-saveplanneroutput.png[1000,1000]
 
 . Login with admin / r3dh4t1! as we have done with the other administrative UIs  and clicking the large "Templates" option from the main menu at the top. Find the "Insights Facts Scan" Job and click the Rocket under the Actions. 
 +
-image:images/lab-8-insights-facts1.PNG[1000,1000]
+image:images/lab-8-insights-facts-1.PNG[1000,1000]
 
 .The Job Details output will pop up and you should let the job run to completion. At the end the Status should show Successful.  From here go to the Inventories menu option from the top menu. Click into "Insights Inventory" and then Click "Hosts" and click into "ic4.summit.example.com"
 
@@ -284,7 +284,7 @@ NOTE: Please note that when the execution if a playbook is completed, the Insigh
 
 === Lab 8.4 BONUS LAB: Automatically fix all the issues on client systems using Ansible Tower
 
-In this lab exercise, we will fix all the issues on the client systems, *ic1.summit.example.com* and *ic4.summit.example.com*.
+In this lab exercise, we will attempt to fix all the issues on the client systems, *ic1.summit.example.com* and *ic4.summit.example.com*.
 
 . From the Satellite UI, click on *Red Hat Insights → Inventory* so we can focus on systems *ic1.summit.example.com* and *ic4.summit.example.com*, please notice these two show numerous actions each to be resolved.
 +
@@ -296,7 +296,7 @@ image:images/lab8.3-createplan.png[1000,1000]
 
 . This way, we are going to create an Ansible Playbook based plan to solve issues on those two specific systems (systems can also be grouped as per our convenience, from that very same menu).
 
-. The Plan / Playbook Builder screens will appear. Please make sure to fill the boxes as follows:
+. The Plan / Playbook Builder screens will appear. Please make sure to fill the boxes as follows as your screenshots may vary slightly:
 * Plan name: <GUID> Insights Fix ALL
 * Actions: all (do this by clicking on the box by the Action label at the top).
 +
@@ -315,9 +315,6 @@ You should see all the issues this plan is going to solve as well as the affecte
 image:images/lab8.3-planner.png[1000,1000]
 
 . Like in the previous exercise, we need to log into the Ansible Tower machine in order to create a job template for the new Insights Plan that we created. Don't forget to sync your Insights Planner Sync project before building the template.
-
-+
-image:images/lab8.3-downloadplaybook.png[1000,1000]
 
 . Part of this being the bonus and final lab is that you may have ample time to perform remediations on ic1.summit.example.com and ic4.summit.example.com. Try to remediate all vulnerabilities on these hosts. There are some that will not have Ansible playbook generation capability, so you may have to do those manually, but you can knock out a majority of the vulnerabilities with Insights Plans and Ansible Tower. Just repeat the steps to create plans, sync them, and create and run the remediation template.
 
