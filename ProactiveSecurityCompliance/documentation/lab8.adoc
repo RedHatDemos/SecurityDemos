@@ -259,39 +259,31 @@ NOTE: In an upcoming version of Tower you will be able to remediate directly fro
 +
 image:images/lab8.3-insights-sync-scm.png[1000,1000]
 
-. The sync should complete successfully, and now you're ready to remediate with Tower. In addition, now Tower can Identify Insights issues on managed hosts. All of the above projects and plans can be sync'd and updated automatically with Tower via the API or with scheduled runs.
+. The sync should complete successfully, and now you're ready to remediate with Tower.
++
+NOTE: Tower can also identify Insights issues on managed hosts. All of the above projects and plans can be sync'd and updated automatically with Tower via the API or with scheduled runs.
 
+. Navigate to *Templates* and click on *+ADD* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
 +
 image:images/lab8.3-insights-template1.png[1000,1000]
 
-. In the Tower UI return to the *Templates* interface from the main menu at the top of the UI. We will create a job template to run one of the plans we created. You should have created the plan with your unique GUID from this lab, so if you did not, you will need to locate your specific plan or create one you can recognize easily from the playbook selection.
-
-. Click *+ADD* in the Templates UI and select the *Job Template* dropdown option. We will create a basic job template for your automated remediation with Insights.
-
-. For the name of the template use: <your GUID> Payload Fix. Job Type should be *Run*. For Inventory select *Insights Inventory*. For Project select *Insights Planner Sync* (you may need to navigate to a different page to find this project). In the Playbook Dropdown Choose a playbook that you created with your unique GUID in the Insights Planner. For credential select *Insights Fix All Machine Credentials*. The final task is to click *Enable Privilege Escalation* under OPTIONS, and click Save.
-
+. For the name of the template use: *GUID* Payload Fix. Job Type should be *Run*. For Inventory select *Insights Inventory*. For Project select *Insights Planner Sync* (you may need to navigate to a different page to find this project). In the Playbook Dropdown Choose a playbook that you created with your unique GUID in the Insights Planner. For credential select *Insights Fix All Machine Credentials*. The final task is to click *Enable Privilege Escalation* under OPTIONS, and click Save.
 +
 image:images/lab8.3-insights-template2.png[1000,1000]
 
 . Scroll down to where the Templates are listed below the New Template fields, or click Templates from the Main Tower menu. Find the template you created.
-
 +
 image:images/lab8.3-insights-template3.png[1000,1000]
 
-. Click the rocket for the template you created. This will launch the job and run the playbook you selected from the dropdown.
-
+. Click the rocket for the template you created. This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in he DETAILS pane, and the ansible-playbook run output on the right.
 +
 image:images/lab8.3-insights-template4.png[1000,1000]
 
-. If everything is successful you will see a status of Sucessful in he DETAILS pane, and the ansible-playbook run output on the right. You're looking for something like the screenshot above.
-
 . Now navigate back to your Satellite UI at https://sat-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, since we resolved the kernel vulnerability that we created the Plan and playbook for.
-
 +
 image:images/lab8.2-afteransiblefix.png[1000,1000]
-
 +
-NOTE: Please note that when the execution if a playbook is completed, the Insights agent is also run as part of this Ansible playbook, so the latest state of the system is reporting into Insights automatically.
+NOTE: When the execution if a playbook is completed, the Insights agent is also run as part of this Ansible playbook, so the latest state of the system is reporting into Insights automatically.
 
 === Lab 8.4 BONUS LAB: Automatically fix all the issues on client systems using Ansible Tower
 
