@@ -202,8 +202,6 @@ image:images/lab8.1-payloadinjectionsearch-again.png[1000,1000]
 
 It is also possible to automate some of the issues with an Ansible Playbook that Insights provides us. You can see that in the top left corner of every single issue with the Ansible logo in blue if a playbook is available or in grey if it’s not.
 
-image:images/lab8.2-ansiblelogo.png[1000,1000]
-
 . For this part of the lab exercise, we will fix the payload injection vulnerability using an Ansible playbook versus fixing it manually like we did in the previous exercise. We will execute these steps on the *ic4.summit.exmaple.com* VM.
 +
 image:images/lab8.2-ansibleavailable.png[1000,1000]
@@ -216,10 +214,9 @@ image:images/lab8.2-ansibleplaybook-payloadinjection.png[1000,1000]
 +
 image:images/lab8.2-createaplan.png[1000,1000]
 
-. Naming the plan: Since we're all sharing one big lab environment, the naming of plans is very important, and is primarily how we organize the playbooks we will use for remediation. In this lab name your plan starting with your unique GUID That you were given for this lab. This will make it easier to find when its time to select the plan for remediation.
-
-* For Example, Insights Planner may ask me for a plan name, and my unique GUID is "1a2b3" I might name my plan "1a2b3 Payload Remediation". Type in the name you wish to use for the plan and select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE and click on *Save*.
-
+. Name the plan: *GUID* Payload Remediation. Replacing *GUID* with your lab's *GUID*, select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE and click on *Save*.
++
+NOTE: Since this is a shared Insights environment naming this with your GUID will make it easier to find when its time to select the plan for remediation.
 +
 image:images/lab8.2-playbookbuilder.png[1000,1000]
 
@@ -232,11 +229,11 @@ image:images/lab8.2-setacklimit.png[1000,1000]
 +
 image:images/lab8.2-saveplanneroutput.png[1000,1000]
 
-. Now that we have a plan built to resolve the Payload vulnerability for ic4, lets login to Tower and sync the Insights information with Tower. The Tower environment has been mostly pre-configured for your use in this lab.
+. Now that we have a plan built to resolve the Payload vulnerability for *ic4.summit.exampl.com*, we need to sync the Red Hat Insights information with Ansible Tower.
 
-. We accomplish this by logging into Ansible Tower. Point your browser to https://tower-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
+. Login with *admin* / *r3dh4t1!* to Tower at https://tower-*GUID*.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
 
-. Login with admin / r3dh4t1! as we have done with the other administrative UIs  and clicking the large *Templates* option from the main menu at the top. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
+. Click on *Templates* from the main menu at the top. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
 +
 image:images/lab8.3-insights-facts-1.png[1000,1000]
 
