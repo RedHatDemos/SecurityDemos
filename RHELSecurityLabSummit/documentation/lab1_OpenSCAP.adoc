@@ -3,12 +3,12 @@
 == Goal of Lab 1
 The goal of this part of the lab is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
 
-=== Introduction
+== Introduction
 OpenSCAP is a family of open source SCAP tools and content that help users create standard security checklists for enterprise systems. Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certifications and accreditations easier.
 
 OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this lab exercise, we will focus on one-off scanning to get started.
 
-=== Pre-Configured Set Up Steps (You do not need to do these steps)
+== Pre-Configured Set Up Steps (You do not need to do these steps)
 All of the steps in this pre-configured set up section have already been done for you. This section is for your reference only so you know what steps have already been pre-configured in this lab environment for you.
 
 .  Red Hat Enterprise Linux 7.5 is installed on the *openscap.example.com* host. We have also pre-installed several packages on the *openscap.example.com* host.
@@ -47,7 +47,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
  # GUI tool for scanning and content customization, a front-end for OpenSCAP
  [root@workstation] yum install scap-workbench
 
-=== Lab 1.1 Security scanning with OpenSCAP
+== Lab 1.1 Security scanning with OpenSCAP
 . If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
@@ -131,7 +131,7 @@ image::images/scap_report_pass.png[HTML report: A rule that is passing]
 
 image::images/scap_report_fail.png[HTML report: A rule that is failing]
 
-=== Lab 1.2 Customizing existing SCAP security content using SCAP workbench
+== Lab 1.2 Customizing existing SCAP security content using SCAP workbench
 . Now, go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
@@ -167,7 +167,7 @@ image:images/lab1.2-scapworkbenchscan.png[500,500]
 +
 image:images/lab1.2-savecustomization.png[300,300]
 
-=== Lab 1.3 Security Remediations with OpenSCAP and Ansible
+== Lab 1.3 Security Remediations with OpenSCAP and Ansible
 Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! As a result, it is best practice to test the remediation changes before deploying.
 
 . If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
