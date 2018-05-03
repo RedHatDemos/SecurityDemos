@@ -11,6 +11,11 @@ There are various tools that you can use to manage GPG on your system, graphical
 
 === Logon to Your System:
 . Logon to servera.example.com as *root* using *r3dh4t1!* as your password.
+
+[source]
+[lab-user@workstation-GUID ~]$ ssh root@servera.example.com
+[root@servera ~]#
+
 . Rather than use the root account, let’s create a new user account and assign it a password and do our work from within that scope.  From the command line, perform the following:
 +
 [source]
