@@ -104,7 +104,7 @@ The security compliance officer/auditor has asked the admin to remediate the iss
 +
 image:images/lab5.4-cloudintelreports.png[500,500]
 
-. Notice that the OpenSCAP Scan Results reports are there for both *rhel7-custom* and *rhel7-pci-dss*.
+. Under *Save Reports* notice that the OpenSCAP Scan Results reports are there for both *rhel7-custom* and *rhel7-pci-dss*.
 +
 image:images/lab5.4-savedreports.png[1000,1000]
 
