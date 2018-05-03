@@ -17,6 +17,11 @@ AIDE maintains a database that captures the state of critical system configurati
 
 === Install the AIDE package
 . Login to the *servera* VM using either console or using the terminal on your laptop. Login to your *servera* VM as *lab-user* using the password *r3dh4t1!*.
+
+[source]
+[lab-user@workstation-GUID ~]$ ssh lab-user@servera.example.com
+[lab-user@servera ~]#
+
 . AIDE is part of the base repository that comes standard with Red Hat Enterprise Linux, but is not installed by default.  As *lab-user*, become root and install the AIDE package.
 
 +
@@ -68,6 +73,10 @@ AIDE, version 0.15.1
 === Modify Permission and Content of a File
 . Let’s review the /etc/aide.conf file and look for entries related to ssh.  At line 273 you will find the following entries:
 +
+
+[source]
+[root@servera ~]# vim /etc/aide.conf
+
 [source]
 # ssh
 /etc/ssh/sshd_config$ CONTENT_EX
@@ -85,7 +94,7 @@ CONTENT_EX = sha256+ftype+p+u+g+n+acl+selinux+xattrs
 [root@servera ~]# chmod 0644 /etc/ssh/sshd_config
 [root@servera ~]# vim /etc/ssh/sshd_config
 
-. I appended “UseDNS no” to the end of the sshd_config for my content change.  When we run AIDE we expect it to note the change of the permissions and identify a change in the checksum of the file.  Run a new scan as follows:
+. I appended __UseDNS no__ to the end of the sshd_config for my content change.  When we run AIDE we expect it to note the change of the permissions and identify a change in the checksum of the file.  Run a new scan as follows:
 +
 [source]
 [root@servera ~]# aide --check
