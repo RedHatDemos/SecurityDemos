@@ -61,8 +61,7 @@ The exploit will be executed from the _selinux1.example.com_ system.
 . If not already root, become *root* and then log into the _selinux1.example.com_ system.
 +
 [source]
-[lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh root@selinux1.example.com
+[lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
 
 . Move to directory /root/selinux_sctipts/ where are all the scripts needed for provide attack.
 
@@ -207,8 +206,7 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 . If not already root, become *root* and then log into the _selinux1.example.com_ system.
 +
 [source]
-[lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh root@selinux1.example.com
+[lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
 
 . Update DNS records on the _selinux1_ server.
 
@@ -249,8 +247,7 @@ Test whether all servers are available via the _ansible_ command.
 . If not already root, become *root* and then log into the _selinux1.example.com_ system.
 +
 [source]
-[lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh root@selinux1.example.com
+[lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
 
 	[root@selinux1 selinux_scripts]# ansible all -i inventory -m ping -u root
 
@@ -538,8 +535,7 @@ All actions are performed on the _selinux2_ host which is a RHEL-7.6 Beta instal
 . If not already root, become *root* and then log into the _selinux1.example.com_ system.
 +
 [source]
-[lab-user@workstation-GUID ~]$ sudo -i
-[root@workstation-GUID ~]# ssh root@selinux1.example.com
+[lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
 [root@selinux1 ~]# ssh root@selinux2
 
 Linux users can be assigned to SELinux users using semanage login tool. By default users are mapped to _unconfined_u_:
