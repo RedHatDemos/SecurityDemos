@@ -1,7 +1,7 @@
-== Lab 3: How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes
+== Lab 3: How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKS encrypted volumes
 
 === Goal of Lab:
-The goal of this lab is to understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes. You will install a Tang server on our NBDE1 server, and install the Clevis client on NBDE2.
+The goal of this lab is to understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKS encrypted volumes. You will install a Tang server on our NBDE1 server, and install the Clevis client on NBDE2.
 
 === Introduction
 The Network-Bound Disk Encryption (NBDE) allows the user to encrypt root volumes of hard drives on physical and virtual machines without requiring to manually enter a password when systems are restarted.  Red Hat Enterprise Linux implements NBDE with a central server named Tang, and and client framework named Clevis.
@@ -32,7 +32,7 @@ Since tangd uses the systemd socket activation mechanism, the server starts as s
 === Installing the Clevis Client
 Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
 
-. Open the console for *NBDE2*. As noted in Lab 0, you have console access to all of the VMs that you will use in all the lab exercises. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!* .
+. Open the console for *NBDE2*. As noted in Lab 0, you have console access to all of the VMs that you will use in all the lab exercises. The passphrase for the LUKS encrypted disk on *NBDE2* is *r3dh4t1!* .
 If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
 +
 image:images/lab3-console2.png[200,200]
@@ -80,7 +80,7 @@ NOTE: This command performs four steps:
 NOTE: Pass the ‘-vf’ parameter if you want to see verbose output.
 
 === Reboot your server
-Reboot your NBDE2 server.  When the prompt comes up for the LUKs passphrase, wait a few seconds and your server should automatically begin the boot process without requiring you to enter a password.
+Reboot your NBDE2 server.  When the prompt comes up for the LUKS passphrase, wait a few seconds and your server should automatically begin the boot process without requiring you to enter a password.
 
 
 
