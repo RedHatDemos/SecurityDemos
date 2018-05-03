@@ -347,9 +347,11 @@ image:images/lab8.4-insights-fix-all.png[1000,1000]
 
 . This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in he DETAILS pane, and the ansible-playbook run output on the right.
 +
+IMPORTANT: It is possible that one of the nodes will fail during remediation. This is simply an environmental issue and will be addressed in future releases of this lab exercise.
++
 image:images/lab8.4-insights-template4.png[1000,1000]
 +
-IMPORTANT: There are some actions that will not have Ansible playbook generation capability, so you may have to do those manually, but you can knock out a majority of the vulnerabilities with Insights Plans and Ansible Tower. Just repeat the steps to create plans, sync them, and create and run the remediation template.
+NOTE: There are some actions that will not have Ansible playbook generation capability, so you may have to do those manually, but you can knock out a majority of the vulnerabilities with Insights Plans and Ansible Tower. Just repeat the steps to create plans, sync them, and create and run the remediation template.
 
 . Now navigate back to your Satellite UI at https://sat-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic1.summit.example.com* and *ic4.summit.example.com* less issues than before.
 +
