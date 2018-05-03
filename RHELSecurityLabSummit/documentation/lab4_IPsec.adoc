@@ -37,7 +37,7 @@ out of a VM.
 
 and
 
- [lab-user@workstation-repl ~]$ ssh root@ipsec.example.com
+ [lab-user@workstation-repl ~]$ ssh root@ipsec2.example.com
 
 . Create the lab X.509 Certificates:
 
@@ -85,7 +85,7 @@ When prompted for the import password, use "secret".
 . You can confirm the node's certificate and CA certificate are installed and available
 to libreswan:
 
- # certutil -L -d sql:/etc/ipsec.d
+ [root@ipsec ~]# certutil -L -d sql:/etc/ipsec.d
  .
  Certificate Nickname                                         Trust Attributes
  .                                                            SSL,S/MIME,JAR/XPI
@@ -118,13 +118,10 @@ and we can always use it to login to other machines to reconfigure or debug:
 
  [root@ipsec ~]# echo "192.168.0.3/32" >> /etc/ipsec.d/policies/clear
 
-. These group names are built-in, so you cannot change them. Whenever you change one of these group files, the ipsec service needs to be restarted:
+. Now we will do the same for the next machine, ipsec2.example.com. Since the ipsec.example.com host contains all the certificates, we need to copy the certificate onto ipsec2.example.com via the workstation VM:
 
- [root@ipsec ~]# systemctl restart ipsec
-
-. Now we will do the same for the next machine, ipsec2.example.com. Since the ipsec.example.com host contains all the certificates, we need to copy the certificate for ipsec2.example.com from ipsec.example.com:
-
- [root@ipsec ~]# scp /root/labcerts/pkcs12/ipsec2.example.com.p12 root@ipsec2.example.com:/root
+[lab-user@workstation-repl ~]$ scp root@ipsec.example.com:/root/labcerts/pkcs12/ipsec2.example.com.p12 .
+[lab-user@workstation-repl ~]$ scp ipsec2.example.com.p12 root@ipsec2.example.com:/root/
 
 Then we install libreswan, import the certificate on ipsec2.example.com and configure it for Opportunistc IPsec:
 
@@ -161,6 +158,8 @@ and on the other host:
 
  [root@ipsec ~]# ipsec status
  [ lots of output ]
+
+That's it! You have your two node IPsec encrypted mesh network running.
 
 . If you think something went wrong and the ipsec status command does not show you the connections private, private-or-clear and clear-or-private (and their instances)
 then issue a manual command to see why loading failed:
@@ -209,7 +208,6 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 . If everything works as expected, you would now be ready to enable the IPsec services on your cluster on every startup. So on each node run:
 
  [root@ipsec ~]# systemctl enable ipsec
- [root@ipsec ~]# systemctl start ipsec
 
 . For more information on Opportunistc IPsec, please see https://libreswan.org/wiki/Main_Page
 
