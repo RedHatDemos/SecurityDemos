@@ -77,6 +77,8 @@ image:images/lab3.1-vm-ipaddress.png[400,400]
 
 . Once logged in check to see if the *AIDE* package is installed.
 +
+NOTE: It may take a couple of minutes for the aide package to appear. So keep trying!
++
 [source]
 ----
 [root@lab3-vm1 ~]# rpm -qa --last aide
