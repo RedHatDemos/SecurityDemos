@@ -107,9 +107,9 @@ Now, you will see the compliance scan results for every security control in the 
 . Now, let's copy the *report.html* over to the workstation bastion host, set the correct permissions on *report.html* file so it is viewable, and view the report from the workstation bastion host in a web browser.
 +
  [root@openscap]# exit
- [root@workstation]$ scp root@openscap.example.com:/tmp/report.html /home/lab-user/Desktop
- [root@workstation]$ chmod 644 /home/lab-user/Desktop/report.html
- [root@workstation] chown lab-user /home/lab-user/Desktop/report.html
+ [lab-user@workstation-GUID ~]$ scp root@openscap.example.com:/tmp/report.html /home/lab-user/Desktop
+ [lab-user@workstation-GUID ~]$ chmod 644 /home/lab-user/Desktop/report.html
+ [lab-user@workstation-GUID ~]$ chown lab-user /home/lab-user/Desktop/report.html
 
 . Now, go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
@@ -152,7 +152,7 @@ Putting the machine (change its configuration) into compliance is called *remedi
 
 . If you want to test remediations as part of this lab, perform them on the *openscap.example.com* host to avoid modifying the *workstation.example.com* host:
 +
- [root@workstation]# ssh openscap.example.com
+ [lab-user@workstation-GUID ~]$ ssh root@openscap.example.com
 
 . (optional) Generate bash remediation script and run it on target machine(s). This can be accomplished by running:
 +
