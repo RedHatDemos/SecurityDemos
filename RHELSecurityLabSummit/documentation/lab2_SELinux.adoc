@@ -122,7 +122,7 @@ Victim server (_selinux4_ system) has SELinux in permissive mode. Now, let's swi
 
 Connect to _selinux4_ and switch to Enforcing mode
 
-    [root@selinux1 selinux_scripts]# ssh root@selinux4
+    [root@selinux1 selinux_scripts]# ssh root@selinux4.example.com
     [root@selinux4 ~]# setenforce 1
     [root@selinux4 ~]# exit
 
@@ -151,7 +151,7 @@ Let's analyze what happened and why SELinux blocked ShellShock exploit.
 
 Connect to selinux4 system from selinux1 machine
 
-    [root@selinux1 selinux_scripts]# ssh root@selinux4
+    [root@selinux1 selinux_scripts]# ssh root@selinux4.example.com
     [root@selinux4 ~]# ausearch -m AVC -ts today | grep name_connect
     type=AVC msg=audit(1524909646.681:86): avc:  denied  { name_connect } for  pid=2091 comm="bashbug.sh" dest=9999 scontext=system_u:system_r:httpd_sys_script_t:s0 tcontext=system_u:object_r:jboss_management_port_t:s0 tclass=tcp_socket
 
@@ -282,11 +282,11 @@ The following actions are performed for all hosts mentioned in the _inventory_ f
 
 At the end we need to install the _setools-console_ package containing SELinux policy quiery tools which will be used for SELinux Troubleshooting.
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2
+	[root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
 	[root@selinux2 ~]# yum install setools-console
 	[root@selinux2 ~]# exit
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux3
+	[root@selinux1 selinux_scripts]# ssh root@selinux3.example.com
 	[root@selinux3 ~]# yum install setools-console
 	[root@selinux3 ~]# exit
 
@@ -299,24 +299,24 @@ At the end we need to install the _setools-console_ package containing SELinux p
 
 	[root@selinux1 selinux_scripts]# cd /root/selinux_scripts
 
-	[root@selinux1 selinux_scripts]# curl selinux2
+	[root@selinux1 selinux_scripts]# curl selinux2.example.com
 	<h1>Default Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# curl selinux2:7070
+	[root@selinux1 selinux_scripts]# curl selinux2.example.com:7070
 	<h1>Custom Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# curl selinux3
+	[root@selinux1 selinux_scripts]# curl selinux3.example.com
 	<h1>Default Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# curl selinux3:7070
+	[root@selinux1 selinux_scripts]# curl selinux3.example.com:7070
 	<h1>Custom Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2
+	[root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
 	[root@selinux2 ~]# getenforce
 	Disabled
 	[root@selinux2 ~]# exit
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux3
+	[root@selinux1 selinux_scripts]# ssh root@selinux3.example.com
 	[root@selinux3 ~]# getenforce
 	Disabled
 	[root@selinux3 ~]# exit
@@ -330,17 +330,17 @@ Setup SELinux to _permissive_ mode and relabel whole filesystem.
 
 SELinux is switched to _permissive_ mode using the _enable-selinux_ playbook. It means that SELinux policy is enabled but is not enforced. We can use the _getenforce_ and _sestatus_ utility to view the current SELinux mode for our server(s).
 
-    [root@selinux1 selinux_scripts]# ssh root@selinux2
+    [root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
     [root@selinux2 ~]# getenforce
     [root@selinux2 ~]# sestatus
     [root@selinux2 ~]# exit
 
 SELinux does not deny access, but denials are logged for actions that would have been denied if running in enforcing mode. In order to show logged denials for certain actions we need to run the _curl_ command. AVC denial(s) will be generated and we can view it via the _ausearch_ command [3].
 
-	[root@selinux1 selinux_scripts]# curl selinux2
-	[root@selinux1 selinux_scripts]# curl selinux3
+	[root@selinux1 selinux_scripts]# curl selinux2.example.com
+	[root@selinux1 selinux_scripts]# curl selinux3.example.com
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2
+	[root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
 	[root@selinux2 ~]# ausearch -m AVC -su httpd_t -ts recent
 	avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
 	avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
@@ -352,7 +352,7 @@ SELinux Troubleshooting can be performed on both hosts. We will use the _selinux
 
 Log into the _selinux2_ host.
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2
+	[root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
 
 ==== Lab 2.2.6 SELinux Port
 
@@ -457,12 +457,12 @@ Apply defined configurations for all servers.
 
 List all SELinux configuration changes.
 
-    [root@selinux1 selinux_scripts]# ssh selinux2
+    [root@selinux1 selinux_scripts]# ssh selinux2.example.com
     [root@selinux2 ~]# semanage export
     [root@selinux2 ~]# exit
 
 
-    [root@selinux1 selinux_scripts]# ssh selinux3
+    [root@selinux1 selinux_scripts]# ssh selinux3.example.com
     [root@selinux3 ~]# semanage -o -
     [root@selinux3 ~]# exit
 
@@ -472,11 +472,11 @@ Check the current SELinux status for all servers..
 
 Check the functionality with enabled SELinux.
 
-    [root@selinux1 selinux_scripts]# curl selinux2
-    [root@selinux1 selinux_scripts]# curl selinux2:7070
+    [root@selinux1 selinux_scripts]# curl selinux2.example.com
+    [root@selinux1 selinux_scripts]# curl selinux2.example.com:7070
 
-    [root@selinux1 selinux_scripts]# curl selinux3
-    [root@selinux1 selinux_scripts]# curl selinux3:7070
+    [root@selinux1 selinux_scripts]# curl selinux3.example.com
+    [root@selinux1 selinux_scripts]# curl selinux3.example.com:7070
 
 == Summary
 
@@ -536,7 +536,7 @@ All actions are performed on the _selinux2_ host which is a RHEL-7.6 Beta instal
 +
 [source]
 [lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
-[root@selinux1 ~]# ssh root@selinux2
+[root@selinux1 ~]# ssh root@selinux2.example.com
 
 Linux users can be assigned to SELinux users using semanage login tool. By default users are mapped to _unconfined_u_:
 
