@@ -1,6 +1,6 @@
 = Cloud encryption using RHEL Opportunistic IPsec
 
-== Goal of Lab:
+== Goal of Lab
 In this lab exercise, you will learn how to deploy Opportunistic IPsec to encrypt
 all host to host communication within an enterprise network. Whenever two
 hosts in the network want to send any kind of traffic, IPsec security will
@@ -13,7 +13,7 @@ In this lab exercise, you will learn:
 * Configure Opportunistic IPsec on two or more nodes
 * How to debug and monitor the network for IPsec encryption
 
-== Introduction:
+== Introduction
 
 Imagine a LAN of various machines. Each machine is given an X.509
 certificate in the form of a PKCS#12 file (eg ipsecXXX.example.com). This
@@ -30,7 +30,9 @@ any other provided lab VM. However do be careful.  If you misconfigure
 IPsec and do not allow fallback to cleartext, you can lock yourself
 out of a VM. 
 
-=== Setup one IPsec machine to generate X.509 certificates:
+== Setup
+
+=== Create and Install X.509 certificates
 
 We will need to generate the required X.509 certificates. To make this
 easier, on ipsec.example.com there is a script /root/vpn-cert-gen.py that
@@ -75,7 +77,7 @@ lab libreswan cannot link the IP address to the hostname securely. This is why
 the python script hardcodes the IP address in the SubjectAltName of the X.509
 certificate.
 
-=== Setup the machine for Opportunistic IPsec:
+=== Configure Opportunistic IPsec
 
 In order to setup ipsec.example.com, first install libreswan and initialize the
 certificate database using the following commands:
@@ -140,7 +142,9 @@ other machines to reconfigure or debug:
 
 	[root@ipsec ~]# echo "192.168.0.3/32" >> /etc/ipsec.d/policies/clear
 
-Now we will do the same for the next machine, ipsec2.example.com. Since the
+=== Transfer the Configuration to a Second System
+
+Now we will configure the next machine, ipsec2.example.com. Since the
 ipsec.example.com host contains all the certificates, we need to copy the
 certificate onto ipsec2.example.com via the workstation VM:
 
@@ -172,6 +176,8 @@ ipsec.example.com. If you end up adding more nodes into the crypto mesh, for
 example audit.example.com, then you will need to scp one of these files and edit
 it to change the certificate name.
 
+== Using Opportunistic IPsec
+
 Now we are ready for testing our configuration. Start the IPsec subsystem on
 both configured nodes:
 
@@ -202,6 +208,8 @@ command is:
 	<lots of output>
 
 That's it! You have your two node IPsec encrypted mesh network running.
+
+== Troubleshooting
 
 If you think something went wrong and the ipsec status command does not show you
 the connections private, private-or-clear and clear-or-private (and their
@@ -285,7 +293,7 @@ services on your cluster on every startup. So on each node run:
 For more information on Opportunistc IPsec, please see
 https://libreswan.org/wiki/Main_Page
 
-=== Resetting the IPsec NSS Certificate Database
+== Resetting the IPsec NSS Certificate Database
 
 Libreswan uses the NDD cryptographic library. It keeps all its X.509
 certificates and keys in its own NSS database in /etc/ipsec.d. If for some
