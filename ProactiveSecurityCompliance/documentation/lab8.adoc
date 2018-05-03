@@ -317,7 +317,7 @@ image:images/lab8.3-planner.png[1000,1000]
 +
 NOTE: Now that we have a plan built to resolve most of the vulnerabilities for our two nodes, we need to sync the Red Hat Insights information with Ansible Tower.
 
-. Login with *admin* / *r3dh4t1!* to Tower at https://tower-*GUID*.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
+. Login with *admin* / *r3dh4t1!* to Tower at https://tower-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
 
 . Click on *Templates* from the main menu at the top. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
 +
