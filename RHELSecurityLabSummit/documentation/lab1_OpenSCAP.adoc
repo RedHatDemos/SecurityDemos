@@ -187,10 +187,13 @@ Putting the machine into compliance (for example by changing its configuration) 
 All remediations will be executed on the *openscap.example.com* host. You will not make modifications to any other hosts, including the *workstation.example.com* host.
 
 . Let's generate an Ansible playbook that will put the *openscap.example.com* machine into compliance. Let's go ahead and generate a playbook from the results:
+* use --fix-type ansible to request an ansible playbook with the fixes
 +
  [root@openscap]# oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
 
 . (Optional) Generate bash remediation script and run it on target machine(s). This can be accomplished by running:
+* use --fix-type bash to request a bash script with the fixes
+* after the script is generated change its permissions so that we can run it
 +
  [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash-fix.sh
  [root@openscap]# chmod +x bash-fix.sh
