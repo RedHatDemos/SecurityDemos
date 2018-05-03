@@ -21,7 +21,7 @@ Once that account is established, logout as root and log back in as your new use
 
 === Generating a New Key Pair
 Once you have created a new key pair, you can export these keys to identify yourself to the rest of the world, or simply use it locally to encrypt your files at rest.   To generate your new key pair, login as your new user and enter the following command:
-+
+
 [source]
 gpg2 --gen-key
 
@@ -35,7 +35,7 @@ You will be asked to provide the following information:
 
 At this point you system will start generating the key pair.  You will be asked to assist in helping generate entropy by moving your mouse or typing random keystrokes.  Eventually it will complete and you will have your new key pair that you can now use.  The output will list your key and your fingerprint.  If you wish to view them at a later time, run the following commands:
 
-+
+
 [source]
 gpg2 --list-keys [student]
 gpg2 --fingerprint [student]

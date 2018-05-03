@@ -18,38 +18,38 @@ In one of the below exercises, we'll see an example where using this process iso
 
 === Introduction to the Shellshock vulnerability and SELinux
 
-The Shellshock vulnerability is a bash exploit and the root issue was that you could put any command after _env_ variable in a command , which allowed you to execute any arbitrary code. The following pictures shows an example of the bash explout on an apache server.
+The Shellshock vulnerability is a bash exploit and the root issue is that you could put any command after the _env_ variable in a command , which allows an attacker to execute any arbitrary code. The following pictures shows an example of the bash exploit on an apache server.
 
 image:images/lab2-shellshock-1.png[]
 
-If you would have a _cgi_ script accessing user data or internal network then this script could compromise either internal network or user data on your system.
+If you had a _cgi_ script accessing user data or the internal network, then this script could compromise either the internal network or user data on your system.
 
-The first question which usually comes to mind in term of SELinux and Shellshock is *_What does SELinux do to mitigate against the Shellshock bash exploit?_*
+_So what can SELinux do to mitigate against the Shellshock bash exploit?_
 
-The important fact to understand is that *SELinux does not block the exploit* but it would *prevent escallation of confined domains*. These confined domains are defined by SELinux policy installed on a system. Because *SELinux controls on their types (SELinux labels)*, the process is doing what it was designed to do and can not access what is not allowed in SELinux policy.
+The important fact to understand is that *SELinux does not block the exploit* but it will *prevent escalation of confined domains*. These confined domains are defined by the SELinux policy installed on a system. Because *SELinux controls on their types (SELinux labels)*, the process is doing what it was designed to do and can not access what is not allowed in the SELinux policy.
 
-The picture below shows the situation described above with enabled SELinux and with SELinux in enforcing mode at this time.
+The picture below shows the situation described above with SELinux enabled and in enforcing mode.
 
 image:images/lab2-shellshock-2.png[]
 
-Our possible _cgi_ scripts executed by an attacker can not access either user data or certain parts of internal network as it is defined in SELinux policy.
+If an attacker executed the potential _cgi_ script mentioned earlier, the attacker would not be able to access either user data or certain parts of the internal network as it is defined in the SELinux policy.
 
-How is it done practically? How do types, which ensure described process separation, look in reality? Read below text and practice to get answers.
+How is this done in reality? How do types, which ensure described process separation, look in reality? The below exercises will help answer these questions.
 
-== Lab 2.1 Exploiting Red Hat Enterprise Linux 7 with Shellshock vulnerability
+== Lab 2.1 Exploiting Red Hat Enterprise Linux 7 with the Shellshock vulnerability
 
 === Goal of Lab 2.1
 In this first exercise, let's become a hacker and try to exploit Red Hat Enterprise Linux 7 with the Shellshock vulnerability.
 
-As an administrator of Red Hat Enterprise Linux 7 servers, I want to have enabled SELinux for my webserver environment to mitigate damage by zero day vulnerbalities.
+As an administrator of Red Hat Enterprise Linux 7 servers, I want to enable SELinux for the web servers in my environment to mitigate against damages caused by zero day vulnerabilities.
 
-The lab exercise is split into three steps:
+This lab exercise is split into three steps:
 
 . Exploiting a RHEL system with SELinux in Permissive mode
 . Exploiting a RHEL system with SELinux in Enforcing mode
 . Analyzing SELinux denials
 
-=== Lab 2.1.1 exercise steps
+=== Lab 2.1.1 Logging into the *selinux1.example.com* system and navigating to the selinux scripts directory
 
 The exploit will be executed from the _selinux1.example.com_ system.
 
@@ -67,31 +67,39 @@ The exploit will be executed from the _selinux1.example.com_ system.
 
     [root@selinux1 ~]# cd /root/selinux_scripts
 
-We will now need to open two terminals( both selinux1.example.com): one for listening on 9999 tcp port and the second one for executing the exploit script. Below, in the next part of the lab exercise, we will open two terminals, connect both of them to the selinux1.example.com systems and change directory to /root/selinux_scripts.
+. Repeat steps #1-3 above on a second terminal (this terminal window will also be connected to *selinux1.example.com*)
 
+=== Lab 2.1.2 Exploiting the system with SELinux in Permissive mode
+
+==== Goal of Lab 2.1.2
+In this part of the lab exercise, we are going to utilize the two open open terminals from the previous exercise.
+(both selinux1.example.com). The first terminal window will be for listening on 9999 tcp port and the second terminal window will be for executing the exploit script.
+
+==== Introduction
 Let's see this visually. Take a look at the image below. This image describes the flow of how the exploit that will be executed. On the left side is the victim server (selinux4 system). From the attacker machine(which is the selinux1 system), a http request will be sent and part of this httpd request will be to open the shell to the attacker machine listening on tcp port 9999.
 
 image:images/lab2-shellshock-flow.png[]
 
-== Lab 2.1.2 Exploiting system with SELinux in Permissive mode
 
+==== Lab 2.1.2 exercise steps
 Now let's go through the steps we just described above.
-The _selinux4_ system has SELinux in permissive mode by default. It is running the Apache service running with an older version of bash. Everything is ready to run the exploit.
 
-Based on flow of the ShellShock attack we learned about earlier, it's necessary to start listening on tcp port 9999 on the selinux1 system.
+. Go to your two open two terminals that are connected to the *selinux1.example.com* systems and pointed to the /root/selinux_scripts directory.
+
+. Note that the victim server, _selinux4_, has SELinux in permissive mode by default. It is running the Apache service running with an older version of bash. Everything is ready to run the exploit.
+
+. Based on flow of the ShellShock attack we learned about earlier, it's necessary to start listening on tcp port 9999 on one of the selinux1 terminals you have open. We'll be using Ncat, which is a feature-packed networking utility which reads and writes data across networks from the command line.
 
     [root@selinux1 selinux_scripts]# nc -lvp 9999
     Ncat: Version 7.50 ( https://nmap.org/ncat )
     Ncat: Listening on :::9999
     Ncat: Listening on 0.0.0.0:9999
 
-Ncat is a feature-packed networking utility which reads and writes data across networks from the command line.
-
-Now, from another terminal (still for the selinux1 system), let's run the exploit:
+. Now, from the other *selinux1* terminal, let's run the exploit:
 
     [root@selinux1 selinux_scripts]# ./shellshock_exploit.sh
 
-Right now, on the terminal where nc command was executed, a bash prompt should now appear.
+. Right now, on the terminal where nc command was executed, a bash prompt should now appear.
 
     [root@selinux1 selinux_scripts]# nc -lvp 9999
     Ncat: Version 7.50 ( https://nmap.org/ncat )
@@ -102,7 +110,7 @@ Right now, on the terminal where nc command was executed, a bash prompt should n
     bash: no job control in this shell
     bash-4.2$
 
-For testing purpose, few commands could be executed on victim (_selinux4_ machine)
+. For testing purpose, few commands could be executed on victim (_selinux4_ machine). Type *id* and then type *uname -a*. Then type *exit*.
 
     bash-4.2$ id
     id
@@ -113,24 +121,24 @@ For testing purpose, few commands could be executed on victim (_selinux4_ machin
 
     # exit
 
-Command _id_ prints real and effecitve user and group IDs, where we could see that user and group is apache. It's because cgi scripts are started with apache owner.
-Command _uname_ prints system information, where is hostname described, it's selinux4.example.com, which means it's victim system. These commands proofs that attack was successful
+* The _id_ command prints real and effecitve user and group IDs, where we could see that user and group is apache. This is because cgi scripts are started as the apache owner.
+* The _uname_ command prints system information. You can see the hostname *selinux4.example.com* being printed, which indicates that this is the victim system. These commands proves that the attack was successful
 
-==== Lab 2.1.2 Set SELinux to enforcing mode
+=== Lab 2.1.3 Set SELinux to enforcing mode
 
-Victim server (_selinux4_ system) has SELinux in permissive mode. Now, let's switch SELinux to enforcing and repeat the attack.
+The victim server (_selinux4_ system) has SELinux in permissive mode. Now, let's switch SELinux to enforcing and repeat the attack.
 
 Connect to _selinux4_ and switch to Enforcing mode
 
-    [root@selinux1 selinux_scripts]# ssh root@selinux4.example.com
+    [root@selinux1 selinux_scripts]# ssh root@selinux4
     [root@selinux4 ~]# setenforce 1
     [root@selinux4 ~]# exit
 
-=== Lab 2.1.3 Exploiting system with SELinux in Enforcing mode
+=== Lab 2.1.4 Exploiting system with SELinux in Enforcing mode
 
-Right now, attack will be repeated but SELinux is in Enforcing mode on victim server (_selinux4_ system)
+Now, let's repeat the attack but this time with SELinux in Enforcing mode on the victim server (_selinux4_ ).
 
-Based on flow of the _ShellShock_ attack, it's necessary to start listening on tcp port 9999 on _selinux1_ system.
+Based on flow of the _ShellShock_ attack, let's again start listening on tcp port 9999 on one of the terminals for the _selinux1_ system.
 
     [root@selinux1 selinux_scripts]# nc -lvp 9999
     Ncat: Version 7.50 ( https://nmap.org/ncat )
@@ -139,31 +147,31 @@ Based on flow of the _ShellShock_ attack, it's necessary to start listening on t
 
 _Ncat_ is a feature-packed networking utility which reads and writes data across networks from the command line.
 
-Now, from another terminal for the selinux1 system, let's run the exploit
+Now, from another terminal for the selinux1 system, let's run the exploit again.
 
     [root@selinux1 selinux_scripts]# ./shellshock_exploit.sh
 
-As you can see, there is no bash prompt on terminal where you used _nc_ command, because SELinux blocked this access. SELinux did its job!
+As you can see, this time around, there is no bash prompt on the terminal where you executed the _nc_ command. This is because SELinux blocked this access. SELinux did its job!
 
-==== Lab 2.1.4 Analyzing SELinux denial
+=== Lab 2.1.5 Analyzing the SELinux denial
 
-Let's analyze what happened and why SELinux blocked ShellShock exploit.
+Let's analyze what happened and why SELinux blocked the ShellShock exploit.
 
-Connect to selinux4 system from selinux1 machine
+Connect to the selinux4 system from the selinux1 machine
 
-    [root@selinux1 selinux_scripts]# ssh root@selinux4.example.com
+    [root@selinux1 selinux_scripts]# ssh root@selinux4
     [root@selinux4 ~]# ausearch -m AVC -ts today | grep name_connect
     type=AVC msg=audit(1524909646.681:86): avc:  denied  { name_connect } for  pid=2091 comm="bashbug.sh" dest=9999 scontext=system_u:system_r:httpd_sys_script_t:s0 tcontext=system_u:object_r:jboss_management_port_t:s0 tclass=tcp_socket
 
-This is avc record from Audit daemon, which saying that cgi script called bashbug.sh labeled as httpd_sys_script_t tried to connect to tcp port 9999 labeled as jboss_management_port_t. Fortunately there is no allow rules for this access, so it was denied by kernel and SELinux mitigate this attack.
+This is the avc record from the Audit daemon. This output is saying that the cgi script, called bashbug.sh , labeled as httpd_sys_script_t tried to connect to tcp port 9999 labeled as jboss_management_port_t. Fortunately, there is no allow rules for this access. As a result, the access was denied by the kernel and SELinux mitigated this attack.
 
-= Lab 2.2 Enabling SELinux via Ansible
+== Lab 2.2 Enabling SELinux via Ansible
 
 === Goal of Lab 2.2
 
-As an enterprise administrator I want to enable SELinux in my environment with an Apache server using both custom and standard paths for web files so that my Apache server is fully confined by SELinux. I want to use linux-system-roles/selinux as an ansible role which configures SELinux.
+In this lab exercise, you will enable SELinux in your environment, which consists of an Apache server using both custom and standard paths for web files . You will enable SELinux so that your Apache server is fully confined by SELinux. You will use linux-system-roles/selinux as an ansible role which configures SELinux.
 
-=== Lab Detailed User Story
+=== Introduction
 
 As an enterprise administrator I have an environment with Apache webservers where both default and custom paths for Apache web files are used.
 
@@ -198,7 +206,7 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 
 === Lab 2.2.1 Basic environment configuration
 
-. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 [lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
@@ -282,11 +290,11 @@ The following actions are performed for all hosts mentioned in the _inventory_ f
 
 At the end we need to install the _setools-console_ package containing SELinux policy quiery tools which will be used for SELinux Troubleshooting.
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
+	[root@selinux1 selinux_scripts]# ssh root@selinux2
 	[root@selinux2 ~]# yum install setools-console
 	[root@selinux2 ~]# exit
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux3.example.com
+	[root@selinux1 selinux_scripts]# ssh root@selinux3
 	[root@selinux3 ~]# yum install setools-console
 	[root@selinux3 ~]# exit
 
@@ -299,24 +307,24 @@ At the end we need to install the _setools-console_ package containing SELinux p
 
 	[root@selinux1 selinux_scripts]# cd /root/selinux_scripts
 
-	[root@selinux1 selinux_scripts]# curl selinux2.example.com
+	[root@selinux1 selinux_scripts]# curl selinux2
 	<h1>Default Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# curl selinux2.example.com:7070
+	[root@selinux1 selinux_scripts]# curl selinux2:7070
 	<h1>Custom Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# curl selinux3.example.com
+	[root@selinux1 selinux_scripts]# curl selinux3
 	<h1>Default Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# curl selinux3.example.com:7070
+	[root@selinux1 selinux_scripts]# curl selinux3:7070
 	<h1>Custom Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
+	[root@selinux1 selinux_scripts]# ssh root@selinux2
 	[root@selinux2 ~]# getenforce
 	Disabled
 	[root@selinux2 ~]# exit
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux3.example.com
+	[root@selinux1 selinux_scripts]# ssh root@selinux3
 	[root@selinux3 ~]# getenforce
 	Disabled
 	[root@selinux3 ~]# exit
@@ -330,17 +338,17 @@ Setup SELinux to _permissive_ mode and relabel whole filesystem.
 
 SELinux is switched to _permissive_ mode using the _enable-selinux_ playbook. It means that SELinux policy is enabled but is not enforced. We can use the _getenforce_ and _sestatus_ utility to view the current SELinux mode for our server(s).
 
-    [root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
+    [root@selinux1 selinux_scripts]# ssh root@selinux2
     [root@selinux2 ~]# getenforce
     [root@selinux2 ~]# sestatus
     [root@selinux2 ~]# exit
 
 SELinux does not deny access, but denials are logged for actions that would have been denied if running in enforcing mode. In order to show logged denials for certain actions we need to run the _curl_ command. AVC denial(s) will be generated and we can view it via the _ausearch_ command [3].
 
-	[root@selinux1 selinux_scripts]# curl selinux2.example.com
-	[root@selinux1 selinux_scripts]# curl selinux3.example.com
+	[root@selinux1 selinux_scripts]# curl selinux2
+	[root@selinux1 selinux_scripts]# curl selinux3
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
+	[root@selinux1 selinux_scripts]# ssh root@selinux2
 	[root@selinux2 ~]# ausearch -m AVC -su httpd_t -ts recent
 	avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
 	avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
@@ -352,7 +360,7 @@ SELinux Troubleshooting can be performed on both hosts. We will use the _selinux
 
 Log into the _selinux2_ host.
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2.example.com
+	[root@selinux1 selinux_scripts]# ssh root@selinux2
 
 ==== Lab 2.2.6 SELinux Port
 
@@ -457,12 +465,12 @@ Apply defined configurations for all servers.
 
 List all SELinux configuration changes.
 
-    [root@selinux1 selinux_scripts]# ssh selinux2.example.com
+    [root@selinux1 selinux_scripts]# ssh selinux2
     [root@selinux2 ~]# semanage export
     [root@selinux2 ~]# exit
 
 
-    [root@selinux1 selinux_scripts]# ssh selinux3.example.com
+    [root@selinux1 selinux_scripts]# ssh selinux3
     [root@selinux3 ~]# semanage -o -
     [root@selinux3 ~]# exit
 
@@ -472,11 +480,11 @@ Check the current SELinux status for all servers..
 
 Check the functionality with enabled SELinux.
 
-    [root@selinux1 selinux_scripts]# curl selinux2.example.com
-    [root@selinux1 selinux_scripts]# curl selinux2.example.com:7070
+    [root@selinux1 selinux_scripts]# curl selinux2
+    [root@selinux1 selinux_scripts]# curl selinux2:7070
 
-    [root@selinux1 selinux_scripts]# curl selinux3.example.com
-    [root@selinux1 selinux_scripts]# curl selinux3.example.com:7070
+    [root@selinux1 selinux_scripts]# curl selinux3
+    [root@selinux1 selinux_scripts]# curl selinux3:7070
 
 == Summary
 
@@ -536,7 +544,7 @@ All actions are performed on the _selinux2_ host which is a RHEL-7.6 Beta instal
 +
 [source]
 [lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
-[root@selinux1 ~]# ssh root@selinux2.example.com
+[root@selinux1 ~]# ssh root@selinux2
 
 Linux users can be assigned to SELinux users using semanage login tool. By default users are mapped to _unconfined_u_:
 
