@@ -54,7 +54,7 @@ In this step we will show you how to encrypt and un-encrypt a document for priva
 
 +
 [source]
-echo “I love Red Hat!” > sensitive.txt
+echo “I love redhat” > sensitive.txt
 
 . To verify that you can read the document in it’s un-encrypted format, type the following:
 
