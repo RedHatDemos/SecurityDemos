@@ -187,7 +187,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 05:58:20.006529 IP 192.168.0.22 > 192.168.0.23: ESP(spi=0x84019944,seq=0x8), length 120
 05:58:20.006730 IP 192.168.0.23 > 192.168.0.22: ESP(spi=0x5b312cc5,seq=0x8), length 120
 
-. Note due to how the kernel hooks for IPsec and tcpdump interacts, if you look at all traffic over an interface, you might see unencrypted packets going out and encrypted (proto ESP) and decrypted packets coming in. This happens because packets are encrypted by IPsec after the tcpdump hook has seen the packet on some kernel version. The easiest indicator of whether traffic is encrypted is to use the above mentioned trafficstatus command.
+. If you see ESP packets with tcpdump, it means the connection is sending encrypted traffic. If you use ping and see ICMP packets, then the connection is not encrypted. Due due to how the kernel hooks for IPsec and tcpdump interacts, if you look at all traffic over an interface, you might see unencrypted packets going out and encrypted (proto ESP) and decrypted packets coming in. This happens because packets are encrypted by IPsec after the tcpdump hook has seen the packet on some kernel version. The easiest indicator of whether traffic is encrypted is to use the above mentioned trafficstatus command.
 
 . Simply repeat this process on any new node to create your crypto mesh. If you have added the entire network range (192.168.0.0/24) to the private or private-or-clear groups, then for every new node you add, you do not need to reconfigure anything on the existing node.
 
