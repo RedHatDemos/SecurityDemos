@@ -77,25 +77,13 @@ certificate.
 
 === Setup the machine for Opportunistic IPsec:
 
-In order to setup ipsec.example.com, first install libreswan:
+In order to setup ipsec.example.com, first install libreswan and initialize the
+certificate database using the following commands:
 
 	[root@ipsec ~]# yum install libreswan
 	[root@ipsec ~]# ipsec initnss
 
-Libreswan uses the nss cryptographic library. It keeps all its X.509
-certificates and keys in its own NSS database in /etc/ipsec.d. If for some
-reason you want restart the entire lab from scratch, then you want to remove the
-entire libreswan NSS database, run the following commands:
-
-CAUTION: only run these commands once, re-running this commands will empty the
-libreswan certificate database
-
-	[root@ipsec ~]# systemctl stop ipsec
-	[root@ipsec ~]# rm /etc/ipsec.d/*.db
-	[root@ipsec ~]# ipsec initnss
-	Initializing NSS database
-
-Once you have a fresh new NSS database, you can import the PKCS#12 certificate:
+Once libreswan is installed, you can import the PKCS#12 certificate:
 
 	[root@ipsec ~]# ipsec import /root/labcerts/pkcs12/ipsec.example.com.p12
 	Enter password for PKCS12 file:
@@ -296,6 +284,21 @@ services on your cluster on every startup. So on each node run:
 
 For more information on Opportunistc IPsec, please see
 https://libreswan.org/wiki/Main_Page
+
+=== Resetting the IPsec NSS Certificate Database
+
+Libreswan uses the NDD cryptographic library. It keeps all its X.509
+certificates and keys in its own NSS database in /etc/ipsec.d. If for some
+reason you want restart the entire lab from scratch, then you want to remove the
+entire libreswan NSS database, run the following commands:
+
+CAUTION: running these commands will require you to restart the IPsec lab from
+the beginning
+
+	[root@ipsec ~]# systemctl stop ipsec
+	[root@ipsec ~]# rm /etc/ipsec.d/*.db
+	[root@ipsec ~]# ipsec initnss
+	Initializing NSS database
 
 <<top>>
 
