@@ -259,9 +259,9 @@ We will focus on the Ansible remediation options in this next part of the lab ex
         - CJIS-5.10.4.1
 ....
 
-. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Because of a known issue in the SCAP Security Guide content let us use "--skip-tags build_aide_database". Make sure you run this on the *openscap.example.com* host:
+. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Because of a known issue in the SCAP Security Guide content let us use "--skip-tags build_aide_database,firewalld_sshd_port_enabled". Make sure you run this on the *openscap.example.com* host:
 +
- [root@openscap]# ansible-playbook -i "localhost," -c local --check --skip-tags "build_aide_database" playbook.yml
+ [root@openscap]# ansible-playbook -i "localhost," -c local --check --skip-tags aide_build_database,firewalld_sshd_port_enabled playbook.yml
 +
 ....
 ...
