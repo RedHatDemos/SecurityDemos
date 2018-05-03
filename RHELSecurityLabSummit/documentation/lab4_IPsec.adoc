@@ -40,12 +40,12 @@ usbguard.example.com if you want to try and add more machines to the encrypted
 mesh network. All our actions are run as root. To login to ipsec.example.com
 from the lab's bastion workstation you run the following command:
 
-	[lab-user@workstation-repl ~]$ ssh root@ipsec.example.com
+	[lab-user@workstation-GUID ~]$ ssh root@ipsec.example.com
 
 In order to create the X.509 certificates for the lab run the following
 commands:
 
-	[lab-user@workstation-repl ~]$ ssh root@ipsec.example.com
+	[lab-user@workstation-GUID ~]$ ssh root@ipsec.example.com
 	[root@ipsec ~]# mkdir /root/labcerts
 	[root@ipsec ~]# cd /root/labcerts
 	[root@ipsec labcerts]# /root/vpn-cert-gen.py --wipe
@@ -156,8 +156,8 @@ Now we will do the same for the next machine, ipsec2.example.com. Since the
 ipsec.example.com host contains all the certificates, we need to copy the
 certificate onto ipsec2.example.com via the workstation VM:
 
-	[lab-user@workstation-repl ~]$ scp root@ipsec.example.com:/root/labcerts/pkcs12/ipsec2.example.com.p12 .
-	[lab-user@workstation-repl ~]$ scp ipsec2.example.com.p12 root@ipsec2.example.com:/root/
+	[lab-user@workstation-GUID ~]$ scp root@ipsec.example.com:/root/labcerts/pkcs12/ipsec2.example.com.p12 .
+	[lab-user@workstation-GUID ~]$ scp ipsec2.example.com.p12 root@ipsec2.example.com:/root/
 
 Then we install libreswan, import the certificate on ipsec2.example.com and
 configure it for Opportunistc IPsec:
