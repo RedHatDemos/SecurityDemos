@@ -20,7 +20,7 @@ All of the steps in this pre-configured set up section have already been done fo
  # project that brings in security policies we will load and test agains
  [root@openscap]# yum install scap-security-guide
  # we will need this later for Ansible based remediations
- [root@openscap]# yum install ansible
+ [root@openscap]# yum install ansible python-firewall
 
 . You can verify a successful installation by running:
 +
