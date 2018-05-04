@@ -196,7 +196,7 @@ type=SYSCALL msg=audit(1519415062.738:424): arch=c000003e syscall=268 success=ye
 [source]
 -w /etc/shadow -pa -k shadow_key
 
-When the service restarts you can run auditctl -l to verify that your rule has survived.  Note that you auditd is configured to manual start and stop, so you will have to reboot the server to see this change.  If you want to configure a watch, but do not want to reboot your server, create a dynamic rule as we have in this exercise, and then update the audit.rules file for when your server reboots.
+. When the service restarts you can run auditctl -l to verify that your rule has survived.  Note that you auditd is configured to manual start and stop, so you will have to reboot the server to see this change.  If you want to configure a watch, but do not want to reboot your server, create a dynamic rule as we have in this exercise, and then update the audit.rules file for when your server reboots.
 
 
 <<top>>
