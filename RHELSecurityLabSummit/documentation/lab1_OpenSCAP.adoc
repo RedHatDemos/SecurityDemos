@@ -1,7 +1,7 @@
 = Lab 1: OpenSCAP Basics and Command Line Scanning
 
 == Goal of Lab 1
-The goal of this part of the lab is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
+The goal of this lab exercise is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
 
 == Introduction
 OpenSCAP is a family of open source SCAP tools and content that help users create standard security checklists for enterprise systems. Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certifications and accreditations easier.
