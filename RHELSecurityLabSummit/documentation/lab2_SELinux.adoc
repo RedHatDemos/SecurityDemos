@@ -596,15 +596,20 @@ _system_u_ is a special user used only for system processes and in the future wi
     [user42@selinux2 ~]$ exit
     [root@selinux2 ~]# id -Z
     unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
     [root@selinux2 ~]# setenforce 0
     [root@selinux2 ~]# ssh user42@localhost
+
     user42@localhost's password:
     [user42@selinux2 ~]$ sudo -i
     [root@selinux2 ~]# id
     uid=0(root) gid=0(root) groups=0(root) context=user_u:user_r:user_t:s0
+
     [root@selinux2 ~]# id -Z
     User_u:user_r:user_t:s0
+
     [root@selinux2 ~]# exit
+
     [user42@selinux2 ~]$ exit
     [root@selinux2 ~]# setenforce 1
 
