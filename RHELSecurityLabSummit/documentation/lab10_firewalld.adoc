@@ -1,6 +1,6 @@
 == Lab 10: How to use firewalld to dynamically manage firewall rules
 
-=== Goal of Lab:
+=== Goal of Lab
 In this lab exercise, we will learn how to use firewalld to dynamically manage firewall rules.
 
 

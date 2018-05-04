@@ -1,6 +1,6 @@
 == Lab 8: How to create a single sign-on environment for all of your linux servers using Red Hat Identity Management
 
-=== Goal of Lab:
+=== Goal of Lab
 In this exercise you are going to configure clients to attach to a Red Hat Identity Management (IdM) server.  The goal is to create a single-sign-on environment for all of your Linux servers to manage users, hosts, and sudo commands from a central console.  This exercise will already have and IdM server installed, and will focus on registering and managing clients.  The objectives for this exercise are:
 
 * Install the IdM client on your client systems

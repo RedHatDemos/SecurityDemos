@@ -1,6 +1,6 @@
 == Lab 9: How to use GNU Privacy Guard (GPG) to identify yourself and encrypt your communications
 
-=== Goal of Lab:
+=== Goal of Lab
 GNU Privacy Guard (GPG) is a cryptographic software package that is included in your Red Hat Linux subscription.  It can be used to identify yourself and encrypt your communications.  It can also be used to encrypt files at rest, which will be the focus of this exercise.  This will allow you to become comfortable with some the basics of GPG, after which point, you can delve further into the documentation to use more advanced features, such as signing RPM packages, or encrypting email communications.
 
 The documentation can be found at:

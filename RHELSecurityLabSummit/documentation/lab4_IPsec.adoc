@@ -1,4 +1,4 @@
-= Cloud encryption using RHEL Opportunistic IPsec
+= Lab 4: Cloud encryption using RHEL Opportunistic IPsec
 
 == Goal of Lab
 In this lab exercise, you will learn how to deploy Opportunistic IPsec to encrypt
@@ -28,7 +28,7 @@ exercise. But as this configuration method's main feature is scalability,
 you can pick up another X.509 certificate and repeat the process for
 any other provided lab VM. However do be careful.  If you misconfigure
 IPsec and do not allow fallback to cleartext, you can lock yourself
-out of a VM. 
+out of a VM.
 
 == Setup
 

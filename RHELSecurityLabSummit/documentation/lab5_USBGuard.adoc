@@ -1,6 +1,6 @@
 = Lab 5: USBGuard
 
-== Goal of Lab 5
+== Goal of Lab 
 The goal of this lab exercise is to introduce you to the basics of USBGuard.
 
 == Introduction
@@ -280,7 +280,7 @@ image:images/lab5.1.5-reject.png[500,500]
 
 
 === Lab 5.1.6 (Optional) Reset VM steps
-If you wanted to start this lab exercise from scratch, you can go through these reset VM steps. 
+If you wanted to start this lab exercise from scratch, you can go through these reset VM steps.
 
 On host:
 

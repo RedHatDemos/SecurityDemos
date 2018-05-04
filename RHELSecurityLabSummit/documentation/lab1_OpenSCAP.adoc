@@ -1,6 +1,6 @@
 = Lab 1: OpenSCAP Basics and Command Line Scanning
 
-== Goal of Lab 1
+== Goal of Lab 
 The goal of this lab exercise is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
 
 == Introduction
