@@ -158,6 +158,8 @@ success
 . Next, edit the idm.xml file to look like the following:
 +
 [source]
+[root@servera ~]# vi /etc/firewalld/services/idm.xml
+[root@servera ~]# cat /etc/firewalld/services/idm.xml
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>IdM</short>
