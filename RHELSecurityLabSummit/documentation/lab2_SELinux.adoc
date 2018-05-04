@@ -76,7 +76,7 @@ In this part of the lab exercise, we are going to utilize the two open open term
 (both selinux1.example.com). The first terminal window will be for listening on 9999 tcp port and the second terminal window will be for executing the exploit script.
 
 ==== Introduction
-Let's see this visually. Take a look at the image below. This image describes the flow of how the exploit that will be executed. On the left side is the victim server (selinux4 system). From the attacker machine(which is the selinux1 system), a http request will be sent and part of this httpd request will be to open the shell to the attacker machine listening on tcp port 9999.
+Let's see this visually. Take a look at the image below. This image describes the flow of how the exploit that will be executed. On the left side is the victim server (selinux4 system). From the attacker machine (which is the selinux1 system), a http request will be sent and part of this httpd request will be to open the shell to the attacker machine listening on tcp port 9999.
 
 image:images/lab2-shellshock-flow.png[]
 
@@ -169,7 +169,7 @@ This is the avc record from the Audit daemon. This output is saying that the cgi
 
 === Goal of Lab 2.2
 
-SELinux brings additional security for your environment and very often needs to be further modified to reflect the current environment configuration. For these cases, SELinux can be switched to Permissive mode as a debugging mode to not block basic functionality of systems. With this mode, we can run for a time period to debug all possible SELinux AVC denials, which makes turning SELinux On easier to manage. There are many ways to view or modify the installed SELinux policy.
+SELinux brings additional security for your environment and very often needs to be further modified to reflect the current environment configuration. For these cases, SELinux can be switched to Permissive mode as a debugging mode to not block basic functionality of systems. With this mode, we can run for a time period to debug all possible SELinux AVC denials, which makes turning SELinux on easier to manage. There are many ways to view or modify the installed SELinux policy.
 
 In this lab, we used the SELinux Ansible role to distribute all needed changes in the SELinux policy to make our Apache configuration working with SELinux in Enforcing mode.
 
@@ -186,6 +186,9 @@ These web files are accessible using tcp/80 and tcp/7070 ports on each web serve
 
  * selinux2.example.com:80 (default)
  * selinux2.example.com:7070 (custom)
+
+ * selinux3.example.com:80 (default)
+ * selinux3.example.com:7070 (custom)
 
 SELinux is disabled for all web servers by default. In a fully automated fashion, you will turn SELinux on for all web servers without breaking any functionality using the SELinux system roles feature as an Ansible role.
 
@@ -360,7 +363,7 @@ In this section, we are going to test our pre-configured setup steps from before
 	[root@selinux2 ~]# exit
 
 === Lab 2.2.3 SELinux Troubleshooting
-In the previous step, we turned on SELinux and got AVC denials. Denial messages are logged when SELinux denies access. Let's find out why we got these AVC denials.
+In the previous step, we turned SELinux on and got AVC denials. Denial messages are logged when SELinux denies access. Let's find out why we got these AVC denials.
 
 SELinux Troubleshooting can be performed on both the _selinux2_ and _selinux3_ hosts. We will use the _selinux2_ host for the following examples.
 
