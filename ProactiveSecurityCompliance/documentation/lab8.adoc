@@ -275,7 +275,7 @@ image:images/lab8.3-insights-template2.png[1000,1000]
 +
 image:images/lab8.3-insights-template3.png[1000,1000]
 
-. Click the rocket for the template you created. This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in he DETAILS pane, and the ansible-playbook run output on the right.
+. Click the rocket for the template you created. This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in the DETAILS pane, and the ansible-playbook run output on the right.
 +
 image:images/lab8.3-insights-template4.png[1000,1000]
 
@@ -345,7 +345,7 @@ image:images/lab8.4-insights-template2.png[1000,1000]
 +
 image:images/lab8.4-insights-fix-all.png[1000,1000]
 
-. This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in he DETAILS pane, and the ansible-playbook run output on the right.
+. This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in the DETAILS pane, and the ansible-playbook run output on the right.
 +
 IMPORTANT: It is possible that one of the nodes will fail during remediation. This is simply an environmental issue and will be addressed in future releases of this lab exercise.
 +
