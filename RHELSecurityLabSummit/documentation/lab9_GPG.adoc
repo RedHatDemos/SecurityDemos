@@ -40,11 +40,11 @@ In this step we will show you how to encrypt and un-encrypt a document for priva
 
 	[root@servera ~]# cat sensitive.txt
 
-. Now we can encrypt the file by typing the following command:
+. Now we can encrypt the file by typing the following command. You will be asked to enter the ID (the email address) you used when creating your key, followed by a carriage return to complete the task.
 
 	[root@servera ~]# gpg2 -e sensitive.txt
 
-. You will be asked to enter the ID you entered when you created your key, followed by a carraige return to complete the task.  Note that you now have a new file entitled sensitive.txt.gpg.  The .gpg extension indicated that it is a file that has been encrypted with a GPG key.  Verify the encryption by typing the following:
+. You now have a new file entitled sensitive.txt.gpg.  The .gpg extension indicates that it is a file that has been encrypted with a GPG key.  Verify the encryption by typing the following:
 
 	[root@servera ~]# cat sensitive.txt.gpg
 
