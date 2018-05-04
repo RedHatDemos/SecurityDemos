@@ -210,8 +210,7 @@ it to change the certificate name.
 
 == Lab 4.4 Using Opportunistic IPsec
 
-. Now we are ready for testing our configuration. Start the IPsec subsystem on
-both configured nodes:
+. Now we are ready for testing our configuration. Start the IPsec subsystem on BOTH *ipsec* and *ipsec2*:
 
 	[root@ipsec ~]# systemctl start ipsec
 
