@@ -8,7 +8,7 @@ OpenSCAP is a family of open source SCAP tools and content that help users creat
 
 OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this lab exercise, we will focus on one-off scanning to get started.
 
-== Pre-Configured Set Up Steps (You do not need to do these steps)
+== Pre-Configured Set Up Steps (Already done for you)
 All of the steps in this pre-configured set up section have already been done for you. This section is for your reference only so you know what steps have already been pre-configured in this lab environment for you.
 
 .  Red Hat Enterprise Linux 7.5 is installed on the *openscap.example.com* host. We have also pre-installed several packages on the *openscap.example.com* host.
