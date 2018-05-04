@@ -85,7 +85,7 @@ In this part of the lab exercise, as the restricted security officer/auditor use
 +
 image:images/lab7.2-cloudintelreports.png[500,500]
 
-. Scroll to the bottom and Click on the report named *Lab 7 - Host Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the hosts in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
+. Inside of the *Reports* accordion, scroll to the bottom and click on the report named *Lab 7 - Host Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the hosts in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
 +
 image:images/lab7.2-hostreport.png[1000,1000]
 
@@ -94,17 +94,12 @@ image:images/lab7.2-hostreport.png[1000,1000]
 image:images/lab7.2-queue-reportresult-host.png[1000,1000]
 
 . In the report, you will notice that you have 1 virtualization host that is vulnerable to the Meltdown and Spectre vulnerabilities.
-
 +
 image:images/lab7.2-queuehostreport.png[1000,1000]
 
-. Now let's create a report that shows which VMs and Instances are vulnerable to the Meltdown and Spectre vulnerabilities.
+. Now let's generate a report that shows which VMs and Instances are vulnerable to the Meltdown and Spectre vulnerabilities.
 
-. Navigate to *Cloud Intel -> Reports*.
-+
-image:images/lab7.2-cloudintelreports.png[500,500]
-
-. Scroll to the bottom and Click on the report named *Lab 7 - VM Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the VMs and Instances in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
+. Inside of the *Reports* accordion, scroll to the bottom and Click on the report named *Lab 7 - VM Meltdown & Spectre*, which is in the *Custom* folder. This report will list all the VMs and Instances in this environment and indicate whether or not they are vulnerable to the Meltdown and Spectre vulnerabilities. Click on the *Queue* button to create this report.
 +
 image:images/lab7.2-vmreport.png[1000,1000]
 
