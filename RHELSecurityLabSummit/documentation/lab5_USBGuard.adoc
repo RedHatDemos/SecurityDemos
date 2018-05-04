@@ -135,7 +135,7 @@ Most steps are taken on the *usbguard-demo* virtual machine residing inside the 
 +
 [source]
 ----
-[lab-user@workstation-GUID ~]$ ssh usbguard.example.com
+[lab-user@workstation-GUID ~]$ ssh root@usbguard.example.com
 ----
 
 . Now, let's start the *usbguard-demo* VM (which again resides INSIDE the *host* , *usbguard.example.com* virtual machine) and connect to its console. See steps below.
