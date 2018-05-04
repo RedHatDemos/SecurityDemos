@@ -356,9 +356,13 @@ image:images/lab8.4-insights-fix-all.png[1000,1000]
 
 . This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in the DETAILS pane, and the ansible-playbook run output on the right.
 +
-IMPORTANT: It is possible that one of the nodes will fail during remediation. This is simply an environmental issue and will be addressed in future releases of this lab exercise.
+IMPORTANT: It is possible that one of the nodes will fail during remediation. Simply re-launch the job by clicking on the *Rocket*.
 +
 image:images/lab8.4-insights-template4.png[1000,1000]
++
+NOTE: Here is what a successful job looks like.
++
+image:images/lab8.4-insights-template5.png[1000,1000]
 +
 NOTE: There are some actions that will not have Ansible playbook generation capability, so you may have to do those manually, but you can knock out a majority of the vulnerabilities with Insights Plans and Ansible Tower. Just repeat the steps to create plans, sync them, and create and run the remediation template.
 
