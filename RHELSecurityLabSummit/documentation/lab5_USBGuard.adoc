@@ -153,7 +153,7 @@ On host:
 	[root@usbguard]# hostname
 	usbguard
 	[root@usbguard]# dd if=/dev/zero of=/tmp/usb-disk.img bs=1M count=32
-	[root@usbguard]# sudo virsh attach-device usbguard-demo usb-disk.xml
+	[root@usbguard]# virsh attach-device usbguard-demo usb-disk.xml
 
 On usbguard-demo:
 
