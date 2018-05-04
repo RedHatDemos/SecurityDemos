@@ -356,7 +356,7 @@ image:images/lab8.4-insights-fix-all.png[1000,1000]
 
 . This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in the DETAILS pane, and the ansible-playbook run output on the right.
 +
-IMPORTANT: It is possible that one of the nodes will fail during remediation. Simply re-launch the job by clicking on the *Rocket*.
+IMPORTANT: It is possible that one of the nodes will fail during remediation. Since Ansible, by nature, is *idempotent*, we can simply re-launch the job by clicking on the *Rocket* to try it again.
 +
 image:images/lab8.4-insights-template4.png[1000,1000]
 +
