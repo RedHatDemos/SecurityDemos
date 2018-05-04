@@ -124,11 +124,11 @@ Notice the *--display-name* parameter. This allows you to set the displayed host
 === Lab 8.2 Manually fixing the payload injection security issue
 In this section, we will manually fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on *ic1.summit.example.com* without causing downtime.
 
-. Going back to the Satellite UI, click on *Red Hat Insights → Overview*, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
+. Login with *admin* / *r3dh4t1!* to Satellite at https://sat6-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*. Click on *Red Hat Insights → Overview*, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
 +
 image:images/lab8.1-insightsoverview.png[1000,1000]
 
-. From your Satellite 6.3 UI, click on *Red Hat Insights → Inventory*.
+. Click on *Red Hat Insights → Inventory*.
 +
 image:images/lab8.1-inventory.png[1000,1000]
 
@@ -250,6 +250,15 @@ image:images/lab8.3-tower-inv-insights-inv.png[600,600]
 image:images/lab8.3-tower-inv-hosts.png[600,600]
 
 . By clicking the *Insights* option for this host you can see all of the risks and vulnerabilities associated with this host.
++
+IMPORTANT: If you see the following error: `error : Unkown exception HTTPSConnectionPool(host='access.redhat.com', port=443)`. Don't worry as this is a known issue. Simply ssh into your tower server, form your workstation, ping access.redhat.com, note the IP Address and add an entry in your tower's /etc/hosts file. See below for an example:
++
+[source]
+----
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+23.218.148.105 access.redhat.com
+----
 +
 image:images/lab8.3-insights-issues.png[1000,1000]
 +
