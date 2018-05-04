@@ -195,6 +195,9 @@ On usbguard-demo:
 	[root@localhost]# usbguard block-device -p 11
 	[root@localhost]# usbguard list-rules
 
+	[root@localhost]# usbguard allow-device -p 11
+	[root@localhost]# usbguard list-rules
+
 === USBGuard policy for multiple USB devices
 
 OPTIONAL: The policy has been created for a very specific device.  Test that other USB devices will be blocked by adding a second USB drive from the host.  The _hash_ is calculated by USBGuard to identify individual devices.
