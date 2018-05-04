@@ -115,19 +115,20 @@ Most steps are taken on the *usbguard-demo* virtual machine residing inside the 
 
 Start the *usbguard-demo* VM and connect to its console using:
 
-	[root@usbguard]# hostname
-	usbguard
+....
+[root@usbguard]# hostname
+usbguard
+[root@usbguard]# virsh start usbguard-demo
+[root@usbguard]# virsh console usbguard-demo
+Connected to domain usbguard-demo
+Escape character is ^]
+<ENTER>
 
-	[root@usbguard]# virsh start usbguard-demo
-	[root@usbguard]# virsh console usbguard-demo
-	Connected to domain usbguard-demo
-	Escape character is ^]
-	<ENTER>
+Red Hat Enterprise Linux Server 7.4 (Maipo)
+Kernel 3.10.0-693.el7.x86_64 on an x86_64
 
-	Red Hat Enterprise Linux Server 7.4 (Maipo)
-	Kernel 3.10.0-693.el7.x86_64 on an x86_64
-
-	localhost login:
+localhost login:
+....
 
 Login as root using the password “redhat”.
 
