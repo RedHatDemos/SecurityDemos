@@ -115,6 +115,9 @@ Most steps are taken on the *usbguard-demo* virtual machine residing inside the 
 
 Start the *usbguard-demo* VM and connect to its console using:
 
+IMPORTANT: you may see a blank console when connecting to the the VM if it is
+slow to start
+
 ....
 [root@usbguard]# hostname
 usbguard
