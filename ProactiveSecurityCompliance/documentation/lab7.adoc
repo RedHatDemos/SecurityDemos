@@ -33,7 +33,7 @@ image:images/lab7.1-ssa.png[400,400]
 +
 image:images/lab7.1-admintasks.png[300,300]
 
-. Press the *Refresh* button at the top. Notice that eventually the job message changes to *Process Completed Successfully*.
+. Press the *Refresh* button periodically until job message changes to *Process Completed Successfully*.
 +
 image:images/lab7.1-scanrefresh.png[2000,2000]
 image:images/lab7.1-scancompleted.png[2000,2000]
@@ -42,16 +42,16 @@ image:images/lab7.1-scancompleted.png[2000,2000]
 +
 image:images/lab7.1-serviceworkloads.png[400,400]
 
-. Look at the *Last Analyzed* line in the *Lifecycle* section in this VM summary view. Notice that the date and time has been updated to today's current date and time.
+. Look at the *Last Analyzed* line in the *Lifecycle* section in this VM summary view. Notice that the date and time has been updated to today's date.
 +
 image:images/lab7.1-lastanalyzed.png[500,500]
 
-. Now let's look at the data that has been collected by our Smart State Analysis scan. Navigate to the *Security* and *Configuration* section. Notice that the Smart State Analysis scan now has the latest information on Users, Groups, Packages, Init Processes, and Files. Click on *Packages*.
+. Now let's look at the data that has been collected by our Smart State Analysis scan. Find to the *Security* and *Configuration* section. Notice that the Smart State Analysis scan now has the latest information on Users, Groups, Packages, Init Processes, and Files. Click on *Packages*.
 +
 image:images/lab7.1-ssaresults-packages.png[1000,1000]
 
 
-. Notice all the packages that are installed on this VM. Scroll down to the *kernel* package. Notice the version and release number of the kernel package. Kernel packages must be updated to at least version 3.10.0 with a release of 830.el7 to be protected from the Meltdown and Spectre vulnerabilities as noted in link:https://access.redhat.com/errata/RHSA-2018:0007[this Red Hat Security Advisory].
+. Notice all the packages that are installed on this VM. Scroll down to the *kernel* package. Notice the version and release number of the kernel package. Kernel packages must be updated to at least version 3.10.0 with a release of 830.el7 to be protected from the Meltdown and Spectre vulnerabilities as noted in this link:https://access.redhat.com/errata/RHSA-2018:0007[Red Hat Security Advisory].
 +
 image:images/lab7.1-kernel.png[1000,1000]
 
@@ -59,7 +59,7 @@ image:images/lab7.1-kernel.png[1000,1000]
 +
 image:images/lab7.1-vm1.png[300,300]
 
-. Now Click on *Files* in  the *Configuration* section.
+. Now click on *Files* in the *Configuration* section.
 +
 image:images/lab7.1-files.png[500,500]
 
