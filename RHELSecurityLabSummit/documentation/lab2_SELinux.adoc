@@ -375,7 +375,7 @@ SELinux Troubleshooting can be performed on both the _selinux2_ and _selinux3_ h
 
 . Note: Use _port_ instead of _unreserved_port_t_ for this query on the _selinux3_ host.
 
-	[root@selinux2 ~]# sesearch -A -s httpd_t -t port_t -c tcp_socket -p name_bind -C
+	[root@selinux3 ~]# sesearch -A -s httpd_t -t port_t -c tcp_socket -p name_bind -C
 
 . Compare to that Apache webservers can bind to other ports and these SELinux port types can be assigned to our selected custom port (_tcp/7070_).
 
