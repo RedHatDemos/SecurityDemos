@@ -535,7 +535,7 @@ In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u
 
     [root@selinux1 selinux_scripts]# ansible-playbook -i inventory -u root revert-all.yml
 
-. All actions are performed on the _selinux2_ host which is a RHEL-7.6 Beta installation.
+. All actions are performed on the _selinux2_ host , which is a RHEL 7.5 system.
 
 . If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
