@@ -75,7 +75,7 @@ Upload completed successfully!
 [lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
 ----
 
-. If not already root, become *root* and then log into the *ic1.summit.example.com*.
+. If not already root, become *root* and then log into the *ic4.summit.example.com*.
 +
 [source]
 ----
