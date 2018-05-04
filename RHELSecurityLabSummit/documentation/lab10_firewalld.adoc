@@ -32,6 +32,7 @@ The firewall is enabled by default, but we can check for that a couple of ways b
 
 [lab-user@workstation-GUID ~]$ ssh root@servera.example.com
 
+[source]
 [root@servera ~]# yum install -y firewalld
 [root@servera ~]# systemctl enable firewalld.service
 [root@servera ~]# systemctl start firewalld.service
