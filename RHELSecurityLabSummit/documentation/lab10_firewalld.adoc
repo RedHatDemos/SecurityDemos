@@ -29,7 +29,7 @@ The firewall is enabled by default, but we can check for that a couple of ways b
 . First, login to servera.example.com with username of "root".  Our lab does not have the firewall enabled by default so we will install it:
 +
 [source]
-
+----
 [lab-user@workstation-GUID ~]$ ssh root@servera.example.com
 
 [root@servera ~]# yum install -y firewalld
@@ -39,7 +39,7 @@ The firewall is enabled by default, but we can check for that a couple of ways b
 active
 [root@servera ~]# systemctl is-enabled firewalld.service
 enabled
-
+----
 . If you are not active and enabled, run the following commands:
 +
 [source]
