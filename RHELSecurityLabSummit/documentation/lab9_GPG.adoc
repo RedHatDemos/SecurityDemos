@@ -11,7 +11,7 @@ There are various tools that you can use to manage GPG on your system, graphical
 
 === Logon to Your System:
 . Logon to servera.example.com as *root* using *r3dh4t1!* as your password.
-
++
 [source]
 [lab-user@workstation-GUID ~]$ ssh root@servera.example.com
 [root@servera ~]#
@@ -21,9 +21,10 @@ There are various tools that you can use to manage GPG on your system, graphical
 [source]
 [root@servera ~]# useradd student
 [root@servera ~]# passwd student
-
++
 Once that account is established, login as your new user.
-
++
+[source]
 [root@servera ~]# ssh student@localhost
 [student@servera ~]$
 
