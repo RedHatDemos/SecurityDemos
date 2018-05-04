@@ -565,10 +565,10 @@ _system_u_ is a special user used only for system processes and in the future wi
 
 . After this, when users (not root) logs in, their processes will run the _user_t_ domain. Every user session but root will run with _user_t_:
 
-
     [root@selinux2 ~]# adduser user42
+
     [root@selinux2 ~]# passwd user42
-    …
+    (Feel free to pick whatever password you want for user42. But, be sure to pick a password you can remember.)
 
     [root@selinux2 ~]# ssh user42@localhost
     user42@localhost's password:
@@ -584,11 +584,24 @@ _system_u_ is a special user used only for system processes and in the future wi
 
     # exit
 
-. Now we can try if the user can become root. We need to add following line:
+. Now we can try if the user can become root.
+
+. Let's add this line to the /etc/sudoers.d/administrators file:
++
+  user42  ALL=(ALL)       NOPASSWD: ALL
 
     [root@selinux2 ~]# visudo -f /etc/sudoers.d/administrators
+
+. In the text editor, Press *i* to insert and copy and paste this line into the text editor:
++
+  user42  ALL=(ALL)       NOPASSWD: ALL
+
+. Next, press *esc* and then press *:wq!* to save and exit.
+. Let's confirm our changes.
+
     [root@selinux2 ~]# grep user42 /etc/sudoers.d/administrators
     user42  ALL=(ALL)       NOPASSWD: ALL
+
 
     [root@selinux2 ~]# ssh user42@localhost
     user42@localhost's password:
@@ -598,7 +611,7 @@ _system_u_ is a special user used only for system processes and in the future wi
     sudo: setresuid() [0, 0, 0] -> [1001, -1, -1]: Operation not permitted
     sudo: unable to initialize policy plugin
 
-. And the same attempt in permissive mode.
+. And the same attempt in permissive mode:
 
     [user42@selinux2 ~]$ exit
     [root@selinux2 ~]# id -Z
@@ -620,7 +633,7 @@ _system_u_ is a special user used only for system processes and in the future wi
     [user42@selinux2 ~]$ exit
     [root@selinux2 ~]# setenforce 1
 
-Since in permissive mode SELinux denials are not enforced, _user42_ can become root but we can see that the context stayed _user_t_ and didn't change to _unconfined_t_.
+Since SELinux denials are not enforced in permissive mode, _user42_ can become root but we can see that the context stayed _user_t_ and didn't change to _unconfined_t_.
 
 === Lab 2.3.2 Confined Administrator
 
@@ -630,7 +643,9 @@ Since in permissive mode SELinux denials are not enforced, _user42_ can become r
 
     [root@selinux2 ~]# semanage user -m -R "sysadm_r secadm_r" sysadm_u
     [root@selinux2 ~]# adduser -G wheel -Z sysadm_u admin1
+
     [root@selinux2 ~]# passwd admin1
+    (Feel free to pick whatever password you want for admin1. But, be sure to pick a password you can remember.)
 
     [root@selinux2 ~]# semanage login -l | grep admin
     admin1               sysadm_u             s0-s0:c0.c1023       *
@@ -657,7 +672,10 @@ Since in permissive mode SELinux denials are not enforced, _user42_ can become r
 * The other way is to assign u administer users to _staff_u_ and configure _sudo_ so that particular users can gain SELinux administrator role.
 
     [root@selinux2 ~]# adduser -G wheel -Z staff_u admin2
+
     [root@selinux2 ~]# passwd admin2
+    (Feel free to pick whatever password you want for admin1. But, be sure to pick a password you can remember.)
+
     [root@selinux2 ~]# semanage login -l | grep admin
     admin1               sysadm_u             s0-s0:c0.c1023       *
     admin2               staff_u              s0-s0:c0.c1023       *
@@ -686,7 +704,7 @@ Since in permissive mode SELinux denials are not enforced, _user42_ can become r
 
     [root@selinux2 ~]# visudo -f /etc/sudoers.d/administrators
 
-. Append following line to end of file:
+. Append following line to end of file.  In the text editor, Press *o* then copy and paste these lines below into the text editor. Then, press *esc* and then press *:wq!* to save and exit.
 
     admin2  ALL=(ALL)  TYPE=sysadm_t ROLE=sysadm_r    ALL
     admin2  ALL=(ALL)  TYPE=secadm_t ROLE=secadm_r /usr/sbin/semanage,/usr/sbin/semodule
