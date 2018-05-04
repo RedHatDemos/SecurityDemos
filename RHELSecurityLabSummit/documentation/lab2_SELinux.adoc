@@ -84,7 +84,7 @@ image:images/lab2-shellshock-flow.png[]
 ==== Lab 2.1.2 exercise steps
 Now let's go through the steps we just described above.
 
-. Go to your two open two terminals that are connected to the *selinux1.example.com* systems and pointed to the /root/selinux_scripts directory.
+. Go to your two opened terminals that are connected to the *selinux1.example.com* systems and pointed to the /root/selinux_scripts directory.
 
 . Note that the victim server, _selinux4_, has SELinux in permissive mode by default. It is running the Apache service running with an older version of bash. Everything is ready to run the exploit.
 
