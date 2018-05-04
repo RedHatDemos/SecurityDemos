@@ -26,10 +26,13 @@ The firewalld daemon allow for configuration via a command line interface, direc
 === Verify the Firewall is Running
 The firewall is enabled by default, but we can check for that a couple of ways by running the following commands.
 
-. First, login to servera.example.com with username of ‘admin’ and a password of ‘r3dh4t1!’.  Our lab does not have the firewall enabled by default so we will install it:
+. First, login to servera.example.com with username of "root".  Our lab does not have the firewall enabled by default so we will install it:
 +
 [source]
-root@servera ~]# yum install -y firewalld
+
+[lab-user@workstation-GUID ~]$ ssh root@servera.example.com
+
+[root@servera ~]# yum install -y firewalld
 [root@servera ~]# systemctl enable firewalld.service
 [root@servera ~]# systemctl start firewalld.service
 [root@servera ~]# systemctl is-active firewalld.service
