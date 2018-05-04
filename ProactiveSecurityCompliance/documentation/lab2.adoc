@@ -115,10 +115,11 @@ NOTE: This is the equivalent to running puppet agent --test. This will ensure th
 +
 image:images/lab2-successcircle1.png[1000,1000]
 
-. Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*.
-Navigate to *Hosts -> All hosts* again. Then, put a check mark next to *lab2-vm1.example.com*. At the top right, navigate to *Select Action -> Schedule Remote Job*.
+. Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*. Navigate to *Hosts -> All hosts* again.
 +
 image:images/lab2-hostsallhosts.png[1000,1000]
+
+. Put a check next to *lab2-vm1.example.com*. At the top right, select *Action -> Schedule Remote Job*.
 +
 image:images/lab2-scheduleremotejob.png[1000,1000]
 
