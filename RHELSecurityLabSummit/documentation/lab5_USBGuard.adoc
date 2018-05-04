@@ -115,19 +115,23 @@ Most steps are taken on the *usbguard-demo* virtual machine residing inside the 
 
 Start the *usbguard-demo* VM and connect to its console using:
 
-	[root@usbguard]# hostname
-	usbguard
+IMPORTANT: you may see a blank console when connecting to the the VM if it is
+slow to start
 
-	[root@usbguard]# virsh start usbguard-demo
-	[root@usbguard]# virsh console usbguard-demo
-	Connected to domain usbguard-demo
-	Escape character is ^]
-	<ENTER>
+....
+[root@usbguard]# hostname
+usbguard
+[root@usbguard]# virsh start usbguard-demo
+[root@usbguard]# virsh console usbguard-demo
+Connected to domain usbguard-demo
+Escape character is ^]
+<ENTER>
 
-	Red Hat Enterprise Linux Server 7.4 (Maipo)
-	Kernel 3.10.0-693.el7.x86_64 on an x86_64
+Red Hat Enterprise Linux Server 7.4 (Maipo)
+Kernel 3.10.0-693.el7.x86_64 on an x86_64
 
-	localhost login:
+localhost login:
+....
 
 Login as root using the password “redhat”.
 
@@ -149,7 +153,7 @@ On host:
 	[root@usbguard]# hostname
 	usbguard
 	[root@usbguard]# dd if=/dev/zero of=/tmp/usb-disk.img bs=1M count=32
-	[root@usbguard]# sudo virsh attach-device usbguard-demo usb-disk.xml
+	[root@usbguard]# virsh attach-device usbguard-demo usb-disk.xml
 
 On usbguard-demo:
 
@@ -189,6 +193,9 @@ On usbguard-demo:
 	[root@localhost]# cat /etc/usbguard/rules.conf
 
 	[root@localhost]# usbguard block-device -p 11
+	[root@localhost]# usbguard list-rules
+
+	[root@localhost]# usbguard allow-device -p 11
 	[root@localhost]# usbguard list-rules
 
 === USBGuard policy for multiple USB devices
