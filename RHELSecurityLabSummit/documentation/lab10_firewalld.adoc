@@ -85,15 +85,16 @@ success
 
 . You can handle this by running the following commands:
 +
-[source]
+----
 [root@servera ~]# firewall-cmd --add-port=443/tcp --permanent
 success
-[root@servera ~]# firewall-cmd --add-port=443/tcp
-success
+[root@servera ~]# firewall-cmd --list-ports
+
 [root@servera ~]# firewall-cmd --reload
 success
 [root@servera ~]# firewall-cmd --list-ports
 443/tcp
+----
 
 . Note that this time it did survive the reload.  Another way to make runtime rules permanent is add them to the firewall and then run the following command:
 +
