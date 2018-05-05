@@ -137,7 +137,7 @@ ssh dhcpv6-client dns
 . If you want to view the ports in the service, you can still use the iptables command, even though the iptable service is not running:
 +
 [source]
-iptables -L -n
+[root@servera ~]# iptables -L -n
 
 . You can remove this rule by running the following command:
 +
