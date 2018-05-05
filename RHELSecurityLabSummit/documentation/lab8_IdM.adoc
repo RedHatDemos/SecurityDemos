@@ -1,7 +1,7 @@
 = Lab 8: How to create a single sign-on environment for all of your linux servers using Red Hat Identity Management
 
 == Goal of Lab
-In this exercise you are going to configure clients to attach to a Red Hat Identity Management (IdM) server.  The goal is to create a single-sign-on environment for all of your Linux servers to manage users, hosts, and sudo commands from a central console.  This exercise will already have and IdM server installed, and will focus on registering and managing clients.  The objectives for this exercise are:
+In this exercise you are going to configure clients to attach to a Red Hat Identity Management (IdM) server.  The goal is to create a single-sign-on environment for all of your Linux servers to manage users, hosts, and sudo commands from a central console.  This exercise will already have an IdM server installed, and will focus on registering and managing clients.  The objectives for this exercise are:
 
 * Install the IdM client on your client systems
 * Configure the client to be part of the IdM realm
@@ -11,53 +11,77 @@ In this exercise you are going to configure clients to attach to a Red Hat Ident
 * Create sudo command groups that allow escalated privileges
 * Integrate user, host and sudo command groups into a policy
 
+We will be doing this lab exercise using the consoles for both your IdM server and clients. You will access the consoles and your lab environment's power control from the Red Hat Summit Lab GUID information UI page.
+
 == Introduction
 The IdM server is a 389 based server that has been configured to manage users, hosts, and sudo commands.  It is kerberos based and can operate as a standalone directory server, or can integrate with any LDAP compliant directory servers (e.g. Microsoft Active Directory).  IdM can also be configured to manage DNS for you Linux environment and provide for dynamic DNS updates.   Because the lab already provides DNS we will not have that enabled.  It will also be configured to create user home directories upon first login.
 
-== Lab 8.1 Verify that the IdM Server is Running
-. Navigate to Red Hat Summit Lab GUID information page UI with your environment's power control and consoles. Click on the console for *IdM1*.
+== Lab 8.1 Attaching the Clients to the IdM Realm
+. Navigate to Red Hat Summit Lab GUID information UI page with your environment's power control and consoles. Click on the console for *IdM1*.
 +
 image:images/idm-console.png[300,300]
 
 . Notice that the *IdM1* system has been installed with a GUI.
+*IdM1* already has an IdM server installed on it.
 Login with username *admin* and *r3dh4t1!* as the password.
 +
 image:images/idm-login.png[400,400]
 
-. Our server is using a self-signed certificate, so you may need to select and confirm the security exception.  Navigate through the menu at the top to become familiar with the layout.
-
-=== Attach the Client
-In this step we are going to attach our servers to the IdM realm.  The servers we are going to attach are:
+. Next, we are going to attach our client servers to the IdM realm.  The servers we are going to attach are:
 
 * idm2.example.com
 * idm3.example.com
 
-The ipa-client package has already been installed for your convenience.  Next we are going to log into idm2 and idm3 and configure the client:
+. The ipa-client package has already been installed for your convenience.  Next we are going to log into idm2 and idm3 and configure the client.
 
+. Navigate to Red Hat Summit Lab GUID information UI page with your environment's power control and consoles again. Click on the console for *IdM2* and *IdM3*.
++
+image:images/idm2-console.png[200,200]
+image:images/idm3-console.png[200,200]
+
+. Log into *IdM2* as *root* with *r3dh4t1!* as the password.
+
+. Now, let's install the IdM client and configure the client to be part of the IdM realm.
+
+. In the console window for *IdM2*, type the following:
++
 [source]
+----
 [root@idm2 ~]# ipa-client-install --mkhomedir --no-ntp
-domain: example.com
-IdM server: idm1.example.com
-username: admin
-password: r3dh4t1!
+----
+. NOTE:
+* mkhomedir - this allows you to create a user home directory upon first login
+* no-ntp - our lab is using chronyd to synchronize time
+* In a production environment, you may want to mount home directories remotely so that there are no user accounts or home directories on your servers.
 
-You will be asked to proceed with no DNS discovery, and continue configuration, select Yes.  Had we been using IdM with embedded DNS, it would have auto discovered and iput all parameters and simply asked us to confirm.
+. You will be asked a series of questions during the installation and configuration of your IdM client. Here are the answers to these questions:
 
-Your systems are now configured and enrolled in the IdM realm.  You can verify enrollment by logging into the GUI via the browser and viewing the hosts tab.
+* Provide the domain name of your IPA server: *example.com*
+* Provide your IPA server name: *idm1.example.com*
+* Proceed with fixed values and no DNS discovery? *yes*
+* Continue to configure the system with these values? *yes*
+* User authorized to enroll computers: *admin*
+* Password for admin@EXAMPLE.COM: *r3dh4t1!*
++
+NOTE: Had we been using IdM with embedded DNS, it would have auto discovered and input all parameters and simply asked us to confirm.
 
-image:images/idm-01-hosts.png[300,300]
+. Repeat the above steps 6-9 for *IdM3*.
 
-There are two options in the configuration piece that warrants additional discussion:
+. Your systems are now configured and enrolled in the IdM realm.  Let's verify enrollment of our 2 client systems.
 
-[source]
---mkhomedir - this allows you to create a user home directory upon first login
---no-ntp - our lab is using chronyd to synchronize time
+. Navigate back to *IdM1*. If you need to log back in, the password for the Administrator is *r3dh4t1!*. Open up the Firefox web browser and navigate to *https://idm1.example.com*.
 
-In a production environment, you may want to mount home directories remotely so that there are no user accounts or home directories on your servers.
+. Click on the *Hosts* tab. Notice that both of our client systems, *idm2.example.com* and *idm3.example.com* are showing as Enrolled (in addition to our IdM server, *idm1.example.com*).
+
+image:images/idm-01-hosts.png[700,700]
+
+
 
 == Lab 8.2 Configuring a Simple User
-. In this exercise we will create a user and demonstrate single-sign-on.
-. Logon to the GUI at http://idm1.example.com
+In this exercise we will create a user and demonstrate single-sign-on.
+
+.  Navigate back to *IdM1* (which again is our IdM server). If you need to log back in, the password for the Administrator is *r3dh4t1!*. Open up the Firefox web browser and navigate to *https://idm1.example.com*. 
+
 . Navigate to the Identity -> Users tab
 . Select the Add button and fill in:
 
