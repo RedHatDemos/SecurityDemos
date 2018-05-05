@@ -28,9 +28,9 @@ image:images/lab7.1-vm1-list.png[500,500]
 +
 image:images/lab7.1-ssa.png[400,400]
 
-. Now let's take a closer look at the progress of our scan job. Navigate to *Administrator -> Tasks* at the top right.
+. Now let's take a closer look at the progress of our scan job. Navigate to *Lab Security Auditor -> Tasks* at the top right.
 +
-image:images/lab7.1-admintasks.png[300,300]
+image:images/lab7.1-securitytasks.png[600,600]
 
 . Press the *Refresh* button periodically until job message changes to *Process Completed Successfully*.
 +

@@ -49,7 +49,7 @@ image:images/ocp-ss8.png[600,600]
 +
 image:images/lab4-phpversion.png[400,400]
 
-. Now, go to your OpenShift UI. Log in as *developer* using *r3dh4t1!* as your password. In the OpenShift UI, browse to the *18-summit-labs* project using the *My Projects* list on the right side of the screen.
+. Now, Open your browser to your OpenShift instance https://ocp-GUID.rhpds.opentlc.com:8443, replacing *GUID* with your lab's GUID. Log in as *developer* using *r3dh4t1!* as your password. In the OpenShift UI, browse to the *18-summit-labs* project using the *My Projects* list on the right side of the screen.
 +
 NOTE: If you do not see the *summit-labs* project in the list, click on the *View All* link in the *My Projects* list.
 

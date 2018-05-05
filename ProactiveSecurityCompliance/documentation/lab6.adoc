@@ -8,18 +8,18 @@ The goal of this lab is to view other security related reports in Red Hat CloudF
 === Introduction
 Red Hat CloudForms has a robust reporting engine built into the product that allows you to create reports using any of the introspective data collected from your heterogeneous infrastructure. This data is stored either in an internal or external PostgreSQL database. You can use this collected data when creating reports , in control policies , or in automation workflows in Red Hat CloudForms.
 
-=== Viewing Security related reports for Red Hat Openstack Platform
+=== Lab 6.1 Viewing Security related reports for Red Hat Openstack Platform
 . Log into CloudForms with *admin* as the username and *r3dh4t1!* as the password.
 . Navigate to *Cloud Intel -> Reports*.
 +
 image:images/lab6-cloudintelreports.png[500,500]
 
-. Navigate to the report named *Openstack - Top Security Groups Used*. Take a look at this report. In this report, we can see the top Openstack security groups. Here, we see that the Production and default security groups are tied, with both having 1 VM that is attached to these security groups.
+. Under *Saved Reports*, locate to the report named *Openstack - Top Security Groups Used*. Take a look at this report. In this report, we can see the top Openstack security groups. Here, we see that the Production and default security groups are tied, with both having 1 VM that is attached to these security groups.
 +
 image:images/lab6-ospreport.png[1000,1000]
 
 
-=== Viewing Security related reports for Red Hat Openshift Platform
+=== Lab 6.2 Viewing Security related reports for Red Hat Openshift Platform
 . From CloudForms, take a look at the report named *OpenSCAP: Non-Compliant Containers*. In this report, we can see the not only the Container Name, but also the Container State, Image Name, whether it is OpenSCAP Compliant, what the last OpenSCAP Scan Date is and what the OpenSCAP scan Severity is.
 +
 image:images/lab6-ocpreport.png[1000,1000]
