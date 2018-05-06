@@ -329,7 +329,7 @@ image:images/idm-18-sudo.png[700,700]
 +
 image:images/idm-whoadd2.png[1000,1000]
 
-. Next, select *my_user_group* from the list of *Available User Groups* and add it to the *Prospective User Groupss* by pressing the > button. Press *Add*.
+. Next, select *my_user_group* from the list of *Available User Groups* and add it to the *Prospective User Groups* by pressing the > button. Press *Add*.
 +
 image:images/idm-addmyusergroup.png[500,500]
 
