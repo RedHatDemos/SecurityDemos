@@ -1,6 +1,6 @@
 = Lab 1: OpenSCAP Basics and Command Line Scanning
 
-== Goal of Lab 
+== Goal of Lab
 The goal of this lab exercise is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
 
 == Introduction
@@ -73,7 +73,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
  /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
  ...
 
-Notice that the provided content in `scap-security-guide` covers a wide range of security baselines such as PCI-DSS, STIG, C2S, Common, CJIS, and others. Also notice that Ansible remediation playbooks are included for these various security baselines as well in the provided content in the `scap-security-guide` .
+. Notice that the provided content in `scap-security-guide` covers a wide range of security baselines such as PCI-DSS, STIG, C2S, Common, CJIS, and others. Also notice that Ansible remediation playbooks are included for these various security baselines as well in the provided content in the `scap-security-guide` .
 
 . Move to the `content` folder so we can avoid typing long paths:
 +
@@ -144,7 +144,7 @@ image:images/lab1.2-scapworkbenchmenu.png[400,400]
 . After Workbench starts, select *RHEL7* and click on *Load Content* to open the compliance content for Red Hat Enterprise Linux 7.
 +
 image:images/lab1.2-scapsecurityguide.png[600,600]
-
++
 image::images/scap_workbench_opened.png[SCAP Workbench opened, profile selected]
 
 . Let's customize the US Government Configuration Baseline (USGCB). Select this profile from the *Profile* drop-down list. Click *Customize*.
@@ -184,7 +184,7 @@ Putting the machine into compliance (for example by changing its configuration) 
 [lab-user@workstation-GUID ~]$ ssh root@openscap.example.com
 ----
 
-All remediations will be executed on the *openscap.example.com* host. You will not make modifications to any other hosts, including the *workstation.example.com* host.
+. All remediations will be executed on the *openscap.example.com* host. You will not make modifications to any other hosts, including the *workstation.example.com* host.
 
 . Let's generate an Ansible playbook that will put the *openscap.example.com* machine into compliance. Let's go ahead and generate a playbook from the results:
 * use --fix-type ansible to request an ansible playbook with the fixes
@@ -199,9 +199,9 @@ All remediations will be executed on the *openscap.example.com* host. You will n
  [root@openscap]# chmod +x bash-fix.sh
  [root@openscap]# ./bash-fix.sh
 
-Notice that in both cases we are using empty result-id. This is a trick to avoid specifying the full result ID.
+. Notice that in both cases we are using empty result-id. This is a trick to avoid specifying the full result ID.
 
-We will focus on the Ansible remediation options in this next part of the lab exercise.
+. We will focus on the Ansible remediation options in this next part of the lab exercise.
 
 . Let's open the generated playbook using a text editor. In this example, we will use nano as our text editor (but feel free to use vi as well).
 +
