@@ -325,12 +325,20 @@ image:images/idm-add-sudo-rules.png[700,700]
 +
 image:images/idm-18-sudo.png[700,700]
 
-. Add your host group under *Access this host -> Host Groups*. Press *Add*.
+. In the *Who* section, add your user group under *User Groups*. Press *+Add*.
++
+image:images/idm-whoadd2.png[500,500]
+
+. Next, select *my_user_group* from the list of *Available User Groups* and add it to the *Prospective User Groupss* by pressing the > button. Press *Add*.
++
+image:images/idm-addmyusergroup.png[500,500]
+
+. Add your host group under *Access this host -> Host Groups*. Press *+Add*.
 +
 image:images/idm-add-host-group.png[700,700]
 image:images/idm-add-to-my-host-group.png[700,700]
 
-. In the *Run Commands* section, add your sudo group under *Sudo Allow Command Groups*. Press *Add*.
+. In the *Run Commands* section, add your sudo group under *Sudo Allow Command Groups*. Press *+Add*.
 +
 image:images/idm-sudo-command.png[700,700]
 image:images/idm-add-sudo-commands.png[700,700]
@@ -352,14 +360,14 @@ image:images/idm-hbac.png[300,300]
 image:images/idm-viaservice-add.png[800,800]
 image:images/idm-19-sudo.png[700,700]
 
-. Log back into the server that your user (user1) has access to (*IdM3*) from the previous step to verify that you do not have access to escalate and run yum. Use the password that you set earlier for this user.
+. Log back into the server that your user (user1) has access to (*IdM3*) from the previous step to verify that you do have access to escalate and run yum. Use the password that you set earlier for this user.
 +
 [source]
 [user1@idm3 ~]# sudo yum update
 
 +
 NOTE:
-You could have simplified this by adding a user and a command rather than a user group and command group. However, what we want to show is how you can group users, hosts, and sudo commands into one policy, which allows you to add and remove users that will inherit and dis-inherit access respectively. 
+You could have simplified this by adding a user and a command rather than a user group and command group. However, what we want to show is how you can group users, hosts, and sudo commands into one policy, which allows you to add and remove users that will inherit and dis-inherit access respectively.
 
 
 <<top>>

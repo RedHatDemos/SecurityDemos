@@ -1,15 +1,23 @@
-== Lab 9: How to use GNU Privacy Guard (GPG) to identify yourself and encrypt your communications
+== Lab 9: GNU Privacy Guard (GPG)
 
 === Goal of Lab
-GNU Privacy Guard (GPG) is a cryptographic software package that is included in your Red Hat Linux subscription.  It can be used to identify yourself and encrypt your communications.  It can also be used to encrypt files at rest, which will be the focus of this exercise.  This will allow you to become comfortable with some the basics of GPG, after which point, you can delve further into the documentation to use more advanced features, such as signing RPM packages, or encrypting email communications.
-
-The documentation can be found at:
-
-https://gnupg.org/index.html
+The goal of this lab exercise is to introduce you to GNU Privacy Guard (GPG), which can be used to identify yourself and encrypt your communications.
 
 There are various tools that you can use to manage GPG on your system, graphical as well as command line.  We will use the command line tools for the steps in this exercise.
 
-=== Generating a New Key Pair
+=== Introduction
+All Red Hat Enterprise Linux packages are signed with the Red Hat GPG key. GPG stands for GNU Privacy Guard, or GnuPG, a free software package used for ensuring the authenticity of distributed files. For example, a private key (secret key) locks the package while the public key unlocks and verifies the package. If the public key distributed by Red Hat Enterprise Linux does not match the private key during RPM verification, the package may have been altered and therefore cannot be trusted.
+
+GNU Privacy Guard (GPG) is a cryptographic software package that is included in your Red Hat Enterprise Linux subscription.  GPG is used to identify yourself and encrypt and authenticate your communications, including those with people you do not know. GPG allows anyone reading a GPG-signed email to verify its authenticity. In other words, GPG allows someone to be reasonably certain that communications signed by you actually are from you. GPG is useful because it helps prevent third parties from altering code or intercepting conversations and altering the message.
+
+GPG can also be used to encrypt files at rest, which will be the focus of this exercise.
+
+This lab exercise will allow you to become comfortable with some the basics of GPG, after which point, you can delve further into the documentation to use more advanced features. These include signing RPM packages, encrypting email communications, and more.
+
+More information can be found on the https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-encryption#sec-Creating_GPG_Keys[Red Hat Enterprise Linux 7 Security Guide] and on the https://gnupg.org/index.html[GNU Privacy Guard webpage].
+
+
+=== Lab 9.1 Generating a New Key Pair
 Once you have created a new key pair, you can export these keys to identify yourself to the rest of the world, or simply use it locally to encrypt your files at rest.   To generate your new key pair, login to servera.example.com as root and enter the following command:
 
 	[root@servera ~]# gpg2 --gen-key

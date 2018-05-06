@@ -174,7 +174,11 @@ File: /etc/ssh/sshd_config
 . Let's check for active watches by running the following command:
 +
 [source]
-[root@servera ~]# auditctl -l -w /etc/shadow -p a -k shadow_key
+----
+[root@servera ~]# auditctl -l
+
+-w /etc/shadow -p a -k shadow_key
+----
 
 . Now let’s change the permission on the /etc/shadow file, run a scan, and then look for the entry in the audit.log.
 +
