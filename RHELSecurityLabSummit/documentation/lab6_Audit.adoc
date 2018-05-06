@@ -345,6 +345,8 @@ the CSV format suitable for use within LibreOffice:
 . Next, let's transfer this CSV file from the _audit.example.com_ system to the workstation bastion host
 system using `scp`. Then, we'll open the CSV file using LibreOffice from the workstation bastion host.
 
+=== Lab 6.3.5 Viewing the CSV output Audit Log from the workstation bastion host
+
 . If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
@@ -356,19 +358,23 @@ system using `scp`.
 
 	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv /home/lab-user/Desktop
 
-	. Now, let's take a look at this CSV file from your workstation bastion host.
-	. Go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
-	image:images/lab1.1-workstationconsole.png[300,300]
-	image:images/lab1.1-labuserlogin.png[300,300]
+. Now, let's take a look at this CSV file from your workstation bastion host.
+. Go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
++
+image:images/lab1.1-workstationconsole.png[300,300]
+image:images/lab1.1-labuserlogin.png[300,300]
 
-	. Notice the CSV file you just copied over from the _audit.example.com_ system on the Desktop of your workstation bastion host.
-	image:images/audit-csvdesktop.png[200,200]
+. Notice the CSV file you just copied over from the _audit.example.com_ system on the Desktop of your workstation bastion
+host.
++
+image:images/audit-csvdesktop.png[200,200]
 
-	. Double click on the audit report to view it. Click *Ok* on the Text Import box.
-
+. Double click on the audit report to view it. Click *Ok* on the Text Import box.
++
 image:images/audit-textimportok.png[400,400]
 
 . Take a look at your CSV report.
++
 image:images/audit-csvoutput.png[500,500]
 
 == Reset the Lab System (Optional)
