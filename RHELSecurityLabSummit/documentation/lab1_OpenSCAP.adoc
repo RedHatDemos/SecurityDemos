@@ -263,7 +263,7 @@ Putting the machine into compliance (for example by changing its configuration) 
 ....
 
 
-. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Because of a known issue in the SCAP Security Guide content let us use "--skip-tags build_aide_database,firewalld_sshd_port_enabled". Make sure you run this on the *openscap.example.com* host:
+. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Because of a known issue in the SCAP Security Guide content, let's use "--skip-tags build_aide_database,firewalld_sshd_port_enabled". Make sure you run this on the *openscap.example.com* host:
 +
  [root@openscap]# ansible-playbook -i "localhost," -c local --check --skip-tags aide_build_database,firewalld_sshd_port_enabled playbook.yml
 +
