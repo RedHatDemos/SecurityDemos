@@ -327,7 +327,7 @@ image:images/idm-18-sudo.png[700,700]
 
 . In the *Who* section, add your user group under *User Groups*. Press *+Add*.
 +
-image:images/idm-whoadd2.png[500,500]
+image:images/idm-whoadd2.png[1000,1000]
 
 . Next, select *my_user_group* from the list of *Available User Groups* and add it to the *Prospective User Groupss* by pressing the > button. Press *Add*.
 +
