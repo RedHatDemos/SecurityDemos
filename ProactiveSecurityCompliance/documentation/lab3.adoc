@@ -1,7 +1,7 @@
 == Lab 3: How to use the control policy engine in Red Hat CloudForms and Red Hat Ansible Automation to enforce automated compliance with security policies
 
 == Goal of Lab 3
-The goal of this lab is to introduce you to the power and flexibility of Red Hat CloudForms and Red Hat Ansible Automation to enforce your security policies in an automated fashion.
+The goal of this lab is to introduce you to the power and flexibility of Red Hat CloudForms and Red Hat Ansible Automation to enforce compliance with your security policies in an automated fashion.
 
 Specifically, using a combination of Red Hat CloudForms and Red Hat Ansible Automation, you will: enforce the installation of the AIDE package, determine if an Openstack instace is vulnerable to the Meltdown and Spectre vulnerabilities, and enforce Openstack security group membership.
 
