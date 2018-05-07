@@ -134,7 +134,7 @@ image:images/lab3.2-launch-smart-state.png[400,400]
 +
 image:images/lab3.2-tasks.png[150,150]
 +
-. Click on the *Refresh* button periodically until it the scan job has completed (about 3 minutes). Afterwards, *click on the job* and this will take you back to the VM summary page.
+. Click on the *Refresh* button periodically until the scan job has completed (about 3 minutes). Afterwards, *click on the job* and this will take you back to the VM summary page.
 +
 image:images/lab3.2-task-results.png[600,600]
 +
