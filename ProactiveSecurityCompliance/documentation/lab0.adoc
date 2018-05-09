@@ -59,8 +59,8 @@ NOTE: Replace GUID with your lab's GUID.
 +
 [source]
 ----
-[root@sat6 ~]# ansible-tower-service restart
-[root@sat6 ~]# logout
+[root@cfme ~]# ansible-tower-service restart
+[root@cfme ~]# logout
 ----
 
 . The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  Click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password.
