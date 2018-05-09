@@ -24,6 +24,45 @@ image:images/lab0-welcomescreen.png[1000,1000]
 +
 NOTE: Replace GUID with your lab's GUID.
 
+. If not already root, become *root*.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ sudo -i
+----
+
+. Log into the *Satellite* host.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh sat6.example.com
+----
+
+. On the Satellite server, restart katello-service and logout
++
+[source]
+----
+[root@sat6 ~]# katello-service restart
+[root@sat6 ~]# logout
+----
+
+. Log into the *CloudForms* host.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]# ssh cfme.example.com
+----
+
+. On the CloudForms server, restart ansible-tower-service and logout
++
+[source]
+----
+[root@sat6 ~]# ansible-tower-service restart
+[root@sat6 ~]# logout
+----
+
 . The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  Click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password.
 +
 NOTE: It is recommended that you use Firefox for all of the labs.  You cannot use the Chrome web browser to access the Openstack Horizon UI since it will not accept its SSL certificate.
