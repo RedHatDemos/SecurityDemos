@@ -63,7 +63,7 @@ NOTE: Replace GUID with your lab's GUID.
 [root@cfme ~]# logout
 ----
 
-. The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  Click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password.
+. The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  With the exception of the link for rhvm and osp12, click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password. You will not be using the UIs for rhvm and osp12 directly which is why you do not need to log into these. 
 +
 NOTE: It is recommended that you use Firefox for all of the labs.  You cannot use the Chrome web browser to access the Openstack Horizon UI since it will not accept its SSL certificate.
 
