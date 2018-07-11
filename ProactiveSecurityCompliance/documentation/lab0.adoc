@@ -16,7 +16,7 @@ Let’s log into the Red Hat Products that you will use in this lab so they are 
 [source, text]
 [localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 +
-NOTE: Replace GUID with your lab's GUID. Use the password *r3dh4t1!*.
+NOTE: Replace GUID with your lab's GUID. Use the password *r3dh4t1!*
 
 . Log into the *Satellite* host.
 +
