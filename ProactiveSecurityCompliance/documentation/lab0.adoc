@@ -7,9 +7,7 @@ Let’s log into the Red Hat Products that you will use in this lab so they are 
 
 . Enter the activation key provided by the lab instructor then click *Next*.
 
-. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.  It will be embedded in your lab environment's host names.
-+
-image:images/lab0-welcomescreen.png[1000,1000]
+. In your lab information webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.  It will be embedded in your lab environment's host names.
 
 . From the lab environment information page, copy the hostname of the *Workstation* system (it should be workstation-GUID.rhpds.opentlc.com where GUID matches your environment's guid).
 
@@ -50,7 +48,7 @@ NOTE: Replace GUID with your lab's GUID. Use the password *r3dh4t1!*.
 [root@cfme ~]# logout
 ----
 
-. The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  With the exception of the link for rhvm and osp12, click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password. *You will not be using the UIs for rhvm and osp12 directly which is why you do not need to log into these.* 
+. The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  With the exception of the link for rhvm and osp12, click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password. *You will not be using the UIs for rhvm and osp12 directly which is why you do not need to log into these.*
 +
 NOTE: You cannot use the Chrome web browser to access the Openstack Horizon UI since it will not accept its SSL certificate.
 
