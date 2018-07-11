@@ -3,11 +3,7 @@
 === Logging into all the Red Hat Products
 Let’s log into the Red Hat Products that you will use in this lab so they are ready to use.
 
-. Open Firefox to The Red Hat Summit https://www.opentlc.com/guidgrabber/guidgrabber.cgi[GUID Grabber^] application in order to obtain your lab GUID.
-
-. For *Lab Code* select *L1034 - Implementing Proactive Security and Compliance Automation*.
-+
-image:images/lab0-labcode.png[]
+. Open a web browser and navigate to URL provider by the lab instructor in order to obtain your lab GUID.
 
 . Enter the activation key provided by the lab instructor then click *Next*.
 
@@ -20,22 +16,14 @@ image:images/lab0-welcomescreen.png[1000,1000]
 . Open a terminal window on your desktop environment and make sure you can SSH into the workstation host as you see below:
 +
 [source, text]
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 +
-NOTE: Replace GUID with your lab's GUID.
-
-. If not already root, become *root*.
-+
-[source]
-----
-[lab-user@workstation-GUID ~]$ sudo -i
-----
+NOTE: Replace GUID with your lab's GUID. Use the password *r3dh4t1!*.
 
 . Log into the *Satellite* host.
 +
 [source]
 ----
-[lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]# ssh sat6.example.com
 ----
 
@@ -51,7 +39,6 @@ NOTE: Replace GUID with your lab's GUID.
 +
 [source]
 ----
-[lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]# ssh cfme.example.com
 ----
 
@@ -63,9 +50,9 @@ NOTE: Replace GUID with your lab's GUID.
 [root@cfme ~]# logout
 ----
 
-. The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  With the exception of the link for rhvm and osp12, click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password. You will not be using the UIs for rhvm and osp12 directly which is why you do not need to log into these. 
+. The lab environment information page contains a list of links to all of the Red Hat Products that you will use in this lab.  With the exception of the link for rhvm and osp12, click each of the links on this page.  Each link should open a new tab. You will have to accept the SSL certificates for each page when the warning appears.  Each application should accept the *admin* as the user name and *r3dh4t1!* as the password. *You will not be using the UIs for rhvm and osp12 directly which is why you do not need to log into these.* 
 +
-NOTE: It is recommended that you use Firefox for all of the labs.  You cannot use the Chrome web browser to access the Openstack Horizon UI since it will not accept its SSL certificate.
+NOTE: You cannot use the Chrome web browser to access the Openstack Horizon UI since it will not accept its SSL certificate.
 
 === Turning on *some* of your VMs
 . Before starting the lab steps, you will need to turn on *some* (NOT all) of your VMs. Go to the CloudForms (cfme-GUID.rhpds.opentlc.com) tab.  If not already logged in, do so with *admin* as the Username and *r3dh4t1!* as the Password.
