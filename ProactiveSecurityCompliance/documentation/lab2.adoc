@@ -195,14 +195,14 @@ image:images/lab2-compliancefailedfilter1.png[1000,1000]
 === Lab 2.5 Fixing a specific OpenSCAP scan failure
 . Now let's fix the OpenSCAP scan failure from the *rhel7-custom* compliance policy. Remember that this compliance check failed since the AIDE package is not installed on the *lab2-vm1.example.com* host. Let's fix this OpenSCAP scan failure by installing the AIDE package on the *lab2-vm1.example.com* host.
 
-. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID. Use the password *r3dh4t1!*:
+. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID. Use the password r3dh4t1!*
 +
 [source]
 ----
 [localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 ----
 
-. Become *root* and then log into the *lab2-vm1.example.com* host.
+. Log into the *lab2-vm1.example.com* host.
 +
 [source]
 ----
