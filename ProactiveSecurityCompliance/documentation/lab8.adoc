@@ -16,18 +16,17 @@ Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, R
 To prepare Red Hat Insights clients we must first register each node with Satellite and install the Red Hat Insights agent
 
 ==== Lab 8.1.1 Registering host *ic1.summit.example.com* to Red Hat Satellite and install Red Hat Insights agent
-. If not already there, log into to the workstation host from your desktop system replacing *GUID* with your lab's *GUID*:
+. If not already there, log into to the workstation host from your desktop system replacing *GUID* with your lab's *GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 ----
 
-. If not already root, become *root* and then log into the *ic1.summit.example.com*.
+. Log into the *ic1.summit.example.com*.
 +
 [source]
 ----
-[lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]# ssh ic1.summit.example.com
 ----
 
@@ -68,18 +67,17 @@ Upload completed successfully!
 ----
 
 ==== Lab 8.1.2 Registering Red Hat Insights host *ic4.summit.example.com* to Red Hat Satellite
-. If not already there, log into to the bastion host from your desktop system replacing *GUID* with your lab's *GUID*:
+. If not already there, log into to the bastion host from your desktop system replacing *GUID* with your lab's *GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 ----
 
-. If not already root, become *root* and then log into the *ic4.summit.example.com*.
+. Log into the *ic4.summit.example.com*.
 +
 [source]
 ----
-[lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]# ssh ic4.summit.example.com
 ----
 
@@ -148,18 +146,17 @@ image:images/lab8.1-payloadinjectionsearch.png[1000,1000]
 +
 NOTE: Reading the description for the vulnerability shows that the sysctl variable is set to a level that allows being exploited. We want to do the active mitigation by changing the sysctl variable and making it permanent on reboot. In this case, we do not want to update the kernel or reboot since we don’t want downtime.
 
-. If not already there, log into to the workstation host from your desktop system replacing *GUID* with your lab's *GUID*:
+. If not already there, log into to the workstation host from your desktop system replacing *GUID* with your lab's *GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 ----
 
-. If not already root, become *root*, log in to your two Red Hat Insights client machine *ic1.summit.example.com*
+. Log in to your two Red Hat Insights client machine *ic1.summit.example.com*
 +
 [source]
 ----
-[lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]# ssh ic1.summit.example.com
 ----
 
