@@ -112,7 +112,7 @@ image:images/lab5.4-savedreports.png[1000,1000]
 +
 image:images/lab5.4-vmnoncompliant.png[1000,1000]
 
-. Now let's fix this issue. Before we do that, let's go into our *lab5-vm1* by SSH or via the console button on the main *Lab Information* webpage. In this step, we'll use SSH. SSH into the *lab5-vm1* VM. First, SSH into your workstation VM (using the password *r3dh4t1!* and then from there SSH into your *lab5-vm1* as root.
+. Now let's fix this issue. Before we do that, let's go into our *lab5-vm1* by SSH or via the console button on the main *Lab Information* webpage. In this step, we'll use SSH. SSH into the *lab5-vm1* VM. First, SSH into your workstation VM (using the password *r3dh4t1!*) and then from there SSH into your *lab5-vm1* as root.
 +
 [source]
 ssh root@IP_ADDRESS_OF_YOUR_WORKSTATION_VM
