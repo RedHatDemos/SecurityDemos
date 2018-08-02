@@ -1,0 +1,6 @@
+---
+drop_local_modifications: |
+  boolean -D -N
+  login -D -N
+  port -D -N
+  fcontext -D -N

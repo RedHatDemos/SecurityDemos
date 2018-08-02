@@ -1,0 +1,36 @@
+
+- name: Ensure the default is targeted, enforcing, without local modifications
+  hosts: all
+  become: true
+
+  roles:
+    - selinux
+
+  tasks:
+    - name: Gather facts again
+      setup:
+    - name: Check SELinux config mode
+      assert:
+        that: "{{ ansible_selinux.config_mode == 'enforcing' }}"
+        mgs: "SELinux config mode should be enforcing instead of {{ ansible_selinux.config_mode }}"
+    - name: Check SELinux current mode
+      assert:
+        that: "{{ ansible_selinux.mode == 'enforcing' }}"
+        mgs: "SELinux mode should be enforcing instead of {{ ansible_selinux.mode }}"
+    - name: Check SELinux type
+      assert:
+        that: "{{ ansible_selinux.type == 'targeted' }}"
+        mgs: "SELinux type should be targeted instead of {{ ansible_selinux.type }}"
+    - include: set_selinux_variables.yml
+    - name: Check if local modifications are empty - booleans
+      assert:
+        that: "{{ selinux_role_boolean.stdout == '' }}"
+    - name: Check if local modifications are empty - port
+      assert:
+        that: "{{ selinux_role_port.stdout == '' }}"
+    - name: Check if local modifications are empty - login
+      assert:
+        that: "{{ selinux_role_login.stdout == '' }}"
+    - name: Check if local modifications are empty - fcontext
+      assert:
+        that: "{{ selinux_role_fcontext.stdout == '' }}"

@@ -1,0 +1,19 @@
+
+- name: Check if selinux role sets SELinux fcontext mappings
+  hosts: all
+  become: true
+
+  vars:
+    SELinux_file_contexts:
+      - { target: '/tmp/test_dir(/.*)?', setype: 'user_home_dir_t', ftype: 'd' }
+
+  roles:
+    - selinux
+
+  tasks:
+    - include: set_selinux_variables.yml
+    - name: Check if there are SELinux fcontext mapping changes
+      assert:
+        that: "{{ selinux_role_fcontext.stdout != '' }}"
+    - name: Cleanup file contexts
+      command: /usr/sbin/semanage fcontext -D
