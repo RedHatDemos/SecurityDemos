@@ -1,8 +1,8 @@
 == Lab 0: Setup steps
 
-=== Accessing your Summit Lab environment
+=== Accessing your Lab environment
 
-. Open Firefox to The Red Hat Summit https://www.opentlc.com/guidgrabber/guidgrabber.cgi[GUID Grabber^] application in order to obtain your lab GUID.
+. Open Firefox to The Red Hat https://www.opentlc.com/guidgrabber/guidgrabber.cgi[GUID Grabber^] application in order to obtain your lab GUID.
 
 . For *Lab Code* select *L1036 - Defend Yourself using Built-in RHEL Security Technologies*.
 +
@@ -10,7 +10,7 @@ image:images/lab0-lablist.png[]
 
 . Enter the activation key provided by the lab instructor then click *Next*.
 
-. In your *Red Hat Summit Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.  It will be embedded in your lab environment's host names.
+. In your *Red Hat Lab Information* webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.  It will be embedded in your lab environment's host names.
 +
 image:images/lab0-welcomescreen.png[1000,1000]
 
