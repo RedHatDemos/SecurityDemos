@@ -109,7 +109,7 @@ Now, you will see the compliance scan results for every security control in the 
  [lab-user@workstation-GUID ~]$ chmod 644 /home/lab-user/Desktop/report.html
  [lab-user@workstation-GUID ~]$ chown lab-user /home/lab-user/Desktop/report.html
 
-. Now, go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+. Now, go back to your *Red Hat Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
@@ -132,7 +132,7 @@ image::images/scap_report_pass.png[HTML report: A rule that is passing]
 image::images/scap_report_fail.png[HTML report: A rule that is failing]
 
 == Lab 1.2 Customizing existing SCAP security content using SCAP workbench
-. Now, go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+. Now, go back to your *Red Hat Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
