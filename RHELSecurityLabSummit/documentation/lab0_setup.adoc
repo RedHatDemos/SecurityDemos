@@ -2,7 +2,7 @@
 
 === Accessing your Lab environment
 
-. Follow the directions  https://github.com/RedHatDemos/RHTE-2018/blob/master/GG/gg-dedicated.adoc[here^]in order to obtain your lab GUID. This GUID will be used to access your unique lab environment.
+. Follow the directions  https://github.com/RedHatDemos/RHTE-2018/blob/master/GG/gg-dedicated.adoc[here^] in order to obtain your lab GUID. This GUID will be used to access your unique lab environment.
 
 
 
