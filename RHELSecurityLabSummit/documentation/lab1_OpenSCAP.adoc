@@ -48,11 +48,11 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
  [root@workstation] yum install scap-workbench
 
 == Lab 1.1 Security scanning with OpenSCAP
-. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 ----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
 . Log into the *openscap.example.com* host as *root*.
@@ -109,7 +109,7 @@ Now, you will see the compliance scan results for every security control in the 
  [lab-user@workstation-GUID ~]$ chmod 644 /home/lab-user/Desktop/report.html
  [lab-user@workstation-GUID ~]$ chown lab-user /home/lab-user/Desktop/report.html
 
-. Now, go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+. Now, go back to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
@@ -132,7 +132,7 @@ image::images/scap_report_pass.png[HTML report: A rule that is passing]
 image::images/scap_report_fail.png[HTML report: A rule that is failing]
 
 == Lab 1.2 Customizing existing SCAP security content using SCAP workbench
-. Now, go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+. Now, go back to your *Lab Information* webpage from the *Lab 0 Setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
@@ -170,12 +170,11 @@ image:images/lab1.2-savecustomization.png[300,300]
 == Lab 1.3 Security Remediations with OpenSCAP and Ansible
 Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! As a result, it is best practice to test the remediation changes before deploying.
 
-. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 ----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$ ssh root@openscap.example.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 . Log into the *openscap.example.com* host as *root*.
 +
