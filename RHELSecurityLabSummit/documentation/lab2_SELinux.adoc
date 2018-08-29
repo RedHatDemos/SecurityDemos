@@ -53,7 +53,7 @@ This lab exercise is split into three steps:
 
 The exploit will be executed from the _selinux1.example.com_ system.
 
-. If not already there, log into to the bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
@@ -210,7 +210,7 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 
 Let's take a look at what has been pre-configured for you in this part of the lab exercise.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
@@ -251,7 +251,7 @@ All ansible commands below were executed from _selinux1.example.com_.
 
 Test whether all servers are available via the _ansible_ command.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
@@ -539,7 +539,7 @@ In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u
 
 . All actions are performed on the _selinux2_ host , which is a RHEL 7.5 system.
 
-. If not already there, log into to the bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com

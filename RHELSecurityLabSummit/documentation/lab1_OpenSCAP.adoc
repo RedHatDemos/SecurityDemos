@@ -48,7 +48,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
  [root@workstation] yum install scap-workbench
 
 == Lab 1.1 Security scanning with OpenSCAP
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----
@@ -170,7 +170,7 @@ image:images/lab1.2-savecustomization.png[300,300]
 == Lab 1.3 Security Remediations with OpenSCAP and Ansible
 Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! As a result, it is best practice to test the remediation changes before deploying.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----

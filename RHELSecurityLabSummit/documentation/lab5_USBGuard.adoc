@@ -124,7 +124,7 @@ Output comparison with allowed drive attached as `sda`:
 === Lab 5.1.1 Logging into the *usbguard-demo* VM
 Most steps are taken on the *usbguard-demo* virtual machine residing inside the *host* , *usbguard.example.com* virtual machine.  Adding and removing USB drives are done from the RHEL 7.5 *host* VM - *usbguard.example.com* .
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----

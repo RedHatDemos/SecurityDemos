@@ -64,7 +64,7 @@ The _/etc/audit/auditd.conf_ file
 can be modified using any text editor; but in this lab we will use the `sed` command to edit the _auditd.conf_ file.
 
 ==== Lab 6.2.1 exercise steps
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----
@@ -347,7 +347,7 @@ system using `scp`. Then, we'll open the CSV file using LibreOffice from the wor
 
 === Lab 6.3.5 Viewing the CSV output Audit Log from the workstation bastion host
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----

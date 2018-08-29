@@ -37,7 +37,7 @@ We will need to generate the required X.509 certificates. To make this easier, o
 usbguard.example.com if you want to try and add more machines to the encrypted
 mesh network. All our actions are run as root.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----
@@ -155,7 +155,7 @@ other machines to reconfigure or debug:
 ipsec.example.com host contains all the certificates, we need to copy the
 certificate onto ipsec2.example.com via the workstation VM:
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----

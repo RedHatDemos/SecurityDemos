@@ -19,7 +19,7 @@ AIDE and audit watches are complementary security tools that can help you harden
 
 
 === Lab 7.1 Installing the AIDE package
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----

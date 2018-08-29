@@ -22,7 +22,7 @@ More information can be found on the https://access.redhat.com/documentation/en-
 === Lab 9.1 Generating a New Key Pair
 Once you have created a new key pair, you can export these keys to identify yourself to the rest of the world, or simply use it locally to encrypt your files at rest.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----
