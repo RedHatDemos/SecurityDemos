@@ -29,7 +29,7 @@ correctly, you should not need to enter a password.
 
 * SSH command to login to _audit.example.com_ as *root*. Replace GUID with your lab's GUID.
 
-  [lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+  [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
 
 * SSH command to login to _audit.example.com_ as "auditlab"
@@ -64,11 +64,11 @@ The _/etc/audit/auditd.conf_ file
 can be modified using any text editor; but in this lab we will use the `sed` command to edit the _auditd.conf_ file.
 
 ==== Lab 6.2.1 exercise steps
-. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 ----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
 . Log into the *audit.example.com* host as *root*.
@@ -347,11 +347,11 @@ system using `scp`. Then, we'll open the CSV file using LibreOffice from the wor
 
 === Lab 6.3.5 Viewing the CSV output Audit Log from the workstation bastion host
 
-. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 ----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 . Now, let's transfer the CSV file from the _audit.example.com_ system to the Desktop of the workstation bastion host
 system using `scp`.

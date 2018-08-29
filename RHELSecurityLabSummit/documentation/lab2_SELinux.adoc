@@ -1,7 +1,7 @@
 
 = Lab 2: Security Enhanced Linux
 
-== Goal of Lab 
+== Goal of Lab
 The goal of this lab is to use Security Enhanced Linux (SELinux) to help mitigate against attacks due to privilege escalation vulnerabilities in a three part exercise.
 
 * In the first part of this lab exercise, you will become a hacker and try to execute a real vulnerability on a given Red Hat Enterprise Linux 7 system and explore how SELinux can help to protect this system.
@@ -53,10 +53,10 @@ This lab exercise is split into three steps:
 
 The exploit will be executed from the _selinux1.example.com_ system.
 
-. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 
 . If not already root, become *root* and then log into the _selinux1.example.com_ system.
 +
@@ -66,6 +66,8 @@ The exploit will be executed from the _selinux1.example.com_ system.
 . Move to directory /root/selinux_sctipts/ where are all the scripts needed for provide attack.
 
     [root@selinux1 ~]# cd /root/selinux_scripts
++
+NOTE: If you'd like copies of these selinux_scripts, they can also be found in this github link https://github.com/RedHatDemos/SecurityDemos/tree/master/RHELSecurityLabSummit/selinux_scripts[here^].
 
 . Repeat steps #1-3 above on a second terminal (this terminal window will also be connected to *selinux1.example.com*)
 
@@ -208,10 +210,10 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 
 Let's take a look at what has been pre-configured for you in this part of the lab exercise.
 
-. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 
 . Log into the _selinux1.example.com_ system as *root*.
 +
@@ -249,10 +251,10 @@ All ansible commands below were executed from _selinux1.example.com_.
 
 Test whether all servers are available via the _ansible_ command.
 
-. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 
 . If not already root, become *root* and then log into the _selinux1.example.com_ system.
 +
@@ -537,10 +539,10 @@ In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u
 
 . All actions are performed on the _selinux2_ host , which is a RHEL 7.5 system.
 
-. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 
 . Log into the _selinux1.example.com_ system as root.
 +

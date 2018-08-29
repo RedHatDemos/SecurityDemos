@@ -17,7 +17,7 @@ We will be doing this lab exercise using the consoles for both your IdM server a
 The IdM server is a 389 based server that has been configured to manage users, hosts, and sudo commands.  It is kerberos based and can operate as a standalone directory server, or can integrate with any LDAP compliant directory servers (e.g. Microsoft Active Directory).  IdM can also be configured to manage DNS for you Linux environment and provide for dynamic DNS updates.   Because the lab already provides DNS we will not have that enabled.  It will also be configured to create user home directories upon first login.
 
 == Lab 8.1 Attaching the Clients to the IdM Realm
-. Navigate to Red Hat Summit Lab GUID information UI page. This page has your environment's power control and consoles. Click on the console for *IdM1*.
+. Navigate to the *Lab information page* from the *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *IdM1*.
 +
 image:images/idm-console.png[300,300]
 

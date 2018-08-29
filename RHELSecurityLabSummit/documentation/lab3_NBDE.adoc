@@ -11,7 +11,7 @@ Tang is used to bind data to a secure network.  It is stateless and does not req
 Clevis and Tang are generic client and server components that provide network bound encryption. In Red Hat Enterprise Linux 7, they are used in conjunction with LUKS to encrypt and decrypt root and non-root storage volumes to accomplish Network Bound Disk Encryption.
 
 == Lab 3.1 Installing the Tang server
-. Navigate to Red Hat Summit Lab GUID information UI page. This page has your environment's power control and consoles. Click on the console for *NBDE1*. Login to the NBDE1 server as *root* using the password *r3dh4t1!*.
+. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE1*. Login to the NBDE1 server as *root* using the password *r3dh4t1!*.
 
 +
 image:images/lab3-console.png[200,200]
@@ -36,7 +36,7 @@ Since tangd uses the systemd socket activation mechanism, the server starts as s
 == Lab 3.2 Installing the Clevis Client
 Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
 
-. Navigate to Red Hat Summit Lab GUID information UI page. This page has your environment's power control and consoles. Click on the console for *NBDE2*. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
+. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE2*. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
 +
 image:images/lab3-console2.png[200,200]
 image:images/console-textbox.png[500,500]

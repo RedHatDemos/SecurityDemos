@@ -27,11 +27,11 @@ The firewalld daemon allows for configuration via a command line interface, dire
 == Lab 10.1 Verifying that the Firewall is Running
 The firewall is enabled by default, but we can check for that a couple of ways by running the following commands.
 
-. If not already there, log into to the workstation bastion host from your desktop system *replacing GUID with your lab's GUID*:
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*:
 +
 [source]
 ----
-[lab-user@localhost ~]$ ssh workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
 . Log into the *servera.example.com* host as *root*.
