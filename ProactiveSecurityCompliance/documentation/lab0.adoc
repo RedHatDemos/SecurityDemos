@@ -3,9 +3,7 @@
 === Logging into all the Red Hat Products
 Let’s log into the Red Hat Products that you will use in this lab so they are ready to use.
 
-. Open a web browser and navigate to URL provider by the lab instructor in order to obtain your lab GUID.
-
-. Enter the activation key provided by the lab instructor then click *Next*.
+. Follow the directions  https://github.com/RedHatDemos/RHTE-2018/blob/master/GG/gg-dedicated.adoc[here^] in order to obtain your lab GUID.  This GUID will be used to access your unique lab environment.
 
 . In your lab information webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.  It will be embedded in your lab environment's host names.
 
