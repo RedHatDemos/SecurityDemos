@@ -359,7 +359,7 @@ system using `scp`.
 	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv /home/lab-user/Desktop
 
 . Now, let's take a look at this CSV file from your workstation bastion host.
-. Go back to your *Red Hat Summit Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+. Go back to your *Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]

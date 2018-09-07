@@ -204,7 +204,7 @@ The first _selinux1.example.com_ host will be used as an admin interface to setu
 
 ===  Pre-Configured Set Up Steps (Already done for you)
 
-*Important*: All steps in this _Pre-Configured Set Up Steps_ section have been already performed in the Summit lab environment for you. They are mentioned from an informative purpose and they ONLY need to executed if you use the revert script for this lab
+*Important*: All steps in this _Pre-Configured Set Up Steps_ section have been already performed in the lab environment for you. They are mentioned from an informative purpose and they ONLY need to executed if you use the revert script for this lab
 
 ==== Viewing basic environment pre-configuration information
 

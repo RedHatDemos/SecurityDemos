@@ -11,7 +11,7 @@ In this exercise you are going to configure clients to attach to a Red Hat Ident
 * Create sudo command groups that allow escalated privileges
 * Integrate user, host and sudo command groups into a policy
 
-We will be doing this lab exercise using the consoles for both your IdM server and clients. You will access the consoles and your lab environment's power control from the Red Hat Summit Lab GUID information UI page.
+We will be doing this lab exercise using the consoles for both your IdM server and clients. You will access the consoles and your lab environment's power control from the Lab GUID information UI page.
 
 == Introduction
 The IdM server is a 389 based server that has been configured to manage users, hosts, and sudo commands.  It is kerberos based and can operate as a standalone directory server, or can integrate with any LDAP compliant directory servers (e.g. Microsoft Active Directory).  IdM can also be configured to manage DNS for you Linux environment and provide for dynamic DNS updates.   Because the lab already provides DNS we will not have that enabled.  It will also be configured to create user home directories upon first login.
@@ -38,7 +38,7 @@ image:images/idm-initiallogin.png[500,500]
 
 . The ipa-client package has already been installed for your convenience.  Next we are going to log into idm2 and idm3 and configure the client.
 
-. Navigate to Red Hat Summit Lab GUID information UI page again. This page has your environment's power control and consoles. Click on the consoles for *IdM2* and *IdM3*.
+. Navigate to the Lab GUID information UI page again. This page has your environment's power control and consoles. Click on the consoles for *IdM2* and *IdM3*.
 +
 image:images/idm2-console.png[200,200]
 image:images/idm3-console.png[200,200]
