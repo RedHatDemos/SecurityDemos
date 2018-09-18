@@ -409,7 +409,7 @@ SELinux Troubleshooting can be performed on both the _selinux2_ and _selinux3_ h
 
 === Lab 2.2.4 Viewing and Executing the SELinux _setup-selinux.yml_ ansible playbook
 
-We will execute an SELinux Ansible playbook which will switch SELinux to Permissive mode and apply all needed changes for our web servers' configuration.
+We will execute an SELinux Ansible playbook which will switch SELinux to Enforcing mode and apply all needed changes for our web servers' configuration.
 
 The playbook uses the linux-system-roles/selinux Ansible role.
 
