@@ -2,7 +2,7 @@
 
 == Goal of Lab
 
-The following lab is an introduction to the auditing capabilities of Red Ha Enterprise Linux.  The exercises below are done on a system installed with Red Hat Enterprise Linux 7.5, and may require modification to work in other lab environments.
+The following lab is an introduction to the auditing capabilities of Red Hat Enterprise Linux. The exercises below are done on a system installed with Red Hat Enterprise Linux 7.5, and may require modification to work in other lab environments.
 
 == Introduction
 The Linux Audit system provides a way to track security-relevant information on your system. Based on pre-configured rules, Audit generates log entries to record as much information about the events that are happening on your system as possible. This information is crucial for mission-critical environments to determine the violator of the security policy and the actions they performed. Audit does not provide additional security to your system; rather, it can be used to discover violations of security policies used on your system. These violations can further be prevented by additional security measures such as SELinux.
@@ -29,7 +29,7 @@ correctly, you should not need to enter a password.
 
 * SSH command to login to _audit.example.com_ as *root*. Replace GUID with your lab's GUID.
 
-  [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+	[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
 
 * SSH command to login to _audit.example.com_ as "auditlab"
@@ -50,10 +50,9 @@ configuration file in _/etc/audit/auditd.conf_.  The different configuration op
 http://man7.org/linux/man-pages/man5/auditd.conf.5.html[auditd.conf(5)]
 manpage.  Three of the more interesting options are the *flush*, *freq*, and *log_format* options:
 
-* *flush* controls how often the audit events are
-explicitly flushed to disk
-* *freq* determines how frequently the flush happens
-* *log_format* option controls the on-disk audit log format.  
+* *flush* determines the method how the audit events are flushed to disk.
+* *freq* controls how frequently the flush happens.
+* *log_format* option controls the on-disk audit log format.
 
 For this lab, we will check to ensure that *flush*  is set to *INCREMENTAL_ASYNC*
 (asynchronous flushing for performance), *freq* is set to 50 (flush the log
@@ -235,7 +234,7 @@ http://man7.org/linux/man-pages/man8/ausearch.8.html[ausearch(8)] manpage.
 The *-ts* option specifies at what point in the audit logs to start searching,
 *-ts today* indicates that only events from today should be considered.  The
 *-m* option indicates that you are interested in audit events with the given
-record.
+record type.
 
 . While logged into the _audit.example.com_ system as *root*, run the
 following commands to see the login events on the test system:
@@ -322,7 +321,7 @@ done the rest of this lab, you are most likely familiar with the default *raw*
 and the *interpreted* formats.  In addition to these formats, there are also
 *csv* and *text* formats which can be selected using the *--format* argument.
 
-The *-format* option, as well as several others which can customize the output
+The *--format* option, as well as several others which can customize the output
 of `ausearch`, can be found in the
 http://man7.org/linux/man-pages/man8/ausearch.8.html[ausearch(8)] manpage.
 
