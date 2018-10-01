@@ -16,12 +16,11 @@ Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, R
 To prepare Red Hat Insights clients we must first register each node with Satellite and install the Red Hat Insights agent
 
 ==== Lab 8.1.1 Registering host *ic1.summit.example.com* to Red Hat Satellite and install Red Hat Insights agent
-. If not already there, log into to the workstation host as *lab-user* from your desktop system replacing *GUID* with your lab's *GUID*. Use the password *r3dh4t1!*
+. If not already there, log into to the workstation host as *root* from your desktop system replacing *GUID* with your lab's *GUID*. Use the password *r3dh4t1!*
 +
 [source]
 ----
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$ sudo -i
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 ----
 
 . Log into the *ic1.summit.example.com*.
@@ -72,8 +71,7 @@ Upload completed successfully!
 +
 [source]
 ----
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$ sudo -i
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 ----
 
 . Log into the *ic4.summit.example.com*.
@@ -152,8 +150,7 @@ NOTE: Reading the description for the vulnerability shows that the sysctl variab
 +
 [source]
 ----
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$ sudo -i
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 ----
 
 . Log in to your two Red Hat Insights client machine *ic1.summit.example.com*

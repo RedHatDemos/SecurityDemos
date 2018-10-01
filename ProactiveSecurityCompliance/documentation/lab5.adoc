@@ -112,11 +112,10 @@ image:images/lab5.4-savedreports.png[1000,1000]
 +
 image:images/lab5.4-vmnoncompliant.png[1000,1000]
 
-. Now let's fix this issue. Before we do that, let's go into our *lab5-vm1* by SSH or via the console button on the main *Lab Information* webpage. In this step, we'll use SSH. SSH into the *lab5-vm1* VM. First, SSH into your workstation VM as *lab-user* (using the password *r3dh4t1!*) and then from there, SSH into your *lab5-vm1* as root.
+. Now let's fix this issue. Before we do that, let's go into our *lab5-vm1* by SSH or via the console button on the main *Lab Information* webpage. In this step, we'll use SSH. SSH into the *lab5-vm1* VM. First, SSH into your workstation VM as *root* (using the password *r3dh4t1!*) and then from there, SSH into your *lab5-vm1* as root.
 +
 [source, text]
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$ sudo -i
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 [root@workstation-GUID ~]$ ssh lab5-vm1.example.com
 
 . From here, find out if the AIDE package is installed on *lab5-vm1*. You will find that it is not since the rpm -qa aide command comes back empty.

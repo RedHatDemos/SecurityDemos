@@ -12,10 +12,9 @@ Let’s log into the Red Hat Products that you will use in this lab so they are 
 . Open a terminal window on your desktop environment and make sure you can SSH into the workstation host as you see below.
 +
 [source, text]
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$ sudo -i
+[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
 +
-NOTE: Replace GUID with your lab's GUID. Use the password *r3dh4t1!* for *lab-user*.
+NOTE: Replace GUID with your lab's GUID. Use the password *r3dh4t1!* for *root*.
 
 . Log into the *Satellite* host.
 +
