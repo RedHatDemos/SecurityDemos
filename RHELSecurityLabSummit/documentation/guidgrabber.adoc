@@ -1,6 +1,6 @@
 = Obtaining your GUID to access your unique and dedicated lab environment
 
-This document explains how to obtain your unique GUID.  This GUID will be used to access your unique and dedicated lab environment.
+This document explains how to obtain your unique GUID.  This GUID will be used to access your dedicated lab environment.
 
 . Begin by going to https://bit.ly/2N5cEe5
 +
