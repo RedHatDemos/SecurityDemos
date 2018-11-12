@@ -12,7 +12,7 @@ image:images/gg1.png[GuidGrabber Landing Page]
 
 . Click *Next*.
 
-. The resulting page will display your lab's GUID and other useful information about your lab environment.
+. The resulting page will display your lab's GUID and other useful information about your lab environment. For example, you will see a page similar to this page (Except your page will say *Red Hat Enterprise Linux Security Technologies Lab*).
 +
 image:images/ggdedicated.png[Information Page]
 
