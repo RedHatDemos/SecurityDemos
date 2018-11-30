@@ -12,9 +12,7 @@ image:images/gg1.png[GuidGrabber Landing Page]
 
 . Click *Next*.
 
-. The resulting page will display your lab's GUID and other useful information about your lab environment. For example, you will see a page similar to this page (Except your page will say *Red Hat Enterprise Linux Security Technologies Lab*).
-+
-image:images/ggdedicated.png[Information Page]
+. The resulting page will display your lab's GUID and other useful information about your lab environment.
 
 . When you are completely done with your lab environment, please click *Reset Workstation* so that you can move on to the next lab.  If you fail to do this, you will be locked into the GUID from the previous lab.
 +
