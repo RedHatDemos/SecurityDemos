@@ -12,7 +12,7 @@ image:images/gg1.png[GuidGrabber Landing Page]
 
 . Click *Next*.
 
-. The resulting page will display your lab's GUID and other useful information about your lab environment.
+. The resulting page will display your lab's GUID and other useful information about your lab environment. You will use your GUID for all the lab exercises, so take note of your unique GUID.
 
 . When you are completely done with your lab environment, please click *Reset Workstation* so that you can move on to the next lab.  If you fail to do this, you will be locked into the GUID from the previous lab.
 +
