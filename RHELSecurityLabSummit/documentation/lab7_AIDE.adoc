@@ -71,7 +71,7 @@ AIDE, version 0.15.1
 [source]
 [root@servera ~]# mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
 
-. You now have a baseline scan derived from the rules setup in /etc/aide.conf.  Note that we used the --init parameter (or -i) to initialize the baseline.  In subsequent scans, we will use --check (or -c) to check for changes.  Run a check as follows:
+. You now have a baseline scan derived from the rules setup in /etc/aide.conf.  Note that we used the --init parameter (or -i) to initialize the baseline.  In subsequent scans, we will use --check to check for changes.  Run a check as follows:
 +
 [source]
 [root@servera ~]#  aide --check
@@ -114,7 +114,7 @@ Using the less command, you can jump to line 26 by typing 26g. When you do that 
 [root@servera ~]# vim /etc/ssh/sshd_config
 ----
 
-. Using vim, jump to the end of the /etc/ssh/sshd_config file by typing *Shift + g*. Then, press the letter *o* to add a line to the end of the file. Type  __UseDNS no__ to the end of the /etc/ssh/sshd_config file. Then, press *esc* and  save and exit by pressing *:wq!*
+. Using vim, jump to the end of the /etc/ssh/sshd_config file by typing *Shift + g*. Then, press the letter *o* to add a line to the end of the file. Type  __UseDNS no__ to the end of the /etc/ssh/sshd_config file. Then, press *esc* and  save and exit by pressing *ZZ*
 
 . When we run AIDE, we expect it to note the change of the permissions and identify a change in the checksum of the file.
 
@@ -152,7 +152,7 @@ File: /etc/ssh/sshd_config
 [root@servera ~]# vim /etc/ssh/sshd_config
 ----
 
-. Using vim, jump to the end of the /etc/ssh/sshd_config file by typing *Shift + g*. Then, delete the last time that we added previously by pressing *dd* on the last line, __UseDNS no__. Then, save and exit by pressing *:wq!*
+. Using vim, jump to the end of the /etc/ssh/sshd_config file by typing *Shift + g*. Then, delete the last time that we added previously by pressing *dd* on the last line, __UseDNS no__. Then, save and exit by pressing *ZZ*
 
 . Run *aide --check* again to verify that you have reverted back correctly.
 +
