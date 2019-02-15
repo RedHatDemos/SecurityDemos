@@ -7,9 +7,9 @@ Peter Beniaris, Senior Solutions Architect, Red Hat
 
 Lukas Vrabec, Software Engineer - Security Controls, Red Hat
 
-Paul Moore, Principal Software Engineer - Security Controls, Red Hat
+Marek Haicman, QE and Product Owner - Security Compliance, Red Hat
 
-Martin Preisler, Senior Software Engineer - Security Compliance, Red Hat
+Simo Sorce, Senior Principal Software Engineer - RHEL Security, Red Hat
 
 == [.underline]#Additional Lab Developers#:
 Paul Wouters, Senior Software Engineer - RHEL Security, Red Hat

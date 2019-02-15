@@ -3,13 +3,13 @@
 === [.underline]#Presenters/Lab Developers#:
 *Lucy Kerner*, Security Global Technical Evangelist and Strategist, Red Hat
 
-*Patrick Rutledge*, Principal Solution Architect, Red Hat
+*Phil Avery*, Senior Solutions Architect, Red Hat
 
-*Kevin Morey*, Principal Cloud Specialist Solution Architect, Red Hat
+*Justin Lacey*, Architect, Red Hat
 
-*Nate Stephany*, Senior Cloud Specialist Solution Architect, Red Hat
+*Kevin Holmes*, Senior Solutions Architect, Red Hat
 
-*Will Nix*, Principal Technical Marketing Manager - Management Portfolio, Red Hat
+*Khary Mendez*, Principal Consultant , Red Hat
 
 
 == Overview and Prerequisites:
