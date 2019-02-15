@@ -1,6 +1,5 @@
 = Red Hat Security Demo
 
-
 2019 LABS:
 
 * link:2019Labs/ProactiveSecurityCompliance/documentation/README.adoc[Implementing Proactive Security and Compliance Automation]
