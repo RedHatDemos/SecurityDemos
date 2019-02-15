@@ -1,9 +1,12 @@
-= Red Hat Security Demos
+= Red Hat Security Demo
+
+My testinasdfasdfasdfasdf
 
 2019 LABS:
-
+* link:2019Labs/ProactiveSecurityCompliance/documentation/README.adoc[Implementing Proactive Security and Compliance Automation]
+* link:2019Labs/RHELSecurityLab/documentation/README.adoc[Defend Yourself Using Built-in RHEL Security Technologies]
 
 2018 LABS:
 
-* link:ProactiveSecurityCompliance/documentation/README.adoc[Implementing Proactive Security and Compliance Automation]
-* link:RHELSecurityLabSummit/documentation/README.adoc[Defend Yourself Using Built-in RHEL Security Technologies]
+* link:2018Labs/ProactiveSecurityCompliance/documentation/README.adoc[Implementing Proactive Security and Compliance Automation]
+* link:2018Labs/RHELSecurityLab/documentation/README.adoc[Defend Yourself Using Built-in RHEL Security Technologies]
