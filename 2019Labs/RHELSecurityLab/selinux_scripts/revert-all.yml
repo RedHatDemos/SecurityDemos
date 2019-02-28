@@ -31,6 +31,10 @@
       - debug:
           msg: "SELinux status = {{ ansible_selinux.status }}"
   tasks:
+      - name: Install Apache webserver
+        package:
+            name: httpd
+            state: absent
       - name: Create custom path for Document Root
         file:
             path: /var/www_new/

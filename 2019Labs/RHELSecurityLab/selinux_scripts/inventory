@@ -1,2 +1,3 @@
-selinux2.example.com
-selinux3.example.com
+selinux2 ansible_python_interpreter=/usr/libexec/platform-python
+selinux3
+selinux5

@@ -5,6 +5,8 @@
 
   vars:
       firewall:
+          # This is required for shellshock demo
+          - { port: '9999/tcp', state: 'enabled' }
           - { port: '7070/tcp', state: 'enabled' }
           - { port: '80/tcp', state: 'enabled' }
           - { port: '22/tcp', state: 'enabled' }
@@ -29,6 +31,10 @@
       - debug:
           msg: "SELinux status = {{ ansible_selinux.status }}"
   tasks:
+      - name: Install Apache webserver
+        package:
+            name: httpd
+            state: latest
       - name: Create custom path for Document Root
         file:
             path: /var/www_new/html/
@@ -38,7 +44,7 @@
         file:
             path: /etc/httpd/conf.d/welcome.conf
             state: absent
-      - name: Copy custom config files for RHEL-7
+      - name: Copy custom config files for RHEL-7 and RHEL-8
         copy:
             src: files/custom_path.conf.rhel7
             dest: /etc/httpd/conf.d/custom_path.conf
@@ -46,7 +52,7 @@
             group: root
             mode: 0644
             backup: yes
-        when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+        when: ansible_distribution == "RedHat" and ansible_distribution_major_version > "6"
       - name: Copy custom config files for RHEL-6
         copy:
             src: files/custom_path.conf.rhel6
