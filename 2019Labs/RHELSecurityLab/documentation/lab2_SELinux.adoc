@@ -192,13 +192,17 @@ These web files are accessible using tcp/80 and tcp/7070 ports on each web serve
  * selinux3.example.com:80 (default)
  * selinux3.example.com:7070 (custom)
 
+ * selinux5.example.com:80 (default)
+ * selinux5.example.com:7070 (custom)
+
 SELinux is disabled for all web servers by default. In a fully automated fashion, you will turn SELinux on for all web servers without breaking any functionality using the SELinux system roles feature as an Ansible role.
 
-The SELinux part of the lab environment consists of three machines:
+The SELinux part of the lab environment consists of four machines:
 
  * selinux1, selinux1.example.com (RHEL-7 admin host)
- * selinux2, selinux2.example.com (RHEL-7 host)
+ * selinux2, selinux2.example.com (RHEL-8 host)
  * selinux3, selinux3.example.com (RHEL-6 host)
+ * selinux5, selinux5.example.com (RHEL-7 host)
 
 The first _selinux1.example.com_ host will be used as an admin interface to setup the other two hosts where we will complete all our configuration steps.
 
@@ -228,6 +232,7 @@ Let's take a look at what has been pre-configured for you in this part of the la
 
 	192.168.0.20 selinux2
 	192.168.0.21 selinux3
+	192.168.0.6 selinux5
 
 .  The __ansible__ package has been installed on the _selinux1_ host.
 
@@ -240,12 +245,13 @@ Let's take a look at what has been pre-configured for you in this part of the la
 . Look at the created inventory file for our Ansible usage.
 
 	[root@selinux1 selinux_scripts]# cat inventory
-	selinux2
+	selinux2 ansible_python_interpreter=/usr/libexec/platform-python
 	selinux3
+    selinux5
 
 ==== Pre-Configuration of Apache web servers with SELinux disabled
 
-The _apache_ web servers were set up using the _setup_webserver.yml_ playbook and this playbook was executed on the _selinux2_ and _selinux3_ hosts.  SELinux was also turned off.
+The _apache_ web servers were set up using the _setup_webserver.yml_ playbook and this playbook was executed on the _selinux2_,  _selinux3_ and _selinux5_ hosts.  SELinux was also turned off.
 
 All ansible commands below were executed from _selinux1.example.com_.
 
@@ -268,15 +274,18 @@ Test whether all servers are available via the _ansible_ command.
 
 . An Ansible script will pass all listed servers in the _inventory_ file and will send a test to see if they are accessible. All servers should return a pong response.
 
-	selinux2.example.com | SUCCESS => {
-        	"changed": false,
-	        "ping": "pong"
-	}
-
-    selinux3.example.com | SUCCESS => {
+    selinux3 | SUCCESS => {
         "changed": false,
-	        "ping": "pong"
-	}
+        "ping": "pong"
+    }
+    selinux5 | SUCCESS => {
+        "changed": false,
+        "ping": "pong"
+    }
+    selinux2 | SUCCESS => {
+        "changed": false,
+        "ping": "pong"
+    }
 
 . Apache web servers were configured on given servers via the _setup_webserver.yml_ playbook.
 
@@ -305,6 +314,9 @@ At the end we installed the _setools-console_ package containing SELinux policy 
 	[root@selinux3 ~]# yum install setools-console
 	[root@selinux3 ~]# exit
 
+	[root@selinux1 selinux_scripts]# ssh root@selinux5
+	[root@selinux5 ~]# yum install setools-console
+	[root@selinux5 ~]# exit
 
 === Lab 2.2.1 Testing the pre-configured setup
 In this section, we are going to test our pre-configured setup steps from before.
@@ -326,6 +338,12 @@ In this section, we are going to test our pre-configured setup steps from before
 	[root@selinux1 selinux_scripts]# curl selinux3:7070
 	<h1>Custom Document Root</h1>
 
+    [root@selinux1 selinux_scripts]# curl selinux5
+    <h1>Default Document Root</h1>
+
+    [root@selinux1 selinux_scripts]# curl selinux5:7070
+    <h1>Custom Document Root</h1>
+
 	[root@selinux1 selinux_scripts]# ssh root@selinux2
 	[root@selinux2 ~]# getenforce
 	Disabled
@@ -335,6 +353,11 @@ In this section, we are going to test our pre-configured setup steps from before
 	[root@selinux3 ~]# getenforce
 	Disabled
 	[root@selinux3 ~]# exit
+
+	[root@selinux1 selinux_scripts]# ssh root@selinux5
+	[root@selinux5 ~]# getenforce
+	Disabled
+	[root@selinux5 ~]# exit
 
 === Lab 2.2.2 Turning SELinux On
 
@@ -352,8 +375,9 @@ In this section, we are going to test our pre-configured setup steps from before
 
 . SELinux does not deny access, but denials are logged for actions that would have been denied if running in enforcing mode. In order to show logged denials for certain actions we need to run the _curl_ command. AVC denial(s) will be generated and we can view it via the _ausearch_ command below.
 
-	[root@selinux1 selinux_scripts]# curl selinux2
-	[root@selinux1 selinux_scripts]# curl selinux3
+	[root@selinux1 selinux_scripts]# curl selinux2:7070
+	[root@selinux1 selinux_scripts]# curl selinux3:7070
+	[root@selinux1 selinux_scripts]# curl selinux5:7070
 
 	[root@selinux1 selinux_scripts]# ssh root@selinux2
 
@@ -375,10 +399,13 @@ SELinux Troubleshooting can be performed on both the _selinux2_ and _selinux3_ h
 
 ==== Lab 2.2.3.1 SELinux Port
 
-. SELinux _httpd_t_ process domain used for Apache web servers is not able to bind to _tcp/7070_ port by default. There is no default rule for this access in the SELinux policy on the RHEL-7 _selinux2_ host.
+. SELinux _httpd_t_ process domain used for Apache web servers is not able to bind to _tcp/7070_ port by default. There is no default rule for this access in the SELinux policy on the RHEL-7 _selinux5_ and RHEL-8 _selinux2_ hosts.
 
-	[root@selinux2 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind -C
+	[root@selinux2 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind
   [root@selinux2 ~]# exit
+
+  [root@selinux5 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind
+  [root@selinux5 ~]# exit
 
 . Use _port_ instead of _unreserved_port_t_ for this query on the _selinux3_ host.
 
@@ -480,6 +507,9 @@ Let's take a quick look at this Ansible playbook.
     [root@selinux2 ~]# semanage export
     [root@selinux2 ~]# exit
 
+    [root@selinux1 selinux_scripts]# ssh selinux5
+    [root@selinux5 ~]# semanage export
+    [root@selinux5 ~]# exit
 
     [root@selinux1 selinux_scripts]# ssh selinux3
     [root@selinux3 ~]# semanage -o -
@@ -497,6 +527,8 @@ Let's take a quick look at this Ansible playbook.
     [root@selinux1 selinux_scripts]# curl selinux3
     [root@selinux1 selinux_scripts]# curl selinux3:7070
 
+    [root@selinux1 selinux_scripts]# curl selinux5
+    [root@selinux1 selinux_scripts]# curl selinux5:7070
 
 == Revert script
 
@@ -511,8 +543,9 @@ Also, for those of you that want to re-do this lab exercise from the beginning, 
     /root/selinux_scripts
 
     [root@selinux1 selinux_scripts]# cat inventory
-    selinux2
+    selinux2 ansible_python_interpreter=/usr/libexec/platform-python
     selinux3
+    selinux5
 
     [root@selinux1 selinux_scripts]# ansible-playbook -i inventory -u root revert-all.yml
 
@@ -537,7 +570,7 @@ In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u
 
     [root@selinux1 selinux_scripts]# ansible-playbook -i inventory -u root revert-all.yml
 
-. All actions are performed on the _selinux2_ host , which is a RHEL 7.5 system.
+. All actions are performed on the _selinux5_ host , which is a RHEL 7.5 system.
 
 . If not already there, log into to the bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
@@ -548,11 +581,11 @@ In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u
 +
 [source]
 [lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
-[root@selinux1 ~]# ssh root@selinux2
+[root@selinux1 ~]# ssh root@selinux5
 
 . Linux users can be assigned to SELinux users using semanage login tool. By default users are mapped to _unconfined_u_:
 
-    [root@selinux2 ~]# semanage login -l
+    [root@selinux5 ~]# semanage login -l
 
 ==== Lab 2.3.1.1 Change the default mapping
 
@@ -560,24 +593,24 @@ In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u
 
 _system_u_ is a special user used only for system processes and in the future will not be listed.
 
-    [root@selinux2 ~]# semanage login -m -s user_u -r s0 __default__
-    [root@selinux2 ~]# semanage login -l
+    [root@selinux5 ~]# semanage login -m -s user_u -r s0 __default__
+    [root@selinux5 ~]# semanage login -l
 
 ==== Lab 2.3.1.2 Add a test user
 
 . After this, when users (not root) logs in, their processes will run the _user_t_ domain. Every user session but root will run with _user_t_:
 
-    [root@selinux2 ~]# adduser user42
+    [root@selinux5 ~]# adduser user42
 
-    [root@selinux2 ~]# passwd user42
+    [root@selinux5 ~]# passwd user42
     (Feel free to pick whatever password you want for user42. But, be sure to pick a password you can remember.)
 
-    [root@selinux2 ~]# ssh user42@localhost
+    [root@selinux5 ~]# ssh user42@localhost
     user42@localhost's password:
-    [user42@selinux2 ~]$ id -Z
+    [user42@selinux5 ~]$ id -Z
     user_u:user_r:user_t:s0
 
-    [user42@selinux2 ~]$ ps axZ
+    [user42@selinux5 ~]$ ps axZ
     LABEL                     PID TTY    STAT  TIME COMMAND
     -                           1 ?      Ss    0:00 /usr/lib/systemd/systemd --switched-root --system --deserialize 21
     user_u:user_r:user_t:s0  2780 ?      S     0:00 sshd: user42@pts/1
@@ -592,7 +625,7 @@ _system_u_ is a special user used only for system processes and in the future wi
 +
   user42  ALL=(ALL)       NOPASSWD: ALL
 
-    [root@selinux2 ~]# visudo -f /etc/sudoers.d/administrators
+    [root@selinux5 ~]# visudo -f /etc/sudoers.d/administrators
 
 . In the text editor, Press *i* to insert and copy and paste this line into the text editor:
 +
@@ -601,13 +634,13 @@ _system_u_ is a special user used only for system processes and in the future wi
 . Next, press *esc* and then press *:wq!* to save and exit.
 . Let's confirm our changes.
 
-    [root@selinux2 ~]# grep user42 /etc/sudoers.d/administrators
+    [root@selinux5 ~]# grep user42 /etc/sudoers.d/administrators
     user42  ALL=(ALL)       NOPASSWD: ALL
 
 
-    [root@selinux2 ~]# ssh user42@localhost
+    [root@selinux5 ~]# ssh user42@localhost
     user42@localhost's password:
-    [user42@selinux2 ~]$ sudo -i
+    [user42@selinux5 ~]$ sudo -i
     sudo: PERM_SUDOERS: setresuid(-1, 1, -1): Operation not permitted
     sudo: no valid sudoers sources found, quitting
     sudo: setresuid() [0, 0, 0] -> [1001, -1, -1]: Operation not permitted
@@ -615,25 +648,25 @@ _system_u_ is a special user used only for system processes and in the future wi
 
 . And the same attempt in permissive mode:
 
-    [user42@selinux2 ~]$ exit
-    [root@selinux2 ~]# id -Z
+    [user42@selinux5 ~]$ exit
+    [root@selinux5 ~]# id -Z
     unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
 
-    [root@selinux2 ~]# setenforce 0
-    [root@selinux2 ~]# ssh user42@localhost
+    [root@selinux5 ~]# setenforce 0
+    [root@selinux5 ~]# ssh user42@localhost
 
     user42@localhost's password:
-    [user42@selinux2 ~]$ sudo -i
-    [root@selinux2 ~]# id
+    [user42@selinux5 ~]$ sudo -i
+    [root@selinux5 ~]# id
     uid=0(root) gid=0(root) groups=0(root) context=user_u:user_r:user_t:s0
 
-    [root@selinux2 ~]# id -Z
+    [root@selinux5 ~]# id -Z
     User_u:user_r:user_t:s0
 
-    [root@selinux2 ~]# exit
+    [root@selinux5 ~]# exit
 
-    [user42@selinux2 ~]$ exit
-    [root@selinux2 ~]# setenforce 1
+    [user42@selinux5 ~]$ exit
+    [root@selinux5 ~]# setenforce 1
 
 Since SELinux denials are not enforced in permissive mode, _user42_ can become root but we can see that the context stayed _user_t_ and didn't change to _unconfined_t_.
 
@@ -643,51 +676,51 @@ Since SELinux denials are not enforced in permissive mode, _user42_ can become r
 
 * Administrator can be directly mapped to _sysadm_u_ SELinux user so that when such user logs in, the session will be run with _sysadm_t_ domain. In this case you need to enable the _ssh_sysadm_login_ SELinux boolean in order to allow users assigned _sysadm_u_ to login using ssh.
 
-    [root@selinux2 ~]# semanage user -m -R "sysadm_r secadm_r" sysadm_u
-    [root@selinux2 ~]# adduser -G wheel -Z sysadm_u admin1
+    [root@selinux5 ~]# semanage user -m -R "sysadm_r secadm_r" sysadm_u
+    [root@selinux5 ~]# adduser -G wheel -Z sysadm_u admin1
 
-    [root@selinux2 ~]# passwd admin1
+    [root@selinux5 ~]# passwd admin1
     (Feel free to pick whatever password you want for admin1. But, be sure to pick a password you can remember.)
 
-    [root@selinux2 ~]# semanage login -l | grep admin
+    [root@selinux5 ~]# semanage login -l | grep admin
     admin1               sysadm_u             s0-s0:c0.c1023       *
 
-    [root@selinux2 ~]# setsebool -P ssh_sysadm_login on
-    [root@selinux2 ~]# ssh admin1@localhost
+    [root@selinux5 ~]# setsebool -P ssh_sysadm_login on
+    [root@selinux5 ~]# ssh admin1@localhost
 
-    [admin1@selinux2 ~]$ id -Z
+    [admin1@selinux5 ~]$ id -Z
     sysadm_u:sysadm_r:sysadm_t:s0-s0:c0.c1023
 
-    [admin1@selinux2 ~]$ sudo -i
+    [admin1@selinux5 ~]$ sudo -i
     [sudo] password for admin1:
 
 
-    [root@selinux2 ~]# id -Z
+    [root@selinux5 ~]# id -Z
     sysadm_u:sysadm_r:sysadm_t:s0-s0:c0.c1023
 
 ** Now we can try to perform admin's operation which can be executed only by admin SELinux users.
 
-    [root@selinux2 ~]# systemctl restart sshd
-    [root@selinux2 ~]# exit
-    [admin1@selinux2 ~]# exit
+    [root@selinux5 ~]# systemctl restart sshd
+    [root@selinux5 ~]# exit
+    [admin1@selinux5 ~]# exit
 
 * The other way is to assign u administer users to _staff_u_ and configure _sudo_ so that particular users can gain SELinux administrator role.
 
-    [root@selinux2 ~]# adduser -G wheel -Z staff_u admin2
+    [root@selinux5 ~]# adduser -G wheel -Z staff_u admin2
 
-    [root@selinux2 ~]# passwd admin2
+    [root@selinux5 ~]# passwd admin2
     (Feel free to pick whatever password you want for admin1. But, be sure to pick a password you can remember.)
 
-    [root@selinux2 ~]# semanage login -l | grep admin
+    [root@selinux5 ~]# semanage login -l | grep admin
     admin1               sysadm_u             s0-s0:c0.c1023       *
     admin2               staff_u              s0-s0:c0.c1023       *
 
 
-    [root@selinux2 ~]# ssh admin2@localhost
-    [admin2@selinux2 ~]$ id -Z
+    [root@selinux5 ~]# ssh admin2@localhost
+    [admin2@selinux5 ~]$ id -Z
     staff_u:staff_r:staff_t:s0-s0:c0.c1023
 
-    [admin2@selinux2 ~]$ sudo -i
+    [admin2@selinux5 ~]$ sudo -i
     [sudo] password for admin2:
     -bash: /root/.bash_profile: Permission denied
     -bash-4.2# id -Z
@@ -700,11 +733,11 @@ Since SELinux denials are not enforced in permissive mode, _user42_ can become r
     Failed to restart sshd.service: Access denied
     See system logs and 'systemctl status sshd.service' for details.
     -bash-4.2# exit
-    [admin2@selinux2 ~]$ exit
+    [admin2@selinux5 ~]$ exit
 
 . To allow admin2 user to gain SELinux administrator role you need to add the following rule to sudoers.
 
-    [root@selinux2 ~]# visudo -f /etc/sudoers.d/administrators
+    [root@selinux5 ~]# visudo -f /etc/sudoers.d/administrators
 
 . Append following line to end of file.  In the text editor, Press *o* then copy and paste these lines below into the text editor. Then, press *esc* and then press *:wq!* to save and exit.
 
@@ -713,28 +746,28 @@ Since SELinux denials are not enforced in permissive mode, _user42_ can become r
 
 . Admin2 can gain administrator role using sudo now.
 
-    [root@selinux2 ~]# ssh admin2@localhost
-    [admin2@selinux2 ~]$ sudo -i
+    [root@selinux5 ~]# ssh admin2@localhost
+    [admin2@selinux5 ~]$ sudo -i
     [sudo] password for admin2:
 
-    [root@selinux2 ~]# id -Z
+    [root@selinux5 ~]# id -Z
     staff_u:sysadm_r:sysadm_t:s0-s0:c0.c1023
 
-    [root@selinux2 ~]# systemctl restart sshd
-    [root@selinux2 ~]#
+    [root@selinux5 ~]# systemctl restart sshd
+    [root@selinux5 ~]#
 
-    [root@selinux2 ~]# exit
-    [admin2@selinux2 ~]# exit
+    [root@selinux5 ~]# exit
+    [admin2@selinux5 ~]# exit
 
 == Revert script
 
-There is a revert script to restore the default SELinux Users configuration. If you want to run this revert script, run it on the _selinux2_ host.
+There is a revert script to restore the default SELinux Users configuration. If you want to run this revert script, run it on the _selinux5_ host.
 
-    [root@selinux2 ~]# hostname
-    selinux2.example.com
+    [root@selinux5 ~]# hostname
+    selinux5.example.com
 
-    [root@selinux2 ~]# cd /root
-    [root@selinux2 ~]# sh confined_users_revert.sh
+    [root@selinux5 ~]# cd /root
+    [root@selinux5 ~]# sh confined_users_revert.sh
 
 <<top>>
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_NBDE.adoc[Lab 3: NBDE]
