@@ -1,0 +1,28 @@
+- include: firewalld.yml
+  when: >
+    firewall_setup_default_solution == true and
+    ((ansible_distribution in ['RedHat', 'CentOS'] and
+      ansible_distribution_version|int >= 7) or
+     ansible_distribution == 'Fedora')
+
+- name: Install system-config-firewall
+  package: name=system-config-firewall
+  when: >
+    firewall_setup_default_solution == true and
+    ansible_distribution in ['RedHat', 'CentOS'] and
+    ansible_distribution_version|int < 7
+
+- name: Configure firewall
+  firewall_lib:
+    service: "{{ item.service | default(omit) }}"
+    port: "{{ item.port | default(omit)}}"
+    trust: "{{ item.trust | default(omit)}}"
+    trust_by_mac: "{{ item.trust_by_mac | default(omit)}}"
+    masq: "{{ item.masq | default(omit)}}"
+    masq_by_mac: "{{ item.masq_by_mac | default(omit)}}"
+    forward_port: "{{ item.forward_port | default(omit)}}"
+    forward_port_by_mac: "{{ item.forward_port_by_mac | default(omit)}}"    
+    state: "{{ item.state }}"
+
+  with_items:
+    - "{{ firewall }}"

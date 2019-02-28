@@ -30,11 +30,5 @@
           msg: "SELinux status = {{ ansible_selinux.status }}"
     when: ansible_selinux.status == "disabled"
 
-  tasks:
-    - name: Restart httpd
-      service:
-          name: httpd
-          enabled: yes
-          state: restarted
   roles:
       - linux-system-roles.selinux
