@@ -88,7 +88,7 @@ daemon to reload its configuration.  While logged into the _audit.example.com_
 system as *root*, run the following command to force `auditd` to reload its
 configuration:
 
-	[root@audit ~]# killall -SIGHUP auditd
+	[root@audit ~]# service auditd reload
 
 === Lab 6.2.2 Linux Kernel Configuration
 
@@ -114,12 +114,12 @@ Technical Implementation Guide (STIG) for Red Hat Enterprise Linux.
 logged into the _audit.example.com_ system as *root*, run the following commands
 to enable a number of pre-defined audit filters:
 
-	[root@audit ~]# cat /usr/share/doc/audit-*/rules/README-rules
+	[root@audit ~]# cat /usr/share/doc/audit/rules/README-rules
 	[root@audit ~]# rm /etc/audit/rules.d/*
-	[root@audit ~]# cp /usr/share/doc/audit-*/rules/10-base-config.rules /etc/audit/rules.d
-	[root@audit ~]# cp /usr/share/doc/audit-*/rules/30-stig.rules /etc/audit/rules.d
-	[root@audit ~]# cp /usr/share/doc/audit-*/rules/31-privileged.rules /etc/audit/rules.d
-	[root@audit ~]# cp /usr/share/doc/audit-*/rules/99-finalize.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit/rules/10-base-config.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit/rules/30-stig.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit/rules/31-privileged.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit/rules/99-finalize.rules /etc/audit/rules.d
 	[root@audit ~]# augenrules --load
 
 +
@@ -216,11 +216,12 @@ user and run the following commands:
 	[auditlab@audit ~]$ vi /etc/shadow
 	(Type :q! to exit vi)
 
-	[auditlab@audit ~]$ date -s "8 Aug 2011 08:00:00 -0400"
 	[auditlab@audit ~]$ ping -c 1 127.0.0.1
 
 	[auditlab@audit ~]$ vi ~/project_tps_report.txt
 	(Type :q! to exit vi)
+
+	[auditlab@audit ~]$ chmod 0664 ~/project_tps_report.txt
 
 === Lab 6.3.2 Searching for Events
 
@@ -355,7 +356,7 @@ system using `scp`. Then, we'll open the CSV file using LibreOffice from the wor
 . Now, let's transfer the CSV file from the _audit.example.com_ system to the Desktop of the workstation bastion host
 system using `scp`.
 
-	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv /home/lab-user/Desktop
+	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv ~/Desktop/
 
 . Now, let's take a look at this CSV file from your workstation bastion host.
 . Go back to your *Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
