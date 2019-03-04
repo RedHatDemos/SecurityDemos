@@ -1,6 +1,6 @@
 == Lab 0: Setup steps
 
-=== Accessing your dedicated lab environment
+=== Accessing your dedicated lab environment using your provided GUID
 
 . Follow the directions  https://github.com/RedHatDemos/SecurityDemos/blob/master/RHELSecurityLabSummit/documentation/guidgrabber.adoc[here^] in order to obtain your lab GUID. This GUID will be used to access your unique lab environment.
 
