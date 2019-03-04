@@ -1,0 +1,21 @@
+---
+- hosts: all
+
+  become: yes
+  become_method: sudo
+  become-user: lab_user
+
+  vars:
+    CACC_LOCAL: "/home/lab-user/complianceAsCode"
+    LABS_ROOT: "/home/lab-user/labs"
+
+  tasks:
+    - name: Configure CaC/c
+      shell: "cmake .."
+      args:
+        chdir: "{{ LABS_ROOT }}/2_content_creation/complianceAsCode/build"
+
+    - name: Make CaC/c
+      make:
+        chdir: "{{ LABS_ROOT }}/2_content_creation/complianceAsCode/build"
+        target: all
