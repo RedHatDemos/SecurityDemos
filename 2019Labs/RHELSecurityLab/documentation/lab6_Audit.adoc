@@ -383,7 +383,7 @@ If you wanted to re-do all of these audit lab exercises from scratch, you can re
 *root* on _audit.example.com_:
 
 	[root@audit ~]# rm /etc/audit/rules.d/*
-	[root@audit ~]# cp /usr/share/doc/audit-*/rules/10-no-audit.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit/rules/10-no-audit.rules /etc/audit/rules.d
 	[root@audit ~]# augenrules --load
 	[root@audit ~]# userdel -r auditlab
 
