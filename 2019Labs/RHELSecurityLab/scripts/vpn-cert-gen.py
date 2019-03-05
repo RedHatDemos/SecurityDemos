@@ -1,4 +1,4 @@
-#!/usr/bin/python -tt
+#!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
 # pylint: disable=invalid-name
 # pylint: enable=invalid-name
@@ -20,6 +20,7 @@ Use the --wipe option to remove all created certificates, keys and CAs and creat
 new ones for CA and the VPN server itself (in case of use as VPN Remote Access server)
 """
 
+from __future__ import print_function
 import base64
 import datetime
 import os
@@ -32,7 +33,7 @@ DOMAIN_NAME = 'example.com'
 VPN_NAME = 'IKEv2 VPN Server'
 VPN_ORG = 'Test Org'
 CA_NAME = 'CA for %s' % VPN_ORG
-PASSPHRASE = 'secret'
+PASSPHRASE = b'secret'
 MOBILECONFIG = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -201,7 +202,7 @@ def create_csr(
 
 def add_ext(cert, kind, crit, string):
     """ Helper to set single extension """
-    cert.add_extensions([crypto.X509Extension(kind, crit, string)])
+    cert.add_extensions([crypto.X509Extension(kind.encode('utf-8'), crit, string.encode('utf-8'))])
 
 
 def set_cert_extensions(cert, is_ca):
@@ -244,8 +245,8 @@ def create_sub_cert(
     certreq = create_csr(certkey, CN, C, ST, L, O, OU, emailAddress, sign_alg)
     cert = crypto.X509()
     cert.set_serial_number(snum)
-    cert.set_notBefore(START)
-    cert.set_notAfter(END)
+    cert.set_notBefore(START.encode('utf-8'))
+    cert.set_notAfter(END.encode('utf-8'))
     cert.set_issuer(CACert.get_subject())
     cert.set_subject(certreq.get_subject())
     cert.set_pubkey(certreq.get_pubkey())
@@ -265,8 +266,8 @@ def create_root_ca(
     careq = create_csr(cakey, CN, C, ST, L, O, OU, emailAddress, sign_alg)
     cacert = crypto.X509()
     cacert.set_serial_number(0)
-    cacert.set_notBefore(START)
-    cacert.set_notAfter(END)
+    cacert.set_notBefore(START.encode('utf-8'))
+    cacert.set_notAfter(END.encode('utf-8'))
     cacert.set_issuer(careq.get_subject())
     cacert.set_subject(careq.get_subject())
     cacert.set_pubkey(careq.get_pubkey())
@@ -289,15 +290,15 @@ def generate_dates():
 
 def writeout_cert_and_key(certdir, name, cert, privkey):
     """ Write the cert and key files """
-    with open(certdir + name + '.crt', 'w') as fhn:
+    with open(certdir + name + '.crt', 'wb') as fhn:
         fhn.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
-    with open('keys/' + name + '.key', 'w') as fhn:
+    with open('keys/' + name + '.key', 'wb') as fhn:
         fhn.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, privkey))
 
 
 def create_ca(ca_name):
     """ Create the core root cert """
-    print 'creating CA cert'
+    print('creating CA cert')
     notbefore, notafter = generate_dates()
     cert, key = create_root_ca('Certificate Agency (CA)', notbefore, notafter)
     writeout_cert_and_key('cacerts/', ca_name, cert, key)
@@ -309,7 +310,7 @@ def create_pkcs12(path, name, cert, key, cacert):
     p12 = crypto.PKCS12()
     p12.set_certificate(cert)
     p12.set_privatekey(key)
-    p12.set_friendlyname(name)
+    p12.set_friendlyname(name.encode('utf-8'))
     p12.set_ca_certificates([cacert])
     with open(path + name + '.p12', 'wb') as fhn:
         fhn.write(p12.export(passphrase=PASSPHRASE))
@@ -321,17 +322,17 @@ def create_mobileconfig(username):
     profile = MOBILECONFIG
     profile = profile.replace(
         '@COMMON_CACERT_BASE64@',
-        ''.join(file('cacerts/exampleca.crt').readlines()[1:-1]))
+        ''.join(open('cacerts/exampleca.crt', 'r').readlines()[1:-1]))
     profile = profile.replace(
         '@COMMON_EE_CERT_PKCS12@',
-        base64.b64encode(
-            file('pkcs12/%s.%s.p12' % (username, DOMAIN_NAME)).read()))
+        str(base64.b64encode(
+            open('pkcs12/%s.%s.p12' % (username, DOMAIN_NAME), 'rb').read())))
     profile = profile.replace('@CLIENT_DN@', '%s.%s' % (username, DOMAIN_NAME))
     profile = profile.replace('@CA_NAME@', CA_NAME)
     profile = profile.replace('@SERVER_NAME@', SERVER_NAME)
     profile = profile.replace('@VPN_NAME@', VPN_NAME)
     profile = profile.replace('@VPN_ORG@', VPN_ORG)
-    profile = profile.replace('@PASSPHRASE@', PASSPHRASE)
+    profile = profile.replace('@PASSPHRASE@', str(PASSPHRASE))
     profile = profile.replace('@DOMAIN_NAME@', DOMAIN_NAME)
 
     # Create file
@@ -343,7 +344,7 @@ def create_end_certs(cacert, cakey, end_certs):
     """ Create end certificates """
     # Read current serial
     try:
-        serial = int(file('serial.txt').read())
+        serial = int(open('serial.txt', 'r').read())
     except IOError:
         serial = 2
 
@@ -393,7 +394,7 @@ def main(argv):
     if argv[1] == '--wipe':
         reset_files()
         run_dist_certs()
-        print 'OK: CA system completely re-initialized'
+        print('OK: CA system completely re-initialized')
         return
 
     # Create new username
@@ -404,11 +405,11 @@ def main(argv):
         sys.exit('Error: user %s already exists' % username)
 
     cacert = crypto.load_certificate(
-        crypto.FILETYPE_PEM, file('cacerts/exampleca.crt').read())
+        crypto.FILETYPE_PEM, open('cacerts/exampleca.crt', 'r').read())
     cakey = crypto.load_privatekey(
-        crypto.FILETYPE_PEM, file('keys/exampleca.key').read())
+        crypto.FILETYPE_PEM, open('keys/exampleca.key', 'r').read())
     create_end_certs(cacert, cakey, (username,))
-    print 'OK: Generated X.509 certificate for %s' % username
+    print('OK: Generated X.509 certificate for %s' % username)
 
 
 if __name__ == '__main__':
