@@ -26,10 +26,12 @@ NOTE:
 If you wanted to copy and paste text to send to the console, you could also press the *T* button at the top right of your console if you didn't want to type text into the console directly. This is mainly recommended for longer commands.
 image:images/console-textbox.png[500,500]
 
-. Finally, enable the tang service in systemd:
+. Finally, enable the tang service in systemd and open the HTTP port in firewall:
 +
 [source, text]
 [root@nbde1 ~]# systemctl enable tangd.socket --now
+[root@nbde1 ~]# firewall-cmd --add-service=http
+[root@nbde1 ~]# firewall-cmd --add-service=http --permanent
 
 Since tangd uses the systemd socket activation mechanism, the server starts as soon as the first connection comes in. A new set of cryptographic keys is automatically generated at the first start.
 
@@ -49,7 +51,7 @@ image:images/console-textbox.png[500,500]
 . Next, we will initialize the luks binding to the tang server. If you wanted to copy and paste the text below to send to the console, press the *T* button at the top right of your console (See the picture above on Step #1).
 +
 [source, text]
-[root@nbde2 ~]# clevis bind luks -d /dev/vda2 tang '{"url":"http://nbde1.example.com"}'
+[root@nbde2 ~]# clevis luks bind -d /dev/vda2 tang '{"url":"http://nbde1.example.com"}'
 +
 NOTE: This command performs four steps:
 1) Creates a new key with the same entropy as the LUKS master key.
@@ -64,18 +66,12 @@ NOTE: This command performs four steps:
 . This disk can now be unlocked with your existing passphrase as well as with the Clevis policy.
 
 == Lab 3.3 Verify LUKS Header
-. To verify that the Clevis JWE object is successfully placed in a LUKS header, use the luksmeta show command on *NBDE2*. Slot 0 will be active and empty.  This slot represent the prompt to see when the server boots.  Slot 1 or 2 will be active with the JSON Web Encryption (JWE) key.  This is the slot that enable the unattended boot process. You may see an inactive Slot as well. You can ignore this as it will not be used.
+. To verify that the Clevis JWE object is successfully placed in a LUKS header, use the `cryptsetup luksDump` command on *NBDE2*.
+You should see that there are two keyslots in the header. Keyslot 0 represents the static password you had to enter when booting the machine for the first time. Keyslot 1 is the newly added entry by the `clevis luks bind` command.
 +
 [source, text]
-[root@nbde2 ~]# luksmeta show -d /dev/vda2
-0   active empty
-1   active cb6e8904-81ff-40da-a84a-07ab9ab5715e
-2 inactive empty
-3 inactive empty
-4 inactive empty
-5 inactive empty
-6 inactive empty
-7 inactive empty
+[root@nbde2 ~]# cryptsetup luksDump /dev/vda2
+<TO BE ADDED>
 
 == Lab 3.4 Enable Decryption on the Boot Process
 . To enable the early boot system to process the disk binding, enter the following command on *NBDE2*.
