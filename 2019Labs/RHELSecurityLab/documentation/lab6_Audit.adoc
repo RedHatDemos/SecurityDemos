@@ -90,6 +90,19 @@ configuration:
 
 	[root@audit ~]# service auditd reload
 
+. The audit daemon can dump a small report about its configuration and some facts about
+its current state. This can help you diagnose problems that the audit daemon has run into.
+As *root*, run the following command:
+
+	[root@audit ~]# service auditd state
+
+. Normally the audit daemon enables the kernel's audit subsystem. To verify that the audit
+system is enabled, we can run the following command as *root* to get the kernel's state:
+
+	[root@audit ~]# auditctl -s
++
+The first line output should tell you if its enabled. A one means it's enabled.
+
 === Lab 6.2.2 Linux Kernel Configuration
 
 The Linux Kernel’s audit subsystem can be configured using the `auditctl`
@@ -127,6 +140,13 @@ The `augenrules` tool combines all of the _*.rules_ files located in
 _/etc/audit/rules.d_ into the _/etc/audit/audit.rules_ file and loads them
 using the `auditctl` command.  You can remove, or rename, any of these files
 and rerun the `augenrules --load` command to reconfigure your system.
+
+. Now that we have loaded some rules, let's have the kernel dump the currently loaded rules so
+that we can inspect what was loaded. As *root*, run the following command and observe its output:
+
+	[root@audit ~]# auditctl -l
++
+You should see many audit rules output from the kernel.
 
 ==== Lab 6.2.2.2 Custom Rules
 
@@ -199,6 +219,35 @@ commands to make the backlog changes persistent:
 	[root@audit ~]# echo "-b 8192" > /etc/audit/rules.d/15-rhkey_kernel.rules
 	[root@audit ~]# augenrules --load
 
+==== Lab 6.2.2.3 Kernel boot parameters
+
+===== Introduction
+Additionally, the kernel has two kernel boot command line options that affect the audit system:
+*audit* and *audit_backlog_limit*. The audit configuration option takes either a 1 or 0 which
+means enabled or disabled respectively. If you plan to use to the audit system, you should boot
+with audit enabled. As the system is booting, it will be generating events. By default the kernel
+has room to hold 64 events. But systemd logs an event for every service started and stopped, and
+the kernel logs events as it gets configured. This can easily overrun the 64 reserved event spots.
+So, what we want to do is increase the backlog to hold a lot of events until auditd can start
+reading them.
+
+===== Lab 6.2.2.3 exercise steps
+
+In the steps below, we will modify _/etc/default/grub_ to add audit related configuration to the
+kernel's boot prompt. We will then regenerate the boot menu so that it takes effect.
+
+. As *root* run the following command:
+
+	[root@audit ~]# cp /etc/default/grub /etc/default/grub.bak
+	[root@audit ~]# sed -e '/GRUB_CMDLINE_LINUX/s/\"/ audit=1 audit_back_log_limit=8192\"/2' -i /etc/default/grub
+
+. Next we need to regenerate the grub boot menu. The menu is in different places based on whether
+you have a BIOS based machine or a UEFI based machine. But we can find the file we need to
+replace with a `find` command. As *root*, run the following command:
+
+	[root@audit ~]# grub2-mkconfig -o `find /boot -name grub.cfg`
+
+
 == Lab 6.3 Inspecting Audit Logs
 
 The exercises below show how to search through the audit logs and generate
@@ -240,14 +289,14 @@ record type.
 . While logged into the _audit.example.com_ system as *root*, run the
 following commands to see the login events on the test system:
 
-	[root@audit ~]# ausearch -ts today -m USER_LOGIN
+	[root@audit ~]# ausearch --start today -m USER_LOGIN
 
 . Multiple record types can be specified, the results include events which
 contain either record type.  While logged into the _audit.example.com_ system
 as *root*, run the following command to see all of the service start and stop
 events:
 
-	[root@audit ~]# ausearch -ts this-month -m SERVICE_START -m SERVICE_STOP
+	[root@audit ~]# ausearch --start this-month -m SERVICE_START -m SERVICE_STOP
 
 . The *-i* option instructs `ausearch` to interpret the results, translating some
 fields into a more human readable form.  The *-k* option searches on the key
@@ -257,27 +306,27 @@ assigned to an audit rule.
 *root*, run the following command to see all events from today matching the
 *access* key:
 
-	[root@audit ~]# ausearch -ts today -i -k access
+	[root@audit ~]# ausearch --start today -i -k access
 
 . The *--uid* option searches for events that match the given UID.
 . While logged
 into the _audit.example.com_ system as *root*, run the following command to see
-today's events from the *auditlab* user that match the *time-change* key:
+today's events from the *auditlab* user that match the *perm_mod* key:
 
-	[root@audit ~]# ausearch -ts today -i -k time-change --uid auditlab
+	[root@audit ~]# ausearch --start today -i -k perm_mod --uid auditlab
 
 . The *-f* option searches for events that match on the given file name.
 . While
 logged into the _audit.example.com_ system as *root*, run the following command
 to see all of today's accesses of the *project_tps_report.txt* file:
 
-	[root@audit ~]# ausearch -ts today -i -f project_tps_report.txt
+	[root@audit ~]# ausearch --start today -i -f project_tps_report.txt
 
 . Finally, we can search for audit events generated by our custom filter rule.
 . While logged into the _audit.example.com_ system as *root*, run the following
 command to see all events from today matching the *rhkey* key:
 
-	[root@audit ~]# ausearch -ts today -i -k rhkey
+	[root@audit ~]# ausearch --start today -i -k rhkey
 
 === Lab 6.3.3 Generating Reports
 
@@ -288,20 +337,36 @@ all of which are described in the
 http://man7.org/linux/man-pages/man8/aureport.8.html[aureport(8)] manpage.
 
 . While logged into the _audit.example.com_ system as *root*, run the following
-command to create an audit report for today's activity:
+commands to create several audit reports for today's activity:
 
-	[root@audit ~]# aureport -ts today --summary
+	[root@audit ~]# aureport --start today --summary
+	[root@audit ~]# aureport --start today --summary -i --file
+	[root@audit ~]# aureport --start today --summary -i --executable
+	[root@audit ~]# aureport --start today --summary -i --login
+
+. The `aureport` and `ausearch` tools may be used together. Suppose you wanted to identify who was
+triggering a specific audit rule. The strategy is to search for the key that is associated and then
+feed the results to the kind of report you are interested in. This will only work if the output
+from `ausearch` is exactly as it is in the logs. To tell `ausearch` to leave the event unaltered,
+pass the *--raw* formatting option. As *root* run the following command:
+
+	[root@audit ~]# ausearch --start today -k access --raw | aureport --summary -i --file
 
 . The `aulast` tool generates a report similar to the `last` command, except the
 information is collected from the audit log instead of the less reliable utmp
 logs.  The _aulast(8)_ manpage provides details on how to run `aulast`, without
 any options the output is familiar with the `last` command.
 
+The `aulast` utility can also help you find an `ausearch` command to extract just the audit
+events for a specific login whenever you pass the *--proof* command line option. This is helpful
+when investigating what programs or files a user accessed during a specific session.
+
 . While logged into
 the _audit.example.com_ system as *root*, run the following command to see an
 example of an `aulast` report:
 
 	[root@audit ~]# aulast
+	[root@audit ~]# aulast --proof
 
 . Similar to `aulast`, `aulastlog` is designed as a replacement for the `lastlog`
 command; the important difference being that `aulastlog` collects data from the
@@ -383,9 +448,10 @@ If you wanted to re-do all of these audit lab exercises from scratch, you can re
 *root* on _audit.example.com_:
 
 	[root@audit ~]# rm /etc/audit/rules.d/*
-	[root@audit ~]# cp /usr/share/doc/audit/rules/10-no-audit.rules /etc/audit/rules.d
+	[root@audit ~]# cp /usr/share/doc/audit/rules/10-base-config.rules /etc/audit/rules.d
 	[root@audit ~]# augenrules --load
-	[root@audit ~]# userdel -r auditlab
+	[root@audit ~]# cp /etc/default/grub.bak /etc/default/grub
+	[root@audit ~]# grub2-mkconfig -o `find /boot -name grub.cfg`
 
 <<top>>
 
