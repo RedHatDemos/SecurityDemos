@@ -11,7 +11,7 @@ OpenSCAP allows you to perform both vulnerability and security compliance checks
 == Pre-Configured Set Up Steps (Already done for you)
 All of the steps in this pre-configured set up section have already been done for you. This section is for your reference only so you know what steps have already been pre-configured in this lab environment for you.
 
-.  Red Hat Enterprise Linux 7.5 is installed on the *openscap.example.com* host. We have also pre-installed several packages on the *openscap.example.com* host.
+.  Red Hat Enterprise Linux 8.0 is installed on the *openscap.example.com* host. We have also pre-installed several packages on the *openscap.example.com* host.
 
 . Specifically, we pre-installed *openscap-scanner*, *scap-security-guide*, and *Ansible*. Take a look at the comments above each installation command for more details.
 +
@@ -25,10 +25,10 @@ All of the steps in this pre-configured set up section have already been done fo
 . You can verify a successful installation by running:
 +
  [root@openscap]# oscap -V
-
- OpenSCAP command line tool (oscap) 1.2.16
- Copyright 2009--2017 Red Hat Inc., Durham, North Carolina.
-
+ 
+ OpenSCAP command line tool (oscap) 1.3.0
+ Copyright 2009--2018 Red Hat Inc., Durham, North Carolina.
+ 
  ==== Supported specifications ====
  XCCDF Version: 1.2
  OVAL Version: 5.11.1
@@ -66,29 +66,30 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
 +
  [root@openscap]# rpm -ql scap-security-guide
  ...
- /usr/share/xml/scap/ssg/content/ssg-rhel7-cpe-dictionary.xml
- /usr/share/xml/scap/ssg/content/ssg-rhel7-cpe-oval.xml
- /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml
- /usr/share/xml/scap/ssg/content/ssg-rhel7-oval.xml
- /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-dictionary.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-oval.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel8-ocil.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel8-oval.xml
+ /usr/share/xml/scap/ssg/content/ssg-rhel8-xccdf.xml
  ...
 
-. Notice that the provided content in `scap-security-guide` covers a wide range of security baselines such as PCI-DSS, STIG, C2S, Common, CJIS, and others. Also notice that Ansible remediation playbooks are included for these various security baselines as well in the provided content in the `scap-security-guide` .
+. Notice that the provided content in `scap-security-guide` covers a wide range of security baselines such as PCI-DSS, STIG, C2S, Common, CJIS, and others. Also notice that Ansible remediation playbooks are included for these various security baselines as well in the provided content in the `scap-security-guide`. 
 
 . Move to the `content` folder so we can avoid typing long paths:
 +
  [root@openscap]# cd /usr/share/xml/scap/ssg/content
 
-. First, let's check which compliance profiles are available for rhel7.
+. First, let's check which compliance profiles are available for rhel8.
 +
 ----
- [root@openscap]# oscap info ssg-rhel7-ds.xml
+ [root@openscap]# oscap info ssg-rhel8-ds.xml
 ----
-Notice that there are several compliance profiles included such as the Standard System Security Profile, PCI-DSS, C2S, Common Profile for General-Purpose Systems, and many others.
+Notice that there are two compliance profiles included. OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS..
 
- . Next, let's perform our first baseline testing scan with the vanilla OSPP profile. Notice in our command below that we can skip the profile ID prefix to make the command simpler. The real ID is xccdf_org.ssgproject.content_profile_ospp-rhel7.
+ . Next, let's perform our first baseline testing scan with the vanilla OSPP profile. Notice in our command below that we can skip the profile ID prefix to make the command simpler. The real ID is xccdf_org.ssgproject.content_profile_ospp.
 
-  [root@openscap]# oscap xccdf eval --profile ospp-rhel7 ./ssg-rhel7-ds.xml
+  [root@openscap]# oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
 +
 Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
 
@@ -96,27 +97,23 @@ Now, you will see the compliance scan results for every security control in the 
 * use --results-arf to get machine readable results archive
 * use --report to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 
- [root@openscap]# oscap xccdf eval --profile ospp-rhel7 --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel7-ds.xml
+ [root@openscap]# oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
 
 . (Optional) You can also generate the HTML report separately:
 +
  [root@openscap]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
-
-. Now, let's copy the *report.html* over to the workstation bastion host, set the correct permissions on *report.html* file so it is viewable, and view the report from the workstation bastion host in a web browser.
-+
- [root@openscap]# exit
- [lab-user@workstation-GUID ~]$ scp root@openscap.example.com:/tmp/report.html /home/lab-user/Desktop
- [lab-user@workstation-GUID ~]$ chmod 644 /home/lab-user/Desktop/report.html
- [lab-user@workstation-GUID ~]$ chown lab-user /home/lab-user/Desktop/report.html
 
 . Now, go back to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-. Once you log in, you'll notice the report that you just created on the Desktop. Double click on this report. You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
+. Open the Terminal, and use it to open the *report.html* in a X forwarded web browser.
 +
-image:images/lab1.1-reportfromworkstation.png[300,300]
+ [lab-user@workstation-GUID ~]$ ssh -X root@openscap.example.com firefox /tmp/report.html
+
+. You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
++
 image:images/lab1.1-scapreport.png[500,500]
 
 . Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether or not the particular security control has passed or failed the scan.
@@ -137,17 +134,17 @@ image::images/scap_report_fail.png[HTML report: A rule that is failing]
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-. Once you log in, navigate to the *Applications* menu at the top and go to *System Tools -> SCAP Workbench*.
+. Once you log in, open the Terminal, and use it to open SCAP Workbench on the server.
 +
-image:images/lab1.2-scapworkbenchmenu.png[400,400]
+ [lab-user@workstation-GUID ~]$ ssh -X root@openscap.example.com scap-workbench
 
-. After Workbench starts, select *RHEL7* and click on *Load Content* to open the compliance content for Red Hat Enterprise Linux 7.
+. After Workbench starts, select *RHEL8* and click on *Load Content* to open the compliance content for Red Hat Enterprise Linux 8.
 +
 image:images/lab1.2-scapsecurityguide.png[600,600]
 +
 image::images/scap_workbench_opened.png[SCAP Workbench opened, profile selected]
 
-. Let's customize the US Government Configuration Baseline (USGCB). Select this profile from the *Profile* drop-down list. Click *Customize*.
+. Let's customize the PCI-DSS Control baseline. Select this profile from the *Profile* drop-down list. Click *Customize*.
 +
 image:images/lab1.2-selectcustomize.png[700,700]
 
@@ -188,13 +185,13 @@ Putting the machine into compliance (for example by changing its configuration) 
 . Let's generate an Ansible playbook that will put the *openscap.example.com* machine into compliance. Let's go ahead and generate a playbook from the results:
 * use --fix-type ansible to request an ansible playbook with the fixes
 +
- [root@openscap]# oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
+ [root@openscap]# oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
 
 . (Optional) Generate bash remediation script and run it on target machine(s). This can be accomplished by running:
 * use --fix-type bash to request a bash script with the fixes
 * after the script is generated change its permissions so that we can run it
 +
- [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash-fix.sh
+ [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
  [root@openscap]# chmod +x bash-fix.sh
  [root@openscap]# ./bash-fix.sh
 
@@ -209,12 +206,13 @@ Putting the machine into compliance (for example by changing its configuration) 
 ---
 ###############################################################################
 #
-# Ansible remediation role for the results of evaluation of profile xccdf_org.ssgproject.content_profile_ospp-rhel7
+# Ansible remediation role for the results of evaluation of profile xccdf_org.ssgproject.content_profile_ospp 
 # XCCDF Version:  1.2
 #
 ...
 #
 # How to apply this remediation role:
+# $ ansible-playbook -i "localhost," -c local playbook.yml
 # $ ansible-playbook -i "192.168.1.155," playbook.yml
 # $ ansible-playbook -i inventory.ini playbook.yml
 #
@@ -246,23 +244,30 @@ Putting the machine into compliance (for example by changing its configuration) 
         - CJIS-5.10.4.1
 ....
 
-. You can customize the playbook by changing the variables listed at the top of the generated file. Let's change the password minimum length by setting the `var_password_pam_minlen` to 18. After making this change, press *control + x* , then type *y* and press *enter* in your nano text editor to save your changes.
+. You can customize the playbook by changing the variables listed at the top of the generated file. Let's change the password minimum length by setting the `var_password_pam_minlen` to `!!str 18`. After making this change, press *control + x* , then type *y* and press *enter* in your nano text editor to save your changes.
 +
 ....
    vars:
-      var_accounts_password_minlen_login_defs: 6
-      var_accounts_minimum_age_login_defs: 7
-      var_accounts_maximum_age_login_defs: 60
-      var_account_disable_post_pw_expiration: 35
-      var_password_pam_maxrepeat: 2
-      var_password_pam_maxclassrepeat: 4
-      var_password_pam_dcredit: -1
-      var_password_pam_minlen: 18
+      var_accounts_password_minlen_login_defs: !!str 15
+      var_accounts_passwords_pam_faillock_deny: !!str 3
+      var_accounts_passwords_pam_faillock_unlock_time: !!str never
+      var_accounts_passwords_pam_faillock_fail_interval: !!str 900
+      var_accounts_passwords_pam_faillock_deny: !!str 3
+      var_accounts_passwords_pam_faillock_unlock_time: !!str never
+      var_accounts_passwords_pam_faillock_fail_interval: !!str 900
+      var_password_pam_minlen: !!str 12
+      var_password_pam_ocredit: !!str -1
+      var_password_pam_lcredit: !!str -1
+      var_password_pam_ucredit: !!str -1
+      var_password_pam_dcredit: !!str -1
+      var_accounts_tmout: !!str 600
+      var_system_crypto_policy: !!str FIPS
+      rsyslog_remote_loghost_address: !!str logcollector
 ...
 ....
 
 
-. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Because of a known issue in the SCAP Security Guide content, let's use "--skip-tags build_aide_database,firewalld_sshd_port_enabled". Make sure you run this on the *openscap.example.com* host:
+. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Because of a known issue in the SCAP Security Guide content, let's use `"--skip-tags build_aide_database,firewalld_sshd_port_enabled"`. Make sure you run this on the *openscap.example.com* host:
 +
  [root@openscap]# ansible-playbook -i "localhost," -c local --check --skip-tags aide_build_database,firewalld_sshd_port_enabled playbook.yml
 +
