@@ -36,6 +36,7 @@ The prerequisite for this lab include basic Linux skills gained from Red Hat Cer
 * How to create a single sign-on environment for all of your linux servers using Red Hat Identity Management
 * How to use GNU Privacy Guard (GPG) to identify yourself and encrypt your communications
 * How to use firewalld to dynamically manage firewall rules
+* How to configure systemwide Crypto Policies and set a machine in FIPS mode
 
 
 == Lab Environment:
@@ -58,3 +59,4 @@ Each lab exercise is independent from each other, so feel free to do the lab exe
 * link:lab8_IdM.adoc[Lab 8: Identity Management (IdM)]
 * link:lab9_GPG.adoc[Lab 9: GNU Privacy Guard (GPG)]
 * link:lab10_firewalld.adoc[Lab 10: Firewalld]
+* link:lab11_cryptopolicies.adoc[Lab 11: Crypto Policies]
