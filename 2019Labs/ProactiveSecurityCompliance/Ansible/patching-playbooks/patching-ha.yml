@@ -1,0 +1,33 @@
+- name: Patch HA Linux Servers
+  hosts: all
+  serial: 
+    - 1
+    - 20%
+  tasks:
+  - name: Ensure Yum-utils is installed
+    yum:
+      name: yum-utils
+      state: present
+
+  - name: check for updates (yum)
+    yum: 
+      list: updates 
+      update_cache: true
+    register: yum_updates
+
+  - when: yum_updates.results|length > 0
+    block:    
+    - name: upgrade all packages
+      yum: 
+        name: '*' 
+        state: latest
+
+    - name: check if reboot is required
+      shell: needs-restarting -r
+      failed_when: false
+      changed_when: false
+      register: reboot_required
+  
+    - name: reboot
+      reboot:
+      when: reboot_required.rc != 0

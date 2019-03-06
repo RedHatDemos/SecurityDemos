@@ -1,0 +1,19 @@
+---
+- name: Create publish config file
+  template:
+    src: publish.yml.j2
+    dest: /var/katello-cvmanager/publish.yml
+
+- name: update all content views
+  shell: ./cvmanager --config=publish.yml --wait publish
+  args:
+    chdir: /var/katello-cvmanager/
+  register: published
+
+- debug:
+    var: published
+
+- name: Delete publish config file
+  file:
+    path: /var/katello-cvmanager/publish.yml
+    state: absent

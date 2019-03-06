@@ -1,0 +1,15 @@
+---
+:settings:
+  :user: {{ sat_user }}
+  :pass: {{ sat_pass }}
+  :uri: {{ sat_url }}
+  :timeout: {{ sat_timeout }}
+  :org: {{ sat_org }}
+  :lifecycle: {{ sat_lifecycle }}
+  :keep: {{ sat_cv_keep_count }}
+  :promote_cvs: {{ sat_promote_cvs }}
+  :checkrepos: {{ sat_check_repos }}
+:publish:
+{% for contentview in sat_contentviews %}
+  - {{ contentview }}
+{% endfor %}

@@ -1,0 +1,16 @@
+---
+- name: Create promote config file
+  template:
+    src: promote.yml.j2
+    dest: "/var/katello-cvmanager/promote_{{ contentview }}.yml"
+
+- name: update all content views
+  shell: "./cvmanager --config=promote_{{ contentview }}.yml --wait promote"
+  args:
+    chdir: /var/katello-cvmanager/
+  register: "promoted_{{ contentview }}"
+
+- name: Delete publish config file
+  file:
+    path: "/var/katello-cvmanager/promote_{{ contentview }}.yml"
+    state: absent
