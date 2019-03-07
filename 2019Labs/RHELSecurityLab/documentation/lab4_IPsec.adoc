@@ -1,11 +1,11 @@
 = Lab 4: Cloud encryption using RHEL Opportunistic IPsec
 
 == Goal of Lab
-In this lab exercise, you will learn how to deploy Opportunistic IPsec to encrypt
-all host to host communication within an enterprise network. Whenever two
-hosts in the network want to send any kind of traffic, IPsec security will
-automatically activate and encrypt all traffic between those hosts. This
-is also called mesh encryption.
+In this lab exercise, you will learn how to deploy Opportunistic
+IPsec to encrypt all host to host communication within an enterprise
+network. Whenever two hosts in the network want to send any kind of
+traffic, IPsec security will automatically activate and encrypt all
+traffic between those hosts. This is also called mesh encryption.
 
 In this lab exercise, you will learn:
 
@@ -25,17 +25,18 @@ call this Opportunistic IPsec.
 
 There are two machines available to you for this specific lab
 exercise. But as this configuration method's main feature is scalability,
-you can pick up another X.509 certificate and repeat the process for
-any other provided lab VM. However, do be careful.  If you misconfigure
-IPsec and do not allow fallback to cleartext, you can lock yourself
-out of a VM.
+you can pick up another X.509 certificate and repeat the process for any
+other provided lab VM. However, do be careful.  If you misconfigure IPsec
+and do not allow fallback to cleartext, you can lock yourself out of a VM.
 
 == Lab 4.1 Create and Install X.509 certificates
 
-We will need to generate the required X.509 certificates. To make this easier, on ipsec.example.com, there is a script (/root/vpn-cert-gen.py) that generates x.509 certificates for ipsec.example.com and ipsec2.example.com for use with this exercise.
- It also creates certificates for audit.example.com and
-usbguard.example.com if you want to try and add more machines to the encrypted
-mesh network. All our actions are run as root.
+We will need to generate the required X.509 certificates. To make this
+easier, on ipsec.example.com, there is a script (/root/vpn-cert-gen.py)
+that generates x.509 certificates for ipsec.example.com and
+ipsec2.example.com for use with this exercise.  It also creates certificates
+for audit.example.com and usbguard.example.com if you want to try and add
+more machines to the encrypted mesh network. All our actions are run as root.
 
 . If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
@@ -108,7 +109,7 @@ available to libreswan:
 Certificate Nickname                                         Trust Attributes
                                                              SSL,S/MIME,JAR/XPI
 
-ipsec.example.com                                            u,u,u
+mycert                                                       u,u,u
 Certificate Agency (CA) - Test Org                           CT,,
 ....
 
@@ -164,7 +165,7 @@ certificate onto ipsec2.example.com via the workstation VM:
 
 	[lab-user@workstation-GUID ~]$ scp root@ipsec.example.com:/root/labcerts/pkcs12/ipsec2.example.com.p12 .
 
-	[lab-user@workstation-GUID ~]$ scp ipsec2.example.com.p12 root@ipsec2.example.com:/root/
+	[lab-user@workstation-GUID ~]$ scp ipsec2.example.com.p12 /root/oe-cert.conf root@ipsec2.example.com:/root/
 
 . Then we install libreswan, import the certificate on ipsec2.example.com, and configure it for Opportunistc IPsec:
 
@@ -186,7 +187,7 @@ certificate onto ipsec2.example.com via the workstation VM:
 
 [root@ipsec2 ~]# rm /root/ipsec2.example.com.p12
 
-[root@ipsec2 ~]# cp /root/oe-cert.conf /etc/ipsec.d/
+[root@ipsec2 ~]# mv /root/oe-cert.conf /etc/ipsec.d/
 
 [root@ipsec2 ~]# restorecon -Rv /etc/ipsec.d
 
@@ -201,12 +202,9 @@ file with updated leftcert= entry and update the policy groups in
 /etc/ipsec.d/policies/ to match the first two nodes of the cluster. So for each
 added node, you do not need to reconfigure any of the previous nodes, as those
 are already configured to trust the same CA and talk IPsec to the same IP ranges
-as the new nodes. Note the /root/oe-cert.conf file on ipsec2.example.com has
-been configured to use the ipsec2.example.com certificate and is different from
-the file with the same name on the ipsec.example.com which is configured to use
-ipsec.example.com. If you end up adding more nodes into the crypto mesh, for
-example audit.example.com, then you will need to scp one of these files and edit
-it to change the certificate name.
+as the new nodes. In a production setting, you could be able to populate new nodes
+using ansible as all configuration files (other then the PKCS#12 certificate) are
+identical on all the nodes.
 
 == Lab 4.4 Using Opportunistic IPsec
 
@@ -230,7 +228,7 @@ connection.
 . You can check the system logs in /var/log/secure, or you can use one of the
 various status commands available:
 
-	[root@ipsec ~]# ipsec whack --trafficstatus
+	[root@ipsec ~]# ipsec trafficstatus
 	006 #2: "private-or-clear#192.168.0.0/24"[1] ...192.168.0.22, type=ESP, add_time=1523268130, inBytes=1848, outBytes=1848, id='C=CA, ST=Ontario, L=Toronto, O=Test Org, OU=Clients, CN=ipsec.example.com, E=pwouters@redhat.com'
 
 . You can see the non-zero byte counters for IPsec packets that shows the kernel
