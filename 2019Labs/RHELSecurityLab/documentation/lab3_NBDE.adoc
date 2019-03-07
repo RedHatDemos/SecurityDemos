@@ -70,8 +70,65 @@ NOTE: This command performs four steps:
 You should see that there are two keyslots in the header. Keyslot 0 represents the static password you had to enter when booting the machine for the first time. Keyslot 1 is the newly added entry by the `clevis luks bind` command.
 +
 [source, text]
+```
 [root@nbde2 ~]# cryptsetup luksDump /dev/vda2
-<TO BE ADDED>
+LUKS header information
+Version:       	2
+Epoch:         	5
+Metadata area: 	12288 bytes
+UUID:          	65a375f8-16bc-46bd-96a5-d7331e685d9f
+Label:         	(no label)
+Subsystem:     	(no subsystem)
+Flags:       	(no flags)
+
+Data segments:
+  0: crypt
+	offset: 8388608 [bytes]
+	length: (whole device)
+	cipher: aes-xts-plain64
+	sector: 512 [bytes]
+
+Keyslots:
+  0: luks2
+	Key:        512 bits
+	Priority:   normal
+	Cipher:     aes-xts-plain64
+	PBKDF:      argon2i
+	Time cost:  4
+	Memory:     754560
+	Threads:    2
+	Salt:       c7 be d2 42 3c d0 57 53 65 59 bb 62 1f 21 aa ba 
+	            4b 6d c4 82 1f 6b 8f a0 2d 0a 22 5a 4e 5f 4e 88 
+	AF stripes: 4000
+	Area offset:32768 [bytes]
+	Area length:258048 [bytes]
+	Digest ID:  0
+  1: luks2
+	Key:        512 bits
+	Priority:   normal
+	Cipher:     aes-xts-plain64
+	PBKDF:      argon2i
+	Time cost:  4
+	Memory:     831696
+	Threads:    2
+	Salt:       76 f2 20 9e 37 2f 2d 76 42 05 7f 14 83 30 da bc 
+	            ae 33 dc fd 6e 5d 7a 74 f1 b6 dc b1 3d 61 f7 a9 
+	AF stripes: 4000
+	Area offset:290816 [bytes]
+	Area length:258048 [bytes]
+	Digest ID:  0
+Tokens:
+  0: clevis
+	Keyslot:  1
+Digests:
+  0: pbkdf2
+	Hash:       sha256
+	Iterations: 83485
+	Salt:       e8 33 a0 97 1b 5d ac 81 29 30 df fa 5e e0 4a e3 
+	            8b 12 fd 1d 1d 7f f2 74 b1 b5 c7 56 08 2b 9e 76 
+	Digest:     b7 42 05 a6 84 23 e2 26 af d7 2d db bf 21 27 29 
+	            b7 23 26 c1 07 08 52 bc e2 a7 93 75 21 7f 80 b1
+```
 
 == Lab 3.4 Enable Decryption on the Boot Process
 . To enable the early boot system to process the disk binding, enter the following command on *NBDE2*.
