@@ -1,0 +1,64 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+
+  tasks:
+  - name: Enable Ansible repository
+    yum_repository:
+      name: ansible-2.7-rhel-8
+      file: ansible-2.7-rhel-8
+      description: Ansible 2.7 RHEL8
+      baseurl: http://download.devel.redhat.com/nightly/rhel-8/ANSIBLE/latest-ANSIBLE-2.7-RHEL-8/compose/Base/$basearch/os/
+      gpgcheck: no
+
+  - name: Ensure SCAP Security Guide dependencies are installed
+    package:
+      name:
+      - git
+      - make
+      - cmake
+      - openscap-utils
+      - openscap-scanner
+      - scap-workbench
+      - wget  # needed for the NIST test suite for SSG
+# - ansible  # needed for Ansible validation
+      - gedit
+      state: installed
+
+  - name: Ensure SCAP Security Guide dependencies are installed (RHEL7)
+    package:
+      name:
+      - python-jinja2  # needed for the new SSG yaml/jinja2 port
+      - PyYAML
+      - python-pip
+      state: installed
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "7"
+
+  - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL7)
+    pip:
+      name:
+      - pytest
+      - docker
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "7"
+
+  - name: Ensure SCAP Security Guide dependencies are installed (RHEL8)
+    package:
+      name:
+      - python3-jinja2
+      - python3-pytest  # needed for unit tests + coverage
+      - python3-PyYAML
+      state: installed
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
+
+  - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL8)
+    package:
+      name:
+      - podman
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
+
+  - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL8)
+    shell:
+      name:
+      - podman
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
