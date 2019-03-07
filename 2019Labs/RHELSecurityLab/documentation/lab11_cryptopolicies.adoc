@@ -1,0 +1,68 @@
+
+= Lab 11: Crypto Policies
+
+== Goal of Lab
+The goal of this lab is to use the new Crypto Policies tools to have a consistent security configuration across all cryptographic libraries in the system. The lab will also show how to configure the system so that it is FIPS compliant using the new simplified workflow in Red Hat Enterprise Linux 8.
+
+== Introduction
+The idea behind System-wide Crypto Policies is to give Administrator a simple interface to change the security level of a system, so that all cryptographic library follow the same set of rules and enable or disable the same set of cryptographic primitives and protocols.
+
+In the past each application required individual configuration changes to be performed on multiple different configuration files to have the system configured so that it consistently used the same cryptographic primitives across all programs. This process was difficult to maintain and operate.
+
+With the introduction of crypto policies we have made it much simpler to set a default policy for all application. The policy can still be overriden at the application level if exceptions are desired.
+
+== Pre-Configured Items
+The machines have been pre-configure to use a Root CA certificate and individual X509 certificates for the Servers used for testing. The Root CA certificate has been imported in the system trust store so all applications can trust the test certificates used by the servers in the excercise.
+
+== Lab 11.1 Connecting to a Web Server using TLS 1.1
+TLS 1.1 is disabled in RHEL 8 default security policy, so connecting to a TLS 1.1 server will result in an error by client tools. In this excercise we'll explore how to enable the system to connect to legacy systems that are limited to use only TLS 1.0 or TLS 1.1 protocols.
+We will use two tools, curl and wget, as they use two different cryptographic libraries (openSSL and GnuTLS respectively) to show the crypto policy setting work across application and libraries.
+
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
++
+[source]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+----
+
+. Log into the *openscap.example.com* host as *root*.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
+----
+
+. Try to connect to the web server https://crypto2-tls11.example.com:1443 and verify that the connection is refused
++
+[source]
+----
+[root@crypto ~]# curl https://crypto2-tls11.example.com:1443
+curl: (35) error:1409442E:SSL routines:ssl3_read_bytes:tlsv1 alert protocol version
+
+[root@crypto ~]# wget https://crypto2-tls11.example.com:1443
+--2019-03-06 18:47:29--  https://crypto2-tls11.example.com:1443/
+Resolving crypto2-tls11.example.com (crypto2-tls11.example.com)... 192.168.0.7
+Connecting to crypto2-tls11.example.com
+(crypto2-tls11.example.com)|192.168.0.7|:1443... connected.
+GnuTLS: A TLS fatal alert has been received.
+GnuTLS: received alert [70]: Error in protocol version
+Unable to establish SSL connection.
+----
+
+. Now change the system policy to allow legacy protocols
++
+[source]
+----
+[root@crypto ~]# update-crypto-policies --set LEGACY
+Setting system policy to LEGACY
+----
+
+. Try again with curl and wget, the default page returns the simple text *WORKS!*
++
+[source]
+----
+[root@crypto ~]# curl https://crypto2.example.com
+WORKS!
+[root@crypto ~]# wget -q -O - https://crypto2.example.com
+WORKS!
+----
