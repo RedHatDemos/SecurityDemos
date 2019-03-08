@@ -1,0 +1,474 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: pqc-support
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: sonarqube-custom
+    name: sonarqube-custom
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: sonarqube-custom:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      dockerStrategy: {}
+      type: Docker
+    triggers:
+    - github:
+        secret: Of8lNQXMyWXDzvkKGSyD
+      type: GitHub
+    - generic:
+        secret: AHRv1WxGhSJGttxEuLPM
+      type: Generic
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: nexus-custom
+    name: nexus-custom
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: nexus-custom:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      dockerStrategy: {}
+      type: Docker
+    triggers:
+    - github:
+        secret: Of8lNQXMyWXDzvkKGSyD
+      type: GitHub
+    - generic:
+        secret: AHRv1WxGhSJGttxEuLPM
+      type: Generic      
+#- apiVersion: v1
+#  kind: ImageStream
+#  metadata:
+#    creationTimestamp: null
+#    labels:
+#      app: gogs
+#    name: gogs
+#  spec:
+#    tags:
+#    - annotations:
+#        openshift.io/imported-from: docker.io/gogs/gogs
+#      from:
+#        kind: DockerImage
+#        #name: docker-registry.default.svc.cluster.local:5000/pqc-support/gogs:latest
+#        name: docker.io/gogs/gogs
+#      #generation: 2
+#      importPolicy: {}
+#      name: latest
+#      referencePolicy:
+#        type: Source
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: nexus-custom
+    name: nexus-custom
+  spec:
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc.cluster.local:5000/pqc-support/nexus-custom:latest
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: sonarqube-custom
+    name: sonarqube-custom
+  spec:
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker-registry.default.svc.cluster.local:5000/pqc-support/sonarqube-custom:latest
+      generation: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
+#- apiVersion: v1
+#  kind: DeploymentConfig
+#  metadata:
+#    annotations:
+#    creationTimestamp: null
+#    generation: 1
+#    labels:
+#      app: gogs
+#    name: gogs
+#  spec:
+#    replicas: 1
+#    selector:
+#      app: gogs
+#      deploymentconfig: gogs
+#    strategy:
+#      activeDeadlineSeconds: 21600
+#      resources: {}
+#      rollingParams:
+#        intervalSeconds: 1
+#        maxSurge: 25%
+#        maxUnavailable: 25%
+#        timeoutSeconds: 600
+#        updatePeriodSeconds: 1
+#      type: Rolling
+#    template:
+#      metadata:
+#        annotations:
+#          openshift.io/generated-by: OpenShiftNewApp
+#        creationTimestamp: null
+#        labels:
+#          app: gogs
+#          deploymentconfig: gogs
+#      spec:
+#        containers:
+#        - image: docker.io/gogs/gogs:latest
+#          imagePullPolicy: Always
+#          livenessProbe:
+#            failureThreshold: 30
+#            httpGet:
+#              path: /
+#              port: 3000
+#              scheme: HTTP
+#            initialDelaySeconds: 300
+#            periodSeconds: 10
+#            successThreshold: 1
+#            timeoutSeconds: 3
+#          name: gogs
+#          ports:
+#          - containerPort: 22
+#            protocol: TCP
+#          - containerPort: 3000
+#            protocol: TCP
+#          readinessProbe:
+#            failureThreshold: 3
+#            httpGet:
+#              path: /
+#              port: 3000
+#              scheme: HTTP
+#            initialDelaySeconds: 3
+#            periodSeconds: 5
+#            successThreshold: 1
+#            timeoutSeconds: 10
+#          resources: {}
+#          terminationMessagePath: /dev/termination-log
+#          volumeMounts:
+#          - mountPath: /data
+#            name: gogs-volume-1
+#        dnsPolicy: ClusterFirst
+#        restartPolicy: Always
+#        securityContext: {}
+#        terminationGracePeriodSeconds: 30
+#        volumes:
+#        - name: gogs-volume-1
+#          persistentVolumeClaim:
+#            claimName: pvc-gogs
+#    test: false
+#    triggers:
+#    - type: ConfigChange
+#    - imageChangeParams:
+#        automatic: true
+#        containerNames:
+#        - gogs
+#        from:
+#          kind: ImageStreamTag
+#          name: gogs:latest
+#          namespace: pqc-support
+#      type: ImageChange
+#- apiVersion: "v1"
+#  kind: "PersistentVolumeClaim"
+#  metadata:
+#    name: "pvc-gogs"
+#  spec:
+#    accessModes:
+#      - "ReadWriteOnce"
+#    resources:
+#      requests:
+#        storage: "1Gi"
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: nexus-custom
+    name: nexus-custom
+  spec:
+    replicas: 1
+    selector:
+      app: nexus-custom
+      deploymentconfig: nexus-custom
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: nexus-custom
+          deploymentconfig: nexus-custom
+      spec:
+        containers:
+        #- image: docker.io/sonatype/nexus3:latest
+        - image: image-registry.openshift-image-registry.svc:5000/pqc-support/nexus-custom
+          imagePullPolicy: Always
+          env:
+          - name: INSTALL4J_ADD_VM_PARAMS
+            value: "-Xms1024m -Xmx1024m -XX:MaxDirectMemorySize=1024m -Djava.util.prefs.userRoot=/nexus-data/javaprefs"
+          livenessProbe:
+            failureThreshold: 30
+            httpGet:
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 300
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: nexus-custom
+          ports:
+          - containerPort: 8081
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 10
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /nexus-data
+            name: nexus-volume-1
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: nexus-volume-1
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - nexus-custom
+        from:
+          kind: ImageStreamTag
+          name: nexus-custom:latest
+          namespace: pqc-support
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: sonarqube-custom
+    name: sonarqube-custom
+  spec:
+    replicas: 1
+    selector:
+      app: sonarqube-custom
+      deploymentconfig: sonarqube-custom
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: sonarqube-custom
+          deploymentconfig: sonarqube-custom
+      spec:
+        containers:
+        - image: image-registry.openshift-image-registry.svc:5000/pqc-support/nexus-custom
+          env:
+          - name: SONARQUBE_WEB_JVM_OPTS
+            value: "-Xms1024m -Xmx1024m -XX:MaxMetaspaceSize=512m"
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 300
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: sonarqube-custom
+          ports:
+          - containerPort: 9000
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 10
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /opt/sonarqube/data
+            name: sonarqube-custom-volume-1
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: sonarqube-custom-volume-1
+          emptyDir: {}
+#          persistentVolumeClaim:
+#            claimName: pvc-sonarqube-data
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - sonarqube-custom
+        from:
+          kind: ImageStreamTag
+          name: sonarqube-custom:latest
+          namespace: pqc-support
+      type: ImageChange
+#- apiVersion: "v1"
+#  kind: "PersistentVolumeClaim"
+#  metadata:
+#    name: "pvc-sonarqube-plugins"
+#  spec:
+#    accessModes:
+#      - "ReadWriteOnce"
+#    resources:
+#      requests:
+#         storage: "1Gi"
+#- apiVersion: "v1"
+#  kind: "PersistentVolumeClaim"
+#  metadata:
+#    name: "pvc-sonarqube-data"
+#  spec:
+#    accessModes:
+#      - "ReadWriteOnce"
+#    resources:
+#      requests:
+#         storage: "1Gi"
+    
+#- apiVersion: v1
+#  kind: Service
+#  metadata:
+#    labels:
+#      app: gogs
+#    name: gogs
+#  spec:
+#    ports:
+#    - name: 22-tcp
+#      port: 22
+#      protocol: TCP
+#      targetPort: 22
+#    - name: 3000-tcp
+#      port: 3000
+#      protocol: TCP
+#      targetPort: 3000
+#    selector:
+#      app: gogs
+#      deploymentconfig: gogs
+#    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: nexus
+    name: nexus
+  spec:
+    ports:
+    - name: 8081-tcp
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      app: nexus-custom
+      deploymentconfig: nexus-custom
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: sonarqube-custom
+    name: sonarqube-custom
+  spec:
+    ports:
+    - name: 9000-tcp
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+    selector:
+      app: sonarqube-custom
+      deploymentconfig: sonarqube-custom
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: "v1"
+  kind: "PersistentVolumeClaim"
+  metadata:
+    name: "maven-cache"
+  spec:
+    accessModes:
+      - "ReadWriteOnce"
+    resources:
+      requests:
+        storage: "1Gi"
