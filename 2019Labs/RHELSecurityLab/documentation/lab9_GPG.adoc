@@ -38,7 +38,7 @@ Once you have created a new key pair, you can export these keys to identify your
 
 . Now let's generate your new key pair as *root* on *servera.example.com*.
 
-	[root@servera ~]# gpg2 --gen-key
+	[root@servera ~]# gpg2 --full-generate-key
 
 . You will be asked to provide the following information:
 
@@ -70,7 +70,7 @@ In this step we will show you how to encrypt and un-encrypt a document for priva
 
 	[root@servera ~]# cat sensitive.txt
 
-. Now we can encrypt the file by typing the following command. You will be asked to enter the ID (the email address) you used when creating your key, followed by a carriage return to complete the task.
+. Now we can encrypt the file by typing the following command. You will be asked to enter the User ID you used when creating your key, followed by a carriage return to complete the task.
 
 	[root@servera ~]# gpg2 -e sensitive.txt
 
