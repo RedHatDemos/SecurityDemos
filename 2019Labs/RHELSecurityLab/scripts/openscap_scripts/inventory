@@ -1,0 +1,1 @@
+openscap.example.com ansible_python_interpreter=/usr/libexec/platform-python ansible_user=root
