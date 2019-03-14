@@ -63,7 +63,7 @@ Organizations often create a locked down standard operating build for provisioni
 . The previous step does take a few minutes, so you may want to read ahead as you wait.  Upon completion you should see output similar to:
 +
 [source]
-AIDE, version 0.15.1
+AIDE, version 0.16.1
 ### AIDE database at /var/lib/aide/aide.db.new.gz initialized.
 
 . To complete the initialization, rename or copy the database file by removing the *new.* from the generated file name as follows:
@@ -71,7 +71,7 @@ AIDE, version 0.15.1
 [source]
 [root@servera ~]# mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
 
-. You now have a baseline scan derived from the rules setup in /etc/aide.conf.  Note that we used the --init parameter (or -i) to initialize the baseline.  In subsequent scans, we will use --check (or -C) to check for changes.  Run a check as follows:
+. You now have a baseline scan derived from the rules setup in /etc/aide.conf.  Note that we used the --init parameter (or -i) to initialize the baseline.  In subsequent scans, we will use --check (or -c) to check for changes.  Run a check as follows:
 +
 [source]
 [root@servera ~]#  aide --check
@@ -79,7 +79,7 @@ AIDE, version 0.15.1
 . This scan should not disclose any deviations from the baseline and return:
 +
 [source,text]
-AIDE, version 0.15.1
+AIDE, version 0.16.1
 ### All files match AIDE database. Looks okay!
 
 === Lab 7.3 Modifying Permissions and Contents of a File
@@ -88,27 +88,27 @@ AIDE, version 0.15.1
 ----
 [root@servera ~]# less /etc/aide.conf
 
-Using the less command, you can jump to line 273 by typing 273g. When you do that, you should see these two lines at the top:
+Using the less command, you can jump to line 200 by typing 200g. When you do that, you should see these two lines at the top:
 
-/etc/ssh/sshd_config$ CONTENT_EX
-/etc/ssh/ssh_config$ CONTENT_EX
+/etc/ssh/sshd_config$ LSPP
+/etc/ssh/ssh_config$ LSPP
 ----
-. What this means is that AIDE is monitoring these two files and is looking specifically for changes to extended content.  At line 88, you will find the definition for CONTENT_EX:
+. What this means is that AIDE is monitoring these two files and is looking specifically for changes to content based on sha256 and sha512 hashes.  At line 80, you will find the definition for LSPP:
 +
 ----
 [root@servera ~]# less /etc/aide.conf
 
-Using the less command, you can jump to line 88 by typing 88g. When you do that, you should see these lines at the top:
+Using the less command, you can jump to line 80 by typing 80g. When you do that, you should see these lines at the top:
 
-# Extended content + file type + access.
-CONTENT_EX = sha256+ftype+p+u+g+n+acl+selinux+xattrs
+# Just do sha256 and sha512 hashes
+LSPP = FIPSR+sha512
 ----
 . A review of the default rules beginning at line 26 lists the parameters that are included.  For this exercise we will alter the permissions and content of /etc/ssh/sshd_config, and rerun our scan.
 +
 ----
 [root@servera ~]# less /etc/aide.conf
 
-Using the less command, you can jump to line 26 by typing 26g. When you do that you should see the list of the parameters that are included. Type q to exit less.
+Using the less command, you can jump to line 26 by typing 26g. When you do that you should see the list of the parameters that are included. Type q to exit less, and then type the following commands.
 
 [root@servera ~]# chmod 0644 /etc/ssh/sshd_config
 [root@servera ~]# vim /etc/ssh/sshd_config
@@ -127,7 +127,7 @@ Using the less command, you can jump to line 26 by typing 26g. When you do that 
 +
 [source]
 [root@servera ~]$ aide --check
-AIDE 0.15.1 found differences between database and filesystem!!
+AIDE 0.16.1 found differences between database and filesystem!!
 Start timestamp: 2018-02-23 12:53:21
 Summary:
   Total number of files:    58340
@@ -154,7 +154,7 @@ File: /etc/ssh/sshd_config
 
 . Using vim, jump to the end of the /etc/ssh/sshd_config file by typing *Shift + g*. Then, delete the last time that we added previously by pressing *dd* on the last line, __UseDNS no__. Then, save and exit by pressing *:wq!*
 
-. Run *aide --check* again to verify that you have reverted back correctly.
+. Run *aide --check* again to verify that you have reverted back correctly.  It will show a change in the timestamp, but not to the content.
 +
 [source]
 [root@servera ~]# aide --check

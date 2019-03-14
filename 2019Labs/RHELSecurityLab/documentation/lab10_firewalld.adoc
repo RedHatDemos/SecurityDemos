@@ -148,11 +148,6 @@ success
 [root@servera ~]# firewall-cmd --list-services
 ssh dhcpv6-client dns
 
-. If you want to view the ports in the service, you can still use the iptables command, even though the iptable service is not running:
-+
-[source]
-[root@servera ~]# iptables -L -n
-
 . You can remove this rule by running the following command:
 +
 [source]
@@ -179,13 +174,13 @@ success
 <service>
   <short>IdM</short>
   <description>Red Hat Identity Manager</description>
-  <port protocol="tcp" port="53"/>
   <port protocol="tcp" port="80"/>
   <port protocol="tcp" port="443"/>
   <port protocol="tcp" port="88"/>
   <port protocol="tcp" port="464"/>
   <port protocol="tcp" port="389"/>
   <port protocol="tcp" port="636"/>
+  <port protocol="tcp" port="53"/>
   <port protocol="udp" port="53"/>
   <port protocol="udp" port="88"/>
   <port protocol="udp" port="464"/>
@@ -207,7 +202,7 @@ success
 [source]
 [root@servera services]# firewall-cmd --add-service=idm --permanent
 success
-[root@servera services]# firewall-cmd --add-service=idm
+[root@servera services]# firewall-cmd --reload
 success
 [root@servera services]# firewall-cmd --list-services
 ssh dhcpv6-client idm
