@@ -2,7 +2,7 @@
 
 === Accessing your dedicated lab environment using your provided GUID
 
-. Follow the directions  https://github.com/RedHatDemos/SecurityDemos/blob/master/RHELSecurityLabSummit/documentation/guidgrabber.adoc[here^] in order to obtain your lab GUID. This GUID will be used to access your unique lab environment.
+. Go https://www.opentlc.com/gg/gg.cgi?profile=generic_tester[here^] in order to obtain your lab GUID. This GUID will be used to access your unique lab environment.
 
 
 
