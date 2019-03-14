@@ -272,26 +272,31 @@ Putting the machine into compliance (for example by changing its configuration) 
  [root@openscap]# ansible-playbook -i "localhost," -c local --check --skip-tags aide_build_database,firewalld_sshd_port_enabled playbook.yml
 +
 ....
-...
-TASK [Import RedHat GPG key] ******************************************************************************************************************************************************************
+[WARNING]: While constructing a mapping from /root/playbook.yml, line 26, column 7, found a duplicate dict key (var_accounts_passwords_pam_faillock_deny). Using last defined value only.
+
+[WARNING]: While constructing a mapping from /root/playbook.yml, line 26, column 7, found a duplicate dict key (var_accounts_passwords_pam_faillock_unlock_time). Using last defined value only.
+
+[WARNING]: While constructing a mapping from /root/playbook.yml, line 26, column 7, found a duplicate dict key (var_accounts_passwords_pam_faillock_fail_interval). Using last defined value only.
+
+
+PLAY [all] *********************************************************************
+
+TASK [Gathering Facts] *********************************************************
 ok: [localhost]
 
-TASK [Find All Yum Repositories] **************************************************************************************************************************************************************
-ok: [localhost]
-
-TASK [Ensure gpgcheck Enabled For All Yum Package Repositories] *******************************************************************************************************************************
-changed: [localhost] => (item={u'uid': 0, u'woth': False, u'mtime': 1521757296.0285208, u'inode': 301678, u'isgid': False, u'size': 82, u'isuid': False, u'isreg': True, u'gid': 0, u'ischr': False, u'wusr': True, u'xoth': False, u'islnk': False, u'nlink': 1, u'issock': False, u'rgrp': True, u'path': u'/etc/yum.repos.d/rhel.repo', u'xusr': False, u'atime': 1523305034.24276, u'isdir': False, u'ctime': 1521757296.029521, u'isblk': False, u'wgrp': False, u'xgrp': False, u'dev': 64771, u'roth': True, u'isfifo': False, u'mode': u'0644', u'rusr': True})
-changed: [localhost] => (item={u'uid': 0, u'woth': False, u'mtime': 1523307691.5074177, u'inode': 83765, u'isgid': False, u'size': 143282, u'isuid': False, u'isreg': True, u'gid': 0, u'ischr': False, u'wusr': True, u'xoth': False, u'islnk': False, u'nlink': 1, u'issock': False, u'rgrp': True, u'path': u'/etc/yum.repos.d/redhat.repo', u'xusr': False, u'atime': 1523307693.8396184, u'isdir': False, u'ctime': 1523307691.5084178, u'isblk': False, u'wgrp': False, u'xgrp': False, u'dev': 64771, u'roth': True, u'isfifo': False, u'mode': u'0644', u'rusr': True})
-
-TASK [Ensure YUM Removes Previous Package Versions] *******************************************************************************************************************************************
+TASK [Disable GSSAPI Authentication] *******************************************
 changed: [localhost]
 
-TASK [Check existence of yum on Fedora] *******************************************************************************************************************************************************
-skipping: [localhost]
+TASK [Disable SSH Root Login] **************************************************
+changed: [localhost]
 
-TASK [Ensure GPG check Enabled for Local Packages (Yum)] **************************************************************************************************************************************
-changed: [localhost] => (item=/etc/yum.conf)
 ...
+
+TASK [Set rsyslog remote loghost] **********************************************
+changed: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=458  changed=260  unreachable=0    failed=0  
 ....
 
 <<top>>
