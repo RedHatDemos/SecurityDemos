@@ -20,7 +20,7 @@
 
 *Steve Grubb*, Senior Principal Software Engineer - RHEL Security, Red Hat
 
-*Richard Guy Briggs*, Senior Software Engineer - RHEL Security, Red Hat
+*Richard Guy Briggs*, Senior Software Engineer - RHEL Security, Red Hats
 
 
 == Overview and Prerequisites:
