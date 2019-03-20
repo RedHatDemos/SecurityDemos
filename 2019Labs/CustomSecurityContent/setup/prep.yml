@@ -8,7 +8,7 @@
   vars:
     LABS_LOCAL: "/home/lab-user/labs_data"
     LABS_CONTENT_PART: "2019Labs/CustomSecurityContent/documentation"
-    LAB_2_LABEL: "2_content_creation"
+    LAB_0_LABEL: "lab0_introduction"
     CACC_LOCAL: "/home/lab-user/complianceAsCode"
     LABS_ROOT: "/home/lab-user/labs"
 
@@ -33,6 +33,7 @@
       state: directory
       mode: "u=rwx"
       path: /root/.ssh
+    become_user: root
 
   - name: Copy the RSA key pair to the root user
     copy:
@@ -55,18 +56,32 @@
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
     become_user: root
 
-  - name: Creates directory for Lab 2
+  - name: Creates directory for Lab 0
     file:
-      path: "{{ LABS_ROOT }}/{{ LAB_2_LABEL }}"
+      path: "{{ LABS_ROOT }}/{{ LAB_0_LABEL }}"
       state: directory
 
-  - name: Clone the CaC/c Git for Lab 2
+  - name: Clone the CaC/c Git for Lab 0
     git:
       repo: "{{ CACC_LOCAL }}"
       version: 'v0.1.43'
-      dest: "{{ LABS_ROOT }}/{{ LAB_2_LABEL }}/complianceAsCode"
+      dest: "{{ LABS_ROOT }}/{{ LAB_0_LABEL }}/content"
+      force: yes
 
-  - name: Copy the lab 2 documentation to the working directory
+  - name: Copy the lab 0 documentation to the working directory
     copy:
-      src: "{{ LABS_LOCAL }}/{{ LABS_CONTENT_PART }}/{{ LAB_2_LABEL }}"
-      dest: "{{ LABS_ROOT }}/{{ LAB_2_LABEL }}/documentation"
+      src: "{{ LABS_LOCAL }}/{{ LABS_CONTENT_PART }}/{{ LAB_0_LABEL }}"
+      dest: "{{ LABS_ROOT }}/{{ LAB_0_LABEL }}/documentation"
+    when: False
+
+  - name: Introduce a typo
+    replace:
+      dest: "{{ LABS_ROOT }}/{{ LAB_0_LABEL }}/content/linux_os/guide/system/accounts/accounts-pam/password_quality/password_quality_pwquality/accounts_password_pam_minlen/rule.yml"
+      regexp: '(    after pam_pwquality to set minimum password length requirements.)'
+      replace: '\1\n\1'
+
+  - name: Introduce a typo
+    replace:
+      dest: "{{ LABS_ROOT }}/{{ LAB_0_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml"
+      regexp: '(    Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that)'
+      replace: '\1\n\1'
