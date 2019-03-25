@@ -25,7 +25,7 @@ We will use two tools, curl and wget, as they use two different cryptographic li
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
-. Log into the *openscap.example.com* host as *root*.
+. Log into the *crypto.example.com* host as *root*.
 +
 [source]
 ----
@@ -42,8 +42,7 @@ curl: (35) error:1409442E:SSL routines:ssl3_read_bytes:tlsv1 alert protocol vers
 [root@crypto ~]# wget https://crypto2-tls11.example.com:1443
 --2019-03-06 18:47:29--  https://crypto2-tls11.example.com:1443/
 Resolving crypto2-tls11.example.com (crypto2-tls11.example.com)... 192.168.0.7
-Connecting to crypto2-tls11.example.com
-(crypto2-tls11.example.com)|192.168.0.7|:1443... connected.
+Connecting to crypto2-tls11.example.com (crypto2-tls11.example.com)|192.168.0.7|:1443... connected.
 GnuTLS: A TLS fatal alert has been received.
 GnuTLS: received alert [70]: Error in protocol version
 Unable to establish SSL connection.
@@ -61,8 +60,59 @@ Setting system policy to LEGACY
 +
 [source]
 ----
-[root@crypto ~]# curl https://crypto2.example.com
+[root@crypto ~]# curl https://crypto2-tls11.example.com:1443
 WORKS!
-[root@crypto ~]# wget -q -O - https://crypto2.example.com
+[root@crypto ~]# wget -q -O - https://crypto2-tls11.example.com:1443
 WORKS!
+----
+
+== Lab 11.2 Connecting to a Web Server using a SHA-1 Certificate
+SHA-1 Certificates are still enable in RHEL 8 default security policy for compatibility reasons. In this excercise we'll explore how to change the system to the FUTURE policy which disables SHA-1 signatures.
+We will use two tools, curl and wget, as they use two different cryptographic libraries (openSSL and GnuTLS respectively) to show the crypto policy setting work across application and libraries.
+
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
++
+[source]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+----
+
+. Log into the *crypto.example.com* host as *root*.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
+----
+
+. Try to connect to the web server https://crypto2-sha1.example.com:2443 and verify that the connection is accepted
++
+[source]
+----
+[root@crypto ~]# curl https://crypto2-sha1.example.com:2443
+WORKS!
+[root@crypto ~]# wget -q -O - https://crypto2-sha1.example.com:2443
+WORKS!
+----
+
+. Now change the system policy to disable SHA-1
++
+[source]
+----
+[root@crypto ~]# update-crypto-policies --set FUTURE
+Setting system policy to FUTURE
+----
+
+. Try again with curl and wget, and see that the connection is refused!
++
+[source]
+----
+[root@crypto ~]# curl https://crypto2-sha1.example.com:2443
+curl: (60) SSL certificate problem: EE certificate key too weak
+
+[root@crypto ~]# wget https://crypto2-sha1.example.com:2443
+--2019-03-06 18:47:29--  https://crypto2-sha1.example.com:2443/
+Resolving crypto2-sha1.example.com (crypto2-sha1.example.com)... 192.168.0.7
+Connecting to crypto2-sha1.example.com (crypto2-sha1.example.com)|192.168.0.7|:2443... connected.
+ERROR: The certificate of 'crypto2-sha1.example.com' is not trusted.
+ERROR: The certificate of 'crypto2-sha1.example.com' was signed using an insecure algorithm.
 ----
