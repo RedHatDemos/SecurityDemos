@@ -51,14 +51,14 @@
       state: installed
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
 
-  - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL8)
-    package:
+  - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL7)
+    pip:
       name:
-      - podman
+      - ansible
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
 
   - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL8)
-    shell:
+    package:
       name:
       - podman
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
