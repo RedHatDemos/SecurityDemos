@@ -4,9 +4,9 @@
 The goal of this lab exercise is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
 
 == Introduction
-OpenSCAP is a family of open source SCAP tools and content that help users create standard security checklists for enterprise systems. Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certifications and accreditations easier.
+Security Content Automation Protocol (SCAP) is collection of standards aiming to enable automated vulnerability and configuration compliance. OpenSCAP is a family of open source SCAP tools, and SCAP Security Guide (further as SSG) is collection of xml-based SCAP benchmarks and content in other formats to help with compliance configuration assessment of Red Hat Enterprise Linux machines. Natively shipping in Red Hat Enterprise Linux, this provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certifications and accreditations easier.
 
-OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this lab exercise, we will focus on one-off scanning to get started.
+OpenSCAP and SSG allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this lab exercise, we will focus on one-off scanning to get started.
 
 == Pre-Configured Set Up Steps (Already done for you)
 All of the steps in this pre-configured set up section have already been done for you. This section is for your reference only so you know what steps have already been pre-configured in this lab environment for you.
@@ -16,11 +16,11 @@ All of the steps in this pre-configured set up section have already been done fo
 . Specifically, we pre-installed *openscap-scanner*, *scap-security-guide*, and *Ansible*. Take a look at the comments above each installation command for more details.
 +
  # the tool that performs the scanning
- [root@openscap]# yum install openscap-scanner
+ [root@openscap]# dnf install openscap-scanner
  # project that brings in security policies we will load and test agains
- [root@openscap]# yum install scap-security-guide
+ [root@openscap]# dnf install scap-security-guide
  # we will need this later for Ansible based remediations
- [root@openscap]# yum install ansible python-firewall
+ [root@openscap]# dnf install ansible python-firewall
 
 . You can verify a successful installation by running:
 +
@@ -42,10 +42,10 @@ All of the steps in this pre-configured set up section have already been done fo
 +
 Notice that this command outputs the OpenSCAP version and versions of supported standards. If during your own installation it says `oscap` command not found, you need to install the OpenSCAP tooling since this means that OpenSCAP has not been installed successfully.
 
-. Finally, SCAP Workbench has also been installed on the *workstation.example.com* workstation bastion host for you.
+. Finally, SCAP Workbench has also been installed on the *openscap.example.com* server host for you.
 +
- # GUI tool for scanning and content customization, a front-end for OpenSCAP
- [root@workstation] yum install scap-workbench
+ # GUI tool for scanning and benchmark customization, a front-end for OpenSCAP
+ [root@openscap] dnf install scap-workbench
 
 == Lab 1.1 Security scanning with OpenSCAP
 . If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
@@ -74,7 +74,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
  /usr/share/xml/scap/ssg/content/ssg-rhel8-xccdf.xml
  ...
 
-. Notice that the provided content in `scap-security-guide` covers a wide range of security baselines such as PCI-DSS, STIG, C2S, Common, CJIS, and others. Also notice that Ansible remediation playbooks are included for these various security baselines as well in the provided content in the `scap-security-guide`. 
+. Notice that content provided in `scap-security-guide` covers a wide range of security baselines. For Red Hat Enterprise Linux 8, OSPP (Protection Profile for General Purpose Operating Systems) and PCI-DSS (Payment Card Industry Data Security Standard) profiles are available. There are also various formats in which this is provided - human readable HTML guides, SCAP benchmarks, but also Ansible remediation playbooks. 
 
 . Move to the `content` folder so we can avoid typing long paths:
 +
@@ -85,7 +85,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
 ----
  [root@openscap]# oscap info ssg-rhel8-ds.xml
 ----
-Notice that there are two compliance profiles included. OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS..
+You will get print out of contents - aforementioned two compliance profiles. OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS..
 
  . Next, let's perform our first baseline testing scan with the vanilla OSPP profile. Notice in our command below that we can skip the profile ID prefix to make the command simpler. The real ID is xccdf_org.ssgproject.content_profile_ospp.
 
@@ -128,7 +128,7 @@ image::images/scap_report_pass.png[HTML report: A rule that is passing]
 
 image::images/scap_report_fail.png[HTML report: A rule that is failing]
 
-== Lab 1.2 Customizing existing SCAP security content using SCAP workbench
+== Lab 1.2 Customizing existing SCAP benchmarks using SCAP workbench
 . Now, go back to your *Lab Information* webpage from the *Lab 0 Setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
