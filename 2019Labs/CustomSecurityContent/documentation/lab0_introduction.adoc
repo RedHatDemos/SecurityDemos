@@ -15,13 +15,8 @@
 
 == What have we done for you
 
-* We have cloned the `ComplianceAsCode` repository to the content directory.
-* We have installed dependencies that are required for the content build using dnf install:
-** generic build utilities: cmake, make,
-** utilities for generating SCAP content: openscap-utils, and finally
-** python dependencies for putting content together: python3-pyyaml, python3-jinja2.
+include::what_have_we_done.adoc[]
 * We have edited the project's source code and introduced some modifications, so there are things to do.
-
 
 == Hands-on
 
