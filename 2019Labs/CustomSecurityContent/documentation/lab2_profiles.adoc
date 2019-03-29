@@ -2,10 +2,6 @@
 
 :imagesdir: images
 
-Prerequisites:
-
-* Have a cloned ComplianceAsCode repository. If you haven’t cloned ComplianceAsCode repository, run `git@github.com:ComplianceAsCode/content.git`.
-
 == Introduction
 
 Imagine that your company has approved an internal security policy that enforces certain configuration of laptops travelling outside the company site. Your task is to implement an automated way of checking the laptop configuration. In this track, we will show how to solve the task using ComplianceAsCode.
