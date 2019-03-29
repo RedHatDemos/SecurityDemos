@@ -343,6 +343,16 @@ severity: medium
 +
 . Add the rule ID to the profile selections
 ** As described in the previous section, you need to add the ID of your new rule (`package_hexchat_installed`) to the selections list in your profile (`travel.profile`).
+. Add the package to the list of packages
+** We have a template that will generate the automated checks in Open Vulnerability and Assesment Language (OVAL), Ansible, Bash, Anaconda and Puppet languages.
+** There are multiple templates that can generate different checks. However, not everything is covered by template. Writing OVAL from scratch is discussed in the third track of this lab.
+** You only need to add the `hexchat` package to the list of packages.
++
+----
+vim rhel8/templates/csv/packages_installed.csv
+----
++
+** Add `hexchat` as a new line to this file and save the file.
 . Build the content
 +
 ----
