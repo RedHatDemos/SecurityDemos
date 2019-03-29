@@ -283,8 +283,11 @@ Now, you can use the new profile that you created in previous Subsections in ord
 ----
 +
 . Check the scan results.
-** In your terminal you see all 4 rules, and that the 3 of them were evaluated.
-** TODO: screenshot of a terminal
+** In your terminal you see all 3 rules, and that the 2 of them were evaluated.
++
+.The output of `oscap` tool evaluating the travel profile.
+image::2-02-terminal.png[Terminal]
++
 . Find out the details in the HTML report.
 +
 ----
@@ -293,8 +296,10 @@ firefox report.html
 +
 ** The structure of the HTML report is similar to the HTML guide, but it contains the evaluation results.
 ** After clicking on the rule title, you can see the detailed rule results.
-** TODO: screenshot of the rule detail in HTML report.
 ** For example, you can see that the rule Set Interactive Session Timeout failed because on the target system there was not any `TMOUT` entry in `/etc/profile`.
+
+.Details of the rule evaluation displayed in the HTML report.
+image::2-03-report.png[Report]
 
 
 == Creating a new rule from scratch
@@ -356,7 +361,9 @@ severity: medium
 firefox build/guides/ssg-rhel8-guide-travel.html
 ----
 ** A Firefox window will open and you will see your Travel profile which contains 4 rules. You should see your new rule there.
-** TODO: screenshot of the guide where a new rule is present.
+
+.New rule Install Hexchat Application displayed in HTML guide
+image::2-04-rule.png[New rule]
 
 For more details about the rule.yml format, please refer to https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules
 
