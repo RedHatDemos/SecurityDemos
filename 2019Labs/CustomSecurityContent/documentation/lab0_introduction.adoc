@@ -20,23 +20,7 @@ include::what_have_we_done.adoc[]
 
 == Hands-on
 
-
-=== Before you start
-
-* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
-* Make sure that you are in the project root when you start - run
-+
-.....
-cd /home/lab-user/labs/lab0_introduction/content
-.....
-+
-in the terminal.
-
-* For best experience, open one more terminal window and also navigate to the project root in that one as well.
-* Open the file explorer and also navigate to the project root.
-* Finally, open the Firefox browser.
-
-image::0-01-setup.png[]
+include::before_you_start.adoc[]
 
 === Build the content
 

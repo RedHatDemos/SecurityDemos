@@ -23,6 +23,8 @@ Imagine that your company has approved an internal security policy that enforces
 
 include::what_have_we_done.adoc[]
 
+include::before_you_start.adoc[]
+
 == Creating a new empty profile
 
 In ComplianceAsCode we have multiple profiles. Simply said, a profile is a set of rules. A profile represents a specific security policy.
