@@ -1,0 +1,353 @@
+= Create your own security policy from scratch
+
+Prerequisites:
+
+* Have a cloned ComplianceAsCode repository. If you haven’t cloned ComplianceAsCode repository, run `git@github.com:ComplianceAsCode/content.git`.
+
+== Introduction
+
+Imagine that your company has approved an internal security policy that enforces certain configuration of laptops travelling outside the company site. Your task is to implement an automated way of checking the laptop configuration. In this track, we will show how to solve the task using ComplianceAsCode.
+
+== What will you learn:
+
+* ... how to create a new profile in ComplianceAsCode that will represent your company security policy
+* ... what are “rules” and where they can be found in ComplianceAsCode
+* ... how to choose rules and add them into your new profile
+* ... how to customize these rules by setting variable values
+* ... how to create a new rule
+* ... how to scan your system against the profile you created
+
+== What have we done for you
+
+* We have cloned the ComplianceAsCode repository to the content directory.
+* We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
+** generic build utilities: `cmake`, `make`,
+** utilities for generating SCAP content: `openscap-utils`,
+** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
+
+== Creating a new empty profile
+
+In ComplianceAsCode we have multiple profiles. Simply said, a profile is a set of rules. A profile represents a specific security policy.
+
+Let’s create a new “Travel” profile for Red Hat Enterprise Linux 8. The profile will represent your company new security policy for laptops who travel.
+
+. Go to the Red Hat Enterprise Linux 8 profiles directory.
++
+----
+cd rhel8/profiles
+----
++
+** In ComplianceAsCode, we have policies based on products which are operating systems or applications, eg. Red Hat Enterprise Linux 8, OpenShift Container Platform 3. The products are represented by directories in the root of the ComplianceAsCode repository, eg. `rhel7`, `rhel8`, `ocp3` directories.
+** Each product has a different set of profiles. The profiles represent a specific policy or benchmark, eg. “Protection profile for general purpose operating systems”. The profiles are located in profiles directory in the product directory. The profiles are represented by a simple YAML (YAML Ain't Markup Language) file.
+. Create new file `travel.profile` there and open it in the editor.
++
+----
+vim travel.profile
+----
++
+** Notice that there are already some `.profile` files in the directory. You can get inspired by them.
+. Create the basic structure and fill in the profile title and description as specified in the frame.
++
+----
+documentation_complete: true
+
+title: Travel profile for corporate laptops
+
+description: This profile represents settings which are required by company security policy for employee laptops.
+
+selections:
+    - security_patches_up_to_date
+----
++
+** Profile is a file in YAML format.
+** Take care of correct indentation. Make sure you use spaces, not tabs. Also check if no whitespace is trailing.
+** The profile consists of 4 items which are required:
+... `documentation_complete: true` means that your profile will not be ignored.
+... `title`: is a short profile title.
+... `description`: is a few paragraphs that describe the purpose of the profile.
+... `selections`: is a list of rules and variables that consist of the profile. It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this track.
+. Save the profile file and go back to the root directory.
++
+----
+cd ../..
+----
++
+. Rebuild the content.
++
+----
+./build_product rhel8
+----
++
+** this command will rebuild contents for all the profiles for the Red Hat Enterprise Linux product including you new “Travel” profile
+** it will build the human-readable HTML guide which can be displayed in a web browser and machine-readable SCAP files that can be consumed by OpenSCAP
+. Check the result HTML guide to look at your new profile.
++
+----
+firefox build/guides/ssg-rhel8-guide-travel.html
+----
++
+** A Firefox Window will open and you will see the guide your Travel profile which contains just a single rule - `security_patches_up_to_date`.
+
+== Adding rules to the profile
+
+Let’s imagine that one of the requirements of your company policy is that root user cannot log in to the machine via SSH. At this point, we can reveal to you that ComplianceAsCode already contains a rule that implements this requirement. You now only need to add this rule to your “travel” profile.
+
+. Find the relevant rule
+** Rules are represented by directories in ComplianceAsCode. Each rule directory contains a file called `rule.yml` which contains rule description and metadata.
+** In our case, we are looking if we have a rule.yml in our repository which contains “SSH root login”. We can use eg. git grep for that.
++
+----
+[user@localhost]$ git grep -i "SSH root login" "*rule.yml"
+linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml:title: 'Disable SSH Root Login'
+----
++
+** If you want, you can check that this is the right rule by opening this `rule.yml` file and reading the description section in this file.
++
+----
+vim linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml
+----
++
+----
+documentation_complete: true
+
+
+title: 'Disable SSH Root Login'
+
+
+description: |-
+    The root user should never be allowed to login to a
+    system directly over a network.
+    To disable root login via SSH, add or correct the following line
+[ ... snip ... ]
+----
++
+. Determine the ID of the relevant rule
+** The rule ID is the name of the directory where the `rule.yml` file is located.
+** Therefore, in our case, the rule ID is `sshd_disable_root_login`
+. Add the rule ID to selections list in your travel profile
++
+----
+vim rhel8/profiles/travel.profile
+----
+. Add `sshd_disable_root_login` as a new item in `selections` list.
+** The `selections` list is a list of rules that the profile consists of.
+** Make sure your indentation is consistent, use spaces.
+** Your `travel.profile` file should now look this way:
++
+----
+documentation_complete: true
+
+title: Travel profile for corporate laptops
+
+description: This profile represents settings which are required by company security policy for employee laptops.
+
+selections:
+    - security_patches_up_to_date
+    - sshd_disable_root_login
+----
++
+. Rebuild the content
++
+----
+./build_product rhel8
+----
++
+** The rule `sshd_disable_root_login` will get included to your profile by the build system.
+. Check the result HTML guide
++
+----
+firefox build/guides/ssg-rhel8-guide-travel.html
+----
++
+** A Firefox window will open and you will see your Travel profile which contains two rules.
+
+
+== Adding customizable rules to the profile and customizing them
+
+Let’s imagine that one of the requirements set in your company policy is that the user sessions must timeout after 10 minutes of user’s inactivity.
+
+At this point, we can reveal to you that ComplianceAsCode already contains an implementation of this requirement in a form of a rule.  You now need to add this rule to your “travel” profile.
+
+However, the rule in ComplianceAsCode is generic, or in other words, customizable. It can check for arbitrary period of user’s inactivity. We need to set the specific value (10 minutes) in the profile.
+
+. Find the rule ID.
+** This is similar to the previous action.
+** As you already know from the first lab track, the rule is located in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml`.
+** It is easy to spot that the rule ID is `accounts_tmout` because the rule ID is the name of the directory where the rule is located.
+. Add the rule ID to selections list in your travel profile.
++
+----
+vim rhel8/profiles/travel.profile
+----
++
+** Add `accounts_tmout` as a new item in selections list.
+** The selections list is a list of rules that the profile consists of.
+** Make sure your indentation is consistent, use spaces. Make sure there is no trailing whitespace!
+. Check the rule contents to find out that there is a variable involved
++
+----
+vim linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
+----
++
+** From the rule contents you can clearly see that it is parametrized by the `variable var_accounts_tmout`.
+** Notice that the variable `var_accounts_tmout` is substituted instead of exact value.
+** The value is also automatically substituted into OVAL checks, Ansible Playbooks and the remediation scripts.
+. Check out the variable
++
+----
+find . -name var_accounts_tmout*
+vim linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+----
++
+** The variable has multiple options, see the options list:
++
+----
+options:
+    30_min: 1800
+    10_min: 600
+    15_min: 900
+    5_min: 300
+    default: 600
+----
++
+** The keys are selectors, the values are concrete values. You use the selector to choose the value in the profile. You can add a new key-value pair as an option into this list if no of the values suits your needs. We will use the `10_min` selector to choose the 600 seconds.
+. Add the variable and the selector to the selections list in your `travel` profile
++
+----
+vim rhel8/profiles/travel.profile
+----
+** The variable values also belong to the selections list
+** `var_accounts_tmout=10_min`
+** Your `travel.profile` file should now look like the following snippet:
++
+----
+documentation_complete: true
+
+title: Travel profile for corporate laptops
+
+description: This profile represents settings which are required by company security policy for employee laptops.
+
+
+selections:
+    - security_patches_up_to_date
+    - sshd_disable_root_login
+    - accounts_tmout
+    - var_accounts_tmout=10_min
+----
++
+. Rebuild the content
++
+----
+./build_product rhel8
+----
++
+** The rule `accounts_tmout` will get included to your profile by the build system.
+. Check the result HTML guide
++
+----
+firefox build/guides/ssg-rhel8-guide-travel.html
+----
++
+** Firefox will open and you will see your Travel profile which contains 3 rules.
+** Scroll down to the rule Account Inactivity Timeout and notice that 600 seconds have been substituted there.
+
+
+== Creating a new rule from scratch
+
+Let’s say that one of the requirements in your corporate policy is that the users have to install the Hexchat application when their laptops travel outside the company. You want to add a check for that to your new profile.
+
+ComplianceAsCode does not have any rule ready for installing this application yet. That means we need to add a new rule for that.
+
+. Find a group directory that fits best your new rule.
+** The rules are located in `linux_os` directory.
+** Rules in the ComplianceAsCode project are organized into groups, which are represented by directories.
+** It only depends on you to decide which group  the new rule belongs to. You can  browse the directory structure to find out.
+** We plan to add a rule about installing a new application, so the `linux_os/guide/system/software/` directory will be a suitable place.
+. Create a new rule directory in the group directory
+** The name of the directory will be the rule ID. Let’s say that `package_hexchat_installed` could be a suitable ID.
++
+----
+mkdir -p linux_os/guide/system/software/package_hexchat_installed
+----
++
+. Create `rule.yml` in the rule directory
+** A description of the rule is stored. Each rule needs to have it.
+** The `rule.yml` is a simple YAML file.
++
+----
+vim linux_os/guide/system/software/package_hexchat_installed/rule.yml
+----
++
+** Add the following content to the `rule.yml` file using your editor.
++
+----
+documentation_complete: true
+
+title: Install Hexchat Application
+
+description: As of company policy, the travelling laptops have to have the Hexchat application installed.
+
+rationale: The Hexchat application enables IRC communication with the corporate IT support centre.
+
+severity: medium
+----
++
+. Add the rule ID to the profile selections
+** As described in the previous section, you need to add the ID of your new rule (`package_hexchat_installed`) to the selections list in your profile (`travel.profile`).
+. Build the content
++
+----
+./build_product rhel8
+----
++
+. Check the result HTML guide
++
+----
+firefox build/guides/ssg-rhel8-guide-travel.html
+----
+** A Firefox window will open and you will see your Travel profile which contains 4 rules. You should see your new rule there.
+** TODO: screenshot of the guide where a new rule is present.
+
+For more details about the rule.yml format, please refer to https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules
+
+
+== Scanning the system against the new profile
+
+Now, you can use the new profile that you created in previous Subsections in order to scan your machine using OpenSCAP.
+
+
+. Build the content
++
+----
+./build_product rhel8
+----
++
+** So far we have examined only the HTML guide. But for automated scanning we will use a datastream instead.
+** A datastream is an XML file which contains all the data (rules, checks, remediations, metadata) in a single file.
+** The datastream was also built during the content build.
+** For Red Hat Enterprise Linux 8 content the datastream is called `ssg-rhel8-ds.xml` and is located directly in the `build` directory.
+. Run an OpenSCAP scan using the profile
+** `oscap` is the command-line tool that we will use to scan the machine.
+** We need to give `oscap` the name of the profile (`travel`) and the path to the built datastream (`ssg-rhel8-ds.xml`) as arguments.
+** We will also add arguments to turn on the full reporting, which will generate XML and HTML results, that you can review later.
+** Run the following command:
++
+----
+ oscap xccdf eval --results results.mxl --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
+----
++
+. Check the scan results.
+** In your terminal you see all 4 rules, and that the 3 of them were evaluated.
+** The rule “Install Hexchat Application” was not checked, because we created only the rule text, but we haven’t provided any automated check so far. Adding an automating check will be  discussed in the third track.
+** TODO: screenshot of a terminal
+. Find out the details in the HTML report.
++
+----
+firefox report.html
+----
++
+** The structure of the HTML report is similar to the HTML guide, but it contains the evaluation results.
+** After clicking on the rule title, you can see the detailed rule results.
+** TODO: screenshot of the rule detail in HTML report.
+** For example, you can see that the rule Set Interactive Session Timeout failed because on the target system there was not any `TMOUT` entry in `/etc/profile`.
+
