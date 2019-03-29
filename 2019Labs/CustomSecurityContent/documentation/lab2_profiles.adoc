@@ -257,6 +257,46 @@ firefox build/guides/ssg-rhel8-guide-travel.html
 ** Scroll down to the rule Account Inactivity Timeout and notice that 600 seconds have been substituted there.
 
 
+== Scanning the system against the new profile
+
+Now, you can use the new profile that you created in previous Subsections in order to scan your machine using OpenSCAP.
+
+
+. Build the content
++
+----
+./build_product rhel8
+----
++
+** So far we have examined only the HTML guide. But for automated scanning we will use a datastream instead.
+** A datastream is an XML file which contains all the data (rules, checks, remediations, metadata) in a single file.
+** The datastream was also built during the content build.
+** For Red Hat Enterprise Linux 8 content the datastream is called `ssg-rhel8-ds.xml` and is located directly in the `build` directory.
+. Run an OpenSCAP scan using the profile
+** `oscap` is the command-line tool that we will use to scan the machine.
+** We need to give `oscap` the name of the profile (`travel`) and the path to the built datastream (`ssg-rhel8-ds.xml`) as arguments.
+** We will also add arguments to turn on the full reporting, which will generate XML and HTML results, that you can review later.
+** Run the following command:
++
+----
+ oscap xccdf eval --results results.mxl --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
+----
++
+. Check the scan results.
+** In your terminal you see all 4 rules, and that the 3 of them were evaluated.
+** TODO: screenshot of a terminal
+. Find out the details in the HTML report.
++
+----
+firefox report.html
+----
++
+** The structure of the HTML report is similar to the HTML guide, but it contains the evaluation results.
+** After clicking on the rule title, you can see the detailed rule results.
+** TODO: screenshot of the rule detail in HTML report.
+** For example, you can see that the rule Set Interactive Session Timeout failed because on the target system there was not any `TMOUT` entry in `/etc/profile`.
+
+
 == Creating a new rule from scratch
 
 Let’s say that one of the requirements in your corporate policy is that the users have to install the Hexchat application when their laptops travel outside the company. You want to add a check for that to your new profile.
@@ -296,6 +336,11 @@ rationale: The Hexchat application enables IRC communication with the corporate 
 
 severity: medium
 ----
+.. `documentation_complete: true` means that your rule will not be ignored
+.. `title` is the rule title, which will be displayed on the command line and in SCAP Workbench.
+.. `description` is a section which purpose is to describe the check.
+.. `rationale` should contain a justification why the rule exists.
+.. `severity` can be either `low`, `medium`, or `high`.
 +
 . Add the rule ID to the profile selections
 ** As described in the previous section, you need to add the ID of your new rule (`package_hexchat_installed`) to the selections list in your profile (`travel.profile`).
@@ -314,45 +359,4 @@ firefox build/guides/ssg-rhel8-guide-travel.html
 ** TODO: screenshot of the guide where a new rule is present.
 
 For more details about the rule.yml format, please refer to https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules
-
-
-== Scanning the system against the new profile
-
-Now, you can use the new profile that you created in previous Subsections in order to scan your machine using OpenSCAP.
-
-
-. Build the content
-+
-----
-./build_product rhel8
-----
-+
-** So far we have examined only the HTML guide. But for automated scanning we will use a datastream instead.
-** A datastream is an XML file which contains all the data (rules, checks, remediations, metadata) in a single file.
-** The datastream was also built during the content build.
-** For Red Hat Enterprise Linux 8 content the datastream is called `ssg-rhel8-ds.xml` and is located directly in the `build` directory.
-. Run an OpenSCAP scan using the profile
-** `oscap` is the command-line tool that we will use to scan the machine.
-** We need to give `oscap` the name of the profile (`travel`) and the path to the built datastream (`ssg-rhel8-ds.xml`) as arguments.
-** We will also add arguments to turn on the full reporting, which will generate XML and HTML results, that you can review later.
-** Run the following command:
-+
-----
- oscap xccdf eval --results results.mxl --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
-----
-+
-. Check the scan results.
-** In your terminal you see all 4 rules, and that the 3 of them were evaluated.
-** The rule “Install Hexchat Application” was not checked, because we created only the rule text, but we haven’t provided any automated check so far. Adding an automating check will be  discussed in the third track.
-** TODO: screenshot of a terminal
-. Find out the details in the HTML report.
-+
-----
-firefox report.html
-----
-+
-** The structure of the HTML report is similar to the HTML guide, but it contains the evaluation results.
-** After clicking on the rule title, you can see the detailed rule results.
-** TODO: screenshot of the rule detail in HTML report.
-** For example, you can see that the rule Set Interactive Session Timeout failed because on the target system there was not any `TMOUT` entry in `/etc/profile`.
 
