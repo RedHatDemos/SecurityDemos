@@ -15,12 +15,32 @@
 
 == What have we done for you
 
-include::what_have_we_done.adoc[]
+* We have cloned the ComplianceAsCode repository to the `content` directory.
+* We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
+** generic build utilities: `cmake`, `make`,
+** utilities for generating SCAP content: `openscap-utils`,
+** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 * We have edited the project's source code and introduced some modifications, so there are things to do.
 
 == Hands-on
 
-include::before_you_start.adoc[]
+=== Before you start
+
+* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
+* Make sure that you are in the project root when you start - run
++
+----
+cd /home/lab-user/labs/lab0_introduction/content
+----
++
+in the terminal.
+
+* For best experience, open one more terminal window and also navigate to the project root in that one as well.
+* Open the file explorer and also navigate to the project root.
+* Finally, open the Firefox browser.
+
+.Opening a new terminal window in Red Hat Enterprise Linux 8.
+image::0-01-setup.png[]
 
 === Build the content
 
