@@ -8,10 +8,10 @@ Imagine that your company has approved an internal security policy that enforces
 
 == What will you learn:
 
-* ... how to create a new profile in ComplianceAsCode that will represent your company security policy
-* ... what are “rules” and where they can be found in ComplianceAsCode
-* ... how to choose rules and add them into your new profile
-* ... how to customize these rules by setting variable values
+* ... how to represent your company security policy as a security profile in ComplianceAsCode
+* ... how to operate with basic building blocks of ComplianceAsCode - the rules
+* ... how to choose between hundreds of existing rules and add them into a profile
+* ... how to customize the rules for you needs by using variables
 * ... how to create a new rule
 * ... how to scan your system against the profile you created
 
@@ -43,9 +43,11 @@ image::0-01-setup.png[]
 
 == Creating a new empty profile
 
-In ComplianceAsCode we have multiple profiles. Simply said, a profile is a set of rules. A profile represents a specific security policy.
+The basic building block of a security policy is ComplianceAsCode is a rule. The rule represents a single configuration setting, eg. "Password length is at least 8 characters" or "Logging is enabled".
 
-Let’s create a new “Travel” profile for Red Hat Enterprise Linux 8. The profile will represent your company new security policy for laptops who travel.
+A set of rules is called a profile. A profile represents a specific security policy. In ComplianceAsCode we have multiple profiles.
+
+Let’s create a new “Travel” profile for Red Hat Enterprise Linux 8. The profile will represent your company new security policy for laptops.
 
 . Go to the Red Hat Enterprise Linux 8 profiles directory.
 +
@@ -54,15 +56,16 @@ cd rhel8/profiles
 ----
 +
 ** In ComplianceAsCode, we have policies based on products which are operating systems or applications, eg. Red Hat Enterprise Linux 8, OpenShift Container Platform 3. The products are represented by directories in the root of the ComplianceAsCode repository, eg. `rhel7`, `rhel8`, `ocp3` directories.
-** Each product has a different set of profiles. The profiles represent a specific policy or benchmark, eg. “Protection profile for general purpose operating systems”. The profiles are located in profiles directory in the product directory. The profiles are represented by a simple YAML (YAML Ain't Markup Language) file.
+** Each product has a different set of profiles. The profiles represent a specific policy or benchmark, eg. “Protection profile for general purpose operating systems”.
+** The profiles are located in `profiles` directory in the product directory. The profiles are represented by a simple YAML (YAML Ain't Markup Language) file, eg. `ospp.profile` defines a profile.
+** Notice that there are already some `.profile` files in the `profiles` directory. You can get inspired by them.
 . Create new file `travel.profile` there and open it in the editor.
 +
 ----
-vim travel.profile
+gedit travel.profile
 ----
 +
-** Notice that there are already some `.profile` files in the directory. You can get inspired by them.
-. Create the basic structure and fill in the profile title and description as specified in the frame.
+. Create the basic structure and fill in the profile title and description as specified in this listing.
 +
 ----
 documentation_complete: true
@@ -76,7 +79,7 @@ selections:
 ----
 +
 ** Profile is a file in YAML format.
-** Take care of correct indentation. Make sure you use spaces, not tabs. Also check if no whitespace is trailing.
+** You should be fine if you copy and paste the content from the previous listing. If you attempt to create a YAML file by hand, the most common mistake tends to be using incorrect indentation. Make sure you use spaces, not tabs. Also check if no whitespace is trailing.
 ** The profile consists of 4 items which are required:
 ... `documentation_complete: true` means that your profile will not be ignored.
 ... `title`: is a short profile title.
@@ -116,14 +119,14 @@ Let’s imagine that one of the requirements of your company policy is that root
 ** In our case, we are looking if we have a rule.yml in our repository which contains “SSH root login”. We can use eg. git grep for that.
 +
 ----
-[user@localhost]$ git grep -i "SSH root login" "*rule.yml"
+git grep -i "SSH root login" "*rule.yml"
 linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml:title: 'Disable SSH Root Login'
 ----
 +
 ** If you want, you can check that this is the right rule by opening this `rule.yml` file and reading the description section in this file.
 +
 ----
-vim linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml
+gedit linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml
 ----
 +
 ----
@@ -146,11 +149,10 @@ description: |-
 . Add the rule ID to selections list in your travel profile
 +
 ----
-vim rhel8/profiles/travel.profile
+gedit rhel8/profiles/travel.profile
 ----
 . Add `sshd_disable_root_login` as a new item in `selections` list.
 ** The `selections` list is a list of rules that the profile consists of.
-** Make sure your indentation is consistent, use spaces.
 ** Your `travel.profile` file should now look this way:
 +
 ----
@@ -191,31 +193,37 @@ However, the rule in ComplianceAsCode is generic, or in other words, customizabl
 
 . Find the rule ID.
 ** This is similar to the previous action.
++
+----
+git grep -i "Interactive Session Timeout" "*rule.yml"
+linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml:title: 'Set Interactive Session Timeout'
+----
++
 ** As you already know from the first lab track, the rule is located in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml`.
 ** It is easy to spot that the rule ID is `accounts_tmout` because the rule ID is the name of the directory where the rule is located.
 . Add the rule ID to selections list in your travel profile.
 +
 ----
-vim rhel8/profiles/travel.profile
+gedit rhel8/profiles/travel.profile
 ----
 +
 ** Add `accounts_tmout` as a new item in selections list.
-** The selections list is a list of rules that the profile consists of.
 ** Make sure your indentation is consistent, use spaces. Make sure there is no trailing whitespace!
 . Check the rule contents to find out that there is a variable involved
 +
 ----
-vim linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
+gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 ----
 +
 ** From the rule contents you can clearly see that it is parametrized by the `variable var_accounts_tmout`.
-** Notice that the variable `var_accounts_tmout` is substituted instead of exact value.
+** Notice that the variable `var_accounts_tmout` is used in the description instead of exact value.
+** In the HTML guide, you will later see that `var_accounts_tmout` has been assigned a value.
 ** The value is also automatically substituted into OVAL checks, Ansible Playbooks and the remediation scripts.
 . Check out the variable
 +
 ----
 find . -name var_accounts_tmout*
-vim linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
 ----
 +
 ** The variable has multiple options, see the options list:
@@ -229,11 +237,13 @@ options:
     default: 600
 ----
 +
-** The keys are selectors, the values are concrete values. You use the selector to choose the value in the profile. You can add a new key-value pair as an option into this list if no of the values suits your needs. We will use the `10_min` selector to choose the 600 seconds.
+** The `options` are defined as a YAML dictionary which maps keys to values. The YAML dictionary keys are used as selectors in ComplianceAsCode, the YAML dictionary values are concrete values that will be used in the checks. You use the selector to choose the value in the profile.
+** You can add a new key and value to the `options` dictionary if none of the values suits your needs.
+** We will add a new pair of variable name and selector into the profile. We will use the `10_min` selector to choose the 600 seconds.
 . Add the variable and the selector to the selections list in your `travel` profile
 +
 ----
-vim rhel8/profiles/travel.profile
+gedit rhel8/profiles/travel.profile
 ----
 ** The variable values also belong to the selections list
 ** `var_accounts_tmout=10_min`
@@ -339,7 +349,7 @@ mkdir -p linux_os/guide/system/software/package_hexchat_installed
 ** The `rule.yml` is a simple YAML file.
 +
 ----
-vim linux_os/guide/system/software/package_hexchat_installed/rule.yml
+gedit linux_os/guide/system/software/package_hexchat_installed/rule.yml
 ----
 +
 ** Add the following content to the `rule.yml` file using your editor.
@@ -369,7 +379,7 @@ severity: medium
 ** You only need to add the `hexchat` package to the list of packages.
 +
 ----
-vim rhel8/templates/csv/packages_installed.csv
+gedit rhel8/templates/csv/packages_installed.csv
 ----
 +
 ** Add `hexchat` as a new line to this file and save the file.
