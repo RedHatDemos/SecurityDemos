@@ -10,6 +10,7 @@
     LABS_CONTENT_PART: "2019Labs/CustomSecurityContent/documentation"
     TRACK_0_LABEL: "lab0_introduction"
     TRACK_2_LABEL: "lab2_profiles"
+    TRACK_3_LABEL: "lab3_oval"
     CACC_LOCAL: "/home/lab-user/complianceAsCode"
     LABS_ROOT: "/home/lab-user/labs"
 
@@ -64,6 +65,7 @@
     loop:
       - TRACK_0_LABEL
       - TRACK_2_LABEL
+      - TRACK_3_LABEL
 
   - name: Clone the CaC/c Git for Lab Tracks
     git:
@@ -79,6 +81,7 @@
     copy:
       src: "{{ LABS_LOCAL }}/{{ LABS_CONTENT_PART }}/{{ TRACK_0_LABEL }}"
       dest: "{{ LABS_ROOT }}/{{ TRACK_0_LABEL }}/documentation"
+      remote_src: yes
     when: False
 
   - name: Introduce a typo
@@ -92,3 +95,26 @@
       dest: "{{ LABS_ROOT }}/{{ TRACK_0_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml"
       regexp: '(    Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that)'
       replace: '\1\n\1'
+
+  - name: Clone the CaC/c Git for Lab 3
+    git:
+      repo: "{{ CACC_LOCAL }}"
+      version: 'v0.1.43'
+      dest: "{{ LABS_ROOT }}/{{ LAB_3_LABEL }}/content"
+      force: yes
+
+  - name: Remove the lab3 tests
+    file:
+      path: "{{ LABS_ROOT }}/{{ LAB_3_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
+      state: absent
+
+  - name: Copy bad lab3 tests
+    copy:
+      src: "data/rule_accounts_tmout"
+      dest: "{{ LABS_ROOT }}/{{ LAB_3_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
+
+  - name: Bust the OVAL
+    replace:
+      dest: "{{ LABS_ROOT }}/{{ LAB_3_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
+      regexp: '(operation=")greater than or equal(")'
+      replace: '\1equals\2'
