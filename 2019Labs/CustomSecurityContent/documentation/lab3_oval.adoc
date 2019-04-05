@@ -1,0 +1,539 @@
+= The Art of OVAL Checks
+
+:experimental:
+:imagesdir: images
+
+
+== What will you learn
+
+* ... what is the OVAL about.
+* ... how `ComplianceAsCode` facilitates creation of new OVAL content.
+* ... how to test OVAL checks.
+* ... how to use tests and remediations to safely and gradually improve an OVAL check.
+
+
+== What have we done for you
+
+* We have cloned the `ComplianceAsCode` repository to the `content` directory.
+* We have installed dependencies that are required for the content build using `dnf install`:
+** generic build utilities: `cmake`, `make`,
+** utilities for generating SCAP content: `openscap-utils`, and finally
+** python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
+
+* We have set up a `podman` `ssg_test_suite` image by building one using the `Dockerfiles/test_suite-rhel` files.
+`root` 's  SSH keys are authorized by the container's root user.
+The steps how to accomplish this are in the `tests/README.md` file of the `ComplianceAsCode` project.
+* We have modified the OVAL check for the `accounts_tmout`, so we can improve it.
+
+
+== Hands-on
+
+
+=== Before you start
+
+* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
+* Make sure that you are in the project root when you start - run
++
+.....
+cd /home/lab-user/labs/lab3_oval
+.....
++
+in the terminal.
+
+* For best experience, open one more terminal window and also navigate to the project root in that one as well.
+
+
+=== OVAL introduction
+
+OVAL stands for Open Vulnerability and Assessment Language.
+It is a XML-bassed declarative language that is part of the SCAP standard, and we will focus on it's ability to query a system's state.
+Quoting from the http://ovalproject.github.io/getting-started/faqs/[OVAL FAQ]:
+
+___
+
+The language standardizes the three main steps of the assessment process: representing configuration information of systems for testing; analyzing the system for the presence of the specified machine state (vulnerability, configuration, patch state, etc.); and reporting the results of this assessment.
+___
+
+The `ComplianceAsCode` project uses OVAL to write snippets that are interpreted by an OVAL interpreter (such as the OpenSCAP scanner) to detrmine whether the check defined in the snippet passes.
+In this track, we will go through the OVAL snippet of the `accounts_tmout` rule.
+We will see how it can get complicated soon, and what can we do about it.
+Finally, we will discover that the check has been written incorrectly, and and we will fix it.
+
+
+=== The current state
+
+Make sure that you are in the `content` directory - we will build the content for the RHEL8 product.
+Execute the `./build_product rhel8` command.
+
+When the build finishes, let's take a look at the RHEL8 OSPP profile:
+
+----
+firefox build/guides/ssg-rhel8-guide-ospp.html
+----
+
+In this track, we will focus on the `accounts_tmout` rule.
+In order to find the rule entry it in the guide, press `Ctrl+F` and search for the `Set Interactive Session Timeout` string, which is the rule title.
+
+The description says:
+
+___
+
+Setting the TMOUT option in /etc/profile ensures that all user sessions will terminate based on inactivity. The TMOUT setting in /etc/profile should read as follows:
+
+TMOUT=600
+___
+
+
+When dealing with the rule check, we will focus on those two aspects:
+
+- As the timeout is supposed to be set to 600 seconds, what is the consequence if the timeout value is set to 100?
+Is it more or less secure?
++
+Having shorter time interval between inactivity and logout is more bothersome for the user, but it is a stricter requirement.
+Therefore, we would like to make sure that the if a rule that requires `TMOUT=600` also allows `TMOUT=100`.
+
+- The rule description of having the `TMOUT=...` statement in a config file is accurate, but guides on the Internet often recommend to have `export TMOUT=...` there.
+The assignment form with the `export` keyword ensures that the variable is available to other programs.
+Environmental variables s.a. `PATH` and `HOME` are commonly exported, so this probably is where the confusion that `export` is needed for `TMOUT` to work comes from.
+We want to make sure that the rule's check will allow both forms - with and without `export`, although the `export` keyword is not required.
+
+
+==== Bash remediation
+
+Let's examine the bash remediation body - as you know from the introductory lab, you can either
+
+- scroll down the rule entry in the HTML guide and click the `(show)` link next to the `Remediation Shell Script` label, or
+- open the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file.
+
+The check body looks like this:
+
+....
+
+if grep --silent ^TMOUT /etc/profile ; then
+        sed -i "s/^TMOUT.*/TMOUT=$var_accounts_tmout/g" /etc/profile
+else
+        echo -e "\n# Set TMOUT to $var_accounts_tmout per security requirements" >> /etc/profile
+        echo "TMOUT=$var_accounts_tmout" >> /etc/profile
+fi
+
+....
+
+We can see that the remediation is in sync with the description - it handles the `/etc/profile` file, and it either
+
+- adds the `TMOUT` assignment to the file if is missing, or it
+- modifies the `TMOUT` assignment, so that the correct value is used if an assignment already exists.
+
+
+==== OVAL check
+
+Let's move on to the OVAL check in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml`.
+That file is much more complicated, so let's examine it piece-wise:
+
+We have the leading `definition` element:
+
+....
+
+  <definition class="compliance" id="accounts_tmout" version="2">
+    <metadata>
+      <title>Set Interactive Session Timeout</title>
+      <affected family="unix">
+        <platform>multi_platform_rhel</platform>
+        <platform>multi_platform_fedora</platform>
+        <platform>multi_platform_ol</platform>
+      </affected>
+      <description>Checks interactive shell timeout</description>
+    </metadata>
+    <criteria operator="OR">
+      <criterion comment="TMOUT value in /etc/profile >= var_accounts_tmout" test_ref="test_etc_profile_tmout" />
+      <criterion comment="TMOUT value in /etc/profile.d/*.sh >= var_accounts_tmout" test_ref="test_etc_profiled_tmout" />
+    </criteria>
+  </definition>
+
+....
+
+Here, we can see that the check has two criteria - one checks for `TMOUT` setting in the `/etc/profile` file, the other one checks all files in `/etc/profile.d/` that have the `sh` file extension.
+The check evaluates as passed if any of the tests pass, i.e. if the `TMOUT` assignment is set in either of those files.
+
+The test for the `/etc/profile` criterion and it's dependencies look like this:
+
+....
+
+  <ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in /etc/profile" id="test_etc_profile_tmout" version="1">                                                                    
+    <ind:object object_ref="object_etc_profile_tmout" />
+    <ind:state state_ref="state_etc_profile_tmout" />
+  </ind:textfilecontent54_test>
+
+  <ind:textfilecontent54_object id="object_etc_profile_tmout" version="1">
+    <ind:filepath>/etc/profile</ind:filepath>
+    <ind:pattern operation="pattern match">^[\s]*TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+
+  <ind:textfilecontent54_state id="state_etc_profile_tmout" version="1">
+    <ind:subexpression datatype="int" operation="greater than or equal" var_check="all" var_ref="var_accounts_tmout" />                                                                                           
+  </ind:textfilecontent54_state>
+
+  <external_variable comment="external variable for TMOUT" datatype="int" id="var_accounts_tmout" version="1" />
+
+....
+
+There are two regular expression that check for `TMOUT=...` in the `shared.xml` file, one for the `profile` test, and one for the `profile.d/*.sh` test.
+However, they are the same, and the alternative form of the assignment `export TMOUT=...` isn't handled in either of them.
+
+Moreover, there is the `equals` operation used to perform the match.
+As stated in the previous section, this looks wrong, as shorter timeouts are more secure, and therefore should be allowed.
+
+
+== Tests Hands-on
+
+The `ComplianceAsCode` project is equipped with test suite that is very useful when defining what scenarios the check and the remediation are supposed to handle.
+The test suite sets up a system to a certain state, and runs the scan.
+Depending on the state of the system, the scanner is supposed to either pass, or fail.
+If the scanner fails, we execute the remediation, and the subsequent scan should pass.
+
+In order to test our content, we need to build it, and we are going to use the `build_product` script for this.
+Let's go to the project root, and execute `./build_product fedora`, which will build the datastream that contains the OVAL check that we want to test.
+
+We will test the `accounts_tmout` rule included in the `ospp` profile of the RHEL8 datastream.
+We have to run the test suite as a superuser, as it involves spinning up a container that exposes an SSH port.
+
+You will see an output similar to this one:
+
+....
+$ ./build_product fedora
+...
+$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
+INFO - The base image option has been specified, choosing Podman-based test environment.
+INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
+INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+....
+
+The output tells you the following:
+
+* The rule with full ID `xccdf_org.ssgproject.content_rule_accounts_tmout` has been tested in the `OSPP` profile context.
+* There were 4 test scenarios `comment.fail.sh`, `line_not_there.fail.sh`, `correct_value.pass.sh` and `wrong_value.fail.sh`, all of them passed.
+We will examine existing scenarios and add new one later in this track, for now, it is enough to acknowledge them and making sure that if we edit the rule's OVAL snippet, those scenarios won't start to fail.
+* More information about the test run is available in the respective log directory.
+This is useful when a test breaks unexpectedly, or the test suite suffers from internal issues.
+
+Now when we have a reasonable certainty about our rules, we can improve the OVAL content.
+
+
+== OVAL optimization
+
+In this section, we will analyze the OVAL check for the `accounts_tmout` rule, and we will perform the following steps:
+
+. Analyze the OVAL, identify duplicated elements.
+. Design a jinja2 macro that deduplicates test definitions.
+. Test changes.
+. Design a jinja2 macro that deduplicates test objects.
+. Test changes again.
+
+// This comment breaks the numbered list.
+
+. The OVAL test repeats itself a little bit - there are checks for the `/etc/profile` file, as well as for others `/etc/profile.d/*.sh` files, but the tests and respective objects are very similar.
+This makes editing tedious and prone to https://en.wikipedia.org/wiki/Copy_and_paste_programming#/media/File:Forgotten_edits_in_copypaste_programming.gif[copy-paste errors].
+Luckily, `ComplianceAsCode` supports the http://jinja.pocoo.org/docs/2.10/[jinja2] macro language that can be used to introduce some templating, thus removing this duplicity.
++
+Let's analyze what is the difference:
++
+The test has a different name and comment, plus it uses different test objects:
+Compare the two following excerpts:
++
+----
+<ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in /etc/profile"        id="test_etc_profile_tmout" version="1">
+...
+
+
+<ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in /etc/profile.d/*.sh" id="test_etc_profiled_tmout" version="1">
+...
+----
+. Luckily, the jinja2 language enables us to define http://jinja.pocoo.org/docs/2.10/templates/#macros[macros] that can help us to remove the duplication.
+We are going to define a local macro that accepts the filename comment and the test stem as arguments.
++
+Therefore, we remove both tests, and we add the new macro and it's new invocations.
++
+----
+
+  {{% macro test_tmout(test_stem, files) %}}
+  <ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in {{{ files }}}" id="test_{{{ test_stem }}}" version="1">
+    <ind:object object_ref="object_{{{ test_stem }}}" />
+    <ind:state state_ref="state_etc_profile_tmout" />
+  </ind:textfilecontent54_test>
+  {{% endmacro %}}
+
+  {{{ test_tmout(  test_stem="etc_profile_tmout", files="/etc/profile") }}}
+  {{{ test_tmout(  test_stem="etc_profiled_tmout", files="/etc/profile.d/*.sh") }}}
+----
++
+Note that the delimiters are different than the `jinja2` website shows - i.e. instead of `{% macro ... %}` on the website, we use the `{{% macro ... %}}` form and so on - there is always one curly brace more than the website documentation shows.
+
+. Anyway, did we do everything right?
+Let's rebuild the datastream, and let's execute the test suite again - the result should be exactly the same.
++
+....
+$ ./build_product fedora
+...
+$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
+INFO - The base image option has been specified, choosing Podman-based test environment.
+INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
+INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+....
+
+. Next, the test objects are very similar too - the only thing that differs is their name, and path + filename / filepath attributes.
+So we are going to define a macro that accepts the test name stem, and `path`, `filename`, or `filepath` attributes.
++
+We are going to use the http://jinja.pocoo.org/docs/2.10/templates/#if[if-statement] here - if e.g. `filepath` is not supplied, `{{% if filepath %}}` will evaluate to `False`, and the body of the condition will be ignored.
+Conversely, if the `filepath` is supplied, the `textfilecontent54_object` definition created by the macro will include the `ind:filepath` child element holding the respective value.
++
+----
+  {{% macro object_tmout(test_stem, path, filename, filepath) %}}
+  <ind:textfilecontent54_object id="object_{{{ test_stem }}}" version="1">
+    {{% if path %}}
+    <ind:path>{{{ path }}}</ind:path>
+    {{% endif %}}
+    {{% if filename %}}
+    <ind:filename operation="pattern match">{{{ filename }}}</ind:filename>
+    {{% endif %}}
+    {{% if filepath %}}
+    <ind:filepath>{{{ filepath }}}</ind:filepath>
+    {{% endif %}}
+    <ind:pattern operation="pattern match">^[\s]*TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  {{% endmacro %}}
+----
++
+Then, let's instantiate the objects and tests next to each other.
+The whole OVAL file now looks like this:
++
+----
+<def-group>
+  <definition class="compliance" id="accounts_tmout" version="2">
+    <metadata>
+      <title>Set Interactive Session Timeout</title>
+      <affected family="unix">
+        <platform>multi_platform_rhel</platform>
+        <platform>multi_platform_fedora</platform>
+        <platform>multi_platform_ol</platform>
+      </affected>
+      <description>Checks interactive shell timeout</description>
+    </metadata>
+    <criteria operator="OR">
+      <criterion comment="TMOUT value in /etc/profile >= var_accounts_tmout" test_ref="test_etc_profile_tmout" />
+      <criterion comment="TMOUT value in /etc/profile.d/*.sh >= var_accounts_tmout" test_ref="test_etc_profiled_tmout" />
+    </criteria>
+  </definition>
+
+  {{% macro test_tmout(test_stem, files) %}}
+  <ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in {{{ files }}}" id="test_{{{ test_stem }}}" version="1">
+    <ind:object object_ref="object_{{{ test_stem }}}" />
+    <ind:state state_ref="state_etc_profile_tmout" />
+  </ind:textfilecontent54_test>
+  {{% endmacro %}}
+
+  {{% macro object_tmout(test_stem, path, filename, filepath) %}}
+  <ind:textfilecontent54_object id="object_{{{ test_stem }}}" version="1">
+    {{% if path %}}
+    <ind:path>{{{ path }}}</ind:path>
+    {{% endif %}}
+    {{% if filename %}}
+    <ind:filename operation="pattern match">{{{ filename }}}</ind:filename>
+    {{% endif %}}
+    {{% if filepath %}}
+    <ind:filepath>{{{ filepath }}}</ind:filepath>
+    {{% endif %}}
+    <ind:pattern operation="pattern match">^[\s]*TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
+    <ind:instance datatype="int">1</ind:instance>
+  </ind:textfilecontent54_object>
+  {{% endmacro %}}
+
+  {{{ test_tmout(  test_stem="etc_profile_tmout", files="/etc/profile") }}}
+  {{{ object_tmout(test_stem="etc_profile_tmout", filepath="/etc/profile") }}}
+
+  {{{ test_tmout(  test_stem="etc_profiled_tmout", files="/etc/profile.d/*.sh") }}}
+  {{{ object_tmout(test_stem="etc_profiled_tmout", path="/etc/profile.d", filename="^.*\.sh$") }}}
+
+  <ind:textfilecontent54_state id="state_etc_profile_tmout" version="1">
+    <ind:subexpression datatype="int" operation="greater than or equal" var_check="all" var_ref="var_accounts_tmout" />                                                                                           
+  </ind:textfilecontent54_state>
+
+  <external_variable comment="external variable for TMOUT" datatype="int" id="var_accounts_tmout" version="1" />                                                                                                  
+</def-group>
+----
++
+This way, you won't have to worry about possibly introducing those https://en.wikipedia.org/wiki/Copy_and_paste_programming#/media/File:Forgotten_edits_in_copypaste_programming.gif[copy-paste errors] any more.
+
+. Let's run the rule's test again - it may be that a typo got in, so the OVAL isn't really correct:
++
+....
+$ ./build_product fedora
+...
+$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
+INFO - The base image option has been specified, choosing Podman-based test environment.
+INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
+INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+....
+
+
+== OVAL development
+
+
+=== Correct handling of supercompliance
+
+Let's examine the test scenarios - for example the `wrong_value.fail.sh`.
+Open a new terminal window, and change to the test definitions directory: `cd tests/data/group_system/group_accounts/group_accounts-session/rule_accounts_tmout`
+Then, let's open the `wrong_value.fail.sh` file.
+
+// gedit screenshot
+
+As you can see, the test sets the `TMOUT` value to 1234.
+The value is correctly considered as noncompliant - as the timeout should be 600, 1234 is longer, therefore less secure.
+
+What about the `correct.pass.sh`?
+Let's check that out and open it in an editor.
+As we can see, this one sets the `TMOUT` value to 600, which is the value defined by the profile.
+
+Let's add another check for a correct value - let's check for timeout of 100.
+In case of a timeout, 100 seconds is more secure than 600 seconds.
+Therefore, the scenario is represents a *supercompliant* case, i.e. when the setting is stricter, than what is demanded, while being in the area of allowed values.
+So let's copy that one, and make a new test scenario out of it.
+Run this command in the terminal in the `rule_accounts_tmout` directory: `cp correct_value.pass.sh supercompliant.pass.sh`
+
+Let's run the tests!
+
+....
+$ ./build_product fedora
+...
+...
+$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout                                                            
+Setting console output to log level INFO
+INFO - The base image option has been specified, choosing Podman-based test environment.
+INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
+INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+ERROR - Script supercompliant.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp found issue:                                                                                                        
+ERROR - Rule evaluation resulted in fail, instead of expected pass during initial stage
+ERROR - The initial scan failed for rule 'xccdf_org.ssgproject.content_rule_accounts_tmout'.
+INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+....
+
+The test output tells us that the `supercompliant.pass.sh` scenario has failed, which was not expected.
+Let's modify the OVAL snippet, so timeouts shorter than the threshold are allowed:
+
+....
+gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml
+....
+
+The modification should be easy - instead that checking that the timeout value `equals` the threshold, we will use the `less than or equal` check as per the https://oval.mitre.org/language/version5.11/ovaldefinition/documentation/oval-common-schema.html#OperationEnumeration[OVAL specification].
+So just replace `equals` with `less than or equal` in the OVAL definition of the `textfilecontent54_state` like this:
+
+----
+  <ind:textfilecontent54_state id="state_etc_profile_tmout" version="1">
+    <ind:subexpression datatype="int" operation="less than or equal" var_check="all" var_ref="var_accounts_tmout" />                                                                                              
+  </ind:textfilecontent54_state>
+----
+
+This time, when rebuilt and executed again, tests pass:
+
+....
+$ ./build_product fedora
+...
+$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
+INFO - The base image option has been specified, choosing Podman-based test environment.
+INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
+INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script supercompliant.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+....
+
+
+=== Correct handling of export
+
+The user may have exported th `TMOUT` variable, which is allowed, but not required.
+So let's modify the passing test scenario `correct_value.pass.sh` to test a correct value in addition to the usage of the `export` keyword:
+
+----
+#!/bin/bash
+#
+# profiles = xccdf_org.ssgproject.content_profile_ospp
+
+if grep -q "TMOUT" /etc/profile; then
+        sed -i "s/.*TMOUT.*/export TMOUT=600/" /etc/profile
+else
+        echo "export TMOUT=600" >> /etc/profile
+fi
+----
+
+We don't have to rebuild the product, as we have changed only the test definition, and we can re-run the test suite.
+Now, we execute the test suite again, and we expect the `Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp found issue:` line to appear in the output.
+
+....
+$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
+....
+
+This confirms the theory that OVAL doesn't allow this configuration, although it is valid.
+Therefore, in order to make tests pass, we will have to edit the OVAL, so the occurrence of `export` is allowed.
+Thanks to the OVAL optimization that we have performed before, there is only one place that needs to be changed - it is the definition of the test object.
+
+So let's open the OVAL file again:
+
+....
+gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml
+....
+
+The current test object specifies
+
+----
+<ind:pattern operation="pattern match">^[\s]*TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
+<ind:instance datatype="int">1</ind:instance>
+----
+
+and it needs to be changed to ignore the `export` keyword followed by at least one whitespace.
+
+The best approach is to make this an optional group.
+This would mean adding `(export[\s]+)?` to the regular expression, but as we don't want that group to be registered (a.k.a. stored in memory, captured), we have to https://oval.mitre.org/language/about/re_support_5.6.html[add some special syntax], so we add `(?:export[\s]+)`, and the section becomes
+
+----
+<ind:pattern operation="pattern match">^[\s]*(?:export[\s]+)?TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
+<ind:instance datatype="int">1</ind:instance>
+----
+
+The non-capturing group that consists of `export` followed by at least one whitespace can be either absent or present exactly once.
+
+Time to save the OVAL, rebuild the product and run the tests again!
+
+....
+$ ./build_product fedora
+...
+$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
+INFO - The base image option has been specified, choosing Podman-based test environment.
+INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
+INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+INFO - Script supercompliant.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
+....
+
+Everything passes, which means that our check can now handle a range of compliant values, as well as they don't produce false positives when the `export` keyword is involved.
+
+Congratulations - now you know how use the `ComplianceAsCode` project to make OVAL creation less error-prone, and how to make sure that OVAL checks are working according to expectations.
