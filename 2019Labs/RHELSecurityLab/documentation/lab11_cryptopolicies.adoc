@@ -15,7 +15,8 @@ With the introduction of crypto policies we have made it much simpler to set a d
 The machines have been pre-configure to use a Root CA certificate and individual X509 certificates for the Servers used for testing. The Root CA certificate has been imported in the system trust store so all applications can trust the test certificates used by the servers in the excercise.
 
 == Lab 11.1 Connecting to a Web Server using TLS 1.1
-TLS 1.1 is disabled in RHEL 8 default security policy, so connecting to a TLS 1.1 server will result in an error by client tools. In this excercise we'll explore how to enable the system to connect to legacy systems that are limited to use only TLS 1.0 or TLS 1.1 protocols.
+TLS 1.1 is disabled in RHEL 8 default security policy, so connecting to a TLS 1.1 server will result in an error by client tools.
+In this excercise we will explore how to enable the system to connect to legacy systems that are limited to use only TLS 1.0 or TLS 1.1 protocols.
 We will use two tools, curl and wget, as they use two different cryptographic libraries (openSSL and GnuTLS respectively) to show the crypto policy setting work across application and libraries.
 
 . If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
@@ -25,7 +26,7 @@ We will use two tools, curl and wget, as they use two different cryptographic li
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
-. Log into the *openscap.example.com* host as *root*.
+. Log into the *crypto.example.com* host as *root*.
 +
 [source]
 ----
@@ -42,8 +43,7 @@ curl: (35) error:1409442E:SSL routines:ssl3_read_bytes:tlsv1 alert protocol vers
 [root@crypto ~]# wget https://crypto2-tls11.example.com:1443
 --2019-03-06 18:47:29--  https://crypto2-tls11.example.com:1443/
 Resolving crypto2-tls11.example.com (crypto2-tls11.example.com)... 192.168.0.7
-Connecting to crypto2-tls11.example.com
-(crypto2-tls11.example.com)|192.168.0.7|:1443... connected.
+Connecting to crypto2-tls11.example.com (crypto2-tls11.example.com)|192.168.0.7|:1443... connected.
 GnuTLS: A TLS fatal alert has been received.
 GnuTLS: received alert [70]: Error in protocol version
 Unable to establish SSL connection.
@@ -61,8 +61,166 @@ Setting system policy to LEGACY
 +
 [source]
 ----
-[root@crypto ~]# curl https://crypto2.example.com
+[root@crypto ~]# curl https://crypto2-tls11.example.com:1443
 WORKS!
-[root@crypto ~]# wget -q -O - https://crypto2.example.com
+[root@crypto ~]# wget -q -O - https://crypto2-tls11.example.com:1443
 WORKS!
 ----
+
+== Lab 11.2 Connecting to a Web Server using a SHA-1 Certificate
+SHA-1 Certificates are still enable in RHEL 8 default security policy for compatibility reasons.
+In this excercise we will explore how to change the system to the FUTURE policy which disables SHA-1 signatures.
+We will use two tools, curl and wget, as they use two different cryptographic libraries (openSSL and GnuTLS respectively) to show the crypto policy setting work across application and libraries.
+
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
++
+[source]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+----
+
+. Log into the *crypto.example.com* host as *root*.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
+----
+
+. Try to connect to the web server https://crypto2-sha1.example.com:2443 and verify that the connection is accepted
++
+[source]
+----
+[root@crypto ~]# curl https://crypto2-sha1.example.com:2443
+WORKS!
+[root@crypto ~]# wget -q -O - https://crypto2-sha1.example.com:2443
+WORKS!
+----
+
+. Now change the system policy to disable SHA-1
++
+[source]
+----
+[root@crypto ~]# update-crypto-policies --set FUTURE
+Setting system policy to FUTURE
+----
+
+. Try again with curl and wget, and see that the connection is refused!
++
+[source]
+----
+[root@crypto ~]# curl https://crypto2-sha1.example.com:2443
+curl: (60) SSL certificate problem: EE certificate key too weak
+
+[root@crypto ~]# wget https://crypto2-sha1.example.com:2443
+--2019-03-06 18:47:29--  https://crypto2-sha1.example.com:2443/
+Resolving crypto2-sha1.example.com (crypto2-sha1.example.com)... 192.168.0.7
+Connecting to crypto2-sha1.example.com (crypto2-sha1.example.com)|192.168.0.7|:2443... connected.
+ERROR: The certificate of 'crypto2-sha1.example.com' is not trusted.
+ERROR: The certificate of 'crypto2-sha1.example.com' was signed using an insecure algorithm.
+----
+
+== Lab 11.3 Setting the system in FIPS mode
+When a system is configured to work in FIPS mode, only a restricted set of approved cryptographic algorithms is permitted.
+In this exercise we will learn how to set a system in FIPS mode and we'll test that specific algorithms are disabled in this mode.
+
+. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
++
+[source]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+----
+
+. Log into the *crypto.example.com* host as *root*.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
+----
+
+. Let's change the system configuration to trun on FIPS mode.
+[source]
+----
+[root@crypto ~]# fips-mode-setup --enable
+Setting system policy to FIPS
+Note: System-wide crypto policies are applied on application start-up.
+It is recommended to restart the system for the change of policies
+to fully take place.
+FIPS mode will be enabled.
+Please reboot the system for the setting to take effect.
+----
+
+. Now let's reboot the system to activate FIPS mode.
++
+[source]
+----
+[root@crypto ~]# reboot
+Connection to crypto.example.com closed by remote host.
+Connection to crypto.example.com closed.
+----
+
+. Log again into the *crypto.example.com* host as *root* after reboot.
++
+[source]
+----
+[lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
+----
+
+. Let's check that the system is in FIPS mode.
+[source]
+----
+[root@crypto ~]# fips-mode-setup --check
+FIPS mode is enabled.
+----
+
+. Let's check that SHA-1 signed certificates are disabled in FIPS mode.
++
+[source]
+----
+[root@crypto ~]# curl https://crypto2-sha1.example.com:2443
+curl: (60) SSL certificate problem: EE certificate key too weak
+
+[root@crypto ~]# wget https://crypto2-sha1.example.com:2443
+--2019-03-06 19:00:00--  https://crypto2-sha1.example.com:2443/
+Resolving crypto2-sha1.example.com (crypto2-sha1.example.com)... 192.168.0.7
+Connecting to crypto2-sha1.example.com (crypto2-sha1.example.com)|192.168.0.7|:2443... connected.
+ERROR: The certificate of 'crypto2-sha1.example.com' is not trusted.
+ERROR: The certificate of 'crypto2-sha1.example.com' was signed using an insecure algorithm.
+----
+
+. Let's also check that unapproved Elliptic Curves are not accepted.
++
+[source]
+----
+[root@crypto ~]# wget https://crypto2-ed25519.example.com:3443
+--2019-03-06 19:35:20--  https://crypto2-ed25519.example.com:3443/
+Resolving crypto2-ed25519.example.com (crypto2-ed25519.example.com)... 192.168.0.7
+Connecting to crypto2-ed25519.example.com (crypto2-ed25519.example.com)|192.168.0.7|:3443... connected.
+GnuTLS: A TLS fatal alert has been received.
+GnuTLS: received alert [40]: Handshake failed
+Unable to establish SSL connection.
+----
+
+. Now let's disable FIPS and return the system to the default policy
++
+[source]
+----
+[root@crypto ~]# fips-mode-setup --disable
+Setting system policy to DEFAULT
+Note: System-wide crypto policies are applied on application start-up.
+It is recommended to restart the system for the change of policies
+to fully take place.
+FIPS mode will be disabled.
+Please reboot the system for the setting to take effect.
+----
+
+. Let's check that certificates using Ed25519 are accepted again.
++
+[source]
+----
+[root@crypto ~]# wget -q -O - https://crypto2-ed25519.example.com:3443
+WORKS!
+----
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ]
