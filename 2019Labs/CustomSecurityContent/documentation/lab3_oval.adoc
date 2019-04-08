@@ -46,17 +46,20 @@ in the terminal.
 === OVAL introduction
 
 OVAL stands for Open Vulnerability and Assessment Language.
-It is a XML-bassed declarative language that is part of the SCAP standard, and we will focus on it's ability to query a system's state.
+In a nutshell, it is an XML-based declarative language that is part of the SCAP standard.
+We will focus on its ability to query and evaluate state of a system.
 Quoting from the http://ovalproject.github.io/getting-started/faqs/[OVAL FAQ]:
 
-___
-
+__
 The language standardizes the three main steps of the assessment process: representing configuration information of systems for testing; analyzing the system for the presence of the specified machine state (vulnerability, configuration, patch state, etc.); and reporting the results of this assessment.
-___
+__
 
-The `ComplianceAsCode` project uses OVAL to write snippets that are interpreted by an OVAL interpreter (such as the OpenSCAP scanner) to detrmine whether the check defined in the snippet passes.
+The `ComplianceAsCode` project supports OVAL as the language for writing automated configurable check.
+It compiles OVAL snippets into checks that are understood by OVAL interpreters - for example the OpenSCAP scanner.
+The scanner evaluates the check, and determines whether the system passes.
+
 In this track, we will go through the OVAL snippet of the `accounts_tmout` rule.
-We will see how it can get complicated soon, and what can we do about it.
+We will see how even simple checks can get complicated soon, and what can we do about it.
 Finally, we will discover that the check has been written incorrectly, and and we will fix it.
 
 
@@ -65,7 +68,7 @@ Finally, we will discover that the check has been written incorrectly, and and w
 Make sure that you are in the `content` directory - we will build the content for the RHEL8 product.
 Execute the `./build_product rhel8` command.
 
-When the build finishes, let's take a look at the RHEL8 OSPP profile:
+When the build finishes, we will take a look at the RHEL8 OSPP profile:
 
 ----
 firefox build/guides/ssg-rhel8-guide-ospp.html
@@ -76,13 +79,13 @@ In order to find the rule entry it in the guide, press `Ctrl+F` and search for t
 
 The description says:
 
-___
+----
 
 Setting the TMOUT option in /etc/profile ensures that all user sessions will terminate based on inactivity. The TMOUT setting in /etc/profile should read as follows:
 
 TMOUT=600
-___
 
+----
 
 When dealing with the rule check, we will focus on those two aspects:
 
@@ -100,12 +103,12 @@ We want to make sure that the rule's check will allow both forms - with and with
 
 ==== Bash remediation
 
-Let's examine the bash remediation body - as you know from the introductory lab, you can either
+Let's examine the bash remediation - as you know from the introductory lab, you can either
 
 - scroll down the rule entry in the HTML guide and click the `(show)` link next to the `Remediation Shell Script` label, or
 - open the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file.
 
-The check body looks like this:
+The check's body looks like this:
 
 ....
 
@@ -194,7 +197,7 @@ If the scanner fails, we execute the remediation, and the subsequent scan should
 In order to test our content, we need to build it, and we are going to use the `build_product` script for this.
 Let's go to the project root, and execute `./build_product fedora`, which will build the datastream that contains the OVAL check that we want to test.
 
-We will test the `accounts_tmout` rule included in the `ospp` profile of the RHEL8 datastream.
+We will test the `accounts_tmout` rule included in the `ospp` profile of the Fedora datastream.
 We have to run the test suite as a superuser, as it involves spinning up a container that exposes an SSH port.
 
 You will see an output similar to this one:
@@ -252,10 +255,10 @@ Compare the two following excerpts:
 <ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in /etc/profile.d/*.sh" id="test_etc_profiled_tmout" version="1">
 ...
 ----
-. Luckily, the jinja2 language enables us to define http://jinja.pocoo.org/docs/2.10/templates/#macros[macros] that can help us to remove the duplication.
+. Luckily, the Jinja2 language enables us to define http://jinja.pocoo.org/docs/2.10/templates/#macros[macros] that can help us to remove the duplication.
 We are going to define a local macro that accepts the filename comment and the test stem as arguments.
 +
-Therefore, we remove both tests, and we add the new macro and it's new invocations.
+Therefore, we remove both tests, and we add the new macro and its new invocations.
 +
 ----
 
@@ -270,7 +273,7 @@ Therefore, we remove both tests, and we add the new macro and it's new invocatio
   {{{ test_tmout(  test_stem="etc_profiled_tmout", files="/etc/profile.d/*.sh") }}}
 ----
 +
-Note that the delimiters are different than the `jinja2` website shows - i.e. instead of `{% macro ... %}` on the website, we use the `{{% macro ... %}}` form and so on - there is always one curly brace more than the website documentation shows.
+Note that the delimiters are different than the https://jinja.pocoo.org/docs[Jinja2] website shows - i.e. instead of `{% macro ... %}` on the website, we use the `{{% macro ... %}}` form and so on - there is always one curly brace more than the website documentation shows.
 
 . Anyway, did we do everything right?
 Let's rebuild the datastream, and let's execute the test suite again - the result should be exactly the same.
@@ -312,8 +315,9 @@ Conversely, if the `filepath` is supplied, the `textfilecontent54_object` defini
   {{% endmacro %}}
 ----
 +
-Then, let's instantiate the objects and tests next to each other.
-The whole OVAL file now looks like this:
+To actually create tests and objects, macros have to be called.
+Therefore, let's do it and place the macro calls close to each other - it will emphasize that there are two tests - `etc_profile_tmout` that examines the single file, and `etc_profiled_tmout` that goes through the whole directory.
+Then, the whole OVAL file should look this:
 +
 ----
 <def-group>
@@ -439,8 +443,8 @@ Let's modify the OVAL snippet, so timeouts shorter than the threshold are allowe
 gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml
 ....
 
-The modification should be easy - instead that checking that the timeout value `equals` the threshold, we will use the `less than or equal` check as per the https://oval.mitre.org/language/version5.11/ovaldefinition/documentation/oval-common-schema.html#OperationEnumeration[OVAL specification].
-So just replace `equals` with `less than or equal` in the OVAL definition of the `textfilecontent54_state` like this:
+The modification should be easy - instead of checking that the timeout value `equals` the threshold, we will use the `less than or equal` check as per the https://oval.mitre.org/language/version5.11/ovaldefinition/documentation/oval-common-schema.html#OperationEnumeration[OVAL specification].
+So just replace `equals` with `less than or equal` in the definition of the `textfilecontent54_state` like this:
 
 ----
   <ind:textfilecontent54_state id="state_etc_profile_tmout" version="1">
@@ -467,7 +471,7 @@ INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_pro
 
 === Correct handling of export
 
-The user may have exported th `TMOUT` variable, which is allowed, but not required.
+User may have exported the `TMOUT` variable, which is allowed, but not required.
 So let's modify the passing test scenario `correct_value.pass.sh` to test a correct value in addition to the usage of the `export` keyword:
 
 ----
@@ -509,7 +513,7 @@ The current test object specifies
 and it needs to be changed to ignore the `export` keyword followed by at least one whitespace.
 
 The best approach is to make this an optional group.
-This would mean adding `(export[\s]+)?` to the regular expression, but as we don't want that group to be registered (a.k.a. stored in memory, captured), we have to https://oval.mitre.org/language/about/re_support_5.6.html[add some special syntax], so we add `(?:export[\s]+)`, and the section becomes
+This would mean adding `(export[\s]+)?` to the regular expression, but as we don't want that group to be registered (i.e. stored in memory, captured), we have to https://oval.mitre.org/language/about/re_support_5.6.html[add some special syntax], so we add `(?:export[\s]+)`, and the section becomes
 
 ----
 <ind:pattern operation="pattern match">^[\s]*(?:export[\s]+)?TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
@@ -534,6 +538,6 @@ INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_pro
 INFO - Script supercompliant.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 ....
 
-Everything passes, which means that our check can now handle a range of compliant values, as well as they don't produce false positives when the `export` keyword is involved.
+Everything passes, which means that our check can now handle a range of compliant values, as well as doesn't produce false positives when the `export` keyword is involved.
 
 Congratulations - now you know how use the `ComplianceAsCode` project to make OVAL creation less error-prone, and how to make sure that OVAL checks are working according to expectations.
