@@ -1,6 +1,5 @@
 ---
 - name: Deploy WordPress to groups webservers and dbservers
-  hosts: localhost
   gather_facts: no
   connection: local
 
