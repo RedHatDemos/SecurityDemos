@@ -15,16 +15,12 @@
     owner: root
     group: root
     mode: 0644
-  when: iswpcfg.stat.exists == False or dboverwrite == True
-  changed_when: dboverwrite == True
 
 - name: "Import database for {{ wpdbname }}"
   mysql_db:
     name: "{{ wpdbname }}"
     state: import
     target: /tmp/wordpress.sql
-  when: iswpcfg.stat.exists == False or dboverwrite == True
-  changed_when: dboverwrite == True
 
 - name: "Remove wordpress.sql template database if it still exists"
   file:
