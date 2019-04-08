@@ -31,8 +31,3 @@
     update_password: always
     state: present
 
-- name: "Remove wordpress.sql template database if it still exists"
-  file:
-    path: /tmp/wordpress.sql
-    state: absent
-  changed_when: no
