@@ -1,0 +1,18 @@
+---
+- name: "Checking to see if mariadb is installed prior to us installing it"
+  stat:
+    path: "/usr/lib/systemd/system/mariadb.service"
+  register: wassvcmaria
+
+- name: installing the required software
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - unzip
+    - MySQL-python
+#    - mysql-connector-python
+    - policycoreutils-python
+    - mariadb
+    - mariadb-server
+#    - libselinux-python

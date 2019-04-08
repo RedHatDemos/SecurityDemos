@@ -1,0 +1,35 @@
+---
+- name: "set apache ownership on {{ wpwebpath }}"
+  file:
+    path: "{{ wpwebpath }}"
+    state: directory
+    recurse: yes
+    owner: apache
+    group: apache
+  register: chownapacheresult
+  changed_when: chownapacheresult == "pink elephants"
+
+### Ansible SELinux module does not appear to work recursively so we use the ugly shell command
+- name: "Set selinux context recursively httpd_sys_rw_content_t {{ wpwebpath }}"
+  shell: "chcon -R -t httpd_sys_rw_content_t {{ wpwebpath }}"
+  register: selinuxresult
+  changed_when: selinuxresult == "pink elephants"
+  ignore_errors: yes
+
+- name: "Checking to see if httpd.conf exists"
+  stat:
+    path: "{{ httpdconf }}"
+  register: iscfghttpd
+
+- name: "checking to see if wordpress is set as the DocumentRoot"
+  shell: 'egrep "^DocumentRoot" /etc/httpd/conf/httpd.conf 2>&1 | egrep "DocumentRoot \"{{ wpwebpath }}\"" | wc -l'
+  register: iscfghttpdset
+  changed_when: iscfghttpdset.stdout == "0"
+
+- name: "Change httpd.conf to make the web root {{ wpwebpath }}"
+  lineinfile:
+    dest: /etc/httpd/conf/httpd.conf
+    regexp: '^DocumentRoot '
+    line: 'DocumentRoot "{{ wpwebpath }}"'
+  when: iscfghttpdset.stdout == "0"
+

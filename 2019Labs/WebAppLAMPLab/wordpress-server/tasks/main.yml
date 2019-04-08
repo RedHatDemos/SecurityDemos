@@ -1,0 +1,7 @@
+---
+- include: install/db-main.yml
+  delegate_to: dbservers
+
+- include: install/web-main.yml
+  delegate_to: webservers
+
