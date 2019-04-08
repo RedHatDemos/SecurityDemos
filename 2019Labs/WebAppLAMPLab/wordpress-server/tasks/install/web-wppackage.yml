@@ -15,7 +15,6 @@
     path: "{{ wpwebpath }}"
   register: iswpwebpath
 
-
 - name: download WP
   get_url:
     url: 'https://wordpress.org/latest.zip'
