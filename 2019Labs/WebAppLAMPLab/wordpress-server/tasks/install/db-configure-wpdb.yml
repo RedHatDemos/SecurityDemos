@@ -16,18 +16,18 @@
     group: root
     mode: 0644
 
-- name: "Import database for {{ wpdbname }}"
+- name: Import database for WordPress
   mysql_db:
-    name: "{{ wpdbname }}"
+    name: WordPress
     state: import
     target: /tmp/wordpress.sql
 
-- name: "Create the user {{ wpdbuser }} for {{ wpdbname }}.*:ALL"
+- name: "Create the user {{ wpdbuser }} for WordPress.*:ALL"
   mysql_user:
     host: '%'
     name: "{{ wpdbuser }}"
     password: "{{ wpdbpass }}"
-    priv: "{{ wpdbname }}.*:CREATE,DROP,DELETE,INSERT,SELECT,UPDATE"
+    priv: WordPress.*:CREATE,DROP,DELETE,INSERT,SELECT,UPDATE
     update_password: always
     state: present
 
