@@ -1,0 +1,9 @@
+---
+- name: GoKEV.dummy-role
+  version: master
+  src: https://github.com/GoKEV/GoKEV-dummy-role.git
+
+- name: GoKEV.motd-splash
+  version: master
+  src: https://github.com/GoKEV/motd-splash.git
+

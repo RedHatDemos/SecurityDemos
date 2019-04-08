@@ -1,0 +1,9 @@
+- hosts: all
+
+  vars:
+    dummy_message: You can override this dummy_message variable with extra vars if you like.
+
+  roles:
+    - GoKEV.motd-splash
+    - GoKEV.dummy-role
+
