@@ -1,13 +1,12 @@
 [webservers]
-lampweb ansible_host=192.168.0.51
+lampweb ansible_host=129.213.186.41
 
 [dbservers]
-lampdb ansible_host=192.168.0.52
+lampdb ansible_host=129.213.211.224
 
 [lampservers]
-lampweb ansible_host=192.168.0.51
-lampdb ansible_host=192.168.0.52
-
+lampweb ansible_host=129.213.186.41
+lampdb ansible_host=129.213.211.224
 
 
 [ec2]
