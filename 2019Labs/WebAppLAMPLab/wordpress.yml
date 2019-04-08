@@ -1,5 +1,6 @@
 ---
 - name: Deploy WordPress to groups webservers and dbservers
+  hosts: all
 
   roles:
     - role: wordpress-server
