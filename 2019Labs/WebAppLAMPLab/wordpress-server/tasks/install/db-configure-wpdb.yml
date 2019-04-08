@@ -22,9 +22,17 @@
     state: import
     target: /tmp/wordpress.sql
 
+- name: "Create the user {{ wpdbuser }} for {{ wpdbname }}.*:ALL"
+  mysql_user:
+    host: '%'
+    name: "{{ wpdbuser }}"
+    password: "{{ wpdbpass }}"
+    priv: "{{ wpdbname }}.*:ALL"
+    update_password: always
+    state: present
+
 - name: "Remove wordpress.sql template database if it still exists"
   file:
     path: /tmp/wordpress.sql
     state: absent
   changed_when: no
-
