@@ -9,12 +9,17 @@
   register: chownapacheresult
   changed_when: chownapacheresult == "pink elephants"
 
-### Ansible SELinux module does not appear to work recursively so we use the ugly shell command
-- name: "Set selinux context recursively httpd_sys_rw_content_t {{ wpwebpath }}"
-  shell: "chcon -R -t httpd_sys_rw_content_t {{ wpwebpath }}"
-  register: selinuxresult
-  changed_when: selinuxresult == "pink elephants"
-  ignore_errors: yes
+- name: Set httpd_can_network_connect_db flag on and keep it persistent across reboots
+  seboolean:
+    name: httpd_can_network_connect_db
+    state: yes
+    persistent: yes
+
+- name: "selinux context recursively httpd_sys_rw_content_t {{ wpwebpath }}"
+  sefcontext:
+    target: "{{ wpwebpath }}(/.*)?"
+    setype: httpd_sys_rw_content_t
+    state: present
 
 - name: "Checking to see if httpd.conf exists"
   stat:
