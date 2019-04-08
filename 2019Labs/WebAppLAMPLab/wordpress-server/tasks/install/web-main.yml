@@ -2,7 +2,6 @@
 - include: web-firewall.yml
 - include: web-software.yml
 - include: web-wppackage.yml
-- include: web-services-initial.yml
 - include: web-configure-httpd.yml
 - include: web-configure-wp.yml
 - include: web-services-final.yml
