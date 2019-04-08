@@ -1,5 +1,5 @@
 ---
-- name: Deploy WordPress to groups webservers and dbservers
+- name: Deploy WordPress to lampweb and lampdb
   hosts: all
 
   roles:

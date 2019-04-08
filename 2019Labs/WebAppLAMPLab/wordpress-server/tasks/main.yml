@@ -1,7 +1,7 @@
 ---
 - include: install/db-main.yml
-  delegate_to: dbservers
+  delegate_to: lampdb
 
 - include: install/web-main.yml
-  delegate_to: webservers
+  delegate_to: lampweb
 
