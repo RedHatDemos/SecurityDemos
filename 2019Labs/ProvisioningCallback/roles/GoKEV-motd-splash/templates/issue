@@ -1,0 +1,12 @@
+  ###########################   WARNING!   ###########################
+
+              YOU ARE ABOUT TO CONNECT TO {{ ansible_hostname }}!!
+
+The computer you are about to use is company owned and is intended to be used
+for official company business. As such, the company reserves the right to
+monitor all activity on all company provided equipment and services. All use
+of this machine must comply with company IT policies,  available from HR.
+
+             ALL ACTIVITIES IN THIS SYSTEM ARE MONITORED!
+
+  ###########################   WARNING!   ###########################

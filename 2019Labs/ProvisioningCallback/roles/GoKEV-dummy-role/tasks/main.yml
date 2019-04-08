@@ -1,0 +1,12 @@
+---
+# tasks file for GoKEV-dummy-role
+
+- name: Dummy Role Task
+  debug:
+    msg: "MSG {{ dummy_message }}"
+  when: dummy_fail is undefined
+
+- fail:
+    msg: "MSG {{ dummy_fail }}"
+  when: dummy_fail is defined
+
