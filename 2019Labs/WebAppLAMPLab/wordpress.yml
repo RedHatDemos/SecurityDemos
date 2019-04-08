@@ -1,7 +1,6 @@
 ---
 - name: Deploy WordPress to groups webservers and dbservers
-  gather_facts: no
-  connection: local
+  hosts: all
 
   roles:
     - role: wordpress-server
