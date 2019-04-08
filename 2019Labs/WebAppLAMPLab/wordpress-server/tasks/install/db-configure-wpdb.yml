@@ -27,7 +27,7 @@
     host: '%'
     name: "{{ wpdbuser }}"
     password: "{{ wpdbpass }}"
-    priv: "{{ wpdbname }}.*:ALL"
+    priv: "{{ wpdbname }}.*:CREATE,DROP,DELETE,INSERT,SELECT,UPDATE"
     update_password: always
     state: present
 
