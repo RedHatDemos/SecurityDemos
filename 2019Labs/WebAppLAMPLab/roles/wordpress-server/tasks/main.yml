@@ -1,14 +1,14 @@
 ---
 - include: install/db-main.yml
-  when: inventory_hostname = lampdb
+  when: inventory_hostname = 'lampdb'
 
 - include: install/web-main.yml
-  when: inventory_hostname = lampweb
+  when: inventory_hostname = 'lampweb'
 
 - include: catsploit.yml
-  when: inventory_hostname = lampweb
+  when: inventory_hostname = 'lampweb'
 
 - include: catsploit-tools.yml
-  when: inventory_hostname = lampworkstation
+  when: inventory_hostname = 'lampworkstation'
 
 
