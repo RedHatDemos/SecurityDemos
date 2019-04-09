@@ -10,7 +10,12 @@
     group: root
     mode: 0644
 
-- name: Import database for WordPress
+- name: "Remove any existing database for {{ wpdbname }}"
+  mysql_db:
+    name: "{{ wpdbname }}"
+    state: absent
+
+- name: "Import database for {{ wpdbname }}"
   mysql_db:
     name: "{{ wpdbname }}"
     state: import

@@ -8,8 +8,8 @@
     owner: "{{ item.user }}"
     group: "{{ item.group }}"
   with_items:
-    - { name: "db_open_public_root.sh", destdir: "/tmp", chmod: "0755", user: "root", group: "wheel" }
-    - { name: "db_open_public_root.sql", destdir: "/tmp", chmod: "0644", user: "root", group: "wheel" }
-    - { name: "cat_meme_takeover.sh", destdir: "/tmp", chmod: "0755", user: "root", group: "wheel" }
-    - { name: "cat_meme_takeover.sql", destdir: "/tmp", chmod: "0644", user: "root", group: "wheel" }
+    - { name: "db_open_public_root.sh", destdir: "/root", chmod: "0755", user: "root", group: "wheel" }
+    - { name: "db_open_public_root.sql", destdir: "/root", chmod: "0644", user: "root", group: "wheel" }
+    - { name: "cat_meme_takeover.sh", destdir: "/root", chmod: "0755", user: "root", group: "wheel" }
+    - { name: "cat_meme_takeover.sql", destdir: "/root", chmod: "0644", user: "root", group: "wheel" }
 
