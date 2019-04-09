@@ -1,14 +1,14 @@
 ---
 - include: install/db-main.yml
-  delegate_to: lampdb
+  when: inventory_hostname = lampdb
 
 - include: install/web-main.yml
-  delegate_to: lampweb
+  when: inventory_hostname = lampweb
 
 - include: catsploit.yml
-  delegate_to: lampweb
+  when: inventory_hostname = lampweb
 
 - include: catsploit-tools.yml
-  delegate_to: lampworkstation
+  when: inventory_hostname = lampworkstation
 
 
