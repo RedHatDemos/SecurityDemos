@@ -1,0 +1,12 @@
+---
+- name: Generating VM name(s)
+  set_fact:
+    vm_names: "{{ vm_names + [ vm_name ] }}"
+  when: vm_names is defined
+
+- name: Log vm_names
+  debug:
+    var: vm_names
+  when: vm_names is defined
+
+# Add your own plays here

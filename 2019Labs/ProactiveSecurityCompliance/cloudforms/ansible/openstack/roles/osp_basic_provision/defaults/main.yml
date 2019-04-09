@@ -1,0 +1,64 @@
+---
+# For a full list of os_server parameters, visit:
+# http://docs.ansible.com/ansible/latest/modules/os_server_module.html
+
+osp_auth:
+  auth_url: http://192.168.0.20:5000/v3
+  username: admin
+  password: !vault |
+            $ANSIBLE_VAULT;1.1;AES256
+            32343765326564333435653736376236303139666364343432313831326337386433356361373361
+            3830633930373435366632343039353239326132376537630a653031636261353663353336373665
+            33346534656134343765353434646237666164393766353364626266353332323239623565343063
+            6432363234323161390a323061633334653137363162373032326338666639613239623664353030
+            3863
+  project_name: admin
+  tenant_name: admin
+  project_domain_name: Default
+  user_domain_name: Default
+
+key_name: root_on_workstation
+flavor: m1.small
+security_groups: Production
+network: private
+floating_ip: 192.168.1.2
+ssh_authorized_key:
+template: rhel7.4
+
+# vm guest parameters
+vm_name:
+state: present
+
+dns_suffix: example.com
+dns_servers: 192.168.0.1
+
+# cloud_init script
+custom_script: |
+  #cloud-config
+  host_name: "{{ vm_name }}"
+  hostname: "{{ vm_name }}.{{ dns_suffix }}"
+  disable_root: false
+  users:
+    - name: root
+      lock_passwd: false
+      ssh_authorized_keys:
+        - "{{ ssh_authorized_key | default(omit) }}"
+  chpasswd:
+    list: |
+      root:!vault |
+            $ANSIBLE_VAULT;1.1;AES256
+            32343765326564333435653736376236303139666364343432313831326337386433356361373361
+            3830633930373435366632343039353239326132376537630a653031636261353663353336373665
+            33346534656134343765353434646237666164393766353364626266353332323239623565343063
+            6432363234323161390a323061633334653137363162373032326338666639613239623664353030
+            3863
+    expire: false
+  runcmd:
+    - systemctl stop firewalld
+    - systemctl disable firewalld
+
+
+scap_profile_name:
+
+# enable extra debugging
+verbose: false

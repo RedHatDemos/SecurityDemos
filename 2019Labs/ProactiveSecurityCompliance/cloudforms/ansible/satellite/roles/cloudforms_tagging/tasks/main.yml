@@ -1,0 +1,101 @@
+---
+- name: Creating category
+  uri:
+    url: "{{ manageiq.api_url }}/api/categories"
+    method: POST
+    body:
+      name: "{{ category }}"
+      description: "{{ category_description }}"
+      single_value: true
+    body_format: json
+    validate_certs: "{{ manageiq_validate_certs }}"
+    user: "{{ manageiq_user }}"
+    password: "{{ manageiq_password }}"
+    status_code: 200
+  ignore_errors: true
+  register: category_create_output
+
+- name: Log category_create_output
+  debug:
+    var: category_create_output
+  when: verbose
+
+- name: Check tag category
+  uri:
+    url: "{{ manageiq.api_url }}/api/categories?filter[]=name={{ category }}&expand=resources&attributes=id"
+    method: GET
+    body_format: json
+    validate_certs: false
+    user: "{{ manageiq_user }}"
+    password: "{{ manageiq_password }}"
+    status_code: 200
+  register: category_query_output
+
+- name: Log category_query_output
+  debug:
+    var: category_query_output
+  when: verbose
+
+- name:
+  set_fact:
+    category_id: "{{ category_query_output.json.resources[0].id }}"
+
+- name: Log category_id
+  debug:
+    var: category_id
+  when: verbose
+
+- name: Creating tags
+  uri:
+    url: "{{ manageiq.api_url }}/api/categories/{{ category_id}}/tags"
+    method: POST
+    body:
+      name: "{{ item | lower | regex_replace('\\W', '_') }}"
+      description: "{{ item }}"
+    body_format: json
+    validate_certs: "{{ manageiq_validate_certs }}"
+    user: "{{ manageiq_user }}"
+    password: "{{ manageiq_password }}"
+    status_code: 200
+  ignore_errors: true
+  register: create_tags_output
+  when: category_id is defined
+  with_items:
+  - "{{ tag_pass }}"
+  - "{{ tag_fail }}"
+
+- name: Log create_tags_output
+  debug:
+    var: create_tags_output
+  when: verbose
+
+- name: Setting tag name to "{{ tag_pass }}" based on scan_pass "{{ scan_pass }}"
+  set_fact:
+    tag: "{{ tag_pass }}"
+  when: scan_pass
+
+- name: Setting tag name to "{{ tag_fail }}" based on scan_pass "{{ scan_pass }}"
+  set_fact:
+    tag: "{{ tag_fail }}"
+  when: not scan_pass
+
+- name: Assign tag to VM
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ vm_href_slug }}/tags"
+    method: POST
+    body:
+      action: assign
+      resources:
+        - category: "{{ category }}"
+          name: "{{ tag | lower | regex_replace('\\W', '_') }}"
+    body_format: json
+    validate_certs: "{{ manageiq_validate_certs }}"
+    user: "{{ manageiq_user }}"
+    password: "{{ manageiq_password }}"
+    status_code: 200
+  register: assign_vmtag_output
+
+- name: Log assign_vmtag_output
+  debug:
+    var: assign_vmtag_output
+  when: verbose
