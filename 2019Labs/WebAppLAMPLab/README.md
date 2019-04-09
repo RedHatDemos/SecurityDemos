@@ -33,7 +33,7 @@ Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 MariaDB [WordPress]>  exit
-<pre>
+</pre>
 
 If you see the above dialogue, you're in!  Type "exit" to leave the MySQL prompt and return back to a regular command line.
 
