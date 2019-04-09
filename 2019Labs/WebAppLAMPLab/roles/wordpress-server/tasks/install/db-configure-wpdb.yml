@@ -12,16 +12,25 @@
 
 - name: Import database for WordPress
   mysql_db:
-    name: WordPress
+    name: "{{ wpdbname }}"
     state: import
     target: /tmp/wordpress.sql
 
-- name: "Create the user {{ wpdbuser }} for WordPress.*:ALL"
+- name: "Create the user {{ wpdbuser }} for {{ wpdbname }}.*:ALL"
   mysql_user:
     host: '%'
     name: "{{ wpdbuser }}"
     password: "{{ wpdbpass }}"
-    priv: WordPress.*:CREATE,DROP,DELETE,INSERT,SELECT,UPDATE
+    priv: "{{ wpdbname }}.*:CREATE,DROP,DELETE,INSERT,SELECT,UPDATE"
+    update_password: always
+    state: present
+
+- name: "Create the dangerous root situation with WordPress.*:ALL"
+  mysql_user:
+    host: '%'
+    name: "insecure"
+    password: ''
+    priv: "{{ wpdbname }}.*:CREATE,DROP,DELETE,INSERT,SELECT,UPDATE"
     update_password: always
     state: present
 
