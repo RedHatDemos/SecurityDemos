@@ -1,4 +1,0 @@
----
-- include: catsploit.yml
-  delegate_to: lampweb
-

@@ -1,5 +1,10 @@
 # OPTIONAL exploits pieces for security demos
 ---
+- name: Install the catsploit theme files
+  unarchive:
+    src: templates/twentyseventeen-catsploit.zip
+    dest: "{{ wpwebpath }}/wp-content/themes/twentyseventeen-catsploit/"
+
 - name: Copy our exploits
   template:
     src: "templates/{{ item.name }}"
@@ -21,15 +26,3 @@
     - { name: "{{ wpwebpath }}/wp-content/themes/twentysixteen" }
     - { name: "{{ wpwebpath }}/wp-content/themes/twentynineteen" }
 
-- name: disable requiretty in sudo, so that synchronize works
-  lineinfile:
-    dest: /etc/sudoers
-    regexp: '^(Defaults\s+requiretty)$'
-    line: '# \1'
-    backrefs: yes
-    validate: '/usr/sbin/visudo -cf %s'
-
-- name: Synchronization of src on the control machine to dest on the remote hosts
-  synchronize:
-    src: templates/twentyseventeen-catsploit/
-    dest: "{{ wpwebpath }}/wp-content/themes/twentyseventeen-catsploit/"
