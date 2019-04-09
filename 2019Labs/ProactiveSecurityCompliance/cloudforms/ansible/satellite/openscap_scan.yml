@@ -1,0 +1,25 @@
+---
+- name: OpenSCAP scan
+  hosts: all
+  gather_facts: true
+
+  pre_tasks:
+    - name: logging manageiq object
+      debug: var=manageiq
+      when: manageiq is defined
+
+    - name: Log policy_id
+      debug:
+        var: policy_id
+      when: policy_id is defined
+
+  roles:
+    - role: foreman_scap_scan
+
+- name: Analyze scan results and apply tags
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - role: satellite_scan_results
+    - role: cloudforms_tagging

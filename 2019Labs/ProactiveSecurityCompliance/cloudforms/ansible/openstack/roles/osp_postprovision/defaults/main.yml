@@ -1,0 +1,32 @@
+---
+# initialize empty array
+vms: []
+
+# setup retry variables
+max_retries: 100
+retry_interval: 10
+
+# retirement tags for the service and vms
+retirement_category: lifecycle
+retirement_tag: retire_full
+
+### privileged credentials needed for post provision tasks ###
+manageiq_user: admin
+# Run the following to generate your own vaulted password string and replace the contents of
+# manageiq_password. You will need to include a the vault password in your credentials
+# i.e. ansible-vault encrypt_string smartvm
+manageiq_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32343765326564333435653736376236303139666364343432313831326337386433356361373361
+          3830633930373435366632343039353239326132376537630a653031636261353663353336373665
+          33346534656134343765353434646237666164393766353364626266353332323239623565343063
+          6432363234323161390a323061633334653137363162373032326338666639613239623664353030
+          3863
+
+provider_id:
+
+# turn ssl verify off
+manageiq_validate_certs: false
+
+# enable extra debugging
+verbose: false
