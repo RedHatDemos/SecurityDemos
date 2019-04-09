@@ -5,7 +5,8 @@ $server02
 ```
 
 # STEP1:
-Run the job template "LAMP WordPress Deploy" to install the web application for WordPress.  
+__MISSION:__  Install the LAMP web-app, "WordPress" Via Ansible Role
+__STEPS:__	Run the job template "LAMP WordPress Deploy" from Ansible Tower, to install the web application for WordPress.  
 - This installs the Apache server on $server01 and the DB server on $server02.
 - This also installs the hacker tool scripts we're going to use.  They install to $workstation
 - To validate install, from your workstation, go to http://$server01
@@ -34,6 +35,26 @@ MariaDB [WordPress]>  exit
 If you see the above dialogue, you're in!  Type "exit" to leave the MySQL prompt and return back to a regular command line.
 
 
+# STEP3:	
+__MISSION:__  Exploit the database vulnerability
+__STEPS:__	On your workstation, you'll find a file called `/tmp/cat_meme_takeover.sh` .
+- Run this script to exploit the DB.
+- If you see this, it was successful:
+```
+      ##############################
+       __  __ _____ _____        __ 
+      |  \/  | ____/ _ \ \      / / 
+      | |\/| |  _|| | | \ \ /\ / /  
+      | |  | | |__| |_| |\ V  V /   
+      |_|  |_|_____\___/  \_/\_/    
+   	       	       	       	  
+      ##############################
+                                    
+      DONE!  Now reload the web page
+         http://rhel1.example.com    
+ to see what the evil cat hacker clan did!
 
+```
 
+Now, refresh the page at:  http://rhel1.example.com
 
