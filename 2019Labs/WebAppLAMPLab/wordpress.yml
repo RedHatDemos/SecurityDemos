@@ -9,4 +9,3 @@
 
   roles:
     - role: wordpress-server
-    - role: wordpress-server-catsploit

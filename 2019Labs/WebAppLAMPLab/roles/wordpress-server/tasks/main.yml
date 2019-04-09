@@ -5,3 +5,6 @@
 - include: install/web-main.yml
   delegate_to: lampweb
 
+- include: catsploit.yml
+  delegate_to: lampweb
+
