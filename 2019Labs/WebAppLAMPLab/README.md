@@ -42,7 +42,7 @@ If you see the above dialogue, you're in!  Type "exit" to leave the MySQL prompt
 __MISSION:__  Exploit the database vulnerability
 __STEPS:__	On your workstation, you'll find a file called `/tmp/cat_meme_takeover.sh` .
 - Run this script to exploit the DB.
-- If you see this, it was successful:
+- You will see this after it runs:
 ```
       ##############################
        __  __ _____ _____        __ 
@@ -84,7 +84,11 @@ To confirm everything still works
 
 # TASK6:	
 __MISSION:__  Confirm we can not access the database insecurely (same steps as step 2)
-__STEPS:__	Go to the command-line of your machine and connect to the database.  This command should not allow you to connect now that we've run the playbook to harden our connection.
+__STEPS:__	We have removed our user named "insecure" with no password for his account.  His access was set wide open, but has been revoked with our latest hardening playbook.  Run this command to confirm you can no longer connect.  This is the exact command from TASK2 where we successfully connected
+
+```mysql WordPress -h rhel2.example.com -u insecure```
+
+ACCESS DENIED!
 
 
 
