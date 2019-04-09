@@ -1,0 +1,18 @@
+---
+- name: "Checking to see if httpd is installed prior to us installing it"
+  stat:
+    path: "/usr/lib/systemd/system/httpd.service"
+  register: wassvchttpd
+
+- name: Software packages are present
+  yum:
+    name:
+      - unzip
+      - MySQL-python
+      - policycoreutils-python
+      - httpd
+      - php
+      - php-mysql
+      - mariadb
+    state: latest
+
