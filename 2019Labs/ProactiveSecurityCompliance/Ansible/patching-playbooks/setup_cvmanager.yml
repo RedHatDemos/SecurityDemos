@@ -1,41 +1,11 @@
 ---
 - name: Setup katello-cvmanager
-  hosts: sat
+  hosts: "{{ HOSTS }}"
   gather_facts: false
-  vars_files: 
-    - vault
 
   tasks:
-  - name: ensure optional repo exists
-    rhsm_repository:
-      name: rhel-7-server-optional-rpms
-      state: enabled
-
-  - name: Install packages
-    yum:
-      name: "{{ item }}"
-      state: present
-    with_items:
-      - make
-      - automake
-      - gcc
-      - gcc-c++
-      - kernel-devel
-      - ruby-devel
-
-  - name: Clone katello-cvmanager into /var
-    git:
-      repo: https://github.com/RedHatSatellite/katello-cvmanager.git
-      dest: /var/katello-cvmanager
-
-  - name: build gemspec file
-    command: gem build cvmanager.gemspec
-    args:
-      chdir: /var/katello-cvmanager
-
-  - name: install katello-cvmanager gem
-    gem:
+  - name: install cvmanager
+    include_role:
       name: cvmanager
-      gem_source: /var/katello-cvmanager/cvmanager-0.2.gem
-      state: present
+      tasks_from: install
 

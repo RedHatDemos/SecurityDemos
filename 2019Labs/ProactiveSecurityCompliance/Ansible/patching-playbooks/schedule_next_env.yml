@@ -1,9 +1,7 @@
 ---
 - name: schedule next lifecycle patching run
-  hosts: 127.0.0.1
+  hosts: localhost
   connection: local
-  vars_files:
-    - vault.yml
   tasks:
   - name: set rrule variable to be 7 days from today
     set_fact:
@@ -20,6 +18,6 @@
       body_format: json
       force_basic_auth: yes
       status_code: 201
-      user: "{{ tower_user }}"
-      password: "{{ tower_pass }}"
+      user: "{{ lookup('env', 'TOWER_USERNAME') }}"
+      password: "{{ lookup('env', 'TOWER_PASSWORD') }}"
       validate_certs: no
