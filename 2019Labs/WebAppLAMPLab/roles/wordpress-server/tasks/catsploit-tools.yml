@@ -1,6 +1,6 @@
 # OPTIONAL exploits pieces for security demos
 ---
-- name: Copy our exploits
+- name: Copy our exploits catsploit-tools
   template:
     src: "templates/{{ item.name }}"
     dest: "{{ item.destdir }}/{{ item.name }}"
