@@ -58,3 +58,30 @@ __STEPS:__	On your workstation, you'll find a file called `/tmp/cat_meme_takeove
 
 Now, refresh the page at:  http://rhel1.example.com
 
+
+# STEP4:	
+__MISSION:__  Let's re-install the original WordPress role to reset the servers to a stable baseline.
+__STEPS:__	Run the job template again "LAMP WordPress Deploy" from Ansible Tower, to install the web application for WordPress.  
+- This installs the Apache server on $server01 and the DB server on $server02.
+- This also installs the hacker tool scripts we're going to use.  They install to $workstation
+- To validate install, from your workstation, go to http://$server01
+
+Now, refresh the page at:  http://rhel1.example.com
+
+YAYY!  We're no longer victims of a cat meme exploit!
+
+# STEP5:	
+__MISSION:__  Let's lock down the database so this won't work again.
+__STEPS:__	Run the job template again "LAMP WordPress Secure" this time, from Ansible Tower, to run the hardening playbook.  
+- This removes the open vulnerability which allows you to connect to the database and exploit it with cat memes.
+
+Now, refresh the page at:  http://rhel1.example.com
+To confirm everything still works
+
+
+# STEP6:	
+__MISSION:__  Confirm we can not access the database insecurely (same steps as step 2)
+__STEPS:__	Go to the command-line of your machine and connect to the database.  This command should not allow you to connect now that we've run the playbook to harden our connection.
+
+
+
