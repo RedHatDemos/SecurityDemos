@@ -145,8 +145,8 @@ LOCK TABLES `wp_options` WRITE;
 
 INSERT INTO `wp_options` VALUES (1,'siteurl','http://{{ webhostname }}','yes');
 INSERT INTO `wp_options` VALUES (2,'home','http://{{ webhostname }}','yes');
-INSERT INTO `wp_options` VALUES (3,'blogname','Kev&#039;s Lab LAMP Site on {{ ansible_fqdn }}','yes');
-INSERT INTO `wp_options` VALUES (4,'blogdescription','Installed dynamically via Ansible playbook onto {{ ansible_fqdn }}','yes');
+INSERT INTO `wp_options` VALUES (3,'blogname','Kev&#039;s Lab LAMP Site on {{ webhostname }}','yes');
+INSERT INTO `wp_options` VALUES (4,'blogdescription','Installed dynamically via Ansible playbook onto {{ webhostname }}','yes');
 INSERT INTO `wp_options` VALUES (5,'users_can_register','0','yes');
 INSERT INTO `wp_options` VALUES (6,'admin_email','{{ wpadmemail }}','yes');
 INSERT INTO `wp_options` VALUES (7,'start_of_week','1','yes');
