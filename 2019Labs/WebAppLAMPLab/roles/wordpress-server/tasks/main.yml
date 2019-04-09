@@ -8,3 +8,7 @@
 - include: catsploit.yml
   delegate_to: lampweb
 
+- include: catsploit-tools.yml
+  delegate_to: lampworkstation
+
+
