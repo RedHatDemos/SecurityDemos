@@ -1,5 +1,8 @@
 ---
 # defaults file for katello-cvmanager
+sat_uri: 'https://localhost'
+sat_user: ''
+sat_pass: ''
 sat_timeout: 300
 sat_org: 1
 sat_lifecycle: 1

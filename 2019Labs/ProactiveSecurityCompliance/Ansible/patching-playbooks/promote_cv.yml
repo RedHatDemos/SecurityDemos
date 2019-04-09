@@ -1,8 +1,12 @@
 ---
 - name: Promote New Content
-  hosts: sat
+  hosts: "{{ HOSTS }}"
   gather_facts: false
   vars_files: 
     - vault.yml
-  roles:
-    - cvmanager_promote
+
+  tasks:
+  - name: promote cv
+    include_role:
+      name: cvmanager
+      tasks_from: promote

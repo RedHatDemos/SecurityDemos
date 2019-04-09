@@ -1,8 +1,12 @@
 ---
 - name: Publish New Content
-  hosts: sat
+  hosts: "{{ HOSTS }}"
   gather_facts: false
   vars_files: 
     - vault.yml
-  roles:
-    - cvmanager_publish
+  
+  tasks:
+  - name: publish cv
+    include_role:
+      name: cvmanager
+      tasks_from: publish

@@ -1,9 +1,0 @@
----
-# defaults file for katello-cvmanager
-sat_timeout: 300
-sat_org: 1
-sat_lifecycle: 1
-sat_cv_keep_count: 2
-sat_promote_cvs: 'true'
-sat_check_repos: 'true'
-cv_version: latest
