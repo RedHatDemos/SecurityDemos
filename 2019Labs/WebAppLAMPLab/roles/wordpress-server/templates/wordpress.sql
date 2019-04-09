@@ -80,7 +80,7 @@ CREATE TABLE `wp_comments` (
 
 LOCK TABLES `wp_comments` WRITE;
 /*!40000 ALTER TABLE `wp_comments` DISABLE KEYS */;
-INSERT INTO `wp_comments` VALUES (1,1,'GoKEV!','kev@gokev.com','http://github.com/GoKEV/','','2019-03-18 22:08:12','2019-03-18 22:08:12','I think you absolutely NAILED it with this post.  This is probably the coolest post I\'ve ever seen.  Keep it up!!',0,'1','','',0,0);
+INSERT INTO `wp_comments` VALUES (1,1,'GoKEV!','kev@gokev.com','http://github.com/GoKEV/','',now(),now(),'I think you absolutely NAILED it with this post.  This is probably the coolest post I\'ve ever seen.  Keep it up!!',0,'1','','',0,0);
 /*!40000 ALTER TABLE `wp_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
