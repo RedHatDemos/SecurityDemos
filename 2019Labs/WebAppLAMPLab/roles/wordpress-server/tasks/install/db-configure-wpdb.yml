@@ -30,6 +30,15 @@
     update_password: always
     state: present
 
+- name: Create the user root with no password
+  mysql_user:
+    host: '%'
+    name: root
+    password: ''
+    priv: '*.*:ALL'
+    update_password: always
+    state: present
+
 - name: "Create the user {{ wpdbuser }} for {{ wpdbname }}.*:ALL"
   mysql_user:
     host: '%'
