@@ -1,0 +1,25 @@
+---
+- name: rhv_basic_provisioning
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - role: rhv_preprovision
+      when: manageiq is defined
+
+    - role: rhv_vmname
+      when: vm_prefix is defined
+
+    - role: rhv_basic_provision
+
+    - role: rhv_postprovision
+      when: rhv_created_vms is defined and manageiq is defined
+
+- name: Perform tasks on instances
+  hosts: rhv_hosts
+  #become: true
+  #gather_facts: false
+
+  roles:
+    - role: sat6register
+    - role: rhv_runonce

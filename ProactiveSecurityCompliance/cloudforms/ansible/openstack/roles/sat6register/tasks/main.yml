@@ -1,0 +1,33 @@
+---
+# tasks register to satellite6 with or without puppet
+#
+- name: Download bootstrap.py from the {{ satellite_hostname }}
+  get_url:
+    url: "http://{{ satellite_hostname }}/pub/bootstrap.py"
+    dest: /usr/local/sbin/bootstrap.py
+  when: hostgroup != 'false'
+  register: get_url_result
+  until: get_url_result | succeeded
+  retries: 10
+  delay: 1
+  ignore_errors: yes
+
+- name: Make bootstrap.py script executable
+  file:
+    path: /usr/local/sbin/bootstrap.py
+    mode: 0755
+    owner: root
+    group: root
+
+- name: rm -rf /var/cache/yum/*
+  command: rm -rf /var/cache/yum/*
+  ignore_errors: true
+
+- name: Register to Satellite6 with puppet enabled and add it to the correct hostgroup
+  command: "/usr/local/sbin/bootstrap.py -l {{ satellite_user}} -p {{ satellite_pass }} -s {{ satellite_hostname }} -o '{{ organization }}' -L '{{ location }}' -g {{ hostgroup }} -a {{ activation_key }} -f"
+  register: bootstrap_output
+
+- name: log bootstrap_output
+  debug:
+    var: bootstrap_output
+  when: verbose

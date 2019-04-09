@@ -1,0 +1,31 @@
+---
+- name: Yum Install Packages
+  hosts: all
+  gather_facts: false
+
+  vars:
+    package_name: aide
+    verbose: false
+
+  tasks:
+  - name: Wait for SSH
+    wait_for:
+      host: "{{ ansible_host }}"
+      port: 22
+      delay: 10
+      timeout: 15
+      state: started
+    delegate_to: localhost
+
+  - name: Install Packages
+    yum:
+      name: "{{ item }}"
+      state: latest
+    register: yum_output
+    with_items:
+      - "{{ package_name }}"
+
+  - name: Log yum_output
+    debug:
+      var: yum_output
+    when: verbose and yum_output is defined

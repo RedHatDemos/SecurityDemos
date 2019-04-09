@@ -1,0 +1,58 @@
+---
+- hosts: all
+  vars:
+    sat_hostname: "{{ sat_hostname }}"
+    tools_channel: "{{ tools_channel }}"
+    activation_key: "{{ activation_key }}"
+    org_id: "{{ org_id }}"
+  tasks:
+  - name: Make sure DNS is set up correctly
+    command: "/bin/nmcli con mod \"System eth0\" ipv4.dns \"192.168.0.1\""
+  - name: Reload NIC
+    command: "/bin/nmcli con up ifname eth0"
+  - name: Install Satellite Certificate and Subscription Manager Configuration RPM
+    yum:
+      name: "http://{{ sat_hostname }}/pub/katello-ca-consumer-latest.noarch.rpm"
+      state: present
+  - name: Register with Satellite
+    redhat_subscription:
+      state: present
+      activationkey: "{{ activation_key }}"
+      org_id: "{{ org_id }}"
+      autosubscribe: yes
+      force_register: yes
+  - name: Enable Satellite Tools Repository
+    command: "/usr/bin/subscription-manager repos --enable {{ tools_channel }}"
+  - name: Clean yum cache
+    command: "yum clean all"
+    args:
+      warn: false
+  - name: Install Katello Agent
+    yum: pkg=katello-agent state=latest
+  - name: Enable Katello Agent
+    service: name=goferd enabled=yes
+  - name: Start Katello Agent
+    service: name=goferd state=started
+  - name: Install Red Hat Access Insights Agent
+    yum: pkg=redhat-access-insights state=present
+  - name: Configure Red Hat Access Insights
+    command: "redhat-access-insights --register"
+  - name: Install Foreman SCAP Client
+    yum: pkg=rubygem-foreman_scap_client state=present
+  - name: Install Puppet Client
+    yum: pkg=puppet state=latest
+  - name: Configure puppet client server
+    command: "puppet config set --section agent server {{ sat_hostname }}"
+  - name: Configure puppet client CA server
+    command: "puppet config set --section agent ca_server {{ sat_hostname }}"
+  - name: Clean any old certs from puppet client
+    command: "find /var/lib/puppet/ssl -name {{ inventory_hostname }}.pem -delete"
+    ignore_errors: yes
+  - name: Configure puppet client certificate
+    command: "puppet agent --test --tags no_such_tag --waitforcert 10"
+  - name: Configure puppet client
+    command: "puppet agent -t"
+  - name: Start Puppet Daemon
+    service: name=puppet state=started
+  - name: Enable Puppet Daemon
+    service: name=puppet enabled=yes

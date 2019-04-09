@@ -1,0 +1,47 @@
+= Implementing Proactive Security and Compliance Automation
+
+=== [.underline]#Presenters/Lab Developers#:
+*Lucy Kerner*, Security Global Technical Evangelist and Strategist, Red Hat
+
+*Patrick Rutledge*, Principal Solution Architect, Red Hat
+
+*Kevin Morey*, Principal Cloud Specialist Solution Architect, Red Hat
+
+*Nate Stephany*, Senior Cloud Specialist Solution Architect, Red Hat
+
+*Will Nix*, Principal Technical Marketing Manager - Management Portfolio, Red Hat
+
+
+== Overview and Prerequisites:
+In this hands-on lab and demo environment, you will learn how to automate security and compliance using a combination of Red Hat Ansible Automation, Red Hat Satellite, Red Hat Insights, OpenSCAP, and Red Hat CloudForms. Specifically, you will go through a series of exercises that will show you how, from a central place, you can: create a security compliant host at provisioning time, create and enforce control policies, automate security scans and remediations for various different security profiles and security controls, and do proactive security and automated risk management. The goal of this lab is to introduce you to a variety of Red Hat products that can help you with proactive security and compliance automation. We will demonstrate the power and flexibility of using either one or a combination of Red Hat products to help you with security and compliance automation.
+
+This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to automate security and compliance across their heterogeneous infrastructure using one or more Red Hat Products.  The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills. Knowledge of virtualization and basic linux scripting would also be helpful, but not required.
+
+== Attendees, during this session, will learn:
+* What Security Content Automation Protocol (SCAP) is and how you can use it to automate compliance with security policies
+* How to provision a security compliant host using both Red Hat CloudForms and Red Hat Ansible Automation
+* How to use Red Hat Satellite, OpenSCAP, Red Hat CloudForms, and Red Hat Ansible Automation to automatically apply and enforce security policies
+* How to manage the security of Red Hat Openshift container images from Red Hat CloudForms
+* How to use OpenSCAP, Red Hat Satellite, and Red Hat CloudForms to scan and audit systems for security compliance
+* How to use OpenSCAP, Red Hat CloudForms, and Red Hat Ansible Automation to automatically remediate systems that are out of compliance
+* How to create and view reports showing compliant and non-compliant systems in Red Hat CloudForms after running OpenSCAP security compliance scans on these systems
+* How to create and view security related reports for a hybrid environment, including: Red Hat Virtualization, Red Hat Openstack Platform, and Red Hat Openshift Container Platform.
+* How to use Red Hat Insights for proactive security and automated risk management
+
+== Lab Environment:
+Your entire lab environment is hosted online and includes: Red Hat Virtualization, Red Hat Openstack Platform, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat CloudForms, Red Hat Ansible Automation, Red Hat Insights, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
+
+You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
+
+Each lab exercise is independent from each other, so feel free to do the lab exercises in whatever order you'd like.
+
+== Table of Contents
+* link:lab0.adoc[Lab 0: Setup steps]
+* link:lab1.adoc[Lab 1: Provisioning a security compliant host in Red Hat Virtualization]
+* link:lab2.adoc[Lab 2: Security scanning and auditing using OpenSCAP in Satellite]
+* link:lab3.adoc[Lab 3: Enforcing compliance with security policies using Red Hat CloudForms and Red Hat Ansible Automation]
+* link:lab4.adoc[Lab 4: Managing the security of Red Hat Openshift container images from Red Hat CloudForms]
+* link:lab5.adoc[Lab 5: OpenSCAP security scans and remediations at the push of a button]
+* link:lab6.adoc[Lab 6: Viewing SCAP compliant and non-compliant systems from a report in Red Hat CloudForms]
+* link:lab7.adoc[Lab 7: Viewing other security related reports for systems in Red Hat Virtualization, Red Hat Openstack, and Red Hat Openshift]
+* link:lab8.adoc[Lab 8: Proactive Security and Automated Risk Management with Red Hat Insights]
