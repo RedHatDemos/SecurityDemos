@@ -37,18 +37,3 @@
   with_items:
     - { name: "{{ wpwebpath }}/wp-content/themes/twentysixteen" }
     - { name: "{{ wpwebpath }}/wp-content/themes/twentynineteen" }
-
-
-
-automate_all_the_things.png
-cat_meme_takeover.sh
-cat_meme_takeover.sql
-custom-header.php
-db_open_public_root.sh
-db_open_public_root.sql
-header_ansible.jpg
-twentyseventeen-catsploit
-twentyseventeen-catsploit.zip
-wordpress.sql
-wp-config.php
-
