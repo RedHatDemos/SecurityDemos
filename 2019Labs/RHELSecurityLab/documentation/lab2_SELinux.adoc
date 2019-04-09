@@ -261,6 +261,7 @@ The _selinux6_ system has SELinux in enforcing mode. Now, let's switch SELinux t
 [source]
 [root@selinux6 selinux_scripts]# setenforce 0
 [root@selinux6 selinux_scripts]# getenforce
+Permissive
 
 ==== Lab 2.2.5 exercise steps in permissive mode
 Now, let's follow these again steps to reproduce the attack in permissive mode.
@@ -329,7 +330,7 @@ SELinux is disabled for all web servers by default. In a fully automated fashion
 
 The SELinux part of the lab environment consists of four machines:
 
- * selinux1, selinux1.example.com (RHEL-7 admin host)
+ * selinux1, selinux1.example.com (RHEL-8 admin host)
  * selinux2, selinux2.example.com (RHEL-8 host)
  * selinux3, selinux3.example.com (RHEL-6 host)
  * selinux5, selinux5.example.com (RHEL-7 host)
@@ -355,29 +356,28 @@ Let's take a look at what has been pre-configured for you in this part of the la
 [lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
 
 . Look at the DNS records on the _selinux1_ server.
-
-	[root@selinux1 ~]# cat /etc/hosts
-	127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-
-	192.168.0.20 selinux2
-	192.168.0.21 selinux3
-	192.168.0.6 selinux5
+[source]
+[root@selinux1 ~]# cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.0.20 selinux2
+192.168.0.21 selinux3
+192.168.0.6 selinux5
 
 .  The __ansible__ package has been installed on the _selinux1_ host.
-
-	[root@selinux1 ~]# yum install ansible -y
+[source]
+[root@selinux1 ~]# pip3 install ansible
 
 . Enter the _selinux_scripts_ working directory on the _selinux1_ host.
-
-	[root@selinux1 ~]# cd /root/selinux_scripts
+[source]
+[root@selinux1 ~]# cd /root/selinux_scripts
 
 . Look at the created inventory file for our Ansible usage.
-
-	[root@selinux1 selinux_scripts]# cat inventory
-	selinux2 ansible_python_interpreter=/usr/libexec/platform-python
-	selinux3
-    selinux5
+[source]
+[root@selinux1 selinux_scripts]# cat inventory
+selinux2 ansible_python_interpreter=/usr/libexec/platform-python
+selinux3
+selinux5
 
 ==== Pre-Configuration of Apache web servers with SELinux disabled
 
@@ -531,22 +531,22 @@ SELinux Troubleshooting can be performed on both the _selinux2_ and _selinux3_ h
 
 . SELinux _httpd_t_ process domain used for Apache web servers is not able to bind to _tcp/7070_ port by default. There is no default rule for this access in the SELinux policy on the RHEL-7 _selinux5_ and RHEL-8 _selinux2_ hosts.
 
-	[root@selinux2 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind
+  [root@selinux2 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind | grep httpd_t
   [root@selinux2 ~]# exit
 
-  [root@selinux5 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind
+  [root@selinux5 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind | grep httpd_t
   [root@selinux5 ~]# exit
 
 . Use _port_ instead of _unreserved_port_t_ for this query on the _selinux3_ host.
 
   [root@selinux1] ssh selinux3
-	[root@selinux3 ~]# sesearch -A -s httpd_t -t port_t -c tcp_socket -p name_bind -C
+  [root@selinux3 ~]# sesearch -A -s httpd_t -t port_t -c tcp_socket -p name_bind -C | grep httpd_t
   [root@selinux3 ~]# exit
 
 . Compare to that Apache webservers can bind to other ports and these SELinux port types can be assigned to our selected custom port (_tcp/7070_).
 
   [root@selinux1] ssh selinux2
-  [root@selinux2 ~]# sesearch -A -s httpd_t -c tcp_socket -p name_bind
+  [root@selinux2 ~]# sesearch -A -s httpd_t -c tcp_socket -p name_bind | grep httpd_t
 
 ==== Lab 2.3.3.2 SELinux File context
 
@@ -711,7 +711,7 @@ In Red Hat Enterprise Linux, Linux users are mapped to the SELinux _unconfined_u
 +
 [source]
 [lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
-[root@selinux1 ~]# ssh root@selinux5
+[root@selinux1 ~]# ssh root@selinux5.example.com
 
 . Linux users can be assigned to SELinux users using semanage login tool. By default users are mapped to _unconfined_u_:
 
@@ -752,8 +752,7 @@ _system_u_ is a special user used only for system processes and in the future wi
 . Now we can try if the user can become root.
 
 . Let's add this line to the /etc/sudoers.d/administrators file:
-+
-  user42  ALL=(ALL)       NOPASSWD: ALL
+user42  ALL=(ALL)       NOPASSWD: ALL
 
     [root@selinux5 ~]# visudo -f /etc/sudoers.d/administrators
 
