@@ -2,8 +2,6 @@
 - name: Promote New Content
   hosts: "{{ HOSTS }}"
   gather_facts: false
-  vars_files: 
-    - vault.yml
 
   tasks:
   - name: promote cv
