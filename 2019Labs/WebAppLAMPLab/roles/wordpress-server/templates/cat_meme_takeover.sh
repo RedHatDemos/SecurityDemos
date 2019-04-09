@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mysql -h {{ dbhostname }} -u root {{ wpdbname }} < /tmp/cat_meme_takeover.sql
+mysql -h {{ dbhostname }} -u insecure {{ wpdbname }} < /tmp/cat_meme_takeover.sql
 
 echo
 echo
