@@ -1,15 +1,15 @@
 # OPTIONAL exploits pieces for security demos
 ---
-#- name: Copy our exploits catsploit-tools
-#  template:
-#    src: "templates/{{ item.name }}"
-#    dest: "{{ item.destdir }}/{{ item.name }}"
-#    mode: "{{ item.chmod }}"
-#    owner: "{{ item.user }}"
-#    group: "{{ item.group }}"
-#  with_items:
-#    - { name: "db_open_public_root.sh", destdir: "/root", chmod: "0755", user: "root", group: "wheel" }
-#    - { name: "db_open_public_root.sql", destdir: "/root", chmod: "0644", user: "root", group: "wheel" }
-#    - { name: "cat_meme_takeover.sh", destdir: "/root", chmod: "0755", user: "root", group: "wheel" }
-#    - { name: "cat_meme_takeover.sql", destdir: "/root", chmod: "0644", user: "root", group: "wheel" }
+- name: Copy our exploits catsploit-tools
+  template:
+    src: "templates/{{ item.name }}"
+    dest: "{{ item.destdir }}/{{ item.name }}"
+    mode: "{{ item.chmod }}"
+    owner: "{{ item.user }}"
+    group: "{{ item.group }}"
+  with_items:
+    - { name: "db_open_public_root.sh", destdir: "/root", chmod: "0755", user: "root", group: "wheel" }
+    - { name: "db_open_public_root.sql", destdir: "/root", chmod: "0644", user: "root", group: "wheel" }
+    - { name: "cat_meme_takeover.sh", destdir: "/root", chmod: "0755", user: "root", group: "wheel" }
+    - { name: "cat_meme_takeover.sql", destdir: "/root", chmod: "0644", user: "root", group: "wheel" }
 
