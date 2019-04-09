@@ -16,6 +16,15 @@
     state: import
     target: /tmp/wordpress.sql
 
+- name: Create the user root with a password
+  mysql_user:
+    host: '%'
+    name: root
+    password: "{{ wpdbpass }}"
+    priv: '*.*:ALL'
+    update_password: always
+    state: present
+
 - name: "Create the user {{ wpdbuser }} for {{ wpdbname }}.*:ALL"
   mysql_user:
     host: '%'
