@@ -1,10 +1,4 @@
 ---
-- set_fact:
-    dbhostname: rhel2.example.com
-    webhostname: rhel1.example.com
-#    dbhostname: "{{ hostvars['lampdb']['ansible_facts']['eth0']['ipv4']['address'] }}"
-#    webhostname: "{{ hostvars['lampweb']['ansible_facts']['eth0']['ipv4']['address'] }}"
-
 - include: install/db-main.yml
   delegate_to: lampdb
 
