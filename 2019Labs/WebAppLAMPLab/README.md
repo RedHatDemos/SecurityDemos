@@ -21,8 +21,8 @@ __STEPS:__	Go to the command-line of your machine and connect to the database.  
 
 We have a user named "insecure" with no password for his account.  His access is set wide open.  Run this command to confirm you can connect.
 
-
-<pre>`mysql WordPress -h rhel2.example.com -u insecure`
+`mysql WordPress -h rhel2.example.com -u insecure`
+<pre>
 
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MariaDB connection id is something
