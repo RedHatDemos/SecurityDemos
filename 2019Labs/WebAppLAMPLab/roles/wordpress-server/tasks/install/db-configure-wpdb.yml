@@ -1,12 +1,6 @@
 ---
 - set_fact:
-    myhostname: "{{ ansible_fqdn }}"
-  delegate_to: webservers
-
-- name: Conditionally use inventory_hostname for myhostname if this is an EC2 instance
-  set_fact:
-    myhostname: "{{ inventory_hostname }}"
-  when: ansible_product_version | regex_search('amazon')
+    myhostname: "{{ hostvars['lampweb']['ansible_facts']['ansible_fqdn'] }}"
 
 - name: copy our wordpress template sql dumps
   template:
