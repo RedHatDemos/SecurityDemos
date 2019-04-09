@@ -4,15 +4,12 @@
     path: "/usr/lib/systemd/system/mariadb.service"
   register: wassvcmaria
 
-- name: installing the required software
+- name: Software packages are present
   yum:
-    name: "{{ item }}"
+    name:
+      - unzip
+      - MySQL-python
+      - policycoreutils-python
+      - mariadb
+      - mariadb-server
     state: latest
-  with_items:
-    - unzip
-    - MySQL-python
-#    - mysql-connector-python
-    - policycoreutils-python
-    - mariadb
-    - mariadb-server
-#    - libselinux-python
