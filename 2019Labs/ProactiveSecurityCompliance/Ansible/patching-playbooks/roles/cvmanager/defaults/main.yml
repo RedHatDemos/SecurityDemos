@@ -1,6 +1,6 @@
 ---
 # defaults file for katello-cvmanager
-sat_uri: 'https://localhost'
+sat_uri: "https://{{inventory_hostname}}"
 sat_user: ''
 sat_pass: ''
 sat_timeout: 300
