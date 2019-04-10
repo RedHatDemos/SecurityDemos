@@ -1,13 +1,13 @@
 = Defend Yourself Using Built-in RHEL Security Technologies
 
 == [.underline]#Presenters/Lab Developers#:
-*Lucy Kerner*, Security Global Technical Evangelist and Strategist, Red Hat
+*Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat
 
-*Peter Beniaris*, Senior Solutions Architect, Red Hat
+*Peter Beniaris*, Manager - Solutions Architecture, Red Hat
 
-*Lukas Vrabec*, Software Engineer - Security Controls, Red Hat
+*Lukas Vrabec*, Senior Software Engineer - Security Controls, Red Hat
 
-*Marek Haicman*, QE and Product Owner - Security Compliance, Red Hat
+*Marek Haicman*, Senior Quality Engineer and Product Owner - Security Compliance, Red Hat
 
 *Simo Sorce*, Senior Principal Software Engineer - RHEL Security, Red Hat
 
