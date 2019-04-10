@@ -397,6 +397,10 @@ Test whether all servers are available via the _ansible_ command.
 [source]
 [lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
 
+. Enter the _selinux_scripts_ working directory on the _selinux1_ host.
+[source]
+[root@selinux1 ~]# cd /root/selinux_scripts
+
 . Now let's test which servers are accessible.
 +
 [source]
