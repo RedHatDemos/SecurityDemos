@@ -5,7 +5,7 @@
 
 *Peter Beniaris*, Manager - Solutions Architecture, Red Hat
 
-*Lukas Vrabec*, Senior Software Engineer - Security Controls, Red Hat
+*Lukas Vrabec*, Senior Software Engineer - RHEL Security, Red Hat
 
 *Marek Haicman*, Senior Quality Engineer and Product Owner - Security Compliance, Red Hat
 
