@@ -120,8 +120,7 @@ Now let's go through the steps we just described above.
     bash-4.2$ uname -a
     uname -a
     Linux selinux4.example.com 3.10.0-418.el7.x86_64 #1 SMP Thu May 26 20:35:02 EDT 2016 x86_64 x86_64 x86_64 GNU/Linux
-
-    # exit
+    bash-4.2$ exit
 
 * The _id_ command prints real and effecitve user and group IDs, where we could see that user and group is apache. This is because cgi scripts are started as the apache owner.
 * The _uname_ command prints system information. You can see the hostname *selinux4.example.com* being printed, which indicates that this is the victim system. These commands proves that the attack was successful.
