@@ -1,3 +1,9 @@
+# Lab Excercises Overview
+This lab demonstrates how installing a simple web application can leave open exploits.  In some instances, a default mysql / mariadb installation includes default users that are allowed to connect without a password set.  And if not at the time of installation, humans will often open up liberal permissions to make testing easier during development.  When these changes make their way into production, a site is left vulnerable to attackers who are looking for these loopholes.
+
+We will demonstrate this vulnerability with some simple commands.  After using an Ansible playbook to install a base WordPress web site, you will run a small shell script from your workstation, which will take over the public-facing corporate site with cat memes.  We will then use an Ansible playbook to search and remediate common vulnerabilities (in this case, accounts with liberal permissions and no password set).  After remediating the problem, we will see that our exploit script no longer works.
+
+
 # TASK1:
 __MISSION:__  Install the LAMP web-app, "WordPress" Via Ansible Role
 
@@ -39,6 +45,8 @@ __STEPS:__	On your workstation, you'll find a file called `/tmp/cat_meme_takeove
 - You will see this after it runs:
 ```
 [lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+
+      HACKED!!!  YOU ARE A BAD KITTY!
 
       ##############################
        __  __ _____ _____        __ 
@@ -87,6 +95,9 @@ __STEPS:__	We will manually connect to the database from the workstation, as wel
 - This time, it should fail with a different message like this:
 ```
 [lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+
+        FAILED!  You do not can haz
+        permissionz to the database
 
        ############################## 
        ____      ___        ______  _ 

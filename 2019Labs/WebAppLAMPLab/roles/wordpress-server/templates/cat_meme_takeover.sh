@@ -5,6 +5,8 @@ mysql -h {{ dbhostname }} -u insecure {{ wpdbname }} < /home/lab-user/cat_meme_t
 if [ $? = 0 ]; then
 	echo
 	echo
+	echo '      HACKED!!!  YOU ARE A BAD KITTY!'
+	echo
 	echo '      ##############################'
 	echo '       __  __ _____ _____        __ '
 	echo '      |  \/  | ____/ _ \ \      / / '
@@ -21,6 +23,9 @@ if [ $? = 0 ]; then
 	echo
 else
 	echo
+	echo
+	echo '        FAILED!  You do not can haz   '
+	echo '        permissionz to the database   '
 	echo
 	echo '       ############################## '
         echo '       ____      ___        ______  _ '
