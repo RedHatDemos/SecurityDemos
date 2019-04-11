@@ -31,7 +31,7 @@
 * Make sure that you are in the project root when you start - run
 +
 ----
-cd /home/lab-user/labs/lab0_introduction/content
+cd /home/lab-user/labs/lab1_introduction/content
 ----
 +
 in the terminal.
@@ -53,8 +53,8 @@ The build itself is based on Python, the `oscap` tool, and XSLT transformations.
 
 To build the content, take the following steps:
 
-. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab0_introduction/content`.
-. Go to the build subdirectory of the project - `/home/lab-user/labs/lab0_introduction/content/build`.
+. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction/content`.
+. Go to the build subdirectory of the project - `/home/lab-user/labs/lab1_introduction/content/build`.
 . Execute `cmake ..` in the build directory to generate build files.
 . Run `make` to compile content for all applicable *products*.
 A product may be either an OS s.a. `RHEL8`, `RHEL7`, `Fedora` etc., or they can be applications s.a. `firefox`, `Java`, and so on.
@@ -72,7 +72,7 @@ Guide filenames have a `ssg-<product>-guide-<policy>.html` form, so the guide fo
 Give it a try - execute the following command in the terminal:
 
 ....
-firefox /home/lab-user/labs/lab0_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
+firefox /home/lab-user/labs/lab1_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
 ....
 
 As a security policy is an ordered list of rules, guide is an ordered list of descriptions of those rules.

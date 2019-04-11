@@ -60,7 +60,7 @@ Each lab exercise is independent from each other, so feel free to do the lab exe
 == Table of Contents
 * link:lab0_setup.adoc[Track 0: Setup steps]
 * link:lab1_introduction.adoc[Track 1: Introduction to the ComplianceAsCode framework]
-* link:lab2_OpenSCAP.adoc[Track 2: Scanning Using OpenSCAP and Scap Workbench]
+* link:lab2_openscap.adoc[Track 2: Scanning Using OpenSCAP and Scap Workbench]
 * link:lab3_profiles.adoc[Track 3: The Art of OVAL Checks]
 * link:lab4_ansible.adoc[Track 4: Ansible-only content]
 * link:lab5_oval.adoc[Track 5: The Art of OVAL Checks]

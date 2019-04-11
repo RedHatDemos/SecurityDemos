@@ -29,7 +29,7 @@ Imagine that your company has approved an internal security policy that enforces
 * Make sure that you are in the project root when you start - run
 +
 ----
-cd /home/lab-user/labs/lab2_profiles/content
+cd /home/lab-user/labs/lab3_profiles/content
 ----
 +
 in the terminal.
