@@ -1,5 +1,6 @@
 #!/bin/sh
 
+clear
 mysql -h {{ dbhostname }} -u insecure {{ wpdbname }} < /home/lab-user/cat_meme_takeover.sql > /dev/null 2>&1
 
 if [ $? = 0 ]; then
