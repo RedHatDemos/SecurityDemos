@@ -1,9 +1,3 @@
-```Copy / replace these terms with the server hostnames or IPs that we finalize in the lab:
-$workstation is ??
-$server01 is rhel1.example.com
-$server02 is rhel2.example.com
-```
-
 # TASK1:
 __MISSION:__  Install the LAMP web-app, "WordPress" Via Ansible Role
 
@@ -85,6 +79,27 @@ To confirm everything still works
 # TASK6:	
 __MISSION:__  Confirm we can not access the database insecurely (same steps as step 2)
 __STEPS:__	We have removed our user named "insecure" with no password for his account.  His access was set wide open, but has been revoked with our latest hardening playbook.  Run this command to confirm you can no longer connect.  This is the exact command from TASK2 where we successfully connected
+
+__STEPS:__	We will manually connect to the database from the workstation, as well as attempt to run the exploit again.
+- On your workstation, run the same script from the earlier called `/tmp/cat_meme_takeover.sh` .
+- This time, it should fail with a different message like this:
+```
+[lab-user@workstation-repl ~]$ ./cat_meme_takeover.sh
+
+
+       ############################## 
+       ____      ___        ______  _ 
+      |  _ \    / \ \      / /  _ \| |
+      | |_) |  / _ \ \ /\ / /| |_) | |
+      |  _ <  / ___ \ V  V / |  _ <|_|
+      |_| \_\/_/   \_\_/\_/  |_| \_(_)
+   	       	       	       	    
+       ############################## 
+                                      
+        FAILED!  You do not can haz   
+        permissionz to the database   
+```
+- We also want to confirm the database access has been locked down by running this command from the command line of our lab workstation:
 
 ```mysql WordPress -h rhel2.example.com -u insecure```
 
