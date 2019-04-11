@@ -223,4 +223,4 @@ WORKS!
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab12_SessionRecording.adoc[ Lab 12: Session Recording ]
