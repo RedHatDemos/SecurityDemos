@@ -47,7 +47,9 @@ Okay, so that's not good.  No really, that's not good at all.  Anyone with a bit
 
 # TASK3:	
 __PREAMBLE:__ First of all, what we are about to do here is a very very not nice thing.  But it's important to see that this is the type of event that happens all the time when people miss even one simple security vulnerability.  Do not try this at home... or at the library... or from a computer anywhere.  Always be nice and polite online.  But for just one moment, we're going to do something rotten in this lab.
+
 __MISSION:__  Exploit the database vulnerability
+
 __STEPS:__	On your workstation, you'll find a file called:
 
  `/home/lab-user/cat_meme_takeover.sh` 
