@@ -35,7 +35,12 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 MariaDB [WordPress]>  exit
 </pre>
 
-If you see the above dialogue, you're in!  Type "exit" to leave the MySQL prompt and return back to a regular command line.
+If you see the above dialogue, you're in!  And that's really really bad.
+
+[![BAD KITTEH](https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2019Labs/WebAppLAMPLab/roles/wordpress-server/templates/twentyseventeen-catsploit/assets/images/cat-hack01.jpg)]
+
+
+Type "exit" to leave the MySQL prompt and return back to a regular command line.
 
 
 # TASK3:	
