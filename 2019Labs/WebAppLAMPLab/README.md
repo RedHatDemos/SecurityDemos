@@ -38,7 +38,7 @@ __STEPS:__	On your workstation, you'll find a file called `/tmp/cat_meme_takeove
 - Run this script to exploit the DB.
 - You will see this after it runs:
 ```
-[lab-user@workstation-repl ~]$ ./cat_meme_takeover.sh
+[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
 
       ##############################
        __  __ _____ _____        __ 
@@ -86,7 +86,7 @@ __STEPS:__	We will manually connect to the database from the workstation, as wel
 - On your workstation, run the same script from the earlier called `/tmp/cat_meme_takeover.sh` .
 - This time, it should fail with a different message like this:
 ```
-[lab-user@workstation-repl ~]$ ./cat_meme_takeover.sh
+[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
 
        ############################## 
        ____      ___        ______  _ 
