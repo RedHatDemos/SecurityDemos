@@ -1,5 +1,11 @@
-# OPTIONAL exploits pieces for security demos
 ---
+- name: Software packages are present
+  yum:
+    name:
+      - nano
+      - mariadb
+    state: latest
+
 - name: Copy our exploits catsploit-tools to the workstation
   template:
     src: "templates/{{ item.name }}"
