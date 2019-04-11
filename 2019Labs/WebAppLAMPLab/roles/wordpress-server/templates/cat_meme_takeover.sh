@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mysql -h {{ dbhostname }} -u insecure {{ wpdbname }} < cat_meme_takeover.sql > /dev/null 2>&1
+mysql -h {{ dbhostname }} -u insecure {{ wpdbname }} < /home/lab-user/cat_meme_takeover.sql > /dev/null 2>&1
 
 if [ $? = 0 ]; then
 	echo
