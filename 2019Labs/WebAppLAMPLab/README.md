@@ -40,7 +40,7 @@ If you see the above dialogue, you're in!  Type "exit" to leave the MySQL prompt
 
 # TASK3:	
 __MISSION:__  Exploit the database vulnerability
-__STEPS:__	On your workstation, you'll find a file called `/tmp/cat_meme_takeover.sh` .
+__STEPS:__	On your workstation, you'll find a file called `/home/lab-user/cat_meme_takeover.sh` .
 - Run this script to exploit the DB.
 - You will see this after it runs:
 ```
@@ -91,7 +91,7 @@ __MISSION:__  Confirm we can not access the database insecurely (same steps as s
 __STEPS:__	We have removed our user named "insecure" with no password for his account.  His access was set wide open, but has been revoked with our latest hardening playbook.  Run this command to confirm you can no longer connect.  This is the exact command from TASK2 where we successfully connected
 
 __STEPS:__	We will manually connect to the database from the workstation, as well as attempt to run the exploit again.
-- On your workstation, run the same script from the earlier called `/tmp/cat_meme_takeover.sh` .
+- On your workstation, run the same script from the earlier called `/home/lab-user/cat_meme_takeover.sh` .
 - This time, it should fail with a different message like this:
 ```
 [lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
