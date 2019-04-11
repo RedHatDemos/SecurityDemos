@@ -7,7 +7,7 @@ satellite_pass: !vault |
           33346534656134343765353434646237666164393766353364626266353332323239623565343063
           6432363234323161390a323061633334653137363162373032326338666639613239623664353030
           3863
-satellite_hostname: sat6.summit.example.com
+satellite_hostname: satsat64.example.com
 validate_certs: false
 force_basic_auth: true
 policy_id:
