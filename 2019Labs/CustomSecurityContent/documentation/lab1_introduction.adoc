@@ -31,7 +31,7 @@
 * Make sure that you are in the project root when you start - run
 +
 ----
-cd /home/lab-user/labs/lab0_introduction/content
+cd /home/lab-user/labs/lab1_introduction/content
 ----
 +
 in the terminal.
@@ -53,8 +53,8 @@ The build itself is based on Python, the `oscap` tool, and XSLT transformations.
 
 To build the content, take the following steps:
 
-. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab0_introduction/content`.
-. Go to the build subdirectory of the project - `/home/lab-user/labs/lab0_introduction/content/build`.
+. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction/content`.
+. Go to the build subdirectory of the project - `/home/lab-user/labs/lab1_introduction/content/build`.
 . Execute `cmake ..` in the build directory to generate build files.
 . Run `make` to compile content for all applicable *products*.
 A product may be either an OS s.a. `RHEL8`, `RHEL7`, `Fedora` etc., or they can be applications s.a. `firefox`, `Java`, and so on.
@@ -72,7 +72,7 @@ Guide filenames have a `ssg-<product>-guide-<policy>.html` form, so the guide fo
 Give it a try - execute the following command in the terminal:
 
 ....
-firefox /home/lab-user/labs/lab0_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
+firefox /home/lab-user/labs/lab1_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
 ....
 
 As a security policy is an ordered list of rules, guide is an ordered list of descriptions of those rules.
@@ -134,7 +134,7 @@ You should get the `linux_os/system/accounts/accounts-session/accounts_tmout` di
 . So let’s open it in the editor!
 You can open it in an editor of your preference.
 When in doubt, you can just use the gedit editor: `gedit linux_os/system/accounts/accounts-session/accounts_tmout/rule.yml`
-Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix + fixing it is obvious - simply remove the spurious occurence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
+Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix and fixing it is obvious - simply remove the spurious occurence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
 
 . It is time to recomplie the content, so we can check out whether our fix worked.
 We can do the same as we did at the beginning, but we will take a small shortcut.
@@ -223,10 +223,11 @@ A rule needs more than a description to be of any use - you need to be able
 For these reasons, a rule should contain a check, and possibly also remediations.
 The additional content is placed in subdirectories of the rule, so let's explore our `accounts_tmout` rule.
 
+We can browse it if we open the directory in the `nautilus` file browser.
 Run
 
 ....
-nautilus linux_os/system/accounts/accounts-session/accounts_tmout
+nautilus linux_os/guide/system/accounts/accounts-session/accounts_tmout
 ....
 
 in the terminal - a file explorer window opened at that location should pop up.
