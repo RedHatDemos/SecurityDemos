@@ -68,7 +68,7 @@
 
     - name: Download ssg-rhel7-ds-custom.xml from the {{ satellite_hostname }}
       get_url:
-        url: "http://{{ satellite_hostname }}/pub/ssg-rhel7-ds-custom.xml"
+        url: "https://{{ satellite_hostname }}/pub/ssg-rhel7-ds-custom.xml"
         dest: /usr/share/xml/scap/ssg/content/ssg-rhel7-ds-custom.xml
       register: get_url_result
       until: get_url_result | succeeded
