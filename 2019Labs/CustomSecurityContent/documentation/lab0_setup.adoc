@@ -6,5 +6,4 @@
 The activation key is *security*.
 
 
-
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab 1: Introduction]
