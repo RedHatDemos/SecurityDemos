@@ -37,10 +37,12 @@ MariaDB [WordPress]>  exit
 
 If you see the above dialogue, you're in!  And that's really really bad.
 
-[![BAD KITTEH](https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2019Labs/WebAppLAMPLab/roles/wordpress-server/templates/twentyseventeen-catsploit/assets/images/cat-hack01.jpg)]
+(https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2019Labs/WebAppLAMPLab/roles/wordpress-server/templates/twentyseventeen-catsploit/assets/images/cat-hack01.jpg)
 
+Okay, so that's not good.  No really, that's not good at all.  Anyone with a bit of curiosity can directly access the database that runs your entire site!  They could add their own users and just sit back and wait... and when you run for public office, they could start posting bad things about you on YOUR OWN WEBSITE!  Or they could just go for the gusto right now and cover your site in cat memes.  Yeah.  That's the one.  In the next step, that's exactly what we're going to look at.
 
-Type "exit" to leave the MySQL prompt and return back to a regular command line.
+- For now, get out of the MySQL prompt...
+- Type "exit" to leave the MySQL prompt and return back to a regular command line.
 
 
 # TASK3:	
