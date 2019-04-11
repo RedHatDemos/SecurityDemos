@@ -165,7 +165,9 @@ certificate onto ipsec2.example.com via the workstation VM:
 
 	[lab-user@workstation-GUID ~]$ scp root@ipsec.example.com:/root/labcerts/pkcs12/ipsec2.example.com.p12 .
 
-	[lab-user@workstation-GUID ~]$ scp ipsec2.example.com.p12 /root/oe-cert.conf root@ipsec2.example.com:/root/
+	[lab-user@workstation-GUID ~]$ scp root@ipsec.example.com:/root/oe-cert.conf .
+
+	[lab-user@workstation-GUID ~]$ scp ipsec2.example.com.p12 oe-cert.conf root@ipsec2.example.com:/root/
 
 . Then we install libreswan, import the certificate on ipsec2.example.com, and configure it for Opportunistc IPsec:
 
