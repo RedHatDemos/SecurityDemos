@@ -17,7 +17,7 @@
     - role: foreman_scap_scan
 
 - name: Analyze scan results and apply tags
-  hosts: all
+  hosts: localhost
   gather_facts: false
 
   roles:
