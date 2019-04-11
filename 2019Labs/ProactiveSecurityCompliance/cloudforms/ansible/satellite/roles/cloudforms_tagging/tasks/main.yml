@@ -1,5 +1,5 @@
 ---
-- name: Creating category
+- name: "Creating category with {{ manageiq.api_url }}/api/categories"
   uri:
     url: "{{ manageiq.api_url }}/api/categories"
     method: POST
