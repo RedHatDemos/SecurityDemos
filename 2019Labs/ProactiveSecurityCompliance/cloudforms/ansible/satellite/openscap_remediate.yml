@@ -5,7 +5,7 @@
 
   vars:
     policy_id: 5
-    satellite_hostname: sat6.summit.example.com
+    satellite_hostname: sat64.example.com
     verbose: false
 
   tasks:
