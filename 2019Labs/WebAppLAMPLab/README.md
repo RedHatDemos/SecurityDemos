@@ -41,6 +41,7 @@ If you see the above dialogue, you're in!  Type "exit" to leave the MySQL prompt
 # TASK3:	
 __MISSION:__  Exploit the database vulnerability
 __STEPS:__	On your workstation, you'll find a file called:
+
  `/home/lab-user/cat_meme_takeover.sh` 
 
 - Run this script to exploit the DB.
@@ -94,6 +95,7 @@ __STEPS:__	We have removed our user named "insecure" with no password for his ac
 
 __STEPS:__	We will manually connect to the database from the workstation, as well as attempt to run the exploit again.
 - On your workstation, run the same script from the earlier called
+
  `/home/lab-user/cat_meme_takeover.sh` 
 
 - This time, it should fail with a different message like this:
