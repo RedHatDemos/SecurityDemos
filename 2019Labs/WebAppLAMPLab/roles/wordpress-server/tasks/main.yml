@@ -10,6 +10,6 @@
   when: my_purpose == 'web'
 
 - include: catsploit-tools.yml
-  when: my_purpose == 'workstation'
+  when: my_purpose == 'jump'
 
 
