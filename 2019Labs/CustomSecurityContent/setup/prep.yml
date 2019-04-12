@@ -11,6 +11,7 @@
     TRACK_1_LABEL: "lab1_introduction"
     TRACK_2_LABEL: "lab2_OpenSCAP"
     TRACK_3_LABEL: "lab3_profiles"
+    TRACK_4_LABEL: "lab4_ansible"
     TRACK_5_LABEL: "lab5_oval"
     CACC_LOCAL: "/home/lab-user/complianceAsCode"
     LABS_ROOT: "/home/lab-user/labs"
@@ -130,3 +131,15 @@
       dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
       regexp: '(operation=")greater than or equal(")'
       replace: '\1equals\2'
+
+  - name: Clone the CaC/c Git for Track 4
+    git:
+      repo: "{{ CACC_LOCAL }}"
+      version: 'v0.1.43'
+      dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content"
+      force: yes
+
+  - name: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves
+    file:
+      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content/linux_os/system/accounts/accounts-session/accounts_tmout/ansible/"
+      state: absent
