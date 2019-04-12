@@ -10,6 +10,7 @@ __MISSION:__  Install the LAMP web-app, "WordPress" Via Ansible Role
 __STEPS:__  Run the job template "LAMP WordPress Deploy" from Ansible Tower, to install the web application for WordPress.  
 
 - This role is configured to run against three servers in a group called *lampservers* :
+
 | lampweb | lampdb | lampjump |
 | :----------------------: | :----------------------: | :----------------------: |
 | This server is used for the apache web server.  There is no local database on this machine | this server is a standalone database with no other purpose than to hose the MySQL / MariaDB. | This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site. |
