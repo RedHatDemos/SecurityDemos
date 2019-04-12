@@ -75,7 +75,7 @@ firefox build/guides/ssg-rhel8-guide-ospp.html
 ----
 
 In this track, we will focus on the `accounts_tmout` rule.
-In order to find the rule entry it in the guide, press `Ctrl+F` and search for the `Set Interactive Session Timeout` string, which is the rule title.
+In order to find the rule entry it in the guide, press `Ctrl+F` or use the `Edit->Find in this page` menu item, and search for the `Set Interactive Session Timeout` string, which is the rule title.
 
 The description says:
 
