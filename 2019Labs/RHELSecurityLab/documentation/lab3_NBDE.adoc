@@ -141,8 +141,6 @@ NOTE: Pass the *-vf* parameter if you want to see verbose output.
 == Lab 3.5 Reboot *NBDE3* and test that NBDE was successfully configured
 . Reboot *NBDE3*.  When the prompt comes up for the LUKS passphrase, wait for a while (it might take up to *2 minutes* in the virtualized environment) and *NBDE3*  should automatically begin the boot process without requiring you to enter a password.
 
-NOTE: 
-
 +
 [source, text]
 [root@nbde3 ~]# reboot
