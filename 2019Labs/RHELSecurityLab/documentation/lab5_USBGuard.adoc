@@ -167,6 +167,7 @@ Now let's generate a base policy without any external devices attached. This wil
 
 	[root@localhost]# usbguard generate-policy -X
 	[root@localhost]# usbguard generate-policy -X > /etc/usbguard/rules.conf
+	[root@localhost]# chmod 0600 /etc/usbguard/rules.conf
 	[root@localhost]# systemctl enable usbguard --now
 	[root@localhost]# usbguard list-rules
 
