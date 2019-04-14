@@ -380,7 +380,7 @@ selinux5
 
 ==== Pre-Configuration of Apache web servers with SELinux disabled
 
-The _apache_ web servers were set up using the _setup_webserver.yml_ playbook and this playbook was executed on the _selinux2_,  _selinux3_ and _selinux5_ hosts.  SELinux was also turned off.
+The _apache_ web servers were set up using the _setup-webserver.yml_ playbook and this playbook was executed on the _selinux2_,  _selinux3_ and _selinux5_ hosts.  SELinux was also turned off.
 
 All ansible commands below were executed from _selinux1.example.com_.
 
