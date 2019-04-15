@@ -2,8 +2,19 @@
 
 === Accessing your dedicated lab environment using your provided GUID
 
-. Go https://www.opentlc.com/gg/gg.cgi?profile=generic_tester[here^] in order to obtain your lab GUID. This GUID will be used to access your unique lab environment.
+. Go https://www.opentlc.com/gg/gg.cgi?profile=generic_tester[here^] in order to obtain your lab GUID.
+This GUID will be used to access your unique lab environment.
+. Find the lab `Automate Your Security by Creating Custom Security Content`.
 The activation key is *security*.
-
+. The next page will present you with
+- your GUID string,
+- link to the lab instructions, and
+- the last item of the bullet list - link to *power control and consoles*
+. Click the `here` link to go to the "environment's power control and consoles" page.
+You should get to a new page - a list of VMs.
+There is only one VM, so click the only `CONSOLE` link on the page.
+. You are now redirected to a remote desktop interface.
+Log in as `lab-user` using the password `r3dh4t1!`.
+You are all set!
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab 1: Introduction]
