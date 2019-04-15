@@ -1,12 +1,5 @@
 ---
 - hosts: "{{HOSTS}}"
-  vars:
-    sat_server: sat64.example.com
-    policy_name: all
-      #- RHEL7_Custom
-      #- RHEL7_Standard
-    policy_scan: all
-      #- RHEL7_Custom
 
   roles:
    - ansible-role-scap-client
