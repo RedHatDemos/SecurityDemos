@@ -1,0 +1,3 @@
+---
+- src: https://github.com/willtome/ansible-role-scap-client.git
+  version: tailoring_file
