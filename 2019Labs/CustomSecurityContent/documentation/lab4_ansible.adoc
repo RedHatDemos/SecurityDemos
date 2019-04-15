@@ -62,7 +62,7 @@ Ansible tasks can be attached to every rule in ComplianceAsCode project.
 A lot of rules already contain Ansible tasks.
 
 As an example, we will add a new Ansible task for the rule `accounts_tmout`.
-We have already encountered this rule in Track 1.
+We have already encountered this rule in Lab excercise 1.
 This rule is about the interactive session timeout for the inactive users.
 Terminating an idle session within a short time period reduces the risk of unauthorized operations.
 The Ansible task that we will add will configure the session timeout in the respective configuration file.
@@ -70,7 +70,7 @@ The Ansible task that we will add will configure the session timeout in the resp
 We will work in context of Red Hat Enterprise Linux 8 product and the OSPP profile for Red Hat Enterprise Linux 8.
 But the structure is the same for all rules in ComplianceAsCode.
 
-As we already know from the Track 1, source code of the rule `accounts_tmout` is located in rule `linux_os/system/accounts/accounts-session/accounts_tmout` directory.
+As we already know from the Lab excercise 1, source code of the rule `accounts_tmout` is located in rule `linux_os/system/accounts/accounts-session/accounts_tmout` directory.
 
 First, switch to the rule directory and examine its content.
 
@@ -80,7 +80,7 @@ $ ls
 bash  oval  rule.yml
 ----
 
-As we have discussed in Track 1, the file `rule.yml` contains the rule description, rationale and metadata.
+As we have discussed in Lab excercise 1, the file `rule.yml` contains the rule description, rationale and metadata.
 
 Apart from `rule.yml`, there are also 2 subdirectories in the `accounts_tmout` directory:
 
