@@ -86,15 +86,13 @@ From here... we could change the admin password so that we can always log in as 
 
 ```update wp_users set  user_pass=MD5('FluffyBunny') WHERE `user_login`='admin';```
 
+- Verify you have access by visiting this admin login URL and logging in with your new credentials.
 - The admin user for this WordPress instance is now set to:
+  * http://rhel1.example.com/wp-admin/
   * login: `admin`
   * password:  `FluffyBunny`
 
-- Verify you have access by visiting this admin login URL and logging in with your new credentials.
-  * http://rhel1.example.com/wp-admin/
-
-WOW.  We are in!  Verify by logging in as our admin account.  The main thing we're pointing out here is the fact that 
-
+WOW.  We are in!  Verify by logging in as our admin account.  The main thing we're pointing out here is the fact that this is a really scary exploitable loophole.  This is the kind of security oopsie that we might not ever notice manually.
 
 - For now, get out of the MySQL prompt...
 - Type "exit" to leave the MySQL prompt and return back to a regular command line.
@@ -102,15 +100,18 @@ WOW.  We are in!  Verify by logging in as our admin account.  The main thing we'
 
 
 
-# TASK3:	
+# TASK3:
+__ABOUT THIS STEP:__ This lab is unrelated to the previous exploit.  The previous steps were there to verify that the database was insecure and that one method of exploiting it was to change a login user for MySQL, specifically the login for the WordPress application.  Here, we'll be showing a second, equally scary dangerous situation that the exploitable user has caused.  We'll do a SQL injection here to overwrite the contents of the website.  All without even needing a password!!
+	
 __PREAMBLE:__ First of all, what we are about to do here is a very very not nice thing.  But it's important to see that this is the type of event that happens all the time when people miss even one simple security vulnerability.  Do not try this at home... or at the library... or from a computer anywhere.  Always be nice and polite online.  But for just one moment, we're going to do something rotten in this lab.
 
-__MISSION:__  Exploit the database vulnerability
+__MISSION:__  Exploit the database vulnerability by importing a database payload into the site's database.
 
 __STEPS:__	On your workstation, you'll find a file called:
 
  `/home/lab-user/cat_meme_takeover.sh` 
 
+- This script is set up to run an import command to a file located in that directory.  A typical hacker might have a similar file to this, pre-designed to exploit a site once they found the vulnerability.  When we run this script, 
 - Run this script to exploit the DB.
 - You will see this after it runs:
 ```
@@ -134,36 +135,54 @@ __STEPS:__	On your workstation, you'll find a file called:
 ```
 
 Now, refresh the page at:  http://rhel1.example.com
+You should see a new look to the website, informing you that the site has been hacked by cat memes.
 
 
 # TASK4:	
-__MISSION:__  Let's re-install the original WordPress role to reset the servers to a stable baseline.
-__STEPS:__	Run the job template again "LAMP WordPress Deploy" from Ansible Tower, to install the web application for WordPress.  
-- This installs the Apache server rhel1.example.com and the DB server on rhel2.example.com
-- This also installs the hacker tool scripts we're going to use.  They install to $workstation
-- To validate install, from your workstation, go to http://rhel1.example.com
 
-Now, refresh the page at:  http://rhel1.example.com
+__MISSION:__  Oh no!  A script kitty hacked our site!  Let's re-install the original WordPress role to reset the servers to a stable baseline.
+
+__STEPS:__	Run the job template again "LAMP WordPress Deploy" from Ansible Tower, to install the web application for WordPress.  
+
+- This reinstalls the Apache server rhel1.example.com and the DB server on rhel2.example.com
+- Once this role re-runs in this tasks, we are 100% back to our web site baseline, exactly where we were before the cat hackers took over the site content.  The site is back to normal, but our database is still vulnerable due to that username which can be exploited.
+
+To confirm that our site is back to normal, refresh the page at:  http://rhel1.example.com
 
 YAYY!  We're no longer victims of a cat meme exploit!
 
+
 # TASK5:	
+
 __MISSION:__  Let's lock down the database so this won't work again.
+
 __STEPS:__	Run the job template again "LAMP WordPress Secure" this time, from Ansible Tower, to run the hardening playbook.  
+
 - This removes the open vulnerability which allows you to connect to the database and exploit it with cat memes.
 
-Now, refresh the page at:  http://rhel1.example.com
-To confirm everything still works
+Now, refresh the page at:  http://rhel1.example.com to confirm everything still works
 
 
 # TASK6:	
-__MISSION:__  Confirm we can not access the database insecurely (same steps as step 2)
-__STEPS:__	We have removed our user named "insecure" with no password for his account.  His access was set wide open, but has been revoked with our latest hardening playbook.  Run this command to confirm you can no longer connect.  This is the exact command from TASK2 where we successfully connected
 
-__STEPS:__	We will manually connect to the database from the workstation, as well as attempt to run the exploit again.
-- On your workstation, run the same script from the earlier called
+__MISSION:__  Confirm we can not access the database insecurely (same steps as step 2).
 
- `/home/lab-user/cat_meme_takeover.sh` 
+__PREAMBLE:__	We have removed our user named "insecure" with no password for his account.  His access was set wide open, but has been revoked with our latest hardening playbook.  Run this command to confirm you can no longer connect.  This is the exact command from TASK2 where we successfully connected
+
+__STEPS:__	We will manually connect to the database from the workstation, as well as attempt to run the exploit again.  Then we will attempt to run our SQL injection script again, in a second attempt to take the website over with cat memes.
+
+- From the command line, run: ```mysql WordPress -h rhel2.example.com -u insecure```
+-- You should not be able to connect.  "Access Denied!"
+
+```[lab-user@rhel3 ~]$ mysql WordPress -h rhel2.example.com -u insecure
+ERROR 1045 (28000): Access denied for user 'insecure'@'rhel3.example.com' (using password: NO)
+[lab-user@rhel3 ~]$ 
+
+```
+
+- Back on the jump host, run the same script from the earlier called
+
+ `/home/lab-user/cat_meme_takeover.sh`
 
 - This time, it should fail with a different message like this:
 ```
@@ -184,11 +203,15 @@ __STEPS:__	We will manually connect to the database from the workstation, as wel
         FAILED!  You do not can haz   
         permissionz to the database   
 ```
-- We also want to confirm the database access has been locked down by running this command from the command line of our lab workstation:
-
-```mysql WordPress -h rhel2.example.com -u insecure```
 
 ACCESS DENIED!
 
+# SUMMARY
 
+The default WordPress application install left us vulnerable to a SQL attack.  The database was not secure in the way it was allowing us to connect without a password from a remote machine.  This is not an uncommon situation.  In order to demonstrate and experience the vulnerability, 
+
+The playbook we ran to harden the database server targets and removes accounts set up to allow both:
+- remote access
+- no password
+   
 
