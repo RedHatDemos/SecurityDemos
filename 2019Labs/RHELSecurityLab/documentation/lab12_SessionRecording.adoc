@@ -18,7 +18,9 @@ Tlog records terminal activity by putting itself in the middle between user and 
 === cockpit-session-recording
 Our package for Cockpit uses provided APIs to access journal and get session from it. It provides JavaScript based player which produces text output, but with a videoplayer-like controls.
 
-== Accessing the Session Recording Lab System
+== Lab 12.1 exercise steps
+
+== Lab 12.1.1 Accessing the Session Recording Lab System
 
 All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will switch between various users to imitate different behaviours. Each set of the exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
 
@@ -41,8 +43,7 @@ correctly, you should not need to enter a password.
 	[localhost]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 	[lab-user@workstation-GUID]$ ssh root@sessionrecording.example.com
 
-
-== Install packages
+== Lab 12.1.2 Install session recording packages
 
     [root@sessionrecording]# yum install tlog
     
@@ -50,25 +51,56 @@ correctly, you should not need to enter a password.
 
     [root@sessionrecording]# yum install cockpit-session-recording
 
+== Lab 12.1.3 Install additional packages
 
-== Enable Cockpit
+We will install some more packages to use in course of our lab. We will need them as good examples for session recording:
 
-    [root@sessionrecording]# systemctl start cockpit.socket
+    [root@sessionrecording]# yum install mc nginx
+
+If you are familiar with vim then install it as well (OPTIONAL):
+
+    [root@sessionrecording]# yum install vim
+
+== Lab 12.1.4 Enable Cockpit
 
     [root@sessionrecording]# systemctl enable cockpit.socket --now
 
+== Lab 12.1.5 Add users
 
-== Setup recording
+    [root@sessionrecording]# useradd q
 
-TODO / missing instructions
+    [root@sessionrecording]# usermod -aG wheel q
 
-TODO / missing instruction 
-- Login to GUI as described in https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/RHELSecurityLab/documentation/lab1_OpenSCAP.adoc
-- 
+    [root@sessionrecording]# passwd q
 
-Open a Firefox web browser and go to _https://sessionrecording.example.com:9090/_
+Use *PsS8rdKf* as a password.
 
-Login as _root_ user (using the same password).
+    [root@sessionrecording]# useradd jbond
+
+    [root@sessionrecording]# usermod -aG wheel jbond
+
+    [root@sessionrecording]# passwd jbond
+
+Use *ek3pwpTG* as a password.
+
+== Lab 12.2.1 Setup recording
+
+Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
++
+image:images/lab1.1-workstationconsole.png[300,300]
+image:images/lab1.1-labuserlogin.png[300,300]
+
+Open a Firefox web browser: 
+
+image:images/session_recording_firefox.png[]
+
+Go to _https://sessionrecording.example.com:9090/_
+
+image:images/session_recording_firefox_1.png[]
+
+Login as _root_ user with *r3dh4t1!* as the password.
+
+image:images/session_recording_cockpit_login.png[]
 
 Click on Session Recording menu item
 
@@ -93,18 +125,20 @@ Now you should configure users to be recorded using of ot the following three me
  * sssd config in terminal
  * changing user's login shell
 
-===== Setup recorded users using cockpit-session-recording (PREFERRED method)
+===== Lab 12.2.2 Setup recorded users using cockpit-session-recording (PREFERRED method)
 
 While staying on the same page as in previous chapter do the following.
 
-Choose "Some" option in Scope dropdown and put "q" in the Users input. Then click the save button.
+Choose "*Some*" option in Scope dropdown and put "*q*" in the Users input. Then click the *Save* button.
 
 image:images/session_recording_sssd.png[]
 
-That is it. Now the "q" user will be recorded.
-Jump directly to "In Practise" section, skip the other user configuration methods.
+Do not forget to click *Save* button.
 
-==== Setup recorded users using terminal (OPTIONAL method)
+That is it. Now the "q" user will be recorded.
+Jump directly to "Using Session Player in Cockpit" section, skip the other user configuration methods.
+
+==== Lab 12.3.1 Setup recorded users using terminal (OPTIONAL method)
 
 *If you used preferred method using cockpit-session-recording then you don't need to do this step, because it will produce the same result.*
 
@@ -145,9 +179,9 @@ Then you need to restart SSSD, so that changes will take place:
 
     [root@essionrecording]# systemctl restart sssd
     
-Jump directly to "In Practise" section, skip the other user configuration methods.
+Jump directly to "Using Session Player in Cockpit" section, skip the other user configuration methods.
 
-==== One more way to enable recording by changing user's shell and avoiding usage of SSSD (OPTIONAL method)
+==== Lab 12.4.1 One more way to enable recording by changing user's shell and avoiding usage of SSSD (OPTIONAL method)
 
 In this case user will have to change user's shell to tlog-rec-session, so that their working shell will be the one that is listed in the tlog-rec-session.conf configuration file ( /bin/bash by default ).
 
@@ -167,11 +201,9 @@ And input */usr/bin/tlog-rec-session*
 
 This will make user to be recorded on next login.
 
-=== Review tlog Configuration
+=== Lab 12.5.1 Review tlog Configuration
 
-TODO / missing
-
-Now you can check that the confi
+Now you can check that the config
 
   [root@essionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
 
@@ -182,9 +214,7 @@ You should see this as an output:
     users=q
     groups=
 
-
-
-== In Practise
+== Lab 12.6.1 Creating sessions recorded by tlog
 
 Let's create some activity by one of the recorded users. Then you will be able to play it back in Cockpit.
 
@@ -192,13 +222,11 @@ Login using SSH to the same machine:
 
     [root@sessionrecording]# ssh q@sessionrecording.example.com
 
+Use *ek3pwpTG* as password.
+
 You will see notice message in terminal right after login
 
 image:images/session_recording_notice.png[]
-
-Let's install some software for the lab case.
-
-    [q@sessionrecording]$ sudo yum install mc nginx
 
 Remember, that this session is being recorded. You could try to resize session window to see it's supported later.
 
@@ -231,9 +259,60 @@ image:images/session_recording_nginx_error.png[]
 
 Now, it is time to login to cockpit and use cockpit-session-recording to investigate why web server does not work.
 
-//TODO add login to cockpit section
+=== Lab 12.7.1 Using Session Player from Cockpit UI
 
-=== Using tlog Session Player from Cockpit UI
+Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
++
+image:images/lab1.1-workstationconsole.png[300,300]
+image:images/lab1.1-labuserlogin.png[300,300]
+
+Open a Firefox web browser: 
+
+image:images/session_recording_firefox.png[]
+
+Go to _https://sessionrecording.example.com:9090/_
+
+image:images/session_recording_firefox_1.png[]
+
+Login as _root_ user with *r3dh4t1!* as the password.
+
+image:images/session_recording_cockpit_login.png[]
+
+Click on Session Recording menu item
+
+image:images/session_recording_menu.png[]
+
+Your session will appear in the list of sessions. Of course data will be different. Click on it to open it:
+
+image:images/session_recording_session_list.png[]
+
+Click on "*Play*" button to start playback of the session or just use hotkey "*p*" to achieve the same result:
+
+image:images/session_recording_play.png[]
+
+You can also navigate the session frame-by-frame using "*Skip Frame*" button or hotkey "*.*":
+
+image:images/session_recording_skipframe.png[]
+
+Try to play with other controls. Speed controls:
+
+image:images/session_recording_speed_control.png[]
+
+Restart playback and fast-forward to end:
+
+image:images/session_recording_fastforward.png[]
+
+Zoom controls: 
+
+image:images/session_recording_zoom_controls.png[]
+
+Switch between selection of text and drag'n'pan of zoomed content:
+
+image:images/session_recording_dragnpan.png[]
+
+Searching for appearance of a specific keyword in the session. It shows closest beginning of "frame" with match:
+
+image:images/session_recording_search_button.png[]
 
 In session player action of restarting cockpit should look something like this:
 
