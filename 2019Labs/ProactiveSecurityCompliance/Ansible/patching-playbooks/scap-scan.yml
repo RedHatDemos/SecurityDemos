@@ -1,7 +1,7 @@
 ---
 - hosts: "{{HOSTS}}"
   vars:
-    satellite_server: sat64.example.com
+    sat_server: sat64.example.com
     policy_name: all
       #- RHEL7_Custom
       #- RHEL7_Standard
