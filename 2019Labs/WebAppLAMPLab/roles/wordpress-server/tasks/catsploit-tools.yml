@@ -1,6 +1,12 @@
-# OPTIONAL exploits pieces for security demos
 ---
-- name: Copy our exploits catsploit-tools
+- name: Software packages are present
+  yum:
+    name:
+      - nano
+      - mariadb
+    state: latest
+
+- name: Copy our exploits catsploit-tools to the workstation
   template:
     src: "templates/{{ item.name }}"
     dest: "{{ item.destdir }}/{{ item.name }}"
@@ -8,6 +14,6 @@
     owner: "{{ item.user }}"
     group: "{{ item.group }}"
   with_items:
-    - { name: "cat_meme_takeover.sh", destdir: "/root", chmod: "0755", user: "root", group: "wheel" }
-    - { name: "cat_meme_takeover.sql", destdir: "/root", chmod: "0644", user: "root", group: "wheel" }
+    - { name: "cat_meme_takeover.sh", destdir: "/home/lab-user", chmod: "0755", user: "lab-user", group: "lab-user" }
+    - { name: "cat_meme_takeover.sql", destdir: "/home/lab-user", chmod: "0644", user: "lab-user", group: "lab-user" }
 

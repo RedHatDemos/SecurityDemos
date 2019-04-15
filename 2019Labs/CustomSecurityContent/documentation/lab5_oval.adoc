@@ -35,7 +35,7 @@ The steps how to accomplish this are in the `tests/README.md` file of the `Compl
 * Make sure that you are in the project root when you start - run
 +
 .....
-cd /home/lab-user/labs/lab3_oval
+cd /home/lab-user/labs/lab5_oval
 .....
 +
 in the terminal.
@@ -75,7 +75,7 @@ firefox build/guides/ssg-rhel8-guide-ospp.html
 ----
 
 In this track, we will focus on the `accounts_tmout` rule.
-In order to find the rule entry it in the guide, press `Ctrl+F` and search for the `Set Interactive Session Timeout` string, which is the rule title.
+In order to find the rule entry it in the guide, press `Ctrl+F` or use the `Edit->Find in this page` menu item, and search for the `Set Interactive Session Timeout` string, which is the rule title.
 
 The description says:
 
@@ -207,7 +207,7 @@ $ ./build_product fedora
 ...
 $ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
-INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - Logging into /home/lab-user/labs/lab5_oval/content/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
 INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
@@ -283,7 +283,7 @@ $ ./build_product fedora
 ...
 $ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
-INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - Logging into /home/lab-user/labs/lab5_oval/content/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
 INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
@@ -383,7 +383,7 @@ $ ./build_product fedora
 ...
 $ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
-INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - Logging into /home/lab-user/labs/lab5_oval/content/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
 INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
@@ -425,7 +425,7 @@ $ ./build_product fedora
 $ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout                                                            
 Setting console output to log level INFO
 INFO - The base image option has been specified, choosing Podman-based test environment.
-INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - Logging into /home/lab-user/labs/lab5_oval/content/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
 INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
@@ -459,7 +459,7 @@ $ ./build_product fedora
 ...
 $ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
-INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - Logging into /home/lab-user/labs/lab5_oval/content/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
 INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
@@ -529,7 +529,7 @@ $ ./build_product fedora
 ...
 $ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
-INFO - Logging into /home/lab-user/labs/lab3_oval/content/logs/...
+INFO - Logging into /home/lab-user/labs/lab5_oval/content/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
 INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
@@ -541,3 +541,7 @@ INFO - Script supercompliant.pass.sh using profile xccdf_org.ssgproject.content_
 Everything passes, which means that our check can now handle a range of compliant values, as well as doesn't produce false positives when the `export` keyword is involved.
 
 Congratulations - now you know how use the `ComplianceAsCode` project to make OVAL creation less error-prone, and how to make sure that OVAL checks are working according to expectations.
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ]

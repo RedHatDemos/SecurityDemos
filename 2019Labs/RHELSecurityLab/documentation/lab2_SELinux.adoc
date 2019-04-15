@@ -120,8 +120,7 @@ Now let's go through the steps we just described above.
     bash-4.2$ uname -a
     uname -a
     Linux selinux4.example.com 3.10.0-418.el7.x86_64 #1 SMP Thu May 26 20:35:02 EDT 2016 x86_64 x86_64 x86_64 GNU/Linux
-
-    # exit
+    bash-4.2$ exit
 
 * The _id_ command prints real and effecitve user and group IDs, where we could see that user and group is apache. This is because cgi scripts are started as the apache owner.
 * The _uname_ command prints system information. You can see the hostname *selinux4.example.com* being printed, which indicates that this is the victim system. These commands proves that the attack was successful.
@@ -397,6 +396,10 @@ Test whether all servers are available via the _ansible_ command.
 [source]
 [lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
 
+. Enter the _selinux_scripts_ working directory on the _selinux1_ host.
+[source]
+[root@selinux1 ~]# cd /root/selinux_scripts
+
 . Now let's test which servers are accessible.
 +
 [source]
@@ -515,6 +518,9 @@ In this section, we are going to test our pre-configured setup steps from before
 
 	avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
 	avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
+    avc:  denied  { map } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+    avc:  denied  { open } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+    avc:  denied  { getattr } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
 
 	[root@selinux2 ~]# exit
 

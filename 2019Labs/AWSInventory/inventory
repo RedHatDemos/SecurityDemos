@@ -1,5 +1,5 @@
 [lampservers]
-lampworkstation ansible_host=192.168.47.5 my_purpose=workstation
+lampjump ansible_host=192.168.0.102 my_purpose=jump
 lampweb ansible_host=192.168.0.100 my_purpose=web
 lampdb ansible_host=192.168.0.101 my_purpose=db
 

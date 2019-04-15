@@ -1,7 +1,7 @@
 = Lab 3: How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes
 
 == Goal of Lab
-The goal of this lab is to understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes. You will install the Tang server on our NBDE1 server, and install the Clevis client on NBDE2.
+The goal of this lab is to understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes. You will install the Tang server on our NBDE1 server, and install the Clevis client on NBDE3.
 
 == Introduction
 Network-Bound Disk Encryption (NBDE) allows the user to encrypt root volumes of hard drives on physical and virtual machines without requiring to manually enter a password when systems are restarted.  Red Hat Enterprise Linux implements NBDE with a central server named Tang, and and client framework named Clevis.
@@ -36,22 +36,22 @@ image:images/console-textbox.png[500,500]
 Since tangd uses the systemd socket activation mechanism, the server starts as soon as the first connection comes in. A new set of cryptographic keys is automatically generated at the first start.
 
 == Lab 3.2 Installing the Clevis Client
-Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
+Your NBDE3 client is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
 
-. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE2*. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
+. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE3*. The passphrase for the LUKs encrypted disk on *NBDE3* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
 +
 image:images/lab3-console2.png[200,200]
 image:images/console-textbox.png[500,500]
 
-. Login to the NBDE2 server as *root* using the password *r3dh4t1!*.
+. Login to the NBDE3 server as *root* using the password *r3dh4t1!*.
 . Then, install the clevis packages:
 +
 [source, text]
-[root@nbde2 ~]# yum install clevis clevis-luks clevis-dracut
+[root@nbde3 ~]# yum install clevis clevis-luks clevis-dracut
 . Next, we will initialize the luks binding to the tang server. If you wanted to copy and paste the text below to send to the console, press the *T* button at the top right of your console (See the picture above on Step #1).
 +
 [source, text]
-[root@nbde2 ~]# clevis luks bind -d /dev/vda2 tang '{"url":"http://nbde1.example.com"}'
+[root@nbde3 ~]# clevis luks bind -d /dev/vda2 tang '{"url":"http://nbde1.example.com"}'
 +
 NOTE: This command performs four steps:
 1) Creates a new key with the same entropy as the LUKS master key.
@@ -66,12 +66,12 @@ NOTE: This command performs four steps:
 . This disk can now be unlocked with your existing passphrase as well as with the Clevis policy.
 
 == Lab 3.3 Verify LUKS Header
-. To verify that the Clevis JWE object is successfully placed in a LUKS header, use the `cryptsetup luksDump` command on *NBDE2*.
+. To verify that the Clevis JWE object is successfully placed in a LUKS header, use the `cryptsetup luksDump` command on *NBDE3*.
 You should see that there are two keyslots in the header. Keyslot 0 represents the static password you had to enter when booting the machine for the first time. Keyslot 1 is the newly added entry by the `clevis luks bind` command.
 +
 [source, text]
 ```
-[root@nbde2 ~]# cryptsetup luksDump /dev/vda2
+[root@nbde3 ~]# cryptsetup luksDump /dev/vda2
 LUKS header information
 Version:       	2
 Epoch:         	5
@@ -131,19 +131,19 @@ Digests:
 ```
 
 == Lab 3.4 Enable Decryption on the Boot Process
-. To enable the early boot system to process the disk binding, enter the following command on *NBDE2*.
+. To enable the early boot system to process the disk binding, enter the following command on *NBDE3*.
 +
 [source, text]
-[root@nbde2 ~]# dracut -f
+[root@nbde3 ~]# dracut -f
 +
 NOTE: Pass the *-vf* parameter if you want to see verbose output.
 
-== Lab 3.5 Reboot *NBDE2* and test that NBDE was successfully configured
-. Reboot *NBDE2*.  When the prompt comes up for the LUKs passphrase, wait a few seconds and *NBDE2*  should automatically begin the boot process without requiring you to enter a password.
+== Lab 3.5 Reboot *NBDE3* and test that NBDE was successfully configured
+. Reboot *NBDE3*.  When the prompt comes up for the LUKS passphrase, wait for a while (it might take up to *2 minutes* in the virtualized environment) and *NBDE3*  should automatically begin the boot process without requiring you to enter a password.
 
 +
 [source, text]
-[root@nbde2 ~]# reboot
+[root@nbde3 ~]# reboot
 
 
 <<top>>

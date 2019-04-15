@@ -267,9 +267,9 @@ Putting the machine into compliance (for example by changing its configuration) 
 ....
 
 
-. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Because of a known issue in the SCAP Security Guide content, let's use `"--skip-tags build_aide_database,firewalld_sshd_port_enabled"`. Make sure you run this on the *openscap.example.com* host:
+. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Setting `ansible_python_interpreter` is workaround for known issue in Ansible 2.7 used on the machine. Make sure you run this on the *openscap.example.com* host:
 +
- [root@openscap]# ansible-playbook -i "localhost," -c local --check --skip-tags aide_build_database,firewalld_sshd_port_enabled playbook.yml
+ [root@openscap]# ansible-playbook -i "localhost," -c local --check playbook.yml -e 'ansible_python_interpreter=/usr/bin/python3'
 +
 ....
 [WARNING]: While constructing a mapping from /root/playbook.yml, line 26, column 7, found a duplicate dict key (var_accounts_passwords_pam_faillock_deny). Using last defined value only.

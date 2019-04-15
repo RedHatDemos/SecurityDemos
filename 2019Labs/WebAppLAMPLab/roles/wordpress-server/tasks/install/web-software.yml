@@ -7,6 +7,7 @@
 - name: Software packages are present
   yum:
     name:
+      - nano
       - unzip
       - MySQL-python
       - policycoreutils-python

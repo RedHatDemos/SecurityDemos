@@ -6,10 +6,9 @@
   when: my_purpose == 'web'
 
 - include: catsploit.yml
-  when: inventory_hostname = 'lampweb'
   when: my_purpose == 'web'
 
 - include: catsploit-tools.yml
-  when: my_purpose == 'workstation'
+  when: my_purpose == 'jump'
 
 

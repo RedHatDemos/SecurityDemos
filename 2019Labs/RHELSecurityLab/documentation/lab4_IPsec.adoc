@@ -165,7 +165,9 @@ certificate onto ipsec2.example.com via the workstation VM:
 
 	[lab-user@workstation-GUID ~]$ scp root@ipsec.example.com:/root/labcerts/pkcs12/ipsec2.example.com.p12 .
 
-	[lab-user@workstation-GUID ~]$ scp ipsec2.example.com.p12 /root/oe-cert.conf root@ipsec2.example.com:/root/
+	[lab-user@workstation-GUID ~]$ scp root@ipsec.example.com:/root/oe-cert.conf .
+
+	[lab-user@workstation-GUID ~]$ scp ipsec2.example.com.p12 oe-cert.conf root@ipsec2.example.com:/root/
 
 . Then we install libreswan, import the certificate on ipsec2.example.com, and configure it for Opportunistc IPsec:
 
@@ -202,7 +204,7 @@ file with updated leftcert= entry and update the policy groups in
 /etc/ipsec.d/policies/ to match the first two nodes of the cluster. So for each
 added node, you do not need to reconfigure any of the previous nodes, as those
 are already configured to trust the same CA and talk IPsec to the same IP ranges
-as the new nodes. In a production setting, you could be able to populate new nodes
+as the new nodes. In a production setting, you should be able to populate new nodes
 using ansible as all configuration files (other then the PKCS#12 certificate) are
 identical on all the nodes.
 
@@ -216,7 +218,8 @@ identical on all the nodes.
 
 	[root@ipsec2 ~]# systemctl start ipsec
 
-. Once you have done this on both machines, a simple ping from ipsec.example.com
+. Once you have done this on both machines, wait for a few seconds for both machines to
+load their IPsec policues. Then a simple ping from ipsec.example.com
 to ipsec2.example.com (or visa versa) should trigger an IPsec tunnel. The first
 ping might or might not fail depending on the time it takes to setup the IPsec
 connection.
@@ -270,9 +273,9 @@ you can see it is set to "passthrough", allowing unencrypted traffic. For the
 . You can use tcpdump to confirm that the connection is encrypted. Run a ping on
 one host, and run tcpdump on the other host:
 
-	[root@ipsec ~]# tcpdump -i eth0 -n esp
+	[root@ipsec ~]# tcpdump -i ens3 -n esp
 	tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
-	listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+	listening on ens3, link-type EN10MB (Ethernet), capture size 262144 bytes
 	05:58:18.003410 IP 192.168.0.22 > 192.168.0.23: ESP(spi=0x84019944,seq=0x6), length 120
 	05:58:18.003684 IP 192.168.0.23 > 192.168.0.22: ESP(spi=0x5b312cc5,seq=0x6), length 120
 	05:58:19.004840 IP 192.168.0.22 > 192.168.0.23: ESP(spi=0x84019944,seq=0x7), length 120
