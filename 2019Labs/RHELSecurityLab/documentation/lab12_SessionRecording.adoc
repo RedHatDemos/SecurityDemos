@@ -2,15 +2,15 @@
 = Lab 12: Session Recording
 
 == Goal of Lab
-The goal of this lab is to use Session Recording to help log and audit users terminal sessions and correlate them with system logs.
+The goal of this lab is to use Session Recording to help log and audit user's terminal sessions and correlate them with system logs.
 
 * You will need to install required software. Required packages are tlog & cockpit-session-recording.
-* You will configure your it to record terminal activity for specific users
-* You will wear a hat of third-party contractor who will break something on your system
-* You will wear a hat of a system administrator to find what happened to your system
+* You will configure it to record terminal activity for specific users.
+* You will wear a hat of third-party contractor who will break something on your system.
+* You will wear a hat of a system administrator to find out what has happened to your system.
 
 == Introduction
-Terminal Session Recording project aims to log users terminal sessions for purposes of audit, security and monitoring. It provides interface in Cockpit to analyze these recordings and correlate them with system logs. This provides a whole picture of activity which was done.
+Terminal Session Recording project aims to log user's terminal sessions for purposes of audit, security and monitoring. It provides interface in Cockpit to analyze these recordings and correlate them with system logs. This provides a whole picture of activity which was done.
 
 === tlog
 Tlog records terminal activity by putting itself in the middle between user and terminal. In our lab tlog stores data in systemd journal.
@@ -20,7 +20,7 @@ Our package for Cockpit uses provided APIs to access journal and get session fro
 
 == Accessing the Session Recording Lab System
 
-All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will switch between various user to imitate different behaviours. Each set of exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
+All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will switch between various users to imitate different behaviours. Each set of the exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
 
  * The *root* user prompt on _sessionrecording.example.com_
 
@@ -45,6 +45,8 @@ correctly, you should not need to enter a password.
 == Install packages
 
     [root@sessionrecording]# yum install tlog
+    
+    [root@sessionrecording]# yum install cockpit
 
     [root@sessionrecording]# yum install cockpit-session-recording
 
@@ -58,17 +60,21 @@ correctly, you should not need to enter a password.
 
 == Setup recording
 
-== Review tlog configuration
+TODO / missing instructions
 
-Open https://sessionrecording.example.com:9090/
+TODO / missing instruction 
+- Login to GUI as described in https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/RHELSecurityLab/documentation/lab1_OpenSCAP.adoc
+- 
 
-Login as root user
+Open a Firefox web browser and go to _https://sessionrecording.example.com:9090/_
+
+Login as _root_ user (using the same password).
 
 Click on Session Recording menu item
 
 image:images/session_recording_menu.png[]
 
-Then click on the button with cog icon to access the configuration.
+Then click on the button in upper righ corner with a cog icon to access the configuration.
 
 image:images/session_recording_config.png[]
 
@@ -82,7 +88,12 @@ image:images/session_recording_tlog_conf_1.png[]
 
 Then, press "Save" button.
 
-===== PREFERED:  Setup recorded users using cockpit-session-recording
+Now you should configure users to be recorded using of ot the following three methods, using:
+ * cockpit
+ * sssd config in terminal
+ * changing user's login shell
+
+===== Setup recorded users using cockpit-session-recording (PREFERRED method)
 
 While staying on the same page as in previous chapter do the following.
 
@@ -90,9 +101,10 @@ Choose "Some" option in Scope dropdown and put "q" in the Users input. Then clic
 
 image:images/session_recording_sssd.png[]
 
-That is it. Now the q user will be recorded.
+That is it. Now the "q" user will be recorded.
+Jump directly to "In Practise" section, skip the other user configuration methods.
 
-===== OPTIONAL: Setup recorded users using terminal
+==== Setup recorded users using terminal (OPTIONAL method)
 
 *If you used preferred method using cockpit-session-recording then you don't need to do this step, because it will produce the same result.*
 
@@ -132,8 +144,10 @@ You should see this as an output:
 Then you need to restart SSSD, so that changes will take place:
 
     [root@essionrecording]# systemctl restart sssd
+    
+Jump directly to "In Practise" section, skip the other user configuration methods.
 
-===== One more way to enable recording by changing user's shell and avoiding usage of SSSD
+==== One more way to enable recording by changing user's shell and avoiding usage of SSSD (OPTIONAL method)
 
 In this case user will have to change user's shell to tlog-rec-session, so that their working shell will be the one that is listed in the tlog-rec-session.conf configuration file ( /bin/bash by default ).
 
@@ -153,7 +167,24 @@ And input */usr/bin/tlog-rec-session*
 
 This will make user to be recorded on next login.
 
-== In practise
+=== Review tlog Configuration
+
+TODO / missing
+
+Now you can check that the confi
+
+  [root@essionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
+
+You should see this as an output:
+
+    [session_recording]
+    scope=some
+    users=q
+    groups=
+
+
+
+== In Practise
 
 Let's create some activity by one of the recorded users. Then you will be able to play it back in Cockpit.
 
@@ -201,6 +232,8 @@ image:images/session_recording_nginx_error.png[]
 Now, it is time to login to cockpit and use cockpit-session-recording to investigate why web server does not work.
 
 //TODO add login to cockpit section
+
+=== Using tlog Session Player from Cockpit UI
 
 In session player action of restarting cockpit should look something like this:
 
