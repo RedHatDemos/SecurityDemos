@@ -30,6 +30,9 @@ Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical secur
 OpenSCAP allows you to perform both vulnerability and security compliance checks in a fully automated way.
 Several integrations for continuous scanning exist but in this lab exercise, we will focus on one-off scanning to get started.
 
+NOTE: This lab excercise is one of many excercies that are part of the ... Summit Lab.
+Therefore, you may prefer to skip it if you have attended this excercise on this or previous year's Red Hat Summit.
+
 
 == Pre-Configured Set Up Steps (Already done for you)
 
@@ -75,10 +78,9 @@ rpm -ql scap-security-guide
 ...
 ----
 
-. Notice that the provided content in `scap-security-guide` covers a wide range of security baselines such as PCI-DSS, STIG, C2S, Common, CJIS, and others.
 . Notice that content provided in `scap-security-guide` covers a wide range of security baselines.
 For Red Hat Enterprise Linux 8, OSPP (Protection Profile for General Purpose Operating Systems) and PCI-DSS (Payment Card Industry Data Security Standard) profiles are available.
-There are also various formats in which this is provided - human readable HTML guides, SCAP benchmarks, but also Ansible remediation playbooks. 
+There are also various formats in which this is provided - human readable HTML guides, SCAP benchmarks, but also Ansible remediation playbooks.
 
 . Move to the `content` folder so we can avoid typing long paths:
 +
@@ -99,7 +101,7 @@ Notice in our command below that we can skip the profile ID prefix to make the c
 The real ID is xccdf_org.ssgproject.content_profile_ospp.
 +
 ----
-oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
+sudo oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
 ----
 +
 Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
@@ -107,22 +109,24 @@ Now, you will see the compliance scan results for every security control in the 
 . Now, let's store the results of the scan this time:
 * use `--results-arf` to get machine readable results archive
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
-
++
 ----
-oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
+sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
 ----
-
++
 . (Optional) You can also generate the HTML report separately:
 +
 ----
 oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
 
-. Open the file explorer and head to the `/tmp` directory.
+. Open the file explorer and head to the `/tmp` directory:
+Click on `Activities` at the bottom left corner, choose the `Files` application.
+Once the window comes up, head to the `Other Locations` at the bottom of the left tab, then click on `Computer` and then on `tmp`.
 The `report.html` file should be there - double click on it to open it in the Firefox browser.
 You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
 +
-image:lab1.1-reportfromworkstation.png[300,300]
+//image:lab1.1-reportfromworkstation.png[300,300]
 image:lab1.1-scapreport.png[500,500]
 
 . Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether or not the particular security control has passed or failed the scan.
@@ -176,7 +180,11 @@ image:lab1.2-scapworkbenchscan.png[500,500]
 +
 image:lab1.2-savecustomization.png[300,300]
 
+// TODO: Save remediations, show report.
+
+
 == Lab 1.3 Security Remediations with OpenSCAP and Ansible
+
 Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology.
 Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads!
 As a result, it is best practice to test the remediation changes before deploying.
@@ -313,8 +321,12 @@ TASK [Set rsyslog remote loghost] **********************************************
 changed: [localhost]
 
 PLAY RECAP *********************************************************************
-localhost                  : ok=458  changed=260  unreachable=0    failed=0  
+localhost                  : ok=458  changed=260  unreachable=0    failed=0
 ....
++
+The output may be different, depending on how have you customized the profile before.
+
+// TODO: Scan once more, and watching for improvements?
 
 <<top>>
 
