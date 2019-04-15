@@ -12,7 +12,7 @@
    - ansible-role-scap-client
 
   tasks:
-  - name: Run SCAP Scan for "{{ item.name}}"
+  - name: "Run SCAP Scan for {{ item.name}}"
     shell: "/usr/bin/foreman_scap_client {{ item.id }}"
     loop: "{{ policy }}"
     when: policy_scan == 'all' or item.name in policy_scan
