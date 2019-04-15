@@ -296,3 +296,7 @@ Now is the time to rebuild the guide using `./build_product rhel8` invocation an
 * The OSPP profile: https://www.niap-ccevs.org/Profile/Info.cfm?PPID=424&id=424[Protection Profile for General Purpose Operating Systems]
 * The PCI-DSS profile: https://www.pcisecuritystandards.org/merchants/process[Payment Card Industry Data Security Standard]
 * The OVAL language: https://oval.mitre.org/language/version5.11/[Open Vulnerability and Assessment Language v5.11 hub]
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2_openscap.adoc[Lab 2 - OpenSCAP Basics and Command Line Scanning]
