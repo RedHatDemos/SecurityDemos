@@ -9,16 +9,6 @@
     verbose: false
 
   tasks:
-    - name: Puppet run to get foreman_scap_client config
-      shell: puppet agent -t
-      ignore_errors: true
-      register: puppet_agent_output
-
-    - name: Log puppet_agent_output
-      debug:
-        var: puppet_agent_output
-      when: verbose
-
     - name: get profile
       shell: "grep -A5 '{{ policy_id }}': /etc/foreman_scap_client/config.yaml| grep profile | awk '{print $2}'| sed -e 's/^[ \t]*//'"
       register: profile_contents
