@@ -343,12 +343,6 @@ image:images/idm-add-to-my-host-group.png[700,700]
 image:images/idm-sudo-command.png[700,700]
 image:images/idm-add-sudo-commands.png[700,700]
 
-
-. In the *As Whom* section, press *+Add* for *RunAs Groups* to add your user group under Run as Groups.
-+
-image:images/idm-runasgroup.png[700,700]
-image:images/idm-add-run-as-group.png[700,700]
-
 . Navigate to *Policy -> Host Based Access Control -> HBAC Rules*.
 +
 image:images/idm-hbac.png[300,300]
