@@ -31,7 +31,7 @@
 * Make sure that you are in the project root when you start - run
 +
 ----
-cd /home/lab-user/labs/lab1_introduction/content
+$ cd /home/lab-user/labs/lab1_introduction/content
 ----
 +
 in the terminal.
@@ -75,7 +75,7 @@ Guide filenames have a `ssg-<product>-guide-<policy>.html` form, so the guide fo
 Give it a try - execute the following command in the terminal:
 
 ....
-firefox /home/lab-user/labs/lab1_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
+$ firefox /home/lab-user/labs/lab1_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
 ....
 
 As a security policy is an ordered list of rules, guide is an ordered list of descriptions of those rules.
@@ -169,10 +169,12 @@ In the following section, we will learn about parametrized rules by taking follo
 As the description says, the rule uses the `timeout` variable, that is defined in the `var_accounts_tmout.var` file.
 Similarly as in the previous step, we can search for the variable definition:
 +
-`find linux_os -name var_accounts_tmout.var`
+----
+$ find linux_os -name var_accounts_tmout.var
+linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+----
 +
-You should get `linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var` as result.
-The file contains variable description, which is helpful - one can't be sure what the number 1800 means, however the contents of the file indicate that it is the same as 30 minutes, i.e. 1800 seconds.
+That `var_accounts_tmout.var` file contains variable description, which is helpful - one can't be sure what the number 1800 means, however the contents of the file indicate that it is the same as 30 minutes, i.e. 1800 seconds.
 
 . The rule is parametrized per profile.
 As there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
@@ -205,7 +207,7 @@ But we have things to do before the build finishes - let’s re-examine the vari
 Let's open the variable definition in an editor - execute
 +
 ....
-gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+$ gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
 ....
 +
 In this YAML file, we have the `options:` key, that defines mappings between the supplied and effective values.
@@ -230,7 +232,7 @@ We can browse it if we open the directory in the `nautilus` file browser.
 Run
 
 ....
-nautilus linux_os/guide/system/accounts/accounts-session/accounts_tmout
+$ nautilus linux_os/guide/system/accounts/accounts-session/accounts_tmout
 ....
 
 in the terminal - a file explorer window opened at that location should pop up.

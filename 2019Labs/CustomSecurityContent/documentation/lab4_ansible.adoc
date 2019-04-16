@@ -231,7 +231,7 @@ Go back to the project root directory.
 Run the following command to build the RHEL8 product:
 
 ----
-./build_product rhel8
+$ ./build_product rhel8
 ----
 
 The Playbooks will be generated into the `build/rhel8/playbooks` directory.

@@ -31,7 +31,7 @@ In this lab excercise, we will show how to solve the task using ComplianceAsCode
 * Make sure that you are in the project root when you start - run
 +
 ----
-cd /home/lab-user/labs/lab3_profiles/content
+$ cd /home/lab-user/labs/lab3_profiles/content
 ----
 +
 in the terminal.
@@ -70,7 +70,7 @@ The profile will represent your company new security policy for laptops.
 . Go to the Red Hat Enterprise Linux 8 profiles directory.
 +
 ----
-cd rhel8/profiles
+$ cd rhel8/profiles
 ----
 +
 Notice that there are already some `.profile` files in the `profiles` directory.
@@ -79,7 +79,7 @@ You can get inspired by them.
 . Create new file `travel.profile` there and open it in the editor.
 +
 ----
-gedit travel.profile
+$ gedit travel.profile
 ----
 +
 . Create the basic structure and fill in the profile title and description as specified in this listing.
@@ -112,13 +112,13 @@ It cannot be an empty list, so for now we will add rule `security_patches_up_to_
 . Save the profile file and go back to the root directory.
 +
 ----
-cd ../..
+$ cd ../..
 ----
 +
 . Rebuild the content.
 +
 ----
-./build_product rhel8
+$ ./build_product rhel8
 ----
 +
 This command will rebuild contents for all the profiles in the Red Hat Enterprise Linux 8 product including you new “Travel” profile.
@@ -127,7 +127,7 @@ The command will build the human-readable HTML guide which can be displayed in a
 . Check the result HTML guide to look at your new profile.
 +
 ----
-firefox build/guides/ssg-rhel8-guide-travel.html
+$ firefox build/guides/ssg-rhel8-guide-travel.html
 ----
 +
 A Firefox Window will open and you will see the guide your Travel profile which contains just a single rule - `security_patches_up_to_date`.
@@ -150,14 +150,14 @@ In our case, we are looking if we have a `rule.yml` file in our repository which
 git grep for that.
 +
 ----
-git grep -i "SSH root login" "*rule.yml"
+$ git grep -i "SSH root login" "*rule.yml"
 linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml:title: 'Disable SSH Root Login'
 ----
 +
 If you want, you can check that this is the right rule by opening this `rule.yml` file and reading the description section in this file.
 +
 ----
-gedit linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml
+$ gedit linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml
 ----
 +
 ----
@@ -181,7 +181,7 @@ In our case, the rule ID is `sshd_disable_root_login`.
 . Add the rule ID to selections list in your travel profile.
 +
 ----
-gedit rhel8/profiles/travel.profile
+$ gedit rhel8/profiles/travel.profile
 ----
 +
 Add `sshd_disable_root_login` as a new item in `selections` list.
@@ -204,7 +204,7 @@ selections:
 . Rebuild the content.
 +
 ----
-./build_product rhel8
+$ ./build_product rhel8
 ----
 +
 The rule `sshd_disable_root_login` will get included to your profile by the build system.
@@ -212,7 +212,7 @@ The rule `sshd_disable_root_login` will get included to your profile by the buil
 . Check the result HTML guide.
 +
 ----
-firefox build/guides/ssg-rhel8-guide-travel.html
+$ firefox build/guides/ssg-rhel8-guide-travel.html
 ----
 +
 A Firefox window will open and you will see your Travel profile which contains two rules.
@@ -234,7 +234,7 @@ We need to set the specific value (10 minutes) in the profile.
 This is similar to the previous section.
 +
 ----
-git grep -i "Interactive Session Timeout" "*rule.yml"
+$ git grep -i "Interactive Session Timeout" "*rule.yml"
 linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml:title: 'Set Interactive Session Timeout'
 ----
 +
@@ -244,7 +244,7 @@ It is easy to spot that the rule ID is `accounts_tmout` because the rule ID is t
 . Add the rule ID to selections list in your travel profile.
 +
 ----
-gedit rhel8/profiles/travel.profile
+$ gedit rhel8/profiles/travel.profile
 ----
 +
 Add `accounts_tmout` as a new item in selections list.
@@ -254,7 +254,7 @@ Make sure there is no trailing whitespace!
 . Check the rule contents to find out that there is a variable involved.
 +
 ----
-gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
+$ gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 ----
 +
 From the rule contents you can clearly see that it is parametrized by the `variable var_accounts_tmout`.
@@ -265,8 +265,9 @@ The value is also automatically substituted into OVAL checks, Ansible Playbooks 
 . Check out the variable.
 +
 ----
-find . -name var_accounts_tmout*
-gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+$ find . -name 'var_accounts_tmout*'
+linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+$ gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
 ----
 +
 The variable has multiple options, see the options list:
@@ -290,7 +291,7 @@ We will use the `10_min` selector to choose the 600 seconds.
 . Add the variable and the selector to the selections list in your `travel` profile.
 +
 ----
-gedit rhel8/profiles/travel.profile
+$ gedit rhel8/profiles/travel.profile
 ----
 +
 Same as the rule IDs, the variable values also belong to the `selections` list in the profile.
@@ -316,7 +317,7 @@ selections:
 . Rebuild the content.
 +
 ----
-./build_product rhel8
+$ ./build_product rhel8
 ----
 +
 The rule `accounts_tmout` will get included to your profile by the build system.
@@ -324,7 +325,7 @@ The rule `accounts_tmout` will get included to your profile by the build system.
 . Check the result HTML guide.
 +
 ----
-firefox build/guides/ssg-rhel8-guide-travel.html
+$ firefox build/guides/ssg-rhel8-guide-travel.html
 ----
 +
 Firefox will open and you will see your Travel profile which contains 3 rules.
@@ -349,7 +350,7 @@ We will also add arguments to turn on the full reporting, which will generate XM
 Run the following command:
 +
 ----
-sudo oscap xccdf eval --results results.xml --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
+$ sudo oscap xccdf eval --results results.xml --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
 ----
 +
 . Check the scan results.
@@ -364,7 +365,7 @@ image::2-02-terminal.png[Terminal]
 Open the HTML report using the following command:
 +
 ----
-firefox report.html
+$ firefox report.html
 ----
 +
 The structure of the HTML report is similar to the HTML guide, but it contains the evaluation results.
@@ -403,7 +404,7 @@ Let’s say that `package_hexchat_installed` could be a suitable ID.
 We will create the directory using `mkdir`, the `-p` switch makes sure that the directory is created along with it's parents if needed.
 +
 ----
-mkdir -p linux_os/guide/system/software/package_hexchat_installed
+$ mkdir -p linux_os/guide/system/software/package_hexchat_installed
 ----
 +
 . Create `rule.yml` in the rule directory.
@@ -413,7 +414,7 @@ Each rule needs to have it.
 The `rule.yml` is a simple YAML file.
 +
 ----
-gedit linux_os/guide/system/software/package_hexchat_installed/rule.yml
+$ gedit linux_os/guide/system/software/package_hexchat_installed/rule.yml
 ----
 +
 Add the following content to the `rule.yml` file using your editor.
@@ -468,7 +469,7 @@ Add the `hexchat` package to the list of installed packages to be checked.
 This list is called `package_installed.csv` and is located in the `templates/csv` directory.
 +
 ----
-gedit rhel8/templates/csv/packages_installed.csv
+$ gedit rhel8/templates/csv/packages_installed.csv
 ----
 +
 Add `hexchat` as a new line to this file and save the file.
@@ -476,13 +477,13 @@ Add `hexchat` as a new line to this file and save the file.
 . Build the content.
 +
 ----
-./build_product rhel8
+$ ./build_product rhel8
 ----
 +
 . Check the result HTML guide.
 +
 ----
-firefox build/guides/ssg-rhel8-guide-travel.html
+$ firefox build/guides/ssg-rhel8-guide-travel.html
 ----
 +
 A Firefox window will open and you will see your Travel profile which contains 4 rules.
