@@ -66,7 +66,9 @@
       state: directory
     loop:
       - "{{ TRACK_1_LABEL }}"
+      - "{{ TRACK_2_LABEL }}"
       - "{{ TRACK_3_LABEL }}"
+      - "{{ TRACK_4_LABEL }}"
       - "{{ TRACK_5_LABEL }}"
 
   - name: Clone the CaC/c Git for Lab Tracks
@@ -77,7 +79,9 @@
       force: yes
     loop:
       - "{{ TRACK_1_LABEL }}"
+      - "{{ TRACK_2_LABEL }}"
       - "{{ TRACK_3_LABEL }}"
+      - "{{ TRACK_4_LABEL }}"
       - "{{ TRACK_5_LABEL }}"
 
   - name: Create symlink from the home directory
@@ -87,7 +91,9 @@
       state: link
     loop:
       - "{{ TRACK_1_LABEL }}"
+      - "{{ TRACK_2_LABEL }}"
       - "{{ TRACK_3_LABEL }}"
+      - "{{ TRACK_4_LABEL }}"
       - "{{ TRACK_5_LABEL }}"
 
   - name: Copy the track 0 documentation to the working directory
@@ -109,13 +115,6 @@
       regexp: '(    Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that)'
       replace: '\1\n\1'
 
-  - name: Clone the CaC/c Git for Lab 3
-    git:
-      repo: "{{ CACC_LOCAL }}"
-      version: 'v0.1.43'
-      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content"
-      force: yes
-
   - name: Remove the lab3 tests
     file:
       path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
@@ -131,13 +130,6 @@
       dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
       regexp: '(operation=")greater than or equal(")'
       replace: '\1equals\2'
-
-  - name: Clone the CaC/c Git for Track 4
-    git:
-      repo: "{{ CACC_LOCAL }}"
-      version: 'master'
-      dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content"
-      force: yes
 
   - name: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves
     file:
