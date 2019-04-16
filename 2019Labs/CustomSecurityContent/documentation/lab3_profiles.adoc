@@ -4,7 +4,9 @@
 
 == Introduction
 
-Imagine that your company has approved an internal security policy that enforces certain configuration of laptops travelling outside the company site. Your task is to implement an automated way of checking the laptop configuration. In this track, we will show how to solve the task using ComplianceAsCode.
+Imagine that your company has approved an internal security policy that enforces certain configuration of laptops travelling outside the company site.
+Your task is to implement an automated way of checking the laptop configuration.
+In this lab excercise, we will show how to solve the task using ComplianceAsCode.
 
 == What will you learn:
 
@@ -43,17 +45,27 @@ image::0-01-setup.png[]
 
 == Creating a new empty profile
 
-The basic building block of a security policy is ComplianceAsCode is a rule. The rule represents a single configuration setting, eg. "Password length is at least 8 characters" or "Logging is enabled".
+The basic building block of a security policy in ComplianceAsCode is a rule.
+The rule represents a single configuration setting, eg.
+"Password length is at least 8 characters" or "Logging is enabled".
 
-A set of rules is called a profile. A profile represents a specific security policy. In ComplianceAsCode we have multiple profiles.
+A set of rules is called a profile.
+A profile represents a specific security policy.
+In ComplianceAsCode we have multiple profiles.
 
-We have policies for different products. By using term "product" we mean operating systems or applications, eg. Red Hat Enterprise Linux 8, OpenShift Container Platform 3.
-The products are represented by directories in the root of the ComplianceAsCode repository, eg. `rhel7`, `rhel8`, `ocp3` directories.
+We have profiles for different products.
+By using term "product" we mean operating systems or applications, eg.
+Red Hat Enterprise Linux 8, OpenShift Container Platform 3.
+The products are represented by directories in the root of the ComplianceAsCode repository, eg.
+`rhel7`, `rhel8`, `ocp3` directories.
 
-Each product has a different set of profiles, because some security policies are relevant only for certain operating systesm or applications.
-The profiles are located in `profiles` directory in the product directory. The profiles are represented by a simple YAML (YAML Ain't Markup Language) file, eg. `ospp.profile` defines a profile.
+Each product has a different set of profiles, because some security policies are relevant only for certain operating system or applications.
+The profiles are located in `profiles` directory in the product directory.
+The profiles are represented by a simple YAML (YAML Ain't Markup Language) file, eg.
+`ospp.profile` defines a profile.
 
-Let’s create a new “Travel” profile for Red Hat Enterprise Linux 8. The profile will represent your company new security policy for laptops.
+Let’s create a new “Travel” profile for Red Hat Enterprise Linux 8.
+The profile will represent your company new security policy for laptops.
 
 . Go to the Red Hat Enterprise Linux 8 profiles directory.
 +
@@ -61,7 +73,8 @@ Let’s create a new “Travel” profile for Red Hat Enterprise Linux 8. The pr
 cd rhel8/profiles
 ----
 +
-Notice that there are already some `.profile` files in the `profiles` directory. You can get inspired by them.
+Notice that there are already some `.profile` files in the `profiles` directory.
+You can get inspired by them.
 +
 . Create new file `travel.profile` there and open it in the editor.
 +
@@ -83,14 +96,18 @@ selections:
 ----
 +
 Profile is a file in YAML format.
-You should be fine if you copy and paste the content from the previous listing. If you attempt to create a YAML file by hand, the most common mistake tends to be using incorrect indentation. Make sure you use spaces, not tabs. Also check if no whitespace is trailing.
+You should be fine if you copy and paste the content from the previous listing.
+When creating new YAML file by hand, the most common mistake tends to be incorrect indentation.
+Make sure you use spaces, not tabs.
+Also check if no whitespace is trailing.
 +
 The profile consists of 4 items which are required:
 +
-.. `documentation_complete: true` means that your profile will not be ignored.
+.. `documentation_complete: true` means that your rule is not in a draft state, so the build system will pick it up.
 .. `title`: is a short profile title.
 .. `description`: is a few paragraphs that describe the purpose of the profile.
-.. `selections`: is a list of rules and variables that consist of the profile. It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this track.
+.. `selections`: is a list of rules and variables that the profile is composed of.
+It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this lab excercise.
 +
 . Save the profile file and go back to the root directory.
 +
@@ -118,14 +135,19 @@ A Firefox Window will open and you will see the guide your Travel profile which 
 .The header of the HTML Guide generated by OpenSCAP during the build.
 image::2-01-guide.png[HTML Guide]
 
+
 == Adding rules to the profile
 
-Let’s imagine that one of the requirements of your company policy is that root user cannot log in to the machine via SSH. At this point, we can reveal to you that ComplianceAsCode already contains a rule that implements this requirement. You now only need to add this rule to your “travel” profile.
+Let’s imagine that one of the requirements of your company policy is that root user cannot log in to the machine via SSH.
+At this point, we can reveal to you that ComplianceAsCode already contains a rule that implements this requirement.
+You now only need to add this rule to your “travel” profile.
 
 . Find the relevant rule.
 +
-Rules are represented by directories in ComplianceAsCode. Each rule directory contains a file called `rule.yml` which contains rule description and metadata.
-In our case, we are looking if we have a `rule.yml` file in our repository which contains “SSH root login”. We can use eg. git grep for that.
+Rules are represented by directories in ComplianceAsCode.
+Each rule directory contains a file called `rule.yml` which contains rule description and metadata.
+In our case, we are looking if we have a `rule.yml` file in our repository which contains “SSH root login”. We can use eg.
+git grep for that.
 +
 ----
 git grep -i "SSH root login" "*rule.yml"
@@ -200,9 +222,12 @@ A Firefox window will open and you will see your Travel profile which contains t
 
 Let’s imagine that one of the requirements set in your company policy is that the user sessions must timeout after 10 minutes of user’s inactivity.
 
-At this point, we can reveal to you that ComplianceAsCode already contains an implementation of this requirement in a form of a rule.  You now need to add this rule to your “travel” profile.
+At this point, we can, again, reveal to you that ComplianceAsCode already contains an implementation of this requirement in a form of a rule.
+ You now need to add this rule to your “travel” profile.
 
-However, the rule in ComplianceAsCode is generic, or in other words, customizable. It can check for arbitrary period of user’s inactivity. We need to set the specific value (10 minutes) in the profile.
+However, the rule in ComplianceAsCode is generic, or in other words, customizable.
+It can check for arbitrary period of user’s inactivity.
+We need to set the specific value (10 minutes) in the profile.
 
 . Find the rule ID.
 +
@@ -213,7 +238,7 @@ git grep -i "Interactive Session Timeout" "*rule.yml"
 linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml:title: 'Set Interactive Session Timeout'
 ----
 +
-As you already know from the first lab track, the rule is located in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml`.
+As you already know from the first lab lab excercise, the rule is located in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml`.
 It is easy to spot that the rule ID is `accounts_tmout` because the rule ID is the name of the directory where the rule is located.
 +
 . Add the rule ID to selections list in your travel profile.
@@ -223,7 +248,8 @@ gedit rhel8/profiles/travel.profile
 ----
 +
 Add `accounts_tmout` as a new item in selections list.
-Make sure your indentation is consistent, use spaces. Make sure there is no trailing whitespace!
+Make sure your indentation is consistent, use spaces.
+Make sure there is no trailing whitespace!
 +
 . Check the rule contents to find out that there is a variable involved.
 +
@@ -254,9 +280,12 @@ options:
     default: 600
 ----
 +
-The `options` are defined as a YAML dictionary which maps keys to values. In ComplianceAsCode, the YAML dictionary keys are used as selectors, the YAML dictionary values are concrete values that will be used in the checks. You use the selector to choose the value in the profile.
+The `options` are defined as a YAML dictionary which maps keys to values.
+In ComplianceAsCode, the YAML dictionary keys are used as selectors, the YAML dictionary values are concrete values that will be used in the checks.
+You use the selector to choose the value in the profile.
 You can add a new key and value to the `options` dictionary if none of the values suits your needs.
-We will add a new pair of variable name and selector into the profile. We will use the `10_min` selector to choose the 600 seconds.
+We will add a new pair of variable name and selector into the profile.
+We will use the `10_min` selector to choose the 600 seconds.
 +
 . Add the variable and the selector to the selections list in your `travel` profile.
 +
@@ -306,13 +335,8 @@ Scroll down to the rule Account Inactivity Timeout and notice that 600 seconds h
 
 Now, you can use the new profile that you created in previous Subsections in order to scan your machine using OpenSCAP.
 
-. Build the content.
-+
-----
-./build_product rhel8
-----
-+
-We have examined only the HTML guide so far. But for automated scanning we will use a datastream instead.
+We have examined only the HTML guide so far.
+But for automated scanning we will use a datastream instead.
 A datastream is an XML file which contains all the data (rules, checks, remediations, metadata) in a single file.
 The datastream that contains our new profile was also built during the content build.
 The datastream is called `ssg-rhel8-ds.xml` and is located in the `build` directory.
@@ -325,7 +349,7 @@ We will also add arguments to turn on the full reporting, which will generate XM
 Run the following command:
 +
 ----
- oscap xccdf eval --results results.mxl --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
+sudo oscap xccdf eval --results results.xml --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
 ----
 +
 . Check the scan results.
@@ -357,18 +381,26 @@ Let’s say that one of the requirements in your corporate policy is that the us
 
 You want to add a check that checks if Hexchat is installed to your new profile.
 
-ComplianceAsCode does not have any rule ready for installing this application yet. That means we need to add a new rule for that.
+ComplianceAsCode does not have any rule ready for installing this application yet.
+That means we need to add a new rule for that.
 
 . Find a group directory that fits best your new rule.
 +
 The rules are located in `linux_os` directory.
 Rules in the ComplianceAsCode project are organized into groups, which are represented by directories.
-It only depends on you to decide which group  the new rule belongs to. You can  browse the directory tree to find out the suitable group.
-We plan to add a rule about installing a new application, so the `linux_os/guide/system/software/` directory will be a suitable place.
+It only depends on you to decide which group  the new rule belongs to.
+You can  browse the directory tree to find out the suitable group:
 +
-. Create a new rule directory in the group directory.
+.. We are in the `linux_os/guide` directory, and there are `intro`, `system` and `services` directories.
+.. As we don't want to configure a service setting, we explore `system`.
+.. There are more subdirectories of `system`, and as we want a new software package installed, it makes sense to explore the `software` directory.
+.. Here, we create the directory for our rule.
 +
-The name of the directory will be the rule ID. Let’s say that `package_hexchat_installed` could be a suitable ID.
+. Create a new rule directory in a group directory.
++
+The name of the directory will be the rule ID.
+Let’s say that `package_hexchat_installed` could be a suitable ID.
+We will create the directory using `mkdir`, the `-p` switch makes sure that the directory is created along with it's parents if needed.
 +
 ----
 mkdir -p linux_os/guide/system/software/package_hexchat_installed
@@ -376,7 +408,8 @@ mkdir -p linux_os/guide/system/software/package_hexchat_installed
 +
 . Create `rule.yml` in the rule directory.
 +
-A description of the rule is stored. Each rule needs to have it.
+A description of the rule is stored.
+Each rule needs to have it.
 The `rule.yml` is a simple YAML file.
 +
 ----
@@ -397,7 +430,7 @@ rationale: The Hexchat application enables IRC communication with the corporate 
 severity: medium
 ----
 +
-.. `documentation_complete: true` means that your rule will not be ignored
+.. `documentation_complete: true` again indicates that the rule should be picked up by the build system whenever it is applicable.
 .. `title` is the rule title, which will be displayed on the command line and in SCAP Workbench.
 .. `description` is a section which purpose is to describe the check.
 .. `rationale` should contain a justification why the rule exists.
@@ -406,7 +439,7 @@ severity: medium
 . Add the rule ID to the profile selections.
 +
 As described in the previous section, you need to add the ID of your new rule (`package_hexchat_installed`) to the selections list in your profile (`travel.profile`).
-Your `travel.profile` file should now look like in the following listing:
+Your `travel.profile` file in the `rhel8/profiles` directory should now look like in the following listing:
 +
 ----
 documentation_complete: true
@@ -426,10 +459,13 @@ selections:
 . Use templates to generate checks automatically.
 +
 We have a template that will generate the automated checks in Open Vulnerability and Assesment Language (OVAL), Ansible, Bash, Anaconda and Puppet languages.
-There are multiple templates that can generate different checks. However, not everything is covered by template. Writing OVAL from scratch is discussed in the third track of this lab.
+There are multiple templates that can generate different checks.
+However, not everything is covered by template.
+Writing OVAL from scratch is discussed in the third lab excercise of this lab.
 +
 We only need to add the package to the list of packages for which the checks should be generated using a template.
-Add the `hexchat` package to the list of installed packages to be checked. This list is called `package_installed.csv` and is located in the `templates/csv` directory.
+Add the `hexchat` package to the list of installed packages to be checked.
+This list is called `package_installed.csv` and is located in the `templates/csv` directory.
 +
 ----
 gedit rhel8/templates/csv/packages_installed.csv
@@ -449,7 +485,8 @@ Add `hexchat` as a new line to this file and save the file.
 firefox build/guides/ssg-rhel8-guide-travel.html
 ----
 +
-A Firefox window will open and you will see your Travel profile which contains 4 rules. You should see your new rule there.
+A Firefox window will open and you will see your Travel profile which contains 4 rules.
+You should see your new rule there.
 +
 .New rule Install Hexchat Application displayed in HTML guide
 image::2-04-rule.png[New rule]
