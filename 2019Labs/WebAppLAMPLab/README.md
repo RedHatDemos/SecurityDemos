@@ -79,7 +79,7 @@ MariaDB [WordPress]>
 
 From here... we could change the admin password so that we can always log in as "admin" with our new password.  Chances are, someone will realize they're locked out and eventually get back in.  A real-world example would actually be sneaker:  if we were the type of user to do such a thing as this, we would probably create an ambiguous username that *looked* official but was our secret access backdoor.
 
-## The easy way
+## Giving ourselves access to WordPress... using the vulnerable database user access.
 - it's as simple as updating the admin user's password.  We don't know what that password even is, so we can't log in to WordPress conole... but we have wide open database access!  So we can set it to whatever we want!
 
 - run this command to change the wordpress admin user's password:
