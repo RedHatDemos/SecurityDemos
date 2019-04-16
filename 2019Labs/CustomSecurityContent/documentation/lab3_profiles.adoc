@@ -45,7 +45,7 @@ image::0-01-setup.png[]
 
 == Creating a new empty profile
 
-The basic building block of a security policy is ComplianceAsCode is a rule.
+The basic building block of a security policy in ComplianceAsCode is a rule.
 The rule represents a single configuration setting, eg.
 "Password length is at least 8 characters" or "Logging is enabled".
 
@@ -53,13 +53,13 @@ A set of rules is called a profile.
 A profile represents a specific security policy.
 In ComplianceAsCode we have multiple profiles.
 
-We have policies for different products.
+We have profiles for different products.
 By using term "product" we mean operating systems or applications, eg.
 Red Hat Enterprise Linux 8, OpenShift Container Platform 3.
 The products are represented by directories in the root of the ComplianceAsCode repository, eg.
 `rhel7`, `rhel8`, `ocp3` directories.
 
-Each product has a different set of profiles, because some security policies are relevant only for certain operating systesm or applications.
+Each product has a different set of profiles, because some security policies are relevant only for certain operating system or applications.
 The profiles are located in `profiles` directory in the product directory.
 The profiles are represented by a simple YAML (YAML Ain't Markup Language) file, eg.
 `ospp.profile` defines a profile.
@@ -97,16 +97,16 @@ selections:
 +
 Profile is a file in YAML format.
 You should be fine if you copy and paste the content from the previous listing.
-If you attempt to create a YAML file by hand, the most common mistake tends to be using incorrect indentation.
+When creating new YAML file by hand, the most common mistake tends to be incorrect indentation.
 Make sure you use spaces, not tabs.
 Also check if no whitespace is trailing.
 +
 The profile consists of 4 items which are required:
 +
-.. `documentation_complete: true` means that your profile will not be ignored.
+.. `documentation_complete: true` means that your rule is not in a draft state, so the build system will pick it up.
 .. `title`: is a short profile title.
 .. `description`: is a few paragraphs that describe the purpose of the profile.
-.. `selections`: is a list of rules and variables that consist of the profile.
+.. `selections`: is a list of rules and variables that the profile is composed of.
 It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this lab excercise.
 +
 . Save the profile file and go back to the root directory.
@@ -222,7 +222,7 @@ A Firefox window will open and you will see your Travel profile which contains t
 
 Let’s imagine that one of the requirements set in your company policy is that the user sessions must timeout after 10 minutes of user’s inactivity.
 
-At this point, we can reveal to you that ComplianceAsCode already contains an implementation of this requirement in a form of a rule.
+At this point, we can, again, reveal to you that ComplianceAsCode already contains an implementation of this requirement in a form of a rule.
  You now need to add this rule to your “travel” profile.
 
 However, the rule in ComplianceAsCode is generic, or in other words, customizable.
@@ -430,7 +430,7 @@ rationale: The Hexchat application enables IRC communication with the corporate 
 severity: medium
 ----
 +
-.. `documentation_complete: true` means that your rule will not be ignored
+.. `documentation_complete: true` again indicates that the rule should be picked up by the build system whenever it is applicable.
 .. `title` is the rule title, which will be displayed on the command line and in SCAP Workbench.
 .. `description` is a section which purpose is to describe the check.
 .. `rationale` should contain a justification why the rule exists.
