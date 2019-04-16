@@ -1,5 +1,5 @@
 ---
-- name: schedule next lifecycle patching run
+- name: schedule next lifecycle patching
   hosts: localhost
   connection: local
   tasks:
@@ -9,7 +9,7 @@
 
   - name: schedule next patch group
     uri:
-      url: "https://tower.averyhq.int/api/v2/workflow_job_templates/{{ next_sat_env }}/schedules/"
+      url: "https://{{ lookup('env', 'TOWER_HOST') }}/api/v2/workflow_job_templates/{{ next_sat_env }}/schedules/"
       method: POST
       body:
         name: "Linux_patching_{{ next_cycle_date }}"
