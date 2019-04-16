@@ -42,6 +42,7 @@ _lampservers_ :
     | The wordpress application is set with a default login of: 
     
 ---------------------------
+
     http://rhel1.example.com
 
     LOGIN:  admin
