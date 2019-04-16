@@ -35,12 +35,12 @@ _lampservers_ :
 .An example table
 [width="90%",frame="topbot",options="header,footer"]
 |==========================
-| |      1+|Columns 2 - 4
-| |This server is used for the apache web server. There is no local database on this machine |this server is a standalone database with no other purpose than to hose the MySQL / MariaDB.|This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
-| |2       |Item 2  |Item 2
-| |3       |Item 3  |Item 3
-| |4       |Item 4  |Item 4
-| |footer 1|footer 2|footer 3
+| My |      1+|Columns 2 - 4
+| Name |This server is used for the apache web server. There is no local database on this machine |this server is a standalone database with no other purpose than to hose the MySQL / MariaDB.|This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
+| Is |2       |Item 2  |Item 2
+| Luka |3       |Item 3  |Item 3
+| Second |4       |Item 4  |Item 4
+| Floor |footer 1|footer 2|footer 3
 |==========================
 
 
