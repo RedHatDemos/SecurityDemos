@@ -3,6 +3,19 @@
 :experimental:
 :imagesdir: images
 
+== Introduction
+
+In this lab, we will get familiar with the ComplianceAsCode project.
+The purpose of this project is to help people creating security policy content for various platforms.
+ComplianceAsCode project enables us to efficiently develop and share security content.
+
+Using the powerful build system you generate outputs in various formats such as Ansible Playbooks or SCAP datastreams
+that you can use to automate security auditing and hardening.
+The project contains many useful rules and checks that form various security policies and also allows to easily add new rules and checks.
+
+We will work with the project source repository, which can be retrieved from on https://github.com/ComplianceAsCode/content/.
+
+In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode data is shipped as `scap-security-guide` RPM package.
 
 == What will you learn
 
