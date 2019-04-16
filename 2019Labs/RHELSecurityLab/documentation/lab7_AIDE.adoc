@@ -127,7 +127,7 @@ Search for line 26 by typing *:26*. When you do that you should see the list of 
 +
 [root@servera ~]# aide --check
 
-. We see that AIDE checked nearly 35,000 files and found two changes:
+. We see that AIDE scanned our files and found two changes.  Your output should look similar to the following:
 +
 [source]
 [root@servera aide]# aide --check
@@ -184,7 +184,7 @@ If you want to eliminate the changes resulting from alteration of the timestamps
 -w /etc/shadow -p a -k shadow_key
 ----
 
-. Now let’s change the permission on the /etc/shadow file, run a scan, and then look for the entry in the audit.log.
+. Now let’s change the permission on the /etc/shadow file, run a scan, and then look for the entry in the audit.log  You should see output similar to the following:
 +
 ----
 [root@servera aide]# aide --check
@@ -269,7 +269,7 @@ type=SYSCALL msg=audit(04/09/2019 21:20:22.554:128) : arch=x86_64 syscall=fchmod
 
 . When the service restarts you can run auditctl -l to verify that your rule has survived.  Note that your auditd is configured to manual start and stop, so you will have to reboot the server to see this change.  If you want to configure a watch, but do not want to reboot your server, create a dynamic rule as we have in this exercise, and then update the audit.rules file for when your server reboots.
 
-. If you want to reboot your server to verify that your rule has survived, do the following:
+. If you want to reboot your server to verify that your rule has survived, do the following with the understanding that a server reboot in the lab environment can take some time:
 +
 [source]
 ----
