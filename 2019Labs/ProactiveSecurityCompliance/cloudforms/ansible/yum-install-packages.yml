@@ -12,7 +12,7 @@
     wait_for:
       host: "{{ ansible_host }}"
       port: 22
-      delay: 10
+      delay: 30
       timeout: 15
       state: started
     delegate_to: localhost
