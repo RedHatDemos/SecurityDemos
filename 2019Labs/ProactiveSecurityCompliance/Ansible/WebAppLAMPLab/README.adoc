@@ -33,10 +33,10 @@ _lampservers_ :
 
 
 .An example table
-[width="50%",cols=">s,^m,e",frame="topbot",options="header,footer"]
+[width="90%",cols=">s,^m,e",frame="topbot",options="header,footer"]
 |==========================
 |      2+|Columns 2 and 3
-|1       |Item 1  |Item 1
+|This server is used for the apache web server. There is no local database on this machine |this server is a standalone database with no other purpose than to hose the MySQL / MariaDB.|This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
 |2       |Item 2  |Item 2
 |3       |Item 3  |Item 3
 |4       |Item 4  |Item 4
@@ -45,10 +45,10 @@ _lampservers_ :
 
 
 
-[width="100%"]
-| lampweb | lampdb | lampjump
-| This server is used for the apache web server. There is no local database on this machine | this server is a standalone database with no other purpose than to hose the MySQL / MariaDB. | This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site. 
-| The wordpress application is set with a default login of: `admin` with a password of `Password123`. | The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!! | You will log in as lab-user to this machine and see a script in your home directory. Additionally, you can run remote MySQL commands from this machine against the unsecured database.
+
+The wordpress application is set with a default login of: `admin` with a password of `Password123`. 
+The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!
+You will log in as lab-user to this machine and see a script in your home directory. Additionally, you can run remote MySQL commands from this machine against the unsecured database.
 
 
 * This role appears to install an innocent apache server on one and a db
