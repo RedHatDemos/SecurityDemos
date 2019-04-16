@@ -152,7 +152,7 @@ You will see the compliance scan results for every security control in the OSPP 
 +
 image:lab1.1-scapreport.png[]
 
-. Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether or not the particular security control has passed or failed the scan.
+. Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether a particular security control has passed or failed the scan.
 
 . Click on the rule title in the HTML report.
 +
