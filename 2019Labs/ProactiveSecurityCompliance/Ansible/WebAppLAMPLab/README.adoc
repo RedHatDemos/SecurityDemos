@@ -187,20 +187,26 @@ that directory. A typical hacker might have a similar file to this,
 pre-designed to exploit a site once they found the vulnerability. When
 we run this script,
 * Run this script to exploit the DB.
-* You will see this after it runs: ``` [lab-user@workstation-repl ~]$
-/home/lab-user/cat_meme_takeover.sh
-+
-HACKED!!! YOU ARE A BAD KITTY!
-+
-############################## __ __ _____ _____ __ | / | ____/ _    / /
-| |/| | _|| | |   / / / +
- | | | | |*| |_| | V V / +
- |_| |_|__*/ _/_/
-+
-##############################
-+
-DONE! Now reload the web page http://rhel1.example.com +
+* You will see this after it runs: 
+
+``` 
+[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+
+      HACKED!!!  YOU ARE A BAD KITTY!
+
+      ##############################
+       __  __ _____ _____        __ 
+      |  \/  | ____/ _ \ \      / / 
+      | |\/| |  _|| | | \ \ /\ / /  
+      | |  | | |__| |_| |\ V  V /   
+      |_|  |_|_____\___/  \_/\_/    
+   	       	       	       	  
+      ##############################
+                                    
+      DONE!  Now reload the web page
+         http://rhel1.example.com    
  to see what the evil cat hacker clan did!
+
 
 ```
 
@@ -282,26 +288,29 @@ ERROR 1045 (28000): Access denied for user
 
 [lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
 
-----------------------------------
-    FAILED!  You do not can haz
-    permissionz to the database
-
-   ############################## 
-   ____      ___        ______  _ 
-  |  _ \    / \ \      / /  _ \| |
-  | |_) |  / _ \ \ /\ / /| |_) | |
-  |  _ <  / ___ \ V  V / |  _ <|_|
-  |_| \_\/_/   \_\_/\_/  |_| \_(_)
-                            
-   ############################## 
-                                  
-    FAILED!  You do not can haz   
-    permissionz to the database   
-----------------------------------
 
 ```
 
-ACCESS DENIED!
+[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+
+        FAILED!  You do not can haz
+        permissionz to the database
+
+       ############################## 
+       ____      ___        ______  _ 
+      |  _ \    / \ \      / /  _ \| |
+      | |_) |  / _ \ \ /\ / /| |_) | |
+      |  _ <  / ___ \ V  V / |  _ <|_|
+      |_| \_\/_/   \_\_/\_/  |_| \_(_)
+   	       	       	       	    
+       ############################## 
+                                      
+        FAILED!  You do not can haz   
+        permissionz to the database   
+```
+
+Access DENIED!!!!
+                            
 
 [[summary]]
 SUMMARY
