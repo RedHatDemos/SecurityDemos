@@ -47,7 +47,7 @@ _lampservers_ :
 
     LOGIN:  admin
     
-    PASS:  Password123.	
+    PASS:  Password123	
 
     |lampdb
     | 192.168.0.101
