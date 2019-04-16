@@ -85,7 +85,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
 ----
  [root@openscap]# oscap info ssg-rhel8-ds.xml
 ----
-You will get print out of contents - aforementioned two compliance profiles. OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS..
+. You will get list of contents, aforementioned compliance profiles. OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS.
 
  . Next, let's perform our first baseline testing scan with the vanilla OSPP profile. Notice in our command below that we can skip the profile ID prefix to make the command simpler. The real ID is xccdf_org.ssgproject.content_profile_ospp.
 
@@ -97,13 +97,13 @@ Now, you will see the compliance scan results for every security control in the 
 * use --results-arf to get machine readable results archive
 * use --report to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 
- [root@openscap]# oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
+ [root@openscap]# oscap xccdf eval --oval-results --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
 
 . (Optional) You can also generate the HTML report separately:
 +
  [root@openscap]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 
-. Now, go back to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+. Now, go to your *power controls and consoles* view from the *Lab Information* page (the one with GUID) and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
@@ -122,14 +122,17 @@ image:images/lab1.1-scapreport.png[500,500]
 +
 image:images/lab1.1-clickrule.png[600,600]
 
-. This will bring up a pop-up dialog that allows you to examine why a particular OpenSCAP security rule failed or passed. For example, if an OpenSCAP security rule is testing file permissions on a list of files, it will specify which files failed and what are their permission bits.
+. This will bring up a pop-up dialog that allows you to examine details of the particular OpenSCAP security rule that failed or passed. On case `--oval-results` has been specified on the command line when scanning, extended details are provided. For example, if an OpenSCAP security rule is testing file permissions on a list of files, it will specify which files failed and what are their permission bits. In our case, it shows which file failed regex check.
++
+image::images/lab1.1-report_pass.png[HTML report: A rule that is passing]
++
 
-image::images/scap_report_pass.png[HTML report: A rule that is passing]
+image::images/lab1.1-report_fail.png[HTML report: A rule that is failing]
 
-image::images/scap_report_fail.png[HTML report: A rule that is failing]
+. Feel free to browse through the report, to see all the different checks that are performed. Machine is in state equivalent to default installation. When you are done, you can terminate Firefox window.
 
-== Lab 1.2 Customizing existing SCAP benchmarks using SCAP workbench
-. Now, go back to your *Lab Information* webpage from the *Lab 0 Setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+== Lab 1.2 Customizing existing SCAP benchmarks using SCAP Workbench
+. Now, go back to your *Lab Information* webpage from the *Lab 0 Setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password. Don't forget you can paste text into console using button T in the top right corner.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
@@ -142,7 +145,7 @@ image:images/lab1.1-labuserlogin.png[300,300]
 +
 image:images/lab1.2-scapsecurityguide.png[600,600]
 +
-image::images/scap_workbench_opened.png[SCAP Workbench opened, profile selected]
+image::images/lab1.2-workbench_opened.png[SCAP Workbench opened, profile selected]
 
 . Let's customize the PCI-DSS Control baseline. Select this profile from the *Profile* drop-down list. Click *Customize*.
 +
@@ -152,11 +155,11 @@ image:images/lab1.2-selectcustomize.png[700,700]
 +
 image:images/lab1.2-newprofileID.png[500,500]
 
-. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *OK* to save the profile. You have now created a new custom profile.
+. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. There is no specific goal in mind for this part of exercise, just showcase of capabilities. After you are done customizing click *OK* to save the profile. You have now created a new custom profile.
 +
-image::images/scap_workbench_tailoring.png[SCAP Workbench content customization]
+image::images/lab1.2-workbench_tailoring.png[SCAP Workbench content customization]
 
-. Now let's run a test scan with the new custom profile we just created. Click *Scan* and inspect the results. When prompted for the password for *lab-user*, type *r3dh4t1!*. This will take a few minutes so feel free to move on with the lab exercise and not wait until the scan is completed.
+. Now let's run a test scan with the new custom profile we just created. Click *Scan* and inspect the results.When prompted for the password for *lab-user*, type *r3dh4t1!*. This will take a few minutes so feel free to move on with the lab exercise and not wait until the scan is completed. You can ignore and close the diagnostics window that will pop up at the end of the scan.
 +
 image:images/lab1.2-scapworkbenchscan.png[500,500]
 
@@ -164,8 +167,10 @@ image:images/lab1.2-scapworkbenchscan.png[500,500]
 +
 image:images/lab1.2-savecustomization.png[300,300]
 
+. This is the end of work in the console view.
+
 == Lab 1.3 Security Remediations with OpenSCAP and Ansible
-Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! As a result, it is best practice to test the remediation changes before deploying.
+Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology. As remediation changes configuration of the machine to restrict it's capabilities, it is possible that you will lock yourself out or disable workloads important to you. As a result, it is best practice to test the remediation and it's effects before deploying.
 
 . If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
@@ -183,19 +188,18 @@ Putting the machine into compliance (for example by changing its configuration) 
 . All remediations will be executed on the *openscap.example.com* host. You will not make modifications to any other hosts, including the *workstation.example.com* host.
 
 . Let's generate an Ansible playbook that will put the *openscap.example.com* machine into compliance. Let's go ahead and generate a playbook from the results:
-* use --fix-type ansible to request an ansible playbook with the fixes
+* use `--fix-type ansible` to request an ansible playbook with the fixes
 +
  [root@openscap]# oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
 
-. (Optional) Generate bash remediation script and run it on target machine(s). This can be accomplished by running:
-* use --fix-type bash to request a bash script with the fixes
-* after the script is generated change its permissions so that we can run it
+. (Optional) Generate bash remediation script. This can be accomplished by running:
+* use `--fix-type bash` to request a bash script with the fixes
 +
  [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
- [root@openscap]# chmod +x bash-fix.sh
- [root@openscap]# ./bash-fix.sh
 
-. Notice that in both cases we are using empty result-id. This is a trick to avoid specifying the full result ID.
+. By running this generated script, machine would be also put close to the compliance.
+
+. Notice that in both cases we are using empty `--result-id`. This is a trick to avoid specifying the full result ID.
 
 . We will focus on the Ansible remediation options in this next part of the lab exercise.
 
@@ -298,6 +302,8 @@ changed: [localhost]
 PLAY RECAP *********************************************************************
 localhost                  : ok=458  changed=260  unreachable=0    failed=0  
 ....
+
+. This command will take a while to finish. If you remove `--check` from the command, you will get machine closer to the compliance. Please note that you won't be able to log again into the machine, if hardened, as one of the requirements prohibits login as a root.
 
 <<top>>
 
