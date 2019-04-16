@@ -32,23 +32,35 @@ Tower, to install the web application for WordPress.
 _lampservers_ :
 
 
-.An example table
-[width="90%",frame="topbot",options="header,footer"]
-|==========================
-| My |      1+|Columns 2 - 4
-| Name |This server is used for the apache web server. There is no local database on this machine |this server is a standalone database with no other purpose than to hose the MySQL / MariaDB.|This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
-| Is |2       |Item 2  |Item 2
-| Luka |3       |Item 3  |Item 3
-| Second |4       |Item 4  |Item 4
-| Floor |footer 1|footer 2|footer 3
-|==========================
+.Explanation of the servers you'll be using in this exercise.
+[width="90%",cols="^m,^m,,",frame="topbot",options="header,footer"]
+|=====================================================
+|     3+|Explanations of the machines we'll be using:
+    |lampweb
+    | 192.168.0.101
+    |This server is used for the apache web server. There is no local database on this machine
+    | The wordpress application is set with a default login of: 
+    
+---------------------------
+    http://rhel1.example.com
 
+    LOGIN:  admin
+    
+    PASS:  Password123.	
 
+    |lampdb
+    | 192.168.0.101
+    |this server is a standalone database with no other purpose than to host the MySQL / MariaDB instance.
+    | The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!	
 
+    |lampjump
+    | 192.168.0.101
+    |This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
+    | You will log in as lab-user to this machine and see a script in your home directory. Additionally, you can run remote MySQL commands from this machine against the unsecured database.
 
-The wordpress application is set with a default login of: `admin` with a password of `Password123`. 
-The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!
-You will log in as lab-user to this machine and see a script in your home directory. Additionally, you can run remote MySQL commands from this machine against the unsecured database.
+    
+|=====================================================
+
 
 
 * This role appears to install an innocent apache server on one and a db
