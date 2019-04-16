@@ -37,7 +37,7 @@ _lampservers_ :
 |=====================================================
 |     3+|Explanations of the machines we'll be using:
     |lampweb
-    | 192.168.0.101
+    | 192.168.0.100
     |This server is used for the apache web server. There is no local database on this machine
     | The wordpress application is set with a default login of: 
     
@@ -55,7 +55,7 @@ _lampservers_ :
     | The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!	
 
     |lampjump
-    | 192.168.0.101
+    | 192.168.0.102
     |This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
     | You will log in as lab-user to this machine and see a script in your home directory. Additionally, you can run remote MySQL commands from this machine against the unsecured database.
 
