@@ -35,7 +35,7 @@ _lampservers_ :
 .An example table
 [width="90%",cols=">s,s,^m,e",frame="topbot",options="header,footer"]
 |==========================
-| |      2+|Columns 2 - 4
+| |      1+|Columns 2 - 4
 | |This server is used for the apache web server. There is no local database on this machine |this server is a standalone database with no other purpose than to hose the MySQL / MariaDB.|This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
 | |2       |Item 2  |Item 2
 | |3       |Item 3  |Item 3
