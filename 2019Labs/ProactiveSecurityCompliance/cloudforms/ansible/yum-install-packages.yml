@@ -8,15 +8,6 @@
     verbose: false
 
   tasks:
-  - name: Wait for SSH
-    wait_for:
-      host: "{{ ansible_host }}"
-      port: 22
-      delay: 10
-      timeout: 15
-      state: started
-    delegate_to: localhost
-
   - name: Install Packages
     yum:
       name: "{{ item }}"
