@@ -71,7 +71,7 @@ AIDE initialized database at /var/lib/aide/aide.db.new.gz
 [source]
 [root@servera ~]# mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
 
-. You now have a baseline scan derived from the rules setup in /etc/aide.conf.  Note that we used the --init parameter (or -i) to initialize the baseline.  In subsequent scans, we will use --check (or -c) to check for changes.  Run a check as follows:
+. You now have a baseline scan derived from the rules setup in /etc/aide.conf.  Note that we used the --init parameter (or -i) to initialize the baseline.  In subsequent scans, we will use --check (or -C) to check for changes.  Run a check as follows:
 +
 [source]
 [root@servera ~]#  aide --check
