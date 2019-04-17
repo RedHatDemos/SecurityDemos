@@ -1,4 +1,4 @@
-= Automate Your Security by Creating Custom Security Content
+= Creating Customized Security Policy Content to Automate Security Compliance
 
 
 == [.underline]#Presenters/Lab Developers#:
