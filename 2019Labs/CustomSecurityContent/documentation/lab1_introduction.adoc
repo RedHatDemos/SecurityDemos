@@ -36,9 +36,7 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 
 * We have edited the project's source code and introduced some modifications, so there are things to do.
 
-== Hands-on
-
-=== Before you start
+== Before you start
 
 * Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
 * Make sure that you are in the project root when you start - run
@@ -56,65 +54,66 @@ in the terminal.
 .Opening a new terminal window in Red Hat Enterprise Linux 8.
 image::0-01-setup.png[]
 
-=== Build the content
+== Build the content
 
-The project consists of human-friendly files, that are compiled into standard-compliant files that are difficult to read and to edit directly.
+The ComplianceAsCode project consists of human-friendly files, that are compiled into standard-compliant files that are difficult to read and to edit directly.
 Therefore, let's see how the output looks, let's build the content!
 
-The https://github.com/ComplianceAsCode/content[ComplianceAsCode/content] project uses https://cmake.org/[cmake] build system.
+The https://github.com/ComplianceAsCode/content[ComplianceAsCode/content] project uses https://cmake.org/[CMake] build system.
 The build itself is based on Python, the `oscap` tool, and XSLT transformations.
 
 To build the content, take the following steps:
 
 . Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction/content`.
-. Go to the build subdirectory of the project - `/home/lab-user/labs/lab1_introduction/content/build`.
-. Execute `cmake ..` in the build directory to generate build files.
-. Run `make` to compile content for all applicable *products*.
-A product may be either an OS s.a. `RHEL8`, `RHEL7`, `Fedora` etc., or they can be applications s.a. `firefox`, `Java`, and so on.
-The default target is `all`, which means all possible products - `make` or `make all` build everything that is available, which takes a lot of time.
+. Run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
 +
-For reference, you can run `make <target>` to build only for the content you are interested in.
-The target is lowercase form of the product, so you would run `make rhel8` to build content for `RHEL8`, `make fedora` to build `Fedora` content, and so on.
-. After the build finishes, let's explore the built content.
+It is possible to build content also other for other products.
+A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, eg. Firefox, Java, and so on.
++
+For reference, you can run `./build_product <product>` to build only the content you are interested in.
+The `<product>` is lowercase form of the product, so you would run `./build_product rhel8` to build content for RHEL 8, `./build_product fedora` to build Fedora content, and so on.
 
+.Build of security content for RHEL 8 has finished in the terminal window.
 image::0-02-post_build.png[]
 
+We will explore the built content in following sections.
 
-=== Examine the guides
+== Examine the guides
 
 What people love about the project are HTML guides that are a great resource for those interested in of what rules a policy consists of.
-In the `ComplianceAsCode` project, policies are referred to as security profiles, and HTML guides are built in the `build/guides` subdirectory.
-Guide filenames have a `ssg-<product>-guide-<policy>.html` form, so the guide for the `RHEL8` `OSPP` profile has the `ssg-rhel8-guide-ospp.html` form.
-Give it a try - execute the following command in the terminal:
+The HTML guides are located in the `build/guides` subdirectory.
+In the `ComplianceAsCode` project, policies are referred to as security profiles.
+Guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the guide for the RHEL 8 OSPP profile has the `ssg-rhel8-guide-ospp.html` form.
 
-....
+To open the HTML guide in a web browser,  execute the following command in the terminal:
+
+----
 $ firefox /home/lab-user/labs/lab1_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
-....
+----
 
-As a security policy is an ordered list of rules, guide is an ordered list of descriptions of those rules.
 Rules are organized in a system of hierarchical groups.
 
-////
-Consider for example the `Set Password Minimum Length` rule entry - check out the description:
+.HTML guide displayed in a Firefox window
+image::html_guide.png[]
 
-....
-The pam_pwquality module's minlen parameter controls requirements for minimum characters required in a password.
-Add minlen=12 after pam_pwquality to set minimum password length requirements. after pam_pwquality to set minimum password length requirements.
-....
 
-We can clearly see that there is a typo in the description - there is the `after pam_pwquality to set minimum password length requirements.` twice in a row.
-So let’s fix the typo!
-////
+== Finding a source of a specific rule
 
+We will now take a closer look on a specific rule in the HTML guide.
 Consider for example the `Set Interactive Session Timeout` rule entry.
 Press `Ctrl+F` or use the `Edit->Find in this page` menu item, and search for `session timeout`.
+
+.Rule "Set Interactive Session Timeout" in the HTML guide
+image::session_timeout.png[]
+
+
 Check out the rule's description just below the title:
 
-....
+----
 Setting the TMOUT option in /etc/profile ensures that Setting the TMOUT option in /etc/profile ensures that all user sessions will terminate based on inactivity. The TMOUT setting in /etc/profile should read as follows:
 
 TMOUT=1800
-....
+----
 
 We can clearly see that there is a typo in the description - there is the `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that` twice in a row.
 So let’s fix the typo!
@@ -135,39 +134,46 @@ Rules definitions are written as YAML files, that are particularly great at stor
 All rules are defined by the respective `rule.yml` file, and the parent folder is the respective rule’s ID.
 ID of the rule in question is `accounts_tmout`.
 +
-// TODO: Screenshot of rule ID in the description here.
-// As we know from the rule description, the respective ID is `accounts_tmout`.
-+
 Given that, we can search for the directory. Make sure that you are in the repository root, and execute
 +
-....
-find linux_os -name accounts_tmout
-....
+----
+$ find linux_os -name accounts_tmout
+----
 +
 This command searches for file or directory named exactly `accounts_tmout` in the directory subtree below the linux_os directory.
 You should get the `linux_os/system/accounts/accounts-session/accounts_tmout` directory reported as the result, and the rule is defined in the `rule.yml` file that is in that directory.
 
 . So let’s open it in the editor!
 You can open it in an editor of your preference.
-When in doubt, you can just use the gedit editor: `gedit linux_os/system/accounts/accounts-session/accounts_tmout/rule.yml`
+When in doubt, you can just use the `gedit` editor:
++
+----
+$ gedit linux_os/system/accounts/accounts-session/accounts_tmout/rule.yml`
+----
++
 Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix and fixing it is obvious - simply remove the spurious occurence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
 
 . It is time to recomplie the content, so we can check out whether our fix worked.
 We can do the same as we did at the beginning, but we will take a small shortcut.
-Make sure that you are at the project’s directory root, and run the following command in the terminal: `./build_product rhel8`
-The build will be considerably faster than the first build, as all other products are disabled.
+Make sure that you are at the project’s directory root, and run the following command in the terminal:
++
+----
+$ ./build_product rhel8
+...
+----
++
 
 . If you have the old guide still opened in the browser, you can refresh it by clicking the refresh button or by pressing the F5 key, or you can open it again in Firefox from the file browser GUI, or from the command-line.
 +
-....
+----
 # following command assumes that you are located in the project root:
-firefox build/guides/ssg-rhel8-guide-ospp.html
-....
+$ firefox build/guides/ssg-rhel8-guide-ospp.html
+----
 +
-You should see the fixed description now.
+You should see the fixed description now if you scroll down to rule "Set Interactive Session Timeout".
 
 
-=== Customize a parametrized rule
+== Customize a parametrized rule
 
 What if we want to have a shorter timeout than the OSPP policy requires?
 In the following section, we will learn about parametrized rules by taking following steps:
@@ -195,43 +201,43 @@ As there can be multiple profiles in one datastream file, one rule can exist in 
 To see how the rule is connected to it’s variable, we have to check out the respective profile definition, i.e. `rhel8/profiles/ospp.profile`.
 Open it by e.g. `gedit`, and search for `accounts_tmout` (use the `Ctrl + F` keyboard shortcut or use the `Edit->Find in this page` menu item to bring up the search field):
 +
-....
+----
     ...
     ### FMT_MOF_EXT.1 / AC-11(a)
     ### Set Screen Lock Timeout Period to 30 Minutes or Less
     - accounts_tmout
     - var_accounts_tmout=30_min
     ...
-....
+----
 +
 Therefore, it is obvious now where the timeout duration comes from and how to change it.
 
-. Let's modify the entry, and let's put `10_min` there.
-Then, rebuild the content by executing `./build_product rhel8` in the project root, and let's wait for the result.
+. Modify the entry, and  put `10_min` there.
+Then, rebuild the content by executing `./build_product rhel8` in the project root, and wait for the result.
 It is worth noting that variables aren't continuous - the set of possible values that the variable can have are pre-defined in the file.
 After the build finishes, refresh the HTML guide by either reloading it in the browser, or by reopening `build/guides/ssg-rhel8-guide-ospp.html`.
-The variable's value should be updated to 600.
+The variable value should be updated to 600.
 
 . What happens if we omit the variable definition?
 Open the OSPP profile file in an editor, and comment the line containing `- var_accounts_tmout=30_min` out by inserting `#` just before the leading dash.
 Then, rebuild the content again by executing `./build_product rhel8` in the project root.
 +
 But we have things to do before the build finishes - let’s re-examine the variable definition - maybe we can tell what will be the result!
-Let's open the variable definition in an editor - execute
+Open the variable definition in an editor - execute
 +
-....
+----
 $ gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
-....
+----
 +
 In this YAML file, we have the `options:` key, that defines mappings between the supplied and effective values.
 As the `default: 600` line indicates, if we don’t specify the timeout duration in a profile, it is going to be 600 seconds, i.e. 10 minutes.
 Time to review the HTML guide - when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp.html`, we can clearly see the rule's timeout indeed equals to 600.
 
 The set of values a variable can have is discrete - all values have to be defined in the variable file.
-Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile only after adding `20_min: 1200` to the `options:` key of the variable's definition.
+Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile only after adding `20_min: 1200` to the `options:` key of the variable definition.
 
 
-=== Associated content
+== Associated content
 
 A rule needs more than a description to be of any use - you need to be able
 
@@ -244,9 +250,9 @@ The additional content is placed in subdirectories of the rule, so let's explore
 We can browse it if we open the directory in the `nautilus` file browser.
 Run
 
-....
+----
 $ nautilus linux_os/guide/system/accounts/accounts-session/accounts_tmout
-....
+----
 
 in the terminal - a file explorer window opened at that location should pop up.
 There is a remediation in form of a bash script located in the `bash` subdirectory of the rule directory.
@@ -256,23 +262,24 @@ The `shared` basename has a special meaning - it indicates that the remediation 
 If the remediation had been named `rhel8.sh`, it would have meant that is a RHEL8-only remediation, i.e. one not to be used to remediate RHEL7 systems.
 This name-coding is relevant for all types of additional content.
 
-Now, let's describe currently-supported associated content types:
+We will describe currently-supported associated content types:
 
 
-==== Checks
+=== Checks
 
 Checks can be found under the `oval` directory.
-They are written in an standardized, declarative, XML-based language called OVAL (abbreviation of `Open Vulnerability and Assessment Language`).
-Writing checks in this language is considered cumbersome, and the `ComplianceAsCode` project helps it's users to write it more efficiently.
+They are written in an standardized, declarative, XML-based language called OVAL (Open Vulnerability and Assessment Language).
+Writing checks in this language is considered cumbersome, but the ComplianceAsCode project helps users to write it more efficiently.
 
 We won't go into details of OVAL now, we just point out that the OVAL content can be found in a rule's subdirectory `oval`.
+The OVAL checks will be described in the Exercise 5.
 If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file, that features a shorthand OVAL, which is much simpler than the full-bodied OVAL that you would have to write otherwise.
 
 
-==== Remediations
+=== Remediations
 
 Remediations can be found under `bash`, `ansible`, `anaconda` or `puppet` directories.
-If the system is not set up according to the rule’s description, the scanner reports an error, and the system administrator is supposed to fix it.
+If the system is not set up according to the rule description, the scanner reports that the rule has failed, and the system administrator is supposed to fix it.
 The `ComplianceAsCode` content provides users with snippets that they can run and that can make the system compliant again, or that can provide administrators with hint of what they need to do.
 
 Remediations are expected to work on the clean installation configuration - if the administrator made some changes in the meantime, remediations are not guaranteed to work.
@@ -283,14 +290,17 @@ Anaconda remediations are used to guide the user during system installation.
 Unlike checks, you can review remediations in the guide - there is a `(show)` clickable to do so.
 Therefore, bring back the browser window with the guide opened, and see for yourself.
 
+.Bash remediation snippet shown in the HTML guide
 image::0-03-remediation.png[]
 
-Let's try and edit the remediation - what about adding a comment that describes that the numerical value is number of seconds?
-Let's therefore check out the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file.
+We can try edit the remediation script.
+We will add a comment there that describes that the numerical value is number of seconds.
+We will check out the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file.
 We can see that there are some extra lines, but it corresponds to the content displayed in the guide.
-The line saying `populate var_accounts_tmout` is clearly the line that gets transformed into the variable assignment statement, so let's put the explanatory comment just above it:
+The line saying `populate var_accounts_tmout` is the line that gets transformed into the variable assignment statement.
+We will put the explanatory comment just above it:
 
-....
+----
 # platform = Red Hat Enterprise Linux 7,Red Hat Enterprise Linux 8,multi_platform_fedora,multi_platform_ol
 . /usr/share/scap-security-guide/remediation_functions
 # The timeout delay is defined by number of seconds
@@ -302,11 +312,11 @@ else
         echo -e "\n# Set TMOUT to $var_accounts_tmout per security requirements" >> /etc/profile
         echo "TMOUT=$var_accounts_tmout" >> /etc/profile
 fi  
-....
+----
 
 Don't forget to save the change after you are done with it.
 
-Now is the time to rebuild the guide using `./build_product rhel8` invocation and refresh the guide - the remediation should contain the newly added comment.
+Now is the time to rebuild the guide using `./build_product rhel8` command and refresh the guide - the remediation should contain the newly added comment.
 
 
 == References
