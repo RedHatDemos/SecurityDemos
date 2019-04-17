@@ -13,15 +13,15 @@ OpenSCAP Scanner allows you to perform security compliance checks in a fully aut
 It is possible to run the scan using either a command line  tool `oscap` or a graphical application SCAP Workbench.
 Several integrations for continuous scanning also exist but in this lab Exercise, we will focus on one-off scanning.
 
-== What will you learn
+== What you will learn
 
 * ... basics of automated security scanning in Red Hat Enterprise Linux 8
 * ... using ComplianceAsCode for automated security scanning.
 * ... how to do lightweight customization of a predefined security policy using a GUI tool.
-* ... what possibilities do you have for remediations of failing rules.
+* ... what are the possibilities for remediations of failing rules.
 
 
-== What have we done for you
+== What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:

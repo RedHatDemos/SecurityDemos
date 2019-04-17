@@ -8,7 +8,7 @@ Imagine that your company has approved an internal security policy that enforces
 Your task is to implement an automated way of checking the laptop configuration.
 In this lab excercise, we will show how to solve the task using ComplianceAsCode.
 
-== What will you learn:
+== What you will learn:
 
 * ... how to represent your company security policy as a security profile in ComplianceAsCode
 * ... how to operate with basic building blocks of ComplianceAsCode - the rules
@@ -17,7 +17,7 @@ In this lab excercise, we will show how to solve the task using ComplianceAsCode
 * ... how to create a new rule
 * ... how to scan your system against the profile you created
 
-== What have we done for you
+== What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
