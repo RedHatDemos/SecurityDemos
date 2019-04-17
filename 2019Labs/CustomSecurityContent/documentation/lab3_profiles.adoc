@@ -371,7 +371,7 @@ $ firefox report.html
 The structure of the HTML report is similar to the HTML guide, but it contains the evaluation results.
 After clicking on the rule title, you can see the detailed rule results.
 +
-In the detailed rule results for the rule Set Interactive Session Timeout you can review the rule description to see which requirement was not met by the scanned system.
+In the detailed rule results for the rule *Set Interactive Session Timeout* you can review the rule description to see which requirement was not met by the scanned system.
 See the *OVAL details* section to examine the reason why this rule failed. It says that items displayed below were missing which means that on the scanned system no object described by the table below exists. In this specific example, there was no string that could match the pattern in `/etc/profile`, which means there is not any `TMOUT` entry in `/etc/profile`. To fix this problem we would need to insert `TMOUT=600` to `/etc/profile` and then run a scan again.
 +
 .Details of the rule evaluation displayed in the HTML report.
