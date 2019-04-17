@@ -341,7 +341,7 @@ But for automated scanning we will use a datastream instead.
 A datastream is an XML file which contains all the data (rules, checks, remediations, metadata) in a single file.
 The datastream that contains our new profile was also built during the content build.
 The datastream is called `ssg-rhel8-ds.xml` and is located in the `build` directory.
-+
+
 . Run an OpenSCAP scan using the built content.
 +
 `oscap` is the command-line tool that we will use to scan the machine.
@@ -370,7 +370,9 @@ $ firefox report.html
 +
 The structure of the HTML report is similar to the HTML guide, but it contains the evaluation results.
 After clicking on the rule title, you can see the detailed rule results.
-For example, you can see that the rule Set Interactive Session Timeout failed because on the target system there was not any `TMOUT` entry in `/etc/profile`.
++
+In the detailed rule results for the rule *Set Interactive Session Timeout* you can review the rule description to see which requirement was not met by the scanned system.
+See the *OVAL details* section to examine the reason why this rule failed. It says that items displayed below were missing which means that on the scanned system no object described by the table below exists. In this specific example, there was no string that could match the pattern in `/etc/profile`, which means there is not any `TMOUT` entry in `/etc/profile`. To fix this problem we would need to insert `TMOUT=600` to `/etc/profile` and then run a scan again.
 +
 .Details of the rule evaluation displayed in the HTML report.
 image::2-03-report.png[Report]
