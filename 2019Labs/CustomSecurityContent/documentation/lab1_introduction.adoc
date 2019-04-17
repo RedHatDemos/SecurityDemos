@@ -134,7 +134,7 @@ Rules definitions are written as YAML files, that are particularly great at stor
 All rules are defined by the respective `rule.yml` file, and the parent folder is the respective rule’s ID.
 ID of the rule in question is `accounts_tmout`.
 +
-Given that, we can search for the directory. Make sure that you are in the repository root, and execute
+Given that, we can search for the directory. Make sure that you are in the repository root, and execute:
 +
 ----
 $ find linux_os -name accounts_tmout
@@ -222,7 +222,7 @@ Open the OSPP profile file in an editor, and comment the line containing `- var_
 Then, rebuild the content again by executing `./build_product rhel8` in the project root.
 +
 But we have things to do before the build finishes - let’s re-examine the variable definition - maybe we can tell what will be the result!
-Open the variable definition in an editor - execute
+Open the variable definition in an editor - execute:
 +
 ----
 $ gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
@@ -238,7 +238,7 @@ Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile 
 
 == Associated content
 
-A rule needs more than a description to be of any use - you need to be able
+A rule needs more than a description to be of any use - you need to be able:
 
 * to check whether the system complies to the rule definition, and
 * to restore an incompliant system to a compliant state.
