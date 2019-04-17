@@ -206,7 +206,7 @@ As a result, it is best practice to test the remediation changes before deployin
 
 . All remediations will be executed locally.
 
-. Let's generate an Ansible playbook that will put your machine into compliance.
+. Generate an Ansible Playbook that will put your machine into compliance.
 We will generate a playbook from the scan results:
 +
 Use the `--fix-type ansible` option to request an ansible playbook with the fixes:
@@ -223,7 +223,7 @@ Check the output using a text editor:
 $ gedit playbook.yml
 ----
 +
-. Generate Bash remediation script and run it on target machine(s). This can be accomplished by running:
+. Generate Bash remediation script from the scan results. This can be accomplished by running:
 +
 Use `--fix-type bash` to request a bash script with the fixes
 +
