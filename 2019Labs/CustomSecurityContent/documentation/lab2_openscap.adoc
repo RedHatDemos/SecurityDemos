@@ -104,8 +104,13 @@ $ oscap info ssg-rhel8-ds.xml
 ...
 ----
 +
-You will get a list of profiles contained in the datastream.
-Notice that the provided content in `ssg-rhel8-ds.xml` covers a wide range of security baselines such as PCI-DSS, STIG, C2S, Common, CJIS, and others.
+In the "Profiles:" section you can see a list of profiles contained in the datastream.
+The datastream contains multiple profiles that cover different security baselines for different purposes.
+Each profile is identified by a profile ID.
++
+The built ComplianceAsCode content is available as a RHEL `scap-security-guide` RPM package.
+Unlike the upstream repository that we work with now, the package contains only content that is officially tested and supported by Red Hat.
+Therefore, the `scap-security-guide` package in RHEL 8 contains only the OSPP and PCI-DSS profiles.
 +
 . Perform our first baseline testing scan with the vanilla OSPP profile.
 +
