@@ -272,7 +272,9 @@ Writing checks in this language is considered cumbersome, but the ComplianceAsCo
 
 We won't go into details of OVAL now, we just point out that the OVAL content can be found in a rule's subdirectory `oval`.
 The OVAL checks will be described in the Exercise 5.
-If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file, that features a shorthand OVAL, which is much simpler than the full-bodied OVAL that you would have to write otherwise.
+// The browser cannot handle the xml file because there are namespaces that are not bound, so we advise to open it with a text editor
+If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file, that we recommend to open with a text editor.
+The `shared.xml` file features a shorthand OVAL, which is much simpler than the full-bodied OVAL that you would have to write otherwise.
 
 
 === Remediations
