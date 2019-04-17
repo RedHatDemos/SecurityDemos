@@ -58,7 +58,7 @@ The `ComplianceAsCode` project supports OVAL as the language for writing automat
 It compiles OVAL snippets into checks that are understood by OVAL interpreters - for example the OpenSCAP scanner.
 The scanner evaluates the check, and determines whether the system passes.
 
-In this lab excercise, we will go through the OVAL snippet of the `accounts_tmout` rule.
+In this lab exercise, we will go through the OVAL snippet of the `accounts_tmout` rule.
 We will see how even simple checks can get complicated soon, and what can we do about it.
 Finally, we will discover that the check has been written incorrectly, and and we will fix it.
 
@@ -74,7 +74,7 @@ When the build finishes, we will take a look at the RHEL8 OSPP profile:
 $ firefox build/guides/ssg-rhel8-guide-ospp.html
 ----
 
-In this lab excercise, we will focus on the `accounts_tmout` rule.
+In this lab exercise, we will focus on the `accounts_tmout` rule.
 In order to find the rule entry it in the guide, press `Ctrl+F` or use the `Edit->Find in this page` menu item, and search for the `Set Interactive Session Timeout` string, which is the rule title.
 
 The description says:
@@ -219,7 +219,7 @@ The output tells you the following:
 
 * The rule with full ID `xccdf_org.ssgproject.content_rule_accounts_tmout` has been tested in the `OSPP` profile context.
 * There were 4 test scenarios `comment.fail.sh`, `line_not_there.fail.sh`, `correct_value.pass.sh` and `wrong_value.fail.sh`, all of them passed.
-We will examine existing scenarios and add new one later in this lab excercise, for now, it is enough to acknowledge them and making sure that if we edit the rule's OVAL snippet, those scenarios won't start to fail.
+We will examine existing scenarios and add new one later in this lab exercise, for now, it is enough to acknowledge them and making sure that if we edit the rule's OVAL snippet, those scenarios won't start to fail.
 * More information about the test run is available in the respective log directory.
 This is useful when a test breaks unexpectedly, or the test suite suffers from internal issues.
 
