@@ -141,14 +141,14 @@ $ find linux_os -name accounts_tmout
 ----
 +
 This command searches for file or directory named exactly `accounts_tmout` in the directory subtree below the linux_os directory.
-You should get the `linux_os/system/accounts/accounts-session/accounts_tmout` directory reported as the result, and the rule is defined in the `rule.yml` file that is in that directory.
+You should get the `linux_os/guide/system/accounts/accounts-session/accounts_tmout` directory reported as the result, and the rule is defined in the `rule.yml` file that is in that directory.
 
 . So let’s open it in the editor!
 You can open it in an editor of your preference.
 When in doubt, you can just use the `gedit` editor:
 +
 ----
-$ gedit linux_os/system/accounts/accounts-session/accounts_tmout/rule.yml`
+$ gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 ----
 +
 Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix and fixing it is obvious - simply remove the spurious occurence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
