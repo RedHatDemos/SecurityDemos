@@ -154,7 +154,6 @@ $ gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix and fixing it is obvious - simply remove the spurious occurence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
 
 . It is time to recomplie the content, so we can check out whether our fix worked.
-We can do the same as we did at the beginning, but we will take a small shortcut.
 Make sure that you are at the project’s directory root, and run the following command in the terminal:
 +
 ----
