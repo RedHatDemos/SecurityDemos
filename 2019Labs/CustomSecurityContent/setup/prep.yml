@@ -135,7 +135,7 @@
   - name: Clone the CaC/c Git for Track 4
     git:
       repo: "{{ CACC_LOCAL }}"
-      version: 'v0.1.43'
+      version: 'master'
       dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content"
       force: yes
 
