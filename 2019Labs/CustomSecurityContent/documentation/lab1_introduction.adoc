@@ -17,7 +17,7 @@ We will work with the project source repository, which can be retrieved from on 
 
 In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode data is shipped as `scap-security-guide` RPM package.
 
-== What will you learn
+== What you will learn
 
 * ... the project overview, so you will get a clearer idea what is where, and what can you use the project for.
 * ... how to build the content from the source, and you will go through what gets built.
@@ -26,7 +26,7 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 * ... where to find additional rule content s.a. checks and remediations.
 
 
-== What have we done for you
+== What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:

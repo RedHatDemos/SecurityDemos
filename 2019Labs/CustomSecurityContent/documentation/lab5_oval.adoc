@@ -4,7 +4,7 @@
 :imagesdir: images
 
 
-== What will you learn
+== What you will learn
 
 * ... what is the OVAL about.
 * ... how `ComplianceAsCode` facilitates creation of new OVAL content.
@@ -12,7 +12,7 @@
 * ... how to use tests and remediations to safely and gradually improve an OVAL check.
 
 
-== What have we done for you
+== What we have done for you
 
 * We have cloned the `ComplianceAsCode` repository to the `content` directory.
 * We have installed dependencies that are required for the content build using `dnf install`:
