@@ -6,7 +6,7 @@
 
 Imagine that your company has approved an internal security policy that enforces certain configuration of laptops travelling outside the company site.
 Your task is to implement an automated way of checking the laptop configuration.
-In this lab excercise, we will show how to solve the task using ComplianceAsCode.
+In this lab exercise, we will show how to solve the task using ComplianceAsCode.
 
 == What will you learn:
 
@@ -107,7 +107,7 @@ The profile consists of 4 items which are required:
 .. `title`: is a short profile title.
 .. `description`: is a few paragraphs that describe the purpose of the profile.
 .. `selections`: is a list of rules and variables that the profile is composed of.
-It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this lab excercise.
+It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this lab exercise.
 +
 . Save the profile file and go back to the root directory.
 +
@@ -238,7 +238,7 @@ $ git grep -i "Interactive Session Timeout" "*rule.yml"
 linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml:title: 'Set Interactive Session Timeout'
 ----
 +
-As you already know from the first lab lab excercise, the rule is located in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml`.
+As you already know from the first lab lab exercise, the rule is located in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml`.
 It is easy to spot that the rule ID is `accounts_tmout` because the rule ID is the name of the directory where the rule is located.
 +
 . Add the rule ID to selections list in your travel profile.
@@ -462,7 +462,7 @@ selections:
 We have a template that will generate the automated checks in Open Vulnerability and Assesment Language (OVAL), Ansible, Bash, Anaconda and Puppet languages.
 There are multiple templates that can generate different checks.
 However, not everything is covered by template.
-Writing OVAL from scratch is discussed in the third lab excercise of this lab.
+Writing OVAL from scratch is discussed in the third lab exercise of this lab.
 +
 We only need to add the package to the list of packages for which the checks should be generated using a template.
 Add the `hexchat` package to the list of installed packages to be checked.
