@@ -34,9 +34,9 @@ The steps how to accomplish this are in the `tests/README.md` file of the `Compl
 * Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
 * Make sure that you are in the project root when you start - run
 +
-.....
-cd /home/lab-user/labs/lab5_oval
-.....
+----
+$ cd /home/lab-user/labs/lab5_oval
+----
 +
 in the terminal.
 
@@ -421,7 +421,6 @@ Let's run the tests!
 ....
 $ ./build_product fedora
 ...
-...
 $ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout                                                            
 Setting console output to log level INFO
 INFO - The base image option has been specified, choosing Podman-based test environment.
@@ -500,7 +499,7 @@ Thanks to the OVAL optimization that we have performed before, there is only one
 So let's open the OVAL file again:
 
 ....
-gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml
+$ gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml
 ....
 
 The current test object specifies

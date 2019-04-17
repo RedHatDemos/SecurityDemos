@@ -39,7 +39,7 @@ This section is for your reference only so you know what steps have already been
 You can verify a successful installation by running:
 
 ----
-oscap -V
+$ oscap -V
 
 OpenSCAP command line tool (oscap) 1.3.0
 Copyright 2009--2018 Red Hat Inc., Durham, North Carolina.
@@ -65,7 +65,7 @@ If during your own installation it says `oscap` command not found, you need to i
 . Let's take a look at the compliance content provided by `scap-security-guide`:
 +
 ----
-rpm -ql scap-security-guide
+$ rpm -ql scap-security-guide
 ...
 /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-dictionary.xml
 /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-oval.xml
@@ -83,13 +83,14 @@ There are also various formats in which this is provided - human readable HTML g
 . Move to the `content` folder so we can avoid typing long paths:
 +
 ----
-cd /usr/share/xml/scap/ssg/content
+$ cd /usr/share/xml/scap/ssg/content
 ----
 
 . First, let's check which compliance profiles are available for rhel7.
 +
 ----
-oscap info ssg-rhel8-ds.xml
+$ oscap info ssg-rhel8-ds.xml
+...
 ----
 +
 You will get print out of contents - aforementioned two compliance profiles. OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS.
@@ -99,7 +100,8 @@ Notice in our command below that we can skip the profile ID prefix to make the c
 The real ID is xccdf_org.ssgproject.content_profile_ospp.
 +
 ----
-oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
+$ oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
+...
 ----
 +
 Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
@@ -109,13 +111,14 @@ Now, you will see the compliance scan results for every security control in the 
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 
 ----
-oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
+$ oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
+...
 ----
 
 . (Optional) You can also generate the HTML report separately:
 +
 ----
-oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
+$ oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
 
 . Open the file explorer and head to the `/tmp` directory.
@@ -189,7 +192,7 @@ Let's go ahead and generate a playbook from the results:
 Use the `--fix-type ansible` option to request an ansible playbook with the fixes:
 +
 ----
-oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
+$ oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.yml
 ----
 
 . (Optional) Generate bash remediation script and run it on target machine(s). This can be accomplished by running:
@@ -197,9 +200,10 @@ oscap xccdf generate fix --fix-type ansible --result-id "" arf.xml > playbook.ym
 * after the script is generated change its permissions so that we can run it
 +
 ----
-oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash-fix.sh
-chmod +x bash-fix.sh
-./bash-fix.sh
+$ oscap xccdf generate fix --fix-type bash --result-id "" arf.xml > bash-fix.sh
+$ chmod +x bash-fix.sh
+$ ./bash-fix.sh
+...
 ----
 
 . Notice that in both cases we are using empty result-id.
@@ -285,10 +289,8 @@ After making this change, save and exit the text editor.
 Setting `ansible_python_interpreter` is workaround for known issue in Ansible 2.7 used on the machine.
 +
 ----
-ansible-playbook -i "localhost," -c local --check playbook.yml -e 'ansible_python_interpreter=/usr/bin/python3'
-----
-+
-....
+$ ansible-playbook -i "localhost," -c local --check playbook.yml -e 'ansible_python_interpreter=/usr/bin/python3'
+
 [WARNING]: While constructing a mapping from /root/playbook.yml, line 26, column 7, found a duplicate dict key (var_accounts_passwords_pam_faillock_deny). Using last defined value only.
 
 [WARNING]: While constructing a mapping from /root/playbook.yml, line 26, column 7, found a duplicate dict key (var_accounts_passwords_pam_faillock_unlock_time). Using last defined value only.

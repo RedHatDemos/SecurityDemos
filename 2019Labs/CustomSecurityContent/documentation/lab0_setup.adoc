@@ -17,4 +17,22 @@ There is only one VM, so click the only `CONSOLE` link on the page.
 Log in as `lab-user` using the password `r3dh4t1!`.
 You are all set!
 
+
+=== Conventions
+
+Shell session listings obey the following convention:
+
+----
+$ pwd
+/home/lab-user
+$ cat /etc/passwd
+...
+lab-user:x:1000:1000:Lab User:/home/lab-user:/bin/bash
+----
+
+- Commands, in this example `pwd` and `whoami`, are prefixed by the dollar character.
+- Lines that follow are the command's output, unless they begin with the dollar prefix, in which case they are again commands.
+- Ellipsis may be used to indicate that there are output lines, but as they are of no interest, they are omitted.
+
+
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab 1: Introduction]
