@@ -134,27 +134,26 @@ Rules definitions are written as YAML files, that are particularly great at stor
 All rules are defined by the respective `rule.yml` file, and the parent folder is the respective rule’s ID.
 ID of the rule in question is `accounts_tmout`.
 +
-Given that, we can search for the directory. Make sure that you are in the repository root, and execute
+Given that, we can search for the directory. Make sure that you are in the repository root, and execute:
 +
 ----
 $ find linux_os -name accounts_tmout
 ----
 +
 This command searches for file or directory named exactly `accounts_tmout` in the directory subtree below the linux_os directory.
-You should get the `linux_os/system/accounts/accounts-session/accounts_tmout` directory reported as the result, and the rule is defined in the `rule.yml` file that is in that directory.
+You should get the `linux_os/guide/system/accounts/accounts-session/accounts_tmout` directory reported as the result, and the rule is defined in the `rule.yml` file that is in that directory.
 
 . So let’s open it in the editor!
 You can open it in an editor of your preference.
 When in doubt, you can just use the `gedit` editor:
 +
 ----
-$ gedit linux_os/system/accounts/accounts-session/accounts_tmout/rule.yml`
+$ gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 ----
 +
 Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix and fixing it is obvious - simply remove the spurious occurence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
 
 . It is time to recomplie the content, so we can check out whether our fix worked.
-We can do the same as we did at the beginning, but we will take a small shortcut.
 Make sure that you are at the project’s directory root, and run the following command in the terminal:
 +
 ----
@@ -223,7 +222,7 @@ Open the OSPP profile file in an editor, and comment the line containing `- var_
 Then, rebuild the content again by executing `./build_product rhel8` in the project root.
 +
 But we have things to do before the build finishes - let’s re-examine the variable definition - maybe we can tell what will be the result!
-Open the variable definition in an editor - execute
+Open the variable definition in an editor - execute:
 +
 ----
 $ gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
@@ -239,7 +238,7 @@ Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile 
 
 == Associated content
 
-A rule needs more than a description to be of any use - you need to be able
+A rule needs more than a description to be of any use - you need to be able:
 
 * to check whether the system complies to the rule definition, and
 * to restore an incompliant system to a compliant state.
@@ -273,7 +272,9 @@ Writing checks in this language is considered cumbersome, but the ComplianceAsCo
 
 We won't go into details of OVAL now, we just point out that the OVAL content can be found in a rule's subdirectory `oval`.
 The OVAL checks will be described in the Exercise 5.
-If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file, that features a shorthand OVAL, which is much simpler than the full-bodied OVAL that you would have to write otherwise.
+// The browser cannot handle the xml file because there are namespaces that are not bound, so we advise to open it with a text editor
+If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file, that we recommend to open with a text editor.
+The `shared.xml` file features a shorthand OVAL, which is much simpler than the full-bodied OVAL that you would have to write otherwise.
 
 
 === Remediations
