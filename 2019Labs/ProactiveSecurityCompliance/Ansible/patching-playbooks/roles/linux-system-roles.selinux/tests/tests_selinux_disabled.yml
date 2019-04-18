@@ -1,0 +1,83 @@
+
+- name: Ensure the default is targeted, enforcing, without local modifications
+  hosts: all
+  become: true
+  vars:
+    selinux_all_purge: true
+    selinux_policy: targeted
+    selinux_state: enforcing
+    semanage_change: |
+      boolean -m --on samba_enable_home_dirs
+      port -a -p tcp -t ssh_port_t 22100
+      fcontext -a -t user_home_dir_t /tmp/test_dir
+      login -a -s staff_u sar-user
+
+  tasks:
+    - name: Install SELinux tool semanage on Fedora
+      package:
+        name:
+          - policycoreutils-python-utils
+        state: present
+      when: ansible_distribution == "Fedora"
+
+    - name: Add a Linux System Roles SELinux User
+      user:
+        comment: Linux System Roles SELinux User
+        name: sar-user
+    - name: Add some mapping
+      shell: echo -e -n "{{ semanage_change }}" | /usr/sbin/semanage -i -
+    - name: Backup original /etc/selinux/config
+      copy:
+        remote_src: true
+        src: /etc/selinux/config
+        dest: /etc/selinux/config.test_selinux_disabled
+    - name: Upload testing /etc/selinux/config
+      copy:
+        src: selinux.config
+        dest: /etc/selinux/config
+    - name: Switch to permissive to allow login when selinuxfs is not mounted
+      command: setenforce 0
+      when: ansible_selinux.status != "disabled"
+    - name: Get selinuxfs mountpoint
+      shell: findmnt -n -t selinuxfs --output=target
+      register: selinux_mountpoint
+    - name: Umount {{ selinux_mountpoint.stdout }} to emulate SELinux disabled system
+      command: umount {{ selinux_mountpoint.stdout }}
+
+    - name: execute the role and catch errors
+      block:
+        - include_role:
+            name: selinux
+      rescue:
+        - name: examine the selinux_reboot_required variable
+          set_fact:
+            test_selinux_reboot_required: "{{ selinux_reboot_required }}"
+
+    - name: check that the role has failed and set the correct variable
+      assert:
+        that: "{{ test_selinux_reboot_required }}"
+        msg: "test_selinux_reboot_required should be True instead of {{ test_selinux_reboot_required }}"
+    - name: Mount {{ selinux_mountpoint.stdout }} back to system
+      command: mount -t selinuxfs selinuxfs {{ selinux_mountpoint.stdout }}
+    - name: Switch back to enforcing
+      command: setenforce 1
+    - name: Gather facts again
+      setup:
+    - name: Check SELinux config mode
+      assert:
+        that: "{{ ansible_selinux.config_mode == 'enforcing' }}"
+        mgs: "SELinux config mode should be enforcing instead of {{ ansible_selinux.config_mode }}"
+    - name: Restore original /etc/selinux/config
+      copy:
+        remote_src: true
+        dest: /etc/selinux/config
+        src: /etc/selinux/config.test_selinux_disabled
+    - name: Remove /etc/selinux/config backup
+      file:
+        path: /etc/selinux/config.test_selinux_disabled
+        state: absent
+    - name: Remove Linux System Roles SELinux User
+      user:
+        name: sar-user
+        remove: yes
+        state: absent

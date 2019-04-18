@@ -1,0 +1,69 @@
+- name: Test that selinux_all_purge drops local modifications, defaults to no
+  hosts: all
+  become: true
+  vars:
+    semanage_change: |
+      boolean -m --on samba_enable_home_dirs
+      port -a -p tcp -t ssh_port_t 22100
+      fcontext -a -t user_home_dir_t /tmp/test_dir
+      login -a -s staff_u sar-user
+
+  tasks:
+    - name: Install SELinux tool semanage on Fedora
+      package:
+        name:
+          - policycoreutils-python-utils
+        state: present
+      when: ansible_distribution == "Fedora"
+
+    - name: Add a Linux System Roles SELinux User
+      user:
+        comment: Linux System Roles SELinux User
+        name: sar-user
+
+    - name: Add some mapping
+      shell: echo -e -n "{{ semanage_change }}" | /usr/sbin/semanage -i -
+
+    - name: Apply role with defaults, should not drop local modifications
+      include_role:
+        name: selinux
+
+    - include: set_selinux_variables.yml
+    - name: Check if local modifications are not empty - booleans
+      assert:
+        that: "{{ selinux_role_boolean.stdout != '' }}"
+    - name: Check if local modifications are not empty - port
+      assert:
+        that: "{{ selinux_role_port.stdout != '' }}"
+    - name: Check if local modifications are not empty - login
+      assert:
+        that: "{{ selinux_role_login.stdout != '' }}"
+    - name: Check if local modifications are not empty - fcontext
+      assert:
+        that: "{{ selinux_role_fcontext.stdout != '' }}"
+
+    - name: Apply the role to drop local modifications
+      include_role:
+        name: selinux
+      vars:
+        selinux_all_purge: true
+
+    - include: set_selinux_variables.yml
+    - name: Check if local modifications are empty - booleans
+      assert:
+        that: "{{ selinux_role_boolean.stdout == '' }}"
+    - name: Check if local modifications are empty - port
+      assert:
+        that: "{{ selinux_role_port.stdout == '' }}"
+    - name: Check if local modifications are empty - login
+      assert:
+        that: "{{ selinux_role_login.stdout == '' }}"
+    - name: Check if local modifications are empty - fcontext
+      assert:
+        that: "{{ selinux_role_fcontext.stdout == '' }}"
+
+    - name: Remove Linux System Roles SELinux User
+      user:
+        name: sar-user
+        remove: yes
+        state: absent

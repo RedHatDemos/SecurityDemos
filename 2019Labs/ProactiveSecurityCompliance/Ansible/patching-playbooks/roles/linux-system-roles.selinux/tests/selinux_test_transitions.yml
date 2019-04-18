@@ -1,0 +1,72 @@
+- name: display transition name
+  debug:
+    msg: "testing transition {{ selinux_initial_state }} -> {{ selinux_desired_state }}"
+
+- name: setup the initial state
+  include_tasks: selinux_apply_reboot.yml
+  vars:
+    selinux_state: "{{ selinux_initial_state }}"
+
+- name: refresh facts
+  setup:
+    filter: ansible_selinux
+
+- name: check that initial state has been set up properly
+  assert:
+    that: "{{ selinux_initial_state == (ansible_selinux.mode | d(ansible_selinux.status)) }}"
+
+- name: save the initial state
+  set_fact:
+    initial_selinux_fact: "{{ ansible_selinux }}"
+
+- name: apply the role without parameters
+  include_role:
+    name: selinux
+
+- name: refresh facts
+  setup:
+    filter: ansible_selinux
+
+- name: check that the run w/o parameters has not changed anything
+  assert:
+    that: "{{ ansible_selinux == initial_selinux_fact }}"
+  
+- name: apply the desired state if possible without reboot
+  include_role:
+    name: selinux
+  vars:
+    selinux_state: "{{ selinux_desired_state }}"
+
+  when: "selinux_initial_state == selinux_desired_state or
+  (selinux_initial_state != 'disabled' and 
+  selinux_desired_state  != 'disabled' )"
+
+- name: apply the desired state if necessary with reboot
+  include_tasks: selinux_apply_reboot.yml
+  vars:
+    selinux_state: "{{ selinux_desired_state }}"
+  when: "not (selinux_initial_state == selinux_desired_state or
+  (selinux_initial_state != 'disabled' and 
+  selinux_desired_state  != 'disabled' ))"
+
+- name: refresh facts
+  setup:
+    filter: ansible_selinux
+
+- name: check that something changed if it should have
+  assert:
+    that: "{{ ansible_selinux != initial_selinux_fact }}"
+  when: selinux_initial_state != selinux_desired_state
+
+- name: check that nothing changed if it should not have
+  assert:
+    that: "{{ ansible_selinux == initial_selinux_fact }}"
+  when: selinux_initial_state == selinux_desired_state
+
+- name: check that desired state has been applied properly
+  assert:
+    that: "{{ selinux_desired_state == (ansible_selinux.mode | d(ansible_selinux.status)) }}"
+
+- name: check that desired state has been saved properly
+  assert:
+    that: "{{ selinux_desired_state == (ansible_selinux.config_mode | d(ansible_selinux.status)) }}"

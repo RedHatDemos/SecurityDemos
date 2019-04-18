@@ -1,0 +1,55 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  become_user: root
+  vars:
+    selinux_policy: targeted
+    selinux_state: enforcing
+    selinux_booleans:
+      - { name: 'samba_enable_home_dirs', state: 'on' }
+      - { name: 'ssh_sysadm_login', state: 'on', persistent: 'yes' }
+    selinux_fcontexts:
+      - { target: '/tmp/test_dir(/.*)?', setype: 'user_home_dir_t', ftype: 'd' }
+    selinux_restore_dirs:
+      - /tmp/test_dir
+    selinux_ports:
+      - { ports: '22100', proto: 'tcp', setype: 'ssh_port_t', state: 'present' }
+    selinux_logins:
+      - { login: 'sar-user', seuser: 'staff_u', serange: 's0-s0:c0.c1023', state: 'present' }
+
+  # prepare prerequisites which are used in this playbook
+  tasks:
+    - name: Creates directory
+      file:
+        path: /tmp/test_dir
+        state: directory
+    - name: Add a Linux System Roles SELinux User
+      user:
+        comment: Linux System Roles SELinux User
+        name: sar-user
+    - name: execute the role and catch errors
+      block:
+        - include_role:
+            name: linux-system-roles.selinux
+      rescue:
+        # Fail if failed for a different reason than selinux_reboot_required.
+        - name: handle errors
+          fail:
+            msg: "role failed"
+          when: not selinux_reboot_required
+
+        - name: restart managed host
+          shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+          async: 1
+          poll: 0
+          ignore_errors: true
+
+        - name: wait for managed host to come back
+          wait_for_connection:
+            delay: 10
+            timeout: 300
+
+        - name: reapply the role
+          include_role:
+            name: linux-system-roles.selinux

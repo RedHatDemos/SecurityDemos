@@ -1,0 +1,14 @@
+---
+- name: Get local modifications - boolean
+  command: /usr/sbin/semanage boolean -l -n -C
+  register: selinux_role_boolean
+- name: Get local modifications - port
+  command: /usr/sbin/semanage port -l -n -C
+  register: selinux_role_port
+- name: Get local modifications - login
+  command: /usr/sbin/semanage login -l -n -C
+  register: selinux_role_login
+- name: Get local modifications - fcontext
+  command: /usr/sbin/semanage fcontext -l -n -C
+  register: selinux_role_fcontext
+

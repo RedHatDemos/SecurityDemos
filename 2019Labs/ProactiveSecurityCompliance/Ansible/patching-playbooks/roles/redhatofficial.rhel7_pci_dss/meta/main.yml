@@ -1,0 +1,31 @@
+galaxy_info:
+  role_name: rhel7_pci_dss
+  author: SCAP Security Guide development team
+  description: "PCI-DSS v3 Control Baseline for Red Hat Enterprise Linux 7"
+  company: "Red Hat, Inc."
+
+  issue_tracker_url: https://github.com/complianceascode/content/issues
+
+  license: BSD-3-Clause
+
+  min_ansible_version: 2.5
+
+  platforms:
+  - name: EL
+    versions:
+    - 7
+
+  galaxy_tags:
+  - system
+  - hardening
+  - openscap
+  - ssg
+  - scap
+  - security
+  - compliance
+  - complianceascode
+  - pcidss
+  - redhatofficial
+  - redhat
+
+dependencies: []
