@@ -81,6 +81,8 @@ Red Hat Insights clients have a configuration file which can be modified for you
 
 . You can specific commands and files you don't want to access by creating a remove.conf file.
 +
+NOTE: 0660 file permissions will work on remove.conf and it should inherit the correct selinux types.
+
 [source]
 ----
 [root@ic1 insights-client]# ls
@@ -92,6 +94,7 @@ cert-api.access.redhat.com.pem  insights-client.conf  machine-id  redhattools.pu
 > #patterns=password,username
 > #keywords=super$ecret,ultra$ecret
 > EOF
+[root@ic1 insights-client]# chmod 0660 remove.conf
 [root@ic1 insights-client]# cat ./remove.conf
 [remove]
 files=/etc/hosts,/etc/resolve.conf
@@ -308,7 +311,7 @@ net.ipv4.tcp_challenge_ack_limit = 2147483647
 +
 [source]
 ----
-# redhat-access-insights
+# insights-client
 Starting to collect Insights data
 Uploading Insights data, this may take a few minutes
 Upload completed successfully!
