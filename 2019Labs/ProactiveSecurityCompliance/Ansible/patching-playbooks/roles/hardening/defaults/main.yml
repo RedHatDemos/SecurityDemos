@@ -1,3 +1,6 @@
 ---
 harden_password_complexity: yes
 harden_selinux: yes
+
+pass_max_attempts: 3
+pass_unlock_time: 600
