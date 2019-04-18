@@ -1,5 +1,0 @@
----
-- src: https://github.com/willtome/ansible-role-scap-client.git
-  version: tailoring_file
-
-- src: redhatofficial.rhel7_pci_dss

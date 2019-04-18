@@ -1,0 +1,6 @@
+---
+- hosts: "{{ HOSTS }}"
+  
+  roles:
+  - hardening
+  - dev-sec.ssh-hardening
