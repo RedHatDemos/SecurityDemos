@@ -193,7 +193,6 @@ Debug options:
 
 . Install and Register client to Red Hat Insights:
 +
-NOTE: You can re-register a server and change default settings in Satellite. 
 NOTE: In older versions the package was called redhat-access-insights.
 +
 [source]
