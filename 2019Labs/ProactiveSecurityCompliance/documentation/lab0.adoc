@@ -3,7 +3,11 @@
 === Logging into all the Red Hat Products
 Let’s log into the Red Hat Products that you will use in this lab so they are ready to use.
 
-. Follow the directions  https://github.com/RedHatDemos/RHTE-2018/blob/master/GG/gg-dedicated.adoc[here^] in order to obtain your lab GUID.  This GUID will be used to access your unique lab environment.
+=== Accessing your dedicated lab environment using your provided GUID
+
+. Go https://www.opentlc.com/gg/gg.cgi?profile=generic_tester[here^] in order to obtain your lab GUID. This GUID will be used to access your unique lab environment.
+The activation key is *security*. On the page where you get assigned your GUID, you will also be able to access your unique lab environment's power control and consoles
+on the last bullet point of the GUID assignment page. 
 
 . In your lab information webpage, take note of your assigned GUID. You will use this GUID to access your lab's systems.  It will be embedded in your lab environment's host names.
 
