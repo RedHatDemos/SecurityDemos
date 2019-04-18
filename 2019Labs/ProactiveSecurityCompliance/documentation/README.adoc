@@ -28,7 +28,7 @@ This lab is geared towards systems administrators, cloud administrators and oper
 
 
 == Lab Environment:
-Your entire lab environment is hosted online and includes: Red Hat Virtualization, Red Hat Openstack Platform, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat Ansible Automation, Red Hat Insights, Red Hat CloudForms, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
+Your entire lab environment is hosted online and includes: Red Hat Ansible Automation, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat Insights, Red Hat Virtualization, Red Hat Openstack Platform, Red Hat CloudForms, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
 
 You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
 
