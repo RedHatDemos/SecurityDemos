@@ -2,7 +2,6 @@
 - hosts: "{{ HOSTS }}"
   vars:
     ssh_banner: yes
-    sftp_enable: no
 
   roles:
   - motd-splash
@@ -15,10 +14,3 @@
       path: /etc/ssh/banner.txt
       src: /etc/motd
       state: link
-
-  - name: set sftp subsystem
-    lineinfile:
-      path: /etc/ssh/sshd_config
-      regexp: '^Subsystem sftp'
-      line: Subsystem sftp  /usr/libexec/openssh/sftp-server
-    notify: restart sshd      

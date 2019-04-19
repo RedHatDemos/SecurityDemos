@@ -232,7 +232,7 @@ RevokedKeys /etc/ssh/revoked_keys
 # override default of no subsystems
 # Subsystem sftp /opt/app/openssh5/libexec/sftp-server
 
-Subsystem sftp internal-sftp -l INFO -f LOCAL6
+Subsystem sftp  /usr/libexec/openssh/sftp-server
 
 # These lines must appear at the *end* of sshd_config
 Match Group sftponly
