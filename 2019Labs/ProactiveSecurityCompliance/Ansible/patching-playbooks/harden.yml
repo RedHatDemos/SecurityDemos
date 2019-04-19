@@ -1,7 +1,8 @@
 ---
 - hosts: "{{ HOSTS }}"
   vars:
-    ssh_banner: yes
+    ssh_banner: true
+    sftp_enabled: true
 
   roles:
   - motd-splash
