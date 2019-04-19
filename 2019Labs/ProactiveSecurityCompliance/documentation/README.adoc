@@ -18,12 +18,12 @@ This lab is geared towards systems administrators, cloud administrators and oper
 
 == Attendees, during this session, will learn:
 * How to perform automated audit scans to quickly detect and automatically remediate security and compliance issues in a controlled way to ensure compliance against regulatory or custom profiles and for automated configuration compliance.
-* How to implement automated web application hardening.
 * How to implement infrastructure, security, and compliance as code.
 * How to implement consistent and automated patch and configuration management.
 * How to use Red Hat Satellite, OpenSCAP, Red Hat CloudForms, and Red Hat Ansible Automation to automatically apply and enforce security policies
 * How to use Red Hat Insights and Red Hat Ansible Automation to proactively identify and remediate security threats at scale with automated risk management.
 * How to have centralized management of your hybrid infrastructure for continuous security and monitoring.
+* How to implement automated web application hardening.
 * How to build and automate security into your application by implementing DevSecOps at scale using Red Hat OpenShift Container Platform and several other tools, such as OWASP ZAP, SonarQube, Clair, and more to build a secure CI/CD application pipeline.
 
 
