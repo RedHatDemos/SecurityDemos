@@ -1,1 +1,73 @@
 // Jenkinsfile
+pipeline {
+  agent { label 'master' }
+
+  stages {
+
+    stage('Clone the code') {
+      steps {
+       git url: "http://gogs-ocp-workshop.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/SecurityDemos.git"
+      } // steps
+    } // stage
+
+    stage('Build the application') {
+    agent { label 'maven' }
+    steps {
+         sh "mvn -Dmaven.test.skip=true clean package"
+      } // steps
+    } // stage
+
+    stage('Unit tests') {
+    agent { label 'maven' }
+    steps {
+         sh "mvn test"
+         junit 'target/surefire-reports/*.xml'
+      } // steps
+
+    } // stage
+
+    stage('Archive jar to nexus (TODO)') {
+      steps {
+        
+      } // steps
+    } // stage
+
+    stage('SonarQube Scan (TODO)') {
+      steps {
+        
+      } // steps
+    } // stage
+
+    stage('Dependency lookup (TODO)') {
+      steps {
+        
+      } // steps
+    } // stage
+
+    stage('Build Image (TODO)') {
+      steps {
+        
+      } // steps
+    } // stage
+
+    stage('OpenSCAP Scan (TODO)') {
+      steps {
+        
+      } // steps
+    } // stage
+
+    stage('Deploy (TODO)') {
+      steps {
+        
+      } // steps
+    } // stage
+
+    stage('OWASP ZAP Scan (TODO)') {
+      steps {
+        
+      } // steps
+    } // stage
+
+  } // stages
+
+} // pipeline
