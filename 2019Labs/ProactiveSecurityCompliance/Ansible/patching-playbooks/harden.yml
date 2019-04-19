@@ -1,7 +1,17 @@
 ---
 - hosts: "{{ HOSTS }}"
-  
+  vars:
+    ssh_banner: yes
+
   roles:
   - motd-splash
   - hardening
   - dev-sec.ssh-hardening
+
+  tasks:
+  - name: Link SSH Banner
+    file:
+      path: /etc/ssh/banner.txt
+      src: /etc/motd
+      state: link
+      
