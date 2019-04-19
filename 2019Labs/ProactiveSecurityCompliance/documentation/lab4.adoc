@@ -1,4 +1,4 @@
-== Lab 4: Managing the security of Red Hat Openshift container images from Red Hat CloudForms
+== (THIS LAB EXERCISE DOCUMENTATION STILL NEEDS TO BE UPDATED!!) Lab 4: Managing the security of Red Hat Openshift container images from Red Hat CloudForms
 
 === Goal of Lab 4
 The goal of this lab is demonstrate how you can use Red Hat CloudForms to manage the security of Red Hat Openshift container images. Specifically, we will see how you can use the Red Hat CloudForms control engine to prevent Red Hat Openshift container images with high severity vulnerabilities from running in Red Hat Openshift.

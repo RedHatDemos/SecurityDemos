@@ -1,5 +1,5 @@
 
-== Lab 6: Viewing Security related reports for Red Hat Openstack Platform and Red Hat Openshift Container Platform
+== (THIS LAB EXERCISE DOCUMENTATION STILL NEEDS TO BE UPDATED!!)  Lab 6: Viewing Security related reports for Red Hat Openstack Platform and Red Hat Openshift Container Platform
 
 === Goal of Lab 6
 The goal of this lab is to view other security related reports in Red Hat CloudForms for a hybrid environment. Specifically, we will look at security related reports for Red Hat Openstack Platform and Red Hat Openshift Container Platform.

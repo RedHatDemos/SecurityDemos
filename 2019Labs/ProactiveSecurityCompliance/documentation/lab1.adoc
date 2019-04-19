@@ -1,4 +1,4 @@
-= Lab 1: Provisioning a security compliant host
+= (THIS LAB EXERCISE DOCUMENTATION STILL NEEDS TO BE UPDATED!!) Lab 1: Provisioning a security compliant host
 
 == Goal of Lab 1
 The goal of this lab is to create a security compliant host at provisioning time in Red Hat Virtualization at the push of a button using Red Hat CloudForms and Ansible Automation. Specifically, in this lab exercise, you will use Red Hat CloudForms and Ansible Automation inside CloudForms for your custom provisioning automation workflow.

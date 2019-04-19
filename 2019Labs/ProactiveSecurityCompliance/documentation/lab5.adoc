@@ -1,4 +1,4 @@
-== Lab 5: Automated OpenSCAP security scans and remediations at the push of a button & viewing SCAP compliance reports
+== (THIS LAB EXERCISE DOCUMENTATION STILL NEEDS TO BE UPDATED!!) Lab 5: Automated OpenSCAP security scans and remediations at the push of a button & viewing SCAP compliance reports
 
 == Goal of Lab 5
 The goal of this lab is to show the ability to execute OpenSCAP security scans and remediations at the push of a button in Red Hat CloudForms using Red Hat Ansible Automation, Red Hat Satellite, and Red Hat CloudForms.

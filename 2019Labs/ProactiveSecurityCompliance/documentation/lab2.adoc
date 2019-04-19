@@ -1,4 +1,4 @@
-== Lab 2: Utilizing OpenSCAP in Satellite 6 for security scanning, auditing, and remediation
+== (THIS LAB EXERCISE DOCUMENTATION STILL NEEDS TO BE UPDATED!!) Lab 2: Utilizing OpenSCAP in Satellite 6 for security scanning, auditing, and remediation
 
 === Goal of Lab 2
 The goal of this lab is to introduce you to OpenSCAP in Satellite 6. OpenSCAP is the integrated security scanning, auditing, and remediation tool in Satellite 6.

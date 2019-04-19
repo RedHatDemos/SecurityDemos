@@ -1,4 +1,4 @@
-== Lab 8: Proactive Security and Automated Risk Management with Red Hat Insights
+== (REMOVE ME AFTER LAB6 IS UPDATED) Lab 8: Proactive Security and Automated Risk Management with Red Hat Insights
 
 === Goal of Lab 8
 The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. In this lab, we will focus only on the specific security features of Red Hat Insights.
@@ -35,7 +35,7 @@ Red Hat Insights clients have a configuration file which can be modified for you
 [source]
 ----
 [root@ic1 ~]# cd /etc/insights-client/
-[root@ic1 insights-client]# cat insights-client.conf 
+[root@ic1 insights-client]# cat insights-client.conf
 [insights-client]
 # Example options in this file are the defaults
 
@@ -75,7 +75,7 @@ Red Hat Insights clients have a configuration file which can be modified for you
 
 # Display name for registration
 #display_name=
-[root@ic1 insights-client]# 
+[root@ic1 insights-client]#
 
 ----
 
@@ -101,7 +101,7 @@ files=/etc/hosts,/etc/resolve.conf
 commands=netstat
 #patterns=password,username
 #keywords=super,ultra
-[root@ic1 insights-client]# 
+[root@ic1 insights-client]#
 
 ----
 
@@ -172,7 +172,7 @@ Debug options:
                         only as directed.
   --keep-archive        Do not delete archive after upload
   --no-upload           Do not upload the archive
-[root@ic1 insights-client]# 
+[root@ic1 insights-client]#
 
 ----
 
@@ -199,11 +199,11 @@ NOTE: In older versions the package was called redhat-access-insights.
 ----
 [root@ic4 ~]# yum install -y insights-client
 Loaded plugins: enabled_repos_upload, package_upload, product-id, subscription-manager
-rhel-7-server-extras-rpms                                                                                                                    | 2.0 kB  00:00:00     
-rhel-7-server-insights-3-rpms                                                                                                                | 2.1 kB  00:00:00     
-rhel-7-server-rpms                                                                                                                           | 2.0 kB  00:00:00     
-rhel-7-server-satellite-tools-6.4-rpms                                                                                                       | 2.1 kB  00:00:00     
-rhel-7-server-supplementary-rpms                                                                                                             | 2.0 kB  00:00:00     
+rhel-7-server-extras-rpms                                                                                                                    | 2.0 kB  00:00:00
+rhel-7-server-insights-3-rpms                                                                                                                | 2.1 kB  00:00:00
+rhel-7-server-rpms                                                                                                                           | 2.0 kB  00:00:00
+rhel-7-server-satellite-tools-6.4-rpms                                                                                                       | 2.1 kB  00:00:00
+rhel-7-server-supplementary-rpms                                                                                                             | 2.0 kB  00:00:00
 Resolving Dependencies
 --> Running transaction check
 ---> Package insights-client.noarch 0:3.0.3-9.el7_5 will be installed
@@ -224,17 +224,17 @@ Install  1 Package
 Total download size: 244 k
 Installed size: 431 k
 Downloading packages:
-insights-client-3.0.3-9.el7_5.noarch.rpm                                                                                                     | 244 kB  00:00:00     
+insights-client-3.0.3-9.el7_5.noarch.rpm                                                                                                     | 244 kB  00:00:00
 Running transaction check
 Running transaction test
 Transaction test succeeded
 Running transaction
-  Installing : insights-client-3.0.3-9.el7_5.noarch                                                                                                             1/1 
+  Installing : insights-client-3.0.3-9.el7_5.noarch                                                                                                             1/1
 Uploading Package Profile
-  Verifying  : insights-client-3.0.3-9.el7_5.noarch                                                                                                             1/1 
+  Verifying  : insights-client-3.0.3-9.el7_5.noarch                                                                                                             1/1
 
 Installed:
-  insights-client.noarch 0:3.0.3-9.el7_5                                                                                                                            
+  insights-client.noarch 0:3.0.3-9.el7_5
 
 Complete!
 Uploading Enabled Repositories Report
@@ -249,7 +249,7 @@ Automatic scheduling for Insights has been enabled.
 Starting to collect Insights data for ic4.summit.example.com
 Uploading Insights data.
 Successfully uploaded report from 41d3c62e-5c18-42ad-a1ff-65f7c37cc315 to account 6057187.
-[root@ic4 ~]# 
+[root@ic4 ~]#
 
 ----
 +
@@ -394,13 +394,11 @@ IMPORTANT: If you see the following error: `error : Unkown exception HTTPSConnec
 ----
 +
 image:images/lab8.3-insights-issues.png[1000,1000]
-+
-NOTE: In an upcoming version of Tower you will be able to remediate directly from this interface, but for this lab we will continue using the Insights Planner interface from within Satellite to accomplish our tasks in conjunction with Tower.
 
++
 . Navigate to *Projects* from the main menu at the top and find the *Insights Planner Sync* project, and click the Cloud with a download arrow under ACTIONS to the right of the project name.
 +
 image:images/lab8.3-insights-sync-scm.png[1000,1000]
-
 . The sync should complete successfully, and now you're ready to remediate with Tower.
 +
 NOTE: Tower can also identify Insights issues on managed hosts. All of the above projects and plans can be sync'd and updated automatically with Tower via the API or with scheduled runs.
