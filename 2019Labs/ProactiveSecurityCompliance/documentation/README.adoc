@@ -36,10 +36,10 @@ Each lab exercise is independent from each other, so feel free to do the lab exe
 
 == Table of Contents
 * link:lab0.adoc[Lab 0: Setup steps]
-* link:lab2.adoc[Lab 1: Security Vulnerability and Compliance Scanning and Auditing using Red Hat Ansible Automation and OpenSCAP in Red Hat Satellite]
-* link:lab4.adoc[Lab 2: Host System Hardening and Security Compliance Remediations]
-* link:lab5.adoc[Lab 3: Security Hardening a Web Application Application with Exploit]
-* link:lab6.adoc[Lab 4: Automated Patching of Host Systems]
-* link:lab3.adoc[Lab 5: Enforcing compliance with security policies using Red Hat CloudForms and Red Hat Ansible Automation]
-* link:lab8.adoc[Lab 6: Proactive Security and Automated Risk Management with Red Hat Insights]
+* link:lab1.adoc[Lab 1: Security Vulnerability and Compliance Scanning and Auditing using Red Hat Ansible Automation and OpenSCAP in Red Hat Satellite]
+* link:lab2.adoc[Lab 2: Host System Hardening and Security Compliance Remediations]
+* link:lab3.adoc[Lab 3: Security Hardening a Web Application Application with Exploit]
+* link:lab4.adoc[Lab 4: Automated Patching of Host Systems]
+* link:lab5.adoc[Lab 5: Enforcing compliance with security policies using Red Hat CloudForms and Red Hat Ansible Automation]
+* link:lab6.adoc[Lab 6: Proactive Security and Automated Risk Management with Red Hat Insights]
 * link:lab7.adoc[Lab 7: Implementing DevSecOps to build and automate security into your application]
