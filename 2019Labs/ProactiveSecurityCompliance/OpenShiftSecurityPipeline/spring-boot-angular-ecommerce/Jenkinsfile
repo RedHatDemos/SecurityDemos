@@ -28,43 +28,51 @@ pipeline {
 
     stage('Archive jar to nexus (TODO)') {
       steps {
-        
+        echo "TODO"
       } // steps
     } // stage
 
     stage('SonarQube Scan (TODO)') {
       steps {
-        
+        echo "TODO"
       } // steps
     } // stage
 
     stage('Dependency lookup (TODO)') {
       steps {
-        
+        echo "TODO"
       } // steps
     } // stage
 
     stage('Build Image (TODO)') {
       steps {
-        
+        sh "oc delete bc/ecommerce || true"q
+        sh "oc new-build --name ecommerce --strategy=docker --binary"
+        sh "mkdir deploy || true"
+        sh "cp target/spring-boot-angular-ecommerce-0.0.1-SNAPSHOT.jar deploy"
+        sh "cp Dockerfile deploy"
+        sh "oc start-build ecommerce --from-dir=deploy --follow --wait"
       } // steps
     } // stage
 
     stage('OpenSCAP Scan (TODO)') {
       steps {
-        
+        echo "TODO"
       } // steps
     } // stage
 
     stage('Deploy (TODO)') {
       steps {
-        
+        sh "oc new-app ecommerce"
+        sh "oc set env dc/ecommerce JAVA_ARGS=/deployments/root.jar"
+        sh "oc expose ecommerce"
+        sh "oc rollout status dc/ecommerce"
       } // steps
     } // stage
 
     stage('OWASP ZAP Scan (TODO)') {
       steps {
-        
+        echo "TODO"
       } // steps
     } // stage
 
