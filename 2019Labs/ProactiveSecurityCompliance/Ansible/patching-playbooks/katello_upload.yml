@@ -10,3 +10,4 @@
       
   - name: Recalculate Packages and Errata
     shell: /usr/sbin/katello-package-upload -f
+    ignore_errors: yes
