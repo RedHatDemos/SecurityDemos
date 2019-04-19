@@ -1,0 +1,12 @@
+---
+- hosts: "{{ HOSTS }}"
+  gather_facts: no
+
+  tasks:
+  - name: Ensure Katello is running
+    service:
+      name: goferd
+      state: started
+      
+  - name: Recalculate Packages and Errata
+    shell: /usr/sbin/katello-package-upload -f
