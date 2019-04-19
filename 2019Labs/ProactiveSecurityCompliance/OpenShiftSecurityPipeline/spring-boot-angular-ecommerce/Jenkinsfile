@@ -1,6 +1,6 @@
 // Jenkinsfile
 pipeline {
-  agent { label 'master' }
+  agent { label 'maven' }
 
   stages {
 
@@ -11,14 +11,12 @@ pipeline {
     } // stage
 
     stage('Build the application') {
-    agent { label 'maven' }
     steps {
          sh "mvn -Dmaven.test.skip=true clean package"
       } // steps
     } // stage
 
     stage('Unit tests') {
-    agent { label 'maven' }
     steps {
          sh "mvn test"
          junit 'target/surefire-reports/*.xml'
@@ -44,10 +42,9 @@ pipeline {
       } // steps
     } // stage
 
-    stage('Build Image (TODO)') {
+    stage('Build Image') {
       steps {
-        sh "oc delete bc/ecommerce || true"q
-        sh "oc new-build --name ecommerce --strategy=docker --binary"
+        sh "oc new-build --name ecommerce --strategy=docker --binary || true"
         sh "mkdir deploy || true"
         sh "cp target/spring-boot-angular-ecommerce-0.0.1-SNAPSHOT.jar deploy"
         sh "cp Dockerfile deploy"
@@ -61,11 +58,11 @@ pipeline {
       } // steps
     } // stage
 
-    stage('Deploy (TODO)') {
+    stage('Deploy') {
       steps {
-        sh "oc new-app ecommerce"
+        sh "oc new-app ecommerce || true"
         sh "oc set env dc/ecommerce JAVA_ARGS=/deployments/root.jar"
-        sh "oc expose ecommerce"
+        sh "oc expose svc/ecommerce || true"
         sh "oc rollout status dc/ecommerce"
       } // steps
     } // stage
