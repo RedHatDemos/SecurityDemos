@@ -2,6 +2,7 @@
 pipeline {
   agent { label 'maven' }
 
+
   stages {
 
     stage('Checkout the code') {
@@ -53,8 +54,31 @@ pipeline {
     } // stage
 
     stage('OpenSCAP Scan (TODO)') {
+      agent { label 'master' }
       steps {
-        echo "TODO"
+
+      script {
+         def remote = [:]
+         remote.name = "bastion"
+         remote.host = "bastion.${JENKINS_GUID}.openshiftworkshop.com"
+         remote.allowAnyHosts = true
+         remote.user="${JENKINS_GOGS_USER}"
+         remote.password="${JENKINS_SSH_PASSWORD}"
+         
+
+         //sh "oc login -u ${JENKINS_GOGS_USER} -p r3dh4t1! --insecure-skip-tls-verify"
+         sshCommand remote: remote, command: "oc login -u ${JENKINS_GOGS_USER} -p ${remote.password} --insecure-skip-tls-verify api.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com:6443"
+         //sh "sshpass -p $ocpass ssh -oStrictHostKeyChecking=no -t ${JENKINS_GOGS_USER}@$ocp docker login -u ${JENKINS_GOGS_USER} -p " + '"$(oc whoami -t)"' + " docker-registry-default.default.svc"
+         sshCommand remote: remote, command: "docker login -u ${JENKINS_GOGS_USER} -p " + '"$(oc whoami -t)"' + " image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com"
+         //sh "sshpass -p $ocpass ssh -oStrictHostKeyChecking=no -t ${JENKINS_GOGS_USER}@$ocp docker pull docker-registry-default.apps.$ocp/${JENKINS_GOGS_USER}/tasks:latest"
+         sshCommand remote: remote, command: "docker pull image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/ecommerce:latest"
+         //sh "sshpass -p $ocpass ssh -oStrictHostKeyChecking=no -t ${JENKINS_GOGS_USER}@$ocp sudo oscap-docker image docker-registry-default.apps.$ocp/${JENKINS_GOGS_USER}/tasks:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+         sshCommand remote: remote, command: "sudo oscap-docker image image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/ecommerce:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+         sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report.html", into: 'openscap-report.html', override: true
+
+         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-report.html', reportName: 'OpenSCAP Report', reportTitles: ''])
+         archiveArtifacts 'openscap-report.html'
+        } // script
       } // steps
     } // stage
 
