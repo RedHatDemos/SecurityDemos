@@ -4,7 +4,7 @@ pipeline {
 
   stages {
 
-    stage('Clone the code') {
+    stage('Checkout the code') {
       steps {
        git url: "http://gogs-ocp-workshop.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/SecurityDemos.git"
       } // steps
@@ -16,7 +16,7 @@ pipeline {
       } // steps
     } // stage
 
-    stage('Unit tests') {
+    stage('Run tests') {
     steps {
          sh "mvn test"
          junit 'target/surefire-reports/*.xml'
@@ -24,15 +24,15 @@ pipeline {
 
     } // stage
 
-    stage('SonarQube Scan (TODO)') {
+    stage('SonarQube Scan') {
       steps {
         sh "mvn sonar:sonar -Dsonar.host.url=http://sonarqube.ocp-workshop.svc:9000 -Dsonar.projectkey=${JENKINS_GOGS_USER}-ecommerce -Dsonar.projectName=\"${JENKINS_GOGS_USER} E-Commerce Project\""
       } // steps
     } // stage
 
-    stage('Archive jar to nexus (TODO)') {
+    stage('Archive artifacts to nexus') {
       steps {
-        echo "TODO"
+        sh "mvn --settings mvn.xml deploy -Dmaven.test.skip=true"
       } // steps
     } // stage
 
