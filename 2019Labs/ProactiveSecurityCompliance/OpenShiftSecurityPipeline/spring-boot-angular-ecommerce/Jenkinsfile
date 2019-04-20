@@ -24,13 +24,13 @@ pipeline {
 
     } // stage
 
-    stage('Archive jar to nexus (TODO)') {
+    stage('SonarQube Scan (TODO)') {
       steps {
-        echo "TODO"
+        sh "mvn sonar:sonar -Dsonar.host.url=http://sonarqube.ocp-workshop.svc:9000 -Dsonar.projectkey=${JENKINS_GOGS_USER}-ecommerce -Dsonar.projectName=\"${JENKINS_GOGS_USER} E-Commerce Project\""
       } // steps
     } // stage
 
-    stage('SonarQube Scan (TODO)') {
+    stage('Archive jar to nexus (TODO)') {
       steps {
         echo "TODO"
       } // steps
