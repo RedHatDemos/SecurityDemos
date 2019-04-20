@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/orders")
 public class OrderController {
 
+    public static String PASSWORD = "HARDCODED_PASSWORD-DELETE-ME!!!";
+
     ProductService productService;
     OrderService orderService;
     OrderProductService orderProductService;
@@ -79,9 +81,6 @@ public class OrderController {
             .getId())))
           .collect(Collectors.toList());
 
-        if (!CollectionUtils.isEmpty(list)) {
-            new ResourceNotFoundException("Product not found");
-        }
     }
 
     public static class OrderForm {

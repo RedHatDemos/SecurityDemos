@@ -1,4 +1,4 @@
-== Lab 7: Reporting on the impact of the Meltdown and Spectre vulnerabilities across a hybrid environment
+== (THIS LAB EXERCISE DOCUMENTATION STILL NEEDS TO BE UPDATED!!)  Lab 7: Reporting on the impact of the Meltdown and Spectre vulnerabilities across a hybrid environment
 
 === Goal of Lab 7
 In this lab, we will learn how to take advantage of reports to understand the impact of the Meltdown and Spectre vulnerabilities across a hybrid environment
