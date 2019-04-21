@@ -47,6 +47,12 @@ pipeline {
       } // steps
     } // stage
 
+    stage('Push Image to Quay') {
+      sh "oc new-build --name=quay-push -D 'FROM ${JENKINS_GOGS_USER}/ecommerce:latest' --to-docker --to=quay-secure-quay-enterprise.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/admin/ecommerce:${JENKINS_GOGS_USER} --source-secret=quay || true"
+      sh "oc cancel-build bc/quay-push || true"
+      sh "oc start-build bc/quay-push --follow --wait || true"
+    }
+
     stage('OpenSCAP Scans') {
       agent { label 'master' }
       steps {
@@ -64,11 +70,11 @@ pipeline {
          sshCommand remote: remote, command: "docker pull image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/ecommerce:latest"
          sshCommand remote: remote, command: "sudo oscap-docker image image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/ecommerce:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
          sshCommand remote: remote, command: "sudo oscap-docker image-cve image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/ecommerce:latest --report report-cve.html"
-         sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report.html", into: 'openscap-report.html', override: true
+         sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report.html", into: 'openscap-compliance-report.html', override: true
          sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report-cve.html", into: 'openscap-cve-report.html', override: true
-         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-report.html', reportName: 'OpenSCAP Compliance Report', reportTitles: ''])
-         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-cve-report.html', reportName: 'OpenSCAP Vulnerability Report', reportTitles: ''])
-         archiveArtifacts 'openscap-report.html,openscap-cve-report.html'
+         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-compliance-report.html', reportName: 'OpenSCAP Compliance Report', reportTitles: 'OpenSCAP Compliance Report'])
+         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-cve-report.html', reportName: 'OpenSCAP Vulnerability Report', reportTitles: 'OpenSCAP Vulnerability Report'])
+         archiveArtifacts 'openscap-compliance-report.html,openscap-cve-report.html'
         } // script
       } // steps
     } // stage
