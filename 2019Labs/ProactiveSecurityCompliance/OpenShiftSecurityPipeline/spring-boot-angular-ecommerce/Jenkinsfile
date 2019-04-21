@@ -48,10 +48,12 @@ pipeline {
     } // stage
 
     stage('Push Image to Quay') {
+      steps {
       sh "oc new-build --name=quay-push -D 'FROM ${JENKINS_GOGS_USER}/ecommerce:latest' --to-docker --to=quay-secure-quay-enterprise.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/admin/ecommerce:${JENKINS_GOGS_USER} --source-secret=quay || true"
       sh "oc cancel-build bc/quay-push || true"
       sh "oc start-build bc/quay-push --follow --wait || true"
-    }
+      } // steps
+    } //stage
 
     stage('OpenSCAP Scans') {
       agent { label 'master' }
