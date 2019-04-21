@@ -89,9 +89,11 @@ pipeline {
     stage('OWASP ZAP Scan') {
       agent { label 'zap' }
       steps {
-        def retVal = sh returnStatus: true, script: "/zap/zap-baseline.py -r owasp-zap-baseline.html -t http://ecommerce.${JENKINS_GOGS_USER}.svc:8080/"
-        publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'owasp-zap-baseline.html', reportName: 'OWASP ZAP Basiline Report', reportTitles: ''])
-        archiveArtifacts 'owasp-zap-baseline.html'
+        script {
+          sh "/zap/zap-baseline.py -r owasp-zap-baseline.html -t http://ecommerce.${JENKINS_GOGS_USER}.svc:8080/"
+          publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'owasp-zap-baseline.html', reportName: 'OWASP ZAP Basiline Report', reportTitles: ''])
+          archiveArtifacts 'owasp-zap-baseline.html'
+        } // script
       } // steps
     } // stage
 
