@@ -5,13 +5,13 @@ pipeline {
 
   stages {
 
-    stage('Checkout the code') {
+    stage('Checkout') {
       steps {
        git url: "http://gogs-ocp-workshop.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/SecurityDemos.git"
       } // steps
     } // stage
 
-    stage('Build the application') {
+    stage('Build') {
     steps {
          sh "mvn -Dmaven.test.skip=true clean package"
       } // steps
@@ -31,15 +31,9 @@ pipeline {
       } // steps
     } // stage
 
-    stage('Archive artifacts to nexus') {
+    stage('Archive to nexus') {
       steps {
         sh "mvn --settings mvn.xml deploy -Dmaven.test.skip=true"
-      } // steps
-    } // stage
-
-    stage('Dependency lookup (TODO)') {
-      steps {
-        echo "TODO"
       } // steps
     } // stage
 
@@ -53,7 +47,7 @@ pipeline {
       } // steps
     } // stage
 
-    stage('OpenSCAP Compliance Scan') {
+    stage('OpenSCAP Scans') {
       agent { label 'master' }
       steps {
 
@@ -69,10 +63,12 @@ pipeline {
          sshCommand remote: remote, command: "docker login -u ${JENKINS_GOGS_USER} -p " + '"$(oc whoami -t)"' + " image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com"
          sshCommand remote: remote, command: "docker pull image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/ecommerce:latest"
          sshCommand remote: remote, command: "sudo oscap-docker image image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/ecommerce:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+         sshCommand remote: remote, command: "sudo oscap-docker image-cve image-registry-openshift-image-registry.apps.cluster-${JENKINS_GUID}.${JENKINS_GUID}.openshiftworkshop.com/${JENKINS_GOGS_USER}/ecommerce:latest --report report-cve.html"
          sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report.html", into: 'openscap-report.html', override: true
-
-         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-report.html', reportName: 'OpenSCAP Report', reportTitles: ''])
-         archiveArtifacts 'openscap-report.html'
+         sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report-cve.html", into: 'openscap-cve-report.html', override: true
+         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-report.html', reportName: 'OpenSCAP Compliance Report', reportTitles: ''])
+         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-cve-report.html', reportName: 'OpenSCAP Vulnerability Report', reportTitles: ''])
+         archiveArtifacts 'openscap-report.html,openscap-cve-report.html'
         } // script
       } // steps
     } // stage
@@ -90,8 +86,9 @@ pipeline {
       agent { label 'zap' }
       steps {
         script {
-          sh "/zap/zap-baseline.py -r owasp-zap-baseline.html -t http://ecommerce.${JENKINS_GOGS_USER}.svc:8080/"
-          publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'owasp-zap-baseline.html', reportName: 'OWASP ZAP Basiline Report', reportTitles: ''])
+          sh "/zap/zap-baseline.py -r owasp-zap-baseline.html -t http://ecommerce.${JENKINS_GOGS_USER}.svc:8080/ -t http://ecommerce.${JENKINS_GOGS_USER}.svc:8080/api/products -t http://ecommerce.${JENKINS_GOGS_USER}.svc:8080/api/orders || true"
+          sh "cp /zap/wrk/owasp-zap-baseline.html ."
+          publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'owasp-zap-baseline.html', reportName: 'OWASP ZAP Baseline Report', reportTitles: ''])
           archiveArtifacts 'owasp-zap-baseline.html'
         } // script
       } // steps
