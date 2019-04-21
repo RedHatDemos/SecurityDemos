@@ -18,7 +18,15 @@ In this lab, we will configure the following on our hosts to ensure we are are k
 . Login to Ansible Tower and select "Templates" from the navigation menu on the left. 
 
 . Search or scroll through the templates to find the template named "LINUX / System Hardening". Then click the rocket ship icon to the right side of the window.
++
+image:images/lab2-select_template.png[500,500]
 
 . You will be prompted for the hosts that you would like to configure. Enter `*rhel7_dev` into the text field. We will target our dev servers first. Click "Next" followed by "Launch" to begin the job.
++
+image:images/lab2-select_hosts.png[500,500]
 
 . We will monitor the log as the configuration is checked and remediated on our systems. At the end we will see a Play Recap showing us how many changes were made on the systems.
++
+image:images/lab2-job_log.png[500,500]
+
+. Re-run the job using the rocketship in the top corner of the details frame to observe how many changes are made after a system is already hardened. Ansible works to achieve an endstate defined in the playbook so if this playbook is run routinely, it will only make the changes needed to comply with your hardening standard.
