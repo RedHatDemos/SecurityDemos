@@ -82,7 +82,7 @@ Red Hat Insights clients have a configuration file which can be modified for you
 . You can specific commands and files you don't want to access by creating a remove.conf file.
 +
 NOTE: 0660 file permissions will work on remove.conf and it should inherit the correct selinux types.
-
++
 [source]
 ----
 [root@ic1 insights-client]# ls
