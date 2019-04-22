@@ -12,7 +12,7 @@ From this page, you will be assigned your unique GUID, which you will use to acc
 +
 image:images/gg.png[500,500]
 
-. When you are completely done with your lab environment, please click *FORGET SESSION* so that you can move on to the next lab.  If you fail to do this, you will be locked into the GUID from the previous lab. In order to move from the *infrastructure/operations security and compliance automation* lab exercises (Lab Exercises #1-6) to the *application security and compliance automation* lab exercises (Lab Exercise #7) and vice versa, you will have to push the *FORGET SESSION* button, select the appropriate option from the drop down list as mentioned above, and get your GUID. 
+. When you are completely done with your lab environment, please click *FORGET SESSION* so that you can move on to the next lab.  If you fail to do this, you will be locked into the GUID from the previous lab. In order to move from the *infrastructure/operations security and compliance automation* lab exercises (Lab Exercises #1-6) to the *application security and compliance automation* lab exercises (Lab Exercise #7) and vice versa, you will have to push the *FORGET SESSION* button, select the appropriate option from the drop down list as mentioned above, and get your GUID.
 +
 [NOTE]
 Clicking *FORGET SESSION* will not stop or delete the lab environment.
@@ -43,7 +43,7 @@ The table below also shows the links to the Red Hat Products you need to be logg
 |===
 
 
-=== Other Setup Steps to Perform
+=== Verifying you can SSH into the workstation system
 
 . From the *Lab GUID Assignment page*, copy the hostname of the *workstation* system (it should be *workstation-GUID.rhpds.opentlc.com* where GUID matches your environment's guid).
 
