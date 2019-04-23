@@ -1,4 +1,4 @@
-= Red Hat Security Demo
+= Red Hat Security Labs
 
 2019 LABS:
 
