@@ -1,4 +1,4 @@
-= Using Ansible in ComplianceAsCode
+= Lab exercise 4: Using Ansible in ComplianceAsCode
 
 :imagesdir: images
 

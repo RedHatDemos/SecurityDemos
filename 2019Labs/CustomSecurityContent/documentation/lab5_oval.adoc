@@ -1,4 +1,4 @@
-= The Art of OVAL Checks
+= Lab exercise 5: The Art of OVAL Checks
 
 :experimental:
 :imagesdir: images
