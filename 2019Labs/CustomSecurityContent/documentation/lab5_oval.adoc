@@ -161,8 +161,10 @@ Here is a close-up of those critera:
 ----
     ...
     <criteria operator="OR">
-      <criterion comment="TMOUT value in /etc/profile >= var_accounts_tmout"        test_ref="test_etc_profile_tmout" />
-      <criterion comment="TMOUT value in /etc/profile.d/*.sh >= var_accounts_tmout" test_ref="test_etc_profiled_tmout" />
+      <criterion comment="TMOUT value in /etc/profile >= var_accounts_tmout"
+        test_ref="test_etc_profile_tmout" />
+      <criterion comment="TMOUT value in /etc/profile.d/*.sh >= var_accounts_tmout"
+        test_ref="test_etc_profiled_tmout" />
     </criteria>
   </definition>
   ...
@@ -177,8 +179,9 @@ In order for test to pass, the object has to exist, and it has to conform to the
 The test for the `/etc/profile` criterion and it's dependencies look like this:
 
 ----
-
-  <ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in /etc/profile" id="test_etc_profile_tmout" version="1">                                                                    
+  ...
+  <ind:textfilecontent54_test check="all" check_existence="all_exist"
+      comment="TMOUT in /etc/profile" id="test_etc_profile_tmout" version="1">
     <ind:object object_ref="object_etc_profile_tmout" />
     <ind:state state_ref="state_etc_profile_tmout" />
   </ind:textfilecontent54_test>
@@ -193,8 +196,9 @@ The test for the `/etc/profile` criterion and it's dependencies look like this:
     <ind:subexpression datatype="int" operation="equals" var_check="all" var_ref="var_accounts_tmout" />
   </ind:textfilecontent54_state>
 
-  <external_variable comment="external variable for TMOUT" datatype="int" id="var_accounts_tmout" version="1" />
-
+  <external_variable comment="external variable for TMOUT" datatype="int"
+      id="var_accounts_tmout" version="1" />
+  ...
 ----
 
 We see that the `test_etc_profile_tmout` test references the `object_etc_profile_tmout` object and the `state_etc_profile_tmout` state.
@@ -204,7 +208,7 @@ The `instance` element that equals 1 tells us that it is the first match of the 
 
 The state is a specification that the object (i.e. the matched substring) should be an integer that equals to the value of a variable `var_accounts_tmout`.
 
-There are two regular expression that check for `TMOUT=...` in the `shared.xml` file, one for the `profile` test, and one for the `profile.d/*.sh` test.
+There are two regular expression that check for `TMOUT=...` in the `shared.xml` file, one for the `profile` test, and one for the `profile.d/\*.sh` test.
 As there are two types of locations that need to be examined (the single `/etc/profile` file and `*.sh` files in the `/etc/profile.d` directory), there have to be two objects.
 The `object_etc_profile_tmout` and `object_etc_profiled_tmout` objects have different file / path specifications, but the regular expression is the same.
 The alternative form of the assignment `export TMOUT=...` isn't handled in either of them.
@@ -215,11 +219,11 @@ As stated in the previous section, this looks wrong, as shorter timeouts are mor
 
 == Tests introduction
 
-The `ComplianceAsCode` project features a test suite that is very useful when defining what scenarios the check and the remediation are supposed to handle.
+The `ComplianceAsCode` project features a test suite that is very useful to define what scenarios the check and the remediation are supposed to handle.
 It sets up a system to a certain state, and runs the scan and possibly remediations.
 Results are reported in form of console output, and detailed reports are saved to a log directory.
 
-Concerning scenarios, consider for example the `accounts_tmout` rule - the two simplest cases are should be handled are the following ones:
+Regarding scenarios, consider for example the `accounts_tmout` rule - the two simplest cases are should be handled are the following ones:
 
 * `TMOUT=600` is present in `/etc/profile` - this test scenario should pass.
 * `TMOUT=600` is not present in `/etc/profile` or `/etc/profile.d/*.sh` - it gets more complicated, because remediations become involved:
@@ -290,6 +294,10 @@ This is useful when a test breaks unexpectedly, or the test suite suffers from i
 
 Now when we have a reasonable certainty about our rules, we can improve the OVAL content.
 
+TIP: We will repeat the (re)build of the content and subsequent test suite execution multiple times.
+Therefore, it may be practical to dedicate a terminal window for this purpose.
+You can browse the command history using `Up` and `Down` keyboard arrows keys, so if you want to rebuild after the tests run finishes, tap the `Up` key until the `build_product` command shows up (typically you have to tap twice), and confirm the execution of the build command by pressing `Enter`.
+
 
 == OVAL optimization
 
@@ -313,13 +321,15 @@ There is a difference in name and comment, and test objects are also different.
 Compare the two following excerpts:
 +
 ----
-<ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in /etc/profile"        id="test_etc_profile_tmout" version="1">
+<ind:textfilecontent54_test check="all" check_existence="all_exist"
+    comment="TMOUT in /etc/profile" id="test_etc_profile_tmout" version="1">
   <ind:object object_ref="object_etc_profile_tmout" />
   <ind:state state_ref="state_etc_profile_tmout" />
 </ind:textfilecontent54_test>
 ...
 
-<ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in /etc/profile.d/*.sh" id="test_etc_profiled_tmout" version="1">
+<ind:textfilecontent54_test check="all" check_existence="all_exist"
+    comment="TMOUT in /etc/profile.d/*.sh" id="test_etc_profiled_tmout" version="1">
   <ind:object object_ref="object_etc_profiled_tmout" />
   <ind:state state_ref="state_etc_profile_tmout" />
 </ind:textfilecontent54_test>
@@ -336,7 +346,8 @@ Therefore, we remove both tests, and we add the new macro and its new invocation
 ----
 
   {{% macro test_tmout(test_stem, files) %}}
-  <ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in {{{ files }}}" id="test_{{{ test_stem }}}" version="1">
+  <ind:textfilecontent54_test check="all" check_existence="all_exist"
+      comment="TMOUT in {{{ files }}}" id="test_{{{ test_stem }}}" version="1">
     <ind:object object_ref="object_{{{ test_stem }}}" />
     <ind:state state_ref="state_etc_profile_tmout" />
   </ind:textfilecontent54_test>
@@ -405,13 +416,16 @@ Then, the whole OVAL file should look this:
       <description>Checks interactive shell timeout</description>
     </metadata>
     <criteria operator="OR">
-      <criterion comment="TMOUT value in /etc/profile >= var_accounts_tmout" test_ref="test_etc_profile_tmout" />
-      <criterion comment="TMOUT value in /etc/profile.d/*.sh >= var_accounts_tmout" test_ref="test_etc_profiled_tmout" />
+      <criterion comment="TMOUT value in /etc/profile >= var_accounts_tmout"
+        test_ref="test_etc_profile_tmout" />
+      <criterion comment="TMOUT value in /etc/profile.d/*.sh >= var_accounts_tmout"
+        test_ref="test_etc_profiled_tmout" />
     </criteria>
   </definition>
 
   {{% macro test_tmout(test_stem, files) %}}
-  <ind:textfilecontent54_test check="all" check_existence="all_exist" comment="TMOUT in {{{ files }}}" id="test_{{{ test_stem }}}" version="1">
+  <ind:textfilecontent54_test check="all" check_existence="all_exist"
+      comment="TMOUT in {{{ files }}}" id="test_{{{ test_stem }}}" version="1">
     <ind:object object_ref="object_{{{ test_stem }}}" />
     <ind:state state_ref="state_etc_profile_tmout" />
   </ind:textfilecontent54_test>
@@ -440,10 +454,11 @@ Then, the whole OVAL file should look this:
   {{{ object_tmout(test_stem="etc_profiled_tmout", path="/etc/profile.d", filename="^.*\.sh$") }}}
 
   <ind:textfilecontent54_state id="state_etc_profile_tmout" version="1">
-    <ind:subexpression datatype="int" operation="greater than or equal" var_check="all" var_ref="var_accounts_tmout" />                                                                                           
+    <ind:subexpression datatype="int" operation="greater than or equal" var_check="all"
+      var_ref="var_accounts_tmout" />
   </ind:textfilecontent54_state>
 
-  <external_variable comment="external variable for TMOUT" datatype="int" id="var_accounts_tmout" version="1" />                                                                                                  
+  <external_variable comment="external variable for TMOUT" datatype="int" id="var_accounts_tmout" version="1" />
 </def-group>
 ----
 +
@@ -524,13 +539,13 @@ Let's run the tests!
 ....
 $ ./build_product rhel7
 ...
-$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout                                                            
+$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
 ...
 INFO - Logging into /home/lab-user/labs/lab5_oval/content/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
 INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 INFO - Script comment.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
-ERROR - Script supercompliant.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp found issue:                                                                                                        
+ERROR - Script supercompliant.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp found issue:
 ERROR - Rule evaluation resulted in fail, instead of expected pass during initial stage
 ERROR - The initial scan failed for rule 'xccdf_org.ssgproject.content_rule_accounts_tmout'.
 INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
