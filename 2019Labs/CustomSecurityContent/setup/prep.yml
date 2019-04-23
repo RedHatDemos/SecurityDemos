@@ -53,8 +53,8 @@
   - name: Build a podman image for testing
 # TODO: The RHEL image doesn't work with subscription, even if the host is subscribed.
 # TODO: Building as the root user, as port binding requires root privileges, may not be the case for RHEL8 GA podman.
-# shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /home/lab-user/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-rhel .'
-    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-fedora .'
+    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-rhel   .'
+#   shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-fedora .'
     args:
       chdir: "{{ CACC_LOCAL }}/Dockerfiles"
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
