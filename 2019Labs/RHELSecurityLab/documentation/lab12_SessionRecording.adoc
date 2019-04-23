@@ -32,10 +32,6 @@ All of the exercises in this lab are run on the _sessionrecording.example.com_ h
 
     [q@sessionrecording]$
 
- * The *jbond* user prompt on _sessionrecording.example.com_
-
-    [jbond@sessionrecording]$
-
 The recommended way to access the _sessionrecording.example.com_ is to open up the terminal and SSH into the
 _sessionrecording.example.com_ host from the bastion workstation system as shown below.  If done
 correctly, you should not need to enter a password.
@@ -73,15 +69,7 @@ If you are familiar with vim then install it as well (OPTIONAL):
 
     [root@sessionrecording]# passwd q
 
-Use *PsS8rdKf* as a password.
-
-    [root@sessionrecording]# useradd jbond
-
-    [root@sessionrecording]# usermod -aG wheel jbond
-
-    [root@sessionrecording]# passwd jbond
-
-Use *ek3pwpTG* as a password.
+Use *session1* as a password.
 
 == Lab 12.2.1 Setup recording
 
@@ -121,9 +109,10 @@ image:images/session_recording_tlog_conf_1.png[]
 Then, press "Save" button.
 
 Now you should configure users to be recorded using of ot the following three methods, using:
- * cockpit
- * sssd config in terminal
- * changing user's login shell
+
+* cockpit
+* sssd config in terminal
+* changing user's login shell
 
 ===== Lab 12.2.2 Setup recorded users using cockpit-session-recording (PREFERRED method)
 
@@ -166,7 +155,7 @@ to
 
 Press *Esc* to exit edit mode and then type *:wq!* and press *Enter* to save file and exit from vi. After this do
 
-    [root@essionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
+    [root@sessionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
 
 You should see this as an output:
 
@@ -177,7 +166,7 @@ You should see this as an output:
 
 Then you need to restart SSSD, so that changes will take place:
 
-    [root@essionrecording]# systemctl restart sssd
+    [root@sessionrecording]# systemctl restart sssd
     
 Jump directly to "Using Session Player in Cockpit" section, skip the other user configuration methods.
 
@@ -185,15 +174,15 @@ Jump directly to "Using Session Player in Cockpit" section, skip the other user 
 
 In this case user will have to change user's shell to tlog-rec-session, so that their working shell will be the one that is listed in the tlog-rec-session.conf configuration file ( /bin/bash by default ).
 
-    [root@essionrecording]# yum install util-linux-user
+    [root@sessionrecording]# yum install util-linux-user
 
 Then
 
-    [root@essionrecording]# chsh jbond
+    [root@sessionrecording]# chsh q
 
 And input */usr/bin/tlog-rec-session*
 
-    Changing shell for jbond.
+    Changing shell for q.
     New shell [/bin/bash]
     /usr/bin/tlog-rec-session
     chsh: Warning: "/usr/bin/tlog-rec-session" is not listed in /etc/shells.
@@ -205,7 +194,7 @@ This will make user to be recorded on next login.
 
 Now you can check that the config
 
-  [root@essionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
+  [root@sessionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
 
 You should see this as an output:
 
@@ -222,7 +211,7 @@ Login using SSH to the same machine:
 
     [root@sessionrecording]# ssh q@sessionrecording.example.com
 
-Use *ek3pwpTG* as password.
+Use *session1* as password.
 
 You will see notice message in terminal right after login
 
@@ -250,7 +239,7 @@ image:images/session_recording_nginx_broken.png[]
 
 In next step we need to restart nginx server:
 
-    [q@sessionrecording]$ sudo vi /etc/nginx/nginx.conf
+    [q@sessionrecording]$ sudo systemctl restart nginx
 
 Restart will fail, because of the error we created in nginx.conf file, but this time this is exactly what we need as an example.
 You will see error message like this:
@@ -314,7 +303,7 @@ Searching for appearance of a specific keyword in the session. It shows closest 
 
 image:images/session_recording_search_button.png[]
 
-In session player action of restarting cockpit should look something like this:
+In session player action of restarting nginx should look something like this:
 
 image:images/session_recording_cockpit_nginx_restart.png[]
 
@@ -327,3 +316,6 @@ Clicking on time of event in logs panel will trigger player to jump to same time
 You can try searching for "nginx.conf" to find time when the config was edited. Closest time will be shown and by clicking on it player will rewind position to it.
 
 image:images/session_recording_search.png[]
+
+<<top>>
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab12_SessionRecording.adoc[ Lab 12: Session Recording ]
