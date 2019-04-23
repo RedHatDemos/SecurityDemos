@@ -33,7 +33,7 @@ When you install the SCAP components in Satellite as defined in the link:https:/
 . On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 . Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
 +
-image:images/scapcontents.png[200,200]
+image:images/scapcontents.png[300,300]
 +
 NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*.
 . Take a look at the SCAP policies by navigating to *Hosts → Policies*.
