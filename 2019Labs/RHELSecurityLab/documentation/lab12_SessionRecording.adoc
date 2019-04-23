@@ -13,16 +13,16 @@ The goal of this lab is to use Session Recording to help log and audit user's te
 Terminal Session Recording project aims to log user's terminal sessions for purposes of audit, security and monitoring. It provides interface in Cockpit to analyze these recordings and correlate them with system logs. This provides a whole picture of activity which was done.
 
 === tlog
-Tlog records terminal activity by putting itself in the middle between user and terminal. In our lab tlog stores data in systemd journal.
+Tlog records terminal activity by putting itself in the middle between user and terminal. Systemd Journal is used as a storage for recorded sessions.
 
 === cockpit-session-recording
-Our package for Cockpit uses provided APIs to access journal and get session from it. It provides JavaScript based player which produces text output, but with a videoplayer-like controls.
+Our package for Cockpit uses provided APIs to access Journal and get sessions from it. It provides JavaScript based player which produces text output, but with a videoplayer-like controls.
 
 == Lab 12.1 exercise steps
 
 == Lab 12.1.1 Accessing the Session Recording Lab System
 
-All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will switch between various users to imitate different behaviours. Each set of the exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
+All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will have user *q*. Their terminal sessions will be recorded. Each set of the exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
 
  * The *root* user prompt on _sessionrecording.example.com_
 
@@ -31,10 +31,6 @@ All of the exercises in this lab are run on the _sessionrecording.example.com_ h
  * The *q* user prompt on _sessionrecording.example.com_
 
     [q@sessionrecording]$
-
- * The *jbond* user prompt on _sessionrecording.example.com_
-
-    [jbond@sessionrecording]$
 
 The recommended way to access the _sessionrecording.example.com_ is to open up the terminal and SSH into the
 _sessionrecording.example.com_ host from the bastion workstation system as shown below.  If done
@@ -73,15 +69,7 @@ If you are familiar with vim then install it as well (OPTIONAL):
 
     [root@sessionrecording]# passwd q
 
-Use *PsS8rdKf* as a password.
-
-    [root@sessionrecording]# useradd jbond
-
-    [root@sessionrecording]# usermod -aG wheel jbond
-
-    [root@sessionrecording]# passwd jbond
-
-Use *ek3pwpTG* as a password.
+Use *session1* as a password.
 
 == Lab 12.2.1 Setup recording
 
@@ -121,9 +109,10 @@ image:images/session_recording_tlog_conf_1.png[]
 Then, press "Save" button.
 
 Now you should configure users to be recorded using of ot the following three methods, using:
- * cockpit
- * sssd config in terminal
- * changing user's login shell
+
+* cockpit
+* sssd config in terminal
+* changing user's login shell
 
 ===== Lab 12.2.2 Setup recorded users using cockpit-session-recording (PREFERRED method)
 
@@ -135,7 +124,7 @@ image:images/session_recording_sssd.png[]
 
 Do not forget to click *Save* button.
 
-That is it. Now the "q" user will be recorded.
+That is it. Now the "*q*" user will be recorded.
 Jump directly to "Using Session Player in Cockpit" section, skip the other user configuration methods.
 
 ==== Lab 12.3.1 Setup recorded users using terminal (OPTIONAL method)
@@ -166,7 +155,7 @@ to
 
 Press *Esc* to exit edit mode and then type *:wq!* and press *Enter* to save file and exit from vi. After this do
 
-    [root@essionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
+    [root@sessionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
 
 You should see this as an output:
 
@@ -177,23 +166,23 @@ You should see this as an output:
 
 Then you need to restart SSSD, so that changes will take place:
 
-    [root@essionrecording]# systemctl restart sssd
+    [root@sessionrecording]# systemctl restart sssd
     
-Jump directly to "Using Session Player in Cockpit" section, skip the other user configuration methods.
+Jump directly to "Creating sessions recorded by tlog" section, skip the other user configuration methods.
 
 ==== Lab 12.4.1 One more way to enable recording by changing user's shell and avoiding usage of SSSD (OPTIONAL method)
 
 In this case user will have to change user's shell to tlog-rec-session, so that their working shell will be the one that is listed in the tlog-rec-session.conf configuration file ( /bin/bash by default ).
 
-    [root@essionrecording]# yum install util-linux-user
+    [root@sessionrecording]# yum install util-linux-user
 
 Then
 
-    [root@essionrecording]# chsh jbond
+    [root@sessionrecording]# chsh q
 
 And input */usr/bin/tlog-rec-session*
 
-    Changing shell for jbond.
+    Changing shell for q.
     New shell [/bin/bash]
     /usr/bin/tlog-rec-session
     chsh: Warning: "/usr/bin/tlog-rec-session" is not listed in /etc/shells.
@@ -201,20 +190,7 @@ And input */usr/bin/tlog-rec-session*
 
 This will make user to be recorded on next login.
 
-=== Lab 12.5.1 Review tlog Configuration
-
-Now you can check that the config
-
-  [root@essionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
-
-You should see this as an output:
-
-    [session_recording]
-    scope=some
-    users=q
-    groups=
-
-== Lab 12.6.1 Creating sessions recorded by tlog
+== Lab 12.5.1 Creating sessions recorded by tlog
 
 Let's create some activity by one of the recorded users. Then you will be able to play it back in Cockpit.
 
@@ -222,7 +198,7 @@ Login using SSH to the same machine:
 
     [root@sessionrecording]# ssh q@sessionrecording.example.com
 
-Use *ek3pwpTG* as password.
+Use *session1* as password.
 
 You will see notice message in terminal right after login
 
@@ -250,7 +226,7 @@ image:images/session_recording_nginx_broken.png[]
 
 In next step we need to restart nginx server:
 
-    [q@sessionrecording]$ sudo vi /etc/nginx/nginx.conf
+    [q@sessionrecording]$ sudo systemctl restart nginx
 
 Restart will fail, because of the error we created in nginx.conf file, but this time this is exactly what we need as an example.
 You will see error message like this:
@@ -259,7 +235,7 @@ image:images/session_recording_nginx_error.png[]
 
 Now, it is time to login to cockpit and use cockpit-session-recording to investigate why web server does not work.
 
-=== Lab 12.7.1 Using Session Player from Cockpit UI
+=== Lab 12.6.1 Using Session Player from Cockpit UI
 
 Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
@@ -314,7 +290,7 @@ Searching for appearance of a specific keyword in the session. It shows closest 
 
 image:images/session_recording_search_button.png[]
 
-In session player action of restarting cockpit should look something like this:
+In session player action of restarting nginx should look something like this:
 
 image:images/session_recording_cockpit_nginx_restart.png[]
 
@@ -327,3 +303,6 @@ Clicking on time of event in logs panel will trigger player to jump to same time
 You can try searching for "nginx.conf" to find time when the config was edited. Closest time will be shown and by clicking on it player will rewind position to it.
 
 image:images/session_recording_search.png[]
+
+<<top>>
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab12_SessionRecording.adoc[ Lab 12: Session Recording ]
