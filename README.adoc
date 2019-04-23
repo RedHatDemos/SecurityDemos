@@ -2,8 +2,9 @@
 
 2019 LABS:
 
-* link:2019Labs/ProactiveSecurityCompliance/documentation/README.adoc[Implementing Proactive Security and Compliance Automation]
+* link:2019Labs/ProactiveSecurityCompliance/documentation/README.adoc[Implementing Proactive Security and Compliance Automation and DevSecOps]
 * link:2019Labs/RHELSecurityLab/documentation/README.adoc[Defend Yourself Using Built-in RHEL Security Technologies]
+* link:2019Labs/CustomSecurityContent/documentation/README.adoc[Creating Customized Security Policy Content to Automate Security Compliance]
 
 
 2018 LABS:
