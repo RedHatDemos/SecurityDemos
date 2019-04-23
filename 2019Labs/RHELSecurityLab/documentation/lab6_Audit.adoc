@@ -1,8 +1,8 @@
-= Lab 6: Auditing on Red Hat Enterprise Linux 7.5
+= Lab 6: Auditing on Red Hat Enterprise Linux 8.0
 
 == Goal of Lab
 
-The following lab is an introduction to the auditing capabilities of Red Hat Enterprise Linux. The exercises below are done on a system installed with Red Hat Enterprise Linux 7.5, and may require modification to work in other lab environments.
+The following lab is an introduction to the auditing capabilities of Red Hat Enterprise Linux. The exercises below are done on a system installed with Red Hat Enterprise Linux 8.0, and may require modification to work in other lab environments.
 
 == Introduction
 The Linux Audit system provides a way to track security-relevant information on your system. Based on pre-configured rules, Audit generates log entries to record as much information about the events that are happening on your system as possible. This information is crucial for mission-critical environments to determine the violator of the security policy and the actions they performed. Audit does not provide additional security to your system; rather, it can be used to discover violations of security policies used on your system. These violations can further be prevented by additional security measures such as SELinux.
@@ -83,7 +83,7 @@ can be modified using any text editor; but in this lab we will use the `sed` com
 ----
 [lab-user@workstation-GUID ~]$ ssh root@audit.example.com
 ----
-. While logged into the_audit.example.com_ system as *root*, run the following commands to edit the
+. While logged into the _audit.example.com_ system as *root*, run the following commands to edit the
 _auditd.conf_ file:
 
 	[root@audit ~]# sed -e 's/^flush.*/flush = INCREMENTAL_ASYNC/' -i /etc/audit/auditd.conf
@@ -291,7 +291,9 @@ user and run the following commands:
 	[auditlab@audit ~]$ ping -c 1 127.0.0.1
 
 	[auditlab@audit ~]$ vi ~/project_tps_report.txt
-	(Type :q! to exit vi)
+	(Type: i to go into insert mode)
+	(Type: This is my TPS report)
+	(Type :wq! to save the file and exit vi)
 
 	[auditlab@audit ~]$ chmod 0664 ~/project_tps_report.txt
 
