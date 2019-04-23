@@ -36,71 +36,50 @@ When you install the SCAP components in Satellite as defined in the link:https:/
 image:images/scapcontents.png[300,300]
 +
 NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*.
+
+
+=== Lab 2.2 Viewing the already created SCAP compliance policies
+Now that you have SCAP content defined in Satellite, let's take a look at the SCAP compliance policies that have been already created for you.
+
 . Take a look at the SCAP policies by navigating to *Hosts → Policies*.
 +
-image:images/lab2-scappolicies.png[1000,1000]
+image:images/scappolicies.png[300,300]
+. Notice that there are 3 Compliance Policies that were already created for you: *RHEL7_Custom*, *RHEL7_PCI*, and *RHEL7_Standard*.
 +
-NOTE: A custom policy named *rhel7-custom* has already been uploaded for you. The *rhel7-custom* policy simply checks to see if the AIDE package is installed.
+image:images/policies.png[1500,1500]
 
-
-=== Lab 2.2 Creating a SCAP compliance policy for a host
-Now that you have SCAP content defined in Satellite, you can create a SCAP compliance policy for a host.
-
-. Click on *New Compliance Policy* at the top right.
 +
-image:images/lab2-newcompliancepolicy.png[1000,1000]
+NOTE: A custom policy named *RHEL7_Custom* has already been uploaded for you. The *RHEL7_Custom* policy simply checks to see if the AIDE package is installed.
+
+. Let's take a look at the *RHEL7_PCI* compliance policy that was already created for you. Click on *Edit* in the *Actions* drop down list.
++
+image:images/editcompliancepolicy.png[1500,1500]
 +
 NOTE: A SCAP compliance policy takes one of the security profiles that are available in your SCAP content and applies it to a group of systems(as defined in your Hostgroups). You can also overwrite your SCAP content with a tailoring file. You will learn more about how to use tailoring files later in this lab exercise.
 
-. In the *Create Policy* tab,
-* For the compliance policy *Name*, type *RHEL7_Standard*.
-* For the *Description*, type *RHEL7 Standard System Compliance Policy*.
-* Click *Next*.
-+
-image:images/lab2-createpolicy.png[1000,1000]
+. Click on and review the various tabs including *General*, *SCAP Content*, *Schedule*, *Locations*, *Organizations*, and *Host Groups*.
 
 . In the *SCAP Content* tab,
-* For *SCAP Content*, choose the *Red Hat rhel7 default content*.
-* For *XCCDF Profile*, choose *Standard System Security Profile*.
-* Do not select anything for *Tailoring File*. We will add a tailoring file later and skip this step for now.
+* Notice that nothing is selected for *Tailoring File*. We will add a tailoring file later.
 +
-NOTE: Satellite 6.3 introduced the Tailoring Files feature. Tailoring Files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. It is important to note that the Tailoring files feature does not provide the abililty to create tailoring files. A Tailoring file can be created using SCAP Workbench(which is included in Red Hat Enterprise Linux). Once you have a Tailoring file you can upload it and assign the Tailoring File to a policy.
-
-* Click *Next*.
+image:images/tailoring.png[1000,1000]
 +
-image:images/lab2-scapcontent.png[1000,1000]
+NOTE: Red Hat Satellite 6.3 introduced the Tailoring Files feature. Tailoring Files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. It is important to note that the Tailoring files feature does not provide the abililty to create tailoring files. A Tailoring file can be created using SCAP Workbench(which is included in Red Hat Enterprise Linux). Once you have a Tailoring file you can upload it and assign the Tailoring File to a policy.
 
 . In the *Schedule* tab,
-* For *Period*, choose *Weekly*.
-* For *Weekday* choose *Thursday*.
-+
-NOTE: Whatever is defined here as a schedule is executed as a cron job on the client. For Period, if you selected Custom, you can define normal cron syntax to define when the schedule is going to run.
-* Click *Next*.
-+
-image:images/lab2-schedule.png[1000,1000]
+* Whatever is defined here as a schedule is executed as a cron job on the client. For Period, if you selected Custom, you can define normal cron syntax to define when the schedule is going to run.
 
-. In the *Locations* tab,
-* Click the *Default Location* to move it over to the *Selected items* box. This will associate the compliance policy with this Location.
-* Click *Next*.
-+
-image:images/lab2-locations.png[1000,1000]
-
-. In the *Organizations* tab,
-* (If not already on the right) Click the *Default Organization* to move it over to the *Selected items* box. This will associate the compliance policy with this *Organization*.
-* Click *Next*.
-+
-image:images/lab2-organizations.png[1000,1000]
 
 . In the *Hostgroups* tab,
-* Click *base_with_puppet_75* to move it over to the *Selected items* box. The compliance policy will apply to this selected *Hostgroup*.
+* The compliance policy will apply to your selected *Hostgroup(s)*.
 +
 NOTE: Hostgroups are groupings of systems that are built and configured the same. You can use Hostgroups as a means to roll out certain compliance policies to certain subsets of your systems.
 
-. Click *Submit*.
+. Click *Cancel* when you are done looking through the tabs.
 +
-image:images/lab2-hostgroups.png[1000,1000]
+image:images/cancel.png[800,800]
 
-=== Lab 2.3 Executing the compliance policy scan on a host
+=== Lab 2.3 Executing the compliance policy scan hosts from Red Hat Ansible Tower
 . Now that you have defined SCAP compliance policies in Satellite,
 you can go ahead and run a SCAP compliance policy scan on a host. Navigate to *Hosts -> All hosts*
 +
