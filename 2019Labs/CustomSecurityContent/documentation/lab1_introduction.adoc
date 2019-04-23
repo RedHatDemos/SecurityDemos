@@ -1,4 +1,4 @@
-= Say Hello to ComplianceAsCode
+= Lab exercise 1: Say Hello to ComplianceAsCode
 
 :experimental:
 :imagesdir: images
@@ -328,4 +328,4 @@ Now is the time to rebuild the guide using `./build_product rhel8` command and r
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2_openscap.adoc[Lab 2 - OpenSCAP Basics and Command Line Scanning]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2_openscap.adoc[Lab exercise 2 - Automated Security Scanning Using ComplianceAsCode]

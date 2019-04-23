@@ -1,4 +1,4 @@
-== Lab 0: Setup steps
+== Lab exercise 0: Setup steps
 
 === Accessing your dedicated lab environment using your provided GUID
 
@@ -35,4 +35,4 @@ lab-user:x:1000:1000:Lab User:/home/lab-user:/bin/bash
 - Ellipsis may be used to indicate that there are output lines, but as they are of no interest, they are omitted.
 
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab 1: Introduction]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
