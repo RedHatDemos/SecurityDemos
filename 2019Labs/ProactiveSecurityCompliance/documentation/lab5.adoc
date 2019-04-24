@@ -303,6 +303,7 @@ NOTE: Reading the description for the vulnerability shows that the sysctl variab
 [root@ic1 ~]# echo "net.ipv4.tcp_challenge_ack_limit = 2147483647" >> /etc/sysctl.conf
 [root@ic1 ~]# sysctl -p
 net.ipv4.tcp_challenge_ack_limit = 100
+vm.legacy_va_layout = 0
 net.ipv4.tcp_challenge_ack_limit = 2147483647
 ----
 
@@ -310,10 +311,13 @@ net.ipv4.tcp_challenge_ack_limit = 2147483647
 +
 [source]
 ----
-# insights-client
-Starting to collect Insights data
-Uploading Insights data, this may take a few minutes
-Upload completed successfully!
+[root@ic1 ~]# insights-client
+WARNING: Excluding data from files
+Starting to collect Insights data for ic1.summit.example.com
+WARNING: Skipping command /bin/netstat -neopa
+WARNING: Skipping file /etc/hosts
+Uploading Insights data.
+Successfully uploaded report from 4a61da2a-1f76-470f-8dae-358f3c15b7ca to account 6057187.
 ----
 
 . Wait until this step completes before moving to the next step.
