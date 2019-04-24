@@ -31,7 +31,7 @@ Moreover, it generates separated Playbooks for every rule.
 == What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
-* We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
+* We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
@@ -48,7 +48,7 @@ $ cd /home/lab-user/labs/lab4_ansible/content
 +
 in the terminal.
 
-* For best experience, open one more terminal window and also navigate to the project root in that one as well.
+* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
 * Open the file explorer and also navigate to the project root.
 * Finally, open the Firefox browser.
 
