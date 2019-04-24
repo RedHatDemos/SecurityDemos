@@ -100,7 +100,23 @@ image:images/towerhosts.png[600,600]
 
 . *Copy* the *foreman_lifecycle_environment_rhel7_qa* group name. We will be using this group name in the next step when we launch our Red Hat Ansible Tower job to execute the SCAP compliance policy scan on the hosts that are part of this group.
 
-. Next, navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*. 
+. Next, navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*.
++
+image:images/linuxscapscan.png[1500,1500]
+
+. Now, for *HOSTS*, paste or type in the *foreman_lifecycle_environment_rhel7_qa* group name from before and choose the *RHEL7_PCI* profile from the *CHOOSE PROFILE* drop down list. Click *NEXT*.
++
+image:images/linuxscapscan-profilehost.png[1000,1000]
+
+. Take a look at the preview of the Red Hat Ansible Tower job we are about to run. In this job, we are going to run the RHEL7_PCI SCAP compliance policy scan from the Red Hat Satellite server (sat64.example.com) on the hosts in the foreman_lifecycle_environment_rhel7_qa group. The RHEL7_PCI SCAP compliance policy is one of the SCAP compliance policies that is already configured in our Red Hat Satellite server.
+Click *LAUNCH* to launch this scan. This scan will take about 3 minutes to complete.
++
+image:images/linuxscapscan-preview.png[1000,1000]
+
+. As we wait for this scan to complete, let's take a deeper look at what's happening in the background by looking at the log shown in Red Hat Ansible Tower. First, notice that we're running a playbook named scap-scan.yml. You can find this playbook in github  https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/ProactiveSecurityCompliance/Ansible/patching-playbooks/scap-scan.yml[here^]. When we look at the Red Hat Ansible Tower log, we can see tasks being executed from the ansible-role-scap-client role. Here, we're making sure that the SCAP client is installed and configured on the hosts.
+
++
+NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to a desired state, further runs of the same playbook will result in 0 changes. As a result, this playbook will check to make sure the client is installed and configured, but if there are no changes to be made, Ansible will skip over the task and verify that the systems are in the correct state.
 
 === Lab 2.4 View the OpenSCAP scan results report in Satellite 6
 . Now let's view the SCAP scan results reports for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
