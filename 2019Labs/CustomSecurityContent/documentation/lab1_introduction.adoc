@@ -29,7 +29,7 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 == What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
-* We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
+* We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
@@ -47,7 +47,7 @@ $ cd /home/lab-user/labs/lab1_introduction/content
 +
 in the terminal.
 
-* For best experience, open one more terminal window and also navigate to the project root in that one as well.
+* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
 * Open the file explorer and also navigate to the project root.
 * Finally, open the Firefox browser.
 
@@ -70,7 +70,7 @@ To build the content, take the following steps:
 It is possible to build content also other for other products.
 A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, eg. Firefox, Java, and so on.
 +
-For reference, you can run `./build_product <product>` to build only the content you are interested in.
+In general, you can run `./build_product <product>` to build only the content for a product you are interested in.
 The `<product>` is lowercase form of the product, so you would run `./build_product rhel8` to build content for RHEL 8, `./build_product fedora` to build Fedora content, and so on.
 
 .Build of security content for RHEL 8 has finished in the terminal window.
@@ -80,7 +80,7 @@ We will explore the built content in following sections.
 
 == Examine the guides
 
-What people love about the project are HTML guides that are a great resource for those interested in of what rules a policy consists of.
+What people appreciate about the project are HTML guides that are a great resource for those interested in of what rules a policy consists of.
 The HTML guides are located in the `build/guides` subdirectory.
 In the `ComplianceAsCode` project, policies are referred to as security profiles.
 Guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the guide for the RHEL 8 OSPP profile has the `ssg-rhel8-guide-ospp.html` form.
@@ -151,9 +151,10 @@ When in doubt, you can just use the `gedit` editor:
 $ gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 ----
 +
-Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix and fixing it is obvious - simply remove the spurious occurence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
+Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix and fixing it is obvious - simply remove the spurious occurrence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
+The `Save` button is in the top right part of the window.
 
-. It is time to recomplie the content, so we can check out whether our fix worked.
+. It is time to recompile the content, so we can check out whether our fix worked.
 Make sure that you are at the project’s directory root, and run the following command in the terminal:
 +
 ----
@@ -232,7 +233,7 @@ In this YAML file, we have the `options:` key, that defines mappings between the
 As the `default: 600` line indicates, if we don’t specify the timeout duration in a profile, it is going to be 600 seconds, i.e. 10 minutes.
 Time to review the HTML guide - when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp.html`, we can clearly see the rule's timeout indeed equals to 600.
 
-The set of values a variable can have is discrete - all values have to be defined in the variable file.
+NOTE: The set of values a variable can have is discrete - all values have to be defined in the variable file.
 Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile only after adding `20_min: 1200` to the `options:` key of the variable definition.
 
 
@@ -246,20 +247,15 @@ A rule needs more than a description to be of any use - you need to be able:
 For these reasons, a rule should contain a check, and possibly also remediations.
 The additional content is placed in subdirectories of the rule, so let's explore our `accounts_tmout` rule.
 
-We can browse it if we open the directory in the `nautilus` file browser.
-Run
+We can browse the associated content if we list the contents of the directory.
+Run in the terminal:
 
 ----
-$ nautilus linux_os/guide/system/accounts/accounts-session/accounts_tmout
+$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
+$ ls
+ansible  bash  oval  rule.yml
 ----
 
-in the terminal - a file explorer window opened at that location should pop up.
-There is a remediation in form of a bash script located in the `bash` subdirectory of the rule directory.
-Double-click the `bash` directory to enter it - there is a `shared.sh` file there.
-
-The `shared` basename has a special meaning - it indicates that the remediation can be used with any product.
-If the remediation had been named `rhel8.sh`, it would have meant that is a RHEL8-only remediation, i.e. one not to be used to remediate RHEL7 systems.
-This name-coding is relevant for all types of additional content.
 
 We will describe currently-supported associated content types:
 
@@ -273,20 +269,29 @@ Writing checks in this language is considered cumbersome, but the ComplianceAsCo
 We won't go into details of OVAL now, we just point out that the OVAL content can be found in a rule's subdirectory `oval`.
 The OVAL checks will be described in the Exercise 5.
 // The browser cannot handle the xml file because there are namespaces that are not bound, so we advise to open it with a text editor
-If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file, that we recommend to open with a text editor.
+If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file.
 The `shared.xml` file features a shorthand OVAL, which is much simpler than the full-bodied OVAL that you would have to write otherwise.
 
 
 === Remediations
 
-Remediations can be found under `bash`, `ansible`, `anaconda` or `puppet` directories.
 If the system is not set up according to the rule description, the scanner reports that the rule has failed, and the system administrator is supposed to fix it.
 The `ComplianceAsCode` content provides users with snippets that they can run and that can make the system compliant again, or that can provide administrators with hint of what they need to do.
 
 Remediations are expected to work on the clean installation configuration - if the administrator made some changes in the meantime, remediations are not guaranteed to work.
 
-The majority of rules present in profiles comes with a Bash remediation, and still a large number of them has Ansible remediations, which is preferred over Puppet.
+The majority of rules present in profiles comes with a Bash remediation, and still a large number of them has Ansible remediations.
 Anaconda remediations are used to guide the user during system installation.
+We also support remediations in a form of a Puppet script.
+
+Remediations can be found under `bash`, `ansible`, `anaconda` or `puppet` directories.
+
+For example, in rule `accounts_tmout` there is a remediation in form of a Bash script located in the `bash` subdirectory of the rule directory.
+Run `ls bash` to display contents of the `bash` directory - there is a `shared.sh` file there.
+The `shared` basename has a special meaning - it indicates that the remediation can be used with any product.
+If the remediation had been named `rhel8.sh`, it would have meant that is a RHEL8-only remediation, i.e. one not to be used to remediate RHEL7 systems.
+This name-coding is relevant for all types of additional content.
+
 
 Unlike checks, you can review remediations in the guide - there is a `(show)` clickable to do so.
 Therefore, bring back the browser window with the guide opened, and see for yourself.
