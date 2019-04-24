@@ -275,7 +275,7 @@ The variable has multiple options, see the options list:
 ----
 options:
     30_min: 1800
-    10_min: 300
+    10_min: 600
     15_min: 900
     5_min: 300
     default: 600
