@@ -79,61 +79,28 @@ NOTE: Hostgroups are groupings of systems that are built and configured the same
 +
 image:images/cancel.png[800,800]
 
-=== Lab 2.3 Executing the compliance policy scan hosts from Red Hat Ansible Tower
-. Now that you have defined SCAP compliance policies in Satellite,
-you can go ahead and run a SCAP compliance policy scan on a host. Navigate to *Hosts -> All hosts*
-+
-image:images/lab2-hostsallhosts.png[1000,1000]
+=== Lab 2.3 Executing security compliance policy scan on hosts at scale from Red Hat Ansible Tower
 
-. Next, put a check mark next to *lab2-vm1.example.com*. This is a RHEL 7.5 pre-provisioned host that you will execute a SCAP compliance policy scan on. Then, at the top right, navigate to *Select Action -> Schedule Remote Job*.
-+
-image:images/lab2-scheduleremotejob.png[1000,1000]
+. Now that you have defined SCAP compliance policies in Red Hat Satellite,
+let's run a SCAP compliance policy scan on a few hosts using Red Hat Ansible Tower.
 
-. Now, for *Job Category* , select *Puppet*. Then, notice that for *Job template*, *Puppet Run Once - SSH Default* is automatically selected for you. Leave everything else as is. Press *Submit*.
-+
-image:images/lab2-puppet.png[1000,10000]
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
+. Navigate to *Inventories* and click on the *Satellite Inventory*.
 +
-NOTE: This is the equivalent to running puppet agent --test. This will ensure that we have the latest updates to the compliance policies. This will also ensure that we set up all the SCAP components, which are delivered via the puppet agent.  Satellite provides a puppet module and a means for the puppet module to set up all the SCAP components. Normally, in production, the puppet agent run automatically occurs within 30 mins so the puppet agent --test is not necessary. We are just doing this in the lab to avoid waiting 30 mins for the puppet agent to run.
+image:images/towerinventory.png[400,400]
 
-. Wait for the process to complete with a green circle as you see here:
+. Next click on *GROUPS* and click on the *foreman_lifecycle_environment_rhel7_qa* group. We will be running our SCAP compliance policy scan on the hosts in this group.
 +
-image:images/lab2-successcircle1.png[1000,1000]
+image:images/towergroups.png[400,400]
 
-. Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*. Navigate to *Hosts -> All hosts* again.
+. Now let's take a look at the hosts that are part of the foreman_lifecycle_environment_rhel7_qa group. Click on *HOSTS*. Notice that there are two hosts that are part of the foreman_lifecycle_environment_rhel7_qa group: *rhel7-vm1.hosts.example.com* and *rhel7-vm2.hosts.example.com*.
 +
-image:images/lab2-hostsallhosts.png[1000,1000]
+image:images/towerhosts.png[600,600]
 
-. Put a check next to *lab2-vm1.example.com*. At the top right, select *Action -> Schedule Remote Job*.
-+
-image:images/lab2-scheduleremotejob.png[1000,1000]
+. *Copy* the *foreman_lifecycle_environment_rhel7_qa* group name. We will be using this group name in the next step when we launch our Red Hat Ansible Tower job to execute the SCAP compliance policy scan on the hosts that are part of this group.
 
-. This time under *Job Category*, select *OpenSCAP*. Then, notice that for *Job template*, *Run OpenSCAP scans* is automatically selected for you. Leave everything else as is. Press *Submit*.
-+
-image:images/lab2-openscapscan.png[1000,1000]
-
-. Notice that 5 SCAP compliance policy scans are being executed on this *lab2-vm1.example.com* host. This host is part of the *base_with_puppet_75* Hostgroup and all 5 SCAP compliance policies have been configured to include the *base_with_puppet_75* Hostgroup. As a result, all 5 SCAP compliance policies are being executed on this host.
-+
-image:images/lab2-jobinvocation.png[1000,1000]
-
-. Click on the *Hosts* tab. Click on *lab2-vm1.example.com* in the *Hosts* column.
-+
-image:images/lab2-hostsuccess.png[1000,1000]
-
- . Here you can see the command line output from the running process.  Scroll down and follow the output until you see *Exit status: 0*. This output can be useful for debugging purposes in the event the job fails.
-Notice in this output that the results of the SCAP compliance scans are uploaded and the reports of the scans will be automatically created for you.
-+
-image:images/lab2-exitstatus0.png[1000,1000]
-
-. At the bottom right of the command line output window click the *Scroll to top* link.
-
-. When scrolled back to the top, click on the *Back to Job* button at the top right.
-+
-image:images/lab2-backtojob.png[1000,1000]
-
-. You are now back at the *Overview* page for the OpenSCAP scan that you ran on the *lab2-vm1.example.com* host. Notice again that the OpenSCAP scan on this host completed with 100% Success.
-+
-image:images/lab2-successcircle.png[1000,1000]
+. Next, navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*. 
 
 === Lab 2.4 View the OpenSCAP scan results report in Satellite 6
 . Now let's view the SCAP scan results reports for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
