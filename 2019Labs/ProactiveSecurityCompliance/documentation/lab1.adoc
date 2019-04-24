@@ -14,7 +14,7 @@ Red Hat Ansible Automation is automation software powered by Red Hat Ansible Eng
 
 Red Hat CloudForms is an infrastructure management platform that allows IT departments to control users’ self-service abilities to provision, manage, and ensure compliance across virtual machines and private clouds. In this lab exercise, you will use Red Hat CloudForms to launch Red Hat Ansible Automation security compliance scan and remediation automation tasks from a custom button.
 
-=== Lab 2.1 Introduction to SCAP content provided in Red Hat Satellite
+=== Lab 1.1 Introduction to SCAP content provided in Red Hat Satellite
 Before creating a SCAP compliance policy for a host, you need SCAP content.
 
 SCAP content is a datastream format containing the configuration and security baseline against which hosts are checked. Checklists are described in the extensible checklist configuration description format (XCCDF) and vulnerabilities in the open vulnerability and assessment language (OVAL). Checklist items, also known as rules express the desired configuration of a system item. For example, you may specify that no one can log in to a host over SSH using the root user account. Rules can be grouped into one or more profiles, allowing multiple profiles to share a rule. SCAP content consists of both rules and profiles.
@@ -38,7 +38,7 @@ image:images/scapcontents.png[300,300]
 NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*.
 
 
-=== Lab 2.2 Viewing the already created SCAP compliance policies
+=== Lab 1.2 Viewing the already created SCAP compliance policies
 Now that you have SCAP content defined in Satellite, let's take a look at the SCAP compliance policies that have been already created for you.
 
 . Take a look at the SCAP policies by navigating to *Hosts → Policies*.
@@ -79,7 +79,7 @@ NOTE: Hostgroups are groupings of systems that are built and configured the same
 +
 image:images/cancel.png[800,800]
 
-=== Lab 2.3 Executing security compliance policy scan on hosts at scale from Red Hat Ansible Tower
+=== Lab 1.3 Executing security compliance policy scan on hosts at scale from Red Hat Ansible Tower
 
 . Now that you have defined SCAP compliance policies in Red Hat Satellite,
 let's run a SCAP compliance policy scan on a few hosts using Red Hat Ansible Tower.
@@ -118,7 +118,7 @@ image:images/linuxscapscan-preview.png[1000,1000]
 +
 NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to a desired state, further runs of the same playbook will result in 0 changes. As a result, this playbook will check to make sure the client is installed and configured, but if there are no changes to be made, Ansible will skip over the task and verify that the systems are in the correct state.
 
-=== Lab 2.4 View the OpenSCAP scan results report in Satellite 6
+=== Lab 1.4 View the OpenSCAP scan results report in Satellite 6
 . Now let's view the SCAP scan results reports for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
 +
 image:images/lab2-hostreports.png[600,600]
@@ -160,7 +160,7 @@ image:images/lab2-downloadxml1.png[1000,1000]
 +
 image:images/lab2-compliancefailedfilter1.png[1000,1000]
 
-=== Lab 2.5 Fixing a specific OpenSCAP scan failure
+=== Lab 1.5 Fixing a specific OpenSCAP scan failure
 . Now let's fix the OpenSCAP scan failure from the *rhel7-custom* compliance policy. Remember that this compliance check failed since the AIDE package is not installed on the *lab2-vm1.example.com* host. Let's fix this OpenSCAP scan failure by installing the AIDE package on the *lab2-vm1.example.com* host.
 
 . If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID. Use the password r3dh4t1!*
@@ -193,7 +193,7 @@ image:images/lab2-compliancefailedfilter1.png[1000,1000]
 
 . We will re-execute the *rhel7-custom* compliance policy scan on the *lab2-vm1.example.com* host later in this lab exercise to confirm that the *rhel7-custom* policy scan now passes.
 
-=== Lab 2.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
+=== Lab 1.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
 
 As mentioned earlier, Satellite 6.3 introduced the tailoring files feature. Tailoring files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. In other words, tailoring files allow you to add or ignore rules in the default policy content file. So if the rule is enabled in both the default content and the tailoring file, then the rule is enabled. If the rule is disabled in the tailoring file, but enabled in the default content, then the rule is disabled. If the rule is disabled in the default policy content file but enabled in the tailoring file , then the rule is enabled.
 
