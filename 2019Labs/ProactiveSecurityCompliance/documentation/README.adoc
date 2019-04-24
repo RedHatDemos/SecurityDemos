@@ -38,9 +38,9 @@ Other than that, feel free to do the lab exercises in whatever order you'd like.
 == Table of Contents
 * link:lab0.adoc[Lab 0: Setup steps]
 * link:lab1.adoc[Lab 1: Automated Scanning and Remediation of Host Systems for Vulnerabilities and Security Compliance]
-* link:lab2-wt.adoc[Lab 2: Enforcing Automated Compliance with Security Policies]
+* link:lab2.adoc[Lab 2: Enforcing Automated Compliance with Security Policies]
 * link:lab3.adoc[Lab 3: Automated Patching of Host Systems]
-* link:lab4-wt.adoc[Lab 4: Additional Automated Security Hardening of Host Systems]
+* link:lab4.adoc[Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems]
 * link:lab5.adoc[Lab 5: Proactive Security and Automated Risk Management at Scale with Predictive Analytics]
 * link:lab6.adoc[Lab 6: Automated Security Hardening of a Hacked Web Application]
 * link:lab7.adoc[Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
