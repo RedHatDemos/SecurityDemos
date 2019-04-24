@@ -112,86 +112,53 @@ image:images/linuxscapscan-profilehost.png[1000,1000]
 Click *LAUNCH* to launch this scan. This scan will take about 3 minutes to complete.
 +
 image:images/linuxscapscan-preview.png[1000,1000]
-
-. As we wait for this scan to complete, let's take a deeper look at what's happening in the background by looking at the log shown in Red Hat Ansible Tower. First, notice that we're running a playbook named scap-scan.yml. You can find this playbook in github  https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/ProactiveSecurityCompliance/Ansible/patching-playbooks/scap-scan.yml[here^]. When we look at the Red Hat Ansible Tower log, we can see tasks being executed from the ansible-role-scap-client role. Here, we're making sure that the SCAP client is installed and configured on the hosts.
-
 +
-NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to a desired state, further runs of the same playbook will result in 0 changes. As a result, this playbook will check to make sure the client is installed and configured, but if there are no changes to be made, Ansible will skip over the task and verify that the systems are in the correct state.
+NOTE: Ansible Tower jobs can be scheduled to run on a periodic basis as well.
 
-=== Lab 1.4 View the OpenSCAP scan results report in Satellite 6
-. Now let's view the SCAP scan results reports for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
+. As we wait for this scan to complete, let's take a deeper look at what's happening in the background by looking at the log shown in Red Hat Ansible Tower. First, notice that we're running a playbook named *scap-scan.yml*. You can find this playbook in github  https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/ProactiveSecurityCompliance/Ansible/patching-playbooks/scap-scan.yml[here^]. When we look at the Red Hat Ansible Tower log, we first see tasks being executed from the *ansible-role-scap-client* role. Here, we're making sure that the SCAP client is installed and configured on the hosts.
 +
-image:images/lab2-hostreports.png[600,600]
+image:images/towerjobrun.png[1500,1500]
++
+NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to a desired state, further runs of the same playbook will result in 0 changes. As a result, this playbook will check to make sure the client is installed and configured, but if there are no changes to be made, Ansible will skip over the task and verify that the systems are in the correct state. Also note that when we're accessing the host systems, we're using credentials that are encrypted and securely stored in Red Hat Ansible Tower.
 
-. Notice that there are 5 Compliance reports, each one corresponding to a SCAP policy (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
-+
-image:images/lab2-5scapreportsresults.png[1000,1000]
+Next, notice that the *Run SCAP Scan* task is being run. This will run the specified SCAP compliance policy (RHEL7_PCI) scan on the hosts. Once the scan completes, the SCAP compliance report will be automatically uploaded to the Red Hat Satellite server.
 
-. Look for the report that has *RHEL7_Standard* in the Policy column and click the link in the *Reported At* column which should say how long ago the report was created.
+Finally, once you see *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
+
+image:images/runscan-playrecap.png[1000,1000]
+
+=== Lab 1.4 Viewing the OpenSCAP scan reports in Red Hat Satellite
+
+. Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished running on our specified hosts from the previous lab exercise, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+
+. Navigate to *Hosts → Reports*.
 +
-image:images/lab2-reportedat.png[1000,1000]
+image:images/hostreports.png[300,300]
+
+. Notice that there are two RHEL_PCI compliance policy reports, one for the *rhel7-vm1-hosts.example.com* host and another for the *rhel7-vm2.hosts.example.com* host. Notice that they both have 38 compliance rules that passed and 53 that failed and 3 other, which are compliance rules that were not checked. Let's look at one of the reports in more detail. We'll look at the compliance report for the *rhel7-vm2.hosts.example.com* host. Click the link in the *Reported At* column for the *rhel7-vm2.hosts.example.com* host. The *Reported At* column says how long ago the report was created.
++
+image:images/scanresults-satellite.png[2000,2000]
 
 . In this report, you can see the security rules that have passed and failed at a high level which allows you to see the security posture of a system based upon an assigned audit policy.
 +
-image:images/lab2-viewreport.png[1000,1000]
+image:images/viewreport1.png[1000,1000]
+image:images/viewreport2.png[1000,1000]
 
-. To see the detailed full report, click on *View full report* at the top right.
+. To see the detailed full report, click on *View full report* at the top right. Notice that you can optionally *Download the XML* of the report in bzip or HTML format as well.
 +
-image:images/lab2-viewfullreport.png[1000,1000]
+image:images/viewfullreport.png[1000,1000]
 
 . Glance through this full report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for more detailed information.
 +
 image:images/lab2-moredetails1.png[500,500]
 
-. Click on the Browsers *Back* button to return to the compliance report.
-. Click the *Back* button in the top right menu (see below) to get back to the page with the full list of Compliance Reports.
-+
-image:images/lab2-backarrowreport.png[1000,1000]
 
-. Look for the report that has *rhel7-custom* in the Policy column and click the link in the *Reported At* column which should say how long ago the report was created.
-+
-image:images/lab2-reports-rhel7-custom.png[1000,1000]
 
-. Notice that the *rhel7-custom* compliance policy only checks whether or not the AIDE package is installed. You can see from the report for the *rhel7-custom* policy that this compliance check failed. Take a look at the top right buttons in the Satellite UI. You can optionally *Download the XML* of the report in bzip or HTML format. Click on the *Back* button when done.
-+
-image:images/lab2-downloadxml1.png[1000,1000]
+=== (LEFT OFF) Lab 1.5 Remediating SCAP compliance policy scan failures with Red Hat Ansible Tower
 
-. Notice the search bar at the top of the Satellite UI. Here, you can filter the compliance reports search with various filters. In the search field enter *compliance_failed > 10* then click *Search*. This will find any compliance report that have greater than 10 compliance failures.
-+
-image:images/lab2-compliancefailedfilter1.png[1000,1000]
-
-=== Lab 1.5 Fixing a specific OpenSCAP scan failure
-. Now let's fix the OpenSCAP scan failure from the *rhel7-custom* compliance policy. Remember that this compliance check failed since the AIDE package is not installed on the *lab2-vm1.example.com* host. Let's fix this OpenSCAP scan failure by installing the AIDE package on the *lab2-vm1.example.com* host.
-
-. If not already there, log into to the bastion host from your desktop system *replacing GUID with your lab's GUID. Use the password r3dh4t1!*
-+
-[source]
-----
-[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
-----
-
-. Log into the *lab2-vm1.example.com* host.
-+
-[source]
-----
-[root@workstation-GUID ~]# ssh lab2-vm1.example.com
-----
-
-. Confirm that the AIDE package is not installed.
-+
-[source]
-----
-# rpm -qa aide
-----
-
-. Now let's install the AIDE package onto the *lab2-vm1.example.com* host.
-+
-[source]
-----
-# yum -y install aide
-----
-
-. We will re-execute the *rhel7-custom* compliance policy scan on the *lab2-vm1.example.com* host later in this lab exercise to confirm that the *rhel7-custom* policy scan now passes.
+. Now let's fix the OpenSCAP scan failures from the *RHEL7_PCI* compliance policy on the hosts from the previous lab exercise.
 
 === Lab 1.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
 
