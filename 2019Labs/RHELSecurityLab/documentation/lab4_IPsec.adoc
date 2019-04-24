@@ -155,7 +155,7 @@ for the required packets for IPsec:
 
 	[root@ipsec ~]# firewall-cmd --add-service=ipsec --permanent
 
-	[root@ipsec ~]# firewall-cmd reload
+	[root@ipsec ~]# firewall-cmd --reload
 
 == Lab 4.3 Transfer the Configuration to a Second System
 
@@ -206,7 +206,7 @@ certificate onto ipsec2.example.com via the workstation VM:
 
 [root@ipsec2 ~]# firewall-cmd --add-service=ipsec --permanent
 
-[root@ipsec2 ~]# firewall-cmd reload
+[root@ipsec2 ~]# firewall-cmd --reload
 ----
 
 Now you have configured the first two nodes. For each additional node, all you
