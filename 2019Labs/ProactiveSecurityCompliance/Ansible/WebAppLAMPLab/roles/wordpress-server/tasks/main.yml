@@ -1,11 +1,17 @@
 ---
-- set_fact:
+- name: WEB hostname
+  set_fact:
     webhostname: "{{ ansible_nodename }}"
   when: my_purpose == 'web'
 
-- set_fact:
+- name: DB Hostname
+  set_fact:
     dbhostname: "{{ ansible_default_ipv4.address }}"
   when: my_purpose == 'db'
+
+- name: Debugging hostname vars
+  debug: 
+    msg: "WEB is {{ webhostname }} and DB is {{ dbhostname }}"
 
 - include: install/db-main.yml
   when: my_purpose == 'db' and main_purpose != 'reset'
