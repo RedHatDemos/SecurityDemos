@@ -2,12 +2,12 @@
 - name: WEB hostname
   set_fact:
     webhostname: "{{ hostvars['lampweb']['ansible_facts']['ansible_nodename'] }}"
-  when: my_purpose == 'web'
+  when: webhostname is undefined
 
 - name: DB Hostname
   set_fact:
     dbhostname: "{{ hostvars['lampdb']['ansible_facts']['ansible_nodename'] }}"
-  when: my_purpose == 'db'
+  when: dbhostname is undefined
 
 - name: Debugging hostname vars
   debug: 
