@@ -396,7 +396,7 @@ IMPORTANT: If you see the following error: `error : Unkown exception HTTPSConnec
 image:images/lab5.3-insights-issues.png[1000,1000]
 
 +
-. Navigate to *Projects* from the main menu at the top and find the *Insights Planner Sync* project, and click the Cloud with a download arrow under ACTIONS to the right of the project name.
+. Navigate to *Projects* from the main menu on the left and find the *Insights Planner Sync* project, and click the Cloud with a download arrow.
 +
 image:images/lab5.3-insights-sync.png[1000,1000]
 . The sync should complete successfully, and now you're ready to remediate with Tower.
