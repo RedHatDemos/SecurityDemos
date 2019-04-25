@@ -356,7 +356,7 @@ image:images/lab5.3-playbookplan.png[1000,1000]
 . As you can see, there are two ways to solve this issue, one is by updating the kernel, and the other one is apply the needed changes to the */etc/sysctl.conf* file, add the mitigation configuration, and reload the kernel configuration.
 Insights gives us the opportunity to choose the resolution that we want. In this lab we want to prevent unplanned downtime for this issue, so select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the *Save* button.
 +
-image:images/llab5.3-setlimit.png[1000,1000]
+image:images/lab5.3-setlimit.png[1000,1000]
 
 . Once the plan is saved, the planner screen is shown where you can see the newly created plan, as well as the issues it resolves and the systems affected.
 +
