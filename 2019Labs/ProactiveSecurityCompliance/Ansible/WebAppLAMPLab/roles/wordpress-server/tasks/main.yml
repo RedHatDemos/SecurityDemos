@@ -1,9 +1,11 @@
 ---
 - set_fact:
-    webhostname: "{{ hostvars['lampweb']['ansible_facts']['ansible_nodename'] | default('192.168.0.100') }}"
+    webhostname: "{{ ansible_nodename | default('192.168.0.100') }}"
+  when: my_purpose == 'web'
 
 - set_fact:
-    dbhostname: "{{ hostvars['lampdb']['ansible_facts']['ansible_default_ipv4']['address'] | default('192.168.0.101') }}"
+    dbhostname: "{{ ansible_default_ipv4.address }}"
+  when: my_purpose == 'db'
 
 - include: install/db-main.yml
   when: my_purpose == 'db' and main_purpose != 'reset'
