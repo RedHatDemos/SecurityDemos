@@ -124,9 +124,10 @@ NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to 
 
 Next, notice that the *Run SCAP Scan* task is being run. This will run the specified SCAP compliance policy (RHEL7_PCI) scan on the hosts. Once the scan completes, the SCAP compliance report will be automatically uploaded to the Red Hat Satellite server.
 
-Finally, once you see *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
+Finally, once you see *Successful* for *STATUS* with a date and time listed for *STARTED* and *ENDED* , in addition to seeing zero failures in the *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
 
 image:images/runscan-playrecap.png[1000,1000]
+image:images/pciscanfinish.png[1000,1000]
 
 === Lab 1.4 Viewing the OpenSCAP scan reports in Red Hat Satellite
 
@@ -156,7 +157,7 @@ image:images/viewfullreport.png[1000,1000]
 image:images/lab2-moredetails1.png[1500,1500]
 
 
-=== (LEFT OFF) Lab 1.5 Remediating SCAP compliance policy scan failures on hosts at scale with Red Hat Ansible Tower
+=== Lab 1.5 Remediating SCAP compliance policy scan failures on hosts at scale with Red Hat Ansible Tower
 
 . Now let's fix the OpenSCAP scan failures from the *RHEL7_PCI* compliance policy on the hosts from the previous lab exercise.
 
@@ -181,9 +182,46 @@ NOTE: This job will take about 10 minutes to complete.
 +
 NOTE: In addition to the RHEL 7 PCI-DSS Ansible role, many other Red Hat provided and supported Ansible roles can be found in Ansible galaxy such as HIPAA, DISA STIG, and more. Take a look https://galaxy.ansible.com/RedHatOfficial[here^] for more details.
 
-. Finally, once you see *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
+. Finally, once you see *Successful* for *STATUS* with a date and time listed for *STARTED* and *ENDED* , in addition to seeing zero failures in the *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
++
+image:images/pciremediatefinish.png[1000,1000]
 
-=== Lab 1.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
+=== Lab 1.5 Re-executing the security compliance policy scan on hosts at scale from Red Hat Ansible Tower after Remediations & Viewing the resulting scan reports from Red Hat Satellite
+
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*.
++
+image:images/templates.png[100,100]
+image:images/linuxscapscan.png[1500,1500]
+
+. For *HOSTS*, copy/paste or type in the *foreman_lifecycle_environment_rhel7_qa* group name and choose the *RHEL7_PCI* profile from the *CHOOSE PROFILE* drop down list. Click *NEXT*.
++
+image:images/linuxscapscan-profilehost.png[1000,1000]
+
+. Take a look at the preview of the Red Hat Ansible Tower job we are about to run. Now that our remediations are in place on our hosts from the previous lab exercise, we are going to re-run the RHEL7_PCI SCAP compliance policy scan from the Red Hat Satellite server (sat64.example.com) on the hosts in the foreman_lifecycle_environment_rhel7_qa group.
+Click *LAUNCH* to launch this scan. *This scan will take about 4 minutes to complete*.
++
+image:images/linuxscapscan-preview.png[1000,1000]
+
+. Finally, once you see *Successful* for *STATUS* with a date and time listed for *STARTED* and *ENDED* , in addition to seeing zero failures in the *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
+
+image:images/runscan-playrecap.png[1000,1000]
+image:images/pciscanfinish.png[1000,1000]
+
+. Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished re-running on our specified hosts, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+
+. Navigate to *Hosts → Reports*.
++
+image:images/hostreports.png[300,300]
+
+. Looking at the list of compliance reports in Red Hat Satellite, notice now that we now have 68 passes and 23 failures now for our hosts that we ran the RHEL7_PCI compliance scan on (*rhel7-vm1-hosts.example.com* and *rhel7-vm2.hosts.example.com*). By using the Red Hat provided and supported *redhatofficial.rhel7_pci_dss* Ansible role , we increased the number of passed rule checks and decreased the number of failures by automatically making all the necessary configuration changes to remediate these hosts that this role is applied to for compliance to the RHEL 7 PCI-DSS compliance profile.
++
+image:images/scanpostremediation.png[1000,1000]
+
+=== (LEFT OFF) Lab 1.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
 
 As mentioned earlier, Satellite 6.3 introduced the tailoring files feature. Tailoring files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. In other words, tailoring files allow you to add or ignore rules in the default policy content file. So if the rule is enabled in both the default content and the tailoring file, then the rule is enabled. If the rule is disabled in the tailoring file, but enabled in the default content, then the rule is disabled. If the rule is disabled in the default policy content file but enabled in the tailoring file , then the rule is enabled.
 
