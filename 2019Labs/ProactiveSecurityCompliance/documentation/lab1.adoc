@@ -217,7 +217,7 @@ image:images/pciscanfinish.png[1000,1000]
 +
 image:images/hostreports.png[300,300]
 
-. Looking at the list of compliance reports in Red Hat Satellite, notice now that we now have 68 passes and 23 failures now for our hosts that we ran the RHEL7_PCI compliance scan on (*rhel7-vm1-hosts.example.com* and *rhel7-vm2.hosts.example.com*). By using the Red Hat provided and supported *redhatofficial.rhel7_pci_dss* Ansible role , we increased the number of passed rule checks and decreased the number of failures by automatically making all the necessary configuration changes to remediate these hosts that this role is applied to for compliance to the RHEL 7 PCI-DSS compliance profile.
+. Looking at the list of compliance reports in Red Hat Satellite, notice now that we now have 68 passes and 23 failures now for our hosts that we ran the RHEL7_PCI compliance scan on (*rhel7-vm1-hosts.example.com* and *rhel7-vm2.hosts.example.com*). By using the Red Hat provided and supported *redhatofficial.rhel7_pci_dss* Ansible role , we increased the number of passed rule checks by 30 since we automatically made all the necessary configuration changes to remediate these hosts that this role is applied to for compliance to the RHEL 7 PCI-DSS compliance profile.
 +
 image:images/scanpostremediation.png[1000,1000]
 
