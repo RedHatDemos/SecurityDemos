@@ -479,11 +479,10 @@ image:images/Lab5.4-Template-to-FixAll.png[1000,1000]
 
 . For the name of the template use: *GUID* Insights Fix ALL. Job Type should be *Run*. For Inventory select *Insights Inventory*. For Project select *Insights Planner Sync* (you may need to navigate to a different page to find this project). In the Playbook Dropdown Choose a playbook that you created with your unique GUID in the Insights Planner, i.e. *GUID Insights Fix ALL*. For credential select *Insights Fix All Machine Credentials*. The final task is to click *Enable Privilege Escalation* under OPTIONS, and click *Save*.
 +
-image:images/Lab5.4-FixALLTemplate.png[1000,1000]
+image:images/Lab5.4-FixAllTemplate.png[1000,1000]
 
 . Scroll down to where the Templates are listed below the New Template fields, or click Templates from the Main Tower menu. Find the template you created and click the *rocket* for the template you created.
 +
-image:images/Lab5.4-FixAllTemplate.png[1000,1000]
 
 . This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in the DETAILS pane, and the ansible-playbook run output on the right.
 +
