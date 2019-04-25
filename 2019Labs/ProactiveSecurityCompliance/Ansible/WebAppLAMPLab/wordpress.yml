@@ -3,8 +3,7 @@
   hosts: all
 
   vars:
-#    - webhostname: "{{ hostvars['lampweb']['ansible_facts']['ansible_hostname'].rhpds.opentlc.com }}"
-    - webhostname: "{{ hostvars['lampweb']['ansible_facts']['ansible_nodename'] }}"
+    - webhostname: "{{ hostvars['lampweb']['ansible_nodename'] }}"
     - dbhostname: "{{ hostvars['lampdb']['ansible_facts']['eth0']['ipv4']['address'] }}"
 
 
