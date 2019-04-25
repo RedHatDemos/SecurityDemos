@@ -22,15 +22,15 @@ Our package for Cockpit uses provided APIs to access Journal and get sessions fr
 
 == Lab 12.1.1 Accessing the Session Recording Lab System
 
-All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will have user *recuser*. Their terminal sessions will be recorded. Each set of the exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
+All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will have user *q*. Their terminal sessions will be recorded. Each set of the exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
 
  * The *root* user prompt on _sessionrecording.example.com_
 
     [root@sessionrecording]#
 
- * The *recuser* user prompt on _sessionrecording.example.com_
+ * The *q* user prompt on _sessionrecording.example.com_
 
-    [recuser@sessionrecording]$
+    [q@sessionrecording]$
 
 The recommended way to access the _sessionrecording.example.com_ is to open up the terminal and SSH into the
 _sessionrecording.example.com_ host from the bastion workstation system as shown below.  If done
@@ -61,11 +61,11 @@ If you are familiar with vim then install it as well (OPTIONAL):
 
 == Lab 12.1.5 Add users
 
-    [root@sessionrecording]# useradd recuser
+    [root@sessionrecording]# useradd q
 
-    [root@sessionrecording]# usermod -aG wheel recuser
+    [root@sessionrecording]# usermod -aG wheel q
 
-    [root@sessionrecording]# passwd recuser
+    [root@sessionrecording]# passwd q
 
 Use *session1* as a password.
 
@@ -116,13 +116,13 @@ Now you should configure users to be recorded using of ot the following three me
 
 While staying on the same page as in previous chapter do the following.
 
-Choose "*Some*" option in Scope dropdown and put "*recuser*" in the Users input. Then click the *Save* button.
+Choose "*Some*" option in Scope dropdown and put "*q*" in the Users input. Then click the *Save* button.
 
 image:images/session_recording_sssd.png[]
 
 Do not forget to click the *Save* button.
 
-That is it. Now the "*recuser*" user will be recorded.
+That is it. Now the "*q*" user will be recorded.
 Jump directly to "Lab 12.15.1 Creating sessions recorded by tlog" section, skip the other user configuration methods.
 
 ==== Lab 12.3.1 Setup recorded users using terminal (OPTIONAL method)
@@ -149,7 +149,7 @@ Then change the line
 
 to
 
-    users=recuser
+    users=q
 
 Press *Esc* to exit edit mode and then type *:wq!* and press *Enter* to save file and exit from vi. After this do
 
@@ -159,7 +159,7 @@ You should see this as an output:
 
     [session_recording]
     scope=some
-    users=recuser
+    users=q
     groups=
 
 Then you need to restart SSSD, so that changes will take place:
@@ -176,11 +176,11 @@ In this case user will have to change user's shell to tlog-rec-session, so that 
 
 Then
 
-    [root@sessionrecording]# chsh recuser
+    [root@sessionrecording]# chsh q
 
 And input */usr/bin/tlog-rec-session*
 
-    Changing shell for recuser.
+    Changing shell for q.
     New shell [/bin/bash]
     /usr/bin/tlog-rec-session
     chsh: Warning: "/usr/bin/tlog-rec-session" is not listed in /etc/shells.
@@ -194,7 +194,7 @@ Let's create some activity by one of the recorded users. Then you will be able t
 
 Login using SSH to the same machine:
 
-    [root@sessionrecording]# ssh recuser@sessionrecording.example.com
+    [root@sessionrecording]# ssh q@sessionrecording.example.com
 
 Use *session1* as password.
 
@@ -204,7 +204,7 @@ image:images/session_recording_notice.png[]
 
 Remember, that this session is being recorded. You could try to resize session window to see it's supported later.
 
-    [recuser@sessionrecording]$ mc
+    [q@sessionrecording]$ mc
 
 You will see mc launched
 
@@ -214,7 +214,7 @@ Try to use by navigating to various directories. Then press F10 or click on Quit
 
 Let's imitate a real world scenario by breaking the nginx web server configuration file, so that later we will be able to investigate the problem using session recording in cockpit.
 
-    [recuser@sessionrecording]$ sudo vi /etc/nginx/nginx.conf
+    [q@sessionrecording]$ sudo vi /etc/nginx/nginx.conf
 
 image:images/session_recording_nginx.png[]
 
@@ -224,7 +224,7 @@ image:images/session_recording_nginx_broken.png[]
 
 Next we will restart the nginx server:
 
-    [recuser@sessionrecording]$ sudo systemctl restart nginx
+    [q@sessionrecording]$ sudo systemctl restart nginx
 
 The restart will fail due to the error we created in nginx.conf file, this will be used as an example.
 You will see an error message like this:
