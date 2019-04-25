@@ -1,10 +1,4 @@
 ---
-- set_fact:
-    webhostname: "{{ hostvars['lampweb']['ansible_facts']['ansible_nodename'] }}"
-
-- set_fact:
-    dbhostname: "{{ hostvars['lampdb']['ansible_facts']['ansible_default_ipv4']['address'] }}"
-
 - name: copy our wordpress template sql dumps
   template:
     src: templates/wordpress.sql
