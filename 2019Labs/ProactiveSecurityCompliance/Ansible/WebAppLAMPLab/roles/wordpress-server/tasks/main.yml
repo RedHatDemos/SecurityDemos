@@ -1,12 +1,12 @@
 ---
-- name: WEB hostname
+- name: "WEB hostname is {{ hostvars['lampweb']['ansible_facts']['ansible_hostname'].rhpds.opentlc.com }}"
   set_fact:
-    webhostname: "{{ hostvars['lampweb']['ansible_facts']['ansible_nodename'] }}"
+    webhostname: "{{ hostvars['lampweb']['ansible_facts']['ansible_hostname'].rhpds.opentlc.com }}"
   when: webhostname is undefined
 
-- name: DB Hostname
+- name: "DB Hostname is {{ hostvars['lampdb']['ansible_facts']['ansible_hostname'].rhpds.opentlc.com }}"
   set_fact:
-    dbhostname: "{{ hostvars['lampdb']['ansible_facts']['ansible_nodename'] }}"
+    dbhostname: "{{ hostvars['lampdb']['ansible_facts']['ansible_hostname'].rhpds.opentlc.com }}"
   when: dbhostname is undefined
 
 - name: Debugging hostname vars
