@@ -98,22 +98,23 @@ image:images/towergroups.png[400,400]
 +
 image:images/towerhosts.png[600,600]
 
-. *Copy* the *foreman_lifecycle_environment_rhel7_qa* group name. We will be using this group name in the next step when we launch our Red Hat Ansible Tower job to execute the SCAP compliance policy scan on the hosts that are part of this group.
-
-. Next, navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*.
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*.
 +
+image:images/templates.png[100,100]
 image:images/linuxscapscan.png[1500,1500]
 
-. Now, for *HOSTS*, paste or type in the *foreman_lifecycle_environment_rhel7_qa* group name from before and choose the *RHEL7_PCI* profile from the *CHOOSE PROFILE* drop down list. Click *NEXT*.
+. Now, for *HOSTS*, copy/paste or type in the *foreman_lifecycle_environment_rhel7_qa* group name and choose the *RHEL7_PCI* profile from the *CHOOSE PROFILE* drop down list. Click *NEXT*.
 +
 image:images/linuxscapscan-profilehost.png[1000,1000]
 
 . Take a look at the preview of the Red Hat Ansible Tower job we are about to run. In this job, we are going to run the RHEL7_PCI SCAP compliance policy scan from the Red Hat Satellite server (sat64.example.com) on the hosts in the foreman_lifecycle_environment_rhel7_qa group. The RHEL7_PCI SCAP compliance policy is one of the SCAP compliance policies that is already configured in our Red Hat Satellite server.
-Click *LAUNCH* to launch this scan. This scan will take about 3 minutes to complete.
+Click *LAUNCH* to launch this scan. *This scan will take about 4 minutes to complete*.
 +
 image:images/linuxscapscan-preview.png[1000,1000]
 +
 NOTE: Ansible Tower jobs can be scheduled to run on a periodic basis as well.
++
+NOTE: While we're only running this job on the 2 hosts that are part of the foreman_lifecycle_environment_rhel7_qa group, Red Hat Ansible Tower provides the scalability to run this job across thousands of hosts.
 
 . As we wait for this scan to complete, let's take a deeper look at what's happening in the background by looking at the log shown in Red Hat Ansible Tower. First, notice that we're running a playbook named *scap-scan.yml*. You can find this playbook in github  https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/ProactiveSecurityCompliance/Ansible/patching-playbooks/scap-scan.yml[here^]. When we look at the Red Hat Ansible Tower log, we first see tasks being executed from the *ansible-role-scap-client* role. Here, we're making sure that the SCAP client is installed and configured on the hosts.
 +
@@ -152,13 +153,35 @@ image:images/viewfullreport.png[1000,1000]
 
 . Glance through this full report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for more detailed information.
 +
-image:images/lab2-moredetails1.png[500,500]
+image:images/lab2-moredetails1.png[1500,1500]
 
 
-
-=== (LEFT OFF) Lab 1.5 Remediating SCAP compliance policy scan failures with Red Hat Ansible Tower
+=== (LEFT OFF) Lab 1.5 Remediating SCAP compliance policy scan failures on hosts at scale with Red Hat Ansible Tower
 
 . Now let's fix the OpenSCAP scan failures from the *RHEL7_PCI* compliance policy on the hosts from the previous lab exercise.
+
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Remediate PCI*. This job template will launch the Red Hat provided Ansible role that will do all the configuration changes and remediations to the host(s) that this role is applied to so that the host(s) are compliant the the RHEL 7 PCI-DSS compliance profile.
++
+image:images/templates.png[100,100]
+image:images/linuxremediate.png[1500,1500]
+
+. Next, for *WHICH HOSTS?*, copy/paste or type in the *foreman_lifecycle_environment_rhel7_qa* group name again so we can do the RHEL 7 PCI-DSS remediations to the hosts that are in the foreman_lifecycle_environment_rhel7_qa group. Click *NEXT*.
++
+image:images/remediate-whichhosts.png[1000,1000]
+
+. Take a look at the job preview and click *LAUNCH*.
++
+image:images/launch.png[1000,1000]
++
+NOTE: This job will take about 10 minutes to complete.
+
+. As we wait for the prior remediation step to complete, let's take a deeper look at what's happening in the background by looking at the log shown in Red Hat Ansible Tower. First, notice that the playbook that is being run is the *pci.yml* playbook. This playbook can be found https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/ProactiveSecurityCompliance/Ansible/patching-playbooks/pci.yml[here^]. Notice that this playbook calls the *redhatofficial.rhel7_pci_dss* role, which is why all of the tasks that you see in the log are coming from that *redhatofficial.rhel7_pci_dss* role. This Ansible role is a Red Hat provided and supported Ansible role that you can get from Ansible galaxy https://galaxy.ansible.com/RedHatOfficial/rhel7_pci_dss[here^]. You can also automatically generate this role from the SCAP workbench GUI tool that's provided in Red Hat Enterprise Linux. More details on SCAP workbench can be found https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sect-using_scap_workbench[here^]. This Red Hat provided *redhatofficial.rhel7_pci_dss* Ansible role will automatically make all the necessary configuration changes to remediate the host(s) that this role is applied to for compliance to the RHEL 7 PCI-DSS compliance profile.
++
+NOTE: In addition to the RHEL 7 PCI-DSS Ansible role, many other Red Hat provided and supported Ansible roles can be found in Ansible galaxy such as HIPAA, DISA STIG, and more. Take a look https://galaxy.ansible.com/RedHatOfficial[here^] for more details.
+
+. Finally, once you see *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
 
 === Lab 1.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
 
