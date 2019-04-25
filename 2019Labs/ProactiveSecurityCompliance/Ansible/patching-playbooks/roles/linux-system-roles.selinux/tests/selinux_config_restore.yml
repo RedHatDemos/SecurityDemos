@@ -1,0 +1,25 @@
+- name: Restore original /etc/selinux/config
+  copy:
+    remote_src: true
+    dest: /etc/selinux/config
+    src: /etc/selinux/config.test_selinux_save
+  register: restoreconf
+
+- name: Remove /etc/selinux/config backup
+  file:
+    path: /etc/selinux/config.test_selinux_save
+    state: absent
+
+- name: reboot
+  block:
+    - name: restart managed host
+      shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+      async: 1
+      poll: 0
+      ignore_errors: true
+
+    - name: wait for managed host to come back
+      wait_for_connection:
+        delay: 10
+        timeout: 120
+  when: restoreconf is changed

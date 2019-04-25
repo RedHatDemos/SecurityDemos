@@ -1,0 +1,10 @@
+sat_server: 'satellite.example.es'
+sat_user: admin
+sat_password: 'veryverycomplex'
+capsule_server: "{{ sat_server }}"
+capsule_port: '9090'
+policy_name: 'all'
+policy_scan: "{{ policy_name }}"
+crontab_hour: 2
+crontab_minute: 0
+crontab_weekdays: 0

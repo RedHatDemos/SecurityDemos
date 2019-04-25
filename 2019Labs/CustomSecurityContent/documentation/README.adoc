@@ -1,4 +1,4 @@
-= Automate Your Security by Creating Custom Security Content
+= Creating Customized Security Policy Content to Automate Security Compliance
 
 
 == [.underline]#Presenters/Lab Developers#:
@@ -58,9 +58,9 @@ Each lab exercise is independent from each other, so feel free to do the lab exe
 
 
 == Table of Contents
-* link:lab0_setup.adoc[Lab excercise 0: Setup steps]
-* link:lab1_introduction.adoc[Lab excercise 1: Introduction to the ComplianceAsCode framework]
-* link:lab2_openscap.adoc[Lab excercise 2: Scanning Using OpenSCAP and Scap Workbench]
-* link:lab3_profiles.adoc[Lab excercise 3: Create your own security policy from scratch]
-* link:lab4_ansible.adoc[Lab excercise 4: Ansible-only content]
-* link:lab5_oval.adoc[Lab excercise 5: The Art of OVAL Checks]
+* link:lab0_setup.adoc[Lab exercise 0: Setup steps]
+* link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
+* link:lab2_openscap.adoc[Lab exercise 2: Automated Security Scanning Using ComplianceAsCode]
+* link:lab3_profiles.adoc[Lab exercise 3: Create your own security policy from scratch]
+* link:lab4_ansible.adoc[Lab exercise 4: Using Ansible in ComplianceAsCode]
+* link:lab5_oval.adoc[Lab exercise 5: The Art of OVAL Checks]

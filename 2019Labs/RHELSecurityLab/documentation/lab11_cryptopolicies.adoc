@@ -12,11 +12,11 @@ In the past each application required individual configuration changes to be per
 With the introduction of crypto policies we have made it much simpler to set a default policy for all applications. The policy can still be overriden at the application level if exceptions are desired.
 
 == Pre-Configured Items
-The machines have been pre-configured to use a Root CA certificate and individual X509 certificates for the Servers used for testing. The Root CA certificate has been imported in the system trust store so all applications can trust the test certificates used by the servers in the excercise.
+The machines have been pre-configured to use a Root CA certificate and individual X509 certificates for the Servers used for testing. The Root CA certificate has been imported in the system trust store so all applications can trust the test certificates used by the servers in the exercise.
 
 == Lab 11.1 Connecting to a Web Server using TLS 1.1
 TLS 1.1 is disabled in RHEL 8 default security policy, so connecting to a TLS 1.1 server will result in an error by client tools.
-In this excercise we will explore how to enable the system to connect to legacy systems that are limited to use only TLS 1.0 or TLS 1.1 protocols.
+In this exercise we will explore how to enable the system to connect to legacy systems that are limited to use only TLS 1.0 or TLS 1.1 protocols.
 We will use two tools, `curl` and `wget`, as they use two different cryptographic libraries (openSSL and GnuTLS respectively), to show the crypto policy setting work across application and libraries.
 
 . If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
@@ -69,7 +69,7 @@ WORKS!
 
 == Lab 11.2 Connecting to a Web Server using a SHA-1 Certificate
 SHA-1 Certificates are still enabled in RHEL 8 default security policy for compatibility reasons.
-In this excercise we will explore how to change the system to the FUTURE policy which disables SHA-1 signatures.
+In this exercise we will explore how to change the system to the FUTURE policy which disables SHA-1 signatures.
 We will use two tools, curl and wget, as they use two different cryptographic libraries (openSSL and GnuTLS respectively), to show the crypto policy setting work across application and libraries.
 
 . If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*

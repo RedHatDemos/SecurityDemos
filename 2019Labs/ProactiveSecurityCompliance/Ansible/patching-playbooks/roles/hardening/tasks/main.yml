@@ -1,0 +1,8 @@
+---
+- name: password complexity
+  include_tasks: password_complexity.yml
+  when: harden_password_complexity
+
+- name: selinux
+  include_tasks: selinux.yml
+  when: harden_selinux

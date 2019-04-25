@@ -1,0 +1,4293 @@
+-   name: Test for existence /etc/group
+    stat:
+        path: /etc/group
+    register: file_exists
+
+-   name: Ensure owner 0 on /etc/group
+    file:
+        path: /etc/group
+        owner: 0
+    when:
+    - file_exists.stat.exists and True
+    - '{{ file_owner_etc_group | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_owner_etc_group
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26933-2
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /etc/passwd
+    stat:
+        path: /etc/passwd
+    register: file_exists
+
+-   name: Ensure group owner 0 on /etc/passwd
+    file:
+        path: /etc/passwd
+        group: 0
+    when:
+    - file_exists.stat.exists and True
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ file_groupowner_etc_passwd | bool }}'
+    tags:
+    - file_groupowner_etc_passwd
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26639-5
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /etc/passwd
+    stat:
+        path: /etc/passwd
+    register: file_exists
+
+-   name: Ensure permission 0644 on /etc/passwd
+    file:
+        path: /etc/passwd
+        mode: 420
+    when:
+    - file_exists.stat.exists and True
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ file_permissions_etc_passwd | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_permissions_etc_passwd
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26887-0
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /etc/passwd
+    stat:
+        path: /etc/passwd
+    register: file_exists
+
+-   name: Ensure owner 0 on /etc/passwd
+    file:
+        path: /etc/passwd
+        owner: 0
+    when:
+    - file_exists.stat.exists and True
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ file_owner_etc_passwd | bool }}'
+    tags:
+    - file_owner_etc_passwd
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27138-7
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /etc/shadow
+    stat:
+        path: /etc/shadow
+    register: file_exists
+
+-   name: Ensure group owner 0 on /etc/shadow
+    file:
+        path: /etc/shadow
+        group: 0
+    when:
+    - file_exists.stat.exists and True
+    - '{{ medium_severity | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ file_groupowner_etc_shadow | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_groupowner_etc_shadow
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27125-4
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /etc/shadow
+    stat:
+        path: /etc/shadow
+    register: file_exists
+
+-   name: Ensure permission 0000 on /etc/shadow
+    file:
+        path: /etc/shadow
+        mode: 0
+    when:
+    - file_exists.stat.exists and True
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ file_permissions_etc_shadow | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_permissions_etc_shadow
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27100-7
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /etc/shadow
+    stat:
+        path: /etc/shadow
+    register: file_exists
+
+-   name: Ensure owner 0 on /etc/shadow
+    file:
+        path: /etc/shadow
+        owner: 0
+    when:
+    - file_exists.stat.exists and True
+    - '{{ medium_severity | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ file_owner_etc_shadow | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_owner_etc_shadow
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26795-5
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /etc/group
+    stat:
+        path: /etc/group
+    register: file_exists
+
+-   name: Ensure permission 0644 on /etc/group
+    file:
+        path: /etc/group
+        mode: 420
+    when:
+    - file_exists.stat.exists and True
+    - '{{ file_permissions_etc_group | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_permissions_etc_group
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26949-8
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /etc/group
+    stat:
+        path: /etc/group
+    register: file_exists
+
+-   name: Ensure group owner 0 on /etc/group
+    file:
+        path: /etc/group
+        group: 0
+    when:
+    - file_exists.stat.exists and True
+    - '{{ file_groupowner_etc_group | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_groupowner_etc_group
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27037-1
+    - NIST-800-53-AC-6
+    - PCI-DSS-Req-8.7.c
+    - CJIS-5.5.2.2
+
+-   name: Implement Blank Screensaver
+    ini_file:
+        dest: /etc/dconf/db/local.d/00-security-settings
+        section: org/gnome/desktop/screensaver
+        option: picture-uri
+        value: string ''
+        create: true
+    tags:
+    - dconf_gnome_screensaver_mode_blank
+    - medium_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-80113-4
+    - NIST-800-53-AC-11(b)
+    - NIST-800-171-3.1.10
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.5
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ dconf_gnome_screensaver_mode_blank | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Prevent user modification of GNOME picture-uri
+    lineinfile:
+        path: /etc/dconf/db/local.d/locks/00-security-settings-lock
+        regexp: ^/org/gnome/desktop/screensaver/picture-uri
+        line: /org/gnome/desktop/screensaver/picture-uri
+        create: true
+    tags:
+    - dconf_gnome_screensaver_mode_blank
+    - medium_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-80113-4
+    - NIST-800-53-AC-11(b)
+    - NIST-800-171-3.1.10
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.5
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ dconf_gnome_screensaver_mode_blank | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Enable GNOME3 Screensaver Lock After Idle Period
+    ini_file:
+        dest: /etc/dconf/db/local.d/00-security-settings
+        section: org/gnome/desktop/screensaver
+        option: lock-enabled
+        value: 'true'
+        create: true
+    tags:
+    - dconf_gnome_screensaver_lock_enabled
+    - medium_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-80112-6
+    - NIST-800-53-AC-11(b)
+    - NIST-800-171-3.1.10
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.5
+    - DISA-STIG-RHEL-07-010060
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ dconf_gnome_screensaver_lock_enabled | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Prevent user modification of GNOME lock-enabled
+    lineinfile:
+        path: /etc/dconf/db/local.d/locks/00-security-settings-lock
+        regexp: ^/org/gnome/desktop/screensaver/lock-enabled
+        line: /org/gnome/desktop/screensaver/lock-enabled
+        create: true
+    tags:
+    - dconf_gnome_screensaver_lock_enabled
+    - medium_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-80112-6
+    - NIST-800-53-AC-11(b)
+    - NIST-800-171-3.1.10
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.5
+    - DISA-STIG-RHEL-07-010060
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ dconf_gnome_screensaver_lock_enabled | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Enable GNOME3 Screensaver Idle Activation
+    ini_file:
+        dest: /etc/dconf/db/local.d/00-security-settings
+        section: org/gnome/desktop/screensaver
+        option: idle_activation_enabled
+        value: 'true'
+        create: true
+    tags:
+    - dconf_gnome_screensaver_idle_activation_enabled
+    - medium_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-80111-8
+    - NIST-800-53-AC-11(a)
+    - NIST-800-171-3.1.10
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.5
+    - DISA-STIG-RHEL-07-010100
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ dconf_gnome_screensaver_idle_activation_enabled | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Prevent user modification of GNOME idle_activation_enabled
+    lineinfile:
+        path: /etc/dconf/db/local.d/locks/00-security-settings-lock
+        regexp: ^/org/gnome/desktop/screensaver/idle-activation-enabled
+        line: /org/gnome/desktop/screensaver/idle-activation-enabled
+        create: true
+    tags:
+    - dconf_gnome_screensaver_idle_activation_enabled
+    - medium_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-80111-8
+    - NIST-800-53-AC-11(a)
+    - NIST-800-171-3.1.10
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.5
+    - DISA-STIG-RHEL-07-010100
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ dconf_gnome_screensaver_idle_activation_enabled | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Set GNOME3 Screensaver Inactivity Timeout
+    ini_file:
+        dest: /etc/dconf/db/local.d/00-security-settings
+        section: org/gnome/desktop/screensaver
+        option: idle-delay
+        value: '{{ inactivity_timeout_value }}'
+        create: true
+    tags:
+    - dconf_gnome_screensaver_idle_delay
+    - medium_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-80110-0
+    - NIST-800-53-AC-11(a)
+    - NIST-800-171-3.1.10
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.5
+    - DISA-STIG-RHEL-07-010070
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ dconf_gnome_screensaver_idle_delay | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Prevent user modification of GNOME idle-delay
+    lineinfile:
+        path: /etc/dconf/db/local.d/locks/00-security-settings-lock
+        regexp: ^/org/gnome/desktop/screensaver/idle-delay
+        line: /org/gnome/desktop/screensaver/idle-delay
+        create: true
+    tags:
+    - dconf_gnome_screensaver_idle_delay
+    - medium_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-80110-0
+    - NIST-800-53-AC-11(a)
+    - NIST-800-171-3.1.10
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.5
+    - DISA-STIG-RHEL-07-010070
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ dconf_gnome_screensaver_idle_delay | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Remove the existing "use textfile backend" directive from the config - it may not be at the file's very top
+    lineinfile:
+        path: /etc/dconf/profile/user
+        regexp: ^service-db:keyfile/user.*
+        state: absent
+    check_mode: false
+    tags:
+    - dconf_use_text_backend
+    - high_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_complexity | bool }}'
+    - '{{ high_severity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ dconf_use_text_backend | bool }}'
+
+-   name: Insert the " use textfiles backend" directive at the top of the config file
+    lineinfile:
+        path: /etc/dconf/profile/user
+        regexp: ^service-db:keyfile/user$
+        line: service-db:keyfile/user
+        insertbefore: BOF
+        create: true
+    check_mode: false
+    tags:
+    - dconf_use_text_backend
+    - high_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_complexity | bool }}'
+    - '{{ high_severity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ dconf_use_text_backend | bool }}'
+
+-   name: Find All yum Repositories
+    find:
+        paths: /etc/yum.repos.d/
+        patterns: '*.repo'
+        contains: ^\[.+]$
+    register: yum_find
+
+-   name: Ensure gpgcheck Enabled For All yum Package Repositories
+    with_items: '{{ yum_find.files }}'
+    lineinfile:
+        create: true
+        dest: '{{ item.path }}'
+        regexp: ^gpgcheck
+        line: gpgcheck=1
+    tags:
+    - ensure_gpgcheck_never_disabled
+    - high_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-26876-3
+    - NIST-800-53-CM-5(3)
+    - NIST-800-53-CM-11(a)
+    - NIST-800-53-SI-7
+    - NIST-800-53-MA-1(b)
+    - NIST-800-171-3.4.8
+    - PCI-DSS-Req-6.2
+    - CJIS-5.10.4.1
+    when:
+    - '{{ low_complexity | bool }}'
+    - '{{ high_severity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ ensure_gpgcheck_never_disabled | bool }}'
+
+-   name: Read permission of GPG key directory
+    stat:
+        path: /etc/pki/rpm-gpg/
+    register: gpg_key_directory_permission
+    check_mode: false
+    tags:
+    - ensure_redhat_gpgkey_installed
+    - high_severity
+    - restrict_strategy
+    - medium_complexity
+    - medium_disruption
+    - CCE-26957-1
+    - NIST-800-53-CM-5(3)
+    - NIST-800-53-CM-11(a)
+    - NIST-800-53-SI-7
+    - NIST-800-53-MA-1(b)
+    - NIST-800-171-3.4.8
+    - PCI-DSS-Req-6.2
+    - CJIS-5.10.4.1
+    when:
+    - '{{ medium_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ ensure_redhat_gpgkey_installed | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+
+-   name: Read signatures in GPG key
+    shell: gpg --with-fingerprint --with-colons "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release" | grep "^fpr" | cut -d ":" -f
+        10
+    changed_when: false
+    register: gpg_fingerprints
+    check_mode: false
+    tags:
+    - ensure_redhat_gpgkey_installed
+    - high_severity
+    - restrict_strategy
+    - medium_complexity
+    - medium_disruption
+    - CCE-26957-1
+    - NIST-800-53-CM-5(3)
+    - NIST-800-53-CM-11(a)
+    - NIST-800-53-SI-7
+    - NIST-800-53-MA-1(b)
+    - NIST-800-171-3.4.8
+    - PCI-DSS-Req-6.2
+    - CJIS-5.10.4.1
+    when:
+    - '{{ medium_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ ensure_redhat_gpgkey_installed | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+
+-   name: Set Fact - Valid fingerprints
+    set_fact:
+        gpg_valid_fingerprints: ("567E347AD0044ADE55BA8A5F199E2F91FD431D51" "43A6E49C4A38F4BE9ABF2A5345689C882FA658E0")
+    tags:
+    - ensure_redhat_gpgkey_installed
+    - high_severity
+    - restrict_strategy
+    - medium_complexity
+    - medium_disruption
+    - CCE-26957-1
+    - NIST-800-53-CM-5(3)
+    - NIST-800-53-CM-11(a)
+    - NIST-800-53-SI-7
+    - NIST-800-53-MA-1(b)
+    - NIST-800-171-3.4.8
+    - PCI-DSS-Req-6.2
+    - CJIS-5.10.4.1
+    when:
+    - '{{ medium_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ ensure_redhat_gpgkey_installed | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+
+-   name: Import RedHat GPG key
+    rpm_key:
+        state: present
+        key: /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+    when:
+    - (gpg_key_directory_permission.stat.mode <= '0755') and (( gpg_fingerprints.stdout_lines | difference(gpg_valid_fingerprints))
+        | length == 0) and (gpg_fingerprints.stdout_lines | length > 0) and (ansible_distribution == "RedHat") and True
+    - '{{ medium_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ ensure_redhat_gpgkey_installed | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+    tags:
+    - ensure_redhat_gpgkey_installed
+    - high_severity
+    - restrict_strategy
+    - medium_complexity
+    - medium_disruption
+    - CCE-26957-1
+    - NIST-800-53-CM-5(3)
+    - NIST-800-53-CM-11(a)
+    - NIST-800-53-SI-7
+    - NIST-800-53-MA-1(b)
+    - NIST-800-171-3.4.8
+    - PCI-DSS-Req-6.2
+    - CJIS-5.10.4.1
+
+-   name: Check existence of yum on Fedora
+    stat:
+        path: /etc/yum.conf
+    register: yum_config_file
+    check_mode: false
+    when:
+    - ansible_distribution == "Fedora"
+
+-   name: Ensure GPG check is globally activated (yum)
+    ini_file:
+        dest: /etc/yum.conf
+        section: main
+        option: gpgcheck
+        value: 1
+        create: false
+    when:
+    - (ansible_distribution == "RedHat" or ansible_distribution == "CentOS" or yum_config_file.stat.exists) and True
+    - '{{ ensure_gpgcheck_globally_activated | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+    tags:
+    - ensure_gpgcheck_globally_activated
+    - high_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-26989-4
+    - NIST-800-53-CM-5(3)
+    - NIST-800-53-CM-11
+    - NIST-800-53-SI-7
+    - NIST-800-53-MA-1(b)
+    - NIST-800-171-3.4.8
+    - PCI-DSS-Req-6.2
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-020050
+
+-   name: Ensure GPG check is globally activated (dnf)
+    ini_file:
+        dest: /etc/dnf/dnf.conf
+        section: main
+        option: gpgcheck
+        value: 1
+        create: false
+    when:
+    - ansible_distribution == "Fedora" and True
+    - '{{ ensure_gpgcheck_globally_activated | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+    tags:
+    - ensure_gpgcheck_globally_activated
+    - high_severity
+    - unknown_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-26989-4
+    - NIST-800-53-CM-5(3)
+    - NIST-800-53-CM-11
+    - NIST-800-53-SI-7
+    - NIST-800-53-MA-1(b)
+    - NIST-800-171-3.4.8
+    - PCI-DSS-Req-6.2
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-020050
+
+-   name: Security patches are up to date
+    package:
+        name: '*'
+        state: latest
+    tags:
+    - skip_ansible_lint
+    - security_patches_up_to_date
+    - high_severity
+    - patch_strategy
+    - low_complexity
+    - high_disruption
+    - CCE-26895-3
+    - NIST-800-53-SI-2
+    - NIST-800-53-SI-2(c)
+    - NIST-800-53-MA-1(b)
+    - PCI-DSS-Req-6.2
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-020260
+    when:
+    - '{{ security_patches_up_to_date | bool }}'
+    - '{{ high_severity | bool }}'
+    - '{{ skip_ansible_lint | bool }}'
+    - '{{ high_disruption | bool }}'
+    - '{{ patch_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Ensure AIDE is installed
+    package:
+        name: '{{ item }}'
+        state: present
+    with_items:
+    - aide
+    tags:
+    - aide_periodic_cron_checking
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26952-2
+    - NIST-800-53-CM-3(d)
+    - NIST-800-53-CM-3(e)
+    - NIST-800-53-CM-3(5)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+    - DISA-STIG-RHEL-07-020030
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ aide_periodic_cron_checking | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Configure Periodic Execution of AIDE
+    cron:
+        name: run AIDE check
+        minute: 5
+        hour: 4
+        weekday: 0
+        user: root
+        job: /usr/sbin/aide --check
+    tags:
+    - aide_periodic_cron_checking
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26952-2
+    - NIST-800-53-CM-3(d)
+    - NIST-800-53-CM-3(e)
+    - NIST-800-53-CM-3(5)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+    - DISA-STIG-RHEL-07-020030
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ aide_periodic_cron_checking | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Ensure AIDE is installed
+    package:
+        name: '{{ item }}'
+        state: present
+    with_items:
+    - aide
+    tags:
+    - aide_build_database
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27220-3
+    - NIST-800-53-CM-3(d)
+    - NIST-800-53-CM-3(e)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ aide_build_database | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Build and Test AIDE Database
+    command: /usr/sbin/aide --init
+    changed_when: true
+    tags:
+    - aide_build_database
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27220-3
+    - NIST-800-53-CM-3(d)
+    - NIST-800-53-CM-3(e)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ aide_build_database | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Check whether the stock AIDE Database exists
+    stat:
+        path: /var/lib/aide/aide.db.new.gz
+    register: aide_database_stat
+    tags:
+    - aide_build_database
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27220-3
+    - NIST-800-53-CM-3(d)
+    - NIST-800-53-CM-3(e)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ aide_build_database | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Stage AIDE Database
+    copy:
+        src: /var/lib/aide/aide.db.new.gz
+        dest: /var/lib/aide/aide.db.gz
+        backup: true
+        remote_src: true
+    when:
+    - (aide_database_stat.stat.exists is defined and aide_database_stat.stat.exists) and True
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ aide_build_database | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - aide_build_database
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27220-3
+    - NIST-800-53-CM-3(d)
+    - NIST-800-53-CM-3(e)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+
+-   name: Ensure aide is installed
+    package:
+        name: aide
+        state: present
+    tags:
+    - package_aide_installed
+    - medium_severity
+    - enable_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27096-7
+    - NIST-800-53-CM-3(d)
+    - NIST-800-53-CM-3(e)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+    when:
+    - '{{ enable_strategy | bool }}'
+    - '{{ package_aide_installed | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Read list of files with incorrect permissions
+    shell: rpm -Va --nofiledigest | awk '{ if (substr($0,2,1)=="M") print $NF }'
+    args:
+        warn: false
+    register: files_with_incorrect_permissions
+    failed_when: false
+    changed_when: false
+    check_mode: false
+    tags:
+    - rpm_verify_permissions
+    - high_severity
+    - restrict_strategy
+    - high_complexity
+    - medium_disruption
+    - CCE-27209-6
+    - NIST-800-53-AC-6
+    - NIST-800-53-AU-9(1)
+    - NIST-800-53-AU-9(3)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-171-3.3.8
+    - NIST-800-171-3.4.1
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-010010
+    when:
+    - '{{ high_complexity | bool }}'
+    - '{{ rpm_verify_permissions | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+
+-   name: Correct file permissions with RPM
+    shell: rpm --quiet --setperms $(rpm -qf '{{ item }}')
+    args:
+        warn: false
+    with_items: '{{ files_with_incorrect_permissions.stdout_lines }}'
+    when:
+    - (files_with_incorrect_permissions.stdout_lines | length > 0) and True
+    - '{{ high_complexity | bool }}'
+    - '{{ rpm_verify_permissions | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+    tags:
+    - rpm_verify_permissions
+    - high_severity
+    - restrict_strategy
+    - high_complexity
+    - medium_disruption
+    - CCE-27209-6
+    - NIST-800-53-AC-6
+    - NIST-800-53-AU-9(1)
+    - NIST-800-53-AU-9(3)
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-171-3.3.8
+    - NIST-800-171-3.4.1
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-010010
+
+-   name: 'Set fact: Package manager reinstall command (dnf)'
+    set_fact:
+        package_manager_reinstall_cmd: dnf reinstall -y
+    when:
+    - ansible_distribution == "Fedora" and True
+    - '{{ high_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ rpm_verify_hashes | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+    tags:
+    - rpm_verify_hashes
+    - high_severity
+    - unknown_strategy
+    - high_complexity
+    - medium_disruption
+    - CCE-27157-7
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SI-7(1)
+    - NIST-800-171-3.3.8
+    - NIST-800-171-3.4.1
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-010020
+
+-   name: 'Set fact: Package manager reinstall command (yum)'
+    set_fact:
+        package_manager_reinstall_cmd: yum reinstall -y
+    when:
+    - (ansible_distribution == "RedHat" or ansible_distribution == "OracleLinux") and True
+    - '{{ high_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ rpm_verify_hashes | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+    tags:
+    - rpm_verify_hashes
+    - high_severity
+    - unknown_strategy
+    - high_complexity
+    - medium_disruption
+    - CCE-27157-7
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SI-7(1)
+    - NIST-800-171-3.3.8
+    - NIST-800-171-3.4.1
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-010020
+
+-   name: Read files with incorrect hash
+    shell: rpm -Va | grep -E '^..5.* /(bin|sbin|lib|lib64|usr)/' | awk '{print $NF}'
+    args:
+        warn: false
+    register: files_with_incorrect_hash
+    changed_when: false
+    when:
+    - (package_manager_reinstall_cmd is defined) and True
+    - '{{ high_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ rpm_verify_hashes | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+    check_mode: false
+    tags:
+    - rpm_verify_hashes
+    - high_severity
+    - unknown_strategy
+    - high_complexity
+    - medium_disruption
+    - CCE-27157-7
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SI-7(1)
+    - NIST-800-171-3.3.8
+    - NIST-800-171-3.4.1
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-010020
+
+-   name: Reinstall packages of files with incorrect hash
+    shell: '{{ package_manager_reinstall_cmd }} $(rpm -qf ''{{ item }}'')'
+    args:
+        warn: false
+    with_items: '{{ files_with_incorrect_hash.stdout_lines }}'
+    when:
+    - (package_manager_reinstall_cmd is defined and (files_with_incorrect_hash.stdout_lines | length > 0)) and True
+    - '{{ high_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ rpm_verify_hashes | bool }}'
+    - '{{ unknown_strategy | bool }}'
+    - '{{ high_severity | bool }}'
+    tags:
+    - rpm_verify_hashes
+    - high_severity
+    - unknown_strategy
+    - high_complexity
+    - medium_disruption
+    - CCE-27157-7
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SI-7(1)
+    - NIST-800-171-3.3.8
+    - NIST-800-171-3.4.1
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.4.1
+    - DISA-STIG-RHEL-07-010020
+
+-   name: Does prelink file exist
+    stat:
+        path: /etc/sysconfig/prelink
+    register: prelink_exists
+    tags:
+    - disable_prelink
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27078-5
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - NIST-800-171-3.13.11
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+    when:
+    - '{{ disable_prelink | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: disable prelinking
+    lineinfile:
+        path: /etc/sysconfig/prelink
+        regexp: ^PRELINKING=
+        line: PRELINKING=no
+    when:
+    - prelink_exists.stat.exists and True
+    - '{{ disable_prelink | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - disable_prelink
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27078-5
+    - NIST-800-53-CM-6(d)
+    - NIST-800-53-CM-6(3)
+    - NIST-800-53-SC-28
+    - NIST-800-53-SI-7
+    - NIST-800-171-3.13.11
+    - PCI-DSS-Req-11.5
+    - CJIS-5.10.1.3
+
+-   name: Ensure libreswan is installed
+    package:
+        name: libreswan
+        state: present
+    tags:
+    - package_libreswan_installed
+    - medium_severity
+    - enable_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-80170-4
+    - NIST-800-53-AC-17
+    - NIST-800-53-MA-4
+    - NIST-800-53-SC-9
+    - PCI-DSS-Req-4.1
+    when:
+    - '{{ enable_strategy | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ package_libreswan_installed | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Search for privileged commands
+    shell: find / -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null | cat
+    check_mode: false
+    register: find_result
+    tags:
+    - audit_rules_privileged_commands
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27437-3
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-2(4)
+    - NIST-800-53-AU-6(9)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.2.2
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030360
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_privileged_commands | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Search /etc/audit/rules.d for audit rule entries
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: ^.*path={{ item }} .*$
+        patterns: '*.rules'
+    with_items:
+    - '{{ find_result.stdout_lines }}'
+    register: files_result
+    tags:
+    - audit_rules_privileged_commands
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27437-3
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-2(4)
+    - NIST-800-53-AU-6(9)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.2.2
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030360
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_privileged_commands | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Overwrites the rule in rules.d
+    lineinfile:
+        path: '{{ item.1.path }}'
+        line: -a always,exit -F path={{ item.0.item }} -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
+        create: false
+        regexp: ^.*path={{ item.0.item }} .*$
+    with_subelements:
+    - '{{ files_result.results }}'
+    - files
+    tags:
+    - audit_rules_privileged_commands
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27437-3
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-2(4)
+    - NIST-800-53-AU-6(9)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.2.2
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030360
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_privileged_commands | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Adds the rule in rules.d
+    lineinfile:
+        path: /etc/audit/rules.d/privileged.rules
+        line: -a always,exit -F path={{ item.item }} -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
+        create: true
+    with_items:
+    - '{{ files_result.results }}'
+    when:
+    - item.matched == 0 and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_privileged_commands | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_privileged_commands
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27437-3
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-2(4)
+    - NIST-800-53-AU-6(9)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.2.2
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030360
+
+-   name: Inserts/replaces the rule in audit.rules
+    lineinfile:
+        path: /etc/audit/audit.rules
+        line: -a always,exit -F path={{ item.item }} -F perm=x -F auid>=1000 -F auid!=unset -F key=privileged
+        create: true
+        regexp: ^.*path={{ item.item }} .*$
+    with_items:
+    - '{{ files_result.results }}'
+    tags:
+    - audit_rules_privileged_commands
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27437-3
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-2(4)
+    - NIST-800-53-AU-6(9)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.2.2
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030360
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_privileged_commands | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Set architecture for audit lchown tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_lchown
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_lchown.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_lchown.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_lchown.matched > 0
+
+-   name: Inserts/replaces the lchown rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_lchown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27083-5
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030390
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lchown | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Inserts/replaces the lchown rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lchown | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - audit_rules_dac_modification_lchown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27083-5
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030390
+
+-   name: Inserts/replaces the lchown rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_lchown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27083-5
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030390
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lchown | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Inserts/replaces the lchown rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lchown | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - audit_rules_dac_modification_lchown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27083-5
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030390
+
+-   name: Set architecture for audit fchownat tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_fchownat
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_fchownat.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_fchownat.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_fchownat.matched > 0
+
+-   name: Inserts/replaces the fchownat rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S fchownat -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_fchownat
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27387-0
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030400
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_fchownat | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fchownat rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_fchownat | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fchownat
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27387-0
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030400
+
+-   name: Inserts/replaces the fchownat rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S fchownat -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_fchownat
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27387-0
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030400
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_fchownat | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fchownat rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_fchownat | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fchownat
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27387-0
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030400
+
+-   name: Set architecture for audit setxattr tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_setxattr
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_setxattr.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_setxattr.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_setxattr.matched > 0
+
+-   name: Inserts/replaces the setxattr rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S setxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_setxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27213-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030440
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_setxattr | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Inserts/replaces the setxattr rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_setxattr | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - audit_rules_dac_modification_setxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27213-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030440
+
+-   name: Inserts/replaces the setxattr rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S setxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_setxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27213-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030440
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_setxattr | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Inserts/replaces the setxattr rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_setxattr | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - audit_rules_dac_modification_setxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27213-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030440
+
+-   name: Set architecture for audit chmod tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_chmod
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_chmod.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_chmod.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_chmod.matched > 0
+
+-   name: Inserts/replaces the chmod rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S chmod -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_chmod
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27339-1
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030410
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ audit_rules_dac_modification_chmod | bool }}'
+
+-   name: Inserts/replaces the chmod rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S chmod -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ audit_rules_dac_modification_chmod | bool }}'
+    tags:
+    - audit_rules_dac_modification_chmod
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27339-1
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030410
+
+-   name: Inserts/replaces the chmod rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S chmod -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_chmod
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27339-1
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030410
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ audit_rules_dac_modification_chmod | bool }}'
+
+-   name: Inserts/replaces the chmod rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S chmod -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ audit_rules_dac_modification_chmod | bool }}'
+    tags:
+    - audit_rules_dac_modification_chmod
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27339-1
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030410
+
+-   name: Set architecture for audit removexattr tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_removexattr
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_removexattr.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_removexattr.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_removexattr.matched > 0
+
+-   name: Inserts/replaces the removexattr rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_removexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27367-2
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030470
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_removexattr | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the removexattr rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_removexattr | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_removexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27367-2
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030470
+
+-   name: Inserts/replaces the removexattr rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_removexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27367-2
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030470
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_removexattr | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the removexattr rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_removexattr | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_removexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27367-2
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030470
+
+-   name: Set architecture for audit lsetxattr tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_lsetxattr
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_lsetxattr.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_lsetxattr.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_lsetxattr.matched > 0
+
+-   name: Inserts/replaces the lsetxattr rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S lsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_lsetxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27280-7
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030460
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lsetxattr | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the lsetxattr rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lsetxattr | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_lsetxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27280-7
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030460
+
+-   name: Inserts/replaces the lsetxattr rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S lsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_lsetxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27280-7
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030460
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lsetxattr | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the lsetxattr rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lsetxattr | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_lsetxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27280-7
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030460
+
+-   name: Set architecture for audit chown tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_chown
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_chown.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_chown.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_chown.matched > 0
+
+-   name: Inserts/replaces the chown rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S chown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_chown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27364-9
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030370
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_chown | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the chown rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_chown | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_chown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27364-9
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030370
+
+-   name: Inserts/replaces the chown rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S chown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_chown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27364-9
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030370
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_chown | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the chown rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_chown | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_chown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27364-9
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030370
+
+-   name: Set architecture for audit fremovexattr tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_fremovexattr
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_fremovexattr.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_fremovexattr.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_fremovexattr.matched > 0
+
+-   name: Inserts/replaces the fremovexattr rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_fremovexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27353-2
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030480
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fremovexattr | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fremovexattr rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fremovexattr | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fremovexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27353-2
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030480
+
+-   name: Inserts/replaces the fremovexattr rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_fremovexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27353-2
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030480
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fremovexattr | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fremovexattr rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fremovexattr | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fremovexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27353-2
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030480
+
+-   name: Set architecture for audit lremovexattr tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_lremovexattr
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_lremovexattr.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_lremovexattr.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_lremovexattr.matched > 0
+
+-   name: Inserts/replaces the lremovexattr rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_lremovexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27410-0
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030490
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lremovexattr | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Inserts/replaces the lremovexattr rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lremovexattr | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - audit_rules_dac_modification_lremovexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27410-0
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030490
+
+-   name: Inserts/replaces the lremovexattr rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_lremovexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27410-0
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030490
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lremovexattr | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Inserts/replaces the lremovexattr rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_lremovexattr | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - audit_rules_dac_modification_lremovexattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27410-0
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030490
+
+-   name: Set architecture for audit fchmod tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_fchmod
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_fchmod.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_fchmod.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_fchmod.matched > 0
+
+-   name: Inserts/replaces the fchmod rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S fchmod -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_fchmod
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27393-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030420
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fchmod | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fchmod rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fchmod | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fchmod
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27393-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030420
+
+-   name: Inserts/replaces the fchmod rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S fchmod -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_fchmod
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27393-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030420
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fchmod | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fchmod rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fchmod | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fchmod
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27393-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030420
+
+-   name: Set architecture for audit fchmodat tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_fchmodat
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_fchmodat.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_fchmodat.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_fchmodat.matched > 0
+
+-   name: Inserts/replaces the fchmodat rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_fchmodat
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27388-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030430
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ audit_rules_dac_modification_fchmodat | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Inserts/replaces the fchmodat rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ audit_rules_dac_modification_fchmodat | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - audit_rules_dac_modification_fchmodat
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27388-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030430
+
+-   name: Inserts/replaces the fchmodat rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_fchmodat
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27388-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030430
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ audit_rules_dac_modification_fchmodat | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Inserts/replaces the fchmodat rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ audit_rules_dac_modification_fchmodat | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    tags:
+    - audit_rules_dac_modification_fchmodat
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27388-8
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030430
+
+-   name: Set architecture for audit fsetxattr tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_fsetxattr
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_fsetxattr.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_fsetxattr.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_fsetxattr.matched > 0
+
+-   name: Inserts/replaces the fsetxattr rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S fsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_fsetxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27389-6
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030450
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fsetxattr | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fsetxattr rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S fsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fsetxattr | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fsetxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27389-6
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030450
+
+-   name: Inserts/replaces the fsetxattr rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S fsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_fsetxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27389-6
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030450
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fsetxattr | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fsetxattr rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S fsetxattr -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ audit_rules_dac_modification_fsetxattr | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fsetxattr
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27389-6
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030450
+
+-   name: Set architecture for audit fchown tasks
+    set_fact:
+        audit_arch: b{{ ansible_architecture | regex_replace('.*(\d\d$)','\1') }}
+
+-   name: Search /etc/audit/rules.d for other DAC audit rules
+    find:
+        paths: /etc/audit/rules.d
+        recurse: false
+        contains: -F key=perm_mod$
+        patterns: '*.rules'
+    register: find_fchown
+
+-   name: If existing DAC ruleset not found, use /etc/audit/rules.d/privileged.rules as the recipient for the rule
+    set_fact:
+        all_files:
+        - /etc/audit/rules.d/privileged.rules
+    when:
+    - find_fchown.matched == 0
+
+-   name: Use matched file as the recipient for the rule
+    set_fact:
+        all_files:
+        - '{{ find_fchown.files | map(attribute=''path'') | list | first }}'
+    when:
+    - find_fchown.matched > 0
+
+-   name: Inserts/replaces the fchown rule in rules.d when on x86
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b32 -S fchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    tags:
+    - audit_rules_dac_modification_fchown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27356-5
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030380
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_fchown | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fchown rule in rules.d when on x86_64
+    lineinfile:
+        path: '{{ all_files[0] }}'
+        line: -a always,exit -F arch=b64 -S fchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_fchown | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fchown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27356-5
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030380
+
+-   name: Inserts/replaces the fchown rule in /etc/audit/audit.rules when on x86
+    lineinfile:
+        line: -a always,exit -F arch=b32 -S fchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+    tags:
+    - audit_rules_dac_modification_fchown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27356-5
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030380
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_fchown | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Inserts/replaces the fchown rule in audit.rules when on x86_64
+    lineinfile:
+        line: -a always,exit -F arch=b64 -S fchown -F auid>=1000 -F auid!=unset -F key=perm_mod
+        state: present
+        dest: /etc/audit/audit.rules
+        create: true
+    when:
+    - audit_arch == 'b64' and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ audit_rules_dac_modification_fchown | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - audit_rules_dac_modification_fchown
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27356-5
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - PCI-DSS-Req-10.5.5
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030380
+
+-   name: Configure auditd Max Log File Size
+    lineinfile:
+        dest: /etc/audit/auditd.conf
+        regexp: ^\s*max_log_file\s*=\s*.*$
+        line: max_log_file = {{ var_auditd_max_log_file }}
+        state: present
+    tags:
+    - auditd_data_retention_max_log_file
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27319-3
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-11
+    - NIST-800-53-IR-5
+    - PCI-DSS-Req-10.7
+    - CJIS-5.4.1.1
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ auditd_data_retention_max_log_file | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Configure auditd max_log_file_action Upon Reaching Maximum Log Size
+    lineinfile:
+        dest: /etc/audit/auditd.conf
+        line: max_log_file_action = {{ var_auditd_max_log_file_action }}
+        regexp: ^\s*max_log_file_action\s*=\s*.*$
+        state: present
+    tags:
+    - auditd_data_retention_max_log_file_action
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27231-0
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-4
+    - NIST-800-53-AU-11
+    - NIST-800-53-IR-5
+    - PCI-DSS-Req-10.7
+    - CJIS-5.4.1.1
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ auditd_data_retention_max_log_file_action | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Configure auditd space_left Action on Low Disk Space
+    lineinfile:
+        dest: /etc/audit/auditd.conf
+        line: space_left_action = {{ var_auditd_space_left_action }}
+        regexp: ^\s*space_left_action\s*=\s*.*$
+        state: present
+    tags:
+    - auditd_data_retention_space_left_action
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27375-5
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-4
+    - NIST-800-53-AU-5(1)
+    - NIST-800-53-AU-5(b)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.3.1
+    - PCI-DSS-Req-10.7
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030340
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ auditd_data_retention_space_left_action | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Configure auditd admin_space_left Action on Low Disk Space
+    lineinfile:
+        dest: /etc/audit/auditd.conf
+        line: admin_space_left_action = {{ var_auditd_admin_space_left_action }}
+        regexp: ^\s*admin_space_left_action\s*=\s*.*$
+        state: present
+    tags:
+    - auditd_data_retention_admin_space_left_action
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27370-6
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-4
+    - NIST-800-53-AU-5(b)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.3.1
+    - PCI-DSS-Req-10.7
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030340
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ auditd_data_retention_admin_space_left_action | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Configure auditd mail_acct Action on Low Disk Space
+    lineinfile:
+        dest: /etc/audit/auditd.conf
+        line: action_mail_acct = {{ var_auditd_action_mail_acct }}
+        state: present
+    tags:
+    - auditd_data_retention_action_mail_acct
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27394-6
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-4
+    - NIST-800-53-AU-5(1)
+    - NIST-800-53-AU-5(a)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.3.1
+    - PCI-DSS-Req-10.7.a
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030350
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ auditd_data_retention_action_mail_acct | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Configure auditd Number of Logs Retained
+    lineinfile:
+        dest: /etc/audit/auditd.conf
+        line: num_logs = {{ var_auditd_num_logs }}
+        regexp: ^\s*num_logs\s*=\s*.*$
+        state: present
+    tags:
+    - auditd_data_retention_num_logs
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27348-2
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-11
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.3.1
+    - PCI-DSS-Req-10.7
+    - CJIS-5.4.1.1
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ auditd_data_retention_num_logs | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Enable service auditd
+    service:
+        name: auditd
+        enabled: 'yes'
+        state: started
+    tags:
+    - service_auditd_enabled
+    - high_severity
+    - enable_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27407-6
+    - NIST-800-53-AC-2(g)
+    - NIST-800-53-AU-3
+    - NIST-800-53-AC-17(1)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-10
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-AU-14(1)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.3.1
+    - NIST-800-171-3.3.2
+    - NIST-800-171-3.3.6
+    - PCI-DSS-Req-10.1
+    - CJIS-5.4.1.1
+    - DISA-STIG-RHEL-07-030000
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ enable_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ high_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ service_auditd_enabled | bool }}'
+
+-   name: Test for existence /boot/grub2/grub.cfg
+    stat:
+        path: /boot/grub2/grub.cfg
+    register: file_exists
+
+-   name: Ensure group owner 0 on /boot/grub2/grub.cfg
+    file:
+        path: /boot/grub2/grub.cfg
+        group: 0
+    when:
+    - file_exists.stat.exists and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ file_groupowner_grub2_cfg | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_groupowner_grub2_cfg
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26812-8
+    - NIST-800-53-AC-6(7)
+    - NIST-800-171-3.4.5
+    - PCI-DSS-Req-7.1
+    - CJIS-5.5.2.2
+
+-   name: Test for existence /boot/grub2/grub.cfg
+    stat:
+        path: /boot/grub2/grub.cfg
+    register: file_exists
+
+-   name: Ensure owner 0 on /boot/grub2/grub.cfg
+    file:
+        path: /boot/grub2/grub.cfg
+        owner: 0
+    when:
+    - file_exists.stat.exists and (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ file_owner_grub2_cfg | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    tags:
+    - file_owner_grub2_cfg
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26860-7
+    - NIST-800-53-AC-6(7)
+    - NIST-800-171-3.4.5
+    - PCI-DSS-Req-7.1
+    - CJIS-5.5.2.2
+
+-   name: Add auth pam_faillock preauth unlock_time before pam_unix.so
+    pamd:
+        name: '{{ item }}'
+        type: auth
+        control: sufficient
+        module_path: pam_unix.so
+        new_type: auth
+        new_control: required
+        new_module_path: pam_faillock.so
+        module_arguments: preauth silent unlock_time={{ var_accounts_passwords_pam_faillock_unlock_time }}
+        state: before
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_unlock_time
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26884-7
+    - NIST-800-53-AC-7(b)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.7
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ accounts_passwords_pam_faillock_unlock_time | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Add unlock_time argument to pam_faillock preauth
+    pamd:
+        name: '{{ item }}'
+        type: auth
+        control: required
+        module_path: pam_faillock.so
+        module_arguments: preauth silent unlock_time={{ var_accounts_passwords_pam_faillock_unlock_time }}
+        state: args_present
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_unlock_time
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26884-7
+    - NIST-800-53-AC-7(b)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.7
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ accounts_passwords_pam_faillock_unlock_time | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Add auth pam_faillock authfail unlock_interval after pam_unix.so
+    pamd:
+        name: '{{ item }}'
+        type: auth
+        control: sufficient
+        module_path: pam_unix.so
+        new_type: auth
+        new_control: '[default=die]'
+        new_module_path: pam_faillock.so
+        module_arguments: authfail unlock_time={{ var_accounts_passwords_pam_faillock_unlock_time }}
+        state: after
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_unlock_time
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26884-7
+    - NIST-800-53-AC-7(b)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.7
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ accounts_passwords_pam_faillock_unlock_time | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Add unlock_time argument to auth pam_faillock authfail
+    pamd:
+        name: '{{ item }}'
+        type: auth
+        control: '[default=die]'
+        module_path: pam_faillock.so
+        module_arguments: authfail unlock_time={{ var_accounts_passwords_pam_faillock_unlock_time }}
+        state: args_present
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_unlock_time
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26884-7
+    - NIST-800-53-AC-7(b)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.7
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ accounts_passwords_pam_faillock_unlock_time | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Add account pam_faillock before pam_unix.so
+    pamd:
+        name: '{{ item }}'
+        type: account
+        control: required
+        module_path: pam_unix.so
+        new_type: account
+        new_control: required
+        new_module_path: pam_faillock.so
+        state: before
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_unlock_time
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-26884-7
+    - NIST-800-53-AC-7(b)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.7
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ accounts_passwords_pam_faillock_unlock_time | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Do not allow users to reuse recent passwords - system-auth (change)
+    replace:
+        dest: /etc/pam.d/system-auth
+        follow: true
+        regexp: ^(password\s+sufficient\s+pam_unix\.so\s.*remember\s*=\s*)(\S+)(.*)$
+        replace: \g<1>{{ var_password_pam_unix_remember }}\g<3>
+    tags:
+    - accounts_password_pam_unix_remember
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-26923-3
+    - NIST-800-53-IA-5(f)
+    - NIST-800-53-IA-5(1)(e)
+    - NIST-800-171-3.5.8
+    - PCI-DSS-Req-8.2.5
+    - CJIS-5.6.2.1.1
+    - DISA-STIG-RHEL-07-010270
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ accounts_password_pam_unix_remember | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Do not allow users to reuse recent passwords - system-auth (add)
+    replace:
+        dest: /etc/pam.d/system-auth
+        follow: true
+        regexp: ^password\s+sufficient\s+pam_unix\.so\s(?!.*remember\s*=\s*).*$
+        replace: \g<0> remember={{ var_password_pam_unix_remember }}
+    tags:
+    - accounts_password_pam_unix_remember
+    - medium_severity
+    - configure_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-26923-3
+    - NIST-800-53-IA-5(f)
+    - NIST-800-53-IA-5(1)(e)
+    - NIST-800-171-3.5.8
+    - PCI-DSS-Req-8.2.5
+    - CJIS-5.6.2.1.1
+    - DISA-STIG-RHEL-07-010270
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ configure_strategy | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ accounts_password_pam_unix_remember | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Add auth pam_faillock preauth deny before pam_unix.so
+    pamd:
+        name: '{{ item }}'
+        type: auth
+        control: sufficient
+        module_path: pam_unix.so
+        new_type: auth
+        new_control: required
+        new_module_path: pam_faillock.so
+        module_arguments: preauth silent deny={{ var_accounts_passwords_pam_faillock_deny }}
+        state: before
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_deny
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27350-8
+    - NIST-800-53-AC-7(a)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.6
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ accounts_passwords_pam_faillock_deny | bool }}'
+
+-   name: Add deny argument to auth pam_faillock preauth
+    pamd:
+        name: '{{ item }}'
+        type: auth
+        control: required
+        module_path: pam_faillock.so
+        module_arguments: preauth silent deny={{ var_accounts_passwords_pam_faillock_deny }}
+        state: args_present
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_deny
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27350-8
+    - NIST-800-53-AC-7(a)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.6
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ accounts_passwords_pam_faillock_deny | bool }}'
+
+-   name: Add auth pam_faillock authfail deny after pam_unix.so
+    pamd:
+        name: '{{ item }}'
+        type: auth
+        control: sufficient
+        module_path: pam_unix.so
+        new_type: auth
+        new_control: '[default=die]'
+        new_module_path: pam_faillock.so
+        module_arguments: authfail deny={{ var_accounts_passwords_pam_faillock_deny }}
+        state: after
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_deny
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27350-8
+    - NIST-800-53-AC-7(a)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.6
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ accounts_passwords_pam_faillock_deny | bool }}'
+
+-   name: Add deny argument to auth pam_faillock authfail
+    pamd:
+        name: '{{ item }}'
+        type: auth
+        new_type: auth
+        control: '[default=die]'
+        module_path: pam_faillock.so
+        module_arguments: authfail deny={{ var_accounts_passwords_pam_faillock_deny }}
+        state: args_present
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_deny
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27350-8
+    - NIST-800-53-AC-7(a)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.6
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ accounts_passwords_pam_faillock_deny | bool }}'
+
+-   name: Add account pam_faillock before pam_unix.so
+    pamd:
+        name: '{{ item }}'
+        type: account
+        control: required
+        module_path: pam_unix.so
+        new_type: account
+        new_control: required
+        new_module_path: pam_faillock.so
+        state: before
+    loop:
+    - system-auth
+    - password-auth
+    tags:
+    - accounts_passwords_pam_faillock_deny
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27350-8
+    - NIST-800-53-AC-7(a)
+    - NIST-800-171-3.1.8
+    - PCI-DSS-Req-8.1.6
+    - CJIS-5.5.3
+    - DISA-STIG-RHEL-07-010320
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ accounts_passwords_pam_faillock_deny | bool }}'
+
+-   name: Set Password Hashing Algorithm in /etc/login.defs
+    lineinfile:
+        dest: /etc/login.defs
+        regexp: ^#?ENCRYPT_METHOD
+        line: ENCRYPT_METHOD SHA512
+        state: present
+    tags:
+    - set_password_hashing_algorithm_logindefs
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27124-7
+    - NIST-800-53-IA-5(b)
+    - NIST-800-53-IA-5(c)
+    - NIST-800-53-IA-5(1)(c)
+    - NIST-800-53-IA-7
+    - NIST-800-171-3.13.11
+    - PCI-DSS-Req-8.2.1
+    - CJIS-5.6.2.2
+    - DISA-STIG-RHEL-07-010210
+    when:
+    - '{{ set_password_hashing_algorithm_logindefs | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Set Password Hashing Algorithm in /etc/libuser.conf
+    lineinfile:
+        dest: /etc/libuser.conf
+        insertafter: ^\s*\[defaults]
+        regexp: ^#?crypt_style
+        line: crypt_style = sha512
+        state: present
+    tags:
+    - set_password_hashing_algorithm_libuserconf
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27053-8
+    - NIST-800-53-IA-5(b)
+    - NIST-800-53-IA-5(c)
+    - NIST-800-53-IA-5(1)(c)
+    - NIST-800-53-IA-7
+    - NIST-800-171-3.13.11
+    - PCI-DSS-Req-8.2.1
+    - CJIS-5.6.2.2
+    - DISA-STIG-RHEL-07-010220
+    when:
+    - '{{ set_password_hashing_algorithm_libuserconf | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ restrict_strategy | bool }}'
+
+-   name: Ensure PAM variable lcredit is set accordingly
+    lineinfile:
+        create: true
+        dest: /etc/security/pwquality.conf
+        regexp: ^#?\s*lcredit
+        line: lcredit = {{ var_password_pam_lcredit }}
+    tags:
+    - accounts_password_pam_lcredit
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27345-8
+    - NIST-800-53-IA-5(b)
+    - NIST-800-53-IA-5(c)
+    - NIST-800-53-IA-5(1)(a)
+    - PCI-DSS-Req-8.2.3
+    - DISA-STIG-RHEL-07-010130
+    when:
+    - '{{ accounts_password_pam_lcredit | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Ensure PAM variable dcredit is set accordingly
+    lineinfile:
+        create: true
+        dest: /etc/security/pwquality.conf
+        regexp: ^#?\s*dcredit
+        line: dcredit = {{ var_password_pam_dcredit }}
+    tags:
+    - accounts_password_pam_dcredit
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27214-6
+    - NIST-800-53-IA-5(1)(a)
+    - NIST-800-53-IA-5(b)
+    - NIST-800-53-IA-5(c)
+    - NIST-800-53-194
+    - PCI-DSS-Req-8.2.3
+    - DISA-STIG-RHEL-07-010140
+    when:
+    - '{{ accounts_password_pam_dcredit | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Ensure PAM variable minlen is set accordingly
+    lineinfile:
+        create: true
+        dest: /etc/security/pwquality.conf
+        regexp: ^#?\s*minlen
+        line: minlen = {{ var_password_pam_minlen }}
+    tags:
+    - accounts_password_pam_minlen
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27293-0
+    - NIST-800-53-IA-5(1)(a)
+    - PCI-DSS-Req-8.2.3
+    - CJIS-5.6.2.1.1
+    - DISA-STIG-RHEL-07-010280
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ accounts_password_pam_minlen | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Ensure PAM variable ucredit is set accordingly
+    lineinfile:
+        create: true
+        dest: /etc/security/pwquality.conf
+        regexp: ^#?\s*ucredit
+        line: ucredit = {{ var_password_pam_ucredit }}
+    tags:
+    - accounts_password_pam_ucredit
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27200-5
+    - NIST-800-53-IA-5(b)
+    - NIST-800-53-IA-5(c)
+    - NIST-800-53-IA-5(1)(a)
+    - PCI-DSS-Req-8.2.3
+    - DISA-STIG-RHEL-07-010120
+    when:
+    - '{{ accounts_password_pam_ucredit | bool }}'
+    - '{{ medium_severity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Set Account Expiration Following Inactivity
+    lineinfile:
+        create: true
+        dest: /etc/default/useradd
+        regexp: ^INACTIVE
+        line: INACTIVE={{ var_account_disable_post_pw_expiration }}
+    tags:
+    - account_disable_post_pw_expiration
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27355-7
+    - NIST-800-53-AC-2(2)
+    - NIST-800-53-AC-2(3)
+    - NIST-800-53-IA-4(e)
+    - NIST-800-171-3.5.6
+    - PCI-DSS-Req-8.1.4
+    - CJIS-5.6.2.1.1
+    - DISA-STIG-RHEL-07-010310
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ account_disable_post_pw_expiration | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Set Password Maximum Age
+    lineinfile:
+        create: true
+        dest: /etc/login.defs
+        regexp: ^#?PASS_MAX_DAYS
+        line: PASS_MAX_DAYS {{ var_accounts_maximum_age_login_defs }}
+    tags:
+    - accounts_maximum_age_login_defs
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27051-2
+    - NIST-800-53-IA-5(f)
+    - NIST-800-53-IA-5(g)
+    - NIST-800-53-IA-5(1)(d)
+    - NIST-800-171-3.5.6
+    - PCI-DSS-Req-8.2.4
+    - CJIS-5.6.2.1
+    - DISA-STIG-RHEL-07-010250
+    when:
+    - '{{ medium_severity | bool }}'
+    - '{{ accounts_maximum_age_login_defs | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ restrict_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+
+-   name: Prevent Log In to Accounts With Empty Password - system-auth
+    replace:
+        dest: /etc/pam.d/system-auth
+        follow: true
+        regexp: nullok
+    tags:
+    - no_empty_passwords
+    - high_severity
+    - configure_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-27286-4
+    - NIST-800-53-AC-6
+    - NIST-800-53-IA-5(b)
+    - NIST-800-53-IA-5(c)
+    - NIST-800-53-IA-5(1)(a)
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.5
+    - PCI-DSS-Req-8.2.3
+    - CJIS-5.5.2
+    - DISA-STIG-RHEL-07-010290
+    when:
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ no_empty_passwords | bool }}'
+    - '{{ high_severity | bool }}'
+
+-   name: Prevent Log In to Accounts With Empty Password - password-auth
+    replace:
+        dest: /etc/pam.d/password-auth
+        follow: true
+        regexp: nullok
+    tags:
+    - no_empty_passwords
+    - high_severity
+    - configure_strategy
+    - low_complexity
+    - medium_disruption
+    - CCE-27286-4
+    - NIST-800-53-AC-6
+    - NIST-800-53-IA-5(b)
+    - NIST-800-53-IA-5(c)
+    - NIST-800-53-IA-5(1)(a)
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.5
+    - PCI-DSS-Req-8.2.3
+    - CJIS-5.5.2
+    - DISA-STIG-RHEL-07-010290
+    when:
+    - '{{ configure_strategy | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ medium_disruption | bool }}'
+    - '{{ no_empty_passwords | bool }}'
+    - '{{ high_severity | bool }}'
+
+-   name: Set SSH Idle Timeout Interval
+    lineinfile:
+        create: true
+        dest: /etc/ssh/sshd_config
+        regexp: ^ClientAliveInterval
+        line: ClientAliveInterval {{ sshd_idle_timeout_value }}
+        validate: /usr/sbin/sshd -t -f %s
+    tags:
+    - sshd_set_idle_timeout
+    - medium_severity
+    - restrict_strategy
+    - low_complexity
+    - low_disruption
+    - CCE-27433-2
+    - NIST-800-53-AC-2(5)
+    - NIST-800-53-SA-8(i)
+    - NIST-800-53-AC-12
+    - NIST-800-53-AC-17(b)
+    - NIST-800-171-3.1.11
+    - PCI-DSS-Req-8.1.8
+    - CJIS-5.5.6
+    - DISA-STIG-RHEL-07-040320
+    when:
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    - '{{ medium_severity | bool }}'
+    - '{{ low_complexity | bool }}'
+    - '{{ low_disruption | bool }}'
+    - '{{ sshd_set_idle_timeout | bool }}'
+    - '{{ restrict_strategy | bool }}'

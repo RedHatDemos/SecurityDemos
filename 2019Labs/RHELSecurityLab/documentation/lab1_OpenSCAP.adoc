@@ -316,7 +316,7 @@ After making this change, press *control + x* , then type *y* and press *enter* 
 ....
 
 . Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance.
-Setting `ansible_python_interpreter` is workaround for known issue in Ansible 2.7 used on the machine.
+Setting `ansible_python_interpreter` is a workaround for a known issue in the Ansible 2.7 binary installed on the lab machines.
 Make sure you run this on the *openscap.example.com* host:
 +
 ----
@@ -352,8 +352,8 @@ localhost                  : ok=458  changed=260  unreachable=0    failed=0
 ....
 
 . This command will take a while to finish.
-If you remove `--check` from the command, you will get machine closer to the compliance.
-Please note that you won't be able to log again into the machine, if hardened, as one of the requirements prohibits login as a root.
+If you omit the `--check` parameter from the previous command, you will get a machine compliant with the provided rules.
+Please note that you won't be able to log again into the machine, if hardened, as one of the requirements prohibits login as root.
 
 <<top>>
 

@@ -1,0 +1,24 @@
+---
+- hosts: "{{ HOSTS }}"
+  vars:
+    ssh_banner: true
+    sftp_enabled: true
+
+  pre_tasks:
+  - name: Set ansible user password
+    user:
+      name: ansible
+      group: ansible
+      password: '$6$ko/AOcM4$jTMKuf92AifkSwFY7EoWdWGMMw6GpHh2xQmOjEeaqYQNoHJAPFpUaXQqHsHHbosXo1663Mq9deh2LSexCAx47.'
+
+  roles:
+  - motd-splash
+  - hardening
+  - dev-sec.ssh-hardening
+
+  tasks:
+  - name: Link SSH Banner
+    file:
+      path: /etc/ssh/banner.txt
+      src: /etc/motd
+      state: link

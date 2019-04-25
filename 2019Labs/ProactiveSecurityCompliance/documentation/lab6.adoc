@@ -1,32 +1,333 @@
-
-== Lab 6: Viewing Security related reports for Red Hat Openstack Platform and Red Hat Openshift Container Platform
+== Lab 6: Automated Security Hardening of a Hacked Web Application
 
 === Goal of Lab 6
-The goal of this lab is to view other security related reports in Red Hat CloudForms for a hybrid environment. Specifically, we will look at security related reports for Red Hat Openstack Platform and Red Hat Openshift Container Platform.
+[[lab-excercises-overview]]
+Lab Excercises Overview
+-----------------------
+
+This lab demonstrates how installing a simple web application can leave
+open exploits. In some instances, a default mysql / mariadb installation
+includes default users that are allowed to connect without a password
+set. And if not at the time of installation, humans will often open up
+liberal permissions to make testing easier during development. When
+these changes make their way into production, a site is left vulnerable
+to attackers who are looking for these loopholes.
+
+We will demonstrate this vulnerability with some simple commands. After
+using an Ansible playbook to install a base WordPress web site, you will
+run a small shell script from your workstation, which will take over the
+public-facing corporate site with cat memes. We will then use an Ansible
+playbook to search and remediate common vulnerabilities (in this case,
+accounts with liberal permissions and no password set). After
+remediating the problem, we will see that our exploit script no longer
+works.
+
+[[task1]]
+TASK1:
+------
+
+*MISSION:* Install the LAMP web-app, "WordPress" Via Ansible Role
+
+*STEPS:* Run the job template "LAMP WordPress Deploy" from Ansible
+Tower, to install the web application for WordPress.
+
+* This role is configured to run against three servers in a group called
+_lampservers_ :
 
 
-=== Introduction
-Red Hat CloudForms has a robust reporting engine built into the product that allows you to create reports using any of the introspective data collected from your heterogeneous infrastructure. This data is stored either in an internal or external PostgreSQL database. You can use this collected data when creating reports , in control policies , or in automation workflows in Red Hat CloudForms.
+.Explanation of the servers you'll be using in this exercise.
+[width="90%",cols="^m,^m,,",frame="topbot",options="header,footer"]
+|=====================================================
+|     3+|Explanations of the machines we'll be using:
+    |lampweb
+    | 192.168.0.100
+    |This server is used for the apache web server. There is no local database on this machine
+    | The wordpress application is set with a default login of:
 
-=== Lab 6.1 Viewing Security related reports for Red Hat Openstack Platform
-. Log into CloudForms with *admin* as the username and *r3dh4t1!* as the password.
-. Navigate to *Cloud Intel -> Reports*.
-+
-image:images/lab6-cloudintelreports.png[500,500]
+---------------------------
 
-. Under *Saved Reports*, locate to the report named *Openstack - Top Security Groups Used*. Take a look at this report. In this report, we can see the top Openstack security groups. Here, we see that the Production and default security groups are tied, with both having 1 VM that is attached to these security groups.
-+
-image:images/lab6-ospreport.png[1000,1000]
+    http://rhel1.example.com
+
+    LOGIN:  admin
+
+    PASS:  Password123
+
+    |lampdb
+    | 192.168.0.101
+    |this server is a standalone database with no other purpose than to host the MySQL / MariaDB instance.
+    | The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!
+
+    |lampjump
+    | 192.168.0.102
+    |This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
+    | You will log in as lab-user to this machine and see a script in your home directory. Additionally, you can run remote MySQL commands from this machine against the unsecured database.
 
 
-=== Lab 6.2 Viewing Security related reports for Red Hat Openshift Platform
-. From CloudForms, take a look at the report named *OpenSCAP: Non-Compliant Containers*. In this report, we can see the not only the Container Name, but also the Container State, Image Name, whether it is OpenSCAP Compliant, what the last OpenSCAP Scan Date is and what the OpenSCAP scan Severity is.
-+
-image:images/lab6-ocpreport.png[1000,1000]
+|=====================================================
 
-+
-NOTE: Feel free to take a look at other reports that can be created as well by clicking on the *Reports* accordian. Note that you can also create custom reports specific to items you want to see that are not a part of this reports list.
-+
-image:images/lab6-reportsaccordian.png[300,300]
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7.adoc[ Lab 7]
+
+* This role appears to install an innocent apache server on one and a db
+on the other. To the innocent eye, we complete this step and validate by
+visiting the website... everything looks clean and safe!
+* Once ths role is run, you can confirm the application has been
+installed by using a web browser to go to http://rhel1.example.com
+
+[[task2]]
+TASK2:
+------
+
+*MISSION:* Confirm we can access the database insecurely and mess with
+the user accouts that already exist on the box. This effectively will
+lock out the legitimate user of the WordPress site so that they can no
+longer log in... but you will now have admin access to the site!
+
+*STEPS:* Go to the command-line of your jumpbox machine. SSH in as
+_lab-user@rhel3.example.com_ and connect to the database. This command
+will allow you to connect and will prove that the DB has been set up
+insecurely so that anyone can connect with no password, from any
+machine, anywhere.
+
+We have a user named "insecure" with no password for his account. His
+access is set wide open. Run this command to confirm you can connect.
+
+`mysql WordPress -h rhel2.example.com -u insecure`
+If you see the above dialogue, you're in! And that's really really bad.
+
+Okay, so that's not good. No really, that's not good at all. Anyone with
+a bit of curiosity can directly access the database that runs your
+entire site! They could add their own users and just sit back and
+wait... and when you run for public office, they could start posting bad
+things about you on YOUR OWN WEBSITE! Or they could just go for the
+gusto right now and cover your site in cat memes. Yeah. That's the one.
+In the next step, that's exactly what we're going to look at. But first,
+let's make ourselves a WordPress user so we can go in anytime and post
+articles.
+
+* While we're in the MySQL database, let's take a look at the users who
+are allowed to log in to the WordPress server:
+
+`select user_login,user_pass from wp_users;`
+
+`select * from wp_usermeta WHERE meta_key = 'wp_capabilities';`
+
+We see the user and the password has that's stored in the database for
+this user, as well as data that defines the access level. Now we're at a
+moral crossroads. Do we notify the owner of the site to warn them of
+this vulnerability? The fact that we can access the site's database and
+make changes without any credentials? Ideally yes. And I'm proud of you
+for that thought. But in this case, we want to demonstrate how bad this
+could be. So in this lab, we're going to do the wrong thing and take
+advantage of this inappropriate level of access. The access level for
+this user (level 10, being an administrative user) is stored in a second
+table. We can view this info direct from the databse and change it if we
+like:
+
+From here... we could change the admin password so that we can always
+log in as "admin" with our new password. Chances are, someone will
+realize they're locked out and eventually get back in. A real-world
+example would actually be sneaker: if we were the type of user to do
+such a thing as this, we would probably create an ambiguous username
+that _looked_ official but was our secret access backdoor.
+
+[[giving-ourselves-access-to-wordpress...-using-the-vulnerable-database-user-access.]]
+Giving ourselves access to WordPress... using the vulnerable database
+user access.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* it's as simple as updating the admin user's password. We don't know
+what that password even is, so we can't log in to WordPress conole...
+but we have wide open database access! So we can set it to whatever we
+want!
+* run this command to change the wordpress admin user's password:
+
+`update wp_users set  user_pass=MD5('FluffyBunny') WHERE \`user_login\`='admin';`
+
+* Verify you have access by visiting this admin login URL and logging in
+with your new credentials.
+* The admin user for this WordPress instance is now set to:
+* http://rhel1.example.com/wp-admin/
+* login: `admin`
+* password: `FluffyBunny`
+
+WOW. We are in! Verify by logging in as our admin account. The main
+thing we're pointing out here is the fact that this is a really scary
+exploitable loophole. This is the kind of security oopsie that we might
+not ever notice manually.
+
+* For now, get out of the MySQL prompt...
+* Type "exit" to leave the MySQL prompt and return back to a regular
+command line.
+
+[[task3]]
+TASK3:
+------
+
+*ABOUT THIS STEP:* This lab is unrelated to the previous exploit. The
+previous steps were there to verify that the database was insecure and
+that one method of exploiting it was to change a login user for MySQL,
+specifically the login for the WordPress application. Here, we'll be
+showing a second, equally scary dangerous situation that the exploitable
+user has caused. We'll do a SQL injection here to overwrite the contents
+of the website. All without even needing a password!!
+
+*PREAMBLE:* First of all, what we are about to do here is a very very
+not nice thing. But it's important to see that this is the type of event
+that happens all the time when people miss even one simple security
+vulnerability. Do not try this at home... or at the library... or from a
+computer anywhere. Always be nice and polite online. But for just one
+moment, we're going to do something rotten in this lab.
+
+*MISSION:* Exploit the database vulnerability by importing a database
+payload into the site's database.
+
+*STEPS:* On your workstation, you'll find a file called:
+
+`/home/lab-user/cat_meme_takeover.sh`
+
+* This script is set up to run an import command to a file located in
+that directory. A typical hacker might have a similar file to this,
+pre-designed to exploit a site once they found the vulnerability. When
+we run this script,
+* Run this script to exploit the DB.
+* You will see this after it runs:
+
+```
+[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+
+      HACKED!!!  YOU ARE A BAD KITTY!
+
+      ##############################
+       __  __ _____ _____        __
+      |  \/  | ____/ _ \ \      / /
+      | |\/| |  _|| | | \ \ /\ / /
+      | |  | | |__| |_| |\ V  V /
+      |_|  |_|_____\___/  \_/\_/
+
+      ##############################
+
+      DONE!  Now reload the web page
+         http://rhel1.example.com
+ to see what the evil cat hacker clan did!
+
+
+```
+
+Now, refresh the page at: http://rhel1.example.com You should see a new
+look to the website, informing you that the site has been hacked by cat
+memes.
+
+[[task4]]
+TASK4:
+------
+
+*MISSION:* Oh no! A script kitty hacked our site! Let's re-install the
+original WordPress role to reset the servers to a stable baseline.
+
+*STEPS:* Run the job template again "LAMP WordPress Deploy" from Ansible
+Tower, to install the web application for WordPress.
+
+* This reinstalls the Apache server rhel1.example.com and the DB server
+on rhel2.example.com
+* Once this role re-runs in this tasks, we are 100% back to our web site
+baseline, exactly where we were before the cat hackers took over the
+site content. The site is back to normal, but our database is still
+vulnerable due to that username which can be exploited.
+
+To confirm that our site is back to normal, refresh the page at:
+http://rhel1.example.com
+
+YAYY! We're no longer victims of a cat meme exploit!
+
+[[task5]]
+TASK5:
+------
+
+*MISSION:* Let's lock down the database so this won't work again.
+
+*STEPS:* Run the job template again "LAMP WordPress Secure" this time,
+from Ansible Tower, to run the hardening playbook.
+
+* This removes the open vulnerability which allows you to connect to the
+database and exploit it with cat memes.
+
+Now, refresh the page at: http://rhel1.example.com to confirm everything
+still works
+
+[[task6]]
+TASK6:
+------
+
+*MISSION:* Confirm we can not access the database insecurely (same steps
+as step 2).
+
+*PREAMBLE:* We have removed our user named "insecure" with no password
+for his account. His access was set wide open, but has been revoked with
+our latest hardening playbook. Run this command to confirm you can no
+longer connect. This is the exact command from TASK2 where we
+successfully connected
+
+*STEPS:* We will manually connect to the database from the workstation,
+as well as attempt to run the exploit again. Then we will attempt to run
+our SQL injection script again, in a second attempt to take the website
+over with cat memes.
+
+* From the command line, run:
+`mysql WordPress -h rhel2.example.com -u insecure` -- You should not be
+able to connect. "Access Denied!"
+
+```[lab-user@rhel3 ~]$ mysql WordPress -h rhel2.example.com -u insecure
+ERROR 1045 (28000): Access denied for user
+'insecure'@'rhel3.example.com' (using password: NO) [lab-user@rhel3 ~]$
+
+--------------------------------------------------------------------
+
+- Back on the jump host, run the same script from the earlier called
+
+ `/home/lab-user/cat_meme_takeover.sh`
+
+- This time, it should fail with a different message like this:
+--------------------------------------------------------------------
+
+[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+
+
+```
+
+[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+
+        FAILED!  You do not can haz
+        permissionz to the database
+
+       ##############################
+       ____      ___        ______  _
+      |  _ \    / \ \      / /  _ \| |
+      | |_) |  / _ \ \ /\ / /| |_) | |
+      |  _ <  / ___ \ V  V / |  _ <|_|
+      |_| \_\/_/   \_\_/\_/  |_| \_(_)
+
+       ##############################
+
+        FAILED!  You do not can haz
+        permissionz to the database
+```
+
+Access DENIED!!!!
+
+
+[[summary]]
+SUMMARY
+-------
+
+The default WordPress application install left us vulnerable to a SQL
+attack. The database was not secure in the way it was allowing us to
+connect without a password from a remote machine. This is not an
+uncommon situation. In order to demonstrate and experience the
+vulnerability,
+
+The playbook we ran to harden the database server targets and removes
+accounts set up to allow both: - remote access - no password
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ]

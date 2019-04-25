@@ -1,0 +1,16 @@
+---
+- hosts: "{{ HOSTS }}"
+  vars:
+    ssh_banner: true
+    sftp_enabled: true
+
+  roles:
+  - motd-splash
+  - hardening
+
+  tasks:
+  - name: Link SSH Banner
+    file:
+      path: /etc/ssh/banner.txt
+      src: /etc/motd
+      state: link

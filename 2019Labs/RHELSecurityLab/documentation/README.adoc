@@ -62,7 +62,7 @@ Each lab exercise is independent from each other, so feel free to do the lab exe
 * link:lab4_IPsec.adoc[Lab 4: IPSec]
 * link:lab5_USBGuard.adoc[Lab 5: USBGuard]
 * link:lab6_Audit.adoc[Lab 6: Audit]
-* link:lab7_AIDE.adoc[Lab 7: Audit Intrusion Detection Environment (AIDE)]
+* link:lab7_AIDE.adoc[Lab 7: Advanced Intrusion Detection Environment (AIDE)]
 * link:lab8_IdM.adoc[Lab 8: Identity Management (IdM)]
 * link:lab9_GPG.adoc[Lab 9: GNU Privacy Guard (GPG)]
 * link:lab10_firewalld.adoc[Lab 10: Firewalld]

@@ -1,4 +1,4 @@
-= Automated Security Scanning Using ComplianceAsCode
+= Lab exercies 2: Automated Security Scanning Using ComplianceAsCode
 
 :imagesdir: images
 
@@ -13,22 +13,22 @@ OpenSCAP Scanner allows you to perform security compliance checks in a fully aut
 It is possible to run the scan using either a command line  tool `oscap` or a graphical application SCAP Workbench.
 Several integrations for continuous scanning also exist but in this lab Exercise, we will focus on one-off scanning.
 
-== What will you learn
+== What you will learn
 
 * ... basics of automated security scanning in Red Hat Enterprise Linux 8
 * ... using ComplianceAsCode for automated security scanning.
 * ... how to do lightweight customization of a predefined security policy using a GUI tool.
-* ... what possibilities do you have for remediations of failing rules.
+* ... what are the possibilities for remediations of failing rules.
 
 
-== What have we done for you
+== What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
-* We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
+* We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
-* We have installed the OpenSCAP ecosystem packages, using `dnf install`:
+* We have installed the OpenSCAP ecosystem packages, using `yum install`:
 ** The scanner: `openscap-scanner`,
 ** utilities for scanning remote systems `openscap-utils`,
 ** GUI frontend and datastream tool `scap-workbench`
@@ -44,7 +44,7 @@ $ cd /home/lab-user/labs/lab2_openscap/content
 +
 in the terminal.
 
-* For best experience, open one more terminal window and also navigate to the project root in that one as well.
+* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
 * Open the file explorer and also navigate to the project root.
 * Finally, open the Firefox browser.
 
@@ -251,4 +251,4 @@ We recommend to review the contents of these scripts and test them in a testing 
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_profiles.adoc[Lab 3 - Create your own security policy from scratch ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_profiles.adoc[Lab exercise 3 - Create your own security policy from scratch ]

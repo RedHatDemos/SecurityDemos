@@ -1,4 +1,4 @@
-= Create your own security policy from scratch
+= Lab exercise 3: Create your own security policy from scratch
 
 :imagesdir: images
 
@@ -6,9 +6,9 @@
 
 Imagine that your company has approved an internal security policy that enforces certain configuration of laptops travelling outside the company site.
 Your task is to implement an automated way of checking the laptop configuration.
-In this lab excercise, we will show how to solve the task using ComplianceAsCode.
+In this lab exercise, we will show how to solve the task using ComplianceAsCode.
 
-== What will you learn:
+== What you will learn:
 
 * ... how to represent your company security policy as a security profile in ComplianceAsCode
 * ... how to operate with basic building blocks of ComplianceAsCode - the rules
@@ -17,10 +17,10 @@ In this lab excercise, we will show how to solve the task using ComplianceAsCode
 * ... how to create a new rule
 * ... how to scan your system against the profile you created
 
-== What have we done for you
+== What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
-* We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
+* We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
@@ -36,7 +36,7 @@ $ cd /home/lab-user/labs/lab3_profiles/content
 +
 in the terminal.
 
-* For best experience, open one more terminal window and also navigate to the project root in that one as well.
+* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
 * Open the file explorer and also navigate to the project root.
 * Finally, open the Firefox browser.
 
@@ -107,7 +107,7 @@ The profile consists of 4 items which are required:
 .. `title`: is a short profile title.
 .. `description`: is a few paragraphs that describe the purpose of the profile.
 .. `selections`: is a list of rules and variables that the profile is composed of.
-It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this lab excercise.
+It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this lab exercise.
 +
 . Save the profile file and go back to the root directory.
 +
@@ -220,14 +220,14 @@ A Firefox window will open and you will see your Travel profile which contains t
 
 == Adding customizable rules to the profile and customizing them
 
-Let’s imagine that one of the requirements set in your company policy is that the user sessions must timeout after 10 minutes of user’s inactivity.
+Let’s imagine that one of the requirements set in your company policy is that the user sessions must timeout after 5 minutes of user’s inactivity.
 
 At this point, we can, again, reveal to you that ComplianceAsCode already contains an implementation of this requirement in a form of a rule.
  You now need to add this rule to your “travel” profile.
 
 However, the rule in ComplianceAsCode is generic, or in other words, customizable.
 It can check for arbitrary period of user’s inactivity.
-We need to set the specific value (10 minutes) in the profile.
+We need to set the specific value (5 minutes) in the profile.
 
 . Find the rule ID.
 +
@@ -238,7 +238,7 @@ $ git grep -i "Interactive Session Timeout" "*rule.yml"
 linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml:title: 'Set Interactive Session Timeout'
 ----
 +
-As you already know from the first lab lab excercise, the rule is located in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml`.
+As you already know from the first lab lab exercise, the rule is located in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml`.
 It is easy to spot that the rule ID is `accounts_tmout` because the rule ID is the name of the directory where the rule is located.
 +
 . Add the rule ID to selections list in your travel profile.
@@ -286,7 +286,7 @@ In ComplianceAsCode, the YAML dictionary keys are used as selectors, the YAML di
 You use the selector to choose the value in the profile.
 You can add a new key and value to the `options` dictionary if none of the values suits your needs.
 We will add a new pair of variable name and selector into the profile.
-We will use the `10_min` selector to choose the 600 seconds.
+We will use the `5_min` selector to choose the 300 seconds.
 +
 . Add the variable and the selector to the selections list in your `travel` profile.
 +
@@ -295,7 +295,7 @@ $ gedit rhel8/profiles/travel.profile
 ----
 +
 Same as the rule IDs, the variable values also belong to the `selections` list in the profile.
-However, the entry for a variable has a format `variable=selector`. So in our case, the format of the list entry is `var_accounts_tmout=10_min`.
+However, the entry for a variable has a format `variable=selector`. So in our case, the format of the list entry is `var_accounts_tmout=5_min`.
 +
 Your `travel.profile` file should now look like in the following listing:
 +
@@ -311,7 +311,7 @@ selections:
     - security_patches_up_to_date
     - sshd_disable_root_login
     - accounts_tmout
-    - var_accounts_tmout=10_min
+    - var_accounts_tmout=5_min
 ----
 +
 . Rebuild the content.
@@ -329,7 +329,7 @@ $ firefox build/guides/ssg-rhel8-guide-travel.html
 ----
 +
 Firefox will open and you will see your Travel profile which contains 3 rules.
-Scroll down to the rule Account Inactivity Timeout and notice that 600 seconds have been substituted there.
+Scroll down to the rule Account Inactivity Timeout and notice that 300 seconds have been substituted there.
 
 
 == Scanning the system against the new profile
@@ -372,7 +372,7 @@ The structure of the HTML report is similar to the HTML guide, but it contains t
 After clicking on the rule title, you can see the detailed rule results.
 +
 In the detailed rule results for the rule *Set Interactive Session Timeout* you can review the rule description to see which requirement was not met by the scanned system.
-See the *OVAL details* section to examine the reason why this rule failed. It says that items displayed below were missing which means that on the scanned system no object described by the table below exists. In this specific example, there was no string that could match the pattern in `/etc/profile`, which means there is not any `TMOUT` entry in `/etc/profile`. To fix this problem we would need to insert `TMOUT=600` to `/etc/profile` and then run a scan again.
+See the *OVAL details* section to examine the reason why this rule failed. It says that items displayed below were missing which means that on the scanned system no object described by the table below exists. In this specific example, there was no string that could match the pattern in `/etc/profile`, which means there is not any `TMOUT` entry in `/etc/profile`. To fix this problem we would need to insert `TMOUT=300` to `/etc/profile` and then run a scan again.
 +
 .Details of the rule evaluation displayed in the HTML report.
 image::2-03-report.png[Report]
@@ -455,7 +455,7 @@ selections:
     - security_patches_up_to_date
     - sshd_disable_root_login
     - accounts_tmout
-    - var_accounts_tmout=10_min
+    - var_accounts_tmout=5_min
     - package_hexchat_installed
 ----
 +
@@ -464,7 +464,7 @@ selections:
 We have a template that will generate the automated checks in Open Vulnerability and Assesment Language (OVAL), Ansible, Bash, Anaconda and Puppet languages.
 There are multiple templates that can generate different checks.
 However, not everything is covered by template.
-Writing OVAL from scratch is discussed in the third lab excercise of this lab.
+Writing OVAL from scratch is discussed in the third lab exercise of this lab.
 +
 We only need to add the package to the list of packages for which the checks should be generated using a template.
 Add the `hexchat` package to the list of installed packages to be checked.
@@ -498,4 +498,4 @@ For more details about the `rule.yml` format, please refer to https://github.com
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4_profiles.adoc[Lab 4 - ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4_profiles.adoc[Lab exercise 4 - Using Ansible in ComplianceAsCode]

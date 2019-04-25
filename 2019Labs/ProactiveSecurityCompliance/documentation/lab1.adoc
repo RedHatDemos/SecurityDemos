@@ -1,61 +1,278 @@
-= Lab 1: Provisioning a security compliant host
+== Lab 1: Automated Scanning and Remediation of Host Systems for Vulnerabilities and Security Compliance
 
-== Goal of Lab 1
-The goal of this lab is to create a security compliant host at provisioning time in Red Hat Virtualization at the push of a button using Red Hat CloudForms and Ansible Automation. Specifically, in this lab exercise, you will use Red Hat CloudForms and Ansible Automation inside CloudForms for your custom provisioning automation workflow.
+=== Goal of Lab 1
+The goal of this lab is to learn how to use a combination of Red Hat Ansible Automation , Red Hat Satellite, Red Hat CloudForms, and OpenSCAP to automatically detect and remediate security and compliance issues in a controlled way for automated security compliance at scale.
 
 === Introduction
-Red Hat CloudForms provides users the ability to create self-service catalogs.  Through the use of catalogs, Red Hat CloudForms provides support for executing free form automation as a service and also allow for multi-tiered service provisioning to deploy layered workloads across hybrid environments. You can create customized dialogs that will give consumers of the services the ability to input just a few parameters and provision the entire service. In addition to using the native ruby language, free form automation workflows using the service catalog of Red Hat CloudForms can call Ansible Tower job templates or Ansible playbooks directly from Red Hat CloudForms.
+Security compliance management is the ongoing process of defining security policies, auditing for compliance with those policies and resolving instances of non-compliance. Once a security policy is defined, an audit is conducted to verify compliance with the policy. Any non-compliance is managed according to the organization's configuration management policies. Security policies vary in their scope, from being host-specific to industry-wide, so there is a need for flexibility in their definition.
 
-In this lab exercise, we will execute a custom provisioning service in the Red Hat CloudForms service catalog. From here, we will run customized Ansible provisioning playbooks to provision a Red Hat Enterprise Linux 7.5 host on Red Hat Virtualization that is locked down to a specific SCAP Profile chosen by the user from the Red Hat CloudForms service dialog. Red Hat Enterprise Linux 7.5 ships with Ansible SCAP remediation playbooks for various SCAP Profiles. In this lab exercise, these Ansible playbooks are presented to the user as SCAP Profiles to choose from to lock down the newly provisioned Red Hat Enterprise Linux 7.5 host against the chosen SCAP profile.
+The Security Content Automation Protocol (SCAP) enables the definition of security configuration policies. For example, a security policy might specify that for hosts running Red Hat Enterprise Linux, login via SSH is not permitted for the root account. OpenSCAP is the integrated security scanning, auditing, and remediation tool in both Red Hat Enterprise Linux and Red Hat Satellite.
 
-As a result, users can easily provision a security compliant host using any of the provided SCAP security profiles in Red Hat Enterprise Linux 7.5. Users also have the ability to use custom security profiles to lock down a provisioned system against your specific security controls. You can easily create custom modified security profiles using SCAP workbench (which is also provided as part of Red Hat Enterprise Linux).
+In Red Hat Satellite, tools provided by the OpenSCAP project are used to implement security compliance auditing. For more information about OpenSCAP see the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index[Red Hat Enterprise Linux 7 Security Guide] and the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8-beta/html/configuring_and_managing_security/scanning-the-system-for-security-compliance-and-vulnerabilities_configuring-and-managing-security[Red Hat Enterprise Linux 8 Security Guide]. The Satellite web UI enables scheduled compliance auditing and reporting on all hosts under management by Red Hat Satellite.
 
-==== Lab 1.1 Provisioning a security compliant host at the push of a button using Red Hat CloudForms and Ansible Automation
-. On the CloudForms appliance (cfme-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+Red Hat Ansible Automation is automation software powered by Red Hat Ansible Engine-an execution engine with hundreds of modules that can automate all aspects of IT environments and processes—and Red Hat Ansible Tower—a management interface that can integrate with other services. In this lab exercise, you will use Red Hat Ansible Tower for centralized automation.
 
-. Navigate to *Services -> Catalogs*.
+Red Hat CloudForms is an infrastructure management platform that allows IT departments to control users’ self-service abilities to provision, manage, and ensure compliance across virtual machines and private clouds. In this lab exercise, you will use Red Hat CloudForms to launch Red Hat Ansible Automation security compliance scan and remediation automation tasks from a custom button.
+
+=== Lab 1.1 Introduction to SCAP content provided in Red Hat Satellite
+Before creating a SCAP compliance policy for a host, you need SCAP content.
+
+SCAP content is a datastream format containing the configuration and security baseline against which hosts are checked. Checklists are described in the extensible checklist configuration description format (XCCDF) and vulnerabilities in the open vulnerability and assessment language (OVAL). Checklist items, also known as rules express the desired configuration of a system item. For example, you may specify that no one can log in to a host over SSH using the root user account. Rules can be grouped into one or more profiles, allowing multiple profiles to share a rule. SCAP content consists of both rules and profiles.
+
+You can either create SCAP content or obtain it from a vendor. Supported profiles are provided for Red Hat Enterprise Linux in the scap-security-guide package. The creation of SCAP content is outside the scope of this lab, but see the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index[Red Hat Enterprise Linux 7 Security Guide] or the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8-beta/html/configuring_and_managing_security/scanning-the-system-for-security-compliance-and-vulnerabilities_configuring-and-managing-security[Red Hat Enterprise Linux 8 Security Guide] for information on how to download, deploy, modify, and create your own content. The SCAP content provided with Red Hat Enterprise Linux is compliant with SCAP specification 1.2.
+
+The default SCAP content provided with the OpenSCAP components of Red Hat Satellite depends on the version of Red Hat Enterprise Linux:
+
+* On Red Hat Enterprise Linux 7, content for both Red Hat Enterprise Linux 6 and Red Hat Enterprise Linux 7 is installed.
+
+* On Red Hat Enterprise Linux 6, content for Red Hat Enterprise Linux 6 is installed.
+
+
+When you install the SCAP components in Satellite as defined in the link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.4/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-security_compliance_management/[Administering Red Hat Satellite Guide], all of the Red Hat default content will show up in Satellite so no extra steps are necessary to add the SCAP content to Satellite.  But if you had customized content that you wrote yourself or if you have a modified policy and you wanted to upload that modified version , you can do that in the Satellite UI under *Hosts → SCAP contents*.
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
 +
-image:images/lab1.1-services-catalog.png[200,200]
-
-. Order the *RHEL 7.5 on RHV* service.
+image:images/scapcontents.png[300,300]
 +
-image:images/lab1.1-all-services.png[900,900]
-
-. Name the VM *lab1-vm1*, choose the default IP Address *192.168.1.110* , and choose the *ssg-rhel7-role-standard* SCAP Profile from the drop down. Click on *Submit*. This will provision a Red Hat Enterprise Linux 7.5 VM in Red Hat Virtualization that is locked down to the *ssg-rhel7-role-standard* SCAP Profile.
-+
-WARNING: Provisioning and scanning can take up to 10 minutes.
-+
-image:images/lab1.1-order-service.png[600,600]
-
-. From the Service Requests page, click on the *Refresh* button at the top until the service request shows *Approved*. Note that this default approval workflow can be customized.
-+
-image:images/lab1.1-services-requests.png[600,600]
-
-. Navigate to *Services -> My Services*.
-+
-image:images/lab1.1-services-myservices.png[400,400]
-
-. Click on the *RHEL 7.5 on RHV* service and then click on the *Provisioning* tab to view the Ansible output.
-+
-image:images/lab1.1-myservice.png[600,600]
-
-. Press the refresh button periodically to refresh the Ansible output.
-+
-NOTE: After clicking on refresh you will need to click on the *Provisioning* tab to view the Ansible output. You can disregard `FAILED - RETRYING` messages in the output as this is normal.
-+
-image:images/lab1.1-service-results.png[400,400]
-
-. Review the Ansible provisioning playbook output by scrolling all the way down. Notice that the SCAP remediation has ran and the *PLAY RECAP* shows no failures.
-+
-image:images/lab1.1-ansible-output.png[400,400]
-
-. Go back to the top of the screen and click on the *Details* tab. Then click on your newly provisioned *lab1-vm1* VM.
-+
-image:images/lab1.1-provisionedvm.png[400,400]
-
-. Notice that the *lab1-vm1* VM provisioned successfully and now has a hostname and the IP address you assigned it during provisioning.
-+
-image:images/lab1.1-summaryprovisionedvm.png[500,500]
+NOTE: To save time on this lab exercise, the SCAP components in Satellite were already installed for you. This is why you are seeing the default content under *Hosts → SCAP contents*.
 
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[ Lab 2]
+=== Lab 1.2 Viewing the already created SCAP compliance policies
+Now that you have SCAP content defined in Satellite, let's take a look at the SCAP compliance policies that have been already created for you.
+
+. Take a look at the SCAP policies by navigating to *Hosts → Policies*.
++
+image:images/scappolicies.png[300,300]
+. Notice that there are 3 Compliance Policies that were already created for you: *RHEL7_Custom*, *RHEL7_PCI*, and *RHEL7_Standard*.
++
+image:images/policies.png[1500,1500]
+
++
+NOTE: A custom policy named *RHEL7_Custom* has already been uploaded for you. The *RHEL7_Custom* policy simply checks to see if the AIDE package is installed.
+
+. Let's take a look at the *RHEL7_PCI* compliance policy that was already created for you. Click on *Edit* in the *Actions* drop down list.
++
+image:images/editcompliancepolicy.png[1500,1500]
++
+NOTE: A SCAP compliance policy takes one of the security profiles that are available in your SCAP content and applies it to a group of systems(as defined in your Hostgroups). You can also overwrite your SCAP content with a tailoring file. You will learn more about how to use tailoring files later in this lab exercise.
+
+. Click on and review the various tabs including *General*, *SCAP Content*, *Schedule*, *Locations*, *Organizations*, and *Host Groups*.
+
+. In the *SCAP Content* tab,
+* Notice that nothing is selected for *Tailoring File*. We will add a tailoring file later.
++
+image:images/tailoring.png[1000,1000]
++
+NOTE: Red Hat Satellite 6.3 introduced the Tailoring Files feature. Tailoring Files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. It is important to note that the Tailoring files feature does not provide the abililty to create tailoring files. A Tailoring file can be created using SCAP Workbench(which is included in Red Hat Enterprise Linux). Once you have a Tailoring file you can upload it and assign the Tailoring File to a policy.
+
+. In the *Schedule* tab,
+* Whatever is defined here as a schedule is executed as a cron job on the client. For Period, if you selected Custom, you can define normal cron syntax to define when the schedule is going to run.
+
+
+. In the *Hostgroups* tab,
+* The compliance policy will apply to your selected *Hostgroup(s)*.
++
+NOTE: Hostgroups are groupings of systems that are built and configured the same. You can use Hostgroups as a means to roll out certain compliance policies to certain subsets of your systems.
+
+. Click *Cancel* when you are done looking through the tabs.
++
+image:images/cancel.png[800,800]
+
+=== Lab 1.3 Executing security compliance policy scan on hosts at scale from Red Hat Ansible Tower
+
+. Now that you have defined SCAP compliance policies in Red Hat Satellite,
+let's run a SCAP compliance policy scan on a few hosts using Red Hat Ansible Tower.
+
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Inventories* and click on the *Satellite Inventory*.
++
+image:images/towerinventory.png[400,400]
+
+. Next click on *GROUPS* and click on the *foreman_lifecycle_environment_rhel7_qa* group. We will be running our SCAP compliance policy scan on the hosts in this group.
++
+image:images/towergroups.png[400,400]
+
+. Now let's take a look at the hosts that are part of the foreman_lifecycle_environment_rhel7_qa group. Click on *HOSTS*. Notice that there are two hosts that are part of the foreman_lifecycle_environment_rhel7_qa group: *rhel7-vm1.hosts.example.com* and *rhel7-vm2.hosts.example.com*.
++
+image:images/towerhosts.png[600,600]
+
+. *Copy* the *foreman_lifecycle_environment_rhel7_qa* group name. We will be using this group name in the next step when we launch our Red Hat Ansible Tower job to execute the SCAP compliance policy scan on the hosts that are part of this group.
+
+. Next, navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*.
++
+image:images/linuxscapscan.png[1500,1500]
+
+. Now, for *HOSTS*, paste or type in the *foreman_lifecycle_environment_rhel7_qa* group name from before and choose the *RHEL7_PCI* profile from the *CHOOSE PROFILE* drop down list. Click *NEXT*.
++
+image:images/linuxscapscan-profilehost.png[1000,1000]
+
+. Take a look at the preview of the Red Hat Ansible Tower job we are about to run. In this job, we are going to run the RHEL7_PCI SCAP compliance policy scan from the Red Hat Satellite server (sat64.example.com) on the hosts in the foreman_lifecycle_environment_rhel7_qa group. The RHEL7_PCI SCAP compliance policy is one of the SCAP compliance policies that is already configured in our Red Hat Satellite server.
+Click *LAUNCH* to launch this scan. This scan will take about 3 minutes to complete.
++
+image:images/linuxscapscan-preview.png[1000,1000]
++
+NOTE: Ansible Tower jobs can be scheduled to run on a periodic basis as well.
+
+. As we wait for this scan to complete, let's take a deeper look at what's happening in the background by looking at the log shown in Red Hat Ansible Tower. First, notice that we're running a playbook named *scap-scan.yml*. You can find this playbook in github  https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/ProactiveSecurityCompliance/Ansible/patching-playbooks/scap-scan.yml[here^]. When we look at the Red Hat Ansible Tower log, we first see tasks being executed from the *ansible-role-scap-client* role. Here, we're making sure that the SCAP client is installed and configured on the hosts.
++
+image:images/towerjobrun.png[1500,1500]
++
+NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to a desired state, further runs of the same playbook will result in 0 changes. As a result, this playbook will check to make sure the client is installed and configured, but if there are no changes to be made, Ansible will skip over the task and verify that the systems are in the correct state. Also note that when we're accessing the host systems, we're using credentials that are encrypted and securely stored in Red Hat Ansible Tower.
+
+Next, notice that the *Run SCAP Scan* task is being run. This will run the specified SCAP compliance policy (RHEL7_PCI) scan on the hosts. Once the scan completes, the SCAP compliance report will be automatically uploaded to the Red Hat Satellite server.
+
+Finally, once you see *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
+
+image:images/runscan-playrecap.png[1000,1000]
+
+=== Lab 1.4 Viewing the OpenSCAP scan reports in Red Hat Satellite
+
+. Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished running on our specified hosts from the previous lab exercise, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+
+. Navigate to *Hosts → Reports*.
++
+image:images/hostreports.png[300,300]
+
+. Notice that there are two RHEL_PCI compliance policy reports, one for the *rhel7-vm1-hosts.example.com* host and another for the *rhel7-vm2.hosts.example.com* host. Notice that they both have 38 compliance rules that passed and 53 that failed and 3 other, which are compliance rules that were not checked. Let's look at one of the reports in more detail. We'll look at the compliance report for the *rhel7-vm2.hosts.example.com* host. Click the link in the *Reported At* column for the *rhel7-vm2.hosts.example.com* host. The *Reported At* column says how long ago the report was created.
++
+image:images/scanresults-satellite.png[2000,2000]
+
+. In this report, you can see the security rules that have passed and failed at a high level which allows you to see the security posture of a system based upon an assigned audit policy.
++
+image:images/viewreport1.png[1000,1000]
+image:images/viewreport2.png[1000,1000]
+
+. To see the detailed full report, click on *View full report* at the top right. Notice that you can optionally *Download the XML* of the report in bzip or HTML format as well.
++
+image:images/viewfullreport.png[1000,1000]
+
+. Glance through this full report to see what rules passed/failed, severity of the rules, etc.  Notice that you can click on each rule for more detailed information.
++
+image:images/lab2-moredetails1.png[500,500]
+
+
+
+=== (LEFT OFF) Lab 1.5 Remediating SCAP compliance policy scan failures with Red Hat Ansible Tower
+
+. Now let's fix the OpenSCAP scan failures from the *RHEL7_PCI* compliance policy on the hosts from the previous lab exercise.
+
+=== Lab 1.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
+
+As mentioned earlier, Satellite 6.3 introduced the tailoring files feature. Tailoring files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. In other words, tailoring files allow you to add or ignore rules in the default policy content file. So if the rule is enabled in both the default content and the tailoring file, then the rule is enabled. If the rule is disabled in the tailoring file, but enabled in the default content, then the rule is disabled. If the rule is disabled in the default policy content file but enabled in the tailoring file , then the rule is enabled.
+
+It is important to note that the tailoring files feature does not provide the ability to create tailoring files. A tailoring file can be created using SCAP Workbench(which is included in Red Hat Enterprise Linux). Once you have a tailoring file you can upload it and assign the Tailoring File to a policy.
+
+. First, let's upload a tailoring file into Satellite. Navigate to http://sat6-GUID.rhpds.opentlc.com/pub. From here, download the *ssg-rhel7-ds-tailoring-standard.xml* file onto your laptop. This is the one we will use for this lab exercise. Feel free to download the other tailoring files for your own use later.
+
+. From Satellite, navigate to *Hosts -> Tailoring Files*
++
+image:images/lab2-tailoringfilesmenu.png[600,600]
+
+. Click on *New Tailoring File* and enter *Tailoring File for Standard Compliance Policy* for the Name and *Scap file*, Click *Browse*, navigate to the location containing the SCAP DataStream Tailoring File and select *Open*.
++
+image:images/lab2-uploadtailoringfile1.png[600,600]
+
+. Click on the *Locations* tab, click the *Default Location* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Location*. Press *Submit* when done.
++
+image:images/lab2-uploadtailoringfile-location.png[600,600]
+
+. Now let's assign this tailoring file to a compliance policy. Navigate to *Hosts → Policies*. For the *RHEL7_Standard* compliance policy that you created earlier, click on *Edit*.
++
+image:images/lab2-editstandardpolicy1.png[600,600]
+
+. Under the *SCAP Content* tab, select the tailoring file we uploaded earlier in the *Tailoring File* section. Note that the *XCCDF Profile in Tailoring File* section automatically got filled in once you select your tailoring file. Press *Submit*.
++
+image:images/lab2-addtailoringfiletopolicy.png[600,600]
+
++
+NOTE: Tailoring files are able to contain multiple XCCDF Profiles. Also, Satellite does not enforce that the tailoring file match the XCCDF profile. However, you need to make sure that they match to avoid running into errors when using the tailored compliance policy.
+
+=== Lab 2.7 Re-executing the compliance policy scan on the host and viewing the OpenSCAP scan results reports
+
+In the previous lab exercise steps, we assigned the tailoring file to the *Standard* compliance policy and we fixed the OpenSCAP compliance scan error for the *rhel7-custom* compliance policy by installing AIDE on the *lab2-vm1.example.com* host. We can now re-execute the compliance policy scan on the *lab2-vm1.example.com* host and generate the report of the OpenSCAP compliance scans.
+
+. Navigate to *Hosts -> All hosts*
++
+image:images/lab2-hostsallhosts.png[1000,1000]
+
+. Next, put a check mark next to *lab2-vm1.example.com*. Then, at the top right, navigate to *Select Action -> Schedule Remote Job*.
++
+image:images/lab2-scheduleremotejob.png[1000,1000]
+
+. Now, for *Job Category* , select *Puppet*. Then, notice that for *Job template*, *Puppet Run Once - SSH Default* is automatically selected for you. Leave everything else as is. Press *Submit*. This puppet job should finish quickly and you should see a green circle with 100% success.
++
+image:images/lab2-puppet.png[1000,10000]
+
+. Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*.
+Navigate to *Hosts -> All hosts* again. Then, put a check mark next to *lab2-vm1.example.com*. At the top right, navigate to *Select Action -> Schedule Remote Job*.
++
+image:images/lab2-hostsallhosts.png[1000,1000]
++
+image:images/lab2-scheduleremotejob.png[1000,1000]
+
+. This time under *Job Category*, select *OpenSCAP*. Then, notice that for *Job template*, *Run OpenSCAP scans* is automatically selected for you. Leave everything else as is. Press *Submit*. Notice that the 5 compliance policy scans are being executed on the *lab2-vm1.example.com* host.
++
+image:images/lab2-openscapscan.png[1000,1000]
+
+. You are now at the *Overview* page for the OpenSCAP scan that you ran on the *lab2-vm1.example.com* host. Notice on the lower left that the 5 compliance policy scans are being executed on the *lab2-vm1.example.com* host (foreman_scap_client 1, 3, 5, etc).  Wait for the OpenSCAP scap job to finish. After a few mins, you will notice that the OpenSCAP scan on this host completed with 100% Success.
++
+image:images/lab2-successcircle.png[1000,1000]
+
+. Now let's view the SCAP scan reports again for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
++
+image:images/lab2-hostreports.png[600,600]
+
+. Notice that there are 5 new Compliance reports, each one corresponding to a SCAP policy (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
+
++
+NOTE: For the recently run *RHEL7_Standard* compliance policy, notice that 19 rules now pass(vs 8 rules that passed before) and 3 rules now fail (vs 2 rules failing before). This is because of the tailoring file we attached to the *RHEL7_Standard* compliance policy. Also, notice that now the 1 rule in the *rhel7-custom* policy now passes (vs failing before).
++
+image:images/lab2-scapreportafter.png[1000,1000]
+
+. Click on the report for the *rhel7-custom* policy by clicking the link in the  *Reported At* column.
++
+image:images/lab2-custompolicypass1.png[1000,1000]
+
+. Notice that the policy now has passed since AIDE is now installed on this *lab2-vm1.example.com* host.
++
+image:images/lab2-custompolicypass2.png[1000,1000]
+
+. In addition, let's see how many hosts are compliant to the *rhel7-custom* compliance policy. Navigate to *Hosts → Policies*. Click on *rhel7-custom* to see the number of hosts that are compliant and non-compliant within a policy.
++
+image:images/lab2-compliancesummary.png[1000,1000]
+
+=== Lab 2.8 (*Optional*) Viewing the global status indicator in Satellite 6
+
+Compliance status is one of the items that affect the global status of a system. In Satellite, we have the global status indicator, which is an aggregate of all the compliance states on the system. Specifically, in order to determine the global status, Satellite checks the status of: compliance with SCAP policies, build, configuration, execution, errata, subscription, and traces. Whichever is the worst status is what governs the overall status of the system. This is important to note since if you have a system that fails a SCAP policy finding, you’ll be able to see this quickly in the Satellite UI.
+
+. Take a look at the global status indicator by navigating to *Hosts → All Hosts*. Hover over the red circle next to *lab2-vm1.example.com*. Notice that you can see at a high level what is wrong with this host in the text once you hover over the red circle.
++
+image:images/lab2-globalstatushover.png[1000,1000]
+
+. Next, let's look at the global status indicator in more depth. Click on *lab2-vm1.example.com*.
++
+image:images/lab2-clickonlab2vm1.png[600,600]
+
+. In the *Properties* box on the left of the Satellite UI, notice that the global *Status* indicator says *Error* due to failing the SCAP scan.
++
+image:images/lab2-globalstatusproperties.png[500,500]
+
+=== Lab 2.9 (*Optional*) Managing Users and Roles
+
+For the administrator, Red Hat Satellite provides the ability to create, modify, and remove users. Also, it is possible to configure access permissions through assigning roles to users. We will not be diving deep into Users and Roles in this lab exercise. For more details on managing users and roles in Satellite, see the guide on link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.3/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-users_and_roles[Administering Red Hat Satellite].
+
+. Satellite does have a default *Compliance viewer* and *Compliance manager* role. You can customize these roles and assign these roles to users. Users with the *Compliance manager* role can create new compliance policies and associate them with Hostgroups. Users with the *Compliance viewer* role can only view compliance reports.
+
++
+image:images/lab2-roles.png[200,200]
++
+image:images/lab2-complianceroles.png[200,200]
+
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3]

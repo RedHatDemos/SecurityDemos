@@ -45,7 +45,7 @@ Once you have created a new key pair, you can export these keys to identify your
 * Key Type - RSA is the default. Type *(1)* to pick this.
 * Key Size - Type *2048*.
 * Expiration - Type *0* for no expiration. This is generally fine for local encryption
-* User ID: Type *labuser*. This can be anything.
+* Real Name: Type *labuser*. This can be anything.
 * Email address: labuser@test.com. This can be any email address.
 *  Type (O) for Okay/Quit.
 * For *Comment*, just press enter to have a blank comment.

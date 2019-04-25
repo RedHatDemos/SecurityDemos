@@ -1,0 +1,49 @@
+
+- name: Check if selinux role sets SELinux booleans
+  hosts: all
+  become: true
+
+  tasks:
+    - name: initial changes
+      include_role:
+        name: selinux
+      vars:
+        selinux_booleans_purge: true
+        selinux_booleans:
+          - { name: 'samba_enable_home_dirs', state: 'on', persistent: 'yes' }
+
+    - include: set_selinux_variables.yml
+    - name: save state after initial changes and before other changes
+      set_fact:
+        boolean_before: "{{ selinux_role_boolean.stdout_lines }}"
+
+    - name: Check if there are SELinux boolean changes
+      assert:
+        that: "{{ selinux_role_boolean.stdout != '' }}"
+
+    - name: subsequent changes
+      include_role:
+        name: selinux
+      vars:
+        selinux_booleans_purge: false
+        selinux_booleans:
+          - { name: 'httpd_can_network_connect', state: 'on', persistent: 'yes' }
+
+    - include: set_selinux_variables.yml
+    - name: save state after other changes
+      set_fact:
+        boolean_after: "{{ selinux_role_boolean.stdout_lines }}"
+
+    - name: Check if there are SELinux boolean changes
+      assert:
+        that: "{{ ( boolean_before | count ) < ( boolean_after | count ) }}"
+
+    - include_role:
+        name: selinux
+      vars:
+        selinux_booleans_purge: true
+
+    - include: set_selinux_variables.yml
+    - name: Check if there are no SELinux boolean mapping changes
+      assert:
+        that: "{{ selinux_role_boolean.stdout == '' }}"

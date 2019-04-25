@@ -1,199 +1,53 @@
-== Lab 3: How to use the control policy engine in Red Hat CloudForms and Red Hat Ansible Automation to enforce automated compliance with security policies
+== Lab 3: Automated Patching of Host Systems
 
 == Goal of Lab 3
-The goal of this lab is to introduce you to the power and flexibility of Red Hat CloudForms and Red Hat Ansible Automation to enforce compliance with your security policies in an automated fashion.
-
-Specifically, using a combination of Red Hat CloudForms and Red Hat Ansible Automation, you will: enforce the installation of the AIDE package, determine if an Openstack instace is vulnerable to the Meltdown and Spectre vulnerabilities, and enforce Openstack security group membership.
 
 == Introduction
-Red Hat CloudForms provides unified hybrid cloud management across your entire heterogenous environment, including virtual, private cloud, public cloud, and container environments. It is an agentless solution, delivered as a virtual appliance, highly scalable and provides deep continuous visibility and discovery of your entire infrastructure. The Red Hat CloudForms control and policy engine provides compliance and governance capabilities right in the GUI of CloudForms. A control policy is created in the Red Hat CloudForms control and policy engine by defining an Event, Condition, and Action. The Action can be one of the defined actions in the Red Hat CloudForms control engine or it can be free-form automation. The Red Hat CloudForms automate engine can be utilized to execute free-form automation using either the native ruby language or using the integrated Ansible to execute Ansible playbooks.  Red Hat CloudForms is also able to communicate directly to your Ansible Tower instance to execute your Ansible playbooks.
+____
+[Automation] is not magic. It’s about continuous, daily improvement—the constant discipline of pursuing higher performance by following the heuristic “if it hurts, do it more often, and bring the pain forward.”
+____
+-- https://continuousdelivery.com[Jez Humble]
 
-Red Hat Ansible Automation is integrated in Red Hat CloudForms. It is a simple, powerful, and agentless IT automation technology that can help improve your current processes, migrate applications for better optimization, and provide a single language for DevOps practices across your organization including Developers, Operations, and the Security Team.
+Frequent patching is a crucial component to maintainting a secure environment. It is often avoided, delayed, or heavlily lagging due to the involved manual process required to confidently roll new patch sets out to systems and applications. In this lab, we will see how utilizing RedHat Satellite (content repository) and Ansible Tower (Automation Platform) make patching must less of a burden.
 
-Ansible Tower by Red Hat provides a graphical user interface for Ansible with a visual dashboard, a centralized API for your Ansible automation, role-based access control for increased security, job scheduling, graphical inventory management, and real-time job status updates thus providing you all the IT automation features you need to support your enterprise.
+Before we get started, let's understand a little about the setup and process since much of what we do will be automated.
 
-Red Hat Ansible Automation is great for security automation because it is agentless, only requires SSH/WinRM, supports desired state, is extensible and modular, has a push-based architecture, and provides easy targeting based on facts.
+. Open the Web UI for your Satellite Server. Select "Content" from the navigation on the left and then select "Content Views". Here you will find a content view called `RHEL7_Standard`. This is used for all base builds of RHEL7.
++
+image:images/lab4-content_views.png[500,500]
 
-=== Lab 3.1 Using Red Hat CloudForms compliance policy with Red Hat Ansible Automation to enforce the installation of the AIDE package
-. On the CloudForms appliance (cfme-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Click on the `RHEL7_Standard` content view. Once the page loads, click the "Versions" tab at the top of the frame. You will see 1 version associated with all lifecycle environments.
++
+image:images/lab4-content_versions.png[500,500]
++
+To patch our systems, we will need to create a new version of the content view that contains any newly syncronized packages. Next, we want to promote that version to the lower environments to test the patches prior to releasing to higher environments. This would all have to be done manually if we did not have automation and as the number of content views and environments grows, so does the workload in doing this manually.
 
-. Navigate to *Control -> Explorer*.
-+
-image:images/lab3.1-control-explorer.png[200,200]
+. From the Tower dashboard, select "Templates" from the navigation bar on the left.
 
-. Navigate to *Policy Profiles -> Lab 3.1 Enforce-AIDE -> Lab 3.1 Enforce AIDE Package*.
+. In the Templates view, locate the "PATCHING / 1 Dev" job template by searching or scrolling, and click the rocket ship icon to the left of the template name. This will launch the job and we will observe what actions it automates as it runs. The next few steps will walk you through what the automation is doing.
 +
-image:images/lab3.1-control-policy.png[600,600]
-+
-NOTE: This control policy dictates that when a VM is powered on, install the AIDE package.
+image:images/lab4-launch_dev.png[500,500]
 
-. Click on this control policy by clicking on the event action that says *Lab 3.1 Yum Install Aide*.
+.. First, we need to publish a new version of content. Go back to Satellite and look at your content view again. (Content > Content Views > RHEL7_Standard) You will notice in the "Versions" section that a new version is being created.
 +
-image:images/lab3.1-clickaction.png[600,600]
+image:images/lab4-create_version.png[500,500]
 
-. Notice that this control policy is invoking a custom automation by calling an Ansible playbook that will install the AIDE package.
+.. Next, the 'RHEL7_Dev' lifecycle environment will be promoted to use the new version.
 +
-image:images/lab3.1-invokecustomautomation.png[400,400]
+image:images/lab4-promote_version.png[500,500]
 
-. Navigate to Services -> Workloads
-+
-image:images/lab3.1-services-workloads.png[400,400]
+.. After that, we scan the hosts for new Errata. This simply updates satellite with the patches missing on the system now that we have a new version of content.
 
-. Click on *lab3-vm1* which will take you to the VM summary page.
+.. Ansible will then run a `yum update` on the hosts to install the new content. Click the "Details" link while the "Install Updates" job is running. From here we can monitor progress across all hosts.
 +
-image:images/lab3.1-clickonvm.png[500,500]
-image:images/lab3.1-vmsummary.png[500,500]
+image:images/lab4-job_details.png[500,500]
 
-. Click on *Policy -> Manage Policies*
+.. Click the back button in your browser to go back and monitor the full workflow. The next 2 jobs will run in parallel since they are not dependent on each other. One will run and OpenSCAP scan on the system post updates to provide the latest compliance report. The other will rescan the host again and upload the patch status to Satellite.
 +
-image:images/lab3.1-policy-manage-policies.png[400,400]
+image:images/lab4-monitor_workflow.png[500,500]
 
-. Verify that the Lab 3.1 control policy is assigned and click on *Cancel* to exit.
+. Finally, if all of the previous steps were successful, a schedule will be created in Ansible Tower to patch the QA environment 7 days from now. Once the entire workflow is complete, select "Schedules" from the navigation menu on the left. Click on the schedule titled "Linux_patching_*". Inspect the scheule to take note of the workflow it will run and the date that is scheudled. From this page you can disable the schedule, reschedule, cancel, etc. If no changes are made, it will automatically promote and patch your QA environment. Since we do not have 7 days to wait, if you would like to watch the process again, return to the "Templates" page and manually run "PATCHING / 2 - QA".
 +
-image:images/lab3.1-policy-assignment.png[600,600]
-
-. From the VM summary page power on the VM. This will trigger the control policy to execute an Ansible playbook to install the AIDE package. Note that it can take a minute or so for the package to be installed.
-+
-image:images/lab3.1-power-on.png[200,200]
-
-. Note the IP address for *lab3-vm1*.
-+
-image:images/lab3.1-vm-ipaddress.png[400,400]
-
-. If not already there, log into to the bastion host as *root* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!* for *root*.
-
-+
-[source]
-----
-[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
-----
-
-. Log into the *lab3-vm1.example.com* host using its IP address *192.168.1.171*.
-+
-[source]
-----
-[root@workstation-GUID ~]# ssh 192.168.1.171
-----
-
-. Once logged in check to see if the *AIDE* package is installed.
-+
-NOTE: It may take a couple of minutes for the aide package to appear. So keep trying!
-+
-[source]
-----
-[root@lab3-vm1 ~]# rpm -qa --last aide
-aide-0.15.1-13.el7.x86_64  Thu 12 Apr 2018 04:26:59 PM EDT
-----
-
-. Log out of the ssh session.
-
-=== Lab 3.2 Using Red Hat CloudForms compliance policy to determine if an OpenStack instance is vulnerable to the Meltdown and Spectre vulnerabilities
-. Open a private browser window in your web browser.  In the private browser window go to the CloudForms appliance URL (cfme-GUID.rhpds.opentlc.com) and log in with *labuser* as the user name and *r3dh4t1!* as the password.
-+
-NOTE: labuser is a restricted user that was created by the admin. This user can only see his/her VMs and has limited functionality in CloudForms.
-
-. Navigate to Services -> Workloads if not already there.
-+
-image:images/lab3.2-services-workloads.png[400,400]
-
-. You will see that the VM is non-compliant. Click on the VM *lab3-vm2* to go to the summary screen.
-+
-image:images/lab3.2-all-vms.png[500,500]
-
-. In the upper right hand corner click on *Compliance Status*.
-+
-image:images/lab3.2-compliance-status.png[400,400]
-+
-. Expand and see the details of this compliance check. You will see that the VM is vulnerable to the Meltdown and Spectre vulnerabilities.
-+
-image:images/lab3.2-compliance-status-view.png[400,400]
-+
-NOTE: For the sake of time, the vulnerable kernel packages have already been patched by updating this VM to the latest kernel packages.
-+
-. Click on the back arrow to navigate back to the VM summary page.
-+
-image:images/lab3.2-back-arrow.png[400,400]
-+
-. From the VM summary page click on Packages.
-+
-image:images/lab3.2-packages.png[500,500]
-+
-. Scroll down to find the kernel package and note the version *693.el7*.
-+
-image:images/lab3.2-packages-view.png[800,800]
-+
-. To mitigate against the Meltdown and Spectre vulnerabilities, the kernel package needs to be version *830.el7* or higher. Click on the *back arrow* to navigate back to the VM summary page.
-+
-image:images/lab3.2-back-arrow.png[400,400]
-+
-. Click on *Configuration -> Perform SmartState Analysis*. This will launch a job that will scan the VMs packages and other metadata.
-+
-image:images/lab3.2-launch-smart-state.png[400,400]
-+
-. Click on *Lab User -> Tasks* to monitor the scan jobs status.
-+
-image:images/lab3.2-tasks.png[150,150]
-+
-. Click on the *Refresh* button periodically until the scan job has completed (about 3 minutes). Afterwards, *click on the job* and this will take you back to the VM summary page.
-+
-image:images/lab3.2-task-results.png[600,600]
-+
-. Click on *Policy -> Check Compliance of Last Known Configuration*
-+
-image:images/lab3.2-check-compliance.png[400,400]
-+
-. Click on the *Refresh* button until the VM is compliant.
-+
-image:images/lab3.2-compliant-success.png[600,600]
-
-=== Lab 3.3 Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
-
-. Switch to the browser tab that is logged in to CloudForms as *admin* and then navigate to *Control -> Explorer*.
-+
-image:images/lab3.3-control-explorer.png[200,200]
-+
-. Navigate to *Policy Profiles -> Lab 3.3 OSP Security Group Enforcement -> Lab 3.3 OSP Attach Security Group Policy*. You will notice that this policy states that when an OpenStack instance is powered on, ensure that the *Production* security group is attached.
-+
-image:images/lab3.3-control-policy.png[600,600]
-+
-. Navigate to Compute -> Cloud -> Instances.
-+
-image:images/lab3.3-computecloudinstances.png[500,500]
-+
-. Click on the VM *lab3-vm3* to go to the VM summary page.
-+
-image:images/lab3.3-all-vms.png[600,600]
-+
-. Click on *Policy -> Manage Policies*.
-+
-image:images/lab3.3-policy-manage-policies.png[400,400]
-+
-. Verify that the Lab 3.3 control policy is assigned and click on *Cancel* to exit.
-+
-image:images/lab3.3-policy-assignment.png[600,600]
-+
-. From the VM summary page, locate *Relationships* and click on *Security Groups*.
-+
-image:images/lab3.3-relationships.png[400,400]
-+
-. You will see that the VM only has 1 security group.
-+
-image:images/lab3.3-security-groups-before.png[600,600]
-+
-. Click on the *back* arrow to navigate back to the VM summary page.
-+
-image:images/lab3.3-back-arrow.png[200,200]
-+
-. From the VM summary page *power on* the VM. This will trigger the control policy to ensure that the *Production* security group is applied.
-+
-image:images/lab3.3-power-on.png[200,200]
-+
-. Click on the *refresh button* until the VM has powered on and the security group count has changed. Once changed, click on *Security Groups* again.
-+
-image:images/lab3.3-refresh-security-groups.png[600,600]
-+
-. You will now notice that the *Production* security group has been applied automatically due to the control policy set on this Openstack instance.
-+
-image:images/lab3.3-security-groups-after.png[600,600]
+image:images/lab4-view_schedule.png[500,500]
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4]
