@@ -49,6 +49,11 @@ active
 [root@servera ~]# systemctl is-enabled firewalld.service
 enabled
 ----
+. After installing firewalld, you can always check to see if it is enabled at any time by running the previous two commands, of by running:
++
+[source]
+[root@servera ~]# systemctl status firewalld.service
+
 . If your firewalld service is not active and enabled, run the following commands:
 +
 [source]
