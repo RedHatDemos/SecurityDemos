@@ -119,7 +119,7 @@ Search for line 26 by typing *:26*. When you do that you should see the list of 
 [root@servera ~]# vim /etc/ssh/sshd_config
 
 
-. Using vim again, open the /etc/ssh/sshd_config file and jump to the end by typing *Shift + g*. Then, press the letter *o* to add a line to the end of the file. Append *UseDNS no* to the end of the /etc/ssh/sshd_config file. Then, press *esc* and  save and exit by pressing *:wq!*
+. Using vim again, open the /etc/ssh/sshd_config file and jump to the end by typing *Shift + g*. Then, press the letter *o* to add a line to the end of the file. Append *UseDNS no* to the end of the /etc/ssh/sshd_config file. Then, press *esc* and  save and exit by typing *:wq!*
 
 . When we run AIDE, we expect it to note the change of the permissions and identify a change in the checksum of the file.
 
@@ -187,7 +187,9 @@ If you want to eliminate the changes resulting from alteration of the timestamps
 . Now let’s change the permission on the /etc/shadow file, run a scan, and then look for the entry in the audit.log  You should see output similar to the following:
 +
 ----
-[root@servera aide]# aide --check
+[root@servera ~] chmod 0666 /etc/shadow
+
+[root@servera ~]# aide --check
 Start timestamp: 2019-04-09 21:20:27 -0400 (AIDE 0.16)
 AIDE found differences between database and filesystem!!
 
