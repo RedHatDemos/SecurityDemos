@@ -151,7 +151,11 @@ NOTE: Pass the *-vf* parameter if you want to see verbose output.
 
 This is not an actual exercise, but rather a presentation of NBDE in Cockpit. The process is fairly simple and straight forward. You do not need to do actual steps.
 
-"*Storage*" in Cockpit provides a way to manage disk encryption. If the disk is encrypted initially it shows only passphrase:
+"*Storage*" in Cockpit provides a way to manage disks.
+
+image:images/nbde_cockpit_storage.png[]
+
+Accessing the "*Encryption*"" tab of a particular disk allows to manage it's encryption keys. If the disk is encrypted initially it shows only passphrase:
 
 image:images/nbde_cockpit_encryption tab.png[]
 
