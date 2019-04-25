@@ -5,7 +5,7 @@ The goal of this lab exercise is to understand how to use the Advanced Intrusion
 
 We want to achieve the following objectives in this exercise:
 
-* Install AIDE on your servera system
+* Install AIDE on your Server A (servera) system
 * Initialize a baseline scan to capture current state
 * Modify permissions and content on a select file
 * Run a scan to identify drift from the baseline
@@ -15,7 +15,7 @@ We want to achieve the following objectives in this exercise:
 === Introduction
 AIDE maintains a database that captures the state of critical system configuration files at a point in time, allowing for subsequent analysis to identify drift from a desired state.  AIDE is able to determine what changes were made to a system, but is not able to determine who made the change, when the change occurred, and what command was used to make the change.  For that, we will use auditd and ausearch, which are installed and enabled by default.
 
-AIDE and audit watches are complementary security tools that can help you harden your environment.  AIDE allows you to configure files and directories that you want to watch, and audit watches allow you to determine who, when, and how a particular change occurred.  These can be fine tuned over time to include scans of custom files and directories, and watches over files and directories you deem most critical.  More information can be found by reviewing the https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index[Red Hat Enterprise Linux Security Guide].
+AIDE and audit watches are complementary security tools that can help you harden your environment.  AIDE allows you to configure files and directories that you want to watch, and audit watches allow you to determine who, when, and how a particular change occurred.  These can be fine tuned over time to include scans of custom files and directories, and watches over files and directories you deem most critical.  More information can be found by reviewing the https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using-aide[Red Hat Enterprise Linux Security Guide].
 
 
 === Lab 7.1 Installing the AIDE package
