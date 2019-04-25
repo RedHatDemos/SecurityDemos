@@ -1,8 +1,4 @@
 ---
-- name: Checking hostname vars
-  debug: 
-    msg: "WEB is {{ webhostname }} and DB is {{ dbhostname }}"
-
 - include: install/db-main.yml
   when: my_purpose == 'db' and main_purpose != 'reset'
 
