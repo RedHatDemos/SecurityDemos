@@ -459,7 +459,7 @@ NOTE: Now that we have a plan built to resolve most of the vulnerabilities for o
 
 . Login with *admin* / *r3dh4t1!* to Tower at https://tower-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
 
-. Click on *Templates* from the main menu at the top. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
+. Click on *Templates* from the main menu on the left. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
 +
 image:images/LAb5.4-Insights-Facts-scan.png[1000,1000]
 
@@ -467,7 +467,7 @@ image:images/LAb5.4-Insights-Facts-scan.png[1000,1000]
 +
 image:images/Lab5.4-Insights-Facts-Fix-All.png[1000,1000]
 
-. Navigate to *Projects* from the main menu at the top and find the *Insights Planner Sync* project, and click the Cloud with a download arrow under ACTIONS to the right of the project name.
+. Navigate to *Projects* from the main menu at the left and find the *Insights Planner Sync* project, and click the Sync button.
 +
 image:images/Lab5.4-Check-for-playbooks.png[1000,1000]
 
