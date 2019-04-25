@@ -1,6 +1,6 @@
 ---
 - set_fact:
-    webhostname: "{{ ansible_nodename | default('192.168.0.100') }}"
+    webhostname: "{{ ansible_nodename }}"
   when: my_purpose == 'web'
 
 - set_fact:
