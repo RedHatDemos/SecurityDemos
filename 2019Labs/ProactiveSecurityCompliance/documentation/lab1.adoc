@@ -297,7 +297,112 @@ image:images/hostreports.png[300,300]
 +
 image:images/cleanscan.png[1500,1500]
 
-=== Lab 2.8 (*Optional*) Viewing the global status indicator in Satellite 6
+=== Lab 1.7 Executing SCAP compliance scans and remediations on hosts from a custom button in Red Hat CloudForms
+
+In this lab exercise, you will use Red Hat CloudForms to launch Red Hat Ansible Automation security compliance scan and remediation automation tasks from a custom button. Specifically, you will launch OpenSCAP security compliance scans and remediations by pressing custom buttons on a VM in Red Hat CloudForms. The buttons will launch automation jobs in Red Hat Ansible Tower and upload the resulting OpenSCAP compliance scan reports to Red Hat Satellite.
+
+. Log into CloudForms(https://cfme-GUID.rhpds.opentlc.com) with *admin* as the username and *r3dh4t1!* as the password.
+
+. Navigate to the *Compute -> Infrastructure -> Virtual Machines*.
++
+image:images/lab5.1-infra-vms.png[500,500]
+
+. Search for the *rhel7-vm3.hosts.example.com* in the top right search bar and then click on this VM.
++
+image:images/cf-vm3.png[1000,1000]
+
+. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Scan*. This will automatically launch a job in Red Hat Ansible Tower to do an OpenSCAP security compliance scan of several different security compliance profiles on this *rhel7-vm3.hosts.example.com*. *This scan will take about 3 minutes to complete*.
++
+image:images/lab5.1-scapscan.png[200,200]
+
+. Let's look at this job run in Red Hat Ansible Tower. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Jobs* and click on the job that is being run at the top , which is *CLOUDFORMS / SCAP SCAN*. This job will take about 3 minutes to complete.
++
+image:images/cf-scan-job.png[1000,1000]
+
+. Notice that this job is running the *scap-scan.yml* playbook on the *rhel7-vm3.hosts.example.com* host. If not specified, by default, this playbook will run SCAP compliance scans on the specified host(s) using all the defined SCAP compliance policy profiles configured in Red Hat Satellite. In our case, these are the compliance polices define in Red Hat Satellite: RHEL7_Standard, RHEL7_PCI, and RHEL7_Custom. As a reminder, the RHEL7_Custom policy is a custom policy that was pre-configured that just checks to see if the AIDE package is installed. These compliance policy scans will be run from the Red Hat Satellite server (sat64.example.com) on this host.
++
+image:images/cf-scan-job-finish.png[1000,1000]
+
+. Finally, once you see *Successful* for *STATUS* with a date and time listed for *STARTED* and *ENDED* , in addition to seeing zero failures in the *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
+
+. Now that all the SCAP compliance scans have finished running on this *rhel7-vm3.hosts.example.com* host, let's view the resulting compliance reports for this host in Red Hat Satellite.
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+
+. Navigate to *Hosts → Reports*.
++
+image:images/hostreports.png[300,300]
+
+. Notice that there is a compliance reports for each of the compliance scans that were run on the *rhel7-vm3.hosts.example.com* host: RHEL7_Standard, RHEL7_PCI, and RHEL7_Custom.
++
+image:images/vm3-scan-results.png[1500,1500]
+
+. Notice that there is one failure associated with the *RHEL7_Custom* compliance report for this host. Let's take a deeper look at this error.  Click the link in the *Reported At* column for the *RHEL7_Custom* compliance report for the *rhel7-vm3.hosts.example.com* host. The *Reported At* column says how long ago the report was created.
++
+image:images/rhel7-custom.png[1500,1500]
+
+. Notice that the reason that this *RHEL7_Custom* compliance policy failed was because this *rhel7-vm3.hosts.example.com* host does not have the AIDE package installed.
++
+image:images/aideerror.png[1000,1000]
+
+. Let's fix this error at the push of a button in Red Hat CloudForms. Before we do that, let's go into our *rhel7-vm3.hosts.example.com* by SSH or via the console button on the main *Lab Information* webpage. In this step, we'll use SSH. SSH into the *rhel7-vm3.hosts.example.com* VM. First, SSH into your workstation VM as *lab-user* (using the password *r3dh4t1!*) and then from there, SSH into your **rhel7-vm3.hosts.example.com* using its IP address (192.168.0.53).
++
+[source, text]
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]$ ssh 192.168.0.53
+
+. From here, find out if the AIDE package is installed on *lab5-vm1*. You will find that it is not since the rpm -qa aide command comes back empty.
++
+[source]
+rpm -qa aide
+
+. Back on the CloudForms UI, let's execute automated remediation and make *rhel7-vm3.hosts.example.com* compliant to the *RHEL7_Custom* security policy in a push button automated fashion. Navigate to the *rhel7-vm3.hosts.example.com* VM by navigating to
+*Compute -> Infrastructure -> Virtual Machines*.
++
+image:images/lab5.4-infra-vms.png[500,500]
+
+. Click on the *rhel7-vm3.hosts.example.com* VM, if not already there.
++
+image:images/cf-vm3.png[1000,1000]
+
+. Then, click on the *SCAP with Sat6* button at the top and click on *OpenSCAP Remediate*.
++
+image:images/scap-remediate.png[1000,1000]
+
+. From the dialog, for *SCAPProfiles*, choose *rhel7-custom*. This is the custom security policy profile that ensures that the AIDE package is installed on your system. We will remediate *rhel7-vm3.hosts.example.com* host against this profile so that at the push of a button AIDE will get installed on this system. Press *Submit* when ready.
++
+image:images/scap-remediate-dialog.png[1000,1000]
+
+. Let's look at this job run in Red Hat Ansible Tower. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Jobs* and click on the job that is being run at the top , which is *CLOUDFORMS / SCAP Remediate*. Notice that the playbook that is being run in this job template is *openscap_remediate.yml*. If you want to take a closer look at this playbook , you can find it link:https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/ProactiveSecurityCompliance/cloudforms/ansible/satellite/openscap_remediate.yml[here^]. In this playbook, you will notice that after the remediation is completed, the OpenSCAP scan is automatically run and the resulting compliance report is automatically uploaded to Red Hat Satellite.
++
+image:images/cf-remediate-job.png[1000,1000]
+
+
+. Oonce you see *Successful* for *STATUS* with a date and time listed for *STARTED* and *ENDED* , in addition to seeing zero failures in the *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
+
+. Go back to your terminal and run a `rpm -qa aide` and in a few minutes, you will notice that the AIDE package gets automatically installed.
++
+image:images/aidecheck.png[1000,1000]
+
+. Now that the AIDE package is installed, we should now pass the OpenSCAP scan against the *rhel7-custom* security policy profile. Let's confirm.
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+
+. Navigate to *Hosts → Reports*.
++
+image:images/hostreports.png[300,300]
+
+. Notice that we no longer have any failures listed in the *RHEL7_Custom* compliance report for this host. Click the link in the *Reported At* column for the *RHEL7_Custom* compliance report for the *rhel7-vm3.hosts.example.com* host. Notice that we now have 100% Passed for the RHEL7_Custom compliance policy.
++
+image:images/rhel7custompass.png[1500,1500]
+image:images/rhel7custompass2.png[1500,1500]
+
+=== Lab 1.8 (*Optional*) Viewing the global status indicator in Red Hat Satellite
 
 Compliance status is one of the items that affect the global status of a system. In Satellite, we have the global status indicator, which is an aggregate of all the compliance states on the system. Specifically, in order to determine the global status, Satellite checks the status of: compliance with SCAP policies, build, configuration, execution, errata, subscription, and traces. Whichever is the worst status is what governs the overall status of the system. This is important to note since if you have a system that fails a SCAP policy finding, you’ll be able to see this quickly in the Satellite UI.
 

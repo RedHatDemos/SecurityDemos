@@ -156,23 +156,7 @@ Navigate to the Lab information page from *Lab 0 Setup steps*. This page has you
 image:images/lab3-console2.png[200,200]
 image:images/console-textbox.png[500,500]
 
-Login to the NBDE2 server as *root* using the password *r3dh4t1!*.
-
-Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
-
-Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE2*. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
-
-image:images/lab3-console2.png[200,200]
-image:images/console-textbox.png[500,500]
-
-Cockpit-storaged package was preinstalled for you. Cockpit was enabled as well. This can be done by following commands:
-
-[source, text]
-[root@nbde2 ~]# yum install cockpit cockpit-storaged
-
-[source, text]
-[root@nbde2 ~]# systemctl start cockpit.socket
-[root@nbde2 ~]# systemctl enable cockpit.socket --now
+You do not need to login to the machine after unlocking the disk with the passphrase. Cockpit-storaged package was preinstalled for you. Cockpit was enabled as well.
 
 Next, we will initialize the luks binding to the tang server using Cockpit.
 
