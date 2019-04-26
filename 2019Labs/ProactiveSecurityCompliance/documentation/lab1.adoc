@@ -406,17 +406,16 @@ image:images/rhel7custompass2.png[1500,1500]
 
 Compliance status is one of the items that affect the global status of a system. In Satellite, we have the global status indicator, which is an aggregate of all the compliance states on the system. Specifically, in order to determine the global status, Satellite checks the status of: compliance with SCAP policies, build, configuration, execution, errata, subscription, and traces. Whichever is the worst status is what governs the overall status of the system. This is important to note since if you have a system that fails a SCAP policy finding, you’ll be able to see this quickly in the Satellite UI.
 
-. Take a look at the global status indicator by navigating to *Hosts → All Hosts*. Hover over the red circle next to *lab2-vm1.example.com*. Notice that you can see at a high level what is wrong with this host in the text once you hover over the red circle.
+. Take a look at the global status indicator by navigating to *Hosts → All Hosts*. Hover over the red circle next to *rhel7-vm3.hosts.example.com* VM. Notice that you can see at a high level what is wrong with this host in the text once you hover over the red circle.
 +
-image:images/lab2-globalstatushover.png[1000,1000]
+image:images/host-all-hosts.png[300,300]
+image:images/vm3status.png[300,300]
 
-. Next, let's look at the global status indicator in more depth. Click on *lab2-vm1.example.com*.
-+
-image:images/lab2-clickonlab2vm1.png[600,600]
+. Next, let's look at the global status indicator in more depth. Click on *rhel7-vm3.hosts.example.com*.
 
-. In the *Properties* box on the left of the Satellite UI, notice that the global *Status* indicator says *Error* due to failing the SCAP scan.
+. In the *Properties* box on the left of the Satellite UI, notice that the global *Status* indicator says *Error* and Compliance shows *Incompliant* due to this host failing some of the compliance scans as show in the previous lab exercises.
 +
-image:images/lab2-globalstatusproperties.png[500,500]
+image:images/globalstatusproperties.png[500,500]
 
 === Lab 2.9 (*Optional*) Managing Users and Roles
 
