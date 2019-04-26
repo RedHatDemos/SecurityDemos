@@ -221,90 +221,81 @@ image:images/hostreports.png[300,300]
 +
 image:images/scanpostremediation.png[1000,1000]
 
-=== (LEFT OFF) Lab 1.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
+=== Lab 1.6 Tailoring (customizing) an existing OpenSCAP compliance policy with a tailoring file
 
-As mentioned earlier, Satellite 6.3 introduced the tailoring files feature. Tailoring files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. In other words, tailoring files allow you to add or ignore rules in the default policy content file. So if the rule is enabled in both the default content and the tailoring file, then the rule is enabled. If the rule is disabled in the tailoring file, but enabled in the default content, then the rule is disabled. If the rule is disabled in the default policy content file but enabled in the tailoring file , then the rule is enabled.
+Red Hat Satellite 6.3 introduced the tailoring files feature. Tailoring files allow existing OpenSCAP policies to be tailored, or customized, without forking or rewriting the policy. In other words, tailoring files allow you to add or ignore rules in the default policy content file. So if the rule is enabled in both the default content and the tailoring file, then the rule is enabled. If the rule is disabled in the tailoring file, but enabled in the default content, then the rule is disabled. If the rule is disabled in the default policy content file but enabled in the tailoring file , then the rule is enabled.
 
 It is important to note that the tailoring files feature does not provide the ability to create tailoring files. A tailoring file can be created using SCAP Workbench(which is included in Red Hat Enterprise Linux). Once you have a tailoring file you can upload it and assign the Tailoring File to a policy.
 
-. First, let's upload a tailoring file into Satellite. Navigate to http://sat6-GUID.rhpds.opentlc.com/pub. From here, download the *ssg-rhel7-ds-tailoring-standard.xml* file onto your laptop. This is the one we will use for this lab exercise. Feel free to download the other tailoring files for your own use later.
+. In this lab exercise, we are going to use a pre-created tailoring file that will disable the *failed* and *other* rules in the RHEL7_PCI compliance profile. The *other* rules are compliance rules that are not checked as part of the compliance profile. Many times, organizations will use a tailoring file if there are rules in the compliance profile that is not relevant or applicable to their organization's security compliance polices.
 
 . From Satellite, navigate to *Hosts -> Tailoring Files*
 +
-image:images/lab2-tailoringfilesmenu.png[600,600]
+image:images/hoststailoringfile.png[300,300]
 
-. Click on *New Tailoring File* and enter *Tailoring File for Standard Compliance Policy* for the Name and *Scap file*, Click *Browse*, navigate to the location containing the SCAP DataStream Tailoring File and select *Open*.
+. Notice that there are two pre-configured tailoring files in Red Hat Satellite. Let's take a look at the pre-configured *PCI DSS Tailoring* file. Click *Edit* for the *PCI DSS Tailoring* file under *Actions*.
 +
-image:images/lab2-uploadtailoringfile1.png[600,600]
+image:images/pcidsstailoring.png[1500,1500]
 
-. Click on the *Locations* tab, click the *Default Location* to move it over to the *Selected Items* box. This will associate this tailoring file with this *Location*. Press *Submit* when done.
+. Let's take a look at each of the tabs in this *PCI DSS Tailoring* file that was pre-configured. In the *File Upload* tab, notice that the *Scap File* that was used is the *ssg-rhel7-ds-tailoring-pcidss.xml* tailoring file, which was downloaded from http://sat64-GUID.rhpds.opentlc.com/pub. Feel free to download this and the other tailoring files for your own use as well if you wish.
 +
-image:images/lab2-uploadtailoringfile-location.png[600,600]
+image:images/uploadtailoringfile.png[600,600]
++
+NOTE: This ssg-rhel7-ds-tailoring-pcidss.xml tailoring file was created using the SCAP Workbench GUI tool that's included in Red Hat Enterprise Linux. In this tool, users can uncheck compliance check rules that do not apply to their organization and export the resulting tailoring file. The SCAP Workbench tool was used to uncheck both the failed and other compliance check rules based on the most recent RHEL_PCI compliance scan results after remediation from the previous lab exercise.
 
-. Now let's assign this tailoring file to a compliance policy. Navigate to *Hosts → Policies*. For the *RHEL7_Standard* compliance policy that you created earlier, click on *Edit*.
-+
-image:images/lab2-editstandardpolicy1.png[600,600]
+. In the *Locations* tab, the *Default Location* is set and in the *Organizations* tab, the *Default Organization* is set. This will associate this tailoring file with this *Default Location* and *Default Organization*. Press *Cancel*.
 
-. Under the *SCAP Content* tab, select the tailoring file we uploaded earlier in the *Tailoring File* section. Note that the *XCCDF Profile in Tailoring File* section automatically got filled in once you select your tailoring file. Press *Submit*.
+. Now let's assign this tailoring file to a compliance policy. Navigate to *Hosts → Policies*.
 +
-image:images/lab2-addtailoringfiletopolicy.png[600,600]
+image:images/scappolicies.png[300,300]
+
+. For the *RHEL7_PCI* compliance policy, click on *Edit* under the *Actions* column.
++
+image:images/editrhel7pci.png[1500,1500]
+
+. Under the *SCAP Content* tab, select the *PCI DSS Tailoring* file that was pre-configured in the *Tailoring File* section. Note that the *XCCDF Profile in Tailoring File* section automatically gets filled in once you select your tailoring file. Press *Submit*.
+
++
+image:images/tailoringfilesubmit.png[600,600]
 
 +
 NOTE: Tailoring files are able to contain multiple XCCDF Profiles. Also, Satellite does not enforce that the tailoring file match the XCCDF profile. However, you need to make sure that they match to avoid running into errors when using the tailored compliance policy.
 
-=== Lab 2.7 Re-executing the compliance policy scan on the host and viewing the OpenSCAP scan results reports
+=== Lab 1.7 Re-executing the compliance policy scan with tailoring file on hosts from Red Hat Ansible Tower and viewing the OpenSCAP scan results from reports in Red Hat Satellite
 
-In the previous lab exercise steps, we assigned the tailoring file to the *Standard* compliance policy and we fixed the OpenSCAP compliance scan error for the *rhel7-custom* compliance policy by installing AIDE on the *lab2-vm1.example.com* host. We can now re-execute the compliance policy scan on the *lab2-vm1.example.com* host and generate the report of the OpenSCAP compliance scans.
+In the previous lab exercise steps, we assigned the PCI DSS tailoring file to the *RHEL7_PCI* compliance policy. Now, let's re-execute the compliance policy scan on our hosts from Red Hat Ansible Tower and view the resulting OpenSCAP compliance scan reports from Red Hat Satellite.
 
-. Navigate to *Hosts -> All hosts*
-+
-image:images/lab2-hostsallhosts.png[1000,1000]
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
-. Next, put a check mark next to *lab2-vm1.example.com*. Then, at the top right, navigate to *Select Action -> Schedule Remote Job*.
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*.
 +
-image:images/lab2-scheduleremotejob.png[1000,1000]
+image:images/templates.png[100,100]
+image:images/linuxscapscan.png[1500,1500]
 
-. Now, for *Job Category* , select *Puppet*. Then, notice that for *Job template*, *Puppet Run Once - SSH Default* is automatically selected for you. Leave everything else as is. Press *Submit*. This puppet job should finish quickly and you should see a green circle with 100% success.
+. For *HOSTS*, copy/paste or type in the *foreman_lifecycle_environment_rhel7_qa* group name and choose the *RHEL7_PCI* profile from the *CHOOSE PROFILE* drop down list. Click *NEXT*.
 +
-image:images/lab2-puppet.png[1000,10000]
+image:images/linuxscapscan-profilehost.png[1000,1000]
 
-. Now that the SCAP components are installed, configured on the client, and Satellite knows about all the SCAP compliance policies, let's execute a SCAP compliance policy scan on *lab2-vm1.example.com*.
-Navigate to *Hosts -> All hosts* again. Then, put a check mark next to *lab2-vm1.example.com*. At the top right, navigate to *Select Action -> Schedule Remote Job*.
+. Take a look at the preview of the Red Hat Ansible Tower job we are about to run. Again, we are going to re-run the RHEL7_PCI SCAP compliance policy scan from the Red Hat Satellite server (sat64.example.com) on the hosts in the foreman_lifecycle_environment_rhel7_qa group but this time with the PCI DSS tailoring file on top of the RHEL7_PCI compliance profile. Click *LAUNCH* to launch this scan. *This scan will take about 4 minutes to complete*.
 +
-image:images/lab2-hostsallhosts.png[1000,1000]
-+
-image:images/lab2-scheduleremotejob.png[1000,1000]
+image:images/linuxscapscan-preview.png[1000,1000]
 
-. This time under *Job Category*, select *OpenSCAP*. Then, notice that for *Job template*, *Run OpenSCAP scans* is automatically selected for you. Leave everything else as is. Press *Submit*. Notice that the 5 compliance policy scans are being executed on the *lab2-vm1.example.com* host.
-+
-image:images/lab2-openscapscan.png[1000,1000]
+. Finally, once you see *Successful* for *STATUS* with a date and time listed for *STARTED* and *ENDED* , in addition to seeing zero failures in the *PLAY RECAP* at the end of your Red Hat Ansible Tower log, then your job has successfully finished running.
 
-. You are now at the *Overview* page for the OpenSCAP scan that you ran on the *lab2-vm1.example.com* host. Notice on the lower left that the 5 compliance policy scans are being executed on the *lab2-vm1.example.com* host (foreman_scap_client 1, 3, 5, etc).  Wait for the OpenSCAP scap job to finish. After a few mins, you will notice that the OpenSCAP scan on this host completed with 100% Success.
-+
-image:images/lab2-successcircle.png[1000,1000]
+image:images/runscan-playrecap.png[1000,1000]
+image:images/pciscanfinish.png[1000,1000]
 
-. Now let's view the SCAP scan reports again for the host, *lab2-vm1.example.com*. Navigate to *Hosts → Reports*.
-+
-image:images/lab2-hostreports.png[600,600]
+. Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished re-running on our specified hosts, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
 
-. Notice that there are 5 new Compliance reports, each one corresponding to a SCAP policy (RHEL7_Standard, RHEL7_PCI_DSS, rhel7-custom, RHEL7_Common, and rhel7-base) that were executed on this host.
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
 
+. Navigate to *Hosts → Reports*.
 +
-NOTE: For the recently run *RHEL7_Standard* compliance policy, notice that 19 rules now pass(vs 8 rules that passed before) and 3 rules now fail (vs 2 rules failing before). This is because of the tailoring file we attached to the *RHEL7_Standard* compliance policy. Also, notice that now the 1 rule in the *rhel7-custom* policy now passes (vs failing before).
-+
-image:images/lab2-scapreportafter.png[1000,1000]
+image:images/hostreports.png[300,300]
 
-. Click on the report for the *rhel7-custom* policy by clicking the link in the  *Reported At* column.
+. Looking at the list of compliance reports in Red Hat Satellite, notice now that we now have 68 passes and no failures or unchecked compliance rules listed in the *Other* column. This is because our pre-configured PCI DSS Tailoring file disabled the *failed* and *other* rules in the RHEL7_PCI compliance profile.
 +
-image:images/lab2-custompolicypass1.png[1000,1000]
-
-. Notice that the policy now has passed since AIDE is now installed on this *lab2-vm1.example.com* host.
-+
-image:images/lab2-custompolicypass2.png[1000,1000]
-
-. In addition, let's see how many hosts are compliant to the *rhel7-custom* compliance policy. Navigate to *Hosts → Policies*. Click on *rhel7-custom* to see the number of hosts that are compliant and non-compliant within a policy.
-+
-image:images/lab2-compliancesummary.png[1000,1000]
+image:images/cleanscan.png[1500,1500]
 
 === Lab 2.8 (*Optional*) Viewing the global status indicator in Satellite 6
 
