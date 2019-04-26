@@ -1,7 +1,7 @@
-= Lab 3: How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes
+= Lab 3: How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKS encrypted volumes
 
 == Goal of Lab
-The goal of this lab is to understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes. You will install the Tang server on our NBDE1 server, and install the Clevis client on NBDE3.
+The goal of this lab is to understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKS encrypted volumes. You will install the Tang server on our NBDE1 server, and install the Clevis client on NBDE3.
 
 == Introduction
 Network-Bound Disk Encryption (NBDE) allows the user to encrypt root volumes of hard drives on physical and virtual machines without requiring to manually enter a password when systems are restarted.  Red Hat Enterprise Linux implements NBDE with a central server named Tang, and and client framework named Clevis.
@@ -40,7 +40,7 @@ Since tangd uses the systemd socket activation mechanism, the server starts as s
 == Lab 3.2 Installing the Clevis Client
 Your NBDE3 client is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
 
-. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE3*. The passphrase for the LUKs encrypted disk on *NBDE3* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
+. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE3*. The passphrase for the LUKS encrypted disk on *NBDE3* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
 +
 image:images/lab3-console2.png[200,200]
 image:images/console-textbox.png[500,500]
