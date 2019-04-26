@@ -147,31 +147,81 @@ NOTE: Pass the *-vf* parameter if you want to see verbose output.
 [source, text]
 [root@nbde3 ~]# reboot
 
-== Lab 3.6 Overview of the feature in Cockpit
+== Lab 3.6 Initializing the luks binding to the tang server using Cockpit
 
-This is not an actual exercise, but rather a presentation of NBDE in Cockpit. The process is fairly simple and straight forward. You do not need to do actual steps.
+Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
 
-"*Storage*" in Cockpit provides a way to manage disks.
+Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE2*. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
 
-image:images/nbde_cockpit_storage.png[]
+image:images/lab3-console2.png[200,200]
+image:images/console-textbox.png[500,500]
 
-Accessing the "*Encryption*"" tab of a particular disk allows to manage it's encryption keys. If the disk is encrypted initially it shows only passphrase:
+Login to the NBDE2 server as *root* using the password *r3dh4t1!*.
 
-image:images/nbde_cockpit_encryption tab.png[]
+Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
 
-Clicking on *+* button allows to add more keys. Key can be a passphrase or Tang keyserver. To add Tang keyserver key keyserver address must be provided together with existing disk passphrase:
+Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE2*. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
+
+image:images/lab3-console2.png[200,200]
+image:images/console-textbox.png[500,500]
+
+Cockpit-storaged package was preinstalled for you. Cockpit was enabled as well. This can be done by following commands:
+
+[source, text]
+[root@nbde2 ~]# yum install cockpit cockpit-storaged
+
+[source, text]
+[root@nbde2 ~]# systemctl start cockpit.socket
+[root@nbde2 ~]# systemctl enable cockpit.socket --now
+
+Next, we will initialize the luks binding to the tang server using Cockpit.
+
+Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
++
+image:images/lab1.1-workstationconsole.png[300,300]
+image:images/lab1.1-labuserlogin.png[300,300]
+
+Open a Firefox web browser: 
+
+image:images/nbde_cockpit_firefox.png[]
+
+Open https://nbde2.example.com:9090/
+
+image:images/nbde_cockpit_firefox_1.png[]
+
+Login as root user using *r3dh4t1!* as the password. Next, access *Storage* menu and then click on VirtiO Disk.
+
+image:images/nbde_cockpit_storage_page.png[]
+
+Next, click on *Encrypted data* for */dev/vda2*:
+
+image:images/nbde_cockpit_disk_page.png[]
+
+Next, click on the *Ecnryption* tab for the disk:
+
+image:images/nbde_cockpit_disk_page_1.png[]
+
+It will show current keys for disk. Currently, there is only one passphrase key:
+
+image:images/nbde_cockpit_disk_enc.png[]
+
+Click on *+* button to add one more key. You will see modal window looking like this:
+
+image:images/nbde_cockpit_tang_empty.png[]
+
+As a Keyserver address we will use *nbde1.example.com* and *r3dh4t1!* for existing disk passphrase. So, fill the modal window fields like this and click *Add* button:
 
 image:images/nbde_cockpit_tang_filled.png[]
 
-Before adding the Keyserver there is an option to verify the key hash:
+It will take some take for it to process the request. After this click *Trust key*:
 
 image:images/nbde_cockpit_tang_confirm.png[]
 
-After keyserver is added, both Disk passphrase and Keyserver are shown as keys for the disk:
+After this you will see both Disk passphrase and Keyserver as your keys for the disk:
 
 image:images/nbde_cockpit_keys_result.png[]
 
-This disk will be unlocked with the existing passphrase as well as with the Clevis policy.
+This disk can now be unlocked with your existing passphrase as well as with the Clevis policy.
 
 <<top>>
 
