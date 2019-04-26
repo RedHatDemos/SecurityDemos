@@ -54,10 +54,6 @@ no login necessary
 login: admin
 password: admin123
 
-<<top>>
-
-link:README.adoc#table-of-contents[ Table of Contents ] 
-
 
 
 === Lab 7.3 Explore the pipeline stages
@@ -124,3 +120,7 @@ An old base images was used to build the application, we will update the base im
 . Navigate back to Jenkins and start another build
 +
 . Once the build is complete review the reports, quay vulnerability scan and sonarqube to verify that the number of vulnerabilities has been reduced.
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] 
