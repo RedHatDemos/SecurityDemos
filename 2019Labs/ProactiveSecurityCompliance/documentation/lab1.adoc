@@ -413,22 +413,31 @@ image:images/vm3status.png[300,300]
 
 . Next, let's look at the global status indicator in more depth. Click on *rhel7-vm3.hosts.example.com*.
 
-. In the *Properties* box on the left of the Satellite UI, notice that the global *Status* indicator says *Error* and Compliance shows *Incompliant* due to this host failing some of the compliance scans as show in the previous lab exercises.
+. In the *Properties* box on the left of the Satellite UI, notice that the global *Status* indicator says *Error* and Compliance shows *Incompliant* due to this host failing some of the compliance scans as shown in the previous lab exercises.
 +
 image:images/globalstatusproperties.png[500,500]
 
-=== Lab 2.9 (*Optional*) Managing Users and Roles
+=== Lab 1.9 (*Optional*) Managing Users and Roles
 
-For the administrator, Red Hat Satellite provides the ability to create, modify, and remove users. Also, it is possible to configure access permissions through assigning roles to users. We will not be diving deep into Users and Roles in this lab exercise. For more details on managing users and roles in Satellite, see the guide on link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.3/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-users_and_roles[Administering Red Hat Satellite].
+For the administrator, Red Hat Satellite provides the ability to create, modify, and remove users. Also, it is possible to configure access permissions through assigning roles to users. We will not be diving deep into Users and Roles in this lab exercise. For more details on managing users and roles in Satellite, see the guide on link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.4/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-users_and_roles[Administering Red Hat Satellite].
 
 . Satellite does have a default *Compliance viewer* and *Compliance manager* role. You can customize these roles and assign these roles to users. Users with the *Compliance manager* role can create new compliance policies and associate them with Hostgroups. Users with the *Compliance viewer* role can only view compliance reports.
 
 +
-image:images/lab2-roles.png[200,200]
+image:images/roles.png[300,300]
 +
 image:images/lab2-complianceroles.png[200,200]
 
+=== Lab 1.10 (*Optional*) Red Hat Satellite Auditing Page
+The auditing page and logging subsystem were updated in Red Hat Satellite 6.4, where we added a large number of events that are audited so you can easily tell who is taking what action. Every change is logged on disk for collection with the tool of your choice.
 
+. Navigate to Monitor -> Audits.
++
+image:images/monitor-audits.png[300,300]
+
+. Notice the different levels of auditing based on access level. Also, different colors indicate different actions (For example, when hosts are destroyed/deleted that event is marked in red).
++
+image:images/audit.png[1000,1000]
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[ Lab 3]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2.adoc[Lab 2: Enforcing Automated Compliance with Security Policies]
