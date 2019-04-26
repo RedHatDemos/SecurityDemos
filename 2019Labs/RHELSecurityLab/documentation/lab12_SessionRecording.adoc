@@ -41,12 +41,8 @@ correctly, you should not need to enter a password.
 
 == Lab 12.1.2 Install session recording packages
 
-    [root@sessionrecording]# yum install tlog
+    [root@sessionrecording]# yum install tlog cockpit cockpit-session-recording
     
-    [root@sessionrecording]# yum install cockpit
-
-    [root@sessionrecording]# yum install cockpit-session-recording
-
 == Lab 12.1.3 Install additional packages
 
 We will install some more packages to use in course of our lab. We will need them as good examples for session recording:
@@ -60,6 +56,8 @@ If you are familiar with vim then install it as well (OPTIONAL):
 == Lab 12.1.4 Enable Cockpit
 
     [root@sessionrecording]# systemctl enable cockpit.socket --now
+
+    [root@sessionrecording]# systemctl start cockpit
 
 == Lab 12.1.5 Add users
 
@@ -106,7 +104,7 @@ Enable logging of user's input by clicking the corresponding checkbox:
 
 image:images/session_recording_tlog_conf_1.png[]
 
-Then, press "Save" button.
+Then, press the "Save" button.
 
 Now you should configure users to be recorded using of ot the following three methods, using:
 
@@ -122,10 +120,10 @@ Choose "*Some*" option in Scope dropdown and put "*q*" in the Users input. Then 
 
 image:images/session_recording_sssd.png[]
 
-Do not forget to click *Save* button.
+Do not forget to click the *Save* button.
 
 That is it. Now the "*q*" user will be recorded.
-Jump directly to "Using Session Player in Cockpit" section, skip the other user configuration methods.
+Jump directly to "Lab 12.15.1 Creating sessions recorded by tlog" section, skip the other user configuration methods.
 
 ==== Lab 12.3.1 Setup recorded users using terminal (OPTIONAL method)
 
@@ -212,28 +210,28 @@ You will see mc launched
 
 image:images/session_recording_mc.png[]
 
-Try to use by navigating to various directories. Then click on Quit button in the right bottom corner.
+Try to use by navigating to various directories. Then press F10 or click on Quit button in the right bottom corner.
 
-Let's imitate some real world scenario by breaking nginx web server configuration file, so that later we will be able to investigate the problem using session recording in cockpit.
+Let's imitate a real world scenario by breaking the nginx web server configuration file, so that later we will be able to investigate the problem using session recording in cockpit.
 
     [q@sessionrecording]$ sudo vi /etc/nginx/nginx.conf
 
 image:images/session_recording_nginx.png[]
 
-Let's remove *;* in line *worker_connections 1024;* like this:
+Let's remove *;* in the line *worker_connections 1024;* like this:
 
 image:images/session_recording_nginx_broken.png[]
 
-In next step we need to restart nginx server:
+Next we will restart the nginx server:
 
     [q@sessionrecording]$ sudo systemctl restart nginx
 
-Restart will fail, because of the error we created in nginx.conf file, but this time this is exactly what we need as an example.
-You will see error message like this:
+The restart will fail due to the error we created in nginx.conf file, this will be used as an example.
+You will see an error message like this:
 
 image:images/session_recording_nginx_error.png[]
 
-Now, it is time to login to cockpit and use cockpit-session-recording to investigate why web server does not work.
+Now, it is time to login to cockpit and use cockpit-session-recording to investigate why the web server does not work.
 
 === Lab 12.6.1 Using Session Player from Cockpit UI
 
@@ -254,7 +252,7 @@ Login as _root_ user with *r3dh4t1!* as the password.
 
 image:images/session_recording_cockpit_login.png[]
 
-Click on Session Recording menu item
+Click on the Session Recording menu item
 
 image:images/session_recording_menu.png[]
 
@@ -290,17 +288,17 @@ Searching for appearance of a specific keyword in the session. It shows closest 
 
 image:images/session_recording_search_button.png[]
 
-In session player action of restarting nginx should look something like this:
+In session player the action of restarting nginx should look something like this:
 
 image:images/session_recording_cockpit_nginx_restart.png[]
 
-In the bottom part of the page correlated logs are shown. You should be able to find corresponding messages:
+In the bottom part of the page the correlated logs are shown. You should be able to find the corresponding messages:
 
 image:images/session_recording_cockpit_nginx_error.png[]
 
-Clicking on time of event in logs panel will trigger player to jump to same time in the session.
+Clicking on the timestamp event in the logs panel will jump to the same time in the session.
 
-You can try searching for "nginx.conf" to find time when the config was edited. Closest time will be shown and by clicking on it player will rewind position to it.
+You can try searching for "nginx.conf" to find time when the config was edited. The Closest time will be shown,  clicking on it will rewind the player position to that time.
 
 image:images/session_recording_search.png[]
 

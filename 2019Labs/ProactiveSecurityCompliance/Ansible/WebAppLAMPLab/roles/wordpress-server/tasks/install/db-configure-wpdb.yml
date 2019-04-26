@@ -1,7 +1,4 @@
 ---
-- set_fact:
-    myhostname: "{{ hostvars['lampweb']['ansible_facts']['eth0']['ipv4']['address'] }}"
-
 - name: copy our wordpress template sql dumps
   template:
     src: templates/wordpress.sql

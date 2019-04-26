@@ -10,6 +10,8 @@ Tang is used to bind data to a secure network.  It is stateless and does not req
 
 Clevis and Tang are generic client and server components that provide network bound encryption. In Red Hat Enterprise Linux 7, they are used in conjunction with LUKS to encrypt and decrypt root and non-root storage volumes to accomplish Network Bound Disk Encryption.
 
+This lab covers setting up NBDE using command line interface, but Cockpit also provides same functionality in cockpit-storaged. You are able to add, edit and remove both passphrase based keys and keyserver key.
+
 == Lab 3.1 Installing the Tang server
 . Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE1*. Login to the NBDE1 server as *root* using the password *r3dh4t1!*.
 
@@ -145,6 +147,31 @@ NOTE: Pass the *-vf* parameter if you want to see verbose output.
 [source, text]
 [root@nbde3 ~]# reboot
 
+== Lab 3.6 Overview of the feature in Cockpit
+
+This is not an actual exercise, but rather a presentation of NBDE in Cockpit. The process is fairly simple and straight forward. You do not need to do actual steps.
+
+"*Storage*" in Cockpit provides a way to manage disks.
+
+image:images/nbde_cockpit_storage.png[]
+
+Accessing the "*Encryption*"" tab of a particular disk allows to manage it's encryption keys. If the disk is encrypted initially it shows only passphrase:
+
+image:images/nbde_cockpit_encryption tab.png[]
+
+Clicking on *+* button allows to add more keys. Key can be a passphrase or Tang keyserver. To add Tang keyserver key keyserver address must be provided together with existing disk passphrase:
+
+image:images/nbde_cockpit_tang_filled.png[]
+
+Before adding the Keyserver there is an option to verify the key hash:
+
+image:images/nbde_cockpit_tang_confirm.png[]
+
+After keyserver is added, both Disk passphrase and Keyserver are shown as keys for the disk:
+
+image:images/nbde_cockpit_keys_result.png[]
+
+This disk will be unlocked with the existing passphrase as well as with the Clevis policy.
 
 <<top>>
 

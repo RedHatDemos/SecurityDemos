@@ -49,6 +49,11 @@ active
 [root@servera ~]# systemctl is-enabled firewalld.service
 enabled
 ----
+. After installing firewalld, you can always check to see if it is enabled at any time by running the previous two commands, of by running:
++
+[source]
+[root@servera ~]# systemctl status firewalld.service
+
 . If your firewalld service is not active and enabled, run the following commands:
 +
 [source]
@@ -181,9 +186,6 @@ success
   <port protocol="udp" port="464"/>
   <port protocol="udp" port="123"/>
 </service>
-
-. For those not familiar with vi, press *dd* to delete all the lines in the existing file above. Then, copy the text above and paste it into the file by pressing *i* and then pasting the text into the file.
-Press *esc* and then save and exit by pressing *:wq!*.
 
 . When a server boots, or when you reload the firewall, the firewalld daemon will look at the custom and default directories and load the services.  Services defined in the custom directory take precedence over those in the default if the names of the files match.  Now we will reload our firewall and look to see which services are available.
 +
