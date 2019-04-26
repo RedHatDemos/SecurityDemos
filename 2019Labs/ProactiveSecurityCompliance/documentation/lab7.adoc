@@ -2,10 +2,68 @@
 
 === Goal of Lab 7
 
+To exercise a devsecops pipeline, analyze result, and apply remediation.
+
 === Introduction
 
-=== Lab 7.1
+=== Lab 7.1 About the sample application
+
+=== Lab 7.2 Logging into the environment
+
+A number of tools have been installed and configured to support the devsecops pipeline. Each of these tools is running containerized within the OpenShift cluster.
+
+==== Gogs
+(description)
+
+==== Jenkins
+(description)
+
+==== Nexus
+(description)
+
+==== SonarQube
+(description)
+
+==== Quay
+(description)
+
+Log in to each of the tools with the credentials show below. Replace `{GUID}` with your lab cluster guid and `{user}` with your user id - e.g., `user`
+
+* Gogs - http://gogs-ocp-workshop.apps.{GUID}.summit.opentlc.com
++
+login: {user}
++
+password: openshift
+
+* Jenkins - https://jenkins-{user}.apps.{GUID}.summit.opentlc.com
++
+login: {user}
++
+password: r3dh4t1!
+
+* Nexus - http://nexus-ocp-workshop.apps.{GUID}.summit.opentlc.com
++
+no login necessary
+
+* Sonarqube - http://sonarqube-ocp-workshop.apps.{GUID}.summit.opentlc.com
++
+no login necessary
+
+* Quay - http://quayecosystem-quay-quay-enterprise.apps.{GUID}.summit.opentlc.com
++
+login: admin
+password: admin123
 
 <<top>>
 
 link:README.adoc#table-of-contents[ Table of Contents ] 
+
+
+
+=== Lab 7.3 Explore the pipeline stages
+
+TODO - Guided tour through each pipeline stage
+
+=== Lab 7.4 Exercise an initial run through the pipeline
+
+. Navigate to the jenkins user interface https://jenkins-{user}.apps.{GUID}.summit.opentlc.com

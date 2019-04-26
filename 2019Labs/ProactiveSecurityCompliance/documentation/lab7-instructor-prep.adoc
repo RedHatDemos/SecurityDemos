@@ -6,7 +6,7 @@ link:README.adoc#table-of-contents[ Table of Contents ]
 
 . Login to the quay console from a web browser:
 +
-      http://quayecosystem-quay-quay-enterprise.apps.{GUID}.openshiftworkshop.com/setup/
+      http://quayecosystem-quay-quay-enterprise.apps.{GUID}.summit.opentlc.com
 +
 . Set the database type from the pull down to `mysql`.  Set the database server to `mysql.quay-mysql.svc`, username, password and database name should be set to `quay`
 +
