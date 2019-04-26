@@ -28,7 +28,7 @@ image:images/lab7-prep-quay-admin-user.png[]
 +
 . Click the `Sign in` button and sign in with the credentials created above
 +
-. Scroll down to the redis configureation and set the hostname to `quayecosystem-redis`, click `Save Configuration Changes`
+. Scroll down to the redis configuration and set the hostname to `quayecosystem-redis`, click `Save Configuration Changes`
 +
 image:images/lab7-prep-redis.png[]
 +
@@ -36,7 +36,7 @@ image:images/lab7-prep-redis.png[]
 +
 . Click the `Restart Container` button when prompted.
 +
-. Click the `View Superuser Panel` button. Refresht the page if you get the `Application is not available` page
+. Click the `View Superuser Panel` button. Refresh the page if you get the `Application is not available` page
 +
 . Click the `Repositories` link in the upper left menu, then click the `Create New Repository` link on the right
 +
@@ -48,7 +48,7 @@ image:images/lab7-prep-create-repo.png[]
 +
 . Go to the settings options by clicking the gear icon in the lower left corner
 +
-. Scroll down the the `Security Scanner` section and click the `Enable Security Scanning` option. Enter `http://clairsvc:6060` into the `Security Scanner Endpoint` field
+. Scroll down the `Security Scanner` section and click the `Enable Security Scanning` option. Enter `http://clairsvc:6060` into the `Security Scanner Endpoint` field
 +
 image:images/lab7-prep-security-scanner.png[]
 +
@@ -78,4 +78,4 @@ image:images/lab7-prep-create-key.png[]
 +
       oc delete pod $(oc get pods -n quay-enterprise | grep quayecosystem-quay | awk '{print $1}') -n quay-enterprise
 +
-. Refresh the quay ui to verify it is back
+. Press ctrl+c if the pregious command hangs. Refresh the quay ui to verify it is back

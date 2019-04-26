@@ -39,7 +39,7 @@ password: openshift
 +
 login: {user}
 +
-password: r3dh4t1!
+password: openshift
 
 * Nexus - http://nexus-ocp-workshop.apps.{GUID}.summit.opentlc.com
 +
