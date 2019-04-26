@@ -10,7 +10,7 @@ Tang is used to bind data to a secure network.  It is stateless and does not req
 
 Clevis and Tang are generic client and server components that provide network bound encryption. In Red Hat Enterprise Linux 7, they are used in conjunction with LUKS to encrypt and decrypt root and non-root storage volumes to accomplish Network Bound Disk Encryption.
 
-Cockpit & cockpit-storaged are providing a user interface in browser for managing hard drives and NBDE.
+Cockpit & cockpit-storaged provide a user interface in browser for managing hard drives and NBDE.
 
 == Lab 3.1 Installing the Tang server
 . Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE1*. Login to the NBDE1 server as *root* using the password *r3dh4t1!*.
@@ -37,7 +37,7 @@ image:images/console-textbox.png[500,500]
 
 Since tangd uses the systemd socket activation mechanism, the server starts as soon as the first connection comes in. A new set of cryptographic keys is automatically generated at the first start.
 
-== Lab 3.2 Installing the cockpit-storaged
+== Lab 3.2 Initializing the luks binding to the tang server using Cockpit
 
 Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
 
@@ -55,39 +55,45 @@ Navigate to the Lab information page from *Lab 0 Setup steps*. This page has you
 image:images/lab3-console2.png[200,200]
 image:images/console-textbox.png[500,500]
 
-Login to the NBDE2 server as *root* using the password *r3dh4t1!*.
-Then, install the cockpit-storaged package:
+Cockpit-storaged package was preinstalled for you. Cockpit was enabled as well. This can be done by following commands:
 
 [source, text]
-[root@nbde2 ~]# yum install cockpit-storaged
-
-Then, enable Cockpit:
+[root@nbde2 ~]# yum install cockpit cockpit-storaged
 
 [source, text]
 [root@nbde2 ~]# systemctl start cockpit.socket
 [root@nbde2 ~]# systemctl enable cockpit.socket --now
 
-== Lab 3.3 Initializing the luks binding to the tang server using Cockpit
-
 Next, we will initialize the luks binding to the tang server using Cockpit.
+
+Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
++
+image:images/lab1.1-workstationconsole.png[300,300]
+image:images/lab1.1-labuserlogin.png[300,300]
+
+Open a Firefox web browser: 
+
+image:images/nbde_cockpit_firefox.png[]
 
 Open https://nbde2.example.com:9090/
 
-Login as root user
+image:images/nbde_cockpit_firefox_1.png[]
 
-Next, access *Storage* menu.
+Login as root user using *r3dh4t1!* as the password. Next, access *Storage* menu and then click on VirtiO Disk.
 
-Click on drive when you access the menu:
+image:images/nbde_cockpit_storage_page.png[]
 
-image:images/nbde_cockpit_drive.png[]
+Next, click on *Encrypted data* for */dev/vda2*:
 
-Open *Encryption* tab.
+image:images/nbde_cockpit_disk_page.png[]
 
-image:images/nbde_cockpit_encryption tab.png[]
+Next, click on the *Ecnryption* tab for the disk:
 
-You should see existing Passphrase key, because the drive is encrypted using password.
+image:images/nbde_cockpit_disk_page_1.png[]
 
-image:images/nbde_cockpit_keys.png[]
+It will show current keys for disk. Currently, there is only one passphrase key:
+
+image:images/nbde_cockpit_disk_enc.png[]
 
 Click on *+* button to add one more key. You will see modal window looking like this:
 
