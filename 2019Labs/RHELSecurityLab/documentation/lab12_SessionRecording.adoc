@@ -10,7 +10,7 @@ The goal of this lab is to use Session Recording to help log and audit user's te
 * You will wear a hat of a system administrator to find out what has happened to your system.
 
 == Introduction
-Terminal Session Recording project aims to log user's terminal sessions for purposes of audit, security and monitoring. It provides interface in Cockpit to analyze these recordings and correlate them with system logs. This provides a whole picture of activity which was done.
+Terminal Session Recording project aims to log user's terminal sessions for purposes of audit, security and monitoring. It provides interface in Cockpit to analyze these recordings and correlate them with system logs. This provides a whole picture of activity which has happened.
 
 === tlog
 Tlog records terminal activity by putting itself in the middle between user and terminal. Systemd Journal is used as a storage for recorded sessions.
@@ -18,7 +18,7 @@ Tlog records terminal activity by putting itself in the middle between user and 
 === cockpit-session-recording
 Our package for Cockpit uses provided APIs to access Journal and get sessions from it. It provides JavaScript based player which produces text output, but with a videoplayer-like controls.
 
-Several packages were pre-installed for you convenience. Those are:
+Several packages were pre-installed for your convenience. Those are:
 
 * tlog
 * cockpit
@@ -29,24 +29,7 @@ Several packages were pre-installed for you convenience. Those are:
 
 == Lab 12.1 Accessing the Session Recording Lab System
 
-All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will have user *q*. Their terminal sessions will be recorded. Each set of the exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
-
- * The *root* user prompt on _sessionrecording.example.com_. Use *r3dh4t1!* as a password.
-
-    [root@sessionrecording]#
-
- * The *q* user prompt on _sessionrecording.example.com_. Use *session1* as a password.
-
-    [q@sessionrecording]$
-
-The recommended way to access the _sessionrecording.example.com_ is to open up the terminal and SSH into the
-_sessionrecording.example.com_ host from the bastion workstation system as shown below.  If done
-correctly, you should not need to enter a password.
-
-	[localhost]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-	[lab-user@workstation-GUID]$ ssh root@sessionrecording.example.com
-
-Use *session1* as a password.
+All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will have user *q*. Their terminal sessions will be recorded.
 
 == Lab 12.2 Setup recording
 
@@ -85,11 +68,7 @@ image:images/session_recording_tlog_conf_1.png[]
 
 Then, press the "Save" button.
 
-Now you should configure users to be recorded using of ot the following three methods, using:
-
-* cockpit
-* sssd config in terminal
-* changing user's login shell
+Now you should configure users to be recorded.
 
 ===== Lab 12.3 Setup recorded users using cockpit-session-recording
 
@@ -102,17 +81,20 @@ image:images/session_recording_sssd.png[]
 Do not forget to click the *Save* button.
 
 That is it. Now the "*q*" user will be recorded.
-Jump directly to "Lab 12.15.1 Creating sessions recorded by tlog" section, skip the other user configuration methods.
 
 == Lab 12.4 Creating sessions recorded by tlog
 
 Let's create some activity by one of the recorded users. Then you will be able to play it back in Cockpit.
 
-Login using SSH to the same machine:
+Open the *Terminal*. 
 
-    [root@sessionrecording]# ssh q@sessionrecording.example.com
+image:images/session_recording_terminal.png[]
 
-Use *session1* as password.
+Login using SSH to the same machine. Use *session1* as a password:
+
+    [lab-user@sessionrecording]# ssh q@sessionrecording.example.com
+
+image:images/session_recording_terminal1.png[]
 
 You will see notice message in terminal right after login
 
@@ -131,6 +113,8 @@ Try to use by navigating to various directories. Then press F10 or click on Quit
 Let's imitate a real world scenario by breaking the nginx web server configuration file, so that later we will be able to investigate the problem using session recording in cockpit.
 
     [q@sessionrecording]$ sudo vi /etc/nginx/nginx.conf
+
+image:images/session_recording_vi_nginx.png[]
 
 image:images/session_recording_nginx.png[]
 
@@ -164,7 +148,7 @@ Go to _https://sessionrecording.example.com:9090/_
 
 image:images/session_recording_firefox_1.png[]
 
-Login as _root_ user with *r3dh4t1!* as the password.
+Login as *root* user with *r3dh4t1!* as the password.
 
 image:images/session_recording_cockpit_login.png[]
 
