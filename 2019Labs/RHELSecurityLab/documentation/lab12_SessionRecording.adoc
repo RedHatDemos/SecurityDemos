@@ -18,17 +18,24 @@ Tlog records terminal activity by putting itself in the middle between user and 
 === cockpit-session-recording
 Our package for Cockpit uses provided APIs to access Journal and get sessions from it. It provides JavaScript based player which produces text output, but with a videoplayer-like controls.
 
-== Lab 12.1 exercise steps
+Several packages were pre-installed for you convenience. Those are:
 
-== Lab 12.1.1 Accessing the Session Recording Lab System
+* tlog
+* cockpit
+* cockpit-session-recording
+* mc
+* nginx
+* vim
+
+== Lab 12.1 Accessing the Session Recording Lab System
 
 All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will have user *q*. Their terminal sessions will be recorded. Each set of the exercises instructs you about which user to use, and the username is reflected in the command prompt, as seen in the examples below:
 
- * The *root* user prompt on _sessionrecording.example.com_
+ * The *root* user prompt on _sessionrecording.example.com_. Use *r3dh4t1!* as a password.
 
     [root@sessionrecording]#
 
- * The *q* user prompt on _sessionrecording.example.com_
+ * The *q* user prompt on _sessionrecording.example.com_. Use *session1* as a password.
 
     [q@sessionrecording]$
 
@@ -39,37 +46,9 @@ correctly, you should not need to enter a password.
 	[localhost]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 	[lab-user@workstation-GUID]$ ssh root@sessionrecording.example.com
 
-== Lab 12.1.2 Install session recording packages
-
-    [root@sessionrecording]# yum install tlog cockpit cockpit-session-recording
-    
-== Lab 12.1.3 Install additional packages
-
-We will install some more packages to use in course of our lab. We will need them as good examples for session recording:
-
-    [root@sessionrecording]# yum install mc nginx
-
-If you are familiar with vim then install it as well (OPTIONAL):
-
-    [root@sessionrecording]# yum install vim
-
-== Lab 12.1.4 Enable Cockpit
-
-    [root@sessionrecording]# systemctl enable cockpit.socket --now
-
-    [root@sessionrecording]# systemctl start cockpit
-
-== Lab 12.1.5 Add users
-
-    [root@sessionrecording]# useradd q
-
-    [root@sessionrecording]# usermod -aG wheel q
-
-    [root@sessionrecording]# passwd q
-
 Use *session1* as a password.
 
-== Lab 12.2.1 Setup recording
+== Lab 12.2 Setup recording
 
 Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
@@ -112,7 +91,7 @@ Now you should configure users to be recorded using of ot the following three me
 * sssd config in terminal
 * changing user's login shell
 
-===== Lab 12.2.2 Setup recorded users using cockpit-session-recording (PREFERRED method)
+===== Lab 12.3 Setup recorded users using cockpit-session-recording
 
 While staying on the same page as in previous chapter do the following.
 
@@ -125,70 +104,7 @@ Do not forget to click the *Save* button.
 That is it. Now the "*q*" user will be recorded.
 Jump directly to "Lab 12.15.1 Creating sessions recorded by tlog" section, skip the other user configuration methods.
 
-==== Lab 12.3.1 Setup recorded users using terminal (OPTIONAL method)
-
-*If you used preferred method using cockpit-session-recording then you don't need to do this step, because it will produce the same result.*
-
-Open sssd session recording configuration file using vi editor
-
-    [root@sessionrecording]# vi /etc/sssd/conf.d/sssd-session-recording.conf
-
-*If something goes wrong* hit *Esc* key several times and then type *:q!* and press *Enter*. This will cause vi to exit without saving changes to the file.
-
-Press *i* to enter in edit mode in vi. Change the line
-
-    scope=none
-
-to
-
-    scope=some
-
-Then change the line
-
-    users=
-
-to
-
-    users=q
-
-Press *Esc* to exit edit mode and then type *:wq!* and press *Enter* to save file and exit from vi. After this do
-
-    [root@sessionrecording]# cat /etc/sssd/conf.d/sssd-session-recording.conf
-
-You should see this as an output:
-
-    [session_recording]
-    scope=some
-    users=q
-    groups=
-
-Then you need to restart SSSD, so that changes will take place:
-
-    [root@sessionrecording]# systemctl restart sssd
-    
-Jump directly to "Creating sessions recorded by tlog" section, skip the other user configuration methods.
-
-==== Lab 12.4.1 One more way to enable recording by changing user's shell and avoiding usage of SSSD (OPTIONAL method)
-
-In this case user will have to change user's shell to tlog-rec-session, so that their working shell will be the one that is listed in the tlog-rec-session.conf configuration file ( /bin/bash by default ).
-
-    [root@sessionrecording]# yum install util-linux-user
-
-Then
-
-    [root@sessionrecording]# chsh q
-
-And input */usr/bin/tlog-rec-session*
-
-    Changing shell for q.
-    New shell [/bin/bash]
-    /usr/bin/tlog-rec-session
-    chsh: Warning: "/usr/bin/tlog-rec-session" is not listed in /etc/shells.
-    Shell changed.
-
-This will make user to be recorded on next login.
-
-== Lab 12.5.1 Creating sessions recorded by tlog
+== Lab 12.4 Creating sessions recorded by tlog
 
 Let's create some activity by one of the recorded users. Then you will be able to play it back in Cockpit.
 
@@ -233,7 +149,7 @@ image:images/session_recording_nginx_error.png[]
 
 Now, it is time to login to cockpit and use cockpit-session-recording to investigate why the web server does not work.
 
-=== Lab 12.6.1 Using Session Player from Cockpit UI
+=== Lab 12.5 Using Session Player from Cockpit UI
 
 Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
