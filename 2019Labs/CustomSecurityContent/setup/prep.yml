@@ -6,10 +6,9 @@
   become_user: lab-user
 
   vars:
-    LABS_LOCAL: "/home/lab-user/labs_data"
     LABS_CONTENT_PART: "2019Labs/CustomSecurityContent/documentation"
     TRACK_1_LABEL: "lab1_introduction"
-    TRACK_2_LABEL: "lab2_OpenSCAP"
+    TRACK_2_LABEL: "lab2_openscap"
     TRACK_3_LABEL: "lab3_profiles"
     TRACK_4_LABEL: "lab4_ansible"
     TRACK_5_LABEL: "lab5_oval"
@@ -17,15 +16,15 @@
     LABS_ROOT: "/home/lab-user/labs"
 
   tasks:
-  - name: Clone the Labs Git repository
-    git:
-      repo: 'https://github.com/RedHatDemos/SecurityDemos.git'
-      dest: "{{ LABS_LOCAL }}"
-
   - name: Clone the CaC/c Git repository
     git:
       repo: 'https://github.com/ComplianceAsCode/content.git'
       dest: "{{ CACC_LOCAL }}"
+
+  - name: Remove the Labs directory, so we start from scratch.
+    file:
+      path: "{{ LABS_ROOT }}"
+      state: absent
 
   - name: Generate SSH keys
     shell: ssh-keygen -b 2048 -t rsa -f /home/lab-user/.ssh/id_rsa -q -N ""
@@ -59,6 +58,11 @@
       chdir: "{{ CACC_LOCAL }}/Dockerfiles"
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
     become_user: root
+
+  - name: Remove the lab3 tests
+    file:
+      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
+      state: absent
 
   - name: Creates directories for Lab Tracks
     file:
@@ -131,7 +135,14 @@
       regexp: '(operation=")greater than or equal(")'
       replace: '\1equals\2'
 
+  - name: Update the Ansible exercise to CaC master
+    git:
+      repo: "{{ CACC_LOCAL }}"
+      version: 'master'
+      dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content"
+      force: yes
+
   - name: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves
     file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content/linux_os/system/accounts/accounts-session/accounts_tmout/ansible/"
+      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/"
       state: absent

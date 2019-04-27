@@ -260,15 +260,15 @@ In this section, we will manually fix the specific *Kernel vulnerable to man-in-
 
 . Login with *admin* / *r3dh4t1!* to Satellite at https://sat6-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*. Click on *Red Hat Insights → Overview*, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
 +
-image:images/lab8.1-insightsoverview.png[1000,1000]
+image:images/lab5.2-insightsoverview.png[1000,1000]
 
 . Click on *Red Hat Insights → Inventory*.
 +
-image:images/lab8.1-inventory.png[1000,1000]
+image:images/lab5.2-inventory.png[1000,1000]
 
 . Click on your client VM, which is *ic1.summit.example.com*. You will see the list of issues affecting it when clicking on the system name.
 +
-image:images/lab8.1-listofissues.png[1000,1000]
+image:images/lab5.2-ic1host.png[1000,1000]
 
 . Notice that your system shows up with multiple security vulnerabilities.
 +
@@ -278,7 +278,7 @@ NOTE: Our objective is to fix the payload injection problem without causing down
 
 . Use your browser’s search function to search for *payload injection*.
 +
-image:images/lab8.1-payloadinjectionsearch.png[1000,1000]
+image:images/lab5.2-CVE-2016-5696.png[1000,1000]
 +
 NOTE: Reading the description for the vulnerability shows that the sysctl variable is set to a level that allows being exploited. We want to do the active mitigation by changing the sysctl variable and making it permanent on reboot. In this case, we do not want to update the kernel or reboot since we don’t want downtime.
 
@@ -323,15 +323,12 @@ Successfully uploaded report from 4a61da2a-1f76-470f-8dae-358f3c15b7ca to accoun
 . Wait until this step completes before moving to the next step.
 . From your Satellite UI, click on *Red Hat Insights → Inventory*.
 +
-image:images/lab8.1-insightsinventory.png[1000,1000]
 
 . Click on your client VM, *ic1.summit.example.com*. You will notice than the number of actions has decreased.
-+
-image:images/lab8.1-actionsdecreased.png[1000,1000]
 
 . Use your browser’s search function to search for *payload injection*. You will notice that this payload injection issue is no longer listed due to fixing the vulnerability.
 +
-image:images/lab8.1-payloadinjectionsearch-again.png[1000,1000]
+image:images/lab5.2-payloadinjectionsearch-again.png[1000,1000]
 
 . Congratulations, you’re no longer impacted by the payload injection vulnerability!
 
@@ -341,30 +338,29 @@ It is also possible to automate some of the issues with an Ansible Playbook that
 
 . For this part of the lab exercise, we will fix the payload injection vulnerability using an Ansible playbook versus fixing it manually like we did in the previous exercise. We will execute these steps on the *ic4.summit.exmaple.com* VM.
 +
-image:images/lab8.2-ansibleavailable.png[1000,1000]
 
 . Now we need to create a plan in which the issues that are found will be solved using an Ansible Playbook. In order to do so, from your Satellite 6.4 UI, click on *Red Hat Insights → Planner*.
 +
-image:images/lab8.2-ansibleplaybook-payloadinjection.png[1000,1000]
+image:images/lab5.3-planner.png[1000,1000]
 
 . Click on *Create a plan*.
 +
-image:images/lab8.2-createaplan.png[1000,1000]
+image:images/lab5.3-createplan.png[1000,1000]
 
 . Name the plan: *GUID* Payload Remediation. Replacing *GUID* with your lab's *GUID*, select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE and click on *Save*.
 +
 NOTE: Since this is a shared Insights environment naming this with your GUID will make it easier to find when its time to select the plan for remediation.
 +
-image:images/lab8.2-playbookbuilder.png[1000,1000]
+image:images/lab5.3-playbookplan.png[1000,1000]
 
 . As you can see, there are two ways to solve this issue, one is by updating the kernel, and the other one is apply the needed changes to the */etc/sysctl.conf* file, add the mitigation configuration, and reload the kernel configuration.
 Insights gives us the opportunity to choose the resolution that we want. In this lab we want to prevent unplanned downtime for this issue, so select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the *Save* button.
 +
-image:images/lab8.2-setacklimit.png[1000,1000]
+image:images/lab5.3-setlimit.png[1000,1000]
 
 . Once the plan is saved, the planner screen is shown where you can see the newly created plan, as well as the issues it resolves and the systems affected.
 +
-image:images/lab8.2-saveplanneroutput.png[1000,1000]
+image:images/lab5.3-plan.png[1000,1000]
 
 . Now that we have a plan built to resolve the Payload vulnerability for *ic4.summit.exampl.com*, we need to sync the Red Hat Insights information with Ansible Tower.
 
@@ -372,19 +368,19 @@ image:images/lab8.2-saveplanneroutput.png[1000,1000]
 
 . Click on *Templates* from the main menu at the top. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
 +
-image:images/lab8.3-insights-facts-1.png[1000,1000]
+image:images/lab5.3-scanjob.png[1000,1000]
 
 . The Job Details output will pop up and you should let the job run to completion. At the end the Status should show Successful.
 +
-image:images/lab8.3-insights-sync-output.png[1000,1000]
+image:images/lab5.3-scanoutput.png[1000,1000]
 
 . Navigate to *Inventories* and click on *Insights Inventory*.
 +
-image:images/lab8.3-tower-inv-insights-inv.png[600,600]
+image:images/lab5.3-insightsinv.png[600,600]
 
 . Click *Hosts* and click on the host *ic4.summit.example.com*.
 +
-image:images/lab8.3-tower-inv-hosts.png[600,600]
+image:images/lab5.3-insights-hosts.png[600,600]
 
 . By clicking the *Insights* option for this host you can see all of the risks and vulnerabilities associated with this host.
 +
@@ -397,35 +393,35 @@ IMPORTANT: If you see the following error: `error : Unkown exception HTTPSConnec
 23.218.148.105 access.redhat.com
 ----
 +
-image:images/lab8.3-insights-issues.png[1000,1000]
+image:images/lab5.3-insights-issues.png[1000,1000]
 
 +
-. Navigate to *Projects* from the main menu at the top and find the *Insights Planner Sync* project, and click the Cloud with a download arrow under ACTIONS to the right of the project name.
+. Navigate to *Projects* from the main menu on the left and find the *Insights Planner Sync* project, and click the Sync button.
 +
-image:images/lab8.3-insights-sync-scm.png[1000,1000]
+image:images/lab5.3-insights-sync.png[1000,1000]
 . The sync should complete successfully, and now you're ready to remediate with Tower.
 +
 NOTE: Tower can also identify Insights issues on managed hosts. All of the above projects and plans can be sync'd and updated automatically with Tower via the API or with scheduled runs.
 
 . Navigate to *Templates* and click on *+ADD* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
 +
-image:images/lab8.3-insights-template1.png[1000,1000]
+image:images/lab5.3-new-template.png[1000,1000]
 
 . For the name of the template use: *GUID* Payload Fix. Job Type should be *Run*. For Inventory select *Insights Inventory*. For Project select *Insights Planner Sync* (you may need to navigate to a different page to find this project). In the Playbook Dropdown Choose a playbook that you created with your unique GUID in the Insights Planner. For credential select *Insights Fix All Machine Credentials*. The final task is to click *Enable Privilege Escalation* under OPTIONS, and click Save.
 +
-image:images/lab8.3-insights-template2.png[1000,1000]
+image:images/lab5.3-new_job.png[1000,1000]
 
 . Scroll down to where the Templates are listed below the New Template fields, or click Templates from the Main Tower menu. Find the template you created.
 +
-image:images/lab8.3-insights-template3.png[1000,1000]
+image:images/lab5.3-new-template-created.png[1000,1000]
 
 . Click the rocket for the template you created. This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in the DETAILS pane, and the ansible-playbook run output on the right.
 +
-image:images/lab8.3-insights-template4.png[1000,1000]
+image:images/lab5.3-playbook_is_run.png[1000,1000]
 
 . Now navigate back to your Satellite UI at https://sat-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, since we resolved the kernel vulnerability that we created the Plan and playbook for.
 +
-image:images/lab8.2-afteransiblefix.png[1000,1000]
+image:images/lab5.3-results_in_satellite.png[1000,1000]
 +
 NOTE: When the execution if a playbook is completed, the Insights agent is also run as part of this Ansible playbook, so the latest state of the system is reporting into Insights automatically.
 
@@ -437,19 +433,19 @@ In this lab exercise, we will attempt to fix all the issues on the client system
 
 . Click on *Red Hat Insights → Inventory*.
 +
-image:images/lab8.4-insights-inventory.png[200,200]
+image:images/lab5.4-Inventory-insights.png[200,200]
 
 . Select both *ic1.summit.example.com* and *ic4.summit.example.com* systems and note the number of actions each client need to take in order to be resolved.
 +
-image:images/lab8.4-insights-pre-inv.png[800,800]
+image:images/lab5.4-inventory-for-plan.png[800,800]
 
 . Click on Actions, on the top left corner, and then select *Create a new Plan / Playbook*.
 +
-image:images/lab8.3-createplan.png[200,200]
+image:images/lab5.4-FixAllPlan.png[200,200]
 
 . Enter a plan name of *GUID Insights Fix ALL*, replacing *GUID* with your lab's *GUID*. Choose all *Actions*, do this by clicking on the box by the Action label at the top. Then click *Save*.
 +
-image:images/lab8.3-screen.png[800,800]
+image:images/lab5.4-choose_resolution.png[800,800]
 
 . You are given the option to choose between different ways to solve your issues. For this exercise in order to save some time, choose actions that do not require a reboot if possible.
 +
@@ -457,53 +453,52 @@ image:images/lab8.4-insights-reboot-required.png[600,600]
 
 . You should see all the issues this plan is going to solve as well as the affected systems.
 +
-image:images/lab8.3-planner.png[1000,1000]
+image:images/lab5.4-FixAll.png[1000,1000]
 +
 NOTE: Now that we have a plan built to resolve most of the vulnerabilities for our two nodes, we need to sync the Red Hat Insights information with Ansible Tower.
 
 . Login with *admin* / *r3dh4t1!* to Tower at https://tower-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
 
-. Click on *Templates* from the main menu at the top. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
+. Click on *Templates* from the main menu on the left. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
 +
-image:images/lab8.3-insights-facts-1.png[1000,1000]
+image:images/LAb5.4-Insights-Facts-scan.png[1000,1000]
 
 . The Job Details output will pop up and you should let the job run to completion. At the end the Status should show Successful.
 +
-image:images/lab8.3-insights-sync-output.png[1000,1000]
+image:images/Lab5.4-Insights-Facts-Fix-All.png[1000,1000]
 
-. Navigate to *Projects* from the main menu at the top and find the *Insights Planner Sync* project, and click the Cloud with a download arrow under ACTIONS to the right of the project name.
+. Navigate to *Projects* from the main menu at the left and find the *Insights Planner Sync* project, and click the Sync button.
 +
-image:images/lab8.3-insights-sync-scm.png[1000,1000]
+image:images/Lab5.4-Check-for-playbooks.png[1000,1000]
 
 . The sync should complete successfully, and now you're ready to remediate with Tower.
 
 . Navigate to *Templates* and click on *+ADD* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
 +
-image:images/lab8.3-insights-template1.png[1000,1000]
+image:images/Lab5.4-Template-to-FixAll.png[1000,1000]
 
 . For the name of the template use: *GUID* Insights Fix ALL. Job Type should be *Run*. For Inventory select *Insights Inventory*. For Project select *Insights Planner Sync* (you may need to navigate to a different page to find this project). In the Playbook Dropdown Choose a playbook that you created with your unique GUID in the Insights Planner, i.e. *GUID Insights Fix ALL*. For credential select *Insights Fix All Machine Credentials*. The final task is to click *Enable Privilege Escalation* under OPTIONS, and click *Save*.
 +
-image:images/lab8.4-insights-template2.png[1000,1000]
+image:images/Lab5.4-FixAllTemplate.png[1000,1000]
 
 . Scroll down to where the Templates are listed below the New Template fields, or click Templates from the Main Tower menu. Find the template you created and click the *rocket* for the template you created.
 +
-image:images/lab8.4-insights-fix-all.png[1000,1000]
 
 . This will launch the job and run the playbook you selected from the dropdown. If everything is successful you will see a status of *Successful* in the DETAILS pane, and the ansible-playbook run output on the right.
 +
 IMPORTANT: It is possible that one of the nodes will fail during remediation. Since Ansible, by nature, is *idempotent*, we can simply re-launch the job by clicking on the *Rocket* to try it again.
 +
-image:images/lab8.4-insights-template4.png[1000,1000]
+image:images/Lab5.4-Run_fixall.png[1000,1000]
 +
 NOTE: Here is what a successful job looks like.
 +
-image:images/lab8.4-insights-template5.png[1000,1000]
+image:images/Lab5.4-finalrun.png[1000,1000]
 +
 NOTE: There are some actions that will not have Ansible playbook generation capability, so you may have to do those manually, but you can knock out a majority of the vulnerabilities with Insights Plans and Ansible Tower. Just repeat the steps to create plans, sync them, and create and run the remediation template.
 
 . Now navigate back to your Satellite UI at https://sat-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic1.summit.example.com* and *ic4.summit.example.com* less issues than before.
 +
-image:images/lab8.4-afteransiblefix.png[1000,1000]
+image:images/Lab5.4-updated.png[1000,1000]
 
 <<top>>
 

@@ -127,6 +127,8 @@ $ sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
 Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
 +
 . Now, let's store the results of the scan this time:
++
+--
 * use `--results-arf` to get machine readable results archive
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 * use `--oval-results` to get detailed results in the report
@@ -135,13 +137,16 @@ Now, you will see the compliance scan results for every security control in the 
 $ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
-+
-. (Optional) You can also generate the HTML report separately:
-+
+
+[NOTE]
+====
+You can also generate the HTML report separately by executing
 ----
 $ oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
-+
+====
+--
+
 . Open the report in Firefox web browser.
 +
 ----
@@ -200,9 +205,12 @@ Close the *Diagnostics* window.
 +
 image:lab1.2-scapworkbenchscan.png[500,500]
 
-. (Optional) You can save the customization to a tailoring file by selecting File->Save Customization Only.
+[TIP]
+====
+You can save the customization to a tailoring file by selecting File->Save Customization Only.
 +
 image:lab1.2-savecustomization.png[300,300]
+====
 
 == Security Remediations with OpenSCAP, Ansible and Bash
 Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology.
