@@ -8,4 +8,5 @@
 
 
   roles:
+    - role: force-reg
     - role: wordpress-server
