@@ -86,7 +86,7 @@ AIDE found NO differences between database and filesystem. Looks okay!!
 . Let’s review the /etc/aide.conf file and look for entries related to ssh.  At line 200 you will find the following entries:
 +
 ----
-[root@servera ~]# vim /etc/aide.conf
+[root@servera ~]# vi /etc/aide.conf
 ----
 Search for line 200 by typing the command *:200*. When you do that, you should see these two lines:
 +
@@ -97,7 +97,7 @@ Search for line 200 by typing the command *:200*. When you do that, you should s
 . What this means is that AIDE is monitoring these two files and is looking specifically for changes to content based on sha256 and sha512 hashes.  At line 81, you will find the definition for LSPP:
 +
 [source]
-[root@servera ~]# vim /etc/aide.conf
+[root@servera ~]# vi /etc/aide.conf
 
 +
 Search for line 81 by typing the command *:81*. When you do that, you should see these two lines:
@@ -109,22 +109,23 @@ LSPP = FIPSR+sha512
 . Next we will examine the default rules in the /etc/aide.conf file.  A review of the default rules beginning at line 26 lists the parameters that are included.  For this exercise we will alter the permissions and content of the /etc/ssh/sshd_config file and rerun our scan.
 +
 [source]
-[root@servera ~]# vim /etc/aide.conf
+[root@servera ~]# vi /etc/aide.conf
 
 +
 Search for line 26 by typing *:26*. When you do that you should see the list of the parameters that are included. Type *:q* to exit *vim*, and then type the following commands.
 +
 [source]
 [root@servera ~]# chmod 0644 /etc/ssh/sshd_config
-[root@servera ~]# vim /etc/ssh/sshd_config
+[root@servera ~]# vi /etc/ssh/sshd_config
 
 
-. Using vim again, open the /etc/ssh/sshd_config file and jump to the end by typing *Shift + g*. Then, press the letter *o* to add a line to the end of the file. Append *UseDNS no* to the end of the /etc/ssh/sshd_config file. Then, press *esc* and  save and exit by typing *:wq!*
+. Using vi again, open the /etc/ssh/sshd_config file and jump to the end by typing *Shift + g*. Then, press the letter *o* to add a line to the end of the file. Append *UseDNS no* to the end of the /etc/ssh/sshd_config file. Then, press *esc* and  save and exit by typing *:wq!*
 
 . When we run AIDE, we expect it to note the change of the permissions and identify a change in the checksum of the file.
 
 . Now let's run a new scan and confirm.
 +
+[source]
 [root@servera ~]# aide --check
 
 . We see that AIDE scanned our files and found two changes.  Your output should look similar to the following:
@@ -139,9 +140,9 @@ Summary:
   Total number of entries:	34527
   Added entries:		0
   Removed entries:		0
-  Changed entries:		2
+  Changed entries:		1
 +
-As you examine the output you will see that permission and content changes were made to the /etc/ssh/sshd_config file.
+As you examine the output you will see that permission and content changes were made to the /`/ssh/sshd_config file.
 
 . We can see which permissions specifically changed, which is also the case when other attributes such as user, group, or file type change.  As for content, we can only see that the checksum changes and we would have to recover a previous version of the file to determine the exact content change.  What we can’t tell is the userid who made this change, or what time and how that change was made.
 
@@ -151,7 +152,7 @@ As you examine the output you will see that permission and content changes were 
 +
 [source]
 [root@servera ~]# chmod 0600 /etc/ssh/sshd_config
-[root@servera ~]# vim /etc/ssh/sshd_config
+[root@servera ~]# vi /etc/ssh/sshd_config
 +
 
 . Using vim, jump to the end of the /etc/ssh/sshd_config file by typing *Shift + g*. Then, delete the last time that we added previously by pressing *dd* on the last line, __UseDNS no__. Then, save and exit by pressing *:wq!*
@@ -184,9 +185,15 @@ If you want to eliminate the changes resulting from alteration of the timestamps
 -w /etc/shadow -p a -k shadow_key
 ----
 
-. Now let’s change the permission on the /etc/shadow file, run a scan, and then look for the entry in the audit.log  You should see output similar to the following:
+. Now let’s change the permission on the /etc/shadow file, run a scan, and then look for the entry in the audit.log  Before we do that let's re-initialize our database to account for the timestamp change in the sshd_conf file from the previous step.  You should see output similar to the following:
 +
 ----
+[root@servera ~]# aide --init
+
+[root@servera ~]# mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+
+[root@servera ~]# aide --check
+
 [root@servera ~] chmod 0666 /etc/shadow
 
 [root@servera ~]# aide --check
@@ -265,7 +272,7 @@ type=SYSCALL msg=audit(04/09/2019 21:20:22.554:128) : arch=x86_64 syscall=fchmod
 ----
 -w /etc/shadow -pa -k shadow_key
 
-[root@servera ~]$ vim /etc/audit/rules.d/audit.rules
+[root@servera ~]$ vi /etc/audit/rules.d/audit.rules
 ----
 . In vim, type the letter *o* to begin a new line below the cursor and insert the text above. Press *esc* and then save and exit by pressing *:wq!*.
 
