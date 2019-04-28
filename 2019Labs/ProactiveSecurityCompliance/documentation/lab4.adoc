@@ -36,4 +36,4 @@ image:images/lab2-job_log.png[500,500]
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5.adoc[Lab 5]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5.adoc[Lab 5: Proactive Security and Automated Risk Management at Scale with Predictive Analytics]

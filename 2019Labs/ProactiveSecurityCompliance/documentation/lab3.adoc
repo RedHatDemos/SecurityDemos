@@ -50,4 +50,4 @@ image:images/lab4-monitor_workflow.png[500,500]
 +
 image:images/lab4-view_schedule.png[500,500]
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems]

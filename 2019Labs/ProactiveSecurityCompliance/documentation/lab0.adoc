@@ -71,4 +71,4 @@ image:images/lab0-vmturnon2.png[1000,1000]
 . Do not close your CloudForms UI since you will be using it in future lab exercises.
 
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[ Lab 1]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1.adoc[Lab 1: Automated Scanning and Remediation of Host Systems for Vulnerabilities and Security Compliance]

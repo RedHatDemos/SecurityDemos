@@ -171,4 +171,4 @@ image:images/lab3.3-refresh-security-groups.png[600,600]
 +
 image:images/osp-security-groups-after.png[600,600]
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3.adoc[Lab 3: Automated Patching of Host Systems]

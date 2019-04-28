@@ -39,27 +39,27 @@ _lampservers_ :
     |lampweb
     | 192.168.0.100
     |This server is used for the apache web server. There is no local database on this machine
-    | The wordpress application is set with a default login of: 
-    
+    | The wordpress application is set with a default login of:
+
 ---------------------------
 
     http://rhel1-[GUID].rhpds.opentlc.com/
 
     LOGIN:  admin
-    
-    PASS:  Password123	
+
+    PASS:  Password123
 
     |lampdb
     | 192.168.0.101
     |this server is a standalone database with no other purpose than to host the MySQL / MariaDB instance.
-    | The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!	
+    | The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!
 
     |lampjump
     | 192.168.0.102
     |This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
     | You will log in as lab-user to this machine and see a script in your home directory. Additionally, you can run remote MySQL commands from this machine against the unsecured database.
 
-    
+
 |=====================================================
 
 
@@ -190,22 +190,22 @@ that directory. A typical hacker might have a similar file to this,
 pre-designed to exploit a site once they found the vulnerability. When
 we run this script,
 * Run this script to exploit the DB.
-* You will see this after it runs: 
+* You will see this after it runs:
 
-``` 
+```
 [lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
 
       HACKED!!!  YOU ARE A BAD KITTY!
 
       ##############################
-       __  __ _____ _____        __ 
-      |  \/  | ____/ _ \ \      / / 
-      | |\/| |  _|| | | \ \ /\ / /  
-      | |  | | |__| |_| |\ V  V /   
-      |_|  |_|_____\___/  \_/\_/    
-   	       	       	       	  
+       __  __ _____ _____        __
+      |  \/  | ____/ _ \ \      / /
+      | |\/| |  _|| | | \ \ /\ / /
+      | |  | | |__| |_| |\ V  V /
+      |_|  |_|_____\___/  \_/\_/
+
       ##############################
-                                    
+
       DONE!  Now reload the web page
   http://rhel1-[GUID].rhpds.opentlc.com/
  to see what the evil cat hacker clan did!
@@ -299,21 +299,21 @@ ERROR 1045 (28000): Access denied for user
         FAILED!  You do not can haz
         permissionz to the database
 
-       ############################## 
-       ____      ___        ______  _ 
+       ##############################
+       ____      ___        ______  _
       |  _ \    / \ \      / /  _ \| |
       | |_) |  / _ \ \ /\ / /| |_) | |
       |  _ <  / ___ \ V  V / |  _ <|_|
       |_| \_\/_/   \_\_/\_/  |_| \_(_)
-   	       	       	       	    
-       ############################## 
-                                      
-        FAILED!  You do not can haz   
-        permissionz to the database   
+
+       ##############################
+
+        FAILED!  You do not can haz
+        permissionz to the database
 ```
 
 Access DENIED!!!!
-                            
+
 
 [[summary]]
 SUMMARY
@@ -327,3 +327,6 @@ vulnerability,
 
 The playbook we ran to harden the database server targets and removes
 accounts set up to allow both: - remote access - no password
+
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7.adoc[Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
