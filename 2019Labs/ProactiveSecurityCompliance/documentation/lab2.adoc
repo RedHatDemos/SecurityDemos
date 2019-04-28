@@ -120,106 +120,48 @@ aide-0.15.1-13.el7.x86_64  Sun 28 Apr 2019 04:26:59 PM EDT
 
 . Exit out of the ssh session.
 
-=== Lab 3.2 Using Red Hat CloudForms compliance policy to determine if an OpenStack instance is vulnerable to the Meltdown and Spectre vulnerabilities
-. Open a private browser window in your web browser.  In the private browser window go to the CloudForms appliance URL (cfme-GUID.rhpds.opentlc.com) and log in with *labuser* as the user name and *r3dh4t1!* as the password.
-+
-NOTE: labuser is a restricted user that was created by the admin. This user can only see his/her VMs and has limited functionality in CloudForms.
+=== Lab 2.2 Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
+. Go back to Red Hat CloudForms (https://cfme-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
-. Navigate to Services -> Workloads if not already there.
-+
-image:images/lab3.2-services-workloads.png[400,400]
-
-. You will see that the VM is non-compliant. Click on the VM *lab3-vm2* to go to the summary screen.
-+
-image:images/lab3.2-all-vms.png[500,500]
-
-. In the upper right hand corner click on *Compliance Status*.
-+
-image:images/lab3.2-compliance-status.png[400,400]
-+
-. Expand and see the details of this compliance check. You will see that the VM is vulnerable to the Meltdown and Spectre vulnerabilities.
-+
-image:images/lab3.2-compliance-status-view.png[400,400]
-+
-NOTE: For the sake of time, the vulnerable kernel packages have already been patched by updating this VM to the latest kernel packages.
-+
-. Click on the back arrow to navigate back to the VM summary page.
-+
-image:images/lab3.2-back-arrow.png[400,400]
-+
-. From the VM summary page click on Packages.
-+
-image:images/lab3.2-packages.png[500,500]
-+
-. Scroll down to find the kernel package and note the version *693.el7*.
-+
-image:images/lab3.2-packages-view.png[800,800]
-+
-. To mitigate against the Meltdown and Spectre vulnerabilities, the kernel package needs to be version *830.el7* or higher. Click on the *back arrow* to navigate back to the VM summary page.
-+
-image:images/lab3.2-back-arrow.png[400,400]
-+
-. Click on *Configuration -> Perform SmartState Analysis*. This will launch a job that will scan the VMs packages and other metadata.
-+
-image:images/lab3.2-launch-smart-state.png[400,400]
-+
-. Click on *Lab User -> Tasks* to monitor the scan jobs status.
-+
-image:images/lab3.2-tasks.png[150,150]
-+
-. Click on the *Refresh* button periodically until the scan job has completed (about 3 minutes). Afterwards, *click on the job* and this will take you back to the VM summary page.
-+
-image:images/lab3.2-task-results.png[600,600]
-+
-. Click on *Policy -> Check Compliance of Last Known Configuration*
-+
-image:images/lab3.2-check-compliance.png[400,400]
-+
-. Click on the *Refresh* button until the VM is compliant.
-+
-image:images/lab3.2-compliant-success.png[600,600]
-
-=== Lab 3.3 Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
-
-. Switch to the browser tab that is logged in to CloudForms as *admin* and then navigate to *Control -> Explorer*.
+. Navigate to *Control -> Explorer*.
 +
 image:images/lab3.3-control-explorer.png[200,200]
 +
-. Navigate to *Policy Profiles -> Lab 3.3 OSP Security Group Enforcement -> Lab 3.3 OSP Attach Security Group Policy*. You will notice that this policy states that when an OpenStack instance is powered on, ensure that the *Production* security group is attached.
+. Navigate to *Policy Profiles -> OSP Security Group Enforcement -> OSP Attach Security Group Policy*. You will notice that this policy states that when an OpenStack instance is powered on, ensure that the *Production* security group is attached.
 +
-image:images/lab3.3-control-policy.png[600,600]
+image:images/osp-controlpolicy.png[1000,1000]
 +
 . Navigate to Compute -> Cloud -> Instances.
 +
 image:images/lab3.3-computecloudinstances.png[500,500]
 +
-. Click on the VM *lab3-vm3* to go to the VM summary page.
+. Click on the Openstack instance named *openstack-instance* to go to the Instance summary page.
 +
-image:images/lab3.3-all-vms.png[600,600]
+image:images/all-osp-instances.png[600,600]
 +
 . Click on *Policy -> Manage Policies*.
 +
 image:images/lab3.3-policy-manage-policies.png[400,400]
 +
-. Verify that the Lab 3.3 control policy is assigned and click on *Cancel* to exit.
+. Notice that the *OSP Security Group Enforcement* control policy is assigned to this Openstack instance. Click on *Cancel* to exit.
 +
-image:images/lab3.3-policy-assignment.png[600,600]
+image:images/osp-policyassignment.png[600,600]
 +
-. From the VM summary page, locate *Relationships* and click on *Security Groups*.
+. From the Instance summary page, locate *Relationships* and click on *Security Groups*.
 +
 image:images/lab3.3-relationships.png[400,400]
 +
-. You will see that the VM only has 1 security group.
+. You will see that this instance is only assigned to 1 security group, the *default* security group.
 +
-image:images/lab3.3-security-groups-before.png[600,600]
+image:images/osp-security-groups-before.png[600,600]
 +
 . Click on the *back* arrow to navigate back to the VM summary page.
 +
-image:images/lab3.3-back-arrow.png[200,200]
+image:images/back-arrow.png[1000,1000]
 +
-. From the VM summary page *power on* the VM. This will trigger the control policy to ensure that the *Production* security group is applied.
+. From the Instance summary page, power on this instance by clicking on *Power -> Start*. Click *OK* to start this instance. This will trigger the control policy to ensure that the *Production* security group is applied to this instance whenever it is powered on.
 +
-image:images/lab3.3-power-on.png[200,200]
+image:images/osp-power-on.png[1000,1000]
 +
 . Click on the *refresh button* until the VM has powered on and the security group count has changed. Once changed, click on *Security Groups* again.
 +
@@ -227,6 +169,6 @@ image:images/lab3.3-refresh-security-groups.png[600,600]
 +
 . You will now notice that the *Production* security group has been applied automatically due to the control policy set on this Openstack instance.
 +
-image:images/lab3.3-security-groups-after.png[600,600]
+image:images/osp-security-groups-after.png[600,600]
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4]
