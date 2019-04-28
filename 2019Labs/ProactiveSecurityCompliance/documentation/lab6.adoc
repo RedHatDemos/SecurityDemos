@@ -141,7 +141,7 @@ but we have wide open database access! So we can set it to whatever we
 want!
 * run this command to change the wordpress admin user's password to something else:
 
-<pre>update wp_users set user_pass=MD5('FluffyBunny') WHERE `user_login`='admin';</pre>
++update wp_users set user_pass=MD5('FluffyBunny') WHERE `user_login`='admin';+
 
 * Verify you have access by visiting this admin login URL and logging in
 with your new credentials.
