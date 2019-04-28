@@ -354,6 +354,15 @@ image:images/idm-hbac.png[300,300]
 image:images/idm-viaservice-add.png[800,800]
 image:images/idm-19-sudo.png[700,700]
 
+. Make sure you are logged out as user1 on *IdM3* and log back in as root and clear the cache.  The kerberos ticket held by user1 may may not be updated with the change to the rules we just made.
+
++
+[source]
+[root@idm2 ~]$ systemctl stop sssd.service
+[root@idm2 ~]$ sss_cache -E
+[root@idm2 ~]$ systemctl start sssd.service
+
+
 . Log back into the server that your user (user1) has access to (*IdM3*) from the previous step to verify that you do have access to escalate and run yum. Use the password that you set earlier for this user.
 +
 [source]
