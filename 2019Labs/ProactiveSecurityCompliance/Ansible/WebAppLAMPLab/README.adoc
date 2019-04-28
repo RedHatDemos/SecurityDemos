@@ -181,7 +181,7 @@ moment, we're going to do something rotten in this lab.
 *MISSION:* Exploit the database vulnerability by importing a database
 payload into the site's database.
 
-*STEPS:* On your workstation, you'll find a file called:
+*STEPS:* On your jumpbox "lampjump" at  192.168.0.102, you'll find a file called:
 
 `/home/lab-user/cat_meme_takeover.sh`
 
