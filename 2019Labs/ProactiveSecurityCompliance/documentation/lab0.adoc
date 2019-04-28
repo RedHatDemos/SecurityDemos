@@ -56,8 +56,8 @@ NOTE: Replace GUID with your lab's GUID. Use the password *r3dh4t1!* for *lab-us
 
 
 === Turning on your VMs
-. Before starting the lab steps, you will need to turn on the VMs that will be used in the infrastructure and operations security and compliance automation lab exercises in this lab (Lab Exercises #1-6).
-. Go to the CloudForms (https://cfme-GUID.rhpds.opentlc.com) tab. *Make sure to replace the GUID with your provided GUID!* If not already logged in, do so with *admin* as the Username and *r3dh4t1!* as the Password.
+. Before starting the lab steps, you will need to turn on the VMs that will be used in the infrastructure and operations security and compliance automation lab exercises in this lab (Lab Exercises #1-6). These VMs live in Red Hat Virtualization, but we will be turning on these VMs from Red Hat CloudForms.
+. Go to the Red Hat CloudForms (https://cfme-GUID.rhpds.opentlc.com) tab. *Make sure to replace the GUID with your provided GUID!* If not already logged in, do so with *admin* as the Username and *r3dh4t1!* as the Password.
 
 . On the left menus, navigate to *Compute -> Infrastructure -> Virtual Machines.*
 +
