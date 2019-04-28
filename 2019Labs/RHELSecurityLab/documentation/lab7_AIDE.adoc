@@ -112,7 +112,7 @@ LSPP = FIPSR+sha512
 [root@servera ~]# vi /etc/aide.conf
 
 +
-Search for line 26 by typing *:26*. When you do that you should see the list of the parameters that are included. Type *:q* to exit *vim*, and then type the following commands.
+Search for line 26 by typing *:26*. When you do that you should see the list of the parameters that are included. Type *:q* to exit *vi*, and then type the following commands.
 +
 [source]
 [root@servera ~]# chmod 0644 /etc/ssh/sshd_config
@@ -155,7 +155,7 @@ As you examine the output you will see that permission and content changes were 
 [root@servera ~]# vi /etc/ssh/sshd_config
 +
 
-. Using vim, jump to the end of the /etc/ssh/sshd_config file by typing *Shift + g*. Then, delete the last time that we added previously by pressing *dd* on the last line, __UseDNS no__. Then, save and exit by pressing *:wq!*
+. Using vi, jump to the end of the /etc/ssh/sshd_config file by typing *Shift + g*. Then, delete the last time that we added previously by pressing *dd* on the last line, __UseDNS no__. Then, save and exit by pressing *:wq!*
 
 . Run *aide --check* again to verify that you have reverted back correctly.  It will show a change in the timestamps (mtime, ctime, etc.), but not to the content.
 +
@@ -274,7 +274,7 @@ type=SYSCALL msg=audit(04/09/2019 21:20:22.554:128) : arch=x86_64 syscall=fchmod
 
 [root@servera ~]$ vi /etc/audit/rules.d/audit.rules
 ----
-. In vim, type the letter *o* to begin a new line below the cursor and insert the text above. Press *esc* and then save and exit by pressing *:wq!*.
+. In vi, type the letter *o* to begin a new line below the cursor and insert the text above. Press *esc* and then save and exit by pressing *:wq!*.
 
 . When the service restarts you can run auditctl -l to verify that your rule has survived.  Note that your auditd is configured to manual start and stop, so you will have to reboot the server to see this change.  If you want to configure a watch, but do not want to reboot your server, create a dynamic rule as we have in this exercise, and then update the audit.rules file for when your server reboots.
 
