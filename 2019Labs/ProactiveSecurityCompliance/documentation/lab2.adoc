@@ -161,7 +161,7 @@ image:images/back-arrow.png[1000,1000]
 +
 . From the Instance summary page, power on this instance by clicking on *Power -> Start*. Click *OK* to start this instance. This will trigger the control policy to ensure that the *Production* security group is applied to this instance whenever it is powered on.
 +
-image:images/osp-power-on.png[1000,1000]
+image:images/osp-power-on.png[500,500]
 +
 . Click on the *refresh button* until the VM has powered on and the security group count has changed. Once changed, click on *Security Groups* again.
 +
