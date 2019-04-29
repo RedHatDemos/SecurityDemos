@@ -1,32 +1,48 @@
 == Lab 3: Automated Patching of Host Systems
 
-== Goal of Lab 3
+=== Goal of Lab 3
+The goal of this lab is to learn how you can use a combination of Red Hat Ansible Tower and Red Hat Satellite to implement an automated patching strategy to automatically update and patch host systems at scale in different lifecycle environments. Specifically, you will learn how you can automatically apply patches to host systems and how to automate the tasks that have to happen behind the scenes to manage content in Red Hat Satellite.
 
-== Introduction
-____
-[Automation] is not magic. It’s about continuous, daily improvement—the constant discipline of pursuing higher performance by following the heuristic “if it hurts, do it more often, and bring the pain forward.”
-____
--- https://continuousdelivery.com[Jez Humble]
+=== Introduction
+Gartner found that link:https://www.gartner.com/smarterwithgartner/focus-on-the-biggest-security-threats-not-the-most-publicized["99% of the vulnerabilities exploited by the end of 2020 will continue to be ones known by security and IT professionals at the time of the incident."]
+By having a consistent and automated patching strategy in place, you have a higher chance of being protected by these known vulnerabilities.
 
-Frequent patching is a crucial component to maintainting a secure environment. It is often avoided, delayed, or heavlily lagging due to the involved manual process required to confidently roll new patch sets out to systems and applications. In this lab, we will see how utilizing RedHat Satellite (content repository) and Ansible Tower (Automation Platform) make patching must less of a burden.
+Patching is a necessary part of operating system lifecycle management. However, many organizations are struggling to remain current with the constant release of new patches and updates. At the same time, they are under pressure to provide near 100% availability of key business systems. With a consistent automated patch strategy that is routinely executed on your host systems, patching can run smoothly and in an automated fashion.
+Automation is a key component of having a successful patching strategy. Automation provides that continuous, daily improvement.
 
-Before we get started, let's understand a little about the setup and process since much of what we do will be automated.
+Frequent patching is a crucial component to maintainting a secure environment. It is often avoided, delayed, or heavlily lagging due to the involved manual process required to confidently roll new patch sets out to systems and applications.
 
-. Open the Web UI for your Satellite Server. Select "Content" from the navigation on the left and then select "Content Views". Here you will find a content view called `RHEL7_Standard`. This is used for all base builds of RHEL7.
+In this lab, we will see how utilizing Red Hat Satellite as the content repository and Red Hat Ansible Tower as the automation platform can make patching must less of a burden with automation.
+
+=== Lab 1.1 Viewing the Red Hat Satellite Pre-Configured Content Views
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+
+. Navigate to *Content -> Content Views*. Here you will find a content view called *RHEL7_Standard*. This is used for all base builds of RHEL7.
 +
-image:images/lab4-content_views.png[500,500]
+image:images/content-views.png[300,300]
 
-. Click on the `RHEL7_Standard` content view. Once the page loads, click the "Versions" tab at the top of the frame. You will see 1 version associated with all lifecycle environments.
+. Click on the *RHEL7_Standard* content view.
 +
-image:images/lab4-content_versions.png[500,500]
-+
-To patch our systems, we will need to create a new version of the content view that contains any newly syncronized packages. Next, we want to promote that version to the lower environments to test the patches prior to releasing to higher environments. This would all have to be done manually if we did not have automation and as the number of content views and environments grows, so does the workload in doing this manually.
+image:images/rhel7standard.png[1500,1500]
 
-. From the Tower dashboard, select "Templates" from the navigation bar on the left.
-
-. In the Templates view, locate the "PATCHING / 1 Dev" job template by searching or scrolling, and click the rocket ship icon to the left of the template name. This will launch the job and we will observe what actions it automates as it runs. The next few steps will walk you through what the automation is doing.
+. Once the page loads, click the *Versions* tab at the top of the frame (if not already there). You will see one version (*Version 1.0*) associated with all lifecycle environments (*RHEL7_Dev, RHEL7_QA, and RHEL7_Prod*).
 +
-image:images/lab4-launch_dev.png[500,500]
+image:images/content_versions.png[2000,2000]
+
+
+=== Lab 1.2 Automatically Creating and Promoting New Content Views in Red Hat Satellite with Red Hat Ansible Tower
+
+To patch our systems, we will need to create a new version of the content view that contains any newly synchronized packages. Next, we want to promote that version to the lower environments (such as Dev and QA) to test the patches prior to releasing to higher environments (such as Production). This would all have to be done manually if we did not have automation in place. As the number of content views and environments grows, so does the workload in doing this manually.
+
+In this lab exercise, we will automatically create and promote new content views with our updated patches and packages in Red Hat Satellite automatically using Red Hat Ansible Tower.
+
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *PATCHING / 1 Dev*. This will launch the job and we will observe what actions it automates as it runs. The next few steps will walk you through what the automation is doing.
++
+image:images/templates.png[100,100]
+image:images/lab4-launch_dev.png[2000,2000]
 
 .. First, we need to publish a new version of content. Go back to Satellite and look at your content view again. (Content > Content Views > RHEL7_Standard) You will notice in the "Versions" section that a new version is being created.
 +
