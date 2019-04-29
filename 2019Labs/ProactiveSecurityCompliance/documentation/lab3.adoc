@@ -39,28 +39,61 @@ In this lab exercise, we will automatically create and promote new content views
 
 . On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
-. Navigate to *Templates* and click the *rocket ship* next to the job template named *PATCHING / 1 Dev*. This will launch the job and we will observe what actions it automates as it runs. The next few steps will walk you through what the automation is doing.
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *PATCHING / 1 - Dev*. This will launch the job and we will observe what actions it automates as it runs.
 +
 image:images/templates.png[100,100]
 image:images/lab4-launch_dev.png[2000,2000]
 
-.. First, we need to publish a new version of content. Go back to Satellite and look at your content view again. (Content > Content Views > RHEL7_Standard) You will notice in the "Versions" section that a new version is being created.
+. Notice how this job kicks off an automation workflow in Red Hat Ansible Tower. *This automation workflow in this job will take about 15 minutes to complete.* In the meantime, let's take a deeper look at this automation workflow in Red Hat Ansible Tower to see what's happening behind the scenes.
 +
-image:images/lab4-create_version.png[500,500]
+image:images/dev-automationworkflow.png[2000,2000]
 
-.. Next, the 'RHEL7_Dev' lifecycle environment will be promoted to use the new version.
+. Notice that this automation workflow has several steps: Publish Content, Promote Content, Recalculate Errata, Install Updates, SCAP Scan, and Schedule Next (which schedules our next patching event). Click on the *Expand Output* button at the top right to see the full workflow. You can click the *Expand Output* button again if you want to exit the full workflow view. Also, feel free to click on *Details* in each of the workflow steps if you want to dive deeper into that particular job template and the automation tasks it is performing.
 +
-image:images/lab4-promote_version.png[500,500]
+image:images/fullworkflow.png[2000,2000]
 
-.. After that, we scan the hosts for new Errata. This simply updates satellite with the patches missing on the system now that we have a new version of content.
-
-.. Ansible will then run a `yum update` on the hosts to install the new content. Click the "Details" link while the "Install Updates" job is running. From here we can monitor progress across all hosts.
+. First, in this automated patching workflow for our Dev environment, notice that the first step in our automation workflow is *Publish Content*. This step automates the publishing of a new version of content that has our new package updates and patches that have been released since our first version was created.
 +
-image:images/lab4-job_details.png[500,500]
+image:images/publish-content.png[1000,1000]
+
+. Go back to the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+
+. Navigate to *Content -> Content Views*.
++
+image:images/content-views.png[300,300]
+
+. Click on the *RHEL7_Standard* content view.
+image:images/rhel7standard.png[1500,1500]
+
+. Notice in the *Versions* tab that a new version is being created. This step of creating and publishing our new content view in Red Hat Satellite may take about 8 minutes to complete.
++
+image:images/newversion-creation.png[500,500]
+
+. Next, notice that the *RHEL7_Dev* lifecycle environment is being promoted to use the new version of the content view so that our host in the Dev lifecycle environment will start receiving updates from the newer set of updated packages and patches.
++
+image:images/devpromotion.png[500,500]
+
+. Go back to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Jobs* and click on your recently launched *PATCHING / 1 - Dev* job.
++
+image:images/devjob.png[500,500]
+
+. Notice that the second step of our automated patching workflow is to *Promote Content*  which is why we saw that step execute in Red Hat Satellite previously. Next, notice that the third step in our automated patching workflow is *Recalculate Errata*. In this step, we scan the hosts for new Errata. This simply updates Red Hat Satellite with the patches missing on the system now that we have a new version of content.
++
+image:images/nextsteps.png[500,500]
+
+. Next, notice that the next step of our automated workflow is *Install Updates*. In this step, Red Hat Ansible Tower will run a `yum update` on the hosts in the Dev lifecycle to install the new content. Click on *Details* while the *Install Updates* job is running.
++
+image:images/installupdates.png[500,500]
+
+. Notice that the *patching-non-ha.yml* playbook is executing on the RHEL 7 Dev Hosts (foreman_lifecycle_environment_rhel7_dev). This playbook will go to each of the hosts in the Dev lifecycle environment, run `yum update`, record the packages that have been installed and if a reboot is required based on any of the updated packages, only that host system that requires a reboot will be rebooted. In the Red Hat Ansible Tower log, you can see these tasks being executed. Specifically, notice that we're gathering facts, checking that the yum utils is installed, checking for updates, and upgrading all packages. *This job will take about 4 minutes to complete*.
++
+image:images/job-details.png[500,500]
 
 .. Click the back button in your browser to go back and monitor the full workflow. The next 2 jobs will run in parallel since they are not dependent on each other. One will run and OpenSCAP scan on the system post updates to provide the latest compliance report. The other will rescan the host again and upload the patch status to Satellite.
 +
-image:images/lab4-monitor_workflow.png[500,500]
+image:images/lab4-monitor_workflow.png[3000,3000]
 
 . Finally, if all of the previous steps were successful, a schedule will be created in Ansible Tower to patch the QA environment 7 days from now. Once the entire workflow is complete, select "Schedules" from the navigation menu on the left. Click on the schedule titled "Linux_patching_*". Inspect the scheule to take note of the workflow it will run and the date that is scheudled. From this page you can disable the schedule, reschedule, cancel, etc. If no changes are made, it will automatically promote and patch your QA environment. Since we do not have 7 days to wait, if you would like to watch the process again, return to the "Templates" page and manually run "PATCHING / 2 - QA".
 +
