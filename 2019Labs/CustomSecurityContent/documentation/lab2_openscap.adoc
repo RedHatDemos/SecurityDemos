@@ -39,7 +39,7 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 * Make sure that you are in the project root when you start - run
 +
 ----
-$ cd /home/lab-user/labs/lab2_openscap/content
+$ cd /home/lab-user/labs/lab2_openscap
 ----
 +
 in the terminal.
