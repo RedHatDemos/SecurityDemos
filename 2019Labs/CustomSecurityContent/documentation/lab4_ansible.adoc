@@ -43,7 +43,7 @@ Moreover, it generates separated Playbooks for every rule.
 * Make sure that you are in the project root when you start - run
 +
 ----
-$ cd /home/lab-user/labs/lab4_ansible/content
+$ cd /home/lab-user/labs/lab4_ansible
 ----
 +
 in the terminal.
