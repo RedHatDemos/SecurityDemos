@@ -4,7 +4,7 @@
 
 . Go https://www.opentlc.com/gg/gg.cgi?profile=generic_tester[here^] in order to obtain your lab GUID.
 This GUID will be used to access your unique lab environment.
-. Find the lab `Automate Your Security by Creating Custom Security Content`.
+. Find the lab `T9A495 - Creating customized security policy content to automate security compliance`.
 The activation key is *security*.
 . The next page will present you with
 - your GUID string,
