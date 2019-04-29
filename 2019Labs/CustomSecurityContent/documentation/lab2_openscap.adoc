@@ -175,7 +175,7 @@ image::scap_report_fail.png[]
 
 . Click *Activities* at the top left part of the screen, then click the 9 dots and click the green-ish icon of SCAP Workbench.
 
-. After Workbench starts, select *Other SCAP content* and click on *Load Content*. Then, open `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_openscap/content/build` directory to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
+. After Workbench starts, select *Other SCAP content* and click on *Load Content*. Then, open `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_openscap/build` directory to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
 +
 image:load_content.png[]
 +

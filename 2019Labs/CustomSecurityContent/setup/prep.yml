@@ -79,7 +79,7 @@
     git:
       repo: "{{ CACC_LOCAL }}"
       version: 'v0.1.43'
-      dest: "{{ LABS_ROOT }}/{{ item }}/content"
+      dest: "{{ LABS_ROOT }}/{{ item }}"
       force: yes
     loop:
       - "{{ TRACK_1_LABEL }}"
@@ -90,7 +90,7 @@
 
   - name: Create symlink from the home directory
     file:
-      src: "{{ LABS_ROOT }}/{{ item }}/content"
+      src: "{{ LABS_ROOT }}/{{ item }}"
       dest: "/home/lab-user/{{ item }}"
       state: link
     loop:
@@ -100,7 +100,7 @@
       - "{{ TRACK_4_LABEL }}"
       - "{{ TRACK_5_LABEL }}"
 
-  - name: Copy the track 0 documentation to the working directory
+  - name: Copy the track + documentation to the working directory
     copy:
       src: "{{ LABS_LOCAL }}/{{ LABS_CONTENT_PART }}/{{ TRACK_1_LABEL }}"
       dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/documentation"
@@ -109,29 +109,34 @@
 
   - name: Introduce a typo
     replace:
-      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/content/linux_os/guide/system/accounts/accounts-pam/password_quality/password_quality_pwquality/accounts_password_pam_minlen/rule.yml"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/linux_os/guide/system/accounts/accounts-pam/password_quality/password_quality_pwquality/accounts_password_pam_minlen/rule.yml"
       regexp: '(    after pam_pwquality to set minimum password length requirements.)'
       replace: '\1\n\1'
 
   - name: Introduce a typo
     replace:
-      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml"
       regexp: '(    Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that)'
       replace: '\1\n\1'
 
+  - name: Build the content to be used in lab 2
+    shell: './build_product rhel8'
+    args:
+      chdir: "{{ LABS_ROOT }}/{{ TRACK_2_LABEL }}"
+
   - name: Remove the lab3 tests
     file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
+      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/tests/data/group_system/group_accounts/group_accounts-session/"
       state: absent
 
   - name: Copy bad lab3 tests
     copy:
       src: "data/rule_accounts_tmout"
-      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/tests/data/group_system/group_accounts/group_accounts-session/"
 
   - name: Bust the OVAL
     replace:
-      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
       regexp: '(operation=")greater than or equal(")'
       replace: '\1equals\2'
 
@@ -139,10 +144,10 @@
     git:
       repo: "{{ CACC_LOCAL }}"
       version: 'master'
-      dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}"
       force: yes
 
   - name: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves
     file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/"
+      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/"
       state: absent

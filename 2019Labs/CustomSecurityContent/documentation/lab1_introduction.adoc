@@ -13,7 +13,7 @@ Using the powerful build system you generate outputs in various formats such as 
 that you can use to automate security auditing and hardening.
 The project contains many useful rules and checks that form various security policies and also allows to easily add new rules and checks.
 
-We will work with the project source repository, which can be retrieved from on https://github.com/ComplianceAsCode/content/.
+We will work with the project source repository, which can be retrieved from on https://github.com/ComplianceAsCode/content.
 
 In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode data is shipped as `scap-security-guide` RPM package.
 
@@ -88,7 +88,7 @@ Guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the guide f
 To open the HTML guide in a web browser,  execute the following command in the terminal:
 
 ----
-$ firefox /home/lab-user/labs/lab1_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
+$ firefox /home/lab-user/labs/lab1_introduction/build/guides/ssg-rhel8-guide-ospp.html
 ----
 
 Rules are organized in a system of hierarchical groups.
