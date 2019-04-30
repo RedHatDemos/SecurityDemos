@@ -39,7 +39,7 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 * Make sure that you are in the project root when you start - run
 +
 ----
-$ cd /home/lab-user/labs/lab2_openscap
+$ cd /home/lab-user/labs/lab2_OpenSCAP
 ----
 +
 in the terminal.
@@ -81,7 +81,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
 
 In this Section we will build the security content for Red Hat Enterprise Linux 8 from ComplianceAsCode source code and then we will use the built content with OpenSCAP command line tool to scan our machine.
 
-. In ComplianceAsCode source directory, build the content for Red Hat Enterprise Linux 8.
+. In `/home/lab-user/labs/lab2_OpenSCAP` directory, build the content for Red Hat Enterprise Linux 8.
 +
 ----
 $ ./build_product rhel8
@@ -175,7 +175,7 @@ image::scap_report_fail.png[]
 
 . Click *Activities* at the top left part of the screen, then click the 9 dots and click the green-ish icon of SCAP Workbench.
 
-. After Workbench starts, select *Other SCAP content* and click on *Load Content*. Then, open `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_openscap/build` directory to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
+. After Workbench starts, select *Other SCAP content* and click on *Load Content*. A file browser window will show up. Locate `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_OpenSCAP/build` directory and click to *Open* to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
 +
 image:load_content.png[]
 +
@@ -228,7 +228,7 @@ Use the `--fix-type ansible` option to request an ansible playbook with the fixe
 $ oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
 ----
 +
-We have specified the empty `result-id` because `oscap` supports generation of fixes from  a result file that has results from multiple scans. However, as there is only one result from a single scan, we don't have to specify the result ID explicitely.
+We have specified the empty `result-id` because `oscap` supports generation of fixes from  a result file that has results from multiple scans. However, as there is only one result from a single scan, we don't have to specify the result ID explicitly.
 +
 Check the output using a text editor:
 +
