@@ -19,23 +19,7 @@ accounts with liberal permissions and no password set). After
 remediating the problem, we will see that our exploit script no longer
 works.
 
-[[task1]]
-TASK1:
-------
-
-*MISSION:* Install the LAMP web-app, "WordPress" Via Ansible Role
-
-*STEPS:* 
-
-* Connect to your Ansible Tower server in a web browser.  [https://tower-GUID.rhpds.opentlc.com]
-
-* Log in with the credentials `admin` and password `r3dh4t1!`
-
-* From the left menu, select "Templates" and locate the job template called "LAMP / WordPress Deploy"
-
-* On the line for the job template called "LAMP / WordPress Deploy", click the icon of the rocketship on the right side of the screen to run the job template.  This will install the web application for WordPress.
-
-* This role is configured to run against three servers in a group called
+* This lab exercise is configured to run against three servers in a group called
 _lampservers_ :
 
 
@@ -69,13 +53,27 @@ _lampservers_ :
 
 |=====================================================
 
+[[task1]]
+TASK1:
+------
 
+*MISSION:* Install the LAMP web-app, "WordPress" Via Ansible Role
+
+*STEPS:* 
+
+* Connect to your Ansible Tower server in a web browser.  [https://tower-GUID.rhpds.opentlc.com]
+
+* Log in with the credentials `admin` and password `r3dh4t1!`
+
+* From the left menu, select "Templates" and locate the job template called "LAMP / WordPress Deploy"
+
+* On the line for the job template called "LAMP / WordPress Deploy", click the icon of the rocketship on the right side of the screen to run the job template.  This will install the web application for WordPress.
 
 * This role appears to install an innocent apache server on one and a db
 on the other. To the innocent eye, we complete this step and validate by
 visiting the website... everything looks clean and safe!
 * Once ths role is run, you can confirm the application has been
-installed by using a web browser to go to http://rhel1-[GUID].rhpds.opentlc.com/
+installed by using a web browser to go to     [http://rhel1-GUID.rhpds.opentlc.com/] (replace GUID with your actual GUID)
 
 [[task2]]
 TASK2:
