@@ -25,8 +25,7 @@ In this lab exercise, we will use automation to further harden our host systems 
 . Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / System Hardening*.
 +
 image:images/templates.png[100,100]
-image:images/lab2-select_template.png[5000,5000]
-image:images/hardening.png[1000,1000]
+image:images/hardening.png[2000,2000]
 
 . You will be prompted for the hosts that you would like to configure. Enter `*rhel7_dev` into the text field. We will target our dev servers first. Click "Next" followed by "Launch" to begin the job.
 +
