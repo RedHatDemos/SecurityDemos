@@ -92,6 +92,7 @@ longer log in... but you will now have admin access to the site!
 
 *STEPS:* 
 
+
 * Go to the command-line of your jumpbox machine. SSH in as
 _lab-user@rhel3-GUID.rhpds.opentlc.com_ 
 
@@ -115,15 +116,7 @@ MariaDB [WordPress]>  exit
 
 If you see the above dialogue, you're in! We just connected to the database on a a server and didn't even need a password.  That's really really bad.
 
-Okay, so that's not good. No really, that's not good at all. Anyone with
-a bit of curiosity can directly access the database that runs your
-entire site! They could add their own users and just sit back and
-wait... and when you run for public office, they could start posting bad
-things about you on YOUR OWN WEBSITE! Or they could just go for the
-gusto right now and cover your site in cat memes. Yeah. That's the one.
-In the next step, that's exactly what we're going to look at. But first,
-let's make ourselves a WordPress user so we can go in anytime and post
-articles.
+Anyone with a bit of curiosity can directly access the database that runs your entire site! They could add their own users and just sit back and wait... and when you run for public office, they could start posting bad things about you on YOUR OWN WEBSITE! Or they could just go for the gusto right now and cover your site in cat memes. Yeah. That's the one. In the next step, that's exactly what we're going to look at. But first, let's make ourselves a WordPress user so we can go in anytime and post articles.
 
 * While we're in the MySQL database, let's take a look at the users who
 are allowed to log in to the WordPress server:
