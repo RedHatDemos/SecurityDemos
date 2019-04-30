@@ -112,7 +112,7 @@ Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-MariaDB [WordPress]>  exit
+MariaDB [WordPress]> 
 ----
 
 If you see the above dialogue, you're in! We just connected to the database on a a server and didn't even need a password.  That's really really bad.
