@@ -449,7 +449,7 @@ image:images/lab5.3-new-template-created.png[1000,1000]
 +
 image:images/lab5.3-playbook_is_run.png[1000,1000]
 
-. Now navigate back to your Satellite UI at https://sat-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, since we resolved the kernel vulnerability that we created the Plan and playbook for.
+. Now navigate back to your Satellite UI at https://sat64-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, since we resolved the kernel vulnerability that we created the Plan and playbook for.
 +
 image:images/lab5.3-results_in_satellite.png[1000,1000]
 +
@@ -526,7 +526,7 @@ image:images/Lab5.4-finalrun.png[1000,1000]
 +
 NOTE: There are some actions that will not have Ansible playbook generation capability, so you may have to do those manually, but you can knock out a majority of the vulnerabilities with Insights Plans and Ansible Tower. Just repeat the steps to create plans, sync them, and create and run the remediation template.
 
-. Now navigate back to your Satellite UI at https://sat-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic1.summit.example.com* and *ic4.summit.example.com* less issues than before.
+. Now navigate back to your Satellite UI at https://sat64-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic1.summit.example.com* and *ic4.summit.example.com* less issues than before.
 +
 image:images/Lab5.4-updated.png[1000,1000]
 
