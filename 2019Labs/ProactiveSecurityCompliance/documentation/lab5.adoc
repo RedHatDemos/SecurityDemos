@@ -451,7 +451,7 @@ NOTE: When the execution if a playbook is completed, the Insights agent is also 
 
 In this lab exercise, we will attempt to fix all the issues on the client systems, *ic1.summit.example.com* and *ic4.summit.example.com*.
 
-. Open your browser to the Red Hat Satellite server https://sat6-GUID.rhpds.opentlc.com (replacing *GUID* with your lab's *GUID*) and login as username *admin* and password *r3dh4t1!*, if not already logged in.
+. Open your browser to the Red Hat Satellite server https://sat64-GUID.rhpds.opentlc.com (replacing *GUID* with your lab's *GUID*) and login as username *admin* and password *r3dh4t1!*, if not already logged in.
 
 . Click on *Red Hat Insights → Inventory*.
 +
