@@ -25,8 +25,9 @@ TASK1:
 
 *MISSION:* Install the LAMP web-app, "WordPress" Via Ansible Role
 
-*STEPS:* Run the job template "LAMP / WordPress Deploy" from Ansible
-Tower, to install the web application for WordPress.
+*STEPS:* 
+- Connect to your Ansible Tower server in a web browser.  https://tower-[GUID].rhpds.opentlc.com
+- Run the job template "LAMP / WordPress Deploy" from Ansible Tower, to install the web application for WordPress.
 
 * This role is configured to run against three servers in a group called
 _lampservers_ :
