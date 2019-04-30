@@ -18,7 +18,9 @@ Every year we are seeing an increase in the number of security breaches, an incr
 
 Automation can help with these challenges by improving both security and compliance. Specifically, it can help you avoid human errors, which will help with reducing risk and data breaches. In addition, automation gives you the ability to create infrastructure, security, and compliance as code , thus creating that repeatable, sharable, and verifiable infrastructure and application environments. Also, all of these benefits with automation also make it easier to pass security compliance audits.
 
-In this lab exercise, we will use automation to further harden our host systems and practice general security hardening best practices by protecting these host systems from common security mistakes, such as weak passwords , and more.
+In this lab exercise, we will use automation to further harden our host systems and practice general security hardening best practices by protecting these host systems from common security mistakes, such as weak passwords, and more.
+
+=== Lab 1.1 Automatically applying additional security hardening tasks on host systems from Red Hat Ansible Tower
 
 . On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
@@ -27,13 +29,22 @@ In this lab exercise, we will use automation to further harden our host systems 
 image:images/templates.png[100,100]
 image:images/hardening.png[2000,2000]
 
-. You will be prompted for the hosts that you would like to configure. Enter `*rhel7_dev` into the text field. We will target our dev servers first. Click "Next" followed by "Launch" to begin the job.
+. You will be prompted for the hosts that you would like to run this job template on. Enter **rhel7_dev* into the text field. We will target our dev host systems first. Click *Next* followed by *Launch* to begin the job.
 +
-image:images/lab2-select_hosts.png[500,500]
+image:images/select_hosts.png[500,500]
+image:images/launch_dev.png[500,500]
 
-. We will monitor the log as the configuration is checked and remediated on our systems. At the end we will see a Play Recap showing us how many changes were made on the systems.
+. Now, let's find out which hosts are part of *foreman_lifecycle_environment_rhel7_dev* group.
+
+. Navigate to *Inventories -> Satellite Inventory -> GROUPS -> foreman_lifecycle_environment_rhel7_dev -> HOSTS*. Notice that there are 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com. That means that this host hardening job template will be run on these three hosts.
+
+. Navigate back to *Jobs* and click on the *LINUX / System Hardening* job.
 +
-image:images/lab2-job_log.png[500,500]
+image:images/jobs_hardening.png[500,500]
+
+. Take a look at the Ansible Tower log output as the configuration is checked and remediated on our host systems. Specifically, notice that several tasks are being executed on our host systems such as various SSH hardening tasks, enabling SELinux, deploying a login banner, and configuring account password complexity.  At the end we will see a *Play Recap* showing us how many changes were made on the systems.
++
+image:images/job_log.png[1500,1500]
 
 . Re-run the job using the rocketship in the top corner of the details frame to observe how many changes are made after a system is already hardened. Ansible works to achieve an endstate defined in the playbook so if this playbook is run routinely, it will only make the changes needed to comply with your hardening standard.
 
