@@ -118,7 +118,7 @@ commands=netstat
 
 . Now, let's run the Red Hat Insights collection on the ic1 client from the command line.
 +
-NOTE: You will see warnings detailing information that will not be collected.
+NOTE: You will see warnings detailing information that will not be collected such as the /etc/hosts and /etc/resolv.conf files and the netstat command.
 +
 [source]
 ----
