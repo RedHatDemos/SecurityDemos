@@ -10,7 +10,7 @@ The activation key is *security*.
 - your GUID string,
 - link to the lab instructions, and
 - the last item of the bullet list - link to *power control and consoles*
-. Click the `here` link to go to the "environment's power control and consoles" page.
+. On the next page click the `here` link in the last item of the bullet list to go to the "environment's power control and consoles" page.
 You should get to a new page - a list of VMs.
 There is only one VM, so click the only `CONSOLE` link on the page.
 . You are now redirected to a remote desktop interface.
@@ -30,7 +30,7 @@ $ cat /etc/passwd
 lab-user:x:1000:1000:Lab User:/home/lab-user:/bin/bash
 ----
 
-- Commands, in this example `pwd` and `whoami`, are prefixed by the dollar character.
+- Commands, in this example `pwd` and `cat /etc/passwd`, are prefixed by the dollar character.
 - Lines that follow are the command's output, unless they begin with the dollar prefix, in which case they are again commands.
 - Ellipsis may be used to indicate that there are output lines, but as they are of no interest, they are omitted.
 

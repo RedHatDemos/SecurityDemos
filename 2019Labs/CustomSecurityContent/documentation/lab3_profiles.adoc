@@ -109,10 +109,10 @@ The profile consists of 4 items which are required:
 .. `selections`: is a list of rules and variables that the profile is composed of.
 It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this lab exercise.
 +
-. Save the profile file and go back to the root directory.
+. Save the profile file and go back to the project's root directory.
 +
 ----
-$ cd ../..
+$ cd /home/lab-user/labs/lab3_profiles
 ----
 +
 . Rebuild the content.
@@ -498,4 +498,4 @@ For more details about the `rule.yml` format, please refer to https://github.com
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4_profiles.adoc[Lab exercise 4 - Using Ansible in ComplianceAsCode]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4_ansible.adoc[Lab exercise 4 - Using Ansible in ComplianceAsCode]
