@@ -41,7 +41,7 @@ In this lab exercise, we will use automation to further harden our host systems 
 
 === Lab 4.2 Automated Security Hardening of Host Systems from Red Hat Ansible Tower
 
-. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / System Hardening*.
 +

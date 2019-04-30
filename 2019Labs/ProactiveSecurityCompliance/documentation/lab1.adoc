@@ -30,7 +30,8 @@ The default SCAP content provided with the OpenSCAP components of Red Hat Satell
 
 When you install the SCAP components in Satellite as defined in the link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.4/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-security_compliance_management/[Administering Red Hat Satellite Guide], all of the Red Hat default content will show up in Satellite so no extra steps are necessary to add the SCAP content to Satellite.  But if you had customized content that you wrote yourself or if you have a modified policy and you wanted to upload that modified version , you can do that in the Satellite UI under *Hosts → SCAP contents*.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
 . Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
 +
 image:images/scapcontents.png[300,300]
@@ -133,7 +134,7 @@ image:images/pciscanfinish.png[1000,1000]
 
 . Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished running on our specified hosts from the previous lab exercise, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -211,7 +212,7 @@ image:images/pciscanfinish.png[1000,1000]
 
 . Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished re-running on our specified hosts, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -287,7 +288,7 @@ image:images/pciscanfinish.png[1000,1000]
 
 . Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished re-running on our specified hosts, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -329,7 +330,7 @@ image:images/cf-scan-job-finish.png[1000,1000]
 
 . Now that all the SCAP compliance scans have finished running on this *rhel7-vm3.hosts.example.com* host, let's view the resulting compliance reports for this host in Red Hat Satellite.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -391,7 +392,7 @@ image:images/aidecheck.png[1000,1000]
 
 . Now that the AIDE package is installed, we should now pass the OpenSCAP scan against the *rhel7-custom* security policy profile. Let's confirm.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +

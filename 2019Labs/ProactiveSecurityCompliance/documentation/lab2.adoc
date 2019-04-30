@@ -13,7 +13,7 @@ Red Hat Ansible Tower and Red Hat CloudForms can easily communicate with each ot
 Red Hat CloudForms is an infrastructure management platform that allows IT departments to control users’ self-service abilities to provision, manage, and ensure compliance across virtual machines and private clouds. The Red Hat CloudForms control and policy engine provides built-in compliance and governance capabilities. A control policy is created in the Red Hat CloudForms control and policy engine by defining an Event, Condition, and Action. The Action can be one of the defined actions in the Red Hat CloudForms control engine or it can be free-form automation. The Red Hat CloudForms automate engine can be utilized to execute free-form automation using the integrated Ansible engine, by using the native ruby language, or by communicating directly to your Red hat Ansible Tower instance to execute your Ansible playbooks.
 
 === Lab 2.1 Using Red Hat Ansible Tower and Red Hat CloudForms to enforce the installation of the AIDE package
-. Log into Red Hat CloudForms (https://cfme-GUID.rhpds.opentlc.com) with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Log into Red Hat CloudForms (https://cfme-GUID.rhpds.opentlc.com) with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Control -> Explorer*.
 +
@@ -97,7 +97,7 @@ image:images/vm-power-on.png[1000,1000]
 +
 image:images/vm-ipaddress.png[400,400]
 
-. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Jobs* and click on the job that is being run at the top , which is *Yum Install Aide*.
 +
@@ -121,7 +121,7 @@ aide-0.15.1-13.el7.x86_64  Sun 28 Apr 2019 04:26:59 PM EDT
 . Exit out of the ssh session.
 
 === Lab 2.2 Using Red Hat CloudForms control engine to enforce OpenStack Security Group membership
-. Go back to Red Hat CloudForms (https://cfme-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Go back to Red Hat CloudForms (https://cfme-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Control -> Explorer*.
 +

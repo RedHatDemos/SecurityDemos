@@ -16,7 +16,7 @@ In this lab, we will see how utilizing Red Hat Satellite as the content reposito
 
 === Lab 3.1 Viewing the Red Hat Satellite Pre-Configured Content Views Before Automated Patching of Host Systems
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Content -> Content Views*. Here you will find a content view called *RHEL7_Standard*. This is used for all base builds of RHEL7.
 +
@@ -37,7 +37,7 @@ To patch our systems, we will need to create a new version of the content view t
 
 In this lab exercise, we will automatically create and promote new content views with our updated patches and packages in Red Hat Satellite automatically using Red Hat Ansible Tower. After that, we will automatically patch our host systems with the new content view and do automated compliance scanning on our host systems as well.
 
-. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Templates* and click the *rocket ship* next to the job template named *PATCHING / 1 - Dev*. This will launch the job and we will observe what actions it automates as it runs.
 +
@@ -63,7 +63,7 @@ image:images/fullworkflow.png[2000,2000]
 image:images/devjob.png[500,500]
 image:images/publish-content.png[1000,1000]
 
-. Go back to the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+. Go back to the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Content -> Content Views*.
 +
@@ -80,7 +80,7 @@ image:images/newversion-creation.png[500,500]
 +
 image:images/devpromotion.png[500,500]
 
-. Go back to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Go back to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Jobs* and click on your recently launched *PATCHING / 1 - Dev* job.
 +
@@ -110,7 +110,7 @@ image:images/policyscan.png[300,300]
 
 . When the *SCAP Scan* job completes, you can take a look at the RHEL7_Standard compliance reports in Red Hat Satellite for the three hosts(rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com) in the foreman_lifecycle_environment_rhel7_dev group.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -120,7 +120,7 @@ image:images/hostreports.png[300,300]
 +
 image:images/satreports-standard.png[2000,2000]
 
-. Go back to your Red Hat Ansible Tower(https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Go back to your Red Hat Ansible Tower(https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Jobs* and click on *PATCHING / 1 - Dev* job (if not already there).
 +

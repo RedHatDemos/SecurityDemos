@@ -4,23 +4,24 @@
 The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. In this lab, we will focus only on the specific security features of Red Hat Insights.
 
 === Introduction
-Red Hat Insights was designed to proactively evaluate the security, performance, and stability of your Red Hat platforms by providing prescriptive analytics of your systems. Red Hat Insights helps move you from reactive to proactive systems management, delivers actionable intelligence, and increases visibility of infrastructure risks and the latest security threats. Operational analytics from Red Hat Insights empowers you to prevent downtime and avoid firefighting while responding faster to new risks.
+Red Hat Insights is designed to proactively evaluate the security, performance, and stability of your Red Hat systems by providing predictive analytics. Red Hat Insights helps move you from reactive to proactive systems management, delivers actionable intelligence, and increases visibility of infrastructure risks and the latest security threats. Operational analytics from Red Hat Insights empowers you to prevent downtime and avoid firefighting while responding faster to new risks.
 
-Red Hat Insights recommendations are tailored for the individual system where risk is detected. This allows you to be certain that actions identified by Insights are validated and have a verified resolution for each detected risk, reducing false positives you may experience from critical risks identified by third-party security scanners. Red Hat Insights provides predictive analysis of security risk in your infrastructure based on a constantly evolving threat feed from Red Hat.
+Red Hat Insights recommendations are tailored for the individual system where risk is detected. This allows you to be certain that actions identified by Red Hat Insights are validated and have a verified resolution for each detected risk, reducing false positives you may experience from critical risks identified by third-party security scanners. Red Hat Insights provides predictive analysis of security risks in your infrastructure based on a constantly evolving threat feed from Red Hat.
 
 Through analysis of Red Hat Insights metadata and curated knowledge based on over fifteen years of enterprise customer support, Red Hat is able to identify critical security vulnerabilities, statistically frequented risks, and known bad configurations. We scale this knowledge to our customers with Red Hat Insights reporting and alerts, allowing prediction of what will happen on a monitored system, why it will happen, and how to fix a problem before it can occur.
 
-Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, Red Hat Satellite, Red Hat CloudForms, and Ansible Tower by Red Hat.  Recommendations from Red Hat Insights are human-readable and in most cases can simply be copy and pasted into the terminal to resolve the issue. You may also automate remediation of hosts in your infrastructure with Red Hat Insights generated Ansible playbooks or Ansible Tower by Red Hat integration.
+Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, Red Hat Satellite, Red Hat CloudForms, and Red Hat Ansible Tower.  Recommendations from Red Hat Insights are human-readable and in most cases can simply be copy and pasted into the terminal to resolve the issue. You may also automate remediation of hosts in your infrastructure with Red Hat Insights generated Ansible playbooks or with the Red Hat Ansible Tower integration.
 
 === Lab 5.1 Configuring Red Hat Insights Clients
 Red Hat Insights clients have a configuration file which can be modified for your needs.
 
 ==== Lab 5.1.1 Updating host *ic1.summit.example.com* to exclude files.
-. If not already there, log into to the workstation host as *root* from your desktop system replacing *GUID* with your lab's *GUID*. Use the password *r3dh4t1!*
+. If not already there, log into to the workstation host as *lab-user* from your desktop system replacing *GUID* with your lab's *GUID*. Then, become *root* on the workstation host.
 +
 [source]
 ----
-[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
 ----
 
 . Log into the *ic1.summit.example.com*.
@@ -79,7 +80,7 @@ Red Hat Insights clients have a configuration file which can be modified for you
 
 ----
 
-. You can specific commands and files you don't want to access by creating a remove.conf file.
+. You can specify commands and files you don't want to access by creating a remove.conf file. Let's create a remove.conf file that does the following (INSERT DETAIL HERE)
 +
 NOTE: 0660 file permissions will work on remove.conf and it should inherit the correct selinux types.
 +
@@ -105,7 +106,7 @@ commands=netstat
 
 ----
 
-. You can run Insights collection from the command line.
+. Now, let's run the Insights collection from the command line.
 +
 NOTE: You will see warnings detailing information that will not be collected. Also the --help option provides a significant amount of options to tailor Insights excution based on your environment.
 +
@@ -177,11 +178,12 @@ Debug options:
 ----
 
 ==== Lab 5.1.2 Updating host *ic4.summit.example.com* with Red Hat Insights
-. If not already there, log into to the bastion host from your desktop system replacing *GUID* with your lab's *GUID*. Use the password *r3dh4t1!*
+. If not already there, log into to the workstation host as *lab-user* from your desktop system replacing *GUID* with your lab's *GUID*. Then, become *root* on the workstation host.
 +
 [source]
 ----
-[localhost ~]$ ssh root@workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
 ----
 
 . Log into the *ic4.summit.example.com*.
@@ -191,7 +193,7 @@ Debug options:
 [root@workstation-GUID ~]# ssh ic4.summit.example.com
 ----
 
-. Install and Register client to Red Hat Insights:
+. Install and register this client to Red Hat Insights:
 +
 NOTE: In older versions the package was called redhat-access-insights.
 +
@@ -253,12 +255,14 @@ Successfully uploaded report from 41d3c62e-5c18-42ad-a1ff-65f7c37cc315 to accoun
 
 ----
 +
-Notice the *--display-name* parameter. This allows you to set the displayed hostname to something other than the default for a system within Insights. This is useful if you wish to obfuscate the hostnames that are used in analysis. Be aware that hostnames must resolve properly for Ansible playbooks and tower management to work for automated remediation, so the display name should match a valid hostname, even if it isn't the publicly accessible DNS name.
+Notice the *--display-name* parameter. This allows you to set the displayed hostname to something other than the default for a system within Red Hat Insights. This is useful if you wish to obfuscate the hostnames that are used in analysis. Be aware that hostnames must resolve properly for Ansible playbooks and Red Hat Ansible Tower management to work for automated remediation. As a result, the display name should match a valid hostname, even if it isn't the publicly accessible DNS name.
 
 === Lab 5.2 Manually fixing the payload injection security issue
 In this section, we will manually fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on *ic1.summit.example.com* without causing downtime.
 
-. Login with *admin* / *r3dh4t1!* to Satellite at https://sat6-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*. Click on *Red Hat Insights → Overview*, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
+. Navigate to *Red Hat Insights → Overview*, where you could see all your registered systems, actions summary (highlighted by priority) as well as latest updates from Red Hat.
 +
 image:images/lab5.2-insightsoverview.png[1000,1000]
 
