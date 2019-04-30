@@ -16,15 +16,17 @@ This is because this lab exercise will harden several host VMs and make them unu
 === Introduction
 Every year we are seeing an increase in the number of security breaches, an increase in the time to resolve an incident, and it's harder and harder to find security skilled staff. Also, the link:https://www-03.ibm.com/press/us/en/pressrelease/53800.wss[Ponemon Institute's Cost of a Data Breach 2018 Study]  found that while 25% of the root cause of data breaches were caused by system glitches, 48% were caused by malicious or criminal attacks, and 27% were caused by human errors. In addition, according to the link:https://enterprise.verizon.com/resources/reports/dbir/[Verizon Data Breach Report], 81% of hacking-related breaches leveraged either stolen and/or weak passwords.
 
-Automation can help with these challenges by improving both security and compliance. Specifically, it can help you avoid human errors, which will help with reducing risks and data breaches. In addition, automation gives you the ability to create infrastructure, security, and compliance as code , thus creating that repeatable, sharable, and verifiable infrastructure and application environments. Also, all of these benefits with automation also helps make passing security compliance audits easier as well.
+Automation can help with these challenges by improving both security and compliance. Specifically, it can help you avoid human errors, which will help with reducing risk and data breaches. In addition, automation gives you the ability to create infrastructure, security, and compliance as code , thus creating that repeatable, sharable, and verifiable infrastructure and application environments. Also, all of these benefits with automation also make it easier to pass security compliance audits.
 
-In this lab exercise, we will use automation to further harden our host systems and practice general security hardening best practices by protecting these host systems from common mistakes, such as weak passwords and more.
+In this lab exercise, we will use automation to further harden our host systems and practice general security hardening best practices by protecting these host systems from common security mistakes, such as weak passwords , and more.
 
-. Login to Ansible Tower and select "Templates" from the navigation menu on the left.
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
-. Search or scroll through the templates to find the template named "LINUX / System Hardening". Then click the rocket ship icon to the right side of the window.
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / System Hardening*.
 +
-image:images/lab2-select_template.png[500,500]
+image:images/templates.png[100,100]
+image:images/lab2-select_template.png[5000,5000]
+image:images/hardening.png[1000,1000]
 
 . You will be prompted for the hosts that you would like to configure. Enter `*rhel7_dev` into the text field. We will target our dev servers first. Click "Next" followed by "Launch" to begin the job.
 +
