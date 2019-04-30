@@ -103,6 +103,52 @@ pipeline {
       } // steps
     } // stage
 
+    stage('Configure Stage Project') {
+      steps {
+        script {
+          sh "set +x ; oc login -u ${JENKINS_GOGS_USER} -p ${JENKINS_SSH_PASSWORD} --insecure-skip-tls-verify https://kubernetes.default.svc"
+          sh "oc create is ecommerce -n ${JENKINS_GOGS_USER}-stage || true"
+          sh "oc new-app ecommerce --image-stream=ecommerce --allow-missing-images --allow-missing-imagestream-tags -n ${JENKINS_GOGS_USER}-stage || true"
+          sh "oc expose dc/ecommerce -n ${JENKINS_GOGS_USER}-stage || true"
+          sh "oc expose dc/ecommerce --port 8080 -n ${JENKINS_GOGS_USER}-stage || true"
+          sh "oc expose svc/ecommerce -n ${JENKINS_GOGS_USER}-stage || true"
+        } // script
+      }// steps
+    } // stage
+
+    stage('Promote to Stage?') {
+      steps {
+        timeout(time: 7, unit: 'DAYS') {
+          input message: "Do you want to deploy to ${JENKINS_GOGS_USER}-stage?"
+        } // timeout
+        sh "oc tag ${JENKINS_GOGS_USER}/ecommerce:latest ${JENKINS_GOGS_USER}-stage/ecommerce:latest"
+        sh "oc rollout status dc/ecommerce -n ${JENKINS_GOGS_USER}-stage"
+      } // steps
+    } // stage
+
+    stage('Configure Prod Project') {
+      steps {
+        script {
+          sh "set +x ; oc login -u ${JENKINS_GOGS_USER} -p ${JENKINS_SSH_PASSWORD} --insecure-skip-tls-verify https://kubernetes.default.svc"
+          sh "oc create is ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
+          sh "oc new-app ecommerce --image-stream=ecommerce --allow-missing-images --allow-missing-imagestream-tags -n ${JENKINS_GOGS_USER}-prod || true"
+          sh "oc expose dc/ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
+          sh "oc expose dc/ecommerce --port 8080 -n ${JENKINS_GOGS_USER}-prod || true"
+          sh "oc expose svc/ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
+        } // script
+      }// steps
+    } // stage
+
+    stage('Promote to Prod?') {
+      steps {
+        timeout(time: 7, unit: 'DAYS') {
+          input message: "Do you want to deploy to ${JENKINS_GOGS_USER}-prod?"
+        } // timeout
+        sh "oc tag ${JENKINS_GOGS_USER}-stage/ecommerce:latest ${JENKINS_GOGS_USER}-prod/ecommerce:latest"
+        sh "oc rollout status dc/ecommerce -n ${JENKINS_GOGS_USER}-prod"
+      } // steps
+    } // stage
+
   } // stages
 
 } // pipeline
