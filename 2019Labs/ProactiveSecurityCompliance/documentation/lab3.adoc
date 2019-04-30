@@ -14,7 +14,7 @@ Frequent patching is a crucial component to maintainting a secure environment. I
 
 In this lab, we will see how utilizing Red Hat Satellite as the content repository and Red Hat Ansible Tower as the automation platform can make patching must less of a burden with automation.
 
-=== Lab 1.1 Viewing the Red Hat Satellite Pre-Configured Content Views
+=== Lab 3.1 Viewing the Red Hat Satellite Pre-Configured Content Views Before Automated Patching of Host Systems
 
 . On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
 
@@ -31,11 +31,11 @@ image:images/rhel7standard.png[1500,1500]
 image:images/content_versions.png[2000,2000]
 
 
-=== Lab 1.2 Automatically Creating and Promoting New Content Views in Red Hat Satellite with Red Hat Ansible Tower
+=== Lab 3.2 Automated Patching and Scanning of Host Systems with Red Hat Ansible Tower and Red Hat Satellite
 
 To patch our systems, we will need to create a new version of the content view that contains any newly synchronized packages. Next, we want to promote that version to the lower environments (such as Dev and QA) to test the patches prior to releasing to higher environments (such as Production). This would all have to be done manually if we did not have automation in place. As the number of content views and environments grows, so does the workload in doing this manually.
 
-In this lab exercise, we will automatically create and promote new content views with our updated patches and packages in Red Hat Satellite automatically using Red Hat Ansible Tower.
+In this lab exercise, we will automatically create and promote new content views with our updated patches and packages in Red Hat Satellite automatically using Red Hat Ansible Tower. After that, we will automatically patch our host systems with the new content view and do automated compliance scanning on our host systems as well.
 
 . On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
@@ -140,6 +140,6 @@ image:images/scheduletower.png[2000,2000]
 +
 image:images/view_schedule.png[1500,1500]
 +
-NOTE: We don't have to do the *Publish Content* step in our automation workflow for the QA lifecycle host systems since we're just moving QA to use the version that we created for our Dev lifecycle environment. As a result, we're just going to do the *Promote Content* and *Install Updates* steps in our patching automation workflow on those QA host systems (in addition to doing the *SCAP Scan* and *Recalculate Errata* steps afterwards).  
+NOTE: We don't have to do the *Publish Content* step in our automation workflow for the QA lifecycle host systems since we're just moving QA to use the version that we created for our Dev lifecycle environment. As a result, we're just going to do the *Promote Content* and *Install Updates* steps in our patching automation workflow on those QA host systems (in addition to doing the *SCAP Scan* and *Recalculate Errata* steps afterwards).
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems]
