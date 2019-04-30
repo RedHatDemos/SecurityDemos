@@ -31,7 +31,7 @@ In this lab exercise, we will show how to solve the task using ComplianceAsCode.
 * Make sure that you are in the project root when you start - run
 +
 ----
-$ cd /home/lab-user/labs/lab3_profiles/content
+$ cd /home/lab-user/labs/lab3_profiles
 ----
 +
 in the terminal.

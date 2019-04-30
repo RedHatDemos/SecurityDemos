@@ -14,7 +14,7 @@ Frequent patching is a crucial component to maintainting a secure environment. I
 
 In this lab, we will see how utilizing Red Hat Satellite as the content repository and Red Hat Ansible Tower as the automation platform can make patching must less of a burden with automation.
 
-=== Lab 1.1 Viewing the Red Hat Satellite Pre-Configured Content Views
+=== Lab 3.1 Viewing the Red Hat Satellite Pre-Configured Content Views Before Automated Patching of Host Systems
 
 . On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
 
@@ -31,11 +31,11 @@ image:images/rhel7standard.png[1500,1500]
 image:images/content_versions.png[2000,2000]
 
 
-=== Lab 1.2 Automatically Creating and Promoting New Content Views in Red Hat Satellite with Red Hat Ansible Tower
+=== Lab 3.2 Automated Patching and Scanning of Host Systems with Red Hat Ansible Tower and Red Hat Satellite
 
 To patch our systems, we will need to create a new version of the content view that contains any newly synchronized packages. Next, we want to promote that version to the lower environments (such as Dev and QA) to test the patches prior to releasing to higher environments (such as Production). This would all have to be done manually if we did not have automation in place. As the number of content views and environments grows, so does the workload in doing this manually.
 
-In this lab exercise, we will automatically create and promote new content views with our updated patches and packages in Red Hat Satellite automatically using Red Hat Ansible Tower.
+In this lab exercise, we will automatically create and promote new content views with our updated patches and packages in Red Hat Satellite automatically using Red Hat Ansible Tower. After that, we will automatically patch our host systems with the new content view and do automated compliance scanning on our host systems as well.
 
 . On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
@@ -52,8 +52,15 @@ image:images/dev-automationworkflow.png[2000,2000]
 +
 image:images/fullworkflow.png[2000,2000]
 
-. First, in this automated patching workflow for our Dev environment, notice that the first step in our automation workflow is *Publish Content*. This step automates the publishing of a new version of content that has our new package updates and patches that have been released since our first version was created.
+. In this automation workflow, after clicking on the *Details* of each of these workflow steps, you will notice that the *Recalculate Errata, Install Updates, and SCAP Scan* steps are all run against the *foreman_lifecycle_environment_rhel7_dev* hosts.
+
+. Now, let's find out which hosts are part of *foreman_lifecycle_environment_rhel7_dev* group.
+
+. Navigate to *Inventories -> Satellite Inventory -> GROUPS -> foreman_lifecycle_environment_rhel7_dev -> HOSTS*. Notice that there are 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com. That means that the Recalculate Errata, Install Updates, and SCAP Scan job templates will run on these 3 hosts.
+
+. Let's go back to our automated patching workflow by clicking on *Jobs -> PATCHING / 1 - Dev*.  In this automated patching workflow for our Dev environment, notice that the first step in our automation workflow is *Publish Content*. This step automates the publishing of a new version of content that has our new package updates and patches that have been released since our first version was created.
 +
+image:images/devjob.png[500,500]
 image:images/publish-content.png[1000,1000]
 
 . Go back to the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
@@ -79,7 +86,9 @@ image:images/devpromotion.png[500,500]
 +
 image:images/devjob.png[500,500]
 
-. Notice that the second step of our automated patching workflow is to *Promote Content*  which is why we saw that step execute in Red Hat Satellite previously. Next, notice that the third step in our automated patching workflow is *Recalculate Errata*. In this step, we scan the hosts for new Errata. This simply updates Red Hat Satellite with the patches missing on the system now that we have a new version of content.
+. Notice that the second step of our automated patching workflow is to *Promote Content*  which is why we saw that step execute in Red Hat Satellite previously.
+
+. Next, notice that the third step in our automated patching workflow is *Recalculate Errata*. In this step, we scan the hosts for new Errata. This simply updates Red Hat Satellite with the patches missing on the system now that we have a new version of content.
 +
 image:images/nextsteps.png[500,500]
 
@@ -91,12 +100,46 @@ image:images/installupdates.png[500,500]
 +
 image:images/job-details.png[500,500]
 
-.. Click the back button in your browser to go back and monitor the full workflow. The next 2 jobs will run in parallel since they are not dependent on each other. One will run and OpenSCAP scan on the system post updates to provide the latest compliance report. The other will rescan the host again and upload the patch status to Satellite.
+. Click the back button in your browser to go back and monitor the full automation workflow. Notice that the next two jobs are *SCAP Scan* and *Recalculate Errata* which are running in parallel. These next 2 jobs will run in parallel since they are not dependent on each other.
 +
-image:images/lab4-monitor_workflow.png[3000,3000]
+image:images/next2-jobs.png[2000,2000]
 
-. Finally, if all of the previous steps were successful, a schedule will be created in Ansible Tower to patch the QA environment 7 days from now. Once the entire workflow is complete, select "Schedules" from the navigation menu on the left. Click on the schedule titled "Linux_patching_*". Inspect the scheule to take note of the workflow it will run and the date that is scheudled. From this page you can disable the schedule, reschedule, cancel, etc. If no changes are made, it will automatically promote and patch your QA environment. Since we do not have 7 days to wait, if you would like to watch the process again, return to the "Templates" page and manually run "PATCHING / 2 - QA".
+. The *SCAP Scan* job will run an OpenSCAP scan on the host systems post updates to provide the latest SCAP compliance report. Specifically, it will run the *RHEL7_Standard* compliance scan on these hosts in the Dev environment. You can confirm this by clicking on *Details* in the SCAP Scan workflow step box to look at this job template in more detail. Notice that this SCAP Scan job template is being run against the RHEL7_Standard compliance policy.
 +
-image:images/lab4-view_schedule.png[500,500]
+image:images/policyscan.png[300,300]
+
+. When the *SCAP Scan* job completes, you can take a look at the RHEL7_Standard compliance reports in Red Hat Satellite for the three hosts(rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com) in the foreman_lifecycle_environment_rhel7_dev group.
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in)
+
+. Navigate to *Hosts → Reports*.
++
+image:images/hostreports.png[300,300]
+
+. Looking at the list of compliance reports in Red Hat Satellite, notice that there is a RHEL7_Standard compliance report for each of the three hosts(rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com) that are part of the foreman_lifecycle_environment_rhel7_dev group.
++
+image:images/satreports-standard.png[2000,2000]
+
+. Go back to your Red Hat Ansible Tower(https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Jobs* and click on *PATCHING / 1 - Dev* job (if not already there).
++
+image:images/devjob.png[500,500]
+
+. After the  *SCAP Scan* job , notice that the *Recalculate Errata* job will run. This job will rescan the host again and upload the patch status to Red Hat Satellite.
+
+. Finally, if all of the previous steps were successful, a schedule will be created in Red Hat Ansible Tower to patch the QA environment 7 days from now.
++
+image:images/schedule-step.png[2000,2000]
+
+. Once the entire automation workflow is complete in Red Hat Ansible Tower, select *Schedules* from the navigation menu on the left. Then, click on the schedule titled *Linux_patching_** The date that you see after *Linux_patching* will be 7 days from when you ran this *PATCHING / 1 - Dev* Red Hat Ansible Tower job workflow.
++
+image:images/scheduletower.png[2000,2000]
+
+. Inspect the schedule to take note of the automation workflow it will run and the date that is scheduled for. From this page you can disable the schedule, reschedule the schedule, cancel the schedule, etc. If no changes are made, it will automatically promote and patch your QA environment. Since we do not have 7 days to wait, if you would like to watch the process again, return to the *Templates* page in Red Hat Ansible Tower and manually run the *PATCHING / 2 - QA* job template. You will notice that this workflow is similar to the one for our Dev lifecycle environment patch automation workflow. This patch automation workflow for our QA lifecycle environment will aoso promote the new content view, patch the QA host systems, and perform an OpenSCAP compliance scan on the QA host systems against the RHEL7_Standard compliance profile.
++
+image:images/view_schedule.png[1500,1500]
++
+NOTE: We don't have to do the *Publish Content* step in our automation workflow for the QA lifecycle host systems since we're just moving QA to use the version that we created for our Dev lifecycle environment. As a result, we're just going to do the *Promote Content* and *Install Updates* steps in our patching automation workflow on those QA host systems (in addition to doing the *SCAP Scan* and *Recalculate Errata* steps afterwards).
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4.adoc[Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems]

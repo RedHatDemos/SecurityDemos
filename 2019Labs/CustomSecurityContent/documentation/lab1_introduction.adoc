@@ -42,7 +42,7 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 * Make sure that you are in the project root when you start - run
 +
 ----
-$ cd /home/lab-user/labs/lab1_introduction/content
+$ cd /home/lab-user/labs/lab1_introduction
 ----
 +
 in the terminal.
@@ -64,7 +64,7 @@ The build itself is based on Python, the `oscap` tool, and XSLT transformations.
 
 To build the content, take the following steps:
 
-. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction/content`.
+. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction`.
 . Run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
 +
 It is possible to build content also other for other products.

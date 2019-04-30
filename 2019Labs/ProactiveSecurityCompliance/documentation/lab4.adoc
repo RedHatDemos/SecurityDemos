@@ -1,37 +1,89 @@
 == Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems
 
 === Goal of Lab 4
-In this lab, we will configure the following on our hosts to ensure we are are keeping up with general best practices.
+The goal of this lab is to perform additional security hardening and configuration management tasks on our host systems.
+
+Specifically, in this lab exercise, we will configure the following on our host systems, in an automated fashion, to ensure that we are are practicing general security hardening best practices:
 
 * Deploy login banner
 * Configure account password complexity
 * Enable SELinux
 * Harden SSH
 
+*Be sure to do this lab exercise (Lab 4) AFTER Labs 1, 2, and 3.*
+This is because this lab exercise will harden several host VMs and make them unusable for Labs 1, 2, and 3.
+
 === Introduction
-____
-99% of the vulnerabilities exploited by the end of 2020 will continue to be ones known by security and IT professionals at the time of the incident.
-____
--- https://www.gartner.com/smarterwithgartner/focus-on-the-biggest-security-threats-not-the-most-publicized/[Gartner]
+Every year we are seeing an increase in the number of security breaches, an increase in the time to resolve an incident, and it's harder and harder to find security skilled staff. Also, the link:https://www-03.ibm.com/press/us/en/pressrelease/53800.wss[Ponemon Institute's Cost of a Data Breach 2018 Study]  found that while 25% of the root cause of data breaches were caused by system glitches, 48% were caused by malicious or criminal attacks, and 27% were caused by human errors. In addition, according to the link:https://enterprise.verizon.com/resources/reports/dbir/[Verizon Data Breach Report], 81% of hacking-related breaches leveraged either stolen and/or weak passwords.
 
-With the pace of IT increasing, agile development pushing changes and new systems into the environment faster than ever before, and increasing complexity from new technologies such as public cloud, security gets harder and harder to keep up with. One of the best ways to protect ourselves is to simply do what we know we are supposed to do. In this lab we will use automation to do just that.
+Automation can help with these challenges by improving both security and compliance. Specifically, it can help you avoid human errors, which will help with reducing risk and data breaches. In addition, automation gives you the ability to create infrastructure, security, and compliance as code , thus creating that repeatable, sharable, and verifiable infrastructure and application environments. Also, all of these benefits with automation also make it easier to pass security compliance audits.
+
+In this lab exercise, we will use automation to further harden our host systems and practice general security hardening best practices by protecting these host systems from common security mistakes, such as weak passwords, and more.
 
 
-. Login to Ansible Tower and select "Templates" from the navigation menu on the left.
+=== Lab 4.1 Viewing Host Systems Before Automated Additional Security Hardening
 
-. Search or scroll through the templates to find the template named "LINUX / System Hardening". Then click the rocket ship icon to the right side of the window.
+. Let's take a look at our host systems before doing additional automated security hardening on them. Note that the additional automated security hardening will be executed on 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: *rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com*.
+
+. SSH into *rhel7-vm3.hosts.example.com* from the workstation bastion host. From your laptop, first SSH into the workstation bastion host as *lab-user*. Then, become *root* on the workstation bastion host and as *lab-user*, ssh into *rhel7-vm3.hosts.example.com* by its *IP address (192.168.0.53)*.
 +
-image:images/lab2-select_template.png[500,500]
+[source, text]
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]$ ssh lab-user@192.168.0.53
+[root@rhel7-vm3 ~]#
 
-. You will be prompted for the hosts that you would like to configure. Enter `*rhel7_dev` into the text field. We will target our dev servers first. Click "Next" followed by "Launch" to begin the job.
+. Notice that we are able to SSH into this host without any issues. Also notice that there is no login banner or message of the day shown when you log into the host. Optionally, SSH into this host as *root* and notice that again you are able to SSH without any issues and do not see the login banner or message of the day.
+
+. Optionally, feel free to SSH into the other 2 hosts: rhel7-vm4.hosts.example.com and rhel7-vm5.hosts.example.com. You will again notice that you are able to SSH into these hosts without any issues and there is no login banner or message of the day shown when you log into these hosts.
+
+. Now, let's go ahead and do automated security hardening of these hosts in the next exercise.
+
+=== Lab 4.2 Automated Security Hardening of Host Systems from Red Hat Ansible Tower
+
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / System Hardening*.
 +
-image:images/lab2-select_hosts.png[500,500]
+image:images/templates.png[100,100]
+image:images/hardening.png[2000,2000]
 
-. We will monitor the log as the configuration is checked and remediated on our systems. At the end we will see a Play Recap showing us how many changes were made on the systems.
+. You will be prompted for the hosts that you would like to run this job template on. Enter **rhel7_dev* into the text field. We will target our dev host systems first. Click *Next* followed by *Launch* to begin the job.
 +
-image:images/lab2-job_log.png[500,500]
+image:images/select_hosts.png[500,500]
+image:images/launch_dev.png[500,500]
 
-. Re-run the job using the rocketship in the top corner of the details frame to observe how many changes are made after a system is already hardened. Ansible works to achieve an endstate defined in the playbook so if this playbook is run routinely, it will only make the changes needed to comply with your hardening standard.
+. Now, let's find out which hosts are part of *foreman_lifecycle_environment_rhel7_dev* group.
+
+. Navigate to *Inventories -> Satellite Inventory -> GROUPS -> foreman_lifecycle_environment_rhel7_dev -> HOSTS*. Notice that there are 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com. That means that this host hardening job template will be run on these three hosts.
+
+. Navigate back to *Jobs* and click on the *LINUX / System Hardening* job.
++
+image:images/jobs_hardening.png[500,500]
+
+. Take a look at the Ansible Tower log output as the configuration is checked and remediated on our host systems. Specifically, notice that several tasks are being executed on our host systems such as various SSH hardening tasks, enabling SELinux, deploying a login banner, and configuring account password complexity.  At the end we will see a *Play Recap* showing us how many changes were made on the systems.
++
+image:images/job_log.png[1500,1500]
++
+NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to a desired state, further runs of the same playbook will result in 0 changes. As a result, this playbook will check to make sure the client is installed and configured, but if there are no changes to be made, Ansible will skip over the task and verify that the systems are in the correct state. Ansible works to achieve an endstate defined in the playbook so if this playbook is run routinely, it will only make the changes needed to comply with your security hardening standard.
+
+
+=== Lab 4.3 Viewing Host Systems After Automated Additional Security Hardening
+
+. Let's take a look at our host systems again now that we have applied additional automated security hardening on them. Again, remember that the additional automated security hardening was executed on 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: *rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com*.
+
+. SSH into *rhel7-vm3.hosts.example.com* from the workstation bastion host. From your laptop, first SSH into the workstation bastion host as *lab-user*. Then, become *root* on the workstation bastion host and as *lab-user*, ssh into *rhel7-vm3.hosts.example.com* by its *IP address (192.168.0.53)*.
++
+[source, text]
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]$ ssh lab-user@192.168.0.53
+
+. Notice that we are no longer able to SSH into this host and get permission denied when trying to log in. Also notice that there is now a login banner and message of the day shown when you log into this host. Optionally, SSH into this host as *root* and notice that again, you are not able to SSH and get a permission denied in addition to seeing the login banner and message of the day.
++
+image:images/afterhardening2.png[1000,1000]
+
+. Optionally, feel free to SSH into the other 2 hosts: rhel7-vm4.hosts.example.com and rhel7-vm5.hosts.example.com. You will again notice that you are not able to SSH into these hosts and get a permission denied. In addition, you will again see the login banner and message of the day when logging into these hosts.
 
 
 <<top>>
