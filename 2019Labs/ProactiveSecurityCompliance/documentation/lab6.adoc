@@ -93,10 +93,11 @@ longer log in... but you will now have admin access to the site!
 *STEPS:* 
 
 
-* Go to the command-line of your jumpbox machine. SSH in as
-_lab-user@rhel3-GUID.rhpds.opentlc.com_ 
+* SSH into to the command-line of your jumpbox machine:
 
-* Connect to the database using this command:
+`ssh lab-user@192.168.0.102`
+
+* From the command line of that machine, connect to the database using this command:
 
 `mysql WordPress -h 192.168.0.101 -u insecure`
 
