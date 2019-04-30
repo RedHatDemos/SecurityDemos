@@ -25,7 +25,7 @@ TASK1:
 
 *MISSION:* Install the LAMP web-app, "WordPress" Via Ansible Role
 
-*STEPS:* Run the job template "LAMP WordPress Deploy" from Ansible
+*STEPS:* Run the job template "LAMP / WordPress Deploy" from Ansible
 Tower, to install the web application for WordPress.
 
 * This role is configured to run against three servers in a group called
@@ -43,7 +43,7 @@ _lampservers_ :
     
 ---------------------------
 
-    http://rhel1.example.com
+    http://rhel1-[GUID].rhpds.opentlc.com/
 
     LOGIN:  admin
     
@@ -68,7 +68,7 @@ _lampservers_ :
 on the other. To the innocent eye, we complete this step and validate by
 visiting the website... everything looks clean and safe!
 * Once ths role is run, you can confirm the application has been
-installed by using a web browser to go to http://rhel1.example.com
+installed by using a web browser to go to http://rhel1-[GUID].rhpds.opentlc.com/
 
 [[task2]]
 TASK2:
@@ -80,7 +80,7 @@ lock out the legitimate user of the WordPress site so that they can no
 longer log in... but you will now have admin access to the site!
 
 *STEPS:* Go to the command-line of your jumpbox machine. SSH in as
-_lab-user@rhel3.example.com_ and connect to the database. This command
+_lab-user@rhel1-[GUID].rhpds.opentlc.com_ and connect to the database. This command
 will allow you to connect and will prove that the DB has been set up
 insecurely so that anyone can connect with no password, from any
 machine, anywhere.
@@ -88,7 +88,10 @@ machine, anywhere.
 We have a user named "insecure" with no password for his account. His
 access is set wide open. Run this command to confirm you can connect.
 
-`mysql WordPress -h rhel2.example.com -u insecure`
+You will need to connect through the desktop or jump VM since this
+is a local network address.
+
+`mysql WordPress -h 192.168.0.101 -u insecure`
 If you see the above dialogue, you're in! And that's really really bad.
 
 Okay, so that's not good. No really, that's not good at all. Anyone with
@@ -143,7 +146,7 @@ want!
 * Verify you have access by visiting this admin login URL and logging in
 with your new credentials.
 * The admin user for this WordPress instance is now set to:
-* http://rhel1.example.com/wp-admin/
+* http://rhel1-[GUID].rhpds.opentlc.com/wp-admin/
 * login: `admin`
 * password: `FluffyBunny`
 
@@ -178,7 +181,7 @@ moment, we're going to do something rotten in this lab.
 *MISSION:* Exploit the database vulnerability by importing a database
 payload into the site's database.
 
-*STEPS:* On your workstation, you'll find a file called:
+*STEPS:* On your jumpbox "lampjump" at  192.168.0.102, you'll find a file called:
 
 `/home/lab-user/cat_meme_takeover.sh`
 
@@ -204,13 +207,13 @@ we run this script,
       ##############################
                                     
       DONE!  Now reload the web page
-         http://rhel1.example.com    
+  http://rhel1-[GUID].rhpds.opentlc.com/
  to see what the evil cat hacker clan did!
 
 
 ```
 
-Now, refresh the page at: http://rhel1.example.com You should see a new
+Now, refresh the page at: http://rhel1-[GUID].rhpds.opentlc.com/ You should see a new
 look to the website, informing you that the site has been hacked by cat
 memes.
 
@@ -221,18 +224,18 @@ TASK4:
 *MISSION:* Oh no! A script kitty hacked our site! Let's re-install the
 original WordPress role to reset the servers to a stable baseline.
 
-*STEPS:* Run the job template again "LAMP WordPress Deploy" from Ansible
+*STEPS:* Run the job template again "LAMP / WordPress Deploy" from Ansible
 Tower, to install the web application for WordPress.
 
-* This reinstalls the Apache server rhel1.example.com and the DB server
-on rhel2.example.com
+* This reinstalls the Apache server rhel1-[GUID].rhpds.opentlc.com and the DB server
+on the DB server
 * Once this role re-runs in this tasks, we are 100% back to our web site
 baseline, exactly where we were before the cat hackers took over the
 site content. The site is back to normal, but our database is still
 vulnerable due to that username which can be exploited.
 
 To confirm that our site is back to normal, refresh the page at:
-http://rhel1.example.com
+http://rhel1-[GUID].rhpds.opentlc.com/
 
 YAYY! We're no longer victims of a cat meme exploit!
 
@@ -242,13 +245,13 @@ TASK5:
 
 *MISSION:* Let's lock down the database so this won't work again.
 
-*STEPS:* Run the job template again "LAMP WordPress Secure" this time,
+*STEPS:* Run the job template again "LAMP / WordPress Secure" this time,
 from Ansible Tower, to run the hardening playbook.
 
 * This removes the open vulnerability which allows you to connect to the
 database and exploit it with cat memes.
 
-Now, refresh the page at: http://rhel1.example.com to confirm everything
+Now, refresh the page at: http://rhel1-[GUID].rhpds.opentlc.com/ to confirm everything
 still works
 
 [[task6]]
@@ -269,11 +272,11 @@ as well as attempt to run the exploit again. Then we will attempt to run
 our SQL injection script again, in a second attempt to take the website
 over with cat memes.
 
-* From the command line, run:
-`mysql WordPress -h rhel2.example.com -u insecure` -- You should not be
+* From the command line of your desktop VM, run:
+`mysql WordPress -h 192.168.0.101 -u insecure` -- You should not be
 able to connect. "Access Denied!"
 
-```[lab-user@rhel3 ~]$ mysql WordPress -h rhel2.example.com -u insecure
+```[lab-user@rhel3 ~]$ mysql WordPress -h 192.168.0.101 -u insecure
 ERROR 1045 (28000): Access denied for user
 'insecure'@'rhel3.example.com' (using password: NO) [lab-user@rhel3 ~]$
 

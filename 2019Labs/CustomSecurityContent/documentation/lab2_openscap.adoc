@@ -1,4 +1,4 @@
-= Automated Security Scanning Using ComplianceAsCode
+= Lab exercies 2: Automated Security Scanning Using ComplianceAsCode
 
 :imagesdir: images
 
@@ -24,11 +24,11 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 == What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
-* We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
+* We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
-* We have installed the OpenSCAP ecosystem packages, using `dnf install`:
+* We have installed the OpenSCAP ecosystem packages, using `yum install`:
 ** The scanner: `openscap-scanner`,
 ** utilities for scanning remote systems `openscap-utils`,
 ** GUI frontend and datastream tool `scap-workbench`
@@ -39,12 +39,12 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 * Make sure that you are in the project root when you start - run
 +
 ----
-$ cd /home/lab-user/labs/lab2_openscap/content
+$ cd /home/lab-user/labs/lab2_openscap
 ----
 +
 in the terminal.
 
-* For best experience, open one more terminal window and also navigate to the project root in that one as well.
+* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
 * Open the file explorer and also navigate to the project root.
 * Finally, open the Firefox browser.
 
@@ -127,6 +127,8 @@ $ sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
 Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
 +
 . Now, let's store the results of the scan this time:
++
+--
 * use `--results-arf` to get machine readable results archive
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 * use `--oval-results` to get detailed results in the report
@@ -135,13 +137,16 @@ Now, you will see the compliance scan results for every security control in the 
 $ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
-+
-. (Optional) You can also generate the HTML report separately:
-+
+
+[NOTE]
+====
+You can also generate the HTML report separately by executing
 ----
 $ oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
-+
+====
+--
+
 . Open the report in Firefox web browser.
 +
 ----
@@ -170,7 +175,7 @@ image::scap_report_fail.png[]
 
 . Click *Activities* at the top left part of the screen, then click the 9 dots and click the green-ish icon of SCAP Workbench.
 
-. After Workbench starts, select *Other SCAP content* and click on *Load Content*. Then, open `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_openscap/content/build` directory to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
+. After Workbench starts, select *Other SCAP content* and click on *Load Content*. Then, open `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_openscap/build` directory to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
 +
 image:load_content.png[]
 +
@@ -200,9 +205,12 @@ Close the *Diagnostics* window.
 +
 image:lab1.2-scapworkbenchscan.png[500,500]
 
-. (Optional) You can save the customization to a tailoring file by selecting File->Save Customization Only.
+[TIP]
+====
+You can save the customization to a tailoring file by selecting File->Save Customization Only.
 +
 image:lab1.2-savecustomization.png[300,300]
+====
 
 == Security Remediations with OpenSCAP, Ansible and Bash
 Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology.
@@ -251,4 +259,4 @@ We recommend to review the contents of these scripts and test them in a testing 
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_profiles.adoc[Lab 3 - Create your own security policy from scratch ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_profiles.adoc[Lab exercise 3 - Create your own security policy from scratch ]

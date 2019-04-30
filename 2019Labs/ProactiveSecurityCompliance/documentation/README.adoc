@@ -12,7 +12,7 @@
 *Kevin Holmes*, Senior Solutions Architect, Red Hat
 
 == Overview and Prerequisites:
-In this hands-on lab, you’ll learn how to implement security and compliance automation for the infrastructure, operations, and application across a hybrid environment using a combination of various Red Hat products. Specifically, you will go through a series of exercises that will show you how, from a central place, you can: create and enforce control policies in an automated way, perform automated security scans and remediations for various different security profiles and security controls, do proactive security and automated risk management, implement automated web application hardening, and more. The goal of this lab is to introduce you to a variety of Red Hat products that can help you with proactive security and compliance automation across the infrastructure, operations, and application across a hybrid environment. We will demonstrate the power and flexibility of using either one or a combination of Red Hat products to help you with various security and compliance automation use cases.
+In this hands-on lab, you’ll learn how to implement security and compliance automation at scale for the infrastructure, operations, and application across a hybrid environment, in a controlled way,  using a combination of various Red Hat products and technologies. Specifically, you will go through a series of exercises that will show you how, from a central place, you can: create and enforce control policies in an automated way, perform automated security scans and remediations for various different security profiles and security controls, do proactive security and automated risk management, implement automated web application hardening, and more. The goal of this lab is to introduce you to a variety of Red Hat products that can help you with proactive security and compliance automation across the infrastructure, operations, and application across a hybrid environment. We will demonstrate the power and flexibility of using either one or a combination of Red Hat products to help you with various security and compliance automation use cases.
 
 This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to automate security and compliance across their heterogeneous infrastructure using one or more Red Hat Products.  The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills. Knowledge of virtualization and basic linux scripting would also be helpful, but not required.
 
@@ -28,7 +28,7 @@ This lab is geared towards systems administrators, cloud administrators and oper
 
 
 == Lab Environment:
-Your entire lab environment is hosted online and includes: Red Hat Ansible Automation, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat Insights, Red Hat Virtualization, Red Hat Openstack Platform, Red Hat CloudForms, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
+Your entire lab environment is cloud hosted online and includes: Red Hat Ansible Automation, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat Insights, Red Hat Virtualization, Red Hat Openstack Platform, Red Hat CloudForms, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
 
 You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
 
@@ -38,9 +38,9 @@ Other than that, feel free to do the lab exercises in whatever order you'd like.
 == Table of Contents
 * link:lab0.adoc[Lab 0: Setup steps]
 * link:lab1.adoc[Lab 1: Automated Scanning and Remediation of Host Systems for Vulnerabilities and Security Compliance]
-* link:lab2-wt.adoc[Lab 2: Enforcing Automated Compliance with Security Policies]
+* link:lab2.adoc[Lab 2: Enforcing Automated Compliance with Security Policies]
 * link:lab3.adoc[Lab 3: Automated Patching of Host Systems]
-* link:lab4-wt.adoc[Lab 4: Additional Automated Security Hardening of Host Systems]
+* link:lab4.adoc[Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems]
 * link:lab5.adoc[Lab 5: Proactive Security and Automated Risk Management at Scale with Predictive Analytics]
 * link:lab6.adoc[Lab 6: Automated Security Hardening of a Hacked Web Application]
 * link:lab7.adoc[Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]

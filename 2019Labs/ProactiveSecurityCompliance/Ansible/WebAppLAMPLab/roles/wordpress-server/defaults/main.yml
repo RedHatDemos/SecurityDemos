@@ -6,3 +6,5 @@ httpdconf: "/etc/httpd/conf/httpd.conf"
 defwebpath: "/var/www/html"
 wpaction: install
 dboverwrite: false
+main_purpose: deploy
+my_purpose: false

@@ -57,9 +57,11 @@ Stop the VM if it is running using virsh:
 
 	[root@usbguard]# virsh destroy 1
 
-== Preliminary knowledge and concepts for Lab exercise
+== **PLEASE READ CAREFULLY:** Preliminary knowledge and concepts for Lab exercise
 
-This section shortly describes some of the workflows and tools used in the <<Lab 5.1 exercise steps>> section.
+This section shortly describes some of the workflows, files and tools used in the <<Lab 5.1 exercise steps>> section.
+The minimum you have to read in this section is the <<Simulating hot plugging with virsh>> topic.
+Make sure you create both `usb-disk.xml` and `usb-disk-2.xml` (see below) files if they don't already exist in your environment.
 If you are familiar with tools like `lsblk`, `udisksctl` and `virsh`, then you can skip this section and go straight to the <<Lab 5.1 exercise steps>>.
 
 === Simulating hot plugging with virsh

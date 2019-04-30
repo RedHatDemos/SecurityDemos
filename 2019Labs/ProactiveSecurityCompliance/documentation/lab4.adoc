@@ -1,128 +1,91 @@
-== (THIS LAB EXERCISE DOCUMENTATION STILL NEEDS TO BE UPDATED!!) Lab 4: Managing the security of Red Hat Openshift container images from Red Hat CloudForms
+== Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems
 
 === Goal of Lab 4
-The goal of this lab is demonstrate how you can use Red Hat CloudForms to manage the security of Red Hat Openshift container images. Specifically, we will see how you can use the Red Hat CloudForms control engine to prevent Red Hat Openshift container images with high severity vulnerabilities from running in Red Hat Openshift.
+The goal of this lab is to perform additional security hardening and configuration management tasks on our host systems.
+
+Specifically, in this lab exercise, we will configure the following on our host systems, in an automated fashion, to ensure that we are are practicing general security hardening best practices:
+
+* Deploy login banner
+* Configure account password complexity
+* Enable SELinux
+* Harden SSH
+
+*Be sure to do this lab exercise (Lab 4) AFTER Labs 1, 2, and 3.*
+This is because this lab exercise will harden several host VMs and make them unusable for Labs 1, 2, and 3.
 
 === Introduction
-Red Hat CloudForms has a container scanning feature, using the integrated OpenSCAP scanner, that allows Red Hat CloudForms to flag images in the container registry in which it has found vulnerabilities. Specifically, Red Hat CloudForms can apply an annotation to an image in the OpenShift container registry when it finds high severity vulnerabilities after doing a scan on it. Then, Red Hat Openshift will prevent new containers from running this image with the high severity vulnerabilities.
+Every year we are seeing an increase in the number of security breaches, an increase in the time to resolve an incident, and it's harder and harder to find security skilled staff. Also, the link:https://www-03.ibm.com/press/us/en/pressrelease/53800.wss[Ponemon Institute's Cost of a Data Breach 2018 Study]  found that while 25% of the root cause of data breaches were caused by system glitches, 48% were caused by malicious or criminal attacks, and 27% were caused by human errors. In addition, according to the link:https://enterprise.verizon.com/resources/reports/dbir/[Verizon Data Breach Report], 81% of hacking-related breaches leveraged either stolen and/or weak passwords.
 
-Red Hat CloudForms has multiple ways a container image scan can be initiated: scheduled scan of the registry, scan based on a newly discovered image in the registry, or a manual execution of the scan via smart state analysis. Having this scanning feature with native integration in Red Hat CloudForms allows for near real time monitoring of your images within the Red Hat Openshift environment. Once Red Hat CloudForms flags an image in the registry, the next time someone tries to start the vulnerable image, Red Hat Openshift will alert the user that the image execution was blocked based on the policy annotation set by Red Hat CloudForms.
+Automation can help with these challenges by improving both security and compliance. Specifically, it can help you avoid human errors, which will help with reducing risk and data breaches. In addition, automation gives you the ability to create infrastructure, security, and compliance as code , thus creating that repeatable, sharable, and verifiable infrastructure and application environments. Also, all of these benefits with automation also make it easier to pass security compliance audits.
 
-=== Red Hat OpenShift Container Image Vulnerability Remediation
+In this lab exercise, we will use automation to further harden our host systems and practice general security hardening best practices by protecting these host systems from common security mistakes, such as weak passwords, and more.
 
-In this lab, you'll learn how Red Hat CloudForms can help you scan container images running in Red Hat OpenShift Container Platform. We'll use built-in OpenShift functionality to remediate those images and redeploy the applications. Finally, we'll make sure CloudForms picks up the new images and catalogs the fresh results.
 
-. If you have not already done so, log into CloudForms as *admin* using *r3dh4t1!* as the password.
-+
-. Using the menu on the left side of the screen, browse to *Compute ->   Containers ->   Providers*.
-+
-image:images/ocp-ss2.png[400,400]
-+
-. Click on the *Openshift-3.7* provider. Here, you will see an overview of the OpenShift Container Platform provider that has been added to your lab environment. On the top menu, click on *Policy ->  Manage Policies*.
-+
-image:images/lab4-ocpprovider.png[300,300]
-image:images/ocp-ss4-1.png[600,600]
+=== Lab 4.1 Viewing Host Systems Before Automated Additional Security Hardening
 
-. Notice the single policy that is currently enabled for this *Openshift-3.7* provider, *OpenSCAP - Scan Images & Check Compliance*.
-+
-image:images/ocp-ss4-2.png[400,400]
-image:images/lab4-ocpprovidercontrolpolicydetails.png[400,400]
-+
-. To see what this policy does, using the menu on the left, browse to *Control ->  Explorer*.
-+
-image:images/lab3.1-control-explorer.png[200,200]
+. Let's take a look at our host systems before doing additional automated security hardening on them. Note that the additional automated security hardening will be executed on 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: *rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com*.
 
-. Find the *OpenSCAP - Scan Images & Check Compliance* policy profile and let's see what actions it takes. In this control policy, as new images are discovered by CloudForms, a SmartState Analysis will happen automatically and scan the container image for known CVE based vulnerabilities. CloudForms will then use this data to check whether the container image is in compliance with defined vulnerability checks. It will also mark any image that violates these constraints with a *deny-execution* annotation.
+. SSH into *rhel7-vm3.hosts.example.com* from the workstation bastion host. From your laptop, first SSH into the workstation bastion host as *lab-user*. Then, become *root* on the workstation bastion host and as *lab-user*, ssh into *rhel7-vm3.hosts.example.com* by its *IP address (192.168.0.53)*.
 +
-NOTE: In this lab example, we are only analyzing against the pass/fail evaluation of a single CVE. In a production environment, you would adjust this condition to analyze against CVE vulnerabilities that your organization has deemed necessary.
-+
+[source, text]
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]$ ssh lab-user@192.168.0.53
+[root@rhel7-vm3 ~]#
 
-image:images/ocp-ss6.png[400,400]
-+
-. Using the menu on the left side of the screen, browse to *Compute ->  Containers ->  Container Images*. In the search box in the upper right portion of the window, search for *summit-php* and click on the image returned in the result.
-+
-image:images/ocp-ss7.png[600,600]
-+
-. Notice all of the details that CloudForms discovers about the container image, including properties, relationships to other objects, OpenSCAP results, and compliance. This particular image has 26 high severity vulnerabilities. In this same view, in the *Environment Variables* section, note that this image is based on *PHP 5.5*.
-+
-image:images/ocp-ss8.png[600,600]
-+
-image:images/lab4-phpversion.png[400,400]
+. Notice that we are able to SSH into this host without any issues. Also notice that there is no login banner or message of the day shown when you log into the host. Optionally, SSH into this host as *root* and notice that again you are able to SSH without any issues and do not see the login banner or message of the day.
 
-. Now, Open your browser to your OpenShift instance https://ocp-GUID.rhpds.opentlc.com:8443, replacing *GUID* with your lab's GUID. Log in as *developer* using *r3dh4t1!* as your password. In the OpenShift UI, browse to the *18-summit-labs* project using the *My Projects* list on the right side of the screen.
-+
-NOTE: If you do not see the *summit-labs* project in the list, click on the *View All* link in the *My Projects* list.
+. Optionally, feel free to SSH into the other 2 hosts: rhel7-vm4.hosts.example.com and rhel7-vm5.hosts.example.com. You will again notice that you are able to SSH into these hosts without any issues and there is no login banner or message of the day shown when you log into these hosts.
 
-. You’ll notice a familiar looking application running in here, *summit-php*. If we denied execution, why is it still running? Simply because we don’t want to rip an application out that may already be in production. The deny execution policy prevents additional containers from being instantiated. Let's give it a try. Expand the summit-php deployment in the main window and click the *up arrow* next to the Pod circle. Rather than quickly adding an additional pod, it will be prevented from doing so.
-+
-image:images/ocp-ss10.png[600,600]
-+
-. Click on *Monitoring* on the left side menu.
-+
-. Click on *View Details* in the Events list on the right hand side and observe the detailed message on why your application is not scaling up. Notice that there was an error in creating additional containers for this application due to the deny execution policy that is in place for this container image which has several severity high vulnerabilities.
-+
-image:images/lab4-monitoringviewdetails.png[1000,1000]
-image:images/ocp-ss12.png[600,600]
-+
-. If you’d like to see why this is happening behind the scenes, using the menu on the left, browse to *Builds ->  Images*. Select the *summit-php* image stream and then click on the *latest* tag.
-+
-image:images/lab4-buildsimages.png[400,400]
-image:images/lab4-latestimage.png[400,400]
+. Now, let's go ahead and do automated security hardening of these hosts in the next exercise.
 
-. Scroll to the bottom of the screen and click on *Show Annotations*. Note the *images.openshift.io/deny-execution* annotation is set to true.
-+
-image:images/lab4-showannotations.png[400,400]
-image:images/lab4-denyexecutiontrue.png[400,400]
+=== Lab 4.2 Automated Security Hardening of Host Systems from Red Hat Ansible Tower
 
-. Now, let's perform some steps to fix our application. Still in the OpenShift UI, browse to *Builds ->  Builds* using the menu on the left hand side of the screen. Click on the *summit-php* build.
-+
-image:images/lab4-buildsmenu.png[300,300]
-image:images/lab4-buildsname.png[400,400]
+. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
-.  Select the *Configuration* tab. Note on this tab that this application was based on the php:5.5 image when it was built, which is an older version that brought along those 26 high severity vulnerabilities discovered earlier by CloudForms.
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / System Hardening*.
 +
-image:images/ocp-ss16.png[400,400]
-+
-. Since containers are immutable, we need to build a new container image based on a version of PHP without all of these high severity vulnerabilities. From this same screen, click *Actions ->  Edit* at the top right of your screen.
-+
-image:images/lab4-actionsedit.png[200,200]
+image:images/templates.png[100,100]
+image:images/hardening.png[2000,2000]
 
-. In the *Image Configuration* section, we’re simply going to tell OpenShift to rebuild this *summit-php* application using a newer version of PHP. Change the PHP image tag from *5.5 ->  5.6* and *click Save*. OpenShift will automatically start building a new image for this application to use based on PHP 5.6.
+. You will be prompted for the hosts that you would like to run this job template on. Enter **rhel7_dev* into the text field. We will target our dev host systems first. Click *Next* followed by *Launch* to begin the job.
 +
-image:images/ocp-ss18.png[600,600]
-+
-. Click on the Overview tab on the left. You’ll see that the application is already rolling out based on this newly built image.
-+
-image:images/lab4-overview.png[400,400]
-image:images/ocp-ss19.png[600,600]
-+
-NOTE: This may take a couple of minutes as your new image automatically builds and deploys. The overview tab will automatically updated as the status changes.
+image:images/select_hosts.png[500,500]
+image:images/launch_dev.png[500,500]
 
-. In the *Builds ->  Images* menu on the left, select the *summit-php* image stream and click on the *latest* tag again. Scroll down and click on *Show Annotations* and you’ll see there is no deny-execution assigned to this image anymore.
-+
-image:images/lab4-buildsimages.png[400,400]
-image:images/lab4-latestimage.png[400,400]
-image:images/lab4-showannotations.png[400,400]
-image:images/lab4-nodenyexecution.png[400,400]
+. Now, let's find out which hosts are part of *foreman_lifecycle_environment_rhel7_dev* group.
 
-. Back in CloudForms, browse to *Compute ->  Containers ->  Container Images* using the menu on the left side of the screen. You should now see two images when searching for *summit-php*. Click on the *latest* container image.
-+
-image:images/lab4-latestcontainerimage.png[600,600]
-+
-NOTE: This will be the one with an Id that does NOT end in “45d". Everyone will have a unique image ID since you all built this image in your own environments.
+. Navigate to *Inventories -> Satellite Inventory -> GROUPS -> foreman_lifecycle_environment_rhel7_dev -> HOSTS*. Notice that there are 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com. That means that this host hardening job template will be run on these three hosts.
 
-. Notice that the container image details, such as packages, OpenSCAP results, etc are already populated. This is because we assigned a control policy to our Openshift provider earlier in this lab exercise to automatically scan all newly discovered images.
+. Navigate back to *Jobs* and click on the *LINUX / System Hardening* job.
 +
-image:images/lab4-compliant.png[400,400]
-+
-NOTE: If yours is not populated yet, give it a couple of minutes to finish the scan and results collection. Use your browser refresh button to refresh the view.
+image:images/jobs_hardening.png[500,500]
 
-. Notice that this time, this container image passes the compliance check. Automated remediation of the same application, different version of PHP, and less vulnerabilities!
+. Take a look at the Ansible Tower log output as the configuration is checked and remediated on our host systems. Specifically, notice that several tasks are being executed on our host systems such as various SSH hardening tasks, enabling SELinux, deploying a login banner, and configuring account password complexity.  At the end we will see a *Play Recap* showing us how many changes were made on the systems.
 +
-image:images/lab4-compliantdetails.png[400,400]
-image:images/lab4-summarydetails.png[400,400]
+image:images/job_log.png[1500,1500]
++
+NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to a desired state, further runs of the same playbook will result in 0 changes. As a result, this playbook will check to make sure the client is installed and configured, but if there are no changes to be made, Ansible will skip over the task and verify that the systems are in the correct state. Ansible works to achieve an endstate defined in the playbook so if this playbook is run routinely, it will only make the changes needed to comply with your security hardening standard.
+
+
+=== Lab 4.3 Viewing Host Systems After Automated Additional Security Hardening
+
+. Let's take a look at our host systems again now that we have applied additional automated security hardening on them. Again, remember that the additional automated security hardening was executed on 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: *rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com*.
+
+. SSH into *rhel7-vm3.hosts.example.com* from the workstation bastion host. From your laptop, first SSH into the workstation bastion host as *lab-user*. Then, become *root* on the workstation bastion host and as *lab-user*, ssh into *rhel7-vm3.hosts.example.com* by its *IP address (192.168.0.53)*.
++
+[source, text]
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
+[root@workstation-GUID ~]$ ssh lab-user@192.168.0.53
+
+. Notice that we are no longer able to SSH into this host and get permission denied when trying to log in. Also notice that there is now a login banner and message of the day shown when you log into this host. Optionally, SSH into this host as *root* and notice that again, you are not able to SSH and get a permission denied in addition to seeing the login banner and message of the day.
++
+image:images/afterhardening2.png[1000,1000]
+
+. Optionally, feel free to SSH into the other 2 hosts: rhel7-vm4.hosts.example.com and rhel7-vm5.hosts.example.com. You will again notice that you are not able to SSH into these hosts and get a permission denied. In addition, you will again see the login banner and message of the day when logging into these hosts.
 
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5.adoc[Lab 5]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5.adoc[Lab 5: Proactive Security and Automated Risk Management at Scale with Predictive Analytics]
