@@ -27,7 +27,11 @@ TASK1:
 
 *STEPS:* 
 
-* Connect to your Ansible Tower server in a web browser.  `https://tower-[GUID].rhpds.opentlc.com`
+* Connect to your Ansible Tower server in a web browser.  [https://tower-GUID.rhpds.opentlc.com]
+
+* Log in with the credentials `admin` and a password `r3dh4t1!`
+
+* From the left menu, select "Job Templates" and locate the job template called LAMP / WordPress Deploy"
 
 * Run the job template "LAMP / WordPress Deploy" from Ansible Tower, to install the web application for WordPress.
 
@@ -46,7 +50,7 @@ _lampservers_ :
 
 ---------------------------
 
-    http://rhel1-[GUID].rhpds.opentlc.com/
+    [http://rhel1-GUID.rhpds.opentlc.com/] (replace GUID with your actual GUID)
 
     LOGIN:  admin
 
