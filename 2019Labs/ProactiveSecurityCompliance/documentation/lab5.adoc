@@ -396,7 +396,7 @@ image:images/lab5.3-plan.png[1000,1000]
 
 . Login with *admin* / *r3dh4t1!* to Red Hat Ansible Tower at https://tower-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
 
-. Click on *Templates* from the main menu at the top. Find the *Insights Facts Scan* Job and click the *Rocket* under the Actions.
+. Click on *Templates* from the main menu at the left. Find the *Insights Facts Scan* job template and click the *rocket ship* to run this job.
 +
 image:images/lab5.3-scanjob.png[1000,1000]
 
