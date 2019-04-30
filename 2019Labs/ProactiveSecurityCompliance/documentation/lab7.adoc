@@ -111,7 +111,7 @@ image:images/lab7.4-jenkins-select-build.png[]
 + 
 image:images/lab7.4-jenkins-output.png[]
 +
-. Once the build has completed successfully, click the *user#/user#-ecommerce-pipeline* link at the top of the display
+. Once the build has completed successfully (and is prompting you to proceed or abort), click the *user#/user#-ecommerce-pipeline* link at the top of the display. We will inspect the security scan artifacts before allowing the pipeline to promote our code into the staging project.
 +
 image:images/lab7.4-jenkins-build-complete.png[]
 + 
@@ -166,7 +166,7 @@ image:images/lab7.4-quay-packages.png[]
 +
 You can also view the deployed application at http://ecommerce-{USERID}.apps.{GUID}.summit.opentlc.com/
 
-=== Lab 7.5 Update the source code and base image
+=== Lab 7.5 Update the base image and source code
 
 An old base images was used to build the application, we will update the base image to use a newer version. This will reduce the number of vulnerabilities that are detected. We will also update the source code to remove the vulnerabilities detected by SonarQube.
 
@@ -201,7 +201,11 @@ image:images/lab7.5-gogs-delete-password.png[]
 +
 . Click the commit changes button
 + 
-. Navigate back to Jenkins and start another build by clicking *Build with Parameters*
+. Navigate back to jenkins and *abort* the current build, the navigate to the pipeline page
++
+image:images/lab7.5-jenkins-abort.png[]
++
+. Start another build by clicking *Build with Parameters*
 +
 image:images/lab7.4-jenkins-build.png[]
 +
@@ -226,7 +230,20 @@ image:images/lab7.5-jenkins-blueocean-artifacts.png[]
 . Then view each of the reports
 +
 image:images/lab7.5-jenkins-blueocean-artifacts-links.png[]
-
++
+. After viewing the reports, feel free to promote the application image into the staging and prod projects:
++
+image:images/lab7.5-jenkins-promote-stage.png[]
++
+image:images/lab7.5-jenkins-promote-prod.png[]
++
+The staging version of the app can be viewed here:
++
+http://ecommerce-{userid}-stage.apps.{GUID}.summit.opentlc.com
++
+The production version of the app can be viewed here:
++
+http://ecommerce-{userid}-prod.apps.{GUID}.summit.opentlc.com
 <<top>>
 
 link:README.adoc#table-of-contents[ Table of Contents ] 
