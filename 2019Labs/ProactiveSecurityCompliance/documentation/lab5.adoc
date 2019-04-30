@@ -15,7 +15,8 @@ Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, R
 === Lab 5.1 Configuring Red Hat Insights Clients
 Red Hat Insights clients have a configuration file which can be modified for your needs.
 
-==== Lab 5.1.1 Updating host *ic1.summit.example.com* to exclude files.
+==== Lab 5.1.1 Updating host *ic1.summit.example.com* to exclude files from being accessed by Red Hat Insights and running the Red Hat Insights collection on this host
+
 . If not already there, log into to the workstation host as *lab-user* from your desktop system replacing *GUID* with your lab's *GUID*. Then, become *root* on the workstation host.
 +
 [source]
@@ -80,14 +81,17 @@ Red Hat Insights clients have a configuration file which can be modified for you
 
 ----
 
-. You can specify commands and files you don't want to access by creating a remove.conf file. Let's create a remove.conf file that does the following (INSERT DETAIL HERE)
-+
-NOTE: 0660 file permissions will work on remove.conf and it should inherit the correct selinux types.
+. You can specify commands and files you don't want to access by creating a remove.conf file. First, notice that a remove.conf does not currently exist.
 +
 [source]
 ----
 [root@ic1 insights-client]# ls
 cert-api.access.redhat.com.pem  insights-client.conf  machine-id  redhattools.pub.gpg  rpm.egg  rpm.egg.asc
+----
+. Let's create the remove.conf file now. In this file, we are telling Red Hat Insights not to access the following files: /etc/hosts and /etc/resolv.conf. We are also telling Red Hat Insights to not access the netstat command.
++
+[source]
+----
 [root@ic1 insights-client]# cat <<EOF > ./remove.conf
 > [remove]
 > files=/etc/hosts,/etc/resolve.conf
@@ -95,20 +99,26 @@ cert-api.access.redhat.com.pem  insights-client.conf  machine-id  redhattools.pu
 > #patterns=password,username
 > #keywords=super$ecret,ultra$ecret
 > EOF
+----
+. Now, let's change the file permissions to 0600. Note that 0660 file permissions will work on remove.conf and it should inherit the correct selinux types.
++
+[source]
+----
 [root@ic1 insights-client]# chmod 0660 remove.conf
+----
+. Let's take another look at our newly created remove.conf file with the correct file permissions.
++
+[source]
 [root@ic1 insights-client]# cat ./remove.conf
 [remove]
 files=/etc/hosts,/etc/resolve.conf
 commands=netstat
 #patterns=password,username
 #keywords=super,ultra
-[root@ic1 insights-client]#
 
-----
-
-. Now, let's run the Insights collection from the command line.
+. Now, let's run the Red Hat Insights collection on the ic1 client from the command line.
 +
-NOTE: You will see warnings detailing information that will not be collected. Also the --help option provides a significant amount of options to tailor Insights excution based on your environment.
+NOTE: You will see warnings detailing information that will not be collected.
 +
 [source]
 ----
@@ -119,6 +129,12 @@ WARNING: Skipping command /bin/netstat -neopa
 WARNING: Skipping file /etc/hosts
 Uploading Insights data.
 Successfully uploaded report from 4a61da2a-1f76-470f-8dae-358f3c15b7ca to account 6057187.
+----
+
+. Also the --help option provides a significant amount of options to tailor the execution of Red Hat Insights based on your environment.
++
+[source]
+----
 [root@ic1 insights-client]# insights-client --help
 usage: insights-client [-h] [--test-connection] [--analyze-image-id ID]
                        [--verbose] [--analyze-container] [--net-debug]
@@ -177,7 +193,7 @@ Debug options:
 
 ----
 
-==== Lab 5.1.2 Updating host *ic4.summit.example.com* with Red Hat Insights
+==== Lab 5.1.2 Installing the Red Hat Insights client and Registering host *ic4.summit.example.com* to Red Hat Insights
 . If not already there, log into to the workstation host as *lab-user* from your desktop system replacing *GUID* with your lab's *GUID*. Then, become *root* on the workstation host.
 +
 [source]
@@ -193,7 +209,7 @@ Debug options:
 [root@workstation-GUID ~]# ssh ic4.summit.example.com
 ----
 
-. Install and register this client to Red Hat Insights:
+. Install the Red Hat Insights client on the ic4.summit.example.com host.
 +
 NOTE: In older versions the package was called redhat-access-insights.
 +
@@ -245,17 +261,18 @@ Loaded plugins: product-id
 Loaded plugins: product-id
 Loaded plugins: product-id
 Loaded plugins: product-id
+----
+. Now, register this host to Red Hat Insights with the *--display-name* parameter. This parameter allows you to set the displayed hostname to something other than the default for a system within Red Hat Insights. This is useful if you wish to obfuscate the hostnames that are used in analysis. Be aware that hostnames must resolve properly for Ansible playbooks and Red Hat Ansible Tower management to work for automated remediation. As a result, the display name should match a valid hostname, even if it isn't the publicly accessible DNS name. 
++
+[source]
+----
 [root@ic4 ~]# insights-client --display-name=ic4.summit.example.com --register
 This host has already been registered.
 Automatic scheduling for Insights has been enabled.
 Starting to collect Insights data for ic4.summit.example.com
 Uploading Insights data.
 Successfully uploaded report from 41d3c62e-5c18-42ad-a1ff-65f7c37cc315 to account 6057187.
-[root@ic4 ~]#
-
 ----
-+
-Notice the *--display-name* parameter. This allows you to set the displayed hostname to something other than the default for a system within Red Hat Insights. This is useful if you wish to obfuscate the hostnames that are used in analysis. Be aware that hostnames must resolve properly for Ansible playbooks and Red Hat Ansible Tower management to work for automated remediation. As a result, the display name should match a valid hostname, even if it isn't the publicly accessible DNS name.
 
 === Lab 5.2 Manually fixing the payload injection security issue
 In this section, we will manually fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on *ic1.summit.example.com* without causing downtime.
