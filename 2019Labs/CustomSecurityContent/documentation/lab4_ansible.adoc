@@ -298,12 +298,13 @@ This is a normal Ansible Playbook as Ansible users are familiar with.
 The name of the Playbook is the same as the title of the rule which is defined in rule.yml.
 
 The `hosts` section contains only a placehoder string `'@@HOSTS@@'` which should be replaced by a list of IP addresses or hosts the Playbook should be applied to.
-We have to edit this in order to check the playbook out - we will set hosts to `all`:
+We have to edit this in order to check the playbook out:
+To use our Playbook on your machine (on a local host), replace the placehoder string `'@@HOSTS@@'` by `'localhost'` and save the file.
 
 ----
 ...
 - name: Set Interactive Session Timeout
-  hosts: 'all'
+  hosts: 'localhost'
   become: true
 ...
 ----
@@ -314,12 +315,11 @@ Notice also that the Playbook has tags in the `tags` section which were added ba
 
 Finally, the `tasks:` section contains our Ansible task which we created.
 
-To use our Playbook on your machine (on a local host), replace the placehoder string `'@@HOSTS@@'` by `localhost` and save the file.
 
 Run the following command to run the Playbook:
 
 ----
-$ ansible-playbook -i 'localhost,'  build/rhel8/playbooks/ospp/accounts_tmout.yml
+$ ansible-playbook build/rhel8/playbooks/ospp/accounts_tmout.yml
 ----
 
 Check if it has any effect:
@@ -328,7 +328,7 @@ Check if it has any effect:
 $ gedit /etc/profile
 ----
 
-Notice that `TMOUT=1800` is there!
+Notice that `TMOUT=1800` is at the end of the file!
 
 The biggest advantage of using Ansible tasks in ComplianceAsCode is that it gets integrated with the SCAP content and also the HTML report and in the HTML guide as well.
 

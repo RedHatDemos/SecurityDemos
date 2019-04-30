@@ -65,7 +65,7 @@ Finally, we will discover that the check has been written incorrectly, and and w
 
 === The current state
 
-Make sure that you are in the `content` directory - we will build the content for the RHEL8 product.
+Make sure that you are in the `/home/lab-user/labs/lab5_oval` directory - we will build the content for the RHEL8 product.
 Execute the `./build_product rhel8` command.
 
 When the build finishes, we will take a look at the RHEL8 OSPP profile:
@@ -223,7 +223,7 @@ The `ComplianceAsCode` project features a test suite that is very useful to defi
 It sets up a system to a certain state, and runs the scan and possibly remediations.
 Results are reported in form of console output, and detailed reports are saved to a log directory.
 
-Regarding scenarios, consider for example the `accounts_tmout` rule - the two simplest cases are should be handled are the following ones:
+Regarding scenarios, consider for example the `accounts_tmout` rule - the two simplest cases are handled using the following scenarios:
 
 * `TMOUT=600` is present in `/etc/profile` - this test scenario should pass.
 * `TMOUT=600` is not present in `/etc/profile` or `/etc/profile.d/*.sh` - it gets more complicated, because remediations become involved:
@@ -288,7 +288,9 @@ The output tells you the following:
 
 * The rule with full ID `xccdf_org.ssgproject.content_rule_accounts_tmout` has been tested in the `OSPP` profile context.
 * There were 4 test scenarios `comment.fail.sh`, `line_not_there.fail.sh`, `correct_value.pass.sh` and `wrong_value.fail.sh`, all of them passed.
-We will examine existing scenarios and add new one later in this lab exercise, for now, it is enough to acknowledge them and making sure that if we edit the rule's OVAL snippet, those scenarios won't start to fail.
+These scenarios test whether the rule can handle various situations correctly.
+We will examine these test scenarios later in this lab exercise.
+For now, it is important to realize that all the scenarios should still pass after we do any changes in the OVAL.
 * More information about the test run is available in the respective log directory.
 This is useful when a test breaks unexpectedly, or the test suite suffers from internal issues.
 
