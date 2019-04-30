@@ -433,7 +433,7 @@ image:images/lab5.3-insights-sync.png[1000,1000]
 +
 NOTE: Tower can also identify Insights issues on managed hosts. All of the above projects and plans can be sync'd and updated automatically with Tower via the API or with scheduled runs.
 
-. Navigate to *Templates* and click on *+ADD* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
+. Navigate to *Templates* and click on *+* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
 +
 image:images/lab5.3-new-template.png[1000,1000]
 
@@ -503,7 +503,7 @@ image:images/Lab5.4-Check-for-playbooks.png[1000,1000]
 
 . The sync should complete successfully, and now you're ready to remediate with Tower.
 
-. Navigate to *Templates* and click on *+ADD* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
+. Navigate to *Templates* and click on *+* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
 +
 image:images/Lab5.4-Template-to-FixAll.png[1000,1000]
 
