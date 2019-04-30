@@ -414,12 +414,6 @@ image:images/lab5.3-insights-hosts.png[600,600]
 
 . By clicking the *Insights* option (the letter *i*) for this host you can see all of the risks and vulnerabilities associated with this host. This is the insight data that you scanned in a previous step.
 
-[source]
-----
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-23.218.148.105 access.redhat.com
-----
 +
 image:images/lab5.3-insights-issues.png[1000,1000]
 
