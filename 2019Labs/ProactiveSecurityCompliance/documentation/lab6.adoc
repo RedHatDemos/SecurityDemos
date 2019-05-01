@@ -1,57 +1,60 @@
-[[lab-excercises-overview]]
-Lab Excercises Overview
------------------------
+== Lab 6: Automated Security Hardening of a Hacked Web Application
 
-This lab demonstrates how installing a simple web application can leave
-open exploits. In some instances, a default mysql / mariadb installation
+=== Goal of Lab 6
+The goal of this lab is to learn how to use Red Hat Ansible Automation to automatically security harden a hacked WordPress web application. Specifically, you will first install a simple Wordpress web application with default credentials in an automated way using Red Hat Ansible Automation. Then, you will exploit this web application since it is left open with liberal permissions and no password set. Finally, you will automatically remediate the issue with Red Hat Ansible Automation.
+
+=== Introduction
+Every year we are seeing an increase in the number of security breaches. Many times, these security breaches are not because of zero-day vulnerabilities. Instead, they are caused by human error or weak passwords or not patching known vulnerabilities. The link:https://www-03.ibm.com/press/us/en/pressrelease/53800.wss[Ponemon Institute's Cost of a Data Breach 2018 Study]  found that while 25% of the root cause of data breaches were caused by system glitches, 48% were caused by malicious or criminal attacks, and 27% were caused by human errors. In addition, according to the link:https://enterprise.verizon.com/resources/reports/dbir/[Verizon Data Breach Report], 81% of hacking-related breaches leveraged either stolen and/or weak passwords.
+
+Automation can help with these challenges by improving both security and compliance. Specifically, it can help you avoid human errors, which will help with reducing risk and data breaches. In addition, automation gives you the ability to create infrastructure, security, and compliance as code , thus creating that repeatable, sharable, and verifiable infrastructure and application environments. Also, all of these benefits with automation also make it easier to pass security compliance audits.
+
+This lab demonstrates how a common task, such as installing a simple web application can leave open exploits. In some instances, a default mysql / mariadb installation
 includes default users that are allowed to connect without a password
 set. And if not at the time of installation, humans will often open up
 liberal permissions to make testing easier during development. When
 these changes make their way into production, a site is left vulnerable
 to attackers who are looking for these loopholes.
 
-We will demonstrate this vulnerability with some simple commands. After
-using an Ansible playbook to install a base WordPress web site, you will
-run a small shell script from your workstation, which will take over the
-public-facing corporate site with cat memes. We will then use an Ansible
-playbook to search and remediate common vulnerabilities (in this case,
+=== Lab 6.1 Introducing the lab exercise setup
+
+In this lab exercise, we will demonstrate this vulnerability with some simple commands. After using a Red Hat Ansible playbook to install a base WordPress web site, you will run a small shell script from a specified system, which will take over a
+public facing site with cat memes. We will then use an Ansible playbook to search and remediate common vulnerabilities (in this case,
 accounts with liberal permissions and no password set). After
 remediating the problem, we will see that our exploit script no longer
 works.
 
-* This lab exercise is configured to run against three servers in a group called
-_lampservers_ :
+This lab exercise is configured to run against three servers in a group called *lampservers*:
 
 
-.Explanation of the servers you'll be using in this exercise.
+.Machines that you'll be using in this lab exercise
 [width="90%",cols="^m,^m,,",frame="topbot",options="header,footer"]
 |=====================================================
-|     3+|Explanations of the machines we'll be using:
-    |lampweb
+|     3+|Details of machines that will be used in this lab exercise:
+    |*lampweb*
 
-    rhel1-GUID.rhpds.opentlc.com/
+    rhel1-GUID.rhpds.opentlc.com (replace the GUID with your lab provided GUID)
     | 192.168.0.100
     |This server is used for the apache web server. There is no local database on this machine
     | The wordpress application is set with a default login of:
 
 ---------------------------
 
-    [http://rhel1-GUID.rhpds.opentlc.com/] (replace GUID with your actual GUID)
+    [http://rhel1-GUID.rhpds.opentlc.com/] (replace GUID with your lab provided GUID)
 
     LOGIN:  admin
 
     PASS:  Password123
 
-    |lampdb
+    |*lampdb*
 
-    rhel2-GUID.rhpds.opentlc.com/
+    rhel2.example.com
     | 192.168.0.101
-    |this server is a standalone database with no other purpose than to host the MySQL / MariaDB instance.
-    | The database has been configured correctly to the WordPress application. However, we made a major mistake here and left one account unsecured. It's possibly (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!!!!
+    |This server is a standalone database with no other purpose than to host the MySQL / MariaDB instance.
+    | The database has been configured correctly for the WordPress application. However, we made a major mistake here and left one account unsecured. It's possible (and sometimes default) to have a database configured to allow traffic from ANYWHERE with NO PASSWORD REQUIRED!
 
-    |lampjump
+    |*lampjump*
 
-    rhel3-GUID.rhpds.opentlc.com/
+    rhel3.example.com
     | 192.168.0.102
     |This is a "jump box," representing a machine that a hacker might use to connect and run some scripts in order to exploit your new web site.
     | You will log in as lab-user to this machine and see a script in your home directory. Additionally, you can run remote MySQL commands from this machine against the unsecured database.
@@ -59,27 +62,22 @@ _lampservers_ :
 
 |=====================================================
 
-[[task1]]
-TASK1:
-------
+=== Lab 6.1 Automated Install of the WordPress LAMP Stack Web Application
 
-*MISSION:* Install the LAMP web-app, "WordPress" Via Ansible Role
+In this lab exercise, you will install the LAMP stack WordPress web application, in an automated fashion, using Red Hat Ansible Automation. Specifically, you will be doing this install using an Ansible role.
 
-*STEPS:* 
+. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
-* Connect to your Ansible Tower server in a web browser.  [https://tower-GUID.rhpds.opentlc.com]
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LAMP / WordPress Deploy*.  This will install our WordPress LAMP Stack web application.
++
+image:images/templates.png[100,100]
+image:images/webappinstall.png[1000,1000]
 
-* Log in with the credentials `admin` and password `r3dh4t1!`
+. Now let's take a closer look at our Red Hat Ansible Tower log to see what is happening behind the scenes. Notice that this job template is executing the *wordpress.yml* playbook that is deploying Wordpress to the lampweb and lampdb systems. Also take a look at the Inventory in the DETAILS section. Notice that the systems that we're using in this lab exercise are AWS EC2 instances. When you look at the Red Hat Ansible Tower log, nothing looks out of the ordinary and to the innocent eye, we complete this step without any issues (as seen in the STATUS in the DETAILS section and in the PLAY RECAP at the bottom of the Red Hat Ansible Tower log).
++
+image:images/wordpressdeploy.png[1000,1000]
 
-* From the left menu, select "Templates" and locate the job template called "LAMP / WordPress Deploy"
-
-* On the line for the job template called "LAMP / WordPress Deploy", click the icon of the rocketship on the right side of the screen to run the job template.  This will install the web application for WordPress.
-
-* This role appears to install an innocent apache server on one and a db
-on the other. To the innocent eye, we complete this step and validate by
-visiting the website... everything looks clean and safe!
-* Once ths role is run, you can confirm the application has been
-installed by using a web browser to go to     [http://rhel1-GUID.rhpds.opentlc.com/] (replace GUID with your actual GUID)
+. Now that this Red Hat Ansible Tower job template completed, let's validate that our WordPress LAMP Stack Web Application got installed successfully by visiting the website at http://rhel1-GUID.rhpds.opentlc.com. Don't forget to replace the GUID with your lab provided GUID! 
 
 [[task2]]
 TASK2:
@@ -90,7 +88,7 @@ the user accouts that already exist on the box. This effectively will
 lock out the legitimate user of the WordPress site so that they can no
 longer log in... but you will now have admin access to the site!
 
-*STEPS:* 
+*STEPS:*
 
 
 * SSH into to the command-line of your jumpbox machine:
@@ -112,7 +110,7 @@ Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-MariaDB [WordPress]> 
+MariaDB [WordPress]>
 ----
 
 If you see the above dialogue, you're in! We just connected to the database on a a server and didn't even need a password.  That's really really bad.
