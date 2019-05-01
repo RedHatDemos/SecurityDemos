@@ -77,7 +77,10 @@ image:images/webappinstall.png[1000,1000]
 +
 image:images/wordpressdeploy.png[1000,1000]
 
-. Now that this Red Hat Ansible Tower job template completed, let's validate that our WordPress LAMP Stack Web Application got installed successfully by visiting the website at *http://rhel1-GUID.rhpds.opentlc.com*. Don't forget to replace the GUID with your lab provided GUID! Also, note that the website is HTTP not HTTPS (another security mistake purposely made for lab demonstration purposes).
+. Now that this Red Hat Ansible Tower job template completed, let's validate that our WordPress LAMP Stack Web Application got installed successfully by visiting the website at *http://rhel1-GUID.rhpds.opentlc.com*. Don't forget to replace the GUID with your lab provided GUID!
+
++
+NOTE: Note that the website is HTTP not HTTPS (another security mistake purposely made for lab demonstration purposes).
 
 [[task2]]
 TASK2:
