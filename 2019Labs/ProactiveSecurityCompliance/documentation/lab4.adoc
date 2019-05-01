@@ -72,14 +72,14 @@ NOTE: Because Ansible is idempotent, after 1 run of a playbook to set things to 
 
 . Let's take a look at our host systems again now that we have applied additional automated security hardening on them. Again, remember that the additional automated security hardening was executed on 3 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: *rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com*.
 
-. SSH into *rhel7-vm3.hosts.example.com* from the workstation bastion host. From your laptop, first SSH into the workstation bastion host as *lab-user*. Then, become *root* on the workstation bastion host and as *lab-user*, ssh into *rhel7-vm3.hosts.example.com* by its *IP address (192.168.0.53)*.
+. SSH into *rhel7-vm3.hosts.example.com* from the workstation bastion host. From your laptop, first SSH into the workstation bastion host as *lab-user*. Then, become *root* on the workstation bastion host, ssh into *rhel7-vm3.hosts.example.com* by its *IP address (192.168.0.53)*.
 +
 [source, text]
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 [lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]$ ssh lab-user@192.168.0.53
 
-. Notice that we are no longer able to SSH into this host and get permission denied when trying to log in. Also notice that there is now a login banner and message of the day shown when you log into this host. Optionally, SSH into this host as *root* and notice that again, you are not able to SSH and get a permission denied in addition to seeing the login banner and message of the day.
+. Notice that we are no longer able to SSH into this host as root and get permission denied when trying to log in. Also notice that there is now a login banner when you log into this host. Optionally, SSH into this host as *ansible* and notice that, you see the login banner and message of the day when connecting.
 +
 image:images/afterhardening2.png[1000,1000]
 
