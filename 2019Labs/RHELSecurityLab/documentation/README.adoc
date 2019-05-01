@@ -26,7 +26,7 @@
 == Overview and Prerequisites:
 In this lab, you'll learn how you can build defense-in-depth in the OS by implementing the key security technologies available to you in the latest version of Red Hat Enterprise Linux.
 
-You will implement security at all layers, in a defense-in-depth approach, to build a strong foundation to proactively defend against possible security attacks and breaches. You will ensure security compliance by using technologies such as OpenSCAP, Audit, AIDE, session recording, and system wide crypto policies. You will implement physical security with technologies such as USBGuard and add network security with technologies such as firewalld, SELinux port security, and IPSec. You will implement access management with Ansible system roles, Identity Management, and SELinux process isolation. You will implement data security with Linux Unified Key Setup(LUKS), Network Bound Disk Encryption, and GNU Privacy Guard. 
+You will implement security at all layers, in a defense-in-depth approach, to build a strong foundation to proactively defend against possible security attacks and breaches. You will ensure security compliance by using technologies such as OpenSCAP, Audit, AIDE, session recording, and system wide crypto policies. You will implement physical security with technologies such as USBGuard and add network security with technologies such as firewalld, SELinux port security, and IPSec. You will implement access management with Ansible system roles, Identity Management, and SELinux process isolation. You will implement data security with Linux Unified Key Setup(LUKS), Network Bound Disk Encryption, and GNU Privacy Guard.
 
 Specifically, you will use OpenSCAP to scan and remediate against vulnerabilities and configuration security baselines. You will also block possible attacks from vulnerabilities using SELinux and use Network Bound Disk Encryption to securely decrypt your encrypted boot volumes unattended. You will learn how to deploy opportunistic IPsec to encrypt all host to host communication within an enterprise network and also use USBGuard to implement basic whitelisting and blacklisting to define which USB devices are and are not authorized and how a USB device may interact with your system. You will also take advantage of the system-wide crypto policies for further security. Throughout your investigation of the security issues in your systems, you will utilize audit logs and the web console and you will automate as much of your tasks as possible using Ansible. For example, you will make automated configuration changes to your systems across multiple versions of Red Hat Enterprise Linux running in your environment using the Systems Roles feature. You will also learn how to use the Audit Intrusion Detection Environment (AIDE), session recording, logging, and playback to look for abnormal behavior. Also, you will learn how to create a single sign-on environment for all of your linux servers using Red Hat Identity Management. Finally, you will discover how to identify yourself and encrypt your communications with GNU Privacy Guard (GPG) and will also learn how to use firewalld to dynamically manage firewall rules.
 
@@ -36,18 +36,20 @@ This lab is geared towards systems administrators, cloud administrators and oper
 The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills.
 
 == Attendees, during this session, will learn:
-* How to do automated security compliance using OpenSCAP to scan and remediate against vulnerabilities and configuration security baselines.
+* How to automate security compliance using OpenSCAP to scan and remediate against vulnerabilities and configuration security baselines.
 * How to use SELinux to isolate running processes to mitigate against attacks
-* How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes un attended
+* How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes unattended
 * How to deploy opportunistic IPsec to encrypt all host to host communication within an enterprise network
 * How to take advantage of system-wide crypto policies
 * How to use USBGuard to protect against rogue USB devices and implement basic whitelisting and blacklisting to define which USB devices are authorized.
-* Auditing capabilities of Red Hat Enterprise Linux
+* How to take advantage of the auditing capabilities and the web console for easier centralized Management.
 * How to use the Audit Intrusion Detection Environment (AIDE)
-* How to create a single sign-on environment for all of your linux servers using Red Hat Identity Management
-* How to use GNU Privacy Guard (GPG) to identify yourself and encrypt your communications
-* How to use firewalld to dynamically manage firewall rules
-* How to configure systemwide Crypto Policies and set a machine in FIPS mode
+* How to create a single sign-on environment for all of your Linux servers using Red Hat Identity Management.
+* How to use GNU Privacy Guard (GPG) to identify yourself and encrypt your communications.
+* How to use firewalld to dynamically manage firewall rules.
+* How to configure system-wide crypto policies and set a machine in Federal Information Processing Standards(FIPS) mode.
+* How to take advantage of session recording, logging, and playback features and AIDE to look for abnormal behavior.
+* How to use systems roles to make multiple automated configuration changes across different versions of Red Hat Enterprise Linux using Red Hat Ansible Automation.
 
 
 == Lab Environment:
