@@ -82,28 +82,30 @@ image:images/wordpressdeploy.png[1000,1000]
 +
 NOTE: Be careful when you type the website's URL. The website is HTTP not HTTPS (another security mistake purposely made for lab demonstration purposes).
 
-[[task2]]
-TASK2:
-------
+=== Lab 6.2 Hacking the Database of the WordPress LAMP Stack Web Application
 
-*MISSION:* Confirm we can access the database insecurely and mess with
-the user accouts that already exist on the box. This effectively will
-lock out the legitimate user of the WordPress site so that they can no
-longer log in... but you will now have admin access to the site!
+In this lab exercise, we are going to confirm that we can access the database of our WordPress LAMP Stack Web Application  insecurely. We'll then take advantage of the user accounts that already exist on the database system and lock out the legitimate user of the WordPress site so that they can no longer log in. You(the database hacker) will now have admin access to the site!
 
-*STEPS:*
+First, let's see if we can get into the database.
 
+==== Lab 6.2.1 Accessing and Viewing the Database of the WordPress LAMP Stack Web Application
 
-* SSH into to the command-line of your jumpbox machine:
+. Let's SSH into our *lampjump* system using its IP address (*192.168.0.102*). Remember that this system is our "jump box", representing a machine that a hacker would use to connect and run exploit scripts to hack your new web site. In order to SSH into our *lampjump* system, we have to first SSH into our lab's workstation box.
 
-`ssh lab-user@192.168.0.102`
-
-* From the command line of that machine, connect to the database using this command:
-
-`mysql WordPress -h 192.168.0.101 -u insecure`
-
-And we get the MySQL prompt!:
-
+. If not already there, go to the Terminal window on your laptop and log in to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your unique lab provided GUID*. If needed, use the password *r3dh4t1!* From the workstation bastion host, log into your *lampjump* system as *lab-user* using its IP address (*192.168.0.102*). Note that the hostname of our *lampjump* system is rhel3.example.com.
++
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ ssh lab-user@192.168.0.102
+[lab-user@rhel3 ~]$
+----
+. Next, from our *lampjump* system, connect to the database using this command:
++
+----
+[lab-user@rhel3 ~]$ mysql WordPress -h 192.168.0.101 -u insecure
+----
+Notice that we get the following MySQL prompt:
++
 ----
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MariaDB connection id is something
@@ -115,65 +117,53 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 MariaDB [WordPress]>
 ----
++
+If you see the above MySQL prompt, you're in the database! We just connected to the database on a a server and didn't even need a password!
++
+Anyone with a bit of curiosity and malicious intent can directly access the database that runs your entire web site! They could add their own users and easily take over your own website. Yikes! Or they could cover your site in cat memes. You, the hacker, decided to do just that since you are a big cat fan. In the next step, we are going to hack this web application and fill it with cat memes. But first, let's create a WordPress user so we can go in anytime and post articles.
 
-If you see the above dialogue, you're in! We just connected to the database on a a server and didn't even need a password.  That's really really bad.
-
-Anyone with a bit of curiosity can directly access the database that runs your entire site! They could add their own users and just sit back and wait... and when you run for public office, they could start posting bad things about you on YOUR OWN WEBSITE! Or they could just go for the gusto right now and cover your site in cat memes. Yeah. That's the one. In the next step, that's exactly what we're going to look at. But first, let's make ourselves a WordPress user so we can go in anytime and post articles.
-
-* While we're in the MySQL database, let's take a look at the users who
-are allowed to log in to the WordPress server:
-
+. While we're in the MySQL database, let's take a look at the users who
+are allowed to log in to the WordPress server. Type the following two commands into your MySQL database prompt.
++
+----
 `select user_login,user_pass from wp_users;`
 
 `select * from wp_usermeta WHERE meta_key = 'wp_capabilities';`
-
-We see the user and the password has that's stored in the database for
-this user, as well as data that defines the access level. Now we're at a
-moral crossroads. Do we notify the owner of the site to warn them of
-this vulnerability? The fact that we can access the site's database and
-make changes without any credentials? Ideally yes. And I'm proud of you
-for that thought. But in this case, we want to demonstrate how bad this
-could be. So in this lab, we're going to do the wrong thing and take
-advantage of this inappropriate level of access. The access level for
-this user (level 10, being an administrative user) is stored in a second
-table. We can view this info direct from the databse and change it if we
-like:
-
-From here... we could change the admin password so that we can always
-log in as "admin" with our new password. Chances are, someone will
-realize they're locked out and eventually get back in. A real-world
-example would actually be sneaker: if we were the type of user to do
-such a thing as this, we would probably create an ambiguous username
+----
++
+image:images/mysql1.png[1000,1000]
++
+Notice how we can easily see the user and the password that's stored in the database for this user. In addition, we can see the data that defines the access level. This tells you that we can easily access the site's database and make changes without any credentials. Now, let's take advantage of the admin account and change the admin password so that we can always log in as admin with our new password. Chances are, someone will realize they're locked out and eventually get back in. A more realistic example would actually be sneakier: we would create an ambiguous username
 that _looked_ official but was our secret access backdoor.
 
-[[giving-ourselves-access-to-wordpress...-using-the-vulnerable-database-user-access.]]
-Giving ourselves access to WordPress... using the vulnerable database
-user access.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+==== Lab 6.2.2 Taking Advantage of the Admin Account by Changing the Admin Password
 
-* it's as simple as updating the admin user's password. We don't know
-what that password even is, so we can't log in to WordPress conole...
-but we have wide open database access! So we can set it to whatever we
+In this lab exercise, let's give ourselves access to our WordPress web application by using the vulnerable database. It's as simple as updating the admin user's password. Even though we don't know what that admin password is, we have wide open database access so we can set the admin password to whatever we
 want!
-* run this command to change the wordpress admin user's password to something else:
 
-+update wp_users set user_pass=MD5('FluffyBunny') WHERE `user_login`='admin';+
+. Run this command in your MySQL prompt to change the WordPress admin user's password to something else:
 
-* Verify you have access by visiting this admin login URL and logging in
-with your new credentials.
-* The admin user for this WordPress instance is now set to:
-* http://rhel1-[GUID].rhpds.opentlc.com/wp-admin/
++
+----
+update wp_users set user_pass=MD5('EvilMeowHacker') WHERE `user_login`='admin';
+----
++
+image:images/mysql2.png[3000,3000]
+
+. Now, verify you have access with this new password by visiting this admin login URL and logging in with your new credentials. The admin user for this WordPress instance is now set to:
+*http://rhel1-GUID.rhpds.opentlc.com/wp-admin/*. Don't forget to change the GUID to your lab's GUID. Also note that the website is HTTP not HTTPS (again, as noted before, this is another security mistake purposely made for lab demonstration purposes).
 * login: `admin`
-* password: `FluffyBunny`
+* password: `EvilMeowHacker`
++
+WOW. We are in!
++
+image:images/wordpressin.png[3000,3000]
++
+The main thing we're pointing out here is the fact that this is a really scary exploitable security mistake that is surprisingly more common than you think and one that we may not ever notice.
 
-WOW. We are in! Verify by logging in as our admin account. The main
-thing we're pointing out here is the fact that this is a really scary
-exploitable loophole. This is the kind of security oopsie that we might
-not ever notice manually.
-
-* For now, get out of the MySQL prompt...
-* Type "exit" to leave the MySQL prompt and return back to a regular
-command line.
+. Now, let's get out of the MySQL prompt. Type *exit* to leave the MySQL prompt and return back to the regular command line.
++
+image:images/mysql3.png[300,300]
 
 [[task3]]
 TASK3:
