@@ -1,15 +1,18 @@
 = Lab 1: OpenSCAP Basics and Command Line Scanning
 
 == Goal of Lab
-The goal of this lab exercise is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
+The goal of this lab exercise is to introduce you to the basics of automated security and compliance scanning and remediations with OpenSCAP and Red Hat Ansible Automation.
 
 == Introduction
-Security Content Automation Protocol (SCAP) is collection of standards aiming to enable automated vulnerability and configuration compliance.
-OpenSCAP is a family of open source SCAP tools, and SCAP Security Guide (further as SSG) is collection of xml-based SCAP benchmarks and content in other formats to help with compliance configuration assessment of Red Hat Enterprise Linux machines.
-Natively shipping in Red Hat Enterprise Linux, this provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certifications and accreditations easier.
+Security Content Automation Protocol (SCAP) is collection of standards to enable automated vulnerability and configuration compliance.
+OpenSCAP is a family of open source SCAP tools and the SCAP Security Guide (SSG) is collection of xml-based SCAP benchmarks and content in various formats to help with compliance configuration assessment of Red Hat Enterprise Linux machines.
+Natively shipping in Red Hat Enterprise Linux, this provides practical security hardening advice and remediations for Red Hat technologies and helps with meeting security compliance requirements, making it easier to obtain security certifications and accreditations.
 
 OpenSCAP and SSG allows you to perform both vulnerability and security compliance checks in a fully automated way.
-Several integrations for continuous scanning exist but in this lab exercise, we will focus on one-off scanning to get started.
+
+OpenSCAP is integrated in Red Hat Satellite for automated security and compliance scanning across multiple Red Hat systems at scale. OpenSCAP, Red Hat Satellite, Red Hat Ansible Automation, and Red Hat CloudForms can also all be integrated together for automated and continuous scanning and remediations for security and compliance across a hybrid environment at scale.
+
+In this lab exercise, we will focus on single host  scanning and remediations for security vulnerabilities and compliance to security baselines using the security tools natively in Red Hat Enterprise Linux.
 
 == Pre-Configured Set Up Steps (Already done for you)
 All of the steps in this pre-configured set up section have already been done for you.
@@ -17,17 +20,23 @@ This section is for your reference only so you know what steps have already been
 
 .  Red Hat Enterprise Linux 8.0 is installed on the *openscap.example.com* host. We have also pre-installed several packages on the *openscap.example.com* host.
 
-. Specifically, we pre-installed *openscap-scanner*, *scap-security-guide*, and *Ansible*. Take a look at the comments above each installation command for more details.
+. Specifically, we pre-installed *openscap-scanner*, *scap-security-guide*, and *Ansible*. Take a look at the comments above each installation command for more details. If needed, the *root* password for the *openscap.example.com* host is *r3dh4t1!*. Also, don't forget to replace the *GUID* with unique lab provided *GUID*!
 +
+[source, text]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ ssh root@openscap.example.com
  # the tool that performs the scanning
- [root@openscap]# dnf install openscap-scanner
+ [root@openscap]# yum install openscap-scanner
  # project that brings in security policies we will load and test agains
- [root@openscap]# dnf install scap-security-guide
+ [root@openscap]# yum install scap-security-guide
  # we will need this later for Ansible based remediations
- [root@openscap]# dnf install ansible python-firewall
-
+ [root@openscap]# yum install ansible python-firewall
+----
 . You can verify a successful installation by running:
 +
+[source, text]
+----
  [root@openscap]# oscap -V
 
  OpenSCAP command line tool (oscap) 1.3.0
@@ -43,17 +52,18 @@ This section is for your reference only so you know what steps have already been
  Asset Reporting Format Version: 1.1
  CVRF Version: 1.1
  ...
+----
 +
 Notice that this command outputs the OpenSCAP version and versions of supported standards.
-If during your own installation it says `oscap` command not found, you need to install the OpenSCAP tooling since this means that OpenSCAP has not been installed successfully.
+If during your own installation it says `oscap` command not found, you need to install the OpenSCAP tooling (as detailed in  step #2 above) since this means that OpenSCAP has not been installed successfully.
 
 . Finally, SCAP Workbench has also been installed on the *openscap.example.com* server host for you.
 +
  # GUI tool for scanning and benchmark customization, a front-end for OpenSCAP
- [root@openscap] dnf install scap-workbench
+ [root@openscap] yum install scap-workbench
 
 == Lab 1.1 Security scanning with OpenSCAP
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
+. If not already there, log in to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your unique lab provided GUID*. If needed, use the password *r3dh4t1!*
 +
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
@@ -81,21 +91,21 @@ If during your own installation it says `oscap` command not found, you need to i
 For Red Hat Enterprise Linux 8, OSPP (Protection Profile for General Purpose Operating Systems) and PCI-DSS (Payment Card Industry Data Security Standard) profiles are available.
 There are also various formats in which this is provided - human readable HTML guides, SCAP benchmarks, but also Ansible remediation playbooks.
 
-. Move to the `content` folder so we can avoid typing long paths:
+. Move to the `content` folder so we can avoid typing long paths in the subsequent exercises below:
 +
 ----
  [root@openscap]# cd /usr/share/xml/scap/ssg/content
 ----
 
-. First, let's check which compliance profiles are available for rhel8.
+. First, let's check which compliance profiles are available for Red Hat Enterprise Linux 8.
 +
 ----
  [root@openscap]# oscap info ssg-rhel8-ds.xml
 ----
 +
-. You will get list of contents, aforementioned compliance profiles. OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS.
+. You will get list of available content and compliance profiles (OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS) available for Red Hat Enterprise Linux 8.
 
-. Next, let's perform our first baseline testing scan with the vanilla OSPP profile.
+. Next, let's perform our first security compliance baseline scan with the OSPP profile.
 You can see in our command below that we can skip the profile ID prefix to make the command simpler.
 The real ID is xccdf_org.ssgproject.content_profile_ospp.
 +
@@ -103,7 +113,7 @@ The real ID is xccdf_org.ssgproject.content_profile_ospp.
   [root@openscap]# oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
 ----
 +
-Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
+Now, you will see the security compliance scan results for every security control in the OSPP security baseline profile. Specifically, you will see the title of each security control and whether or not that security control check passed or failed.
 
 . Now, let's store the results of the scan this time:
 * use `--results-arf` to get machine readable results archive
@@ -120,28 +130,31 @@ Now, you will see the compliance scan results for every security control in the 
  [root@openscap]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
 
-. Now, go to your *power controls and consoles* view from the *Lab Information* page (the one with GUID) and click on the console button for your workstation bastion host.
-Login as *lab-user* with *r3dh4t1!* as the password.
+. Now, go to your *power control and consoles* view from the *Lab Information* page where you got your assigned unique lab GUID by clicking on the link provided on the last bullet point of the Lab Information page.
++
+image:images/labinfopage1.png[2000,2000]
+
+.  Click on the console button for your workstation bastion host and login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-. Open the Terminal, and use it to open the *report.html* in a X forwarded web browser.
+. Open the Terminal and use it to open the *report.html* (which is in the tmp directory of your openscap.example.com host) in a X forwarded web browser.
 +
  [lab-user@workstation-GUID ~]$ ssh -X root@openscap.example.com firefox /tmp/report.html
 
-. You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
+. You will see the security compliance scan results for every security control in the OSPP security baseline profile in HTML format.
 +
 image:images/lab1.1-scapreport.png[500,500]
 
 . Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether a particular security control has passed or failed the scan.
 
-. Click on the rule title in the HTML report.
+. Click on any of the rule titles in the HTML report, such as the rules highlighted in red in the image below.
 +
 image:images/lab1.1-clickrule.png[600,600]
 
 . This will bring up a pop-up dialog that allows you to examine details of the particular OpenSCAP security rule that failed or passed.
-On case `--oval-results` has been specified on the command line when scanning, extended details are provided.
+If the `--oval-results` option was specified on the command line when scanning, extended details are provided.
 For example, if an OpenSCAP security rule is testing file permissions on a list of files, it will specify which files failed and what are their permission bits.
 In our case, it shows which file failed regex check.
 +
@@ -150,7 +163,7 @@ image::images/lab1.1-report_pass.png[HTML report: A rule that is passing]
 
 image::images/lab1.1-report_fail.png[HTML report: A rule that is failing]
 
-. Feel free to browse through the report, to see all the different checks that are performed.
+. Feel free to browse through the report to see all the different checks that were performed.
 Machine is in state equivalent to default installation.
 When you are done, you can close Firefox window.
 
