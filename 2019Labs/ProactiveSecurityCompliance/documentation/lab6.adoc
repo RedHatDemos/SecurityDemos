@@ -224,9 +224,7 @@ Note that the GUID referenced in the output above will be your lab provided GUID
 
 . You should see a new look to the website, informing you that the site has been hacked by cat memes.
 
-[[task4]]
-TASK4:
-------
+=== Lab 6.4 Automated Re-Install of the WordPress LAMP Stack Web Application to reset the servers to a stable baseline (left off)
 
 *MISSION:* Oh no! A script kitty hacked our site! Let's re-install the
 original WordPress role to reset the servers to a stable baseline.
