@@ -48,15 +48,15 @@ image:images/invokecustomautomation.png[400,400]
 +
 [source]
 ----
-[root@workstation-GUID ~]# ssh 192.168.0.51
+[root@workstation-GUID ~]# ssh ansible@192.168.0.51
 ----
 
 . Once logged in check to see if the *AIDE* package is installed. If it is, remove this package by typing *yum remove aide* and then typing *y* to remove the package. Do not exit out of this ssh session in your terminal.
 +
 [source]
 ----
-[root@rhel7-vm1 ~]# rpm -qa --last aide
-[root@rhel7-vm1 ~]# yum remove aide
+[ansible@rhel7-vm1 ~]# sudo rpm -qa --last aide
+[ansible@rhel7-vm1 ~]# sudo yum -y remove aide
 ----
 . Now that we have confirmed and made sure that the AIDE package is not installed, let's go ahead and turn the  *rhel7-vm1.hosts.example.com* VM off and begin testing our Enforce AIDE control policy.
 
@@ -113,7 +113,7 @@ image:images/aide-detail.png[1000,1000]
 +
 [source]
 ----
-[root@rhel7-vm1 ~]# rpm -qa --last aide
+[ansible@rhel7-vm1 ~]# sudo rpm -qa --last aide
 aide-0.15.1-13.el7.x86_64  Sun 28 Apr 2019 04:26:59 PM EDT
 ----
 . The *Enforce AIDE* control policy has automatically executed on the *rhel7-vm1.hosts.example.com* VM successfully!
