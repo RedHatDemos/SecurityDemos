@@ -22,6 +22,7 @@
       name: "{{ package_name }}"
       state: latest
     register: yum_output
+    become: yes
 
   - name: Log yum_output
     debug:
