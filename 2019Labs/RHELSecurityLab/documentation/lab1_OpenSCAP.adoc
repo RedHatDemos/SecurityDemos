@@ -62,7 +62,7 @@ If during your own installation it says `oscap` command not found, you need to i
  # GUI tool for scanning and benchmark customization, a front-end for OpenSCAP
  [root@openscap] yum install scap-workbench
 
-== Lab 1.1 Security scanning with OpenSCAP
+== Lab 1.1 Automated Security and Compliance Scanning with OpenSCAP
 . If not already there, log in to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your unique lab provided GUID*. If needed, use the password *r3dh4t1!*
 +
 ----
@@ -167,15 +167,13 @@ image::images/lab1.1-report_fail.png[HTML report: A rule that is failing]
 Machine is in state equivalent to default installation.
 When you are done, you can close Firefox window.
 
-== Lab 1.2 Customizing existing SCAP benchmarks using SCAP Workbench
-. Now, go back to your *Lab Information* webpage from the *Lab 0 Setup steps* and click on the console button for your workstation bastion host.
-Login as *lab-user* with *r3dh4t1!* as the password.
-Don't forget you can paste text into console using button T in the top right corner.
+== Lab 1.2 Customizing Existing SCAP Security Profiles using SCAP Workbench
+. Now, let's go back to the workstation console page. Click on the console button for your workstation bastion host and login as lab-user with r3dh4t1! as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-. Once you log in, open the Terminal, and use it to open SCAP Workbench on the server.
+. Once you log in, open the Terminal and use it to open SCAP Workbench that's installed on the openscap.example.com system using SSH with X forwarding.
 +
  [lab-user@workstation-GUID ~]$ ssh -X root@openscap.example.com scap-workbench
 
@@ -195,9 +193,7 @@ image:images/lab1.2-selectcustomize.png[700,700]
 +
 image:images/lab1.2-newprofileID.png[500,500]
 
-. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile.
-There is no specific goal in mind for this part of exercise, just showcase of capabilities.
-After you are done customizing click *OK* to save the profile.
+. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. Feel free to customize this profile however you would like. After you are done customizing this profile, click *OK* to save the profile.
 You have now created a new custom profile.
 +
 image::images/lab1.2-workbench_tailoring.png[SCAP Workbench content customization]
@@ -205,23 +201,21 @@ image::images/lab1.2-workbench_tailoring.png[SCAP Workbench content customizatio
 . Now let's run a test scan with the new custom profile we just created.
 Click *Scan* and inspect the results.
 When prompted for the password for *lab-user*, type *r3dh4t1!*.
-This will take a few minutes so feel free to move on with the lab exercise and not wait until the scan is completed.
-You can ignore and close the diagnostics window that will pop up at the end of the scan.
+This will take a few minutes so feel free to move on with the rest of this lab exercise and not wait until the scan is completed. You can ignore and close the diagnostics window that will pop up at the end of the scan.
 +
 image:images/lab1.2-scapworkbenchscan.png[500,500]
 
-. (Optional) You can save it to a tailoring file by selecting File->Save Customization Only.
+. (Optional) You can save it to a tailoring file by selecting *File->Save Customization Only*.
 +
 image:images/lab1.2-savecustomization.png[300,300]
 
-. This is the end of work in the console view.
 
-== Lab 1.3 Security Remediations with OpenSCAP and Ansible
+== Lab 1.3 Automated Security Remediations with OpenSCAP and Ansible
 Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology.
-As remediation changes configuration of the machine to restrict its capabilities, it is possible that you will lock yourself out or disable workloads important to you.
+As remediation changes the configuration of the machine to restrict its capabilities, it is possible that you will lock yourself out or disable workloads important to you.
 As a result, it is best practice to test the remediation and its effects before deploying.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
+. If not already there, open the Terminal and log into the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
@@ -233,25 +227,24 @@ As a result, it is best practice to test the remediation and its effects before 
 ----
 
 . All remediations will be executed on the *openscap.example.com* host.
-You will not make modifications to any other hosts, including the *workstation.example.com* host.
+You will not make modifications to any other hosts, including the *workstation.example.com* bastion host.
 
-. Let's generate an Ansible playbook that will put the *openscap.example.com* machine into compliance.
-Let's go ahead and generate a playbook from the results:
+. Let's automatically generate an Ansible playbook that will put the *openscap.example.com* machine into compliance based on a given security compliance profile. In this step, let's go ahead and generate a playbook from the previous scan results of the OSPP security baseline profile:
 +
-Use the `--fix-type ansible` option to request an ansible playbook with the fixes:
+Use the `--fix-type ansible` option to request an ansible playbook with the scan result fixes:
 +
 ----
  [root@openscap]# oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
 ----
 
-. (Optional) Generate bash remediation script.
+. (Optional) Generate the bash remediation script.
 This can be accomplished by running:
 * use `--fix-type bash` to request a bash script with the fixes
 +
 ----
  [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
 ----
-. By running this generated script, machine would be also put close to the compliance.
+. By running either this automatically generated Ansible remediation playbook or bash remediation script, the *openscap.example.com* machine will be put into compliance to the OSPP security baseline profile.
 
 . Notice that in both cases we are using empty `--result-id`.
 This is a trick to avoid specifying the full result ID.
@@ -279,7 +272,7 @@ In this example, we will use nano as our text editor (but feel free to use vi as
 ###############################################################################
 ....
 
-. Exploring the playbook further you will see the tasks that set up the machine:
+. When you look at the generated playbook in more detail, you will notice the various Ansible tasks for configuring this machine to make it compliant to the OSPP security baseline profile:
 +
 ....
    - name: Ensure gpgcheck Enabled For All Yum Package Repositories
@@ -317,7 +310,7 @@ After making this change, press *control + x* , then type *y* and press *enter* 
       var_accounts_passwords_pam_faillock_deny: !!str 3
       var_accounts_passwords_pam_faillock_unlock_time: !!str never
       var_accounts_passwords_pam_faillock_fail_interval: !!str 900
-      var_password_pam_minlen: !!str 12
+      var_password_pam_minlen: !!str 18
       var_password_pam_ocredit: !!str -1
       var_password_pam_lcredit: !!str -1
       var_password_pam_ucredit: !!str -1
@@ -328,7 +321,7 @@ After making this change, press *control + x* , then type *y* and press *enter* 
 ...
 ....
 
-. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance.
+. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance to the OSPP security baseline profile.
 Setting `ansible_python_interpreter` is a workaround for a known issue in the Ansible 2.7 binary installed on the lab machines.
 Make sure you run this on the *openscap.example.com* host:
 +
@@ -365,8 +358,7 @@ localhost                  : ok=458  changed=260  unreachable=0    failed=0
 ....
 
 . This command will take a while to finish.
-If you omit the `--check` parameter from the previous command, you will get a machine compliant with the provided rules.
-Please note that you won't be able to log again into the machine, if hardened, as one of the requirements prohibits login as root.
+If you omit the `--check` parameter from the previous command, you will get a machine compliant with the provided rules in the OSPP security baseline profile . Please note that you won't be able to log in again into the *openscap.example.com* machine after running the previous Ansible remediation command. This is because the machine is hardened with the Ansible remediation playbook for the OSPP security baseline profile and one of the requirements of the OSPP security baseline profile prohibits login as root.
 
 <<top>>
 
