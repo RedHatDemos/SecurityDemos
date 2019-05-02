@@ -165,13 +165,9 @@ The main thing we're pointing out here is the fact that this is a really scary e
 +
 image:images/mysql3.png[300,300]
 
-[[task3]]
-TASK3:
-------
-
-*ABOUT THIS STEP:* This lab is unrelated to the previous exploit. The
-previous steps were there to verify that the database was insecure and
-that one method of exploiting it was to change a login user for MySQL,
+=== Lab 6.3 (Left off : need to clean up documentation starting here)
+This lab exercise is unrelated to the previous exploit. The
+previous lab exercises were there to verify that the database was insecure and that one method of exploiting it was to change a login user for MySQL,
 specifically the login for the WordPress application. Here, we'll be
 showing a second, equally scary dangerous situation that the exploitable
 user has caused. We'll do a SQL injection here to overwrite the contents
