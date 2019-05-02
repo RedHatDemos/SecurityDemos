@@ -138,6 +138,7 @@ Given that, we can search for the directory. Make sure that you are in the repos
 +
 ----
 $ find linux_os -name accounts_tmout
+linux_os/guide/system/accounts/accounts-session/accounts_tmout
 ----
 +
 This command searches for file or directory named exactly `accounts_tmout` in the directory subtree below the linux_os directory.

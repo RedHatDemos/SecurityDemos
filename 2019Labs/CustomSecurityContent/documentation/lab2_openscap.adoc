@@ -140,7 +140,7 @@ $ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/
 
 [NOTE]
 ====
-You can also generate the HTML report separately by executing
+You can also generate the HTML report later by executing
 ----
 $ oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
