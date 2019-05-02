@@ -19,11 +19,9 @@
 
   - name: Install Packages
     yum:
-      name: "{{ item }}"
+      name: "{{ package_name }}"
       state: latest
     register: yum_output
-    with_items:
-      - "{{ package_name }}"
 
   - name: Log yum_output
     debug:
