@@ -165,37 +165,41 @@ The main thing we're pointing out here is the fact that this is a really scary e
 +
 image:images/mysql3.png[300,300]
 
-=== Lab 6.3 (Left off : need to clean up documentation starting here)
-This lab exercise is unrelated to the previous exploit. The
-previous lab exercises were there to verify that the database was insecure and that one method of exploiting it was to change a login user for MySQL,
-specifically the login for the WordPress application. Here, we'll be
-showing a second, equally scary dangerous situation that the exploitable
-user has caused. We'll do a SQL injection here to overwrite the contents
-of the website. All without even needing a password!!
+=== Lab 6.3 Exploiting the database vulnerability by importing a database payload into the website's database.
 
-*PREAMBLE:* First of all, what we are about to do here is a very very
-not nice thing. But it's important to see that this is the type of event
-that happens all the time when people miss even one simple security
-vulnerability. Do not try this at home... or at the library... or from a
-computer anywhere. Always be nice and polite online. But for just one
-moment, we're going to do something rotten in this lab.
+The previous lab exercises verified that the database was insecure and that one method of exploiting it is to change a login user for MySQL,
+specifically the login for the WordPress application.
 
-*MISSION:* Exploit the database vulnerability by importing a database
-payload into the site's database.
+In this lab exercise, we are going to take advantage of the fact that the database is insecure and do a SQL injection to overwrite the contents of the website without needing a password.
 
-*STEPS:* On your jumpbox "lampjump" at  192.168.0.102, you'll find a file called:
+. Let's SSH into our *lampjump* system using its IP address (*192.168.0.102*). Remember that this system is our "jump box", representing a machine that a hacker would use to connect and run exploit scripts to hack your new web site. In order to SSH into our *lampjump* system, we have to first SSH into our lab's workstation box.
 
-`/home/lab-user/cat_meme_takeover.sh`
+. If not already there, go to the Terminal window on your laptop and log in to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your unique lab provided GUID*. If needed, use the password *r3dh4t1!* From the workstation bastion host, log into your *lampjump* system as *lab-user* using its IP address (*192.168.0.102*). Note that the hostname of our *lampjump* system is rhel3.example.com.
++
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ ssh lab-user@192.168.0.102
+[lab-user@rhel3 ~]$
+----
+. Now that we are in our *lampjump* system, let's take a look at our exploit shell script in the home directory of lab-user. This script is set up to run an import command to a file located in that directory. A typical hacker might have a similar file to this,
+pre-designed to exploit a site once they found the vulnerability. Note the use of cat (versus vi or nano) to view our exploit script for double the meow fun.
++
+----
+[lab-user@rhel3 ~]$ cat /home/lab-user/cat_meme_takeover.sh | less
+----
++
+When you reach the bottom of the cat_meme_takeover.sh exploit script type *q* to exit.
 
-* This script is set up to run an import command to a file located in
-that directory. A typical hacker might have a similar file to this,
-pre-designed to exploit a site once they found the vulnerability. When
-we run this script,
-* Run this script to exploit the DB.
-* You will see this after it runs:
+. Now, let's go ahead and run this script to exploit the database and fill our web site with cat memes!
++
+----
+[lab-user@rhel3 ~]$ /home/lab-user/cat_meme_takeover.sh
+----
+
+. You will see this after the cat_meme_takeover.sh script finishes running:
 
 ```
-[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+[lab-user@rhel3 ~]$ /home/lab-user/cat_meme_takeover.sh
 
       HACKED!!!  YOU ARE A BAD KITTY!
 
@@ -214,10 +218,11 @@ we run this script,
 
 
 ```
+Note that the GUID referenced in the output above will be your lab provided GUID.
 
-Now, refresh the page at: http://rhel1-[GUID].rhpds.opentlc.com/ You should see a new
-look to the website, informing you that the site has been hacked by cat
-memes.
+. Now, refresh the page at *http://rhel1-GUID.rhpds.opentlc.com*, replacing GUID with your lab provided GUID.
+
+. You should see a new look to the website, informing you that the site has been hacked by cat memes.
 
 [[task4]]
 TASK4:
