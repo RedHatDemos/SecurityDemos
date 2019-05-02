@@ -198,7 +198,7 @@ When you reach the bottom of the cat_meme_takeover.sh exploit script type *q* to
 
 . You will see this after the cat_meme_takeover.sh script finishes running:
 
-```
++
 [lab-user@rhel3 ~]$ /home/lab-user/cat_meme_takeover.sh
 
       HACKED!!!  YOU ARE A BAD KITTY!
@@ -216,9 +216,8 @@ When you reach the bottom of the cat_meme_takeover.sh exploit script type *q* to
   http://rhel1-[GUID].rhpds.opentlc.com/
  to see what the evil cat hacker clan did!
 
-
-```
-Note that the GUID referenced in the output above will be your lab provided GUID.
++
+. Note that the GUID referenced in the output above will be your lab provided GUID.
 
 . Now, refresh the page at *http://rhel1-GUID.rhpds.opentlc.com*, replacing GUID with your lab provided GUID.
 
