@@ -15,7 +15,7 @@ liberal permissions to make testing easier during development. When
 these changes make their way into production, a site is left vulnerable
 to attackers who are looking for these loopholes.
 
-=== Lab 6.1 Introducing the lab exercise setup
+=== Lab 6.0 Introducing the lab exercise setup
 
 In this lab exercise, we will demonstrate this vulnerability with some simple commands. After using a Red Hat Ansible playbook to install a base WordPress web site, you will run a small shell script from a specified system, which will take over a
 public facing site with cat memes. We will then use an Ansible playbook to search and remediate common vulnerabilities (in this case,
@@ -250,62 +250,57 @@ vulnerable due to that username which can be exploited. We will fix this issue i
 +
 image:images/cleanweb.png[1000,1000]
 
-[[task5]]
-TASK5:
-------
+=== Lab 6.5 Hardening the WordPress Database
 
-*MISSION:* Let's lock down the database so this won't work again.
+In this lab exercise, we will lock down the database so it can't get exploited again by cat memes or anything else.
 
-*STEPS:* Run the job template again "LAMP / WordPress Secure" this time,
-from Ansible Tower, to run the hardening playbook.
+. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace GUID with your lab provided GUID!
 
-* This removes the open vulnerability which allows you to connect to the
-database and exploit it with cat memes.
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LAMP / WordPress Secure*.  This will harden  our WordPress LAMP database by removing the security issue which allows you to connect to the database as an unauthorized user and exploit it with cat memes.
 
-Now, refresh the page at: http://rhel1-[GUID].rhpds.opentlc.com/ to confirm everything
-still works
+. Now, refresh the page at: *http://rhel1-GUID.rhpds.opentlc.com* (replacing GUID with your lab provided GUID). Notice that our web site is still as expected.
++
+image:images/cleanweb.png[1000,1000]
 
-[[task6]]
-TASK6:
-------
+=== Lab 6.6 Confirming that the WordPress database has been hardened and cannot be accessed insecurely
 
-*MISSION:* Confirm we can not access the database insecurely (same steps
-as step 2).
+By running the  *LAMP / WordPress Secure* job template in the previous step, we have locked down accounts with blank passwords and open access. Specifically, by running this job template, we successfully removed our MySQL user named *insecure* with no password set for his account. This user's access was set wide open before running this job template. However, this wide open access has been revoked by running our latest hardening playbook that is called by our *LAMP / WordPress Secure* job template.
 
-*PREAMBLE:* We have removed our user named "insecure" with no password
-for his account. His access was set wide open, but has been revoked with
-our latest hardening playbook. Run this command to confirm you can no
-longer connect. This is the exact command from TASK2 where we
-successfully connected
+. Now, let's connect to our database again and attempt to run the exploit. Then we will attempt to run our SQL injection exploit script again, in a second attempt to take the website over with cat memes.
 
-*STEPS:* We will manually connect to the database from the workstation,
-as well as attempt to run the exploit again. Then we will attempt to run
-our SQL injection script again, in a second attempt to take the website
-over with cat memes.
+. Let's SSH into our *lampjump* system using its IP address (*192.168.0.102*). Remember that this system is our "jump box", representing a machine that a hacker would use to connect and run exploit scripts to hack your new web site. In order to SSH into our *lampjump* system, we have to first SSH into our lab's workstation box.
 
-* From the command line of your desktop VM, run:
-`mysql WordPress -h 192.168.0.101 -u insecure` -- You should not be
-able to connect. "Access Denied!"
+. If not already there, go to the Terminal window on your laptop and log in to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your unique lab provided GUID*. If needed, use the password *r3dh4t1!* From the workstation bastion host, log into your *lampjump* system as *lab-user* using its IP address (*192.168.0.102*). Note that the hostname of our *lampjump* system is rhel3.example.com.
++
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ ssh lab-user@192.168.0.102
+[lab-user@rhel3 ~]$
+----
+. Next, from our *lampjump* system, connect to the database using this command:
++
+----
+[lab-user@rhel3 ~]$ mysql WordPress -h 192.168.0.101 -u insecure
+----
 
-```[lab-user@rhel3 ~]$ mysql WordPress -h 192.168.0.101 -u insecure
+. You will no longer be able to connect and will see the following *Access Denied* message after trying to connect to the database.
+
++
+[source,txt]
+[lab-user@rhel3 ~]$ mysql WordPress -h 192.168.0.101 -u insecure
 ERROR 1045 (28000): Access denied for user
-'insecure'@'rhel3.example.com' (using password: NO) [lab-user@rhel3 ~]$
+'insecure'@'rhel3.example.com' (using password: NO)
+[lab-user@rhel3 ~]$
 
---------------------------------------------------------------------
+. Now, let's go ahead and run the cat meme exploit shell script again to exploit the database and fill our web site with cat memes!
++
+----
+[lab-user@rhel3 ~]$ /home/lab-user/cat_meme_takeover.sh
+----
 
-- Back on the jump host, run the same script from the earlier called
-
- `/home/lab-user/cat_meme_takeover.sh`
-
-- This time, it should fail with a different message like this:
---------------------------------------------------------------------
-
-[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
-
-
-```
-
-[lab-user@workstation-repl ~]$ /home/lab-user/cat_meme_takeover.sh
+. This time, it should fail with a different message denying you access. Success! Access has been DENIED!
++
+----
 
         FAILED!  You do not can haz
         permissionz to the database
@@ -321,23 +316,8 @@ ERROR 1045 (28000): Access denied for user
 
         FAILED!  You do not can haz
         permissionz to the database
-```
+----
 
-Access DENIED!!!!
-
-
-[[summary]]
-SUMMARY
--------
-
-The default WordPress application install left us vulnerable to a SQL
-attack. The database was not secure in the way it was allowing us to
-connect without a password from a remote machine. This is not an
-uncommon situation. In order to demonstrate and experience the
-vulnerability,
-
-The playbook we ran to harden the database server targets and removes
-accounts set up to allow both: - remote access - no password
-
+. In summary, the default WordPress application install left us vulnerable to a SQL injection attack. The database was not secure since it was allowing us to connect without a password from a remote machine. This is not an uncommon situation. Our hardening Ansible playbook allowed us to harden the database server targets and remove accounts with open access in an automation fashion. 
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7.adoc[Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
