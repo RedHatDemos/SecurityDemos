@@ -220,7 +220,7 @@ Please reboot the system for the setting to take effect.
 [root@crypto ~]# wget -q -O - https://crypto2-ed25519.example.com:3443
 WORKS!
 ----
-NOTE: This step works even without a reboot because the wget is a command line binary and not a long term running process. Reboot is recommended to make sure all resident services are restarted and re-read their configureation (including the libraries they instantiate).
+NOTE: This step works even without a reboot because the wget is a command line binary and not a long term running process. Reboot is recommended to make sure all resident services are restarted and re-read their configuration (including the libraries they instantiate).
 
 <<top>>
 
