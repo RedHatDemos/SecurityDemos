@@ -66,7 +66,7 @@ This lab exercise is configured to run against three servers in a group called *
 
 In this lab exercise, you will install the LAMP stack WordPress web application, in an automated fashion, using Red Hat Ansible Automation. Specifically, you will be doing this install using an Ansible role.
 
-. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace GUID with your lab provided GUID!
 
 . Navigate to *Templates* and click the *rocket ship* next to the job template named *LAMP / WordPress Deploy*.  This will install our WordPress LAMP Stack web application.
 +
@@ -223,25 +223,32 @@ When you reach the bottom of the cat_meme_takeover.sh exploit script type *q* to
 
 . You should see a new look to the website, informing you that the site has been hacked by cat memes.
 
-=== Lab 6.4 Automated Re-Install of the WordPress LAMP Stack Web Application to reset the servers to a stable baseline (left off)
+=== Lab 6.4 Automated Re-Install of the WordPress LAMP Stack Web Application to reset the servers to a stable baseline
+In this lab exercise, after discovering all the fun cat memes and realizing that our web site has been compromised, we want to quickly reset our servers and web site to a stable baseline. To do this, we will re-install our WordPress LAMP Stack Web Application in an automation fashion using Red Hat Ansible Automation.
 
-*MISSION:* Oh no! A script kitty hacked our site! Let's re-install the
-original WordPress role to reset the servers to a stable baseline.
+. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace GUID with your lab provided GUID!
 
-*STEPS:* Run the job template again "LAMP / WordPress Deploy" from Ansible
-Tower, to install the web application for WordPress.
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *LAMP / WordPress Deploy*.  This will install our WordPress LAMP Stack web application again.
++
+image:images/templates.png[100,100]
+image:images/webappinstall.png[1000,1000]
 
-* This reinstalls the Apache server rhel1-[GUID].rhpds.opentlc.com and the DB server
-on the DB server
-* Once this role re-runs in this tasks, we are 100% back to our web site
-baseline, exactly where we were before the cat hackers took over the
-site content. The site is back to normal, but our database is still
-vulnerable due to that username which can be exploited.
 
-To confirm that our site is back to normal, refresh the page at:
-http://rhel1-[GUID].rhpds.opentlc.com/
+. Take a look at the Red Hat Ansible Tower log as this *LAMP / WordPress Deploy* job runs. You will notice that the apache web server gets installed on *http://rhel1-GUID.rhpds.opentlc.com* and the database server gets installed on 192.168.0.101 (rhel2.example.com). Wait until this job completes successfully.
++
+image:images/wordpressdeploy.png[1000,1000]
 
-YAYY! We're no longer victims of a cat meme exploit!
+. Now that we re-installed our WordPress LAMP stack web application in an automated fashion with Red Hat Ansible Automation, we are 100% back to our web site baseline before the cat meow meow hackers took over our web site.
+
+. Our web site is back to normal, but our database is still
+vulnerable due to that username which can be exploited. We will fix this issue in the next lab exercise.
+
+. To confirm that our site is back to normal, refresh the page at:
+*http://rhel1-*GUID.rhpds.opentlc.com*. Don't forget to replace GUID with your lab provided GUID!
+
+. Notice that we are no longer victims of a cat meme exploit!
++
+image:images/cleanweb.png[1000,1000]
 
 [[task5]]
 TASK5:
