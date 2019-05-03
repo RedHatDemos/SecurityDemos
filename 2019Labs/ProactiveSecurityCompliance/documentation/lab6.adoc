@@ -126,9 +126,9 @@ Anyone with a bit of curiosity and malicious intent can directly access the data
 are allowed to log in to the WordPress server. Type the following two commands into your MySQL database prompt.
 +
 ----
-`select user_login,user_pass from wp_users;`
+select user_login,user_pass from wp_users;
 
-`select * from wp_usermeta WHERE meta_key = 'wp_capabilities';`
+select * from wp_usermeta WHERE meta_key = 'wp_capabilities';
 ----
 +
 image:images/mysql1.png[1000,1000]
