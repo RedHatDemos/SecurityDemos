@@ -215,7 +215,7 @@ Therefore, it is obvious now where the timeout duration comes from and how to ch
 
 . Modify the entry, and  put `10_min` there.
 Then, rebuild the content by executing `./build_product rhel8` in the project root, and wait for the result.
-It is worth noting that variables aren't continuous - the set of possible values that the variable can have are pre-defined in the file.
+It is important to note that variables aren't continuous - the set of possible values that the variable can have are pre-defined in the file.
 After the build finishes, refresh the HTML guide by either reloading it in the browser, or by reopening `build/guides/ssg-rhel8-guide-ospp.html`.
 The variable value should be updated to 600.
 
