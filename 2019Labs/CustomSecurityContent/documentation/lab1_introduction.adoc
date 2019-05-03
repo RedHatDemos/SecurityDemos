@@ -134,7 +134,7 @@ Rules definitions are written as YAML files, that are particularly great at stor
 All rules are defined by the respective `rule.yml` file, and the parent folder is the respective rule’s ID.
 ID of the rule in question is `accounts_tmout`.
 +
-Given that, we can search for the directory. Make sure that you are in the repository root, and execute:
+Given that, we can search for the directory. Make sure that you are in the project root, and execute:
 +
 ----
 $ find linux_os -name accounts_tmout
