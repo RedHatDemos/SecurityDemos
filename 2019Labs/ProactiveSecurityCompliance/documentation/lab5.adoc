@@ -447,11 +447,17 @@ image:images/lab5.3-new-template-created.png[3000,3000]
 +
 image:images/lab5.3-playbook_is_run.png[3000,3000]
 
-. Now navigate back to your Satellite UI at https://sat64-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Red Hat Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, since we resolved the kernel vulnerability that we created the Plan and playbook for.
+. Now navigate back to your Satellite UI at https://sat64-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, since we resolved the kernel vulnerability that we created the Plan and playbook for.
 +
 image:images/lab5.3-results_in_satellite.png[3000,3000]
 +
 NOTE: When the execution of the Ansible playbook is completed, the Red Hat Insights agent is also run as part of this Ansible playbook, so the latest state of the system is reporting into Red Hat Insights automatically.
+
+. Finally, navigate to *Insights -> Planner*. Notice here that under *Plans*, the number of Actions that are resolved are listed per plan.
++
+image:images/insightsplanner.png[300,300]
+image:images/planner.png[1000,1000]
+
 
 === Lab 5.4 [BONUS LAB] Automatically fix all the issues on client systems using Red Hat Ansible Tower
 
@@ -523,6 +529,11 @@ NOTE: There are some actions that will not have Ansible playbook generation capa
 . Now navigate back to your Satellite UI at https://sat64-GUID.rhpds.opentlc.com. From here, click on *Insights → Inventory* you will notice that *ic1.summit.example.com* and *ic4.summit.example.com* have less issues than before.
 +
 image:images/Lab5.4-updated.png[4000,4000]
+
+. Finally, navigate to *Insights -> Planner*. Notice here that under *Plans*, the number of Actions that are resolved are listed per plan.
++
+image:images/insightsplanner.png[300,300]
+image:images/planner.png[1000,1000]
 
 <<top>>
 
