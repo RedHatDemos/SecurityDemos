@@ -4,7 +4,7 @@
 == Goal of Lab
 The goal of this lab is to use Security Enhanced Linux (SELinux) to help mitigate attacks due to privilege escalation vulnerabilities in a three part exercise.
 
-* In the first part of this lab exercise, you will become a hacker and try to execute a real vulnerability on a given Red Hat Enterprise Linux 7 system and explore how SELinux can help to protect this system.
+* In the first part of this lab exercise, you will become a hacker and try to execute vulnerabilities on given Red Hat Enterprise Linux 7 and Fedora systems and explore how SELinux can help to protect these systems.
 * In the second part of this lab exercise, you will turn SELinux on for an environment of web servers in an automated fashion using Ansible.
 * In the last part of this lab exercise, you will configure SELinux according to a U.S. Department of Defense STIG security control policy rule.
 
@@ -463,10 +463,10 @@ In this section, we are going to test our pre-configured setup steps from before
 
 	[root@selinux1 selinux_scripts]# ssh root@selinux2 getenforce
 	Disabled
-	
+
     [root@selinux1 selinux_scripts]# ssh root@selinux3 getenforce
 	Disabled
-	
+
     [root@selinux1 selinux_scripts]# ssh root@selinux5 getenforce
 	Disabled
 
