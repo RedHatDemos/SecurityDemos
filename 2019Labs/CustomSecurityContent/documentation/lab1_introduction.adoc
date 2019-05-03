@@ -75,7 +75,7 @@ The `<product>` is lowercase form of the product, so you would run `./build_prod
 
 .Build of security content for RHEL 8 has finished in the terminal window.
 image::0-02-post_build.png[]
-
+{empty} +
 We will explore the built content in following sections.
 
 == Examine the guides
@@ -105,8 +105,7 @@ Press `Ctrl+F` or use the `Edit->Find in this page` menu item, and search for `s
 
 .Rule "Set Interactive Session Timeout" in the HTML guide
 image::session_timeout.png[]
-
-
+{empty} +
 Check out the rule's description just below the title:
 
 ----
@@ -299,7 +298,7 @@ Therefore, bring back the browser window with the guide opened, and see for your
 
 .Bash remediation snippet shown in the HTML guide
 image::0-03-remediation.png[]
-
+{empty} +
 We can try edit the remediation script.
 We will add a comment there that describes that the numerical value is number of seconds.
 We will check out the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file.
