@@ -9,7 +9,7 @@
 
 *Lucy Kerner*, Senior Principal Security Global Technical Evangelist and Strategist, Red Hat
 
-*Lukas Vrabec*, Senior Software Engineer - Security Controls, Red Hat
+*Lukas Vrabec*, Senior Software Engineer - RHEL Security, Red Hat
 
 *Simo Sorce*, Senior Principal Software Engineer - RHEL Security, Red Hat
 
@@ -23,15 +23,12 @@
 
 == Overview and Prerequisites:
 
-This lab will introduce you to the https://github.com/ComplianceAsCode/content[ComplianceAsCode] project, the ultimate tool that composes content for automated security tools.
-The project contains over one thousand of rules - elements of security policies.
-Rules have descriptions, justification and reference to existing security standards.
-They also have OVAL checks, Bash remediations and Ansible content to a varying degree.
+This lab will introduce you to the https://github.com/ComplianceAsCode/content[ComplianceAsCode] project, the ultimate tool that creates content for automated security tools.
+The project contains over one thousand rules - elements of security policies. Rules have descriptions, justifications, and reference to existing security standards. They also have Open Vulnerability and Assessment Language (OVAL) checks, bash remediations and Ansible content to a varying degree.
 
-In a series of scenarios, you will go through exercises as if you are a new system administrator who just joined a company who has not been historically good about practicing security.
-As you have interest in improving the situation, you want to introduce a culture of security supported by automated evaluation and fast and  efficient problem resolution.
-Luckily enough, the company uses RHEL, so in order to reach that goal, you are free to leverage the `ComplianceAsCode` project.
-`ComplianceAsCode` allows you to produce a tailor-made security policy for your company with minimal effort, and the OpenSCAP ecosystem will do the scanning and suport for problem resolution.
+`ComplianceAsCode` enables automated evaluation and fast and  efficient remediations against security controls for compliance with regulatory or custom profiles and for automated configuration compliance. It allows you to produce a tailor-made security policy for your company with minimal effort, and the OpenSCAP ecosystem can do the scanning and support for problem resolution. Specifically, OpenSCAP is a National Institute of Standards and Technology (NIST) certified scanner designed to perform configuration and vulnerability scans on a system, to validate security compliance content, and to generate reports and guides based on these scans and evaluations.
+
+Red Hat Enterprise Linux provides tools that allow for fully automated compliance audit. These tools are based on `ComplianceAsCode` and the Security Content Automation Protocol (SCAP) standard and are designed for automated tailoring of compliance policies.
 
 This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to take advantage of the built-in security technologies in Red Hat Enterprise Linux.
 
@@ -40,12 +37,12 @@ The prerequisite for this lab include basic Linux skills gained from Red Hat Cer
 
 == Attendees, during this session, will learn how to:
 
-* Use the OpenSCAP scanner to scan systems and suggest or perform security fixes.
-* Navigate among existing rules, how to modify them and how to take advantage of parametrization.
-* Create new security profiles, and populate them with existing rules.
-* Create new rules from scratch, and add them to security profiles.
-* Write OVAL checks with minimal effort, being confident about their correctness.
-* Create pure Ansible content - scan and fix your system using pure Ansible.
+* Use the OpenSCAP scanner to scan systems and perform security fixes as needed.
+* Navigate among existing rules and learn how to modify them and  take advantage of parametrization.
+* Create new security profiles and populate them with existing rules.
+* Create new rules from scratch and add them to security profiles.
+* Write OVAL checks with minimal effort and ensure correctness.
+* Create Ansible content for scanning and remediations of systems.
 
 
 == Lab Environment:

@@ -2,37 +2,18 @@
 
 === Accessing your dedicated lab environment using your provided GUID
 
-. Go https://www.opentlc.com/gg/gg.cgi?profile=generic_tester[here^] in order to obtain your lab GUID.
-This GUID will be used to access your unique lab environment.
-. Find the lab `T9A495 - Creating customized security policy content to automate security compliance`.
+. On your Red Hat Summit provided laptop, notice that the https://www.opentlc.com/gg/gg.cgi?profile=generic_summit[*Lab GUID Assignment page*^] is already loaded onto your Firefox web browser.
+From this page, you will be assigned your unique GUID, which you will use to access your unique lab environment and systems.
+
+. Select the proper *Lab Code* from the drop down list. Find the lab `T9A495 - Creating customized security policy content to automate security compliance`.
 The activation key is *security*.
-. The next page will present you with
-- your GUID string,
-- link to the lab instructions, and
-- the last item of the bullet list - link to *power control and consoles*
-. On the next page click the `here` link in the last item of the bullet list to go to the "environment's power control and consoles" page.
-You should get to a new page - a list of VMs.
-There is only one VM, so click the only `CONSOLE` link on the page.
-. You are now redirected to a remote desktop interface.
-Log in as `lab-user` using the password `r3dh4t1!`.
-You are all set!
 
+. The resulting *Lab Information page* will display your lab's GUID and other useful information about your lab environment. Take note of your assigned GUID. You will use this GUID to access your lab's environment and systems.  Your unique GUID will also be embedded in your lab environment's host names. From this *Lab Information page*, you will also be able to access your unique lab environment's power control and consoles. Go to the last bullet point and click on *here* to access the environment's power control and consoles.
++
+image:images/labinfopage.png[4000,4000]
 
-=== Conventions
-
-Shell session listings obey the following convention:
-
-----
-$ pwd
-/home/lab-user
-$ cat /etc/passwd
-...
-lab-user:x:1000:1000:Lab User:/home/lab-user:/bin/bash
-----
-
-- Commands, in this example `pwd` and `cat /etc/passwd`, are prefixed by the dollar character.
-- Lines that follow are the command's output, unless they begin with the dollar prefix, in which case they are again commands.
-- Ellipsis may be used to indicate that there are output lines, but as they are of no interest, they are omitted.
-
+. Notice that one workstation VM is shown on the power control and consoles page. This is a Red Hat Enterprise Linux 8 system with GUI and will be the machine that we will use throughout all the lab exercises in this lab. Click the *CONSOLE* button. Log in as Lab User with password *r3dh4t1!*.
++
+image:images/vmconsole.png[200,200]
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
