@@ -2,11 +2,8 @@
 
 === Goal of Lab 7
 
-<<<<<<< HEAD
 The goal of this lab is to learn how to automate and build security into the application and build a _secure software factory_ that orchestrates a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
-=======
-The goal of this lab is to learn how to orchestrate a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance.
->>>>>>> 099004161aad8475ce2ecc2d35b2fed86c98a51e
+
 
 === Introduction
 
@@ -14,17 +11,14 @@ The benefits of DevOps and Continuous Integration / Continuous Delivery (CI/CD) 
 
 This lab exercise will focus on some of the technologies used to implement automated security compliance controls within a typical CI/CD application pipeline.
 
-<<<<<<< HEAD
-A number of tools have been installed and pre-configured to support the DevSecOps pipeline. Most of these tools are running containerized within the Red Hat OpenShift cluster. The following sections below describe the tools we will be using in this lab exercise.
-=======
-A number of tools have been installed and configured to support the devsecops pipeline. Most of these tools are running containerized within the OpenShift cluster.  Here is the pipeline we will be stepping through during our lab:
+
+A number of tools have been installed and pre-configured to support the DevSecOps pipeline. Most of these tools are running containerized within the Red Hat OpenShift cluster. Here is the pipeline we will be stepping through during our lab:
 
 image:images/lab7.3-pipeline.png[]
 
 
 The following sections describe the tools we will be using in this lab.
 
->>>>>>> 099004161aad8475ce2ecc2d35b2fed86c98a51e
 
 ==== Gogs
 Gogs is the Go Git Service- a github-like git server written in the Go programming language.
