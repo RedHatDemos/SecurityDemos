@@ -45,12 +45,11 @@ The build itself is based on Python, the `oscap` tool, and XSLT transformations.
 
 To build the content, take the following steps:
 
-. First, go to the Terminal window of your laptop. SSH into the workstation bastion host as *lab-user*. Then, as *lab-user*, ssh into *workstation.example.com*. This is the VM that we will be doing all of our lab exercises from. Don't forget to replace *GUID* with your lab provided *GUID*!
+. First, go to the Terminal window of your laptop. SSH into the workstation bastion host as *lab-user*.  This is the VM that we will be doing all of our lab exercises from. Don't forget to replace *GUID* with your lab provided *GUID*!
 +
 [source, text]
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$ ssh lab-user@workstation.example.com
-[lab-user@workstation ~]$
+[lab-user@workstation-GUID ~]$
 
 . Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction`.
 +
