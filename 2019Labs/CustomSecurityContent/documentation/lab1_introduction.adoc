@@ -1,73 +1,68 @@
-= Lab exercise 1: Say Hello to ComplianceAsCode
+= Lab 1: Say Hello to ComplianceAsCode
 
 :experimental:
 :imagesdir: images
 
 == Introduction
 
-In this lab, we will get familiar with the ComplianceAsCode project.
-The purpose of this project is to help people creating security policy content for various platforms.
-ComplianceAsCode project enables us to efficiently develop and share security content.
+In this lab, we will get familiar with the `ComplianceAsCode` project. The purpose of this project is to help users create security policy content for various platforms. The `ComplianceAsCode` project enables users to efficiently develop and share security content.
 
-Using the powerful build system you generate outputs in various formats such as Ansible Playbooks or SCAP datastreams
+Using the powerful build system, you can generate output in various formats such as Ansible Playbooks or SCAP datastreams
 that you can use to automate security auditing and hardening.
-The project contains many useful rules and checks that form various security policies and also allows to easily add new rules and checks.
+The project contains many useful rules and checks that form various security policies and enables users to easily add new rules and checks.
 
-We will work with the project source repository, which can be retrieved from on https://github.com/ComplianceAsCode/content.
+We will work with the project source repository: https://github.com/ComplianceAsCode/content.
 
-In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode data is shipped as `scap-security-guide` RPM package.
+In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode data is shipped as the `scap-security-guide` RPM package.
 
-== What you will learn
+== Goal of Lab 1:
 
-* ... the project overview, so you will get a clearer idea what is where, and what can you use the project for.
-* ... how to build the content from the source, and you will go through what gets built.
-* ... how to find where to find source of a particular part of the built artifact.
-* ... how to parametrize rules that use variables.
-* ... where to find additional rule content s.a. checks and remediations.
+* Learn about the `ComplianceAsCode` project to understand what is where and what can you use the project for.
+* Learn how to build the content from the source and go through what gets built.
+* Understand how to find the source of a particular part of the built artifact.
+* Learn how to parametrize rules that use variables.
+* Learn where to find additional rule content, such as checks and remediations.
 
 
-== What we have done for you
+== Pre-Configured and Already Set Up for you:
 
-* We have cloned the ComplianceAsCode repository to the `content` directory.
-* We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
+* The `ComplianceAsCode` repository has already been cloned to the `content` directory.
+* The following dependencies that are required for the `ComplianceAsCode` content build have already been installed using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
-* We have edited the project's source code and introduced some modifications, so there are things to do.
+* For the purposes of the lab exercises, the project's source code has been edited.
 
-== Before you start
+=== Lab 1.1 Building the content
 
-* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
-* Make sure that you are in the project root when you start - run
-+
-----
-$ cd /home/lab-user/labs/lab1_introduction
-----
-+
-in the terminal.
+The ComplianceAsCode project consists of human readable files that are compiled into standard-compliant files that are difficult to read and edit directly.
 
-* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
-* Open the file explorer and also navigate to the project root.
-* Finally, open the Firefox browser.
-
-.Opening a new terminal window in Red Hat Enterprise Linux 8.
-image::0-01-setup.png[]
-
-== Build the content
-
-The ComplianceAsCode project consists of human-friendly files, that are compiled into standard-compliant files that are difficult to read and to edit directly.
-Therefore, let's see how the output looks, let's build the content!
+Now let's go ahead and start building the content!
 
 The https://github.com/ComplianceAsCode/content[ComplianceAsCode/content] project uses https://cmake.org/[CMake] build system.
 The build itself is based on Python, the `oscap` tool, and XSLT transformations.
 
 To build the content, take the following steps:
 
-. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction`.
-. Run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
+. First, go to the Terminal window of your laptop. SSH into the workstation bastion host as *lab-user*. Then, as *lab-user*, ssh into *workstation.example.com*. This is the VM that we will be doing all of our lab exercises from. Don't forget to replace *GUID* with your lab provided *GUID*!
 +
-It is possible to build content also other for other products.
+[source, text]
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ ssh lab-user@workstation.example.com
+[lab-user@workstation ~]$
+
+. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction`.
++
+[source, text]
+[lab-user@workstation ~]$ cd /home/lab-user/labs/lab1_introduction
+. From this directory, run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
++
+[source, text]
+[lab-user@workstation ~]$ cd /home/lab-user/labs/lab1_introduction
+[lab-user@workstation ~]$ ./build_product rhel8
++
+It is possible to also build content for other products.
 A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, eg. Firefox, Java, and so on.
 +
 In general, you can run `./build_product <product>` to build only the content for a product you are interested in.
@@ -78,20 +73,23 @@ image::0-02-post_build.png[]
 {empty} +
 We will explore the built content in following sections.
 
-== Examine the guides
+=== Lab 1.2 Viewing the provided HTML guides for the ComplianceAsCode project
 
-What people appreciate about the project are HTML guides that are a great resource for those interested in of what rules a policy consists of.
+The `ComplianceAsCode` project provides HTML guides that are a great resource for those interested in what rules a policy consists of.
 The HTML guides are located in the `build/guides` subdirectory.
 In the `ComplianceAsCode` project, policies are referred to as security profiles.
-Guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the guide for the RHEL 8 OSPP profile has the `ssg-rhel8-guide-ospp.html` form.
+The HTML guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the HTML guide for the RHEL 8 OSPP profile has the `ssg-rhel8-guide-ospp.html` form.
 
-To open the HTML guide in a web browser,  execute the following command in the terminal:
+. Now, let's take a look at one of the provided HTML guides in a web browser. Go back to the console of your lab VM by going to the tab that you have opened of the lab environment's power control and consoles page. If you need to log in again as the *Lab User*, the password is *r3dh4t1!*.
++
+image::vmconsole.png[200,200]
 
-----
+. To open the HTML guide in a web browser,  execute the following command in the terminal:
++
+[source,text]
 $ firefox /home/lab-user/labs/lab1_introduction/build/guides/ssg-rhel8-guide-ospp.html
-----
 
-Rules are organized in a system of hierarchical groups.
+. Rules are organized in a system of hierarchical groups.
 
 .HTML guide displayed in a Firefox window
 image::html_guide.png[]
@@ -317,7 +315,7 @@ if grep --silent ^TMOUT /etc/profile ; then
 else
         echo -e "\n# Set TMOUT to $var_accounts_tmout per security requirements" >> /etc/profile
         echo "TMOUT=$var_accounts_tmout" >> /etc/profile
-fi  
+fi
 ----
 
 Don't forget to save the change after you are done with it.
