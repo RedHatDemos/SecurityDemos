@@ -2,7 +2,7 @@
 
 === Goal of Lab 7
 
-The goal of this lab is to learn how to orchestrate a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
+The goal of this lab is to learn how to orchestrate a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance.
 
 === Introduction
 
@@ -208,7 +208,7 @@ image:images/lab7.4-owasp-zap.png[]
 +
 image:images/lab7.4-sonarqube-projects.png[]
 +
-. Find the project prefixed with your userid. Note 3 vulnerabilities were found and that the unit test code coverage has been recorded. SonarQube also provides code metrics on items including unit test coverage, potential bugs and code smells. Click the Project prefixed with your userid and determine where the vulnerabilities are in the source code.
+. Find the project prefixed with your userid. Note 3 vulnerabilities were found and that the unit test code coverage has been recorded. SonarQube also provides code metrics on items including potential bugs and code smells. Click the Project prefixed with your userid and determine where the vulnerabilities are in the source code.
 +
 image:images/lab7.4-sonarqube-project-link.png[]
 . Navigate to the nexus url http://nexus-ocp-workshop.apps.{GUID}.summit.opentlc.com, click *browse* then *maven-snapshots* 
