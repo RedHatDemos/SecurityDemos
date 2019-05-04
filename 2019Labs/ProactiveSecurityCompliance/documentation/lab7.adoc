@@ -2,20 +2,20 @@
 
 === Goal of Lab 7
 
-The goal of this lab is to learn how to orchestrate a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
+The goal of this lab is to learn how to automate and build security into the application and build a _secure software factory_ that orchestrates a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
 
 === Introduction
 
-The benefits of DevOps and Continuous Integration / Continuous Delivery (CI/CD) have been demonstrated with great success over the years. Security was initially treated as a second class citizen in many cases - left until the end usually to much detriment. With the advent of DevSecOps security is put front and center - it is addressed in terms of people, processes and technology.
+The benefits of DevOps and Continuous Integration / Continuous Delivery (CI/CD) have been demonstrated with great success over the years. Security was initially treated as a second class citizen in many cases - left until the end usually to much detriment. With the advent of DevSecOps, security is put front and center - it is addressed in terms of people, processes and technology. Security tools are integrated right into the build process and you could easily break the build if security requirements are not met with the security gates that you build into your CI/CD pipeline.
 
-This lab will focus on some of the technologies used to implement automated security compliance controls within a typical CI/CD pipeline.  
+This lab exercise will focus on some of the technologies used to implement automated security compliance controls within a typical CI/CD application pipeline.
 
-A number of tools have been installed and configured to support the devsecops pipeline. Most of these tools are running containerized within the OpenShift cluster. The following sections describe the tools we will be using in this lab.
+A number of tools have been installed and pre-configured to support the DevSecOps pipeline. Most of these tools are running containerized within the Red Hat OpenShift cluster. The following sections below describe the tools we will be using in this lab exercise.
 
 ==== Gogs
 Gogs is the Go Git Service- a github-like git server written in the Go programming language.
 
-_The goal of this project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, Mac OS X, Windows and ARM._
+_The goal of the Gogs open source project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, Mac OS X, Windows and ARM._
 
 Gogs is great ligtweight git server for use in lab environments such as this. Most enterprise projects will use more fully-featured git repositories such as GitHub Enterprise, Gitlab, Atlassian BitBucket, etc.
 
@@ -45,20 +45,23 @@ Red Hat Quay is a private container registry that stores, builds, and deploys co
 ==== OWASP Zed Attack Proxy (ZAP)
 _The OWASP Zed Attack Proxy (ZAP) is one of the world’s most popular free security tools and is actively maintained by hundreds of international volunteers. It can help you automatically find security vulnerabilities in your web applications while you are developing and testing your applications. Its also a great tool for experienced pentesters to use for manual security testing._
 
-In our pipeline, we will stand up an instance of our web application then point OWASP ZAP to that instance so that it can perform a baseline security scan. 
+In our pipeline, we will stand up an instance of our web application then point OWASP ZAP to that instance so that it can perform a baseline security scan.
 
-=== Lab 7.1 About the sample application
+=== Sample application used in this lab exercise
 
-For the purposes of this lab we will be examining a simple, all-in-one https://spring.io/projects/spring-boot[spring boot] application. The application presents a simple e-commerce web user interface, which is backed by a self-contained restful API.
+For the purposes of this lab, we will be examining a simple, all-in-one https://spring.io/projects/spring-boot[spring boot] application. The application presents a simple e-commerce web user interface, which is backed by a self-contained restful API.
 
 image:images/lab7-ecommerce-webapp.png[]
 
-=== Lab 7.2 Logging into the environment
+=== Lab 7.1 Logging into the environment
 
-After following Lab 0 and choosing *TC9818 -AD - Implementing proactive security and compliance automation and DevSecOps* from the drop down, you would have received your user id and GUID.
-Log in to each of the tools with the credentials shown below. Replace *{GUID}* with your lab cluster guid and *{USERID}* with your user id - e.g., *user1* 
+. After following Lab 0 and choosing *TC9818 -AD - Implementing proactive security and compliance automation and DevSecOps* from the drop down, you will be presented with your user id and GUID.
++
+image:images/gg-ad2.png[2000,2000]
 
-* OpenShift console - https://master.{GUID}.summit.opentlc.com
+. Log in to each of the tools that we previously mentioned  with the credentials shown below. Replace *{GUID}* with your provided lab cluster GUID and replace *{USERID}* with your provided user id - e.g., *user1* . Both the lab cluster GUID and USERID can be found on the Lab Information page where you got your assigned GUID and USERID. (see previous step for more details)
+
+* Red Hat OpenShift console - https://master.{GUID}.summit.opentlc.com
 +
 *login:* {USERID}
 +
@@ -74,6 +77,7 @@ image:images/lab7.2-openshift.png[]
 +
 image:images/lab7.2-gogs.png[]
 * Jenkins - https://jenkins-{USERID}.apps.{GUID}.summit.opentlc.com
+(Click on Log In with OpenShift)
 +
 **login:** {USERID}
 +
@@ -179,13 +183,13 @@ image:images/lab7.4-build-with-params.png[]
 image:images/lab7.4-jenkins-select-build.png[]
 +
 . Click the *Console Output* link to monitor the build progress
-+ 
++
 image:images/lab7.4-jenkins-output.png[]
 +
 . Once the build has completed successfully (and is prompting you to proceed or abort), click the *user#/user#-ecommerce-pipeline* link at the top of the display. We will inspect the security scan artifacts before allowing the pipeline to promote our code into the staging project. *Do not press either of the Proceed or Abort links at this time.*
 +
 image:images/lab7.4-jenkins-build-complete.png[]
-+ 
++
 . Navigate to each of the reports generated by the build on the left hand menu:
 +
 image:images/lab7.4-jenkins-report-links.png[]
@@ -211,7 +215,7 @@ image:images/lab7.4-sonarqube-projects.png[]
 . Find the project prefixed with your userid. Note 3 vulnerabilities were found and that the unit test code coverage has been recorded. SonarQube also provides code metrics on items including unit test coverage, potential bugs and code smells. Click the Project prefixed with your userid and determine where the vulnerabilities are in the source code.
 +
 image:images/lab7.4-sonarqube-project-link.png[]
-. Navigate to the nexus url http://nexus-ocp-workshop.apps.{GUID}.summit.opentlc.com, click *browse* then *maven-snapshots* 
+. Navigate to the nexus url http://nexus-ocp-workshop.apps.{GUID}.summit.opentlc.com, click *browse* then *maven-snapshots*
 +
 image:images/lab7.4-nexus-snapshots.png[]
 +
@@ -220,11 +224,11 @@ image:images/lab7.4-nexus-snapshots.png[]
 image:images/lab7.4-nexus-jar.png[]
 . Navigate to the quay url http://quayecosystem-quay-quay-enterprise.apps.{GUID}.summit.opentlc.com, login as *admin* with the password *admin123* if you haven't already
 +
-. Navigate to the image tagged with your userid by clicking the *ecommerce* repository 
+. Navigate to the image tagged with your userid by clicking the *ecommerce* repository
 +
 image:images/lab7.4-quay-repo.png[]
 +
-. Click the tag icon on the left (second icon from the top) then click the image hash id 
+. Click the tag icon on the left (second icon from the top) then click the image hash id
 +
 image:images/lab7.4-quay-tag.png[]
 . Click the bug icon to see the vulnerabilities detected by Clair. Make a note of the number of vulnerabilities
@@ -244,7 +248,7 @@ An old base image was used to build the application, we will update the base ima
 . Navigate to your source code repository in gogs http://gogs-ocp-workshop.apps.{GUID}.summit.opentlc.com and login if you haven't already (userid / openshift)
 +
 . Click on the *SecurityDemos* repository under *My Repositories*
-+ 
++
 image:images/lab7.5-gogs-repo.png[]
 . Click the *Dockerfile*
 +
@@ -262,7 +266,7 @@ NOTE: For the purposes of this lab we are committing changes directly into the m
 +
 image:images/lab7.5-gogs-commit-changes.png[]
 +
-. Navigate back to the root of the SecurityDemos folder 
+. Navigate back to the root of the SecurityDemos folder
 +
 image:images/lab7.5-gogs-navigate-root.png[]
 +
@@ -275,7 +279,7 @@ image:images/lab7.5-gogs-src.png[]
 image:images/lab7.5-gogs-delete-password.png[]
 +
 . Click the commit changes button
-+ 
++
 . Navigate back to jenkins and *abort* the current build, then navigate to the pipeline page
 +
 image:images/lab7.5-jenkins-abort.png[]
@@ -292,7 +296,7 @@ image:images/lab7.4-build-with-params.png[]
 +
 image:images/lab7.5-jenkins-build-2.png[]
 +
-. Click the *Open Blue Ocean* Link 
+. Click the *Open Blue Ocean* Link
 image:images/lab7.5-jenkins-blueocean.png[]
 +
 . View the build progress
@@ -324,4 +328,4 @@ http://ecommerce-{userid}-prod.apps.{GUID}.summit.opentlc.com
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] 
+link:README.adoc#table-of-contents[ Table of Contents ]
