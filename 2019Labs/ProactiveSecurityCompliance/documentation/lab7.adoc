@@ -10,7 +10,13 @@ The benefits of DevOps and Continuous Integration / Continuous Delivery (CI/CD) 
 
 This lab will focus on some of the technologies used to implement automated security compliance controls within a typical CI/CD pipeline.  
 
-A number of tools have been installed and configured to support the devsecops pipeline. Most of these tools are running containerized within the OpenShift cluster. The following sections describe the tools we will be using in this lab.
+A number of tools have been installed and configured to support the devsecops pipeline. Most of these tools are running containerized within the OpenShift cluster.  Here is the pipeline we will be stepping through during our lab:
+
+image:images/lab7.3-pipeline.png[]
+
+
+The following sections describe the tools we will be using in this lab.
+
 
 ==== Gogs
 Gogs is the Go Git Service- a github-like git server written in the Go programming language.
@@ -108,7 +114,6 @@ image:images/lab7.2-quay.png[]
 
 === Lab 7.3 Explore the pipeline stages
 
-image:images/lab7.3-pipeline.png[]
 
 The following sections describe each of the stages in the CI/CD pipeline that we will be running during this lab.
 
