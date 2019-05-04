@@ -32,7 +32,6 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
-* For the purposes of the lab exercises, the project's source code has been edited.
 
 === Lab 1.1 Building the content
 
@@ -75,7 +74,11 @@ We will explore the built content in following sections.
 === Lab 1.2 Viewing the provided HTML guides for the ComplianceAsCode project
 
 The `ComplianceAsCode` project provides HTML guides that are a great resource for those interested in what rules a policy consists of.
-The HTML guides are located in the `build/guides` subdirectory.
+The HTML guides are located in the respective `build/guides` of each lab exercise subdirectory. Therefore, the full path of the directory for this lab exercise is:
+[source, text]
+/home/lab-user/labs/lab1_introduction/build/guides/
+
+
 In the `ComplianceAsCode` project, policies are referred to as security profiles.
 The HTML guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the HTML guide for the RHEL 8 OSPP profile has the `ssg-rhel8-guide-ospp.html` form.
 

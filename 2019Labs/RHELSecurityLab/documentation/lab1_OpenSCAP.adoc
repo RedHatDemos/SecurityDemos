@@ -119,7 +119,7 @@ Now, you will see the security compliance scan results for every security contro
 * use `--results-arf` to get machine readable results archive
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 * use `--oval-results` for extended details of failing rules
-
++
 ----
  [root@openscap]# oscap xccdf eval --oval-results --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
 ----
