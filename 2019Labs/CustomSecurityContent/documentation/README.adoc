@@ -51,8 +51,6 @@ Your entire lab environment is hosted online and includes: Red Hat Enterprise Li
 
 You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
 
-Each lab exercise is independent from each other, so feel free to do the lab exercises in whatever order you'd like.
-
 
 == Table of Contents
 * link:lab0_setup.adoc[Lab exercise 0: Setup steps]
