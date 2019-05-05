@@ -3,9 +3,9 @@
 
 == [.underline]#Presenters/Lab Developers#:
 
-*Matej Tyc*, Software Engineer and Tech Lead - Security Compliance - RHEL Security, Red Hat
+*Matej Tyc*, Software Engineer and Tech Lead - Security Compliance in RHEL Security, Red Hat
 
-*Marek Haicman*, Senior Quality Engineer and Product Owner - Security Compliance - RHEL Security, Red Hat
+*Marek Haicman*, Senior Quality Engineer and Product Owner - Security Compliance in RHEL Security, Red Hat
 
 *Lucy Kerner*, Senior Principal Security Global Technical Evangelist and Strategist, Red Hat
 
@@ -16,9 +16,9 @@
 
 == [.underline]#Additional Lab Developers#:
 
-*Jan Cerny*, Software Engineer - Security Compliance - RHEL Security, Red Hat
+*Jan Cerny*, Software Engineer - Security Compliance in RHEL Security, Red Hat
 
-*Watson Sato*, Software Engineer - Security Compliance - RHEL Security, Red Hat
+*Watson Sato*, Software Engineer - Security Compliance in RHEL Security, Red Hat
 
 
 == Overview and Prerequisites:
