@@ -43,7 +43,7 @@ Moreover, it generates separated Playbooks for every rule.
 * Make sure that you are in the project root when you start - run
 +
 ----
-$ cd /home/lab-user/labs/lab4_ansible
+[... ~]$ cd /home/lab-user/labs/lab4_ansible
 ----
 +
 in the terminal.
@@ -75,39 +75,45 @@ As we already know from the Lab exercise 1, source code of the rule `accounts_tm
 First, switch to the rule directory and examine its content.
 
 ----
-$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
-$ ls
+[... lab4_ansible]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
+[... accounts_tmout]$ ls
 bash  oval  rule.yml
 ----
 
 As we have discussed in Lab exercise 1, the file `rule.yml` contains the rule description, rationale and metadata.
 
+[NOTE]
+====
 Apart from `rule.yml`, there are also 2 subdirectories in the `accounts_tmout` directory:
 
 * `bash` is a directory contains source code for a Bash script that can fix the timeout settings, so-called "Bash remediation",
 * `oval` which contains source code for an OVAL check that checks if the timeout is set.
+====
 
 To add Ansible tasks in this rule, we will first create a new directory `ansible` in the rule directory, next to the `bash` and `oval` directories.
 Create a new `ansible` directory and change into it.
 
 ----
-$ mkdir ansible
-$ cd ansible
+[... accounts_tmout]$ mkdir ansible
+[... ansible]$ cd ansible
 ----
 
 We will create a new file in this directory that will contain our Ansible task.
+[NOTE]
+====
 In ComplianceAsCode, the file needs to have a specific name.
 We have 2 options:
 
 * `shared.yml` is an universal name, the "shared" in this context means that the task can be applied to any *product*, i.e. to any Linux distribution.
 * `product_id.yml`, e.g. `fedora.yml` should be used if the task is specific only to a single Linux distribution and cannot be extended to other Linux distributions.
+====
 
 Since the interactive session timeout is not a specific feature of RHEL 8 but it is handled the same way in most of the Linux distributions we should name the file `shared.yml`.
 
 Create a new `shared.yml` file in `ansible` directory and open it in the text editor.
 
 ----
-$ gedit shared.yml
+[... ansible]$ nano shared.yml
 ----
 
 We will start to write the Ansible content in this file.
@@ -116,7 +122,8 @@ It is a simple YAML file.
 
 First part of this file must be a header that helps the build system to integrate the Ansible tasks with the SCAP content and also with the rule metadata.
 
-Add the following content to the top of the `shared.yml` file, including the `#` characters:
+Add the following content to the top of the `shared.yml` file, including the `#` characters.
+If you want to copy/paste the text, you have to use `Shift + Ctrl + v` for pasting into terminal with `nano`:
 
 ----
 # platform = multi_platform_all
@@ -126,6 +133,10 @@ Add the following content to the top of the `shared.yml` file, including the `#`
 # disruption = low
 ----
 
+Don't close the file yet.
+
+[NOTE]
+====
 The header contains optional metadata.
 The `platform` and `reboot` fields have a well-defined meaning:
 
@@ -135,7 +146,8 @@ It can be a operating system name, eg.
 `multi_platform_rhel`.
 Here we use the wildcard `multi_platform_all` that matches all the possible platforms.
 * `reboot` specifies if a reboot is needed to make the settings.
-Could be either `true` or `false`. Here we signalize that a reboot isn't needed.
+Could be either `true` or `false`.
+Here we signalize that a reboot isn't needed.
 This value is purely informational and setting it to `true` does not cause Ansible to reboot the system.
 
 The meaning of other fields is more fuzzy, and they are optional:
@@ -146,8 +158,11 @@ It is typically one of `configure`, `disable`, `enable`, `patch`, `restrict`, an
 Could be `unknown`, `low`, `medium` or `high`.
 * `disruption` is an estimate of the potential for disruption or operational degradation that the application of this fix will impose on the target.
 Can be `unknown`, `low`, `medium` or `high`.
+====
 
-Now, we will add an Ansible task or tasks for this rule below the header in `shared.yml`. Add the following at the end of `shared.yml` file.
+Now, we will add an Ansible task or tasks for this rule below the header in `shared.yml`.
+Add the following at the end of `shared.yml` file.
+Again, don't close the file just yet.
 
 ----
 - name: configure timeout
@@ -158,6 +173,25 @@ Now, we will add an Ansible task or tasks for this rule below the header in `sha
       line: "TMOUT=1800"
 ----
 
+Whole file at this moment should look like this:
+
+----
+# platform = multi_platform_all
+# reboot = false
+# strategy = restrict
+# complexity = low
+# disruption = low
+
+- name: configure timeout
+  lineinfile:
+      create: yes
+      dest: /etc/profile
+      regexp: "^#?TMOUT"
+      line: "TMOUT=1800"
+----
+
+[NOTE]
+====
 If you are familiar with Ansible, you probably know that we have just written an https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html#tasks-list[Ansible task].
 Normally, Ansible tasks are low-level components of Ansible playbooks.
 The ComplianceAsCode project allows content contributors to focus on tasks, and the playbook that aggregates them is generated by the project.
@@ -171,6 +205,7 @@ Using the `lineinfile` module we insert the line `TMOUT=1800` to `/etc/profile`.
 Notice that the `regexp` line defines a regular expression that determines what Ansible is going to do.
 If the regular expression matches a line, it is substituted with `line`, so lines `TMOUT=3600` or `#TMOUT=1800` are substituted by `TMOUT=1800`.
 If no line matches the regular expression, contents of `line` are simply appended to the `dest`, in this case `/etc/profile`.
+====
 
 In this rule we add only a single Ansible task.
 If goal needs to be achieved by multiple Ansible tasks, they would go all into the same file as well.
@@ -180,6 +215,8 @@ Tasks should not do anything different that the `rule.yml` description requires.
 We think of the rule description as of a natural language specification of what should be implemented in Ansible.
 
 // Now, it would be a nice time to build the playbook, open it, and run it in a check mode.
+
+== Using Variables in Ansible tasks
 
 However, our task is not fully conforming to rule description in `rule.yml` yet.
 The difference is that the `rule.yml` does not define a specific value of the timeout.
@@ -191,7 +228,7 @@ This way every profile can define a different timeout but reuse the same source 
 We need to fix the Ansible task to use the `var_accounts_tmout` variable instead of explicitly setting 1800 seconds in the task.
 The general format for binding a variable from ComplianceAsCode profiles is `- (xccdf-var name_of_the_variable)`.
 
-Add the following line (including the dash at the beginning of line) before the task but after the header in the `shared.yml`:
+Add the following line (including the dash at the beginning of line) right after `# disruption = low` line in the `shared.yml`:
 
 ----
 - (xccdf-var var_accounts_tmout)
@@ -200,9 +237,10 @@ Add the following line (including the dash at the beginning of line) before the 
 Now, we can use the bound variable in the `configure timeout` Ansible task as an Ansible variable using the standard Ansible syntax.
 When the `shared.yml` file will be processed by the ComplianceAsCode build system this variable binding will be resolved automatically and a new Ansible variable will be created in the generated Playbook in the `vars` list.
 
-Replace `line: "TMOUT=1800"` by `line: "TMOUT={{ var_accounts_tmout }}"` to use the variable in the task.
+Replace line `line: "TMOUT=1800"` by line `line: "TMOUT={{ var_accounts_tmout }}"` to use the variable in the task.
 
-At this point we have completed adding Ansible tasks for rule `accounts_tmout`. The contents of `shared.yml` file should look like this:
+At this point we have completed adding Ansible tasks for rule `accounts_tmout`.
+The contents of `shared.yml` file should look like this:
 
 ----
 # platform = multi_platform_all
@@ -220,7 +258,7 @@ At this point we have completed adding Ansible tasks for rule `accounts_tmout`. 
       line: "TMOUT={{ var_accounts_tmout }}"
 ----
 
-Do not forget to save the file.
+You can now save the file by pressing *ctrl + x*, then *y*, followed by *enter*.
 
 == Generating and Using Ansible Playbooks for a Rule
 
@@ -235,28 +273,34 @@ Go back to the project root directory.
 Run the following command to build the RHEL8 product:
 
 ----
-$ ./build_product rhel8
+[... ansible]$ cd /home/lab-user/labs/lab4_ansible
+[... lab4_ansible]$ ./build_product rhel8
 ----
 
 The Playbooks will be generated into the `build/rhel8/playbooks` directory.
 Check the contents of this directory:
 
 ----
-$ ls build/rhel8/playbooks
+[... lab4_ansible]$ ls build/rhel8/playbooks
 cjis  cui  hipaa  ospp  pci-dss  rht-ccp  standard
 ----
 
 Notice that there is a directory for each profile in the RHEL8 product.
-That is because each profile consists of a different set of rules and the rules are parametrized by variables which can have different values in each profile, which we had to solve in the previous Section.
+That is because each profile consists of a different set of rules and the rules are parametrized by variables which can have different values in each profile.
 
-The rule `accounts_tmout` is for example a part of the OSPP profile, so go to the `ospp` directory.
-In the `ospp` directory there are many Playbook files.
+The rule `accounts_tmout` is for example a part of the OSPP profile, so take a peek into the `ospp` directory.
+
+----
+[... lab4_ansible]$ ls build/rhel8/playbooks/ospp
+----
+
+There are many Playbook files in the `ospp` directory.
 One of them should be the `accounts_tmout.yml` file which is the Ansible Playbooks that contains the Ansible tasks that we added in rule `accounts_tmout`.
 
 Let's open it in the text editor.
 
 ----
-$ gedit build/rhel8/playbooks/ospp/accounts_tmout.yml
+[... lab4_ansible]$ nano build/rhel8/playbooks/ospp/accounts_tmout.yml
 ----
 
 The contents of the `build/rhel8/playbooks/ospp/accounts_tmout.yml` looks like the following:
@@ -295,11 +339,11 @@ The contents of the `build/rhel8/playbooks/ospp/accounts_tmout.yml` looks like t
 ----
 
 This is a normal Ansible Playbook as Ansible users are familiar with.
-The name of the Playbook is the same as the title of the rule which is defined in rule.yml.
+The name of the Playbook is the same as the title of the rule which is defined in `rule.yml`.
 
 The `hosts` section contains only a placehoder string `'@@HOSTS@@'` which should be replaced by a list of IP addresses or hosts the Playbook should be applied to.
 We have to edit this in order to check the playbook out:
-To use our Playbook on your machine (on a local host), replace the placehoder string `'@@HOSTS@@'` by `'localhost'` and save the file.
+To use our Playbook on your machine (on a local host), replace the placeholder string `'@@HOSTS@@'` by `'localhost'` and save the file with *ctrl + x*, *y* and *enter* sequence.
 
 ----
 ...
@@ -311,52 +355,64 @@ To use our Playbook on your machine (on a local host), replace the placehoder st
 
 Notice that the timeout value supplied by variable `var_accounts_tmout` has been set to a specific value (1800 seconds) during the build process, and the variable has been added to the `vars` section of the Playbook.
 
-Notice also that the Playbook has tags in the `tags` section which were added based on metadata in `rule.yml`. At the beginning, it contains the CCE (Common Configuration Enumeration) identifier.
+Notice also that the Playbook has tags in the `tags` section which were added based on metadata in `rule.yml`.
+At the beginning, it contains the CCE (Common Configuration Enumeration) identifier.
 
 Finally, the `tasks:` section contains our Ansible task which we created.
 
+In case there is a typo in the YAML file, edit the source again and rebuild.
+After that, you will need to again replace the placeholder string `'@@HOSTS@@'`.
+
+----
+[... lab4_ansible]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/shared.yml
+[... lab4_ansible]$ ./build_product rhel8
+[... lab4_ansible]$ nano build/rhel8/playbooks/ospp/accounts_tmout.yml
+----
 
 Run the following command to run the Playbook:
 
 ----
-$ ansible-playbook build/rhel8/playbooks/ospp/accounts_tmout.yml
+[... lab4_ansible]$ ansible-playbook build/rhel8/playbooks/ospp/accounts_tmout.yml
 ----
 
 Check if it has any effect:
 
 ----
-$ gedit /etc/profile
+[... lab4_ansible]$ cat /etc/profile
 ----
 
 Notice that `TMOUT=1800` is at the end of the file!
 
 The biggest advantage of using Ansible tasks in ComplianceAsCode is that it gets integrated with the SCAP content and also the HTML report and in the HTML guide as well.
 
-Run the following command to open the HTML guide for OSPP profile for Red Hat Enterprise Linux 8 in your Firefox web browser:
+Switch to the console view, open the terminal.
+Run the following command to open the HTML guide for OSPP profile for Red Hat Enterprise Linux 8 in your Firefox web browser, or navigate to the OSPP guide the same way you have used in previous exercises:
 
 ----
-$ firefox build/guides/ssg-rhel8-guide-ospp.html
+[... ~]$ firefox /home/lab-user/labs/lab4_ansible/build/guides/ssg-rhel8-guide-ospp.html
 ----
 
-Check the rule "Set Interactive Session Timeout". Click on blue `(show)` next to the Remediation Ansible Snippet green label and you will see your Ansible content that you added in the previous Section.
+Check the rule "Set Interactive Session Timeout".
+Click on blue `(show)` next to the Remediation Ansible Snippet green label and you will see your Ansible content that you added in the previous Section.
 
 .Rule "Set Interactive Session Timeout" displayed in a HTML guide including expanded Ansible content
 image::4-01-guide.png[]
 
+You won't need console view anymore in this lab.
 
 == Using the Profile Ansible Playbooks
 
 In previous Section we have discussed using Playbook for rule `accounts_tmout`.
 However, security policies are usually complex which in turn means that profiles consists of many rules.
 It is not convenient to have a separated Ansible Playbook for each rule, because that means to apply many Ansible Playbooks to the systems.
-Fortunately, ComplianceAsCode also generates Ansible Playbook that contain all tasks for the given profile in a single Playbook.
+Fortunately, ComplianceAsCode also generates Ansible Playbook that contain all tasks for a given profile in a single Playbook.
 
 The Playbooks are located in the `build/roles` directory.
 This directory contains both Ansible Playbooks and Bash remediation scripts for each profile.
 The Playbooks files have `.yml` extension.
 
 ----
-$ ls build/roles
+[... lab4_ansible]$ ls build/roles
 all-roles-rhel8-sh
 all-roles-rhel8-yml
 ssg-rhel8-role-cjis.sh
@@ -382,13 +438,14 @@ Although the directory name is `roles`, and the files are called roles, these fi
 Check the contents of the OSPP profile Playbook in your editor and verify that a task for rule `accounts_tmout` is there among all the other tasks.
 
 ----
-$ gedit build/roles/ssg-rhel8-role-ospp.yml
+[... lab4_ansible]$ nano build/roles/ssg-rhel8-role-ospp.yml
 ----
 
 Keep in mind that even if the comments in the headers say that it is an Ansible Role, it is not an Ansible Role, it is an Ansible Playbook.
 This might be confusing.
 
-You can use the profile Playbooks normally as well.
+At this moment, you have per-rule Ansible playbooks available, as well as per-profile ones.
+You can integrate these into your CI/CD pipelines and infrastructure management as per your preferences.
 
 <<top>>
 
