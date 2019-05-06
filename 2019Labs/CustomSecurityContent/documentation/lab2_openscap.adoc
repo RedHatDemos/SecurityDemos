@@ -43,7 +43,7 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 * Make sure that you are in the project root when you start - run
 +
 ----
-~]$ cd /home/lab-user/labs/lab2_OpenSCAP
+[... lab1_introduction]$ cd /home/lab-user/labs/lab2_OpenSCAP
 ----
 +
 in the terminal.
@@ -55,7 +55,7 @@ OpenSCAP provides a command line tool `oscap` that can be used for automated sec
 You can verify a successful installation of `oscap` tool by running:
 
 ----
-lab2_OpenSCAP]$ oscap --version
+[... lab2_OpenSCAP]$ oscap --version
 
 OpenSCAP command line tool (oscap) 1.3.0
 Copyright 2009--2018 Red Hat Inc., Durham, North Carolina.
@@ -81,14 +81,18 @@ In this Section we will build the security content for Red Hat Enterprise Linux 
 . In `/home/lab-user/labs/lab2_OpenSCAP` directory, build the content for Red Hat Enterprise Linux 8.
 +
 ----
-lab2_OpenSCAP]$ ./build_product rhel8
+[... lab2_OpenSCAP]$ ./build_product rhel8
 ----
 +
 . Take a look at the generated files in the `build` directory.
 +
 ----
-lab2_OpenSCAP]$ cd build
-build]$ ls
+[... lab2_OpenSCAP]$ cd build
+[... build]$ ls
+...
+ssg-rhel8-ds.xml
+ssg-rhel8-ocil.xml
+ssg-rhel8-oval.xml
 ...
 ----
 +
@@ -97,7 +101,15 @@ There are multiple files produced by the build. The file that is going to be use
 . Check which compliance profiles are available for RHEL8.
 +
 ----
-build]$ oscap info ssg-rhel8-ds.xml
+[... build]$ oscap info ssg-rhel8-ds.xml
+...
+    Profiles:
+        Title: Criminal Justice Information Services (CJIS) Security Policy
+            Id: xccdf_org.ssgproject.content_profile_cjis
+        Title: Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)
+            Id: xccdf_org.ssgproject.content_profile_cui
+        Title: Red Hat Corporate Profile for Certified Cloud Providers (RH CCP)
+            Id: xccdf_org.ssgproject.content_profile_rht-ccp
 ...
 ----
 +
@@ -117,7 +129,7 @@ The real ID is `xccdf_org.ssgproject.content_profile_ospp`.
 Run the command as root using the `sudo` command to scan the system parts that the common users does not have access.
 +
 ----
-build]$ sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
+[... build]$ sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
 ...
 ----
 +
@@ -131,7 +143,7 @@ Now, you will see the compliance scan results for every security control in the 
 * use `--oval-results` to get detailed results in the report
 +
 ----
-build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html --oval-results ./ssg-rhel8-ds.xml
+[... build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /home/lab-user/labs/lab2_OpenSCAP/report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
 
@@ -139,16 +151,16 @@ build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report
 ====
 You can also generate the HTML report later by executing
 ----
-build]$ oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
+build]$ oscap xccdf generate report /tmp/arf.xml > /home/lab-user/labs/lab2_OpenSCAP/report.html
 ----
 ====
 --
 
-. Now switch to the console view, and open the report in Firefox web browser by typing following in the terminal.
+. Open the file explorer application by clicking `Activities`, and then the blue cabinet icon.
+Once it comes up, click the `Home` entry at the upper left part of the browser's window.
+The `lab2_report.html` file should be there, so double-click it to open it in the browser.
 +
-----
-[lab-user@workstation-GUID ~]$ firefox /tmp/report.html
-----
+image:getting-report.png[]
 +
 You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
 +
@@ -163,9 +175,9 @@ image:lab1.1-clickrule.png[]
 
 . This will bring up a pop-up dialog that allows you to examine why a particular rule failed or passed.
 For example, if a rule is testing file permissions on a list of files, it will specify which files failed and what are their permission bits.
-
++
 image::scap_report_pass.png[]
-
++
 image::scap_report_fail.png[]
 
 
@@ -223,7 +235,7 @@ We will generate a playbook from the scan results:
 Use the `--fix-type ansible` option to request an ansible playbook with the fixes:
 +
 ----
-build]$ oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
+[... build]$ oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
 ----
 +
 We have specified the empty `result-id` because `oscap` supports generation of fixes from  a result file that has results from multiple scans. However, as there is only one result from a single scan, we don't have to specify the result ID explicitly.
@@ -231,7 +243,7 @@ We have specified the empty `result-id` because `oscap` supports generation of f
 Check the output using a text editor:
 +
 ----
-build]$ nano playbook.yml
+[... build]$ nano playbook.yml
 ----
 +
 . You can exit `nano` by pressing *ctrl + x*
@@ -240,7 +252,7 @@ build]$ nano playbook.yml
 Use `--fix-type bash` to request a bash script with the fixes
 +
 ----
-build]$ oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
+[... build]$ oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
 ----
 +
 We have specified the empty `result-id` because `oscap` supports generation of fixes from  a result file that has results from multiple scans. However, as there is only one result from a single scan, we don't have to specify the result ID explicitely.
@@ -248,8 +260,9 @@ We have specified the empty `result-id` because `oscap` supports generation of f
 Check the output using a text editor:
 +
 ----
-build]$ nano bash-fix.sh
+[... build]$ nano bash-fix.sh
 ----
+
 . You can exit `nano` by pressing *ctrl + x*
 
 
