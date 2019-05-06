@@ -488,20 +488,23 @@ In this section, we are going to test our pre-configured setup steps from before
 +
 [source,text]
 ----
-	[root@selinux1 selinux_scripts]# curl selinux{2,3,5}:7070
-	<h1>Custom Document Root</h1>
-	<h1>Custom Document Root</h1>
-	<h1>Custom Document Root</h1>
+[root@selinux1 selinux_scripts]# curl selinux{2,3,5}:7070
+<h1>Custom Document Root</h1>
+<h1>Custom Document Root</h1>
+<h1>Custom Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2
+[root@selinux1 selinux_scripts]# ssh root@selinux2
 
-	[root@selinux2 ~]# ausearch -m AVC -su httpd_t -ts recent
-
-  avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
-  avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
-  avc:  denied  { map } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
-  avc:  denied  { open } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
-  avc:  denied  { getattr } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+[root@selinux2 ~]# ausearch -m AVC -su httpd_t -ts recent
+----
++
+[source,text]
+----
+avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
+avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
+avc:  denied  { map } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+avc:  denied  { open } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+avc:  denied  { getattr } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
 ----
 
 === Lab 2.3.3 SELinux Troubleshooting
