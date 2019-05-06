@@ -166,8 +166,16 @@ This is the avc record from the Audit daemon. This output is saying that the cgi
 
 == Lab 2.2 Exploiting Fedora 27 with the Runcescape vulnerability
 
+==== Introduction
+CVE-2019-5736 runc escape is the latest vulnerability in containers world. It's privilege escalation vulnerability with arbitrary code execution as root, when malicious process inside container will escape from container namespace and will execute arbitary code on host system. This is really dangerous because in any container could be malicious process and when system administrator will start the container, they will add root access to the whole system.
+Fortunately, SELinux technology, which separates containers between each other and also separates containers from the host system, blocks this exploit.
+
+NOTE: If you'd like to read more about this exploit, information can be found in this link https://access.redhat.com/security/vulnerabilities/runcescape[here^].
+
 === Goal of Lab 2.2
-In this second exercise, let's become a hacker and try to exploit Fedora 27 with the Runcescape vulnerability.
+
+In this second exercise, let's become a hacker and try to exploit Fedora 27 with the Runcescape vulnerability. A vulnerability discovered in runc allows for a break out from the container to gain root-level access on the host machine.
+
 
 Old release of Fedora27 was used for the purpose, because docker is fixed in Red Hat Enterprise Linux 7. Fedora27 is in end of life state, which means no updates are provided, so docker there is still vulnerable.
 
@@ -197,12 +205,6 @@ The exploit will be executed from the _selinux6.example.com_ system.
 
 
 NOTE: If you'd like copies of these selinux_scripts, they can also be found in this github link https://github.com/RedHatDemos/SecurityDemos/tree/master/2019Labs/RHELSecurityLab/scripts/selinux_scripts[here^].
-
-==== Introduction
-CVE-2019-5736 runc escape is the latest vulnerability in containers world. It's privilege escalation vulnerability with arbitrary code execution as root, when malicious process inside container will escape from container namespace and will execute arbitary code on host system. This is really dangerous because in any container could be malicious process and when system administrator will start the container, they will add root access to the whole system.
-Fortunately, SELinux technology, which separates containers between each other and also separates containers from the host system, blocks this exploit.
-
-NOTE: If you'd like to read more about this exploit, information can be found in this link https://access.redhat.com/security/vulnerabilities/runcescape[here^].
 
 ==== Lab 2.2.2 exercise steps
 Now, let's follow these steps to reproduce the attack.

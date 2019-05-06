@@ -99,8 +99,8 @@ Keyslots:
 	Time cost:  4
 	Memory:     754560
 	Threads:    2
-	Salt:       c7 be d2 42 3c d0 57 53 65 59 bb 62 1f 21 aa ba 
-	            4b 6d c4 82 1f 6b 8f a0 2d 0a 22 5a 4e 5f 4e 88 
+	Salt:       c7 be d2 42 3c d0 57 53 65 59 bb 62 1f 21 aa ba
+	            4b 6d c4 82 1f 6b 8f a0 2d 0a 22 5a 4e 5f 4e 88
 	AF stripes: 4000
 	Area offset:32768 [bytes]
 	Area length:258048 [bytes]
@@ -113,8 +113,8 @@ Keyslots:
 	Time cost:  4
 	Memory:     831696
 	Threads:    2
-	Salt:       76 f2 20 9e 37 2f 2d 76 42 05 7f 14 83 30 da bc 
-	            ae 33 dc fd 6e 5d 7a 74 f1 b6 dc b1 3d 61 f7 a9 
+	Salt:       76 f2 20 9e 37 2f 2d 76 42 05 7f 14 83 30 da bc
+	            ae 33 dc fd 6e 5d 7a 74 f1 b6 dc b1 3d 61 f7 a9
 	AF stripes: 4000
 	Area offset:290816 [bytes]
 	Area length:258048 [bytes]
@@ -126,9 +126,9 @@ Digests:
   0: pbkdf2
 	Hash:       sha256
 	Iterations: 83485
-	Salt:       e8 33 a0 97 1b 5d ac 81 29 30 df fa 5e e0 4a e3 
-	            8b 12 fd 1d 1d 7f f2 74 b1 b5 c7 56 08 2b 9e 76 
-	Digest:     b7 42 05 a6 84 23 e2 26 af d7 2d db bf 21 27 29 
+	Salt:       e8 33 a0 97 1b 5d ac 81 29 30 df fa 5e e0 4a e3
+	            8b 12 fd 1d 1d 7f f2 74 b1 b5 c7 56 08 2b 9e 76
+	Digest:     b7 42 05 a6 84 23 e2 26 af d7 2d db bf 21 27 29
 	            b7 23 26 c1 07 08 52 bc e2 a7 93 75 21 7f 80 b1
 ```
 
@@ -137,6 +137,7 @@ Digests:
 +
 [source, text]
 [root@nbde3 ~]# dracut -f
+
 +
 NOTE: Pass the *-vf* parameter if you want to see verbose output.
 
@@ -151,57 +152,59 @@ NOTE: Pass the *-vf* parameter if you want to see verbose output.
 
 Your NBDE2 server is already encrypted and this exercise will install the client packages that will allow you to un-encrypt the root device drive upon boot without manual intervention.
 
-Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE2*. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
-
+. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE2*. The passphrase for the LUKs encrypted disk on *NBDE2* is *r3dh4t1!*. You will need to enter the pass phrase to complete the boot process.  If you wanted to copy and paste text to send to the console, press the *T* button at the top right of your console.
++
 image:images/lab3-console2.png[200,200]
 image:images/console-textbox.png[500,500]
 
-You do not need to login to the machine after unlocking the disk with the passphrase. Cockpit-storaged package was preinstalled for you. Cockpit was enabled as well.
+. You do not need to login to the machine after unlocking the disk with the passphrase. Cockpit-storaged package was preinstalled for you. Cockpit was enabled as well.
 
-Next, we will initialize the luks binding to the tang server using Cockpit.
+. Next, we will initialize the luks binding to the tang server using Cockpit.
 
-Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+. Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-Open a Firefox web browser: 
-
+. Open a Firefox web browser:
++
 image:images/nbde_cockpit_firefox.png[]
 
-Open https://nbde2.example.com:9090/
-
+. Open https://nbde2.example.com:9090/
++
 image:images/nbde_cockpit_firefox_1.png[]
 
-Login as root user using *r3dh4t1!* as the password. Next, access *Storage* menu and then click on VirtiO Disk.
-
+. Login as root user using *r3dh4t1!* as the password. Next, access *Storage* menu and then click on VirtiO Disk.
++
 image:images/nbde_cockpit_storage_page.png[]
 
-Next, click on *Encrypted data* for */dev/vda2*:
-
+. Next, click on *Encrypted data* for */dev/vda2*:
++
 image:images/nbde_cockpit_disk_page.png[]
 
-Next, click on the *Ecnryption* tab for the disk:
-
+. Next, click on the *Ecnryption* tab for the disk:
++
 image:images/nbde_cockpit_disk_page_1.png[]
 
-It will show current keys for disk. Currently, there is only one passphrase key:
-
+. It will show current keys for disk. Currently, there is only one passphrase key:
++
 image:images/nbde_cockpit_disk_enc.png[]
 
-Click on *+* button to add one more key. You will see modal window looking like this:
-
+. Click on *+* button to add one more key. You will see modal window looking like this:
++
 image:images/nbde_cockpit_tang_empty.png[]
 
-As a Keyserver address we will use *nbde1.example.com* and *r3dh4t1!* for existing disk passphrase. So, fill the modal window fields like this and click *Add* button:
-
+. As a Keyserver address we will use *nbde1.example.com* and *r3dh4t1!* for existing disk passphrase. So, fill the modal window fields like this and click *Add* button:
++
 image:images/nbde_cockpit_tang_filled.png[]
 
-It will take some take for it to process the request. After this click *Trust key*:
-
+. It will take some take for it to process the request. After this click *Trust key*:
++
 image:images/nbde_cockpit_tang_confirm.png[]
+NOTE:
+Your key will differ from the key shown in the image below.
 
-After this you will see both Disk passphrase and Keyserver as your keys for the disk:
+. After this you will see both Disk passphrase and Keyserver as your keys for the disk:
 
 image:images/nbde_cockpit_keys_result.png[]
 

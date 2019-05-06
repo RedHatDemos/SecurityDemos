@@ -90,14 +90,14 @@ Note that there is also a Red Hat Insights client Ansible role in Ansible galaxy
 [root@ic1 insights-client]# ls
 cert-api.access.redhat.com.pem  insights-client.conf  machine-id  redhattools.pub.gpg  rpm.egg  rpm.egg.asc
 ----
-. Let's create the remove.conf file now. In this file, we are telling Red Hat Insights not to access the following files: /etc/hosts and /etc/resolv.conf. We are also telling Red Hat Insights to not access the netstat command. Let's create the remove.conf file and add this text below to this file using the vi text editor.
+. Let's create the remove.conf file now. In this file, we are telling Red Hat Insights not to access the following files: /etc/hosts and /etc/resolv.conf. We are also telling Red Hat Insights to not access the netstat command. You can use keywords and patterns to hide information from Red Hat Insights. We have commented out the text that would allow you to hide the following keywords and patterns: passwords and super secret keywords. Let's create the remove.conf file and add this text below to this file using the vi text editor.
 +
 [source]
 ----
 [root@ic1 insights-client]# vi remove.conf
 ----
 +
-Add this text to the remove.conf file. Type *i* to insert text. Then, copy and paste the text below into the remove.conf file. Then type *q* and *:wq!* to save and exit.
+Add this text to the remove.conf file. Type *i* to insert text. Then, copy and paste the text below into the remove.conf file. Then press *Esc* and type *:wq!* to save and exit.
 +
 [source,txt]
 ----
@@ -217,10 +217,11 @@ Debug options:
 
 . Install the Red Hat Insights client on the ic4.summit.example.com host. Note that the Red Hat Insights client is already pre-installed on the *ic1.summit.example.com* host.
 +
-NOTE: In older versions the package was called redhat-access-insights.
+NOTE: In older versions the package was called redhat-access-insights. Because of an older version of python, you will need to remove the python-chardet package.
 +
 [source]
 ----
+[root@ic4 ~]# yum -y remove python-chardet
 [root@ic4 ~]# yum install -y insights-client
 Loaded plugins: enabled_repos_upload, package_upload, product-id, subscription-manager
 rhel-7-server-extras-rpms                                                                                                                    | 2.0 kB  00:00:00
