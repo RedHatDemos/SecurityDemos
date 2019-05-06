@@ -48,7 +48,7 @@ Execute the following command,
 but don't forget to replace `GUID` with your lab provided GUID:
 
 ----
-~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 [lab-user@workstation-GUID ~]$
 ----
 
@@ -82,9 +82,9 @@ The profile will represent your company new security policy for laptops.
 Go to the Red Hat Enterprise Linux 8 profiles directory.
 
 ----
-~]$ cd /home/lab-user/labs/lab3_profiles
-lab3_profiles]$ cd rhel8/profiles
-profiles]$ ls
+[... ~]$ cd /home/lab-user/labs/lab3_profiles
+[... lab3_profiles]$ cd rhel8/profiles
+[... profiles]$ ls
 cjis.profile  cui.profile  hipaa.profile  ospp.profile  pci-dss.profile  rht-ccp.profile  standard.profile
 ----
 
@@ -96,7 +96,7 @@ You can get inspired by them.
 Create new file `travel.profile` file there and open it in the editor:
 
 ----
-lab3_profiles]$ nano travel.profile
+[... lab3_profiles]$ nano travel.profile
 ----
 
 Next, create the basic structure and fill in the profile title and description as specified in this listing.
@@ -137,14 +137,14 @@ It cannot be an empty list, so for now we will add rule `security_patches_up_to_
 Save the profile file and go back to the project's root directory.
 
 ----
-profiles]$ cd /home/lab-user/labs/lab3_profiles
+[... profiles]$ cd /home/lab-user/labs/lab3_profiles
 ----
 
 
 === 3.1.3 Rebuild the content.and review [[content_review]]
 
 ----
-lab3_profiles]$ ./build_product rhel8
+[... lab3_profiles]$ ./build_product rhel8
 ...
 ----
 
@@ -181,14 +181,14 @@ In our case, we are looking if we have a `rule.yml` file in our repository which
 git grep for that.
 
 ----
-lab3_profiles]$ git grep -i "SSH root login" "*rule.yml"
+[... lab3_profiles]$ git grep -i "SSH root login" "*rule.yml"
 linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml:title: 'Disable SSH Root Login'
 ----
 
 If you want, you can check that this is the right rule by opening this `rule.yml` file and reading the description section in this file.
 
 ----
-lab3_profiles]$ nano linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml
+[... lab3_profiles]$ nano linux_os/guide/services/ssh/ssh_server/sshd_disable_root_login/rule.yml
 ----
 
 It looks like this:
@@ -246,7 +246,7 @@ selections:
 To review the result, we need to rebuild the content:
 
 ----
-lab3_profiles]$ ./build_product rhel8
+[... lab3_profiles]$ ./build_product rhel8
 ----
 
 The rule `sshd_disable_root_login` will get included to your profile by the build system.
@@ -279,7 +279,7 @@ This is similar to the previous section.
 First of all, we use command-line tools to search for the correct rule file:
 
 ----
-lab3_profiles]$ git grep -i "Interactive Session Timeout" "*rule.yml"
+[... lab3_profiles]$ git grep -i "Interactive Session Timeout" "*rule.yml"
 linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml:title: 'Set Interactive Session Timeout'
 ----
 
@@ -289,7 +289,7 @@ It is easy to spot that the rule ID is `accounts_tmout` because the rule ID is t
 Add the rule ID to selections list in your travel profile.
 
 ----
-lab3_profiles]$ nano rhel8/profiles/travel.profile
+[... lab3_profiles]$ nano rhel8/profiles/travel.profile
 ----
 
 Add `accounts_tmout` as a new item in selections list.
@@ -299,7 +299,7 @@ Also make sure there is no trailing whitespace.
 We are going to check the rule contents to find out whether there is a variable involved:
 
 ----
-lab3_profiles]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
+[... lab3_profiles]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 ----
 
 You don't need to make any changes.
@@ -317,9 +317,9 @@ The value is also automatically substituted into OVAL checks, Ansible Playbooks 
 In order to learn more about the parametrization, we find and review the variable definition file.
 
 ----
-lab3_profiles]$ find . -name 'var_accounts_tmout*'
+[... lab3_profiles]$ find . -name 'var_accounts_tmout*'
 linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
-lab3_profiles]$ nano linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+[... lab3_profiles]$ nano linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
 ----
 
 The variable has multiple options, see the options list:
@@ -349,7 +349,7 @@ If you are asked about saving any changes, you probably don't want that, in whic
 To finalize the rule's parametrization, the variable and the selector have to be added to the selections list in your `travel` profile.
 
 ----
-lab3_profiles]$ nano rhel8/profiles/travel.profile
+[... lab3_profiles]$ nano rhel8/profiles/travel.profile
 ----
 
 Same as the rule IDs, the variable values also belong to the `selections` list in the profile.
@@ -381,7 +381,7 @@ After you are finished with edits, press `Ctrl+x` to bring up the "save and exit
 To review the result, we need to rebuild the content again:
 
 ----
-lab3_profiles]$ ./build_product rhel8
+[... lab3_profiles]$ ./build_product rhel8
 ----
 
 The rule `accounts_tmout` will get included to your profile by the build system.
@@ -434,7 +434,10 @@ The structure of the HTML report is similar to the HTML guide, but it contains t
 After clicking on the rule title, you can see the detailed rule results.
 +
 In the detailed rule results for the rule *Set Interactive Session Timeout* you can review the rule description to see which requirement was not met by the scanned system.
-See the *OVAL details* section to examine the reason why this rule failed. It says that items displayed below were missing which means that on the scanned system no object described by the table below exists. In this specific example, there was no string that could match the pattern in `/etc/profile`, which means there is not any `TMOUT` entry in `/etc/profile`. To fix this problem we would need to insert `TMOUT=300` to `/etc/profile` and then run a scan again.
+See the *OVAL details* section to examine the reason why this rule failed.
+It says that items displayed below were missing which means that on the scanned system no object described by the table below exists.
+In this specific example, there was no string that could match the pattern in `/etc/profile`, which means there is not any `TMOUT` entry in `/etc/profile`.
+To fix this problem we would need to insert `TMOUT=300` to `/etc/profile` and then run a scan again.
 +
 .Details of the rule evaluation displayed in the HTML report.
 image::2-03-report.png[Report]

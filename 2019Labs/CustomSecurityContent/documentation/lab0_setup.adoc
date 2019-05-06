@@ -35,7 +35,7 @@ On your laptop (i.e. not in the browser window with the remote deskop), open the
 Then, enter the following command, replacing `GUID` with your actual GUID:
 
 ----
-~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
 so for example for `GUID` of `3fa1`, you would execute `$ ssh lab-user@workstation-3fa1.rhpds.opentlc.com`
@@ -44,8 +44,8 @@ If everything goes correctly, you will end up in the lab's test system shell.
 You can tell that by listing the directory with lab exercises:
 
 ----
-~]$ cd
-~]$ ls labs
+[... ~]$ cd
+[... ~]$ ls labs
 lab1_introduction  lab2_OpenSCAP  lab3_profiles  lab4_ansible  lab5_oval
 ----
 
@@ -57,17 +57,17 @@ Congratulations, now you got to your *text console*.
 Shell session listings obey the following convention:
 
 ----
-~]$ pwd
+[... ~]$ pwd
 /home/lab-user
-~]$ cd labs
-labs]$ ls
+[... ~]$ cd labs
+[... labs]$ ls
 lab1_introduction  lab2_OpenSCAP  lab3_profiles  lab4_ansible  lab5_oval
-labs]$ cat /etc/passwd
+[... labs]$ cat /etc/passwd
 ...
 lab-user:x:1000:1000:Lab User:/home/lab-user:/bin/bash
 ----
 
-- Commands, in this example `pwd` and `cat /etc/passwd`, are prefixed by the directory name followed by `]$`.
+- Commands, in this example `pwd` and `cat /etc/passwd`, are prefixed by `[...` followed by the respective directory name and `]$`.
 For reference, in the actual terminal, commands are prefixed also by the current username and hostname, for example `[lab-user@workstation-3fa1 ~]$`.
 - Lines that follow commands and that are not commands themselves represent the last command's output.
 In the example above, the output of the `ls` command in the `labs` directory are directories with lab exercises.
