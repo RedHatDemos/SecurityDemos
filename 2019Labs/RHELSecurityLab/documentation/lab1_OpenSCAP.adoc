@@ -38,7 +38,7 @@ This section is for your reference only so you know what steps have already been
 +
 [source, text]
 ----
- [root@openscap]# oscap -V
+ [root@openscap ~]# oscap -V
 
  OpenSCAP command line tool (oscap) 1.3.0
  Copyright 2009--2018 Red Hat Inc., Durham, North Carolina.
@@ -61,7 +61,7 @@ If during your own installation it says `oscap` command not found, you need to i
 . Finally, SCAP Workbench has also been installed on the *openscap.example.com* server host for you.
 +
  # GUI tool for scanning and benchmark customization, a front-end for OpenSCAP
- [root@openscap] yum install scap-workbench
+ [root@openscap ~] yum install scap-workbench
 
 == Lab 1.1 Automated Security and Compliance Scanning with OpenSCAP
 . If not already there, log in to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your unique lab provided GUID*. If needed, use the password *r3dh4t1!*
@@ -78,7 +78,7 @@ If during your own installation it says `oscap` command not found, you need to i
 
 . Let's take a look at the compliance content provided by `scap-security-guide`:
 +
- [root@openscap]# rpm -ql scap-security-guide
+ [root@openscap ~]# rpm -ql scap-security-guide
  ...
  /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-dictionary.xml
  /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-oval.xml
@@ -95,40 +95,42 @@ There are also various formats in which this is provided - human readable HTML g
 . Move to the `content` folder so we can avoid typing long paths in the subsequent exercises below:
 +
 ----
- [root@openscap]# cd /usr/share/xml/scap/ssg/content
+ [root@openscap ~]# cd /usr/share/xml/scap/ssg/content
 ----
 
 . First, let's check which compliance profiles are available for Red Hat Enterprise Linux 8.
 +
 ----
- [root@openscap]# oscap info ssg-rhel8-ds.xml
+ [root@openscap content]# oscap info ssg-rhel8-ds.xml
 ----
 +
 . You will get list of available content and compliance profiles (OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS) available for Red Hat Enterprise Linux 8.
 
 . Next, let's perform our first security compliance baseline scan with the OSPP profile.
 You can see in our command below that we can skip the profile ID prefix to make the command simpler.
-The real ID is xccdf_org.ssgproject.content_profile_ospp.
+The real ID is *xccdf_org.ssgproject.content_profile_ospp*.
 +
 ----
-  [root@openscap]# oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
+  [root@openscap content]# oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
 ----
 +
 Now, you will see the security compliance scan results for every security control in the OSPP security baseline profile. Specifically, you will see the title of each security control and whether or not that security control check passed or failed.
 
 . Now, let's store the results of the scan this time:
+--
 * use `--results-arf` to get machine readable results archive
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 * use `--oval-results` for extended details of failing rules
+--
 +
 ----
- [root@openscap]# oscap xccdf eval --oval-results --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
+ [root@openscap content]# oscap xccdf eval --oval-results --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
 ----
 
 . (Optional) You can also generate the HTML report separately:
 +
 ----
- [root@openscap]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
+ [root@openscap content]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
 
 . Now, go to your *power control and consoles* view from the *Lab Information* page where you got your assigned unique lab GUID by clicking on the link provided on the last bullet point of the Lab Information page.
@@ -148,7 +150,8 @@ image:images/lab1.1-labuserlogin.png[300,300]
 +
 image:images/lab1.1-scapreport.png[500,500]
 
-. Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether a particular security control has passed or failed the scan. Other results you can frequently encounter are *notapplicable*, for rules that have been skipped as not relevant to the scanned system and *notchecked*, for rules without an automated check.
+. Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether a particular security control has passed or failed the scan.
+Other results you can frequently encounter are *notapplicable*, for rules that have been skipped as not relevant to the scanned system and *notchecked*, for rules without an automated check.
 
 . Click on any of the rule titles in the HTML report, such as the rules highlighted in red in the image below.
 +
