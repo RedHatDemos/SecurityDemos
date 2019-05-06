@@ -196,7 +196,7 @@ The exploit will be executed from the _selinux6.example.com_ system.
 [root@selinux6 ~]# cd /root/selinux_scripts
 
 
-NOTE: If you'd like copies of these selinux_scripts, they can also be found in this github link https://github.com/RedHatDemos/SecurityDemos/tree/master/RHELSecurityLabSummit/selinux_scripts[here^].
+NOTE: If you'd like copies of these selinux_scripts, they can also be found in this github link https://github.com/RedHatDemos/SecurityDemos/tree/master/2019Labs/RHELSecurityLab/scripts/selinux_scripts[here^].
 
 ==== Introduction
 CVE-2019-5736 runc escape is the latest vulnerability in containers world. It's privilege escalation vulnerability with arbitrary code execution as root, when malicious process inside container will escape from container namespace and will execute arbitary code on host system. This is really dangerous because in any container could be malicious process and when system administrator will start the container, they will add root access to the whole system.
