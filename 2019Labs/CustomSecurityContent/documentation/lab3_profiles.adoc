@@ -17,6 +17,7 @@ In this lab exercise, we will show how to solve the task using ComplianceAsCode.
 * ... how to create a new rule
 * ... how to scan your system against the profile you created
 
+
 == What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `content` directory.
@@ -25,24 +26,32 @@ In this lab exercise, we will show how to solve the task using ComplianceAsCode.
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
+
 === Before you start
 
-* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
-* Make sure that you are in the project root when you start - run
-+
-----
-~]$ cd /home/lab-user/labs/lab3_profiles
-lab3_profiles]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
-----
-+
-in the terminal.
+Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
 
-* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
-* Open the file explorer and also navigate to the project root.
-* Finally, open the Firefox browser.
+image::desktopfilefolder.png[100,100]
 
-.Opening a new terminal window in Red Hat Enterprise Linux 8.
-image::0-01-setup.png[]
+Just to make sure, click the `Home` icon in the left upper part of the file explorer window.
+Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
+`lab3_profiles`
+folder. The whole exercise will take place under the
+`/home/lab-user/labs/lab3_profiles`
+folder that we will access from both text and graphical consoles.
+
+image::files-navi.png[700,700]
+
+Now log in to the VM using the text console if you haven't done so already.
+Open the terminal window on the lab laptop.
+Execute the following command,
+but don't forget to replace `GUID` with your lab provided GUID:
+
+----
+~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$
+----
+
 
 == Lab 3.1 Creating a new empty profile
 
@@ -73,6 +82,7 @@ The profile will represent your company new security policy for laptops.
 Go to the Red Hat Enterprise Linux 8 profiles directory.
 
 ----
+~]$ cd /home/lab-user/labs/lab3_profiles
 lab3_profiles]$ cd rhel8/profiles
 profiles]$ ls
 cjis.profile  cui.profile  hipaa.profile  ospp.profile  pci-dss.profile  rht-ccp.profile  standard.profile
@@ -95,6 +105,7 @@ link:lab0_setup.adoc#copy_pasting[ have to use ]
 have to use
 `Ctrl+Shift+V`.
 
+[source, yaml]
 ----
 documentation_complete: true
 
@@ -141,7 +152,7 @@ This command will rebuild contents for all the profiles in the Red Hat Enterpris
 The command will build the human-readable HTML guide which can be displayed in a web browser and machine-readable SCAP files that can be consumed by OpenSCAP.
 
 Check the result HTML guide to look at your new profile.
-This is the same as we have did in the first lab - click the `Activities` and then the blue folder icon to open the file browser:
+This is the same as we have did in the first lab - click the `Activities` and then the blue cabinet icon to open the file browser:
 
 image::desktopfilefolder.png[100,100]
 
@@ -242,7 +253,7 @@ The rule `sshd_disable_root_login` will get included to your profile by the buil
 
 Check the result HTML guide.
 Switch to the graphical console in the web browser on your laptop.
-Click the `Activities` and then the blue folder icon to bring the file browser forward.
+Click the `Activities` and then the blue cabinet icon to bring the file browser forward.
 You should be in the `labs/lab3_profiles/build/guides` directory from the previous step.
 If it is not the case, refer to the link:#content_review[end of the 3.1.3 section] how to get there.
 

@@ -33,7 +33,7 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
 
-=== Steps to do
+=== Before you start
 
 On the remote desktop, we are going to browse the project files and open some of them e.g. in a web browser.
 Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
@@ -46,6 +46,8 @@ Then, navigate to the location of the exercise by double-clicking on the `labs` 
 folder. The whole exercise will take place under the
 `/home/lab-user/labs/lab1_introduction`
 folder that we will access from both text and graphical consoles.
+
+image::files-navi.png[700,700]
 
 Now log in to the VM using the text console if you haven't done so already.
 Open the terminal window on the lab laptop.
@@ -105,7 +107,8 @@ The HTML guides are located in the respective `build/guides` of each lab exercis
 In the `ComplianceAsCode` project, policies are referred to as security profiles.
 The HTML guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the HTML guide for the RHEL 8 Protection Profile for General Purpose Operating Systems (OSPP profile) has the `ssg-rhel8-guide-ospp.html` form.
 
-. Now, let's take a look at one of the provided HTML guides in a web browser. Go back to the console of your lab VM by going to the tab that you have opened of the lab environment's *power control and consoles page* from Lab 0.
+. Now, let's take a look at one of the provided HTML guides in a web browser.
+Go back to the console of your lab VM by going to the tab that you have opened of the lab environment's *power control and consoles page* from Lab 0.
 If you need to log in again as the *Lab User*, the password is *r3dh4t1!*.
 +
 image::vmconsole.png[200,200]

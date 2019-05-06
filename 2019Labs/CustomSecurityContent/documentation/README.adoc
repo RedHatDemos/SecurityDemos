@@ -22,7 +22,7 @@
 
 *Gabriel Gaspar Becker*, Software Engineer - Security Compliance in RHEL Security, Red Hat
 
-*Matúš Marhéfka*, Quality Engineer - Security Compliance in RHEL Security, Red Hat
+*Matúš Marhefka*, Quality Engineer - Security Compliance in RHEL Security, Red Hat
 
 
 == Overview and Prerequisites:
