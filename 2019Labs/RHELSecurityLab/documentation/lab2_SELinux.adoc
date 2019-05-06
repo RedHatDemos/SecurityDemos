@@ -485,6 +485,9 @@ In this section, we are going to test our pre-configured setup steps from before
 
 . SELinux does not deny access, but denials are logged for actions that would have been denied if running in enforcing mode. In order to show logged denials for certain actions we need to run the _curl_ command. AVC denial(s) will be generated and we can view it via the _ausearch_ command below.
 
++
+[source,text]
+----
 	[root@selinux1 selinux_scripts]# curl selinux{2,3,5}:7070
 	<h1>Custom Document Root</h1>
 	<h1>Custom Document Root</h1>
@@ -494,11 +497,12 @@ In this section, we are going to test our pre-configured setup steps from before
 
 	[root@selinux2 ~]# ausearch -m AVC -su httpd_t -ts recent
 
-avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
-avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
-avc:  denied  { map } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
-avc:  denied  { open } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
-avc:  denied  { getattr } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+  avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
+  avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
+  avc:  denied  { map } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+  avc:  denied  { open } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+  avc:  denied  { getattr } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+----
 
 === Lab 2.3.3 SELinux Troubleshooting
 In the previous step, we turned SELinux on and got AVC denials. Denial messages are logged when SELinux denies access. Let's find out why we got these AVC denials.
