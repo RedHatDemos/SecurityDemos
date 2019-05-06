@@ -171,18 +171,13 @@ You should see the fixed description now without the repeated *Setting the TMOUT
 
 
 === Lab 1.4 Customizing a Parametrized Rule
-In this lab exercise, we will learn about parametrized rules.
-What if we want to have a shorter timeout than the OSPP policy requires?
-In the following section, we will learn about parametrized rules by taking following steps:
+In this lab exercise, we will learn about parametrized rules. Parametrization can be used to set timeout durations, password length, umask, and other settings.
 
-. Learn where the value comes from.
-. Learn how is it applied to the rule.
-. Change it, and observe the result.
-. Learn what happens when the variable is omitted.
+In this lab exercise, we will learn about parametrized rules by: seeing where the value comes from, learning how is it applied to the rule, changing the parametrized rule and observing the result, and finally learning what happens when the variable is omitted.
 
 // TO BE DONE :-)
-. Modifying a rule like this is very easy, as this rule doesn’t have the timeout duration hardcoded - it is parametrized by a variable.
-As the description says, the rule uses the `timeout` variable, that is defined in the `var_accounts_tmout.var` file.
+. Modifying parametrized rules is very easy, as this rule doesn’t have the timeout duration hardcoded - it is parametrized by a variable.
+As the description for the *Set Interactive Session Timeout* rule says, the rule uses the `timeout` variable. This is defined in the `var_accounts_tmout.var` file.
 Similarly as in the previous step, we can search for the variable definition:
 +
 ----
