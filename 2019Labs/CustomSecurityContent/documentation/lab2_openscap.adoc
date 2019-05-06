@@ -34,22 +34,19 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 ** GUI frontend and datastream tool `scap-workbench`
 
 === Before you start
-
-* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
+. First, go to the Terminal window of your laptop. SSH into the workstation bastion host as *lab-user*.  This is the VM that we will be doing all of our lab exercises from. Don't forget to replace *GUID* with your lab provided *GUID*!
++
+[source, text]
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$
++
 * Make sure that you are in the project root when you start - run
 +
 ----
-$ cd /home/lab-user/labs/lab2_OpenSCAP
+~]$ cd /home/lab-user/labs/lab2_OpenSCAP
 ----
 +
 in the terminal.
-
-* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
-* Open the file explorer and also navigate to the project root.
-* Finally, open the Firefox browser.
-
-.Opening a new terminal window in Red Hat Enterprise Linux 8.
-image::0-01-setup.png[]
 
 == Introducing OpenSCAP command line tool
 
@@ -58,7 +55,7 @@ OpenSCAP provides a command line tool `oscap` that can be used for automated sec
 You can verify a successful installation of `oscap` tool by running:
 
 ----
-$ oscap --version
+lab2_OpenSCAP]$ oscap --version
 
 OpenSCAP command line tool (oscap) 1.3.0
 Copyright 2009--2018 Red Hat Inc., Durham, North Carolina.
@@ -84,14 +81,14 @@ In this Section we will build the security content for Red Hat Enterprise Linux 
 . In `/home/lab-user/labs/lab2_OpenSCAP` directory, build the content for Red Hat Enterprise Linux 8.
 +
 ----
-$ ./build_product rhel8
+lab2_OpenSCAP]$ ./build_product rhel8
 ----
 +
 . Take a look at the generated files in the `build` directory.
 +
 ----
-$ cd build
-$ ls
+lab2_OpenSCAP]$ cd build
+build]$ ls
 ...
 ----
 +
@@ -100,7 +97,7 @@ There are multiple files produced by the build. The file that is going to be use
 . Check which compliance profiles are available for RHEL8.
 +
 ----
-$ oscap info ssg-rhel8-ds.xml
+build]$ oscap info ssg-rhel8-ds.xml
 ...
 ----
 +
@@ -110,7 +107,7 @@ Each profile is identified by a profile ID.
 +
 The built ComplianceAsCode content is available as a RHEL `scap-security-guide` RPM package.
 Unlike the upstream repository that we work with now, the package contains only content that is officially tested and supported by Red Hat.
-Therefore, the `scap-security-guide` package in RHEL 8 contains only the OSPP and PCI-DSS profiles.
+Therefore, the `scap-security-guide` package in RHEL 8 contains only the OSPP and PCI-DSS profiles at the moment.
 +
 . Perform our first baseline testing scan with the vanilla OSPP profile.
 +
@@ -120,7 +117,7 @@ The real ID is `xccdf_org.ssgproject.content_profile_ospp`.
 Run the command as root using the `sudo` command to scan the system parts that the common users does not have access.
 +
 ----
-$ sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
+build]$ sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
 ...
 ----
 +
@@ -134,7 +131,7 @@ Now, you will see the compliance scan results for every security control in the 
 * use `--oval-results` to get detailed results in the report
 +
 ----
-$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html --oval-results ./ssg-rhel8-ds.xml
+build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
 
@@ -142,15 +139,15 @@ $ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/
 ====
 You can also generate the HTML report later by executing
 ----
-$ oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
+build]$ oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
 ====
 --
 
-. Open the report in Firefox web browser.
+. Now switch to the console view, and open the report in Firefox web browser by typing following in the terminal.
 +
 ----
-$ firefox /tmp/report.html
+[lab-user@workstation-GUID ~]$ firefox /tmp/report.html
 ----
 +
 You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
@@ -158,6 +155,7 @@ You will see the compliance scan results for every security control in the OSPP 
 image:lab1.1-scapreport.png[]
 
 . Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether a particular security control has passed or failed the scan.
+Other results you can frequently encounter are *notapplicable*, for rules that have been skipped as not relevant to the scanned system and *notchecked*, for rules without an automated check.
 
 . Click on the rule title in the HTML report.
 +
@@ -173,9 +171,9 @@ image::scap_report_fail.png[]
 
 == Customizing existing SCAP security content using SCAP Workbench
 
-. Click *Activities* at the top left part of the screen, then click the 9 dots and click the green-ish icon of SCAP Workbench.
+. In the console view, click *Activities* at the top left part of the screen, and select the green circular icon of SCAP Workbench.
 
-. After Workbench starts, select *Other SCAP content* and click on *Load Content*. A file browser window will show up. Locate `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_OpenSCAP/build` directory and click to *Open* to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
+. After Workbench starts, select *Other SCAP content* in a drop-down list, and click on *Load Content*. A file browser window will show up. Locate `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_OpenSCAP/build` directory and click to *Open* to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
 +
 image:load_content.png[]
 +
@@ -217,7 +215,7 @@ Putting the machine into compliance (for example by changing its configuration) 
 Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads!
 As a result, it is best practice to test the remediation changes before deploying.
 
-. All remediations will be executed locally.
+We will use terminal on your laptop again - there's no need to use console view for this part.
 
 . Generate an Ansible Playbook that will put your machine into compliance.
 We will generate a playbook from the scan results:
@@ -225,7 +223,7 @@ We will generate a playbook from the scan results:
 Use the `--fix-type ansible` option to request an ansible playbook with the fixes:
 +
 ----
-$ oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
+build]$ oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
 ----
 +
 We have specified the empty `result-id` because `oscap` supports generation of fixes from  a result file that has results from multiple scans. However, as there is only one result from a single scan, we don't have to specify the result ID explicitly.
@@ -233,15 +231,16 @@ We have specified the empty `result-id` because `oscap` supports generation of f
 Check the output using a text editor:
 +
 ----
-$ gedit playbook.yml
+build]$ nano playbook.yml
 ----
 +
+. You can exit `nano` by pressing *ctrl + x*
 . Generate Bash remediation script from the scan results. This can be accomplished by running:
 +
 Use `--fix-type bash` to request a bash script with the fixes
 +
 ----
-$ oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
+build]$ oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
 ----
 +
 We have specified the empty `result-id` because `oscap` supports generation of fixes from  a result file that has results from multiple scans. However, as there is only one result from a single scan, we don't have to specify the result ID explicitely.
@@ -249,8 +248,9 @@ We have specified the empty `result-id` because `oscap` supports generation of f
 Check the output using a text editor:
 +
 ----
-$ gedit bash-fix.sh
+build]$ nano bash-fix.sh
 ----
+. You can exit `nano` by pressing *ctrl + x*
 
 
 The Ansible Playbook can be used to configure a system to meet a compliant state. We will discuss using Ansible Playbooks in link:lab4_ansible.adoc[Lab Exercise 4].
