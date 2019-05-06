@@ -47,18 +47,25 @@ To build the content, take the following steps:
 . First, go to the Terminal window of your laptop. SSH into the workstation bastion host as *lab-user*.  This is the VM that we will be doing all of our lab exercises from. Don't forget to replace *GUID* with your lab provided *GUID*!
 +
 [source, text]
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+----
+~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 [lab-user@workstation-GUID ~]$
+----
 
 . Navigate to */home/lab-user/labs/lab1_introduction*.
 +
 [source, text]
-[lab-user@workstation-GUID ~]$ cd /home/lab-user/labs/lab1_introduction
+----
+~]$ cd /home/lab-user/labs/lab1_introduction
+----
+
 . From this directory, run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
 +
 [source, text]
-[lab-user@workstation-GUID ~]$ cd /home/lab-user/labs/lab1_introduction
-[lab-user@workstation-GUID lab1_introduction]$ ./build_product rhel8
+----
+~]$ cd /home/lab-user/labs/lab1_introduction
+lab1_introduction]$ ./build_product rhel8
+----
 +
 It is possible to also build content for other products.
 A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, eg. Firefox, Java, and so on.
@@ -75,8 +82,11 @@ We will now explore the built content in the subsequent lab exercises.
 
 The `ComplianceAsCode` project provides HTML guides that are a great resource for those interested in what rules a policy consists of.
 The HTML guides are located in the respective `build/guides` of each lab exercise subdirectory. Therefore, the full path of the directory for this lab exercise is:
++
 [source, text]
+----
 /home/lab-user/labs/lab1_introduction/build/guides/
+----
 
 
 In the `ComplianceAsCode` project, policies are referred to as security profiles.

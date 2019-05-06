@@ -43,7 +43,7 @@ in the terminal.
 .Opening a new terminal window in Red Hat Enterprise Linux 8.
 image::0-01-setup.png[]
 
-== Creating a new empty profile
+== Lab 3.1 Creating a new empty profile
 
 The basic building block of a security policy in ComplianceAsCode is a rule.
 The rule represents a single configuration setting, eg.
@@ -136,7 +136,7 @@ A Firefox Window will open and you will see the guide your Travel profile which 
 image::2-01-guide.png[HTML Guide]
 
 
-== Adding rules to the profile
+== Lab 3.2 Adding rules to the profile
 
 Let’s imagine that one of the requirements of your company policy is that root user cannot log in to the machine via SSH.
 At this point, we can reveal to you that ComplianceAsCode already contains a rule that implements this requirement.
@@ -218,7 +218,7 @@ $ firefox build/guides/ssg-rhel8-guide-travel.html
 A Firefox window will open and you will see your Travel profile which contains two rules.
 
 
-== Adding customizable rules to the profile and customizing them
+== Lab 3.3 Adding customizable rules to the profile and customizing them
 
 Let’s imagine that one of the requirements set in your company policy is that the user sessions must timeout after 5 minutes of user’s inactivity.
 
@@ -332,7 +332,7 @@ Firefox will open and you will see your Travel profile which contains 3 rules.
 Scroll down to the rule Account Inactivity Timeout and notice that 300 seconds have been substituted there.
 
 
-== Scanning the system against the new profile
+== Lab 3.4 Scanning the system against the new profile
 
 Now, you can use the new profile that you created in previous Subsections in order to scan your machine using OpenSCAP.
 
@@ -378,7 +378,7 @@ See the *OVAL details* section to examine the reason why this rule failed. It sa
 image::2-03-report.png[Report]
 
 
-== Creating a new rule from scratch
+== Lab 3.5 Creating a new rule from scratch
 
 Let’s say that one of the requirements in your corporate policy is that the users have to install the Hexchat application when their laptops are used on travel outside the company site, because the Hexchat is a preferred way to communicate with the company IT support centre.
 

@@ -4,7 +4,7 @@
 
 == Introduction
 
-As we already know from Exercise 1, ComplianceAsCode project provides security content that can be used for automated security scanning of the system.
+As we already know from link:lab1_introduction.adoc[Exercise 1], the ComplianceAsCode project provides security content that can be used for automated security scanning of the system.
 
 Red Hat Enterprise Linux 8 contains OpenSCAP Scanner, which is a security scanner that works perfectly with ComplianceAsCode content.
 The content that we build in ComplianceAsCode can be simply passed to OpenSCAP Scanner and the scan can be started right away.

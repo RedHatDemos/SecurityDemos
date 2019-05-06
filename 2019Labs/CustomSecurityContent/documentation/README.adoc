@@ -20,6 +20,10 @@
 
 *Watson Sato*, Software Engineer - Security Compliance in RHEL Security, Red Hat
 
+*Gabriel Gaspar Becker*, Software Engineer - Security Compliance in RHEL Security, Red Hat
+
+*Matúš Marhéfka*, Quality Engineer - Security Compliance in RHEL Security, Red Hat
+
 
 == Overview and Prerequisites:
 
@@ -53,6 +57,7 @@ You will each be given your own unique *GUID*, which you will use to access your
 
 
 == Table of Contents
+
 * link:lab0_setup.adoc[Lab exercise 0: Setup steps]
 * link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
 * link:lab2_openscap.adoc[Lab exercise 2: Automated Security Scanning Using ComplianceAsCode]
