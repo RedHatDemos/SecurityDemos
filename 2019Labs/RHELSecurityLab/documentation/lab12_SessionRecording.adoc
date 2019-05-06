@@ -38,7 +38,7 @@ Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on t
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-Open a Firefox web browser: 
+Open a Firefox web browser:
 
 image:images/session_recording_firefox.png[]
 
@@ -86,7 +86,7 @@ That is it. Now the "*q*" user will be recorded.
 
 Let's create some activity by one of the recorded users. Then you will be able to play it back in Cockpit.
 
-Open the *Terminal*. 
+Open the *Terminal*.
 
 image:images/session_recording_terminal.png[]
 
@@ -140,7 +140,7 @@ Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on t
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-Open a Firefox web browser: 
+Open a Firefox web browser:
 
 image:images/session_recording_firefox.png[]
 
@@ -176,7 +176,7 @@ Restart playback and fast-forward to end:
 
 image:images/session_recording_fastforward.png[]
 
-Zoom controls: 
+Zoom controls:
 
 image:images/session_recording_zoom_controls.png[]
 
@@ -203,4 +203,4 @@ You can try searching for "nginx.conf" to find time when the config was edited. 
 image:images/session_recording_search.png[]
 
 <<top>>
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab12_SessionRecording.adoc[ Lab 12: Session Recording ]
+link:README.adoc#table-of-contents[ Table of Contents ]

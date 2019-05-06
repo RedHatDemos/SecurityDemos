@@ -218,4 +218,4 @@ You will now see that the *idm* service has been removed successfully.
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ]
+link:README.adoc#table-of-contents[ Table of Contents ]| link:lab11_cryptopolicies.adoc[ Lab 11: Crypto Policies ]

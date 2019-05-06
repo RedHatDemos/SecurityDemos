@@ -280,6 +280,9 @@ Starting to collect Insights data for ic4.summit.example.com
 Uploading Insights data.
 Successfully uploaded report from 41d3c62e-5c18-42ad-a1ff-65f7c37cc315 to account 6057187.
 ----
++
+NOTE:
+If you see a traceback message during the insights-client --register, you will need to do a yum -y remove python-chardet and yum -y install insights-client again.
 
 === Lab 5.2 Manually fixing the payload injection security issue
 Now that both our *ic1.summit.example.com* and *ic4.summit.example.com* hosts are configured and registered with Red Hat Insights, let's fix some security issues reported to us by Red Hat Insights.
