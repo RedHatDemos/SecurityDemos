@@ -33,6 +33,31 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
 
+=== Steps to do
+
+On the remote desktop, we are going to browse the project files and open some of them e.g. in a web browser.
+Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
+
+image::desktopfilefolder.png[100,100]
+
+Just to make sure, click the `Home` icon in the left upper part of the file explorer window.
+Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
+`lab1_introduction`
+folder. The whole exercise will take place under the
+`/home/lab-user/labs/lab1_introduction`
+folder that we will access from both text and graphical consoles.
+
+Now log in to the VM using the text console if you haven't done so already.
+Open the terminal window on the lab laptop.
+Execute the following command,
+but don't forget to replace `GUID` with your lab provided GUID:
+
+----
+~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$
+----
+
+
 === Lab 1.1 Building the content
 
 The ComplianceAsCode project consists of human readable files that are compiled into standard-compliant files that are difficult to read and edit directly.
@@ -44,31 +69,21 @@ The build itself is based on: Python, the `oscap` tool, and XSLT transformations
 
 To build the content, take the following steps:
 
-. First, go to the Terminal window of your laptop. SSH into the workstation bastion host as *lab-user*.  This is the VM that we will be doing all of our lab exercises from. Don't forget to replace *GUID* with your lab provided *GUID*!
+. First, go to the text console, i.e. the Terminal window of your laptop.
+Navigate to */home/lab-user/labs/lab1_introduction*.
 +
-[source, text]
-----
-~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$
-----
-
-. Navigate to */home/lab-user/labs/lab1_introduction*.
-+
-[source, text]
 ----
 ~]$ cd /home/lab-user/labs/lab1_introduction
 ----
 
 . From this directory, run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
 +
-[source, text]
 ----
-~]$ cd /home/lab-user/labs/lab1_introduction
 lab1_introduction]$ ./build_product rhel8
 ----
 +
 It is possible to also build content for other products.
-A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, eg. Firefox, Java, and so on.
+A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, e.g. Firefox, Java, and so on.
 +
 In general, you can run `./build_product <product>` to build only the content for a product you are interested in.
 The `<product>` is the lowercase form of the product, so you would run: `./build_product rhel8` to build content for RHEL 8, `./build_product fedora` to build content for Fedora, and so on.
@@ -82,25 +97,27 @@ We will now explore the built content in the subsequent lab exercises.
 
 The `ComplianceAsCode` project provides HTML guides that are a great resource for those interested in what rules a policy consists of.
 The HTML guides are located in the respective `build/guides` of each lab exercise subdirectory. Therefore, the full path of the directory for this lab exercise is:
-+
-[source, text]
+
 ----
 /home/lab-user/labs/lab1_introduction/build/guides/
 ----
 
-
 In the `ComplianceAsCode` project, policies are referred to as security profiles.
 The HTML guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the HTML guide for the RHEL 8 Protection Profile for General Purpose Operating Systems (OSPP profile) has the `ssg-rhel8-guide-ospp.html` form.
 
-. Now, let's take a look at one of the provided HTML guides in a web browser. Go back to the console of your lab VM by going to the tab that you have opened of the lab environment's *power control and consoles page* from Lab 0. If you need to log in again as the *Lab User*, the password is *r3dh4t1!*.
+. Now, let's take a look at one of the provided HTML guides in a web browser. Go back to the console of your lab VM by going to the tab that you have opened of the lab environment's *power control and consoles page* from Lab 0.
+If you need to log in again as the *Lab User*, the password is *r3dh4t1!*.
 +
 image::vmconsole.png[200,200]
 
-. To open the HTML guide in a web browser,  *Click on Activites at the top left of your desktop and press the file cabinet icon* to get to the files on your laptop.
+. Remember how we opened the file explorer at the beginning of this exercise?
+Click the `Activities` buttion at the top left corner, and click the folder icon again.
+The file explorer window will come up again.
 +
-image::desktopfilefolder.png[100,100]
-
-. Next, let's navigate to the location of the HTML guides by clicking on the *labs* folder, followed by the *lab1_introduction* folder, then the *build* folder, and lastly the *guides* folder. Then double click on the *ssg-rhel8-guide-ospp.html* file to open the HTML guide for the RHEL 8 OSPP profile.
+We will now use it to open the HTML guide in a web browser.
+Let's navigate to the location of the HTML guides.
+Being in the `lab1_introduction` directory, you just have to click the *build* folder, followed by the *guides* folder.
+Then, double click on the *ssg-rhel8-guide-ospp.html* file to open the HTML guide for the RHEL 8 OSPP profile.
 +
 image::navigateospp.png[1000,1000]
 
@@ -117,7 +134,6 @@ For example, let's take a closer look at the *Set Interactive Session Timeout*  
 
 . In the HTML guide of the RHEL 8 OSPP profile that you have opened in Firefox, press `Ctrl+F` and search for `session timeout`.
 
-+
 .The *Set Interactive Session Timeout* rule in the RHEL 8 OSPP profile HTML guide
 image::session_timeout.png[]
 {empty} +
@@ -164,7 +180,9 @@ Notice that the `linux_os/guide/system/accounts/accounts-session/accounts_tmout`
 [lab-user@workstation-GUID ~]$ cd /home/lab-user/labs/lab1_introduction
 [lab-user@workstation-GUID lab1-introduction]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 
-. Luckily, the rule’s description is right at the upper part of the `rule.yml`. Remove the repeated text occurrence of *Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that*. Press *Ctrl*, followed by *x* , *y* , and *Enter* to save the changes and exit.
+. Luckily, the rule’s description is right at the upper part of the `rule.yml`.
+Remove the repeated text occurrence of *Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that*.
+Press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
 
 . Now let's recompile the content to check whether our fix worked.
 . Go to the following directory: */home/lab-user/labs/lab1_introduction*. Then, recompile the content from this directory.

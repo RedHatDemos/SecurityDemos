@@ -10,21 +10,31 @@ From this page, you will be assigned your unique GUID, which you will use to acc
 . Select the proper *Lab Code* from the drop down list. Find the lab `T9A495 - Creating customized security policy content to automate security compliance`.
 The activation key is *security*.
 
-. The resulting *Lab Information page* will display your lab's GUID and other useful information about your lab environment. Take note of your assigned GUID. You will use this GUID to access your lab's environment and systems.  Your unique GUID will also be embedded in your lab environment's host names. From this *Lab Information page*, you will also be able to access your unique lab environment's power control and consoles. Go to the last bullet point and click on *here* to access the environment's power control and consoles.
+. The resulting *Lab Information page* will display your lab's GUID and other useful information about your lab environment.
+Take note of your assigned GUID.
+You will use this GUID to access your lab's environment and systems.
+Your unique GUID will also be embedded in your lab environment's host names.
+From this *Lab Information page*, you will also be able to access your unique lab environment's power control and consoles.
+Go to the last bullet point and click on *here* to access the environment's power control and consoles.
 +
-image:labinfopage.png[4000,4000]
+image:labinfopage.png[800,800]
 
-. Notice that one workstation VM is shown on the power control and consoles page. This is a Red Hat Enterprise Linux 8 system with GUI and will be the machine that we will use throughout all the lab exercises in this lab. Click the *CONSOLE* button. Log in as Lab User with password *r3dh4t1!*.
+. Notice that one workstation VM is shown on the power control and consoles page.
+This is a Red Hat Enterprise Linux 8 system with GUI and will be the machine that we will use throughout all the lab exercises in this lab.
+Click the *CONSOLE* button.
+Log in as Lab User with password *r3dh4t1!*.
 +
 image:vmconsole.png[200,200]
 
+Congratulations, you got to your *graphical console*.
 
-== Using the console to access the remote shell
 
-Open the `Terminal` application, and enter the following command, replacing the `REPL` with your actual `GUID`:
+== Using the text console to access the remote shell
+
+Open the `Terminal` application, and enter the following command, replacing the `GUID` with your actual GUID:
 
 ----
-~]$ ssh lab-user@workstation-REPL.rhpds.opentlc.com
+~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
 so for example for `GUID` of `3fa1`, you would execute `$ ssh lab-user@workstation-3fa1.rhpds.opentlc.com`
@@ -37,6 +47,8 @@ You can tell that by listing the directory with lab exercises:
 ~]$ ls labs
 lab1_introduction  lab2_OpenSCAP  lab3_profiles  lab4_ansible  lab5_oval
 ----
+
+Congratulations, now you got to your *text console*.
 
 
 == Command listings
