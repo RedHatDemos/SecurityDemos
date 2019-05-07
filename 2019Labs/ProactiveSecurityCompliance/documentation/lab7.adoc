@@ -312,7 +312,7 @@ image:images/lab7.5-jenkins-blueocean-view.png[]
 +
 image:images/lab7.5-jenkins-blueocean-artifacts.png[]
 +
-. Then view each of the reports
+. Then view each of the reports. You may need to refresh the browser.
 +
 image:images/lab7.5-jenkins-blueocean-artifacts-links.png[]
 +
