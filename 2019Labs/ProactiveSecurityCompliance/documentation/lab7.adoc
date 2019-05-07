@@ -319,13 +319,13 @@ image:images/lab7.5-jenkins-blueocean-artifacts-links.png[]
 . After viewing the reports, feel free to promote the application image into the staging and prod projects:
 +
 image:images/lab7.5-jenkins-promote-stage.png[]
-+
-image:images/lab7.5-jenkins-promote-prod.png[]
+
 +
 . The staging version of the app can be viewed here:
 +
 http://ecommerce-{userid}-stage.apps.{GUID}.summit.opentlc.com
 +
+image:images/lab7.5-jenkins-promote-prod.png[]
 . The production version of the app can be viewed here:
 +
 http://ecommerce-{userid}-prod.apps.{GUID}.summit.opentlc.com
