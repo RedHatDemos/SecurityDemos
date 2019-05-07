@@ -80,7 +80,7 @@ In the example above, the output of the `cat /etc/passwd` contains lots of lines
 When composing a file in an editor based on an existing document, you probably use the copy-pasting:
 You select text you want to copy in the document, you press `Ctrl+C` to copy it to the system clipboard, and you paste it from the clipboard to the editor using `Ctrl+V`.
 
-Mind that when you paste to the terminal editor, you have to use `Ctrl+Shift+V` instead of the `Ctrl+V`.
+Mind that when you paste to the **terminal console** or **terminal editor**, you have to use `Ctrl+Shift+V` instead of the `Ctrl+V`.
 The same applies when copying from the terminal window - you have to use `Ctrl+Shift+C` after selecting the text, not just `Ctrl+C`.
 
 
