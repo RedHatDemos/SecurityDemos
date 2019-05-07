@@ -101,11 +101,10 @@ Create new file `travel.profile` file there and open it in the editor:
 
 Next, create the basic structure and fill in the profile title and description as specified in this listing.
 You can copy-paste the following text to the editor - just keep in mind that when pasting to the console, you
-link:lab0_setup.adoc#copy_pasting[ have to use ]
+// link:lab0_setup.adoc#copy-pasting[ have to use ]
 have to use
 `Ctrl+Shift+V`.
 
-[source, yaml]
 ----
 documentation_complete: true
 
@@ -217,7 +216,7 @@ In our case, the rule ID is `sshd_disable_root_login`.
 Add the rule ID to selections list in your travel profile.
 
 ----
-$ nano rhel8/profiles/travel.profile
+[... lab3_profiles]$ nano rhel8/profiles/travel.profile
 ----
 
 Add `sshd_disable_root_login` as a new item in `selections` list.
@@ -409,10 +408,11 @@ The datastream is called `ssg-rhel8-ds.xml` and is located in the `build` direct
 `oscap` is the command-line tool that we will use to scan the machine.
 We need to give `oscap` the name of the profile (`travel`) and the path to the built datastream (`ssg-rhel8-ds.xml`) as arguments.
 We will also add arguments to turn on the full reporting, which will generate XML and HTML results, that you can review later.
-Run the following command:
++
+Run the command as the privileged user using the `sudo` command to scan the system parts that the common users does not have access.
 +
 ----
-$ sudo oscap xccdf eval --results results.xml --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
+[... lab3_profiles]$ sudo oscap xccdf eval --results results.xml --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
 ----
 +
 . Check the scan results.
@@ -423,12 +423,12 @@ In your terminal you see all 3 rules, and that the 2 of them were evaluated.
 image::2-02-terminal.png[Terminal]
 +
 . Find out the details in the HTML report.
+The report is located in the `/home/lab-user/labs/lab3_profiles` directory, so you can locate it using the file explorer as you did in the previous exercises:
 +
-Open the HTML report using the following command:
-+
-----
-$ firefox report.html
-----
+Open the file explorer application by clicking `Activities`, and then the blue cabinet icon.
+Once it comes up, click the `Home` entry at the upper left part of the browser's window.
+Then, click `labs` and `lab3_profiles` directories.
+The `report.html` file should be one of the files there, so double-click it to open it in the browser.
 +
 The structure of the HTML report is similar to the HTML guide, but it contains the evaluation results.
 After clicking on the rule title, you can see the detailed rule results.
@@ -471,9 +471,10 @@ Let’s say that `package_hexchat_installed` could be a suitable ID.
 We will create the directory using `mkdir`, the `-p` switch makes sure that the directory is created along with it's parents if needed.
 +
 ----
-$ mkdir -p linux_os/guide/system/software/package_hexchat_installed
+[... lab3_profiles]$ cd /home/lab-user/labs/lab3_profiles
+[... lab3_profiles]$ mkdir -p linux_os/guide/system/software/package_hexchat_installed
 ----
-+
+
 . Create `rule.yml` in the rule directory.
 +
 A description of the rule is stored.
@@ -481,10 +482,12 @@ Each rule needs to have it.
 The `rule.yml` is a simple YAML file.
 +
 ----
-$ gedit linux_os/guide/system/software/package_hexchat_installed/rule.yml
+[... lab3_profiles]$ nano linux_os/guide/system/software/package_hexchat_installed/rule.yml
 ----
 +
-Add the following content to the `rule.yml` file using your editor.
+Add the following content to the `rule.yml`:
++
+NOTE: You can select the text in the laptop's browser, copy it to the clipboard using `Ctrl+C`, and paste it to the `nano` editor using `Ctrl+Shift+V`.
 +
 ----
 documentation_complete: true
@@ -498,6 +501,9 @@ rationale: The Hexchat application enables IRC communication with the corporate 
 severity: medium
 ----
 +
+When you have finished editing,
+press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
++
 .. `documentation_complete: true` again indicates that the rule should be picked up by the build system whenever it is applicable.
 .. `title` is the rule title, which will be displayed on the command line and in SCAP Workbench.
 .. `description` is a section which purpose is to describe the check.
@@ -507,7 +513,13 @@ severity: medium
 . Add the rule ID to the profile selections.
 +
 As described in the previous section, you need to add the ID of your new rule (`package_hexchat_installed`) to the selections list in your profile (`travel.profile`).
-Your `travel.profile` file in the `rhel8/profiles` directory should now look like in the following listing:
+You do it by editing the travel profile file:
++
+----
+[... lab3_profiles]$ nano rhel8/profiles/travel.profile
+----
++
+When adding the `package_hexchat_installed` item, please make sure that you use spaces, not tabs for indentation:
 +
 ----
 documentation_complete: true
@@ -524,6 +536,9 @@ selections:
     - package_hexchat_installed
 ----
 +
+When you have finished editing,
+press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
+
 . Use templates to generate checks automatically.
 +
 We have a template that will generate the automated checks in Open Vulnerability and Assesment Language (OVAL), Ansible, Bash, Anaconda and Puppet languages.
@@ -536,25 +551,38 @@ Add the `hexchat` package to the list of installed packages to be checked.
 This list is called `package_installed.csv` and is located in the `templates/csv` directory.
 +
 ----
-$ gedit rhel8/templates/csv/packages_installed.csv
+[... lab3_profiles]$ nano rhel8/templates/csv/packages_installed.csv
 ----
 +
-Add `hexchat` as a new line to this file and save the file.
+Add `hexchat` as a new line to this file, so it looks like this:
++
+----
+aide
+audit
+...
+postfix
+tmux
+sssd
+hexchat
+----
++
+When you have finished editing,
+press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
 +
 . Build the content.
 +
 ----
-$ ./build_product rhel8
+[... lab3_profiles]$ ./build_product rhel8
 ----
-+
+
 . Check the result HTML guide.
+You should have it as a tab in your browser, which you can refresh by pressing the refresh button in the upper left part of the browser window.
+Alternatively, you can locate the `ssg-rhel8-guide-travel.html` file in the `/home/lab-user/lab3_profiles/build/guides` directory as you already did earlier in this exercise.
 +
-----
-$ firefox build/guides/ssg-rhel8-guide-travel.html
-----
+.The Firefox Refresh Page button
+image::browser-refresh.png[500,500]
 +
-A Firefox window will open and you will see your Travel profile which contains 4 rules.
-You should see your new rule there.
+Either way, you will see your Travel profile with 4 rules, including the newly added rule.
 +
 .New rule Install Hexchat Application displayed in HTML guide
 image::2-04-rule.png[New rule]
