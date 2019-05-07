@@ -1,5 +1,7 @@
 == Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
 
+*Lab Length: Medium/Average*
+
 === Goal of Lab 7
 
 The goal of this lab is to learn how to automate and build security into the application and build a _secure software factory_ that orchestrates a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.

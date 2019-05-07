@@ -1,5 +1,7 @@
 == Lab 3: Automated Patching of Host Systems
 
+*Lab Length: Long*
+
 === Goal of Lab 3
 The goal of this lab is to learn how you can use a combination of Red Hat Ansible Tower and Red Hat Satellite to implement an automated patching strategy to automatically update and patch host systems at scale in different lifecycle environments. Specifically, you will learn how you can automatically apply patches to host systems and how to automate the tasks that have to happen behind the scenes to manage content in Red Hat Satellite.
 

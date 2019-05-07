@@ -1,5 +1,7 @@
 == Lab 5: Proactive Security and Automated Risk Management at scale with Predictive Analytics
 
+*Lab Length: Medium/Average*
+
 === Goal of Lab 5
 The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. In this lab, we will focus only on the specific security features of Red Hat Insights.
 

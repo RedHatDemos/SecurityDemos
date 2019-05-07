@@ -1,5 +1,7 @@
 == Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems
 
+*Lab Length: Medium/Average*
+
 === Goal of Lab 4
 The goal of this lab is to perform additional security hardening and configuration management tasks on our host systems.
 

@@ -1,5 +1,7 @@
 == Lab 6: Automated Security Hardening of a Hacked Web Application
 
+*Lab Length: Medium/Average*
+
 === Goal of Lab 6
 The goal of this lab is to learn how to use Red Hat Ansible Automation to automatically security harden a hacked WordPress web application. Specifically, you will first install a simple Wordpress web application with default credentials in an automated way using Red Hat Ansible Automation. Then, you will exploit this web application since it is left open with liberal permissions and no password set. Finally, you will automatically remediate the issue with Red Hat Ansible Automation.
 
@@ -318,6 +320,6 @@ ERROR 1045 (28000): Access denied for user
         permissionz to the database
 ----
 
-. In summary, the default WordPress application install left us vulnerable to a SQL injection attack. The database was not secure since it was allowing us to connect without a password from a remote machine. This is not an uncommon situation. Our hardening Ansible playbook allowed us to harden the database server targets and remove accounts with open access in an automation fashion. 
+. In summary, the default WordPress application install left us vulnerable to a SQL injection attack. The database was not secure since it was allowing us to connect without a password from a remote machine. This is not an uncommon situation. Our hardening Ansible playbook allowed us to harden the database server targets and remove accounts with open access in an automation fashion.
 
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab7.adoc[Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]

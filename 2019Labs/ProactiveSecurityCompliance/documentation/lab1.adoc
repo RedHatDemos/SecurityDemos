@@ -1,4 +1,6 @@
-== Lab 1: Automated Scanning and Remediation of Host Systems for Vulnerabilities and Security Compliance
+== Lab 1: Automated Scanning and Remediations of Host Systems for Vulnerabilities and Security Compliance
+
+*Lab Length: Long*
 
 === Goal of Lab 1
 The goal of this lab is to learn how to use a combination of Red Hat Ansible Automation , Red Hat Satellite, Red Hat CloudForms, and OpenSCAP to automatically detect and remediate security and compliance issues in a controlled way for automated security compliance at scale.

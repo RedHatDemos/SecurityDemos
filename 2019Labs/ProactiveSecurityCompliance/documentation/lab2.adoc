@@ -1,5 +1,7 @@
 == Lab 2: Enforcing Automated Compliance with Security Policies
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab 2
 The goal of this lab is to introduce you to the power and flexibility of Red Hat Ansible Automation and Red Hat CloudForms to enforce compliance with your security policies in an automated fashion.
 
