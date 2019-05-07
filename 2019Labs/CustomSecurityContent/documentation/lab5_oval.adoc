@@ -29,22 +29,9 @@ The steps how to accomplish this are in the `tests/README.md` file of the `Compl
 == Hands-on
 
 
-=== Before you start
+=== Lab 5.1 Before you start
 
-Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
-
-image::desktopfilefolder.png[100,100]
-
-Just to make sure, click the `Home` icon in the left upper part of the file explorer window.
-Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
-`lab5_oval`
-folder. The whole exercise will take place under the
-`/home/lab-user/labs/lab5_oval`
-folder that we will access from both text and graphical consoles.
-
-image::files-navi.png[700,700]
-
-Now log in to the VM using the text console if you haven't done so already.
+Log in to the VM using the text console if you haven't done so already.
 Open the terminal window on the lab laptop.
 Execute the following command,
 but don't forget to replace `GUID` with your lab provided GUID:
@@ -64,7 +51,7 @@ Repeat the procedure, so you connect to the VM in that terminal window as well:
 ----
 
 
-=== OVAL introduction
+=== Lab 5.2 OVAL introduction
 
 OVAL stands for Open Vulnerability and Assessment Language.
 In a nutshell, it is an XML-based declarative language that is part of the SCAP standard.
@@ -81,10 +68,10 @@ The scanner evaluates the check, and determines whether the system passes.
 
 In this lab exercise, we will go through the OVAL snippet of the `accounts_tmout` rule.
 We will see how even simple checks can get complicated soon, and what can we do about it.
-Finally, we will discover that the check has been written incorrectly, and and we will fix it.
+Finally, we will discover that the check has been written incorrectly, and we will fix it.
 
 
-=== Anatomy of an existing check-remediation pair
+=== Lab 5.3 Anatomy of an existing check-remediation pair
 
 Select one of your terminals, go to the lab directory and build the content:
 
@@ -103,7 +90,7 @@ image::desktopfilefolder.png[100,100]
 Just to make sure, click the `Home` icon in the left upper part of the file explorer window.
 Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
 `lab5_oval`, `build` and the `guides` directories.
-Finally, double-click the `ssg-rhel8-guide-travel.html` file.
+Finally, double-click the `ssg-rhel8-guide-ospp.html` file.
 
 In this lab exercise, we will focus on the `accounts_tmout` rule.
 In order to find the rule entry it in the guide, press `Ctrl+F` or use the `Edit->Find in this page` menu item, and search for the `Set Interactive Session Timeout` string, which is the rule title.
@@ -120,7 +107,7 @@ TMOUT=600
 
 ----
 
-When dealing with the rule check, we will focus on those two aspects:
+When dealing with the rule check, there are additional aspects to have in mind:
 
 - As the timeout is supposed to be set to 600 seconds, what is the consequence if the timeout value is set to 100?
 Is it more or less secure?
@@ -135,34 +122,31 @@ Environmental variables s.a. `PATH` and `HOME` are commonly exported, so this pr
 We want to make sure that the rule's check will allow both forms - with and without `export`, although the `export` keyword is not required.
 
 
-==== Bash remediation
+==== Lab 5.3.1 Bash remediation
 
-Let's examine the bash remediation - you can either
+Let's examine the bash remediation - open the respective file in the text editor:
 
-- scroll down the rule entry in the HTML guide and click the `(show)` link next to the `Remediation Shell Script` label, or
-- open the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file in the text editor:
-+
 ----
 [... lab5_oval]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh
 ----
-+
-You don't need to make any changes.
-After you are finished with looking, press `Ctrl+x` to bring up the "save and exit" option.
-If you are asked about saving any changes, you probably don't want that, in which case press `n`.
 
-Either way, the remediation body looks like this:
+The remediation body looks like this:
+
+NOTE: The header of the remediation is processed by the build system, so the actual file contents and the remediation displayed in the HTML guide differ.
 
 [source,bash]
 ----
-
 if grep --silent ^TMOUT /etc/profile ; then
         sed -i "s/^TMOUT.*/TMOUT=$var_accounts_tmout/g" /etc/profile
 else
         echo -e "\n# Set TMOUT to $var_accounts_tmout per security requirements" >> /etc/profile
         echo "TMOUT=$var_accounts_tmout" >> /etc/profile
 fi
-
 ----
+
+You don't need to make any changes to the file.
+After you are finished with looking, press `Ctrl+x` to bring up the "save and exit" option.
+If you are asked about saving any changes, you probably don't want that, in which case press `n`.
 
 We can see that the remediation is in sync with the description - it handles the `/etc/profile` file, and it either
 
@@ -170,17 +154,17 @@ We can see that the remediation is in sync with the description - it handles the
 - modifies the `TMOUT` assignment, so that the correct value is used if an assignment already exists.
 
 
-==== OVAL check
+==== Lab 5.3.2 OVAL check
 
 Let's move on to the OVAL check:
 
 Open the file that defines the check in the text editor:
 
 ----
-[... lab5_oval]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh
+[... lab5_oval]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml
 ----
 
-That file is much more complicated, so let's examine it piece-wise:
+That file is much more complicated, so let's examine it piece by piece:
 
 We have the leading `definition` element:
 
@@ -226,8 +210,10 @@ The first test checks for `TMOUT` setting in the `/etc/profile` file, the other 
 If either of those tests passes, the whole test passes as well, as the `operator="OR"` attribute of the `criteria` element imposes.
 
 A test is typically composed of an object and state definitions.
-In order for test to pass, the object has to exist, and it has to conform to the respective state.
-The test for the `/etc/profile` criterion and it's dependencies look like this:
+The object defines what should be gathered on the tested system, the state defines expected properties of the object.
+In order for the test to pass, the object has to exist, and it has to conform to the specified state.
+
+We will now examine the test for the `/etc/profile` criterion and it's dependencies:
 
 [source,xml]
 ----
@@ -237,13 +223,27 @@ The test for the `/etc/profile` criterion and it's dependencies look like this:
     <ind:object object_ref="object_etc_profile_tmout" />
     <ind:state state_ref="state_etc_profile_tmout" />
   </ind:textfilecontent54_test>
+  ...
+----
 
+The object definition associates a filename with a regular expression.
+The filename is checked for the regular expression, and if there is a match, contents of the regular expression group become the object.
+The `instance` element that equals 1 tells us that it is the first match of the regular expression what defines the object.
+
+[source,xml]
+----
+  ...
   <ind:textfilecontent54_object id="object_etc_profile_tmout" version="1">
     <ind:filepath>/etc/profile</ind:filepath>
     <ind:pattern operation="pattern match">^[\s]*TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
+----
 
+The state is a specification that the object (i.e. the matched substring) should be an integer that equals to the value of a variable `var_accounts_tmout`.
+
+[source,xml]
+----
   <ind:textfilecontent54_state id="state_etc_profile_tmout" version="1">
     <ind:subexpression datatype="int" operation="equals" var_check="all" var_ref="var_accounts_tmout" />
   </ind:textfilecontent54_state>
@@ -252,13 +252,6 @@ The test for the `/etc/profile` criterion and it's dependencies look like this:
       id="var_accounts_tmout" version="1" />
   ...
 ----
-
-We see that the `test_etc_profile_tmout` test references the `object_etc_profile_tmout` object and the `state_etc_profile_tmout` state.
-The object definition associates a filename with a regular expression.
-The filename is checked for the regular expression, and if there is a match, contents of the regular expression group become the object.
-The `instance` element that equals 1 tells us that it is the first match of the regular expression what defines the object.
-
-The state is a specification that the object (i.e. the matched substring) should be an integer that equals to the value of a variable `var_accounts_tmout`.
 
 There are two regular expression that check for `TMOUT=...` in the `shared.xml` file, one for the `profile` test, and one for the `profile.d/\*.sh` test.
 As there are two types of locations that need to be examined (the single `/etc/profile` file and `*.sh` files in the `/etc/profile.d` directory), there have to be two objects.
@@ -274,7 +267,7 @@ Therefore, press `Ctrl+x` to bring up the "save and exit" option.
 If you are asked about saving any changes, you probably don't want that, in which case press `n`.
 
 
-== Tests introduction
+== Lab 5.4 Tests introduction
 
 The `ComplianceAsCode` project features a test suite that is very useful to define what scenarios the check and the remediation are supposed to handle.
 It sets up a system to a certain state, and runs the scan and possibly remediations.
@@ -294,7 +287,7 @@ The test suite support `libvirt` VMs, and `docker` or `podman` containers that s
 In this exercise, we are going to use a `podman` container with the RHEL7 image.
 
 
-== Tests Hands-on
+== Lab 5.5 Tests Hands-on
 
 To produce the RHEL7 content that we need to test RHEL7 image, we need to build it:
 
@@ -356,7 +349,7 @@ Therefore, it may be practical to dedicate a terminal window for this purpose.
 You can browse the command history using `Up` and `Down` keyboard arrows keys, so if you want to rebuild after the tests run finishes, tap the `Up` key until the `build_product` command shows up (typically you have to tap twice), and confirm the execution of the build command by pressing `Enter`.
 
 
-== OVAL optimization
+== Lab 5.6 OVAL optimization
 
 In this section, we will analyze the OVAL check for the `accounts_tmout` rule, and we will perform the following steps:
 
@@ -368,15 +361,18 @@ In this section, we will analyze the OVAL check for the `accounts_tmout` rule, a
 
 // This comment is here just to break the numbered list.
 
-. The OVAL test repeats itself a little bit - there are checks for the `/etc/profile` file, as well as for others `/etc/profile.d/*.sh` files, but the tests and respective objects are very similar.
+
+=== Lab 5.6.1 Code duplication analysis
+
+The OVAL test repeats itself a little bit - there are checks for the `/etc/profile` file, as well as for other `/etc/profile.d/*.sh` files, but the tests and respective objects are very similar.
 This makes editing tedious and prone to https://en.wikipedia.org/wiki/Copy_and_paste_programming#/media/File:Forgotten_edits_in_copypaste_programming.gif[copy-paste errors].
-Luckily, `ComplianceAsCode` supports the http://jinja.pocoo.org/docs/2.10/[jinja2] macro language that can be used to introduce some templating, thus removing this duplicity.
-+
+Luckily, `ComplianceAsCode` supports the http://jinja.pocoo.org/docs/2.10/[jinja2] macro language that can be used to introduce templating, thus removing this duplicity.
+
 Let's analyze what is the difference between the two tests:
-+
+
 There is a difference in name and comment, and test objects are also different.
 Compare the two following excerpts:
-+
+
 [source,xml]
 ----
 <ind:textfilecontent54_test check="all" check_existence="all_exist"
@@ -393,14 +389,32 @@ Compare the two following excerpts:
 </ind:textfilecontent54_test>
 ...
 ----
-+
+
 We have `etc_profile_tmout` and `etc_profiled_tmout` (i.e. there is the extra **d**) in test ID and in the object reference.
 
-. Luckily, the Jinja2 language enables us to define http://jinja.pocoo.org/docs/2.10/templates/#macros[macros] that can help us to remove the duplication.
+
+=== Lab 5.6.2 Deduplication of tests
+
+Luckily, the Jinja2 language enables us to define http://jinja.pocoo.org/docs/2.10/templates/#macros[macros] that can help us to remove the duplication.
 We are going to define a macro that accepts the filename comment and the test stem as arguments.
-+
+
 Therefore, we remove both tests, and we add the new macro and its new invocations.
-+
+
+TIP: We will now be editing files in the rule directory, and building the content and testing.
+Therefore, it is advantageous to reserve one terminal window for builds and tests, and the other one for edits.
+
+TIP: To delete a text section in `nano`, move the cursor to the start of the text you want to select.
+Then, press the `Alt-A` key combination to mark the start, then move the cursor to the end of the section you want to select.
+Finally, press `Ctrl+K` to erase the selection.
+Undo by pressing `Alt+U`, redo by `Alt-E`.
+
+----
+[... lab5_oval]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
+[... accounts_tmout]$ nano oval/shared.xml
+----
+
+Now, delete the two `textfilecontent54_test` XML elements, and paste the following content there instead, i.e. between the `definition` and the first of the `textfilecontent54_object` elements:
+
 [source,xml]
 ----
 
@@ -415,18 +429,24 @@ Therefore, we remove both tests, and we add the new macro and its new invocation
   {{{ test_tmout(  test_stem="etc_profile_tmout", files="/etc/profile") }}}
   {{{ test_tmout(  test_stem="etc_profiled_tmout", files="/etc/profile.d/*.sh") }}}
 ----
-+
-Note that the delimiters are different than the https://jinja.pocoo.org/docs[Jinja2] website shows - i.e. instead of `{% macro ... %}` on the website, we use the `{{% macro ... %}}` form and so on - there is always one curly brace more than the website documentation shows.
 
-. Anyway, did we do everything right?
+Finish your edits as usually by pressing `Ctrl+X` followed by `y` and `Enter`.
+
+NOTE: Note that the delimiters are different than the https://jinja.pocoo.org/docs[Jinja2] website shows - i.e. instead of `{% macro ... %}` on the website, we use the `{{% macro ... %}}` form and so on - there is always one curly brace more than the website documentation shows.
+
+
+=== Lab 5.6.3 Checking that we are safe
+
+Anyway, did we do everything right?
 Let's rebuild the datastream, and let's execute the test suite again - the result should be exactly the same.
-+
+
 TIP: You can use the `Up` keyboard key to browse the command history, so you don't have to retype them all over again every time.
-+
+
 ....
-$ ./build_product rhel7
+[... rule_accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
+[... lab5_oval]$ ./build_product rhel7
 ...
-$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+[... lab5_oval]$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
 ...
 INFO - Logging into /home/lab-user/labs/lab5_oval/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
@@ -436,12 +456,22 @@ INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_p
 INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 ....
 
-. Next, the test objects are very similar too - the only thing that differs is their name, and path + filename / filepath attributes.
+
+=== Lab 5.6.4 Deduplication of objects
+
+Next, the test objects are very similar too - the only thing that differs is their name, and path + filename / filepath attributes.
 So we are going to define a macro that accepts the test name stem, and `path`, `filename`, or `filepath` attributes.
-+
+
 We are going to use the http://jinja.pocoo.org/docs/2.10/templates/#if[if-statement] here - if e.g. `filepath` is not supplied, `{{% if filepath %}}` will evaluate to `False`, and the body of the condition will be ignored.
 Conversely, if the `filepath` is supplied, the `textfilecontent54_object` definition created by the macro will include the `ind:filepath` child element holding the respective value.
-+
+
+----
+[... lab5_oval]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
+[... accounts_tmout]$ nano oval/shared.xml
+----
+
+Remove the two `textfilecontent54_object` XML elements, and paste the following block as a replacement, i.e. between the test creation and the `textfilecontent54_state` XML element:
+
 [source,xml]
 ----
   {{% macro object_tmout(test_stem, path, filename, filepath) %}}
@@ -459,12 +489,20 @@ Conversely, if the `filepath` is supplied, the `textfilecontent54_object` defini
     <ind:instance datatype="int">1</ind:instance>
   </ind:textfilecontent54_object>
   {{% endmacro %}}
+
+  {{{ object_tmout(test_stem="etc_profile_tmout", filepath="/etc/profile") }}}
+  {{{ object_tmout(test_stem="etc_profiled_tmout", path="/etc/profile.d", filename="^.*\.sh$") }}}
 ----
-+
+
+Finish your edits as usually by pressing `Ctrl+X` followed by `y` and `Enter`.
+
 To actually create tests and objects, macros have to be called.
 Therefore, let's do it and place the macro calls close to each other - it will emphasize that there are two tests - `etc_profile_tmout` that examines the single file, and `etc_profiled_tmout` that goes through the whole directory.
-Then, the whole OVAL file should look this:
-+
+
+If you get errors during the build or during the tests and you don't know how to fix it, we get you covered:
+The snippet below represents the OVAL file after performing the deduplication described in the previous section.
+To get back to the track, paste the text below to the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml` file.
+
 [source,xml]
 ----
 <def-group>
@@ -494,6 +532,9 @@ Then, the whole OVAL file should look this:
   </ind:textfilecontent54_test>
   {{% endmacro %}}
 
+  {{{ test_tmout(  test_stem="etc_profile_tmout", files="/etc/profile") }}}
+  {{{ test_tmout(  test_stem="etc_profiled_tmout", files="/etc/profile.d/*.sh") }}}
+
   {{% macro object_tmout(test_stem, path, filename, filepath) %}}
   <ind:textfilecontent54_object id="object_{{{ test_stem }}}" version="1">
     {{% if path %}}
@@ -510,29 +551,30 @@ Then, the whole OVAL file should look this:
   </ind:textfilecontent54_object>
   {{% endmacro %}}
 
-  {{{ test_tmout(  test_stem="etc_profile_tmout", files="/etc/profile") }}}
   {{{ object_tmout(test_stem="etc_profile_tmout", filepath="/etc/profile") }}}
-
-  {{{ test_tmout(  test_stem="etc_profiled_tmout", files="/etc/profile.d/*.sh") }}}
   {{{ object_tmout(test_stem="etc_profiled_tmout", path="/etc/profile.d", filename="^.*\.sh$") }}}
 
   <ind:textfilecontent54_state id="state_etc_profile_tmout" version="1">
-    <ind:subexpression datatype="int" operation="greater than or equal" var_check="all"
+    <ind:subexpression datatype="int" operation="equals" var_check="all"
       var_ref="var_accounts_tmout" />
   </ind:textfilecontent54_state>
 
   <external_variable comment="external variable for TMOUT" datatype="int" id="var_accounts_tmout" version="1" />
 </def-group>
 ----
-+
+
 This way, you won't have to worry about possibly introducing those https://en.wikipedia.org/wiki/Copy_and_paste_programming#/media/File:Forgotten_edits_in_copypaste_programming.gif[copy-paste errors] any more.
 
-. Let's run the rule's test again - it may be that a typo got in, so the OVAL isn't really correct:
-+
+
+=== Lab 5.6.5 Reassuring that we are safe
+
+Finally, let's run the rule's test again - it may be that a typo got in, so the OVAL isn't really correct:
+
 ....
-$ ./build_product rhel7
+[... rule_accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
+[... lab5_oval]$ ./build_product rhel7
 ...
-$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+[... lab5_oval]$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
 ...
 INFO - Logging into /home/lab-user/labs/lab5_oval/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
@@ -542,11 +584,13 @@ INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_p
 INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 ....
 
+As there are no errors, this proves that our check-remediation combination works as expected.
 
-== OVAL development
+
+== Lab 5.7 OVAL development
 
 
-=== Correct handling of supercompliance
+=== Lab 5.7.1 Correct handling of supercompliance
 
 Let's examine the test scenarios - for example the `wrong_value.fail.sh`.
 Open a new terminal window, and change to the test definitions directory.
@@ -611,7 +655,6 @@ else
 fi
 ----
 
-Note that you can select the text, press `Ctrl+C` to copy it to the clipboard, and then use `Ctrl+Shift+V` to paste it into `nano`.
 Now, let's get back to the tests and run them:
 
 ....
@@ -635,15 +678,12 @@ INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_pro
 The test output tells us that the `supercompliant.pass.sh` scenario has failed, which was not expected.
 Let's modify the OVAL snippet, so timeouts shorter than the threshold are allowed:
 
-TIP: We will now be editing files in the rule directory, and building the content and testing.
-Therefore, it is advantageous to reserve one terminal window for builds and tests, and the other one for edits.
-
 ....
 [... lab5_oval]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
 [... accounts_tmout]$ nano oval/shared.xml
 ....
 
-The modification should be easy - instead of checking that the timeout value `equals` the threshold, we will use the `less than or equal` check as per the https://oval.mitre.org/language/version5.11/ovaldefinition/documentation/oval-common-schema.html#OperationEnumeration[OVAL specification].
+The modification should be easy - instead of checking that the timeout value `equals` the threshold, we will use the `less than or equal` check as per the https://oval.mitre.org/language/version5.11/ovaldefinition/documentation/oval-common-schema.html#OperationEnumeration[OVAL specification]:
 So just replace `equals` with `less than or equal` in the definition of the `textfilecontent54_state` like this:
 
 [source,xml]
@@ -652,7 +692,6 @@ So just replace `equals` with `less than or equal` in the definition of the `tex
     <ind:subexpression datatype="int" operation="less than or equal" var_check="all" var_ref="var_accounts_tmout" />
   </ind:textfilecontent54_state>
 ----
-
 
 After you are finished with edits, press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
 This time, when rebuilt and executed again, tests pass:
@@ -673,7 +712,7 @@ INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_pro
 ....
 
 
-=== Correct handling of export
+=== Lab 5.7.2 Correct handling of export
 
 As discussed at the beginning of this exercise, the `TMOUT` variable may be prefixed by the `export` keyword - this is allowed, but not required.
 So let's modify the passing test scenario `correct_value.pass.sh` to test a correct value in addition to the usage of the `export` keyword:
@@ -738,7 +777,7 @@ This would mean adding `(export[\s]+)?` to the regular expression, but as we don
 
 The non-capturing group that consists of `export` followed by at least one whitespace can be either absent or present exactly once.
 
-Time to save the OVAL, using the `Ctrl+X`, `Enter` and `y`, rebuild the product and run the tests again:
+Time to save the OVAL, using the `Ctrl+X`, `y` and `Enter`, rebuild the product and run the tests again:
 
 ....
 [... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
