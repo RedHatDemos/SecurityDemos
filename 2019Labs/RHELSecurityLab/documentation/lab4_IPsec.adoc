@@ -1,5 +1,7 @@
 = Lab 4: Cloud encryption using RHEL Opportunistic IPsec
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab
 In this lab exercise, you will learn how to deploy Opportunistic
 IPsec to encrypt all host to host communication within an enterprise
@@ -352,6 +354,8 @@ the beginning
 	[root@ipsec ~]# rm /etc/ipsec.d/*.db
 	[root@ipsec ~]# ipsec initnss
 	Initializing NSS database
+
+Follow the same procedure for ipsec2.
 
 <<top>>
 

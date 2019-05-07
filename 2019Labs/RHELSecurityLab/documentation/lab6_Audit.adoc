@@ -1,5 +1,7 @@
 = Lab 6: Auditing on Red Hat Enterprise Linux 8.0
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab
 
 The following lab is an introduction to the auditing capabilities of Red Hat Enterprise Linux. The exercises below are done on a system installed with Red Hat Enterprise Linux 8.0, and may require modification to work in other lab environments.
@@ -35,13 +37,9 @@ correctly, you should not need to enter a password.
 
 	[lab-user@workstation-GUID ~]$ ssh root@audit.example.com
 
-You will need to enter the password "r3dh4t1!" to get in to _audit.example.com_.
-
 * to avoid the need to exit your root session on _audit.example.com_ repeat the first SSH command to login to your bastion workstation system in a new terminal, then SSH command to login to _audit.example.com_ as "auditlab"
 
 	[lab-user@workstation-GUID ~]$ ssh auditlab@audit.example.com
-
-Again, you will need to enter the password above to get in.
 
 == Lab 6.2 Configuring Audit
 
@@ -293,6 +291,7 @@ user and run the following commands:
 	[auditlab@audit ~]$ vi ~/project_tps_report.txt
 	(Type: i to go into insert mode)
 	(Type: This is my TPS report)
+	(Press *Esc*)
 	(Type :wq! to save the file and exit vi)
 
 	[auditlab@audit ~]$ chmod 0664 ~/project_tps_report.txt

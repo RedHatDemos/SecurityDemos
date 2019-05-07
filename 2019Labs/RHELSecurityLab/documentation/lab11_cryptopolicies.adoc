@@ -1,6 +1,8 @@
 
 = Lab 11: Crypto Policies
 
+*Lab Length: Short*
+
 == Goal of Lab
 The goal of this lab is to use the new Crypto Policies tools to have a consistent security configuration across all cryptographic libraries in the system. The lab will also show how to configure the system so that it is FIPS compliant using the new simplified workflow in Red Hat Enterprise Linux 8.
 

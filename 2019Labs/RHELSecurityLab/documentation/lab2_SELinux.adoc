@@ -1,6 +1,8 @@
 
 = Lab 2: Security Enhanced Linux
 
+*Lab Length: Long*
+
 == Goal of Lab
 The goal of this lab is to use Security Enhanced Linux (SELinux) to help mitigate attacks due to privilege escalation vulnerabilities in a three part exercise.
 

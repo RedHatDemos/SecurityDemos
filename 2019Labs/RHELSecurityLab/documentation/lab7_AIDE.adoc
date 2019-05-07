@@ -1,5 +1,7 @@
 == Lab 7: How to use the Advanced Intrusion Detection Environment (AIDE)
 
+*Lab Length: Medium/Average*
+
 === Goal of Lab
 The goal of this lab exercise is to understand how to use the Advanced Intrusion Detection Environment (AIDE).
 
@@ -83,7 +85,7 @@ Start timestamp: 2019-04-09 20:21:31 -0400 (AIDE 0.16)
 AIDE found NO differences between database and filesystem. Looks okay!!
 
 === Lab 7.3 Modifying Permissions and Contents of a File
-. Let’s review the /etc/aide.conf file and look for entries related to ssh.  At line 200 you will find the following entries:
+. Let’s review the /etc/aide.conf file and look for entries related to ssh.
 +
 ----
 [root@servera ~]# vi /etc/aide.conf
@@ -250,7 +252,7 @@ End timestamp: 2019-04-09 21:20:39 -0400 (run time: 0m 12s)
 . This command returns the following entry in the audit.log:
 +
 ----
-type=CONFIG_CHANGE msg=audit(04/09/2019 21:18:44.578:127) :  auid=root ses=1 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=add_rule key=shadow_key list=exit res=yes 
+type=CONFIG_CHANGE msg=audit(04/09/2019 21:18:44.578:127) :  auid=root ses=1 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=add_rule key=shadow_key list=exit res=yes
 type=PROCTITLE msg=audit(04/09/2019 21:20:22.554:128) : proctitle=chmod 0644 /etc/shadow
 type=PATH msg=audit(04/09/2019 21:20:22.554:128) : item=0 name=/etc/shadow inode=4736901 dev=fd:00 mode=file,000 ouid=root ogid=root rdev=00:00 obj=system_u:object_r:shadow_t:s0 nametype=NORMAL cap_fp=none cap_fi=none cap_fe=0 cap_fver=0
 type=CWD msg=audit(04/09/2019 21:20:22.554:128) : cwd=/var/lib/aide
@@ -274,7 +276,7 @@ type=SYSCALL msg=audit(04/09/2019 21:20:22.554:128) : arch=x86_64 syscall=fchmod
 
 [root@servera ~]$ vi /etc/audit/rules.d/audit.rules
 ----
-. In vi, type the letter *o* to begin a new line below the cursor and insert the text above. Press *esc* and then save and exit by pressing *:wq!*.
+. In vi, move down a line and type the letter *o* to begin a new line below the cursor and insert the text above. Press *esc* and then save and exit by pressing *:wq!*.
 
 . When the service restarts you can run auditctl -l to verify that your rule has survived.  Note that your auditd is configured to manual start and stop, so you will have to reboot the server to see this change.  If you want to configure a watch, but do not want to reboot your server, create a dynamic rule as we have in this exercise, and then update the audit.rules file for when your server reboots.
 

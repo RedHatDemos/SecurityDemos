@@ -1,5 +1,7 @@
 = Lab 5: USBGuard
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab
 The goal of this lab exercise is to introduce you to the basics of USBGuard.
 
@@ -138,6 +140,7 @@ Most steps are taken on the *usbguard-demo* virtual machine residing inside the 
 [source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@usbguard.example.com
+[root@usbguard ~]# export PS1="[\u@\[\e[44m\]\h\[\e[m\] \W]\\$ "
 ----
 
 . Now, let's start the *usbguard-demo* VM (which again resides INSIDE the *host* , *usbguard.example.com* virtual machine) and connect to its console. See steps below.
@@ -166,7 +169,7 @@ Login as root using the password *redhat*.
 Now let's generate a base policy without any external devices attached. This will allow the USB hubs and any other system level USB devices. The default action of USBGuard is to block any device not in the policy.
 
 . On usbguard-demo:
-
+	[root@localhost ~]# export PS1="[\u@\[\e[41m\]\h\[\e[m\] \W]\\$ "
 	[root@localhost]# usbguard generate-policy -X
 	[root@localhost]# usbguard generate-policy -X > /etc/usbguard/rules.conf
 	[root@localhost]# chmod 0600 /etc/usbguard/rules.conf

@@ -1,5 +1,7 @@
 = Lab 3: How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKS encrypted volumes
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab
 The goal of this lab is to understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKS encrypted volumes. You will install the Tang server on our NBDE1 server, and install the Clevis client on NBDE3.
 
@@ -142,7 +144,7 @@ Digests:
 NOTE: Pass the *-vf* parameter if you want to see verbose output.
 
 == Lab 3.5 Reboot *NBDE3* and test that NBDE was successfully configured
-. Reboot *NBDE3*.  When the prompt comes up for the LUKS passphrase, wait for a while (it might take up to *2 minutes* in the virtualized environment) and *NBDE3*  should automatically begin the boot process without requiring you to enter a password.
+. Reboot *NBDE3*.  When the prompt comes up for the LUKS passphrase, wait for a while (it might take up to *5 minutes* in the virtualized environment) and *NBDE3*  should automatically begin the boot process without requiring you to enter a password.
 
 +
 [source, text]
