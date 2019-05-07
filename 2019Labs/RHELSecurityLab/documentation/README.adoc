@@ -18,6 +18,8 @@
 
 *Kirill Gliebov*, Software Engineer - RHEL Security, Red Hat
 
+*Matej Tyc*, Software Engineer and Tech Lead - Security Compliance in RHEL Security, Red Hat
+
 *Steve Grubb*, Senior Principal Software Engineer - RHEL Security, Red Hat
 
 *Richard Guy Briggs*, Senior Software Engineer - RHEL Security, Red Hat
