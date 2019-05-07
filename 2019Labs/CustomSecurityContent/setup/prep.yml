@@ -12,7 +12,7 @@
     TRACK_3_LABEL: "lab3_profiles"
     TRACK_4_LABEL: "lab4_ansible"
     TRACK_5_LABEL: "lab5_oval"
-    CACC_LOCAL: "/home/lab-user/complianceAsCode"
+    CACC_LOCAL: "/tmp/complianceAsCode"
     LABS_ROOT: "/home/lab-user/labs"
 
   tasks:
@@ -81,18 +81,6 @@
       version: 'v0.1.43'
       dest: "{{ LABS_ROOT }}/{{ item }}"
       force: yes
-    loop:
-      - "{{ TRACK_1_LABEL }}"
-      - "{{ TRACK_2_LABEL }}"
-      - "{{ TRACK_3_LABEL }}"
-      - "{{ TRACK_4_LABEL }}"
-      - "{{ TRACK_5_LABEL }}"
-
-  - name: Create symlink from the home directory
-    file:
-      src: "{{ LABS_ROOT }}/{{ item }}"
-      dest: "/home/lab-user/{{ item }}"
-      state: link
     loop:
       - "{{ TRACK_1_LABEL }}"
       - "{{ TRACK_2_LABEL }}"
