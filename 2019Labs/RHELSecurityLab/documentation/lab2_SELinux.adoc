@@ -1,5 +1,5 @@
 
-= Lab 2: Security Enhanced Linux
+= Lab 2: Security Enhanced Linux (SELinux)
 
 *Lab Length: Long*
 
