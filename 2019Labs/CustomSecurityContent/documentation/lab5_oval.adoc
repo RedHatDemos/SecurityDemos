@@ -31,16 +31,37 @@ The steps how to accomplish this are in the `tests/README.md` file of the `Compl
 
 === Before you start
 
-* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
-* Make sure that you are in the project root when you start - run
-+
-----
-$ cd /home/lab-user/labs/lab5_oval
-----
-+
-in the terminal.
+Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
 
-* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
+image::desktopfilefolder.png[100,100]
+
+Just to make sure, click the `Home` icon in the left upper part of the file explorer window.
+Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
+`lab5_oval`
+folder. The whole exercise will take place under the
+`/home/lab-user/labs/lab5_oval`
+folder that we will access from both text and graphical consoles.
+
+image::files-navi.png[700,700]
+
+Now log in to the VM using the text console if you haven't done so already.
+Open the terminal window on the lab laptop.
+Execute the following command,
+but don't forget to replace `GUID` with your lab provided GUID:
+
+----
+[... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$
+----
+
+For best experience, open a second terminal window on the laptop:
+Click `Activities`, then right click on the Terminal icon and choose `New Window` to open one more terminal window.
+Repeat the procedure, so you connect to the VM in that terminal window as well:
+
+----
+[... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$
+----
 
 
 === OVAL introduction
@@ -63,16 +84,26 @@ We will see how even simple checks can get complicated soon, and what can we do 
 Finally, we will discover that the check has been written incorrectly, and and we will fix it.
 
 
-=== The current state
+=== Anatomy of an existing check-remediation pair
 
-Make sure that you are in the `/home/lab-user/labs/lab5_oval` directory - we will build the content for the RHEL8 product.
-Execute the `./build_product rhel8` command.
-
-When the build finishes, we will take a look at the RHEL8 OSPP profile:
+Select one of your terminals, go to the lab directory and build the content:
 
 ----
-$ firefox build/guides/ssg-rhel8-guide-ospp.html
+[... ~]$ cd /home/lab-user/labs/lab5_oval
+[... lab5_oval]$ ./build_product rhel8
 ----
+
+When the build finishes, we will take a look at the RHEL8 OSPP profile.
+Open the file explorer, and open the guide in the browser:
+
+Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
+
+image::desktopfilefolder.png[100,100]
+
+Just to make sure, click the `Home` icon in the left upper part of the file explorer window.
+Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
+`lab5_oval`, `build` and the `guides` directories.
+Finally, double-click the `ssg-rhel8-guide-travel.html` file.
 
 In this lab exercise, we will focus on the `accounts_tmout` rule.
 In order to find the rule entry it in the guide, press `Ctrl+F` or use the `Edit->Find in this page` menu item, and search for the `Set Interactive Session Timeout` string, which is the rule title.
@@ -81,7 +112,9 @@ The description says:
 
 ----
 
-Setting the TMOUT option in /etc/profile ensures that all user sessions will terminate based on inactivity. The TMOUT setting in /etc/profile should read as follows:
+Setting the TMOUT option in /etc/profile ensures that all user sessions
+will terminate based on inactivity. The TMOUT setting in /etc/profile
+should read as follows:
 
 TMOUT=600
 
@@ -107,10 +140,19 @@ We want to make sure that the rule's check will allow both forms - with and with
 Let's examine the bash remediation - you can either
 
 - scroll down the rule entry in the HTML guide and click the `(show)` link next to the `Remediation Shell Script` label, or
-- open the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file.
+- open the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file in the text editor:
++
+----
+[... lab5_oval]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh
+----
++
+You don't need to make any changes.
+After you are finished with looking, press `Ctrl+x` to bring up the "save and exit" option.
+If you are asked about saving any changes, you probably don't want that, in which case press `n`.
 
-The remediation body looks like this:
+Either way, the remediation body looks like this:
 
+[source,bash]
 ----
 
 if grep --silent ^TMOUT /etc/profile ; then
@@ -130,11 +172,19 @@ We can see that the remediation is in sync with the description - it handles the
 
 ==== OVAL check
 
-Let's move on to the OVAL check in `linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml`.
+Let's move on to the OVAL check:
+
+Open the file that defines the check in the text editor:
+
+----
+[... lab5_oval]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh
+----
+
 That file is much more complicated, so let's examine it piece-wise:
 
 We have the leading `definition` element:
 
+[source,xml]
 ----
 
   <definition class="compliance" id="accounts_tmout" version="2">
@@ -158,6 +208,7 @@ We have the leading `definition` element:
 The `definition` specifies a `criteria` element.
 Here is a close-up of those critera:
 
+[source,xml]
 ----
     ...
     <criteria operator="OR">
@@ -178,6 +229,7 @@ A test is typically composed of an object and state definitions.
 In order for test to pass, the object has to exist, and it has to conform to the respective state.
 The test for the `/etc/profile` criterion and it's dependencies look like this:
 
+[source,xml]
 ----
   ...
   <ind:textfilecontent54_test check="all" check_existence="all_exist"
@@ -216,6 +268,11 @@ The alternative form of the assignment `export TMOUT=...` isn't handled in eithe
 Moreover, there is the `equals` operation used to perform the match.
 As stated in the previous section, this looks wrong, as shorter timeouts are more secure, and therefore should be allowed.
 
+Now you can close the file.
+As a reminder, you don't need to make any changes at this point.
+Therefore, press `Ctrl+x` to bring up the "save and exit" option.
+If you are asked about saving any changes, you probably don't want that, in which case press `n`.
+
 
 == Tests introduction
 
@@ -234,42 +291,24 @@ Regarding scenarios, consider for example the `accounts_tmout` rule - the two si
 The test suite has to prepare a system, scan it, and report results.
 Due to practical considerations, the system under test should be isolated from the system running the test.
 The test suite support `libvirt` VMs, and `docker` or `podman` containers that satisfy this isolation requirement.
-In this exercise, we are going to use a RHEL7-based `podman` container
+In this exercise, we are going to use a `podman` container with the RHEL7 image.
 
 
 == Tests Hands-on
 
-In order to test our content, we need to build it, and we are going to use the `build_product` script for this.
-Let's go to the project root, and execute `./build_product rhel7`, which will build the datastream that contains the OVAL check that we want to test.
+To produce the RHEL7 content that we need to test RHEL7 image, we need to build it:
+
+----
+[... lab5_oval]$ cd /home/lab-user/labs/lab5_oval
+[... lab5_oval]$ ./build_product rhel7
+----
 
 We will test the `accounts_tmout` rule included in the `ospp` profile of the RHEL7 datastream.
 We have to run the test suite as a superuser, as it involves spinning up a container that exposes an SSH port.
-
-The test suite is a Python script `tests/test_suite.py`.
-We are going to supply following arguments to it:
-
-* We want to use the test suite in `rule` mode - we want to test a rule under all available rule test scenarios.
-+
-The alternative mode is `profile` mode, which is simpler - there are no test scenarios, the system is scanned.
-
-* We want to use `podman` with the `ssg_test_suite` image as the backend, so we supply the `--container ssg_test_suite` arguments.
-
-* Of course, we have to specify what datastream to use for testing - we will use the built one, so we specify `--datastream build/ssg-rhel7-ds.xml` arguments.
-
-* Finally, we specify what to test - a rule regular expression, i.e. `accounts_tmout` or `^accounts_tmout$`.
-
-Therefore, whole command-line of the test suite execution looks like this:
+Then, we execute the test suite:
 
 ----
-$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
-----
-
-To recapitulate, you first build the content, and then you execute the test suite in the rule mode, testing the `accounts_tmout` rule.
-
-----
-$ ./build_product rhel7
-...
-$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+[... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
 INFO - The DataStream contains 2 Benchmarks
 INFO - 0 - scap_org.open-scap_cref_ssg-rhel7-xccdf-1.2.xml
 INFO - 1 - scap_org.open-scap_cref_ssg-rhel7-pcidss-xccdf-1.2.xml
@@ -283,6 +322,22 @@ INFO - Script line_not_there.fail.sh using profile xccdf_org.ssgproject.content_
 INFO - Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_profile_ospp OK
 ----
+
+[NOTE]
+====
+The test suite is a Python script `tests/test_suite.py`.
+We have supplied following arguments to it:
+
+* We want to use the test suite in `rule` mode - we want to test a rule under all available rule test scenarios.
++
+The alternative mode is `profile` mode, which is simpler - there are no test scenarios, the system is scanned.
+
+* We want to use `podman` with the `ssg_test_suite` image as the backend, so we supply the `--container ssg_test_suite` arguments.
+
+* Of course, we have to specify what datastream to use for testing - we will use the built one, so we specify `--datastream build/ssg-rhel7-ds.xml` arguments.
+
+* Finally, we specify what to test - a rule regular expression, i.e. `accounts_tmout` or `^accounts_tmout$`.
+====
 
 The output tells you the following:
 
@@ -322,6 +377,7 @@ Let's analyze what is the difference between the two tests:
 There is a difference in name and comment, and test objects are also different.
 Compare the two following excerpts:
 +
+[source,xml]
 ----
 <ind:textfilecontent54_test check="all" check_existence="all_exist"
     comment="TMOUT in /etc/profile" id="test_etc_profile_tmout" version="1">
@@ -345,6 +401,7 @@ We are going to define a macro that accepts the filename comment and the test st
 +
 Therefore, we remove both tests, and we add the new macro and its new invocations.
 +
+[source,xml]
 ----
 
   {{% macro test_tmout(test_stem, files) %}}
@@ -363,6 +420,8 @@ Note that the delimiters are different than the https://jinja.pocoo.org/docs[Jin
 
 . Anyway, did we do everything right?
 Let's rebuild the datastream, and let's execute the test suite again - the result should be exactly the same.
++
+TIP: You can use the `Up` keyboard key to browse the command history, so you don't have to retype them all over again every time.
 +
 ....
 $ ./build_product rhel7
@@ -383,6 +442,7 @@ So we are going to define a macro that accepts the test name stem, and `path`, `
 We are going to use the http://jinja.pocoo.org/docs/2.10/templates/#if[if-statement] here - if e.g. `filepath` is not supplied, `{{% if filepath %}}` will evaluate to `False`, and the body of the condition will be ignored.
 Conversely, if the `filepath` is supplied, the `textfilecontent54_object` definition created by the macro will include the `ind:filepath` child element holding the respective value.
 +
+[source,xml]
 ----
   {{% macro object_tmout(test_stem, path, filename, filepath) %}}
   <ind:textfilecontent54_object id="object_{{{ test_stem }}}" version="1">
@@ -405,6 +465,7 @@ To actually create tests and objects, macros have to be called.
 Therefore, let's do it and place the macro calls close to each other - it will emphasize that there are two tests - `etc_profile_tmout` that examines the single file, and `etc_profiled_tmout` that goes through the whole directory.
 Then, the whole OVAL file should look this:
 +
+[source,xml]
 ----
 <def-group>
   <definition class="compliance" id="accounts_tmout" version="2">
@@ -492,19 +553,31 @@ Open a new terminal window, and change to the test definitions directory.
 The directory structure under the `tests/data` directory is analogous to the directory structure under `linux_os/guide`:
 
 ----
-$ cd tests/data/group_system/group_accounts/group_accounts-session/rule_accounts_tmout
+[... lab5_oval]$ cd tests/data/group_system/group_accounts/group_accounts-session/rule_accounts_tmout
 ----
 
 Then, let's open the `wrong_value.fail.sh` file.
 
-// gedit screenshot
+
+----
+[... rule_accounts_tmout]$ nano wrong_value.fail.sh
+----
 
 As you can see, the test sets the `TMOUT` value to 1234.
 The value is correctly considered as noncompliant - as the timeout should be 600, 1234 is longer, therefore less secure.
+After you are finished with looking, press `Ctrl+X` to bring up the "save and exit" option.
+If you are asked about saving any changes, you probably don't want that, in which case press `n`.
 
 What about the `correct.pass.sh`?
-Let's check that out and open it in an editor.
+Let's check that out and open it in the editor as well:
+
+----
+[... rule_accounts_tmout]$ nano correct.pass.sh
+----
+
 As we can see, this one sets the `TMOUT` value to 600, which is the value defined by the profile.
+After you are finished with looking, press `Ctrl+X` to bring up the "save and exit" option.
+If you are asked about saving any changes, you probably don't want that, in which case press `n`.
 
 Let's add another check for a correct value - let's check for timeout of 100.
 In case of a timeout, 100 seconds is more secure than 600 seconds.
@@ -513,17 +586,19 @@ So let's copy that one, and make a new test scenario out of it.
 Run this command in the terminal in the `rule_accounts_tmout` directory:
 
 ----
-$ cp correct_value.pass.sh supercompliant.pass.sh
+[... rule_accounts_tmout]$ cp correct_value.pass.sh supercompliant.pass.sh
 ----
 
-Then, open it in the `gedit` editor, and change the value 600 to 100.
+Then, open it in the `nano` editor, and change the value 600 to 100.
 
 ----
-$ gedit supercompliant.pass.sh
+[... rule_accounts_tmout]$ nano supercompliant.pass.sh
 ----
 
+After you are finished with the edit, press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
 For reference, the `supercompliant.pass.sh` file now looks like this:
 
+[source,bash]
 ----
 #!/bin/bash
 #
@@ -536,12 +611,15 @@ else
 fi
 ----
 
-Let's run the tests!
+Note that you can select the text, press `Ctrl+C` to copy it to the clipboard, and then use `Ctrl+Shift+V` to paste it into `nano`.
+Now, let's get back to the tests and run them:
 
 ....
-$ ./build_product rhel7
+
+[... rule_accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
+[... lab5_oval]$ ./build_product rhel7
 ...
-$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+[... lab5_oval]$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
 ...
 INFO - Logging into /home/lab-user/labs/lab5_oval/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
@@ -557,25 +635,33 @@ INFO - Script wrong_value.fail.sh using profile xccdf_org.ssgproject.content_pro
 The test output tells us that the `supercompliant.pass.sh` scenario has failed, which was not expected.
 Let's modify the OVAL snippet, so timeouts shorter than the threshold are allowed:
 
+TIP: We will now be editing files in the rule directory, and building the content and testing.
+Therefore, it is advantageous to reserve one terminal window for builds and tests, and the other one for edits.
+
 ....
-$ gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml
+[... lab5_oval]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
+[... accounts_tmout]$ nano oval/shared.xml
 ....
 
 The modification should be easy - instead of checking that the timeout value `equals` the threshold, we will use the `less than or equal` check as per the https://oval.mitre.org/language/version5.11/ovaldefinition/documentation/oval-common-schema.html#OperationEnumeration[OVAL specification].
 So just replace `equals` with `less than or equal` in the definition of the `textfilecontent54_state` like this:
 
+[source,xml]
 ----
   <ind:textfilecontent54_state id="state_etc_profile_tmout" version="1">
     <ind:subexpression datatype="int" operation="less than or equal" var_check="all" var_ref="var_accounts_tmout" />
   </ind:textfilecontent54_state>
 ----
 
+
+After you are finished with edits, press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
 This time, when rebuilt and executed again, tests pass:
 
 ....
-$ ./build_product rhel7
+[... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
+[... lab5_oval]$ ./build_product rhel7
 ...
-$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+[... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
 INFO - Logging into /home/lab-user/labs/lab5_oval/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
@@ -593,6 +679,11 @@ As discussed at the beginning of this exercise, the `TMOUT` variable may be pref
 So let's modify the passing test scenario `correct_value.pass.sh` to test a correct value in addition to the usage of the `export` keyword:
 
 ----
+[... lab5_oval]$ nano tests/data/group_system/group_accounts/group_accounts-session/rule_accounts_tmout/correct_value.pass.sh 
+----
+
+[source,bash]
+----
 #!/bin/bash
 #
 # profiles = xccdf_org.ssgproject.content_profile_ospp
@@ -604,12 +695,16 @@ else
 fi
 ----
 
-We don't have to rebuild the product, as we have changed only the test definition, and we can re-run the test suite.
+After you are finished with edits, press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
+
+Time to re-run those tests!
+We don't have to rebuild the product, as we have changed only the test definition, and we can re-run the test suite without the prior rebuild.
 Now, we execute the test suite again, and we expect the `Script correct_value.pass.sh using profile xccdf_org.ssgproject.content_profile_ospp found issue:` line to appear in the output.
 
-....
-$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
-....
+----
+[... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+...
+----
 
 This confirms the theory that OVAL doesn't allow this configuration, although it is valid.
 Therefore, in order to make tests pass, we will have to edit the OVAL, so the occurrence of `export` is allowed.
@@ -618,11 +713,13 @@ Thanks to the OVAL optimization that we have performed before, there is only one
 So let's open the OVAL file again:
 
 ....
-$ gedit linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml
+[... lab5_oval]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
+[... accounts_tmout]$ nano oval/shared.xml
 ....
 
 The current test object specifies
 
+[source,xml]
 ----
 <ind:pattern operation="pattern match">^[\s]*TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
 <ind:instance datatype="int">1</ind:instance>
@@ -633,6 +730,7 @@ and it needs to be changed to ignore the `export` keyword followed by at least o
 The best approach is to make this an optional group.
 This would mean adding `(export[\s]+)?` to the regular expression, but as we don't want that group to be registered (i.e. stored in memory, captured), we have to https://oval.mitre.org/language/about/re_support_5.6.html[add some special syntax], so we add `(?:export[\s]+)`, and the section becomes
 
+[source,xml]
 ----
 <ind:pattern operation="pattern match">^[\s]*(?:export[\s]+)?TMOUT[\s]*=[\s]*(.*)[\s]*$</ind:pattern>
 <ind:instance datatype="int">1</ind:instance>
@@ -640,12 +738,13 @@ This would mean adding `(export[\s]+)?` to the regular expression, but as we don
 
 The non-capturing group that consists of `export` followed by at least one whitespace can be either absent or present exactly once.
 
-Time to save the OVAL, rebuild the product and run the tests again!
+Time to save the OVAL, using the `Ctrl+X`, `Enter` and `y`, rebuild the product and run the tests again:
 
 ....
-$ ./build_product rhel7
+[... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
+[... lab5_oval]$ ./build_product rhel7
 ...
-$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+[... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
 INFO - Logging into /home/lab-user/labs/lab5_oval/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
