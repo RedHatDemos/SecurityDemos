@@ -52,7 +52,15 @@ lab1_introduction  lab2_OpenSCAP  lab3_profiles  lab4_ansible  lab5_oval
 Congratulations, now you got to your *text console*.
 
 
-== Command listings
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
+
+
+== Lab-related tips
+
+This section contains various tips that may be useful in an environment without instructors.
+
+
+=== Command listings
 
 Shell session listings obey the following convention:
 
@@ -75,7 +83,7 @@ In the example above, the output of the `ls` command in the `labs` directory are
 In the example above, the output of the `cat /etc/passwd` contains lots of lines, and we have emphasized the line containing `lab-user`'s entry.
 
 
-== Copy-pasting
+=== Copy-pasting
 
 When composing a file in an editor based on an existing document, you probably use the copy-pasting:
 You select text you want to copy in the document, you press `Ctrl+C` to copy it to the system clipboard, and you paste it from the clipboard to the editor using `Ctrl+V`.
@@ -84,19 +92,18 @@ Mind that when you paste to the **terminal console** or **terminal editor**, you
 The same applies when copying from the terminal window - you have to use `Ctrl+Shift+C` after selecting the text, not just `Ctrl+C`.
 
 
-== Searching in the browser
+=== Searching in the browser
 
 When told to search for a occurrence of text in the Firefox browser, you have following possibilities:
 
 - Press `Ctrl+F`, which will bring up the search window.
 - Click the "hamburger menu" at the top right corner, and click the `Find in This Page` entry.
 This is the same as the previous step, but it is useful if you have problems with the keyboard shortcut.
-
++
 image:0-04-find_in_page.png[600,600]
 
-//. If the browser has the `Find in Page` extension installed, there is a blue icon close to the "hamburger menu" at the top right part of the browser.
-//You can click it, and start typing the text to search for.
-//The extension will display surroundings of the web page next to occurrences of the expression.
-
-
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
+- If the browser has the link:https://addons.mozilla.org/en-US/firefox/addon/find-in-page-with-preview/[Find in Page] extension installed, there is a blue icon close to the "hamburger menu" at the top right part of the browser.
+You can click it, and start typing the text to search for.
+The extension will display surroundings of the web page next to occurrences of the expression.
++
+image:0-05-supersearch.png[600,600]

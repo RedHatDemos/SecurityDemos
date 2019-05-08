@@ -37,25 +37,6 @@ Moreover, it generates separated Playbooks for every rule.
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
 
-=== Before you start
-
-* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
-* Make sure that you are in the project root when you start - run
-+
-----
-[... ~]$ cd /home/lab-user/labs/lab4_ansible
-----
-+
-in the terminal.
-
-* For best experience, right click on the Terminal icon and click on `New Window` to open one more terminal window and also navigate to the project root in that one as well.
-* Open the file explorer and also navigate to the project root.
-* Finally, open the Firefox browser.
-
-.Opening a new terminal window in Red Hat Enterprise Linux 8.
-image::0-01-setup.png[]
-
-
 == Adding an Ansible Task for a Rule
 
 Ansible tasks can be attached to every rule in ComplianceAsCode project.

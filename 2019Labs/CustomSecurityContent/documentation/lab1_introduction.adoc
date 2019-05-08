@@ -252,7 +252,7 @@ Again, use `Ctrl+W` in connection with `Alt+W` in the editor to search for `acco
 Comment the line containing `- var_accounts_tmout=30_min` out by inserting `#` just before the leading dash.
 After you are done,
 press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
-
++
 Then, rebuild the content again:
 +
 ----
