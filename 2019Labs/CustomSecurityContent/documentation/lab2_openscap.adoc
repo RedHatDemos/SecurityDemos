@@ -23,7 +23,7 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 
 == What we have done for you
 
-* We have cloned the ComplianceAsCode repository to the `content` directory.
+* We have cloned the ComplianceAsCode repository to the `lab2_OpenSCAP` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,

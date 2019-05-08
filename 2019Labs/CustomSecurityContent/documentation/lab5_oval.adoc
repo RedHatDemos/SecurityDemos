@@ -14,7 +14,7 @@
 
 == What we have done for you
 
-* We have cloned the `ComplianceAsCode` repository to the `content` directory.
+* We have cloned the `ComplianceAsCode` repository to the `lab5_oval` directory.
 * We have installed dependencies that are required for the content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`, and finally

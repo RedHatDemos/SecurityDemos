@@ -30,7 +30,7 @@ Moreover, it generates separated Playbooks for every rule.
 
 == What we have done for you
 
-* We have cloned the ComplianceAsCode repository to the `content` directory.
+* We have cloned the ComplianceAsCode repository to the `lab4_ansible` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,

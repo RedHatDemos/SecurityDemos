@@ -20,7 +20,7 @@ In this lab exercise, we will show how to solve the task using ComplianceAsCode.
 
 == What we have done for you
 
-* We have cloned the ComplianceAsCode repository to the `content` directory.
+* We have cloned the ComplianceAsCode repository to the `lab3_profiles` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
@@ -75,8 +75,8 @@ Create new file `travel.profile` file there and open it in the editor:
 
 Next, create the basic structure and fill in the profile title and description as specified in this listing.
 You can copy-paste the following text to the editor - just keep in mind that when pasting to the console, you
-// link:lab0_setup.adoc#copy-pasting[ have to use ]
 have to use
+// link:lab0_setup.adoc#copy-pasting[ have to use ]
 `Ctrl+Shift+V`.
 
 ----
@@ -92,7 +92,14 @@ selections:
 
 When you have finished editing,
 press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
+Then, go back to the project's root directory.
 
+----
+[... profiles]$ cd /home/lab-user/labs/lab3_profiles
+----
+
+[NOTE]
+====
 Profile is a file in YAML format.
 You should be fine if you copy and paste the content from the previous listing.
 When creating new YAML file by hand, the most common mistake tends to be incorrect indentation.
@@ -106,12 +113,7 @@ The profile consists of 4 items which are required:
 .. `description`: is a few paragraphs that describe the purpose of the profile.
 .. `selections`: is a list of rules and variables that the profile is composed of.
 It cannot be an empty list, so for now we will add rule `security_patches_up_to_date`. We will discuss how to find and add other rules later in this lab exercise.
-
-Save the profile file and go back to the project's root directory.
-
-----
-[... profiles]$ cd /home/lab-user/labs/lab3_profiles
-----
+====
 
 
 === 3.1.3 Rebuild the content and review [[content_review]]
