@@ -126,7 +126,7 @@ Therefore, the `scap-security-guide` package in RHEL 8 contains only the OSPP an
 Notice in our command below that we can skip the profile ID prefix to make the command simpler.
 The real ID is `xccdf_org.ssgproject.content_profile_ospp`.
 +
-Run the command as root using the `sudo` command to scan the system parts that the common users does not have access.
+Run the command as the privileged user using the `sudo` command to scan the system parts that the common users does not have access.
 +
 ----
 [... build]$ sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
@@ -158,7 +158,8 @@ build]$ oscap xccdf generate report /tmp/arf.xml > /home/lab-user/labs/lab2_Open
 
 . Open the file explorer application by clicking `Activities`, and then the blue cabinet icon.
 Once it comes up, click the `Home` entry at the upper left part of the browser's window.
-The `lab2_report.html` file should be there, so double-click it to open it in the browser.
+Then, click `labs` and `lab2_OpenSCAP` directories.
+The `lab2_report.html` file should be one of the files there, so double-click it to open it in the browser.
 +
 image:getting-report.png[]
 +
