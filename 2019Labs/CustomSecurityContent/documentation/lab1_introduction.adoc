@@ -182,11 +182,7 @@ You should see the fixed description now without the repeated *Setting the TMOUT
 === Lab 1.4 Customizing a Parametrized Rule
 
 In this lab exercise, we will learn about parametrized rules. Parametrization can be used to set timeout durations, password length, umask, and other settings.
-We will learn about parametrized rules by
-- observing where the value comes from,
-- learning how is it applied to the rule,
-- changing the parametrized rule and observing the result, and finally
-- learning what happens when the variable is omitted.
+We will learn about parametrized rules by: observing where the value comes from, changing the parametrized rule to see how it is applied, and finally, observing what happens when the parametrized variable is omitted.
 
 . Modifying parametrized rules is very easy, as this rule doesn’t have the timeout duration hardcoded - it is parametrized by a variable.
 As the description for the *Set Interactive Session Timeout* rule says, the rule uses the `timeout` variable.
@@ -201,9 +197,9 @@ linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
 That `var_accounts_tmout.var` file contains variable description, which is helpful - one can't be sure what the number 1800 means, however the contents of the file indicate that it is the same as 30 minutes, i.e. 1800 seconds.
 
 . The rule is parametrized per profile.
-As there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
+This is because there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
 +
-To see how the rule is connected to it’s variable, we have to check out the respective profile definition, i.e. `rhel8/profiles/ospp.profile`.
+To see how the rule is connected to its variable, we have to check out the respective profile definition, i.e. `rhel8/profiles/ospp.profile`.
 Open it in the editor, and search for `accounts_tmout`
 //(use the `Ctrl + F` keyboard shortcut or use the `Edit->Find in this page` menu item to bring up the search field):
 +
@@ -222,14 +218,7 @@ Then, `Alt+W` jumps to the next occurrence.
     - var_accounts_tmout=30_min
     ...
 ----
-+
-After you are finished with looking, press `Ctrl+x` to bring up the "save and exit" option.
-If you are asked about saving any changes, you probably don't want that, in which case press `n`.
-+
-Therefore, it is obvious now where the timeout duration comes from and how to change it.
-
-. Modify the entry, and  put `10_min` there.
-Then, issue the rebuild of the content:
+. Modify the *var_accounts_tmout* variable to `10_min`. Press `Ctrl+x` and *y* to save and exit. Then, issue the rebuild of the content:
 +
 ----
 [... lab1_introduction]$ ./build_product rhel8
