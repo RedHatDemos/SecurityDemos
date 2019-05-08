@@ -27,32 +27,6 @@ In this lab exercise, we will show how to solve the task using ComplianceAsCode.
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
 
-=== Before you start
-
-Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
-
-image::desktopfilefolder.png[100,100]
-
-Just to make sure, click the `Home` icon in the left upper part of the file explorer window.
-Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
-`lab3_profiles`
-folder. The whole exercise will take place under the
-`/home/lab-user/labs/lab3_profiles`
-folder that we will access from both text and graphical consoles.
-
-image::files-navi.png[700,700]
-
-Now log in to the VM using the text console if you haven't done so already.
-Open the terminal window on the lab laptop.
-Execute the following command,
-but don't forget to replace `GUID` with your lab provided GUID:
-
-----
-[... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$
-----
-
-
 == Lab 3.1 Creating a new empty profile
 
 The basic building block of a security policy in ComplianceAsCode is a rule.
@@ -158,6 +132,8 @@ image::desktopfilefolder.png[100,100]
 Just to make sure, click the `Home` icon in the left upper part of the file explorer window.
 Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
 `lab3_profiles`, `build` and the `guides` directories.
+
+image::files-navi.png[700,700]
 
 Finally, double-click the `ssg-rhel8-guide-travel.html` file.
 A Firefox window will open and you will see the guide your Travel profile which contains just a single rule - `security_patches_up_to_date`.

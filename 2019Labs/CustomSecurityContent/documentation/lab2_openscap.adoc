@@ -33,20 +33,6 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 ** utilities for scanning remote systems `openscap-utils`,
 ** GUI frontend and datastream tool `scap-workbench`
 
-=== Before you start
-. First, go to the Terminal window of your laptop. SSH into the workstation bastion host as *lab-user*.  This is the VM that we will be doing all of our lab exercises from. Don't forget to replace *GUID* with your lab provided *GUID*!
-+
-[source, text]
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-[lab-user@workstation-GUID ~]$
-+
-* Make sure that you are in the project root when you start - run
-+
-----
-[... lab1_introduction]$ cd /home/lab-user/labs/lab2_OpenSCAP
-----
-+
-in the terminal.
 
 == Introducing OpenSCAP command line tool
 
@@ -55,7 +41,7 @@ OpenSCAP provides a command line tool `oscap` that can be used for automated sec
 You can verify a successful installation of `oscap` tool by running:
 
 ----
-[... lab2_OpenSCAP]$ oscap --version
+[... lab1_introduction]$ oscap --version
 
 OpenSCAP command line tool (oscap) 1.3.0
 Copyright 2009--2018 Red Hat Inc., Durham, North Carolina.
@@ -78,9 +64,10 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
 
 In this Section we will build the security content for Red Hat Enterprise Linux 8 from ComplianceAsCode source code and then we will use the built content with OpenSCAP command line tool to scan our machine.
 
-. In `/home/lab-user/labs/lab2_OpenSCAP` directory, build the content for Red Hat Enterprise Linux 8.
+. Build the content for Red Hat Enterprise Linux 8.
 +
 ----
+[... lab1_introduction]$ cd /home/lab-user/labs/lab2_OpenSCAP
 [... lab2_OpenSCAP]$ ./build_product rhel8
 ----
 +
