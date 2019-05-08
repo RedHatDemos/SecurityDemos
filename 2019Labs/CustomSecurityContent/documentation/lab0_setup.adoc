@@ -38,7 +38,7 @@ Then, enter the following command, replacing `GUID` with your actual GUID:
 [... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
-so for example for `GUID` of `3fa1`, you would execute `$ ssh lab-user@workstation-3fa1.rhpds.opentlc.com`
+For example, if your `GUID` was `3fa1`, you would execute: `$ ssh lab-user@workstation-3fa1.rhpds.opentlc.com`
 
 If everything goes correctly, you will end up in the lab's test system shell.
 You can tell that by listing the directory with lab exercises:
@@ -55,9 +55,9 @@ Congratulations, now you got to your *text console*.
 link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
 
 
-== Lab-related tips
+== Lab Related Tips
 
-This section contains various tips that may be useful in an environment without instructors.
+This section contains various tips that may be useful to keep in mind as you are doing the lab exercises.
 
 
 === Command listings
@@ -80,15 +80,14 @@ For reference, in the actual terminal, commands are prefixed also by the current
 - Lines that follow commands and that are not commands themselves represent the last command's output.
 In the example above, the output of the `ls` command in the `labs` directory are directories with lab exercises.
 - Ellipsis may be used to indicate that there are multiple output lines, but as they are of no interest, they are omitted.
-In the example above, the output of the `cat /etc/passwd` contains lots of lines, and we have emphasized the line containing `lab-user`'s entry.
+In the example above, the output of the `cat /etc/passwd` contains lots of lines, and we have emphasized the line containing lab-user's entry.
 
 
-=== Copy-pasting
+=== Copy and Pasting
 
-When composing a file in an editor based on an existing document, you probably use the copy-pasting:
-You select text you want to copy in the document, you press `Ctrl+C` to copy it to the system clipboard, and you paste it from the clipboard to the editor using `Ctrl+V`.
+Normally, when you select text you want to copy in the document, you press `Ctrl+C` to copy it to the system clipboard, and you paste it from the clipboard to the editor using `Ctrl+V`.
 
-Mind that when you paste to the **terminal console** or **terminal editor**, you have to use `Ctrl+Shift+V` instead of the `Ctrl+V`.
+Keep in mind that when you paste to the **terminal console** or **terminal editor**, you have to use `Ctrl+Shift+V` instead of the `Ctrl+V`.
 The same applies when copying from the terminal window - you have to use `Ctrl+Shift+C` after selecting the text, not just `Ctrl+C`.
 
 
@@ -107,3 +106,5 @@ You can click it, and start typing the text to search for.
 The extension will display surroundings of the web page next to occurrences of the expression.
 +
 image:0-05-supersearch.png[600,600]
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
