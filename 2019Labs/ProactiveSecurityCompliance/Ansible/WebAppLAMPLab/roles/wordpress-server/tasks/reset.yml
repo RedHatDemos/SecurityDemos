@@ -24,6 +24,12 @@
     state: absent
     path: /var/www/
 
+- name: Make sure no unwanted Wordpress download artifacts exist /var/www
+  file:
+    state: absent
+    path: "/tmp/latest.zip"
+
+
 - name: Software packages are absent
   yum:
     name:
