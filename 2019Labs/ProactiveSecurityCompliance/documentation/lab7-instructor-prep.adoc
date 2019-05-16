@@ -78,7 +78,7 @@ image:images/lab7-prep-create-key.png[]
 +
       oc delete pod $(oc get pods -n quay-enterprise | grep quayecosystem-quay | awk '{print $1}') -n quay-enterprise
 +
-. Press ctrl+c if the pregious command hangs. 
+. Press ctrl+c if the previous command hangs. 
 +
 . Wait for the quay pod to start back up:
 +
