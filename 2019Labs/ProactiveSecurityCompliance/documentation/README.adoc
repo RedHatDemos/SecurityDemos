@@ -32,7 +32,7 @@ Your entire lab environment is cloud hosted online and includes: Red Hat Ansible
 
 You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
 
-You must complete *Lab 0: Setup steps* and you must complete *Lab 4: Additional Automated Security Hardening of Host Systems* before lab exercises #1-3.
+You must complete *Lab 0: Setup steps* and you must complete *Lab 4: Additional Automated Security Hardening of Host Systems* AFTER lab exercises #1-3.
 Other than that, feel free to do the lab exercises in whatever order you'd like.
 
 == Table of Contents
