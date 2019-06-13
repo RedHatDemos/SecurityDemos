@@ -46,7 +46,7 @@ You can tell that by listing the directory with lab exercises:
 ----
 [... ~]$ cd
 [... ~]$ ls labs
-lab1_introduction  lab2_OpenSCAP  lab3_profiles  lab4_ansible  lab5_oval
+lab1_introduction  lab2_openscap  lab3_profiles  lab4_ansible  lab5_oval
 ----
 
 Congratulations, now you got to your *text console*.
@@ -69,7 +69,7 @@ Shell session listings obey the following convention:
 /home/lab-user
 [... ~]$ cd labs
 [... labs]$ ls
-lab1_introduction  lab2_OpenSCAP  lab3_profiles  lab4_ansible  lab5_oval
+lab1_introduction  lab2_openscap  lab3_profiles  lab4_ansible  lab5_oval
 [... labs]$ cat /etc/passwd
 ...
 lab-user:x:1000:1000:Lab User:/home/lab-user:/bin/bash

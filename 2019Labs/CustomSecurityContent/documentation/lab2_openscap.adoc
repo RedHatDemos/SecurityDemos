@@ -23,7 +23,7 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 
 == What we have done for you
 
-* We have cloned the ComplianceAsCode repository to the `lab2_OpenSCAP` directory.
+* We have cloned the ComplianceAsCode repository to the `lab2_openscap` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
@@ -67,14 +67,14 @@ In this Section we will build the security content for Red Hat Enterprise Linux 
 . Build the content for Red Hat Enterprise Linux 8.
 +
 ----
-[... lab1_introduction]$ cd /home/lab-user/labs/lab2_OpenSCAP
-[... lab2_OpenSCAP]$ ./build_product rhel8
+[... lab1_introduction]$ cd /home/lab-user/labs/lab2_openscap
+[... lab2_openscap]$ ./build_product rhel8
 ----
 +
 . Take a look at the generated files in the `build` directory.
 +
 ----
-[... lab2_OpenSCAP]$ cd build
+[... lab2_openscap]$ cd build
 [... build]$ ls
 ...
 ssg-rhel8-ds.xml
@@ -130,7 +130,7 @@ Now, you will see the compliance scan results for every security control in the 
 * use `--oval-results` to get detailed results in the report
 +
 ----
-[... build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /home/lab-user/labs/lab2_OpenSCAP/report.html --oval-results ./ssg-rhel8-ds.xml
+[... build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /home/lab-user/labs/lab2_openscap/report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
 
@@ -138,14 +138,14 @@ Now, you will see the compliance scan results for every security control in the 
 ====
 You can also generate the HTML report later by executing
 ----
-build]$ oscap xccdf generate report /tmp/arf.xml > /home/lab-user/labs/lab2_OpenSCAP/report.html
+build]$ oscap xccdf generate report /tmp/arf.xml > /home/lab-user/labs/lab2_openscap/report.html
 ----
 ====
 --
 
 . Open the file explorer application by clicking `Activities`, and then the blue cabinet icon.
 Once it comes up, click the `Home` entry at the upper left part of the browser's window.
-Then, click `labs` and `lab2_OpenSCAP` directories.
+Then, click `labs` and `lab2_openscap` directories.
 The `lab2_report.html` file should be one of the files there, so double-click it to open it in the browser.
 +
 image:getting-report.png[]
@@ -173,7 +173,7 @@ image::scap_report_fail.png[]
 
 . In the console view, click *Activities* at the top left part of the screen, and select the green circular icon of SCAP Workbench.
 
-. After Workbench starts, select *Other SCAP content* in a drop-down list, and click on *Load Content*. A file browser window will show up. Locate `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_OpenSCAP/build` directory and click to *Open* to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
+. After Workbench starts, select *Other SCAP content* in a drop-down list, and click on *Load Content*. A file browser window will show up. Locate `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_openscap/build` directory and click to *Open* to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
 +
 image:load_content.png[]
 +
