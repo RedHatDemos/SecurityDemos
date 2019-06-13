@@ -26,7 +26,7 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 
 == Pre-Configured and Already Set Up for you:
 
-* The `ComplianceAsCode` repository has already been cloned to all of the `/home/lab-user/labs/` directories. So for example, `/home/lab-user/labs/lab1-introduction` is a clone of the ComplianceAsCode project repository.
+* The `ComplianceAsCode` repository has already been cloned to all of the `/home/lab-user/labs/` directories. So for example, `/home/lab-user/labs/lab1_introduction` is a clone of the ComplianceAsCode project repository.
 * The following dependencies that are required for the `ComplianceAsCode` content build have already been installed using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
@@ -135,19 +135,19 @@ TMOUT=1800
 . Let's locate this twice written rule definition text.
 Rule definitions for Linux systems are under the `linux_os/guide` directory of the `ComplianceAsCode` project.
 Remember that the `ComplianceAsCode` project has already been cloned to all of the `/home/lab-user/labs/*` directories.
-So for example, `/home/lab-user/labs/lab1-introduction` is a clone of the ComplianceAsCode project repository.
+So for example, `/home/lab-user/labs/lab1_introduction` is a clone of the ComplianceAsCode project repository.
 Since there is about a thousand rules, it is better to search all rules for the text, rather than trying a to find a particular rule in the directory hierarchy by browsing it.
 
 . Rules definitions are written as YAML files, that are particularly great at storing key-value data.
 All rules are defined by the respective `rule.yml` file, and the parent folder is the respective rule’s ID.
 ID of the rule in question is `accounts_tmout`. Given that, we can search for the directory.
 
-. Let's make sure that you are in the */home/lab-user/labs/lab1-introduction* directory and execute the following *find* command.
+. Let's make sure that you are in the */home/lab-user/labs/lab1_introduction* directory and execute the following *find* command.
 This command searches for a file or directory named exactly `accounts_tmout` in the directory subtree below the linux_os directory.
 You will get the following output after typing in the above find command:
 +
 ----
-[... ~]$ cd /home/lab-user/labs/lab1-introduction
+[... ~]$ cd /home/lab-user/labs/lab1_introduction
 [... lab1_introduction]$ find linux_os -name accounts_tmout
 linux_os/guide/system/accounts/accounts-session/accounts_tmout
 ----
@@ -158,7 +158,7 @@ Notice that the `linux_os/guide/system/accounts/accounts-session/accounts_tmout`
 +
 ----
 [... ~]$ cd /home/lab-user/labs/lab1_introduction
-[... lab1-introduction]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
+[... lab1_introduction]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
 ----
 
 . Luckily, the rule’s description is right at the upper part of the `rule.yml`.
