@@ -1,34 +1,50 @@
 = Lab 1: OpenSCAP Basics and Command Line Scanning
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab
-The goal of this lab exercise is to introduce you to the basics of automated security scanning and remediations with OpenSCAP and Ansible.
+The goal of this lab exercise is to introduce you to the basics of automated security and compliance scanning and remediations with OpenSCAP and Red Hat Ansible Automation.
 
 == Introduction
-Security Content Automation Protocol (SCAP) is collection of standards aiming to enable automated vulnerability and configuration compliance. OpenSCAP is a family of open source SCAP tools, and SCAP Security Guide (further as SSG) is collection of xml-based SCAP benchmarks and content in other formats to help with compliance configuration assessment of Red Hat Enterprise Linux machines. Natively shipping in Red Hat Enterprise Linux, this provides practical security hardening advice for Red Hat technologies and links to compliance requirements, making deployment activities like certifications and accreditations easier.
+Security Content Automation Protocol (SCAP) is collection of standards to enable automated vulnerability and configuration compliance.
+OpenSCAP is a family of open source SCAP tools and the SCAP Security Guide (SSG) is collection of xml-based SCAP benchmarks and content in various formats to help with compliance configuration assessment of Red Hat Enterprise Linux machines.
+Natively shipping in Red Hat Enterprise Linux, this provides practical security hardening advice and remediations for Red Hat technologies and helps with meeting security compliance requirements, making it easier to obtain security certifications and accreditations.
 
-OpenSCAP and SSG allows you to perform both vulnerability and security compliance checks in a fully automated way. Several integrations for continuous scanning exist but in this lab exercise, we will focus on one-off scanning to get started.
+OpenSCAP and SSG allows you to perform both vulnerability and security compliance checks in a fully automated way.
+
+OpenSCAP is integrated in Red Hat Satellite for automated security and compliance scanning across multiple Red Hat systems at scale. OpenSCAP, Red Hat Satellite, Red Hat Ansible Automation, and Red Hat CloudForms can also all be integrated together for automated and continuous scanning and remediations for security and compliance across a hybrid environment at scale.
+
+In this lab exercise, we will focus on single host  scanning and remediations for security vulnerabilities and compliance to security baselines using the security tools natively in Red Hat Enterprise Linux.
 
 == Pre-Configured Set Up Steps (Already done for you)
-All of the steps in this pre-configured set up section have already been done for you. This section is for your reference only so you know what steps have already been pre-configured in this lab environment for you.
+All of the steps in this pre-configured set up section have already been done for you.
+This section is for your reference only so you know what steps have already been pre-configured in this lab environment for you.
 
 .  Red Hat Enterprise Linux 8.0 is installed on the *openscap.example.com* host. We have also pre-installed several packages on the *openscap.example.com* host.
 
-. Specifically, we pre-installed *openscap-scanner*, *scap-security-guide*, and *Ansible*. Take a look at the comments above each installation command for more details.
+. Specifically, we pre-installed *openscap-scanner*, *scap-security-guide*, and *Ansible*. Take a look at the comments above each installation command for more details. If needed, the *root* password for the *openscap.example.com* host is *r3dh4t1!*. Also, don't forget to replace the *GUID* with unique lab provided *GUID*!
+. Specifically, we pre-installed *openscap-scanner*, *scap-security-guide*, and *Ansible*. Take a look at the comments above each installation command for more details. If needed, the *root* password for the *openscap.example.com* host is *r3dh4t1!*. Also, don't forget to replace the *GUID* with unique lab provided *GUID*! Note that the versions of packages installed may not be up to date. However, this will not affect this lab.
 +
+[source, text]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ ssh root@openscap.example.com
  # the tool that performs the scanning
- [root@openscap]# dnf install openscap-scanner
+ [root@openscap]# yum install openscap-scanner
  # project that brings in security policies we will load and test agains
- [root@openscap]# dnf install scap-security-guide
+ [root@openscap]# yum install scap-security-guide
  # we will need this later for Ansible based remediations
- [root@openscap]# dnf install ansible python-firewall
-
+ [root@openscap]# yum install ansible python-firewall
+----
 . You can verify a successful installation by running:
 +
- [root@openscap]# oscap -V
- 
+[source, text]
+----
+ [root@openscap ~]# oscap -V
+
  OpenSCAP command line tool (oscap) 1.3.0
  Copyright 2009--2018 Red Hat Inc., Durham, North Carolina.
- 
+
  ==== Supported specifications ====
  XCCDF Version: 1.2
  OVAL Version: 5.11.1
@@ -39,32 +55,32 @@ All of the steps in this pre-configured set up section have already been done fo
  Asset Reporting Format Version: 1.1
  CVRF Version: 1.1
  ...
+----
 +
-Notice that this command outputs the OpenSCAP version and versions of supported standards. If during your own installation it says `oscap` command not found, you need to install the OpenSCAP tooling since this means that OpenSCAP has not been installed successfully.
+Notice that this command outputs the OpenSCAP version and versions of supported standards.
+If during your own installation it says `oscap` command not found, you need to install the OpenSCAP tooling (as detailed in  step #2 above) since this means that OpenSCAP has not been installed successfully.
 
 . Finally, SCAP Workbench has also been installed on the *openscap.example.com* server host for you.
 +
  # GUI tool for scanning and benchmark customization, a front-end for OpenSCAP
- [root@openscap] dnf install scap-workbench
+ [root@openscap ~] yum install scap-workbench
 
-== Lab 1.1 Security scanning with OpenSCAP
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
+== Lab 1.1 Automated Security and Compliance Scanning with OpenSCAP
+. If not already there, log in to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your unique lab provided GUID*. If needed, use the password *r3dh4t1!*
 +
-[source]
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
 . Log into the *openscap.example.com* host as *root*.
 +
-[source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@openscap.example.com
 ----
 
 . Let's take a look at the compliance content provided by `scap-security-guide`:
 +
- [root@openscap]# rpm -ql scap-security-guide
+ [root@openscap ~]# rpm -ql scap-security-guide
  ...
  /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-dictionary.xml
  /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-oval.xml
@@ -74,67 +90,96 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
  /usr/share/xml/scap/ssg/content/ssg-rhel8-xccdf.xml
  ...
 
-. Notice that content provided in `scap-security-guide` covers a wide range of security baselines. For Red Hat Enterprise Linux 8, OSPP (Protection Profile for General Purpose Operating Systems) and PCI-DSS (Payment Card Industry Data Security Standard) profiles are available. There are also various formats in which this is provided - human readable HTML guides, SCAP benchmarks, but also Ansible remediation playbooks. 
+. Notice that content provided in `scap-security-guide` covers a wide range of security baselines.
+For Red Hat Enterprise Linux 8, OSPP (Protection Profile for General Purpose Operating Systems) and PCI-DSS (Payment Card Industry Data Security Standard) profiles are available.
+There are also various formats in which this is provided - human readable HTML guides, SCAP benchmarks, but also Ansible remediation playbooks.
 
-. Move to the `content` folder so we can avoid typing long paths:
-+
- [root@openscap]# cd /usr/share/xml/scap/ssg/content
-
-. First, let's check which compliance profiles are available for rhel8.
+. Move to the `content` folder so we can avoid typing long paths in the subsequent exercises below:
 +
 ----
- [root@openscap]# oscap info ssg-rhel8-ds.xml
+ [root@openscap ~]# cd /usr/share/xml/scap/ssg/content
 ----
-You will get print out of contents - aforementioned two compliance profiles. OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS..
 
- . Next, let's perform our first baseline testing scan with the vanilla OSPP profile. Notice in our command below that we can skip the profile ID prefix to make the command simpler. The real ID is xccdf_org.ssgproject.content_profile_ospp.
-
-  [root@openscap]# oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
+. First, let's check which compliance profiles are available for Red Hat Enterprise Linux 8.
 +
-Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
+----
+ [root@openscap content]# oscap info ssg-rhel8-ds.xml
+----
++
+. You will get list of available content and compliance profiles (OSPP - Protection Profile for General Purpose Operating Systems, and PCI-DSS) available for Red Hat Enterprise Linux 8.
+
+. Next, let's perform our first security compliance baseline scan with the OSPP profile.
+You can see in our command below that we can skip the profile ID prefix to make the command simpler.
+The real ID is *xccdf_org.ssgproject.content_profile_ospp*.
++
+----
+  [root@openscap content]# oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
+----
++
+Now, you will see the security compliance scan results for every security control in the OSPP security baseline profile. Specifically, you will see the title of each security control and whether or not that security control check passed or failed.
 
 . Now, let's store the results of the scan this time:
-* use --results-arf to get machine readable results archive
-* use --report to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
-
- [root@openscap]# oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
+--
+* use `--results-arf` to get machine readable results archive
+* use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
+* use `--oval-results` for extended details of failing rules
+--
++
+----
+ [root@openscap content]# oscap xccdf eval --oval-results --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
+----
 
 . (Optional) You can also generate the HTML report separately:
 +
- [root@openscap]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
+----
+ [root@openscap content]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
+----
 
-. Now, go back to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+. Now, go to your *power control and consoles* view from the *Lab Information* page where you got your assigned unique lab GUID by clicking on the link provided on the last bullet point of the Lab Information page.
++
+image:images/labinfopage1.png[2000,2000]
+
+.  Click on the console button for your workstation bastion host and login as *lab-user* with *r3dh4t1!* as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-. Open the Terminal, and use it to open the *report.html* in a X forwarded web browser.
+. Open the Terminal and use it to open the *report.html* (which is in the tmp directory of your openscap.example.com host) in a X forwarded web browser.
 +
  [lab-user@workstation-GUID ~]$ ssh -X root@openscap.example.com firefox /tmp/report.html
 
-. You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
+. You will see the security compliance scan results for every security control in the OSPP security baseline profile in HTML format.
 +
 image:images/lab1.1-scapreport.png[500,500]
 
-. Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether or not the particular security control has passed or failed the scan.
+. Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether a particular security control has passed or failed the scan.
+Other results you can frequently encounter are *notapplicable*, for rules that have been skipped as not relevant to the scanned system and *notchecked*, for rules without an automated check.
 
-. Click on the rule title in the HTML report.
+. Click on any of the rule titles in the HTML report, such as the rules highlighted in red in the image below.
 +
 image:images/lab1.1-clickrule.png[600,600]
 
-. This will bring up a pop-up dialog that allows you to examine why a particular OpenSCAP security rule failed or passed. For example, if an OpenSCAP security rule is testing file permissions on a list of files, it will specify which files failed and what are their permission bits.
+. This will bring up a pop-up dialog that allows you to examine details of the particular OpenSCAP security rule that failed or passed.
+If the `--oval-results` option was specified on the command line when scanning, extended details are provided.
+For example, if an OpenSCAP security rule is testing file permissions on a list of files, it will specify which files failed and what are their permission bits.
+In our case, it shows which file failed regex check.
++
+image::images/lab1.1-report_pass.png[HTML report: A rule that is passing]
++
 
-image::images/scap_report_pass.png[HTML report: A rule that is passing]
+image::images/lab1.1-report_fail.png[HTML report: A rule that is failing]
 
-image::images/scap_report_fail.png[HTML report: A rule that is failing]
+. Feel free to browse through the report to see all the different checks that were performed.
+Machine is in state equivalent to default installation.
+When you are done, you can close Firefox window.
 
-== Lab 1.2 Customizing existing SCAP benchmarks using SCAP workbench
-. Now, go back to your *Lab Information* webpage from the *Lab 0 Setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
+== Lab 1.2 Customizing Existing SCAP Security Profiles using SCAP Workbench
+. Now, let's go back to the workstation console page. Click on the console button for your workstation bastion host and login as lab-user with r3dh4t1! as the password.
 +
 image:images/lab1.1-workstationconsole.png[300,300]
 image:images/lab1.1-labuserlogin.png[300,300]
 
-. Once you log in, open the Terminal, and use it to open SCAP Workbench on the server.
+. Once you log in, open the Terminal and use it to open SCAP Workbench that's installed on the openscap.example.com system using SSH with X forwarding.
 +
  [lab-user@workstation-GUID ~]$ ssh -X root@openscap.example.com scap-workbench
 
@@ -142,9 +187,11 @@ image:images/lab1.1-labuserlogin.png[300,300]
 +
 image:images/lab1.2-scapsecurityguide.png[600,600]
 +
-image::images/scap_workbench_opened.png[SCAP Workbench opened, profile selected]
+image::images/lab1.2-workbench_opened.png[SCAP Workbench opened, profile selected]
 
-. Let's customize the PCI-DSS Control baseline. Select this profile from the *Profile* drop-down list. Click *Customize*.
+. Let's customize the PCI-DSS Control baseline.
+Select this profile from the *Profile* drop-down list.
+Click *Customize*.
 +
 image:images/lab1.2-selectcustomize.png[700,700]
 
@@ -152,61 +199,73 @@ image:images/lab1.2-selectcustomize.png[700,700]
 +
 image:images/lab1.2-newprofileID.png[500,500]
 
-. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. After you are done customizing click *OK* to save the profile. You have now created a new custom profile.
+. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. Feel free to customize this profile however you would like. After you are done customizing this profile, click *OK* to save the profile.
+You have now created a new custom profile.
 +
-image::images/scap_workbench_tailoring.png[SCAP Workbench content customization]
+image::images/lab1.2-workbench_tailoring.png[SCAP Workbench content customization]
 
-. Now let's run a test scan with the new custom profile we just created. Click *Scan* and inspect the results. When prompted for the password for *lab-user*, type *r3dh4t1!*. This will take a few minutes so feel free to move on with the lab exercise and not wait until the scan is completed.
+. Now let's run a test scan with the new custom profile we just created.
+Click *Scan* and inspect the results.
+When prompted for the password for *lab-user*, type *r3dh4t1!*.
+This will take a few minutes so feel free to move on with the rest of this lab exercise and not wait until the scan is completed. You can ignore and close the diagnostics window that will pop up at the end of the scan.
 +
 image:images/lab1.2-scapworkbenchscan.png[500,500]
 
-. (Optional) You can save it to a tailoring file by selecting File->Save Customization Only.
+. (Optional) You can save it to a tailoring file by selecting *File->Save Customization Only*.
 +
 image:images/lab1.2-savecustomization.png[300,300]
 
-== Lab 1.3 Security Remediations with OpenSCAP and Ansible
-Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology. Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads! As a result, it is best practice to test the remediation changes before deploying.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
+== Lab 1.3 Automated Security Remediations with OpenSCAP and Ansible
+Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology.
+As remediation changes the configuration of the machine to restrict its capabilities, it is possible that you will lock yourself out or disable workloads important to you.
+As a result, it is best practice to test the remediation and its effects before deploying.
+
+. If not already there, open the Terminal and log into the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
-[source]
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 . Log into the *openscap.example.com* host as *root*.
 +
-[source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@openscap.example.com
 ----
 
-. All remediations will be executed on the *openscap.example.com* host. You will not make modifications to any other hosts, including the *workstation.example.com* host.
+. All remediations will be executed on the *openscap.example.com* host.
+You will not make modifications to any other hosts, including the *workstation.example.com* bastion host.
 
-. Let's generate an Ansible playbook that will put the *openscap.example.com* machine into compliance. Let's go ahead and generate a playbook from the results:
-* use --fix-type ansible to request an ansible playbook with the fixes
+. Let's automatically generate an Ansible playbook that will put the *openscap.example.com* machine into compliance based on a given security compliance profile. In this step, let's go ahead and generate a playbook from the previous scan results of the OSPP security baseline profile:
 +
+Use the `--fix-type ansible` option to request an ansible playbook with the scan result fixes:
++
+----
  [root@openscap]# oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
+----
 
-. (Optional) Generate bash remediation script and run it on target machine(s). This can be accomplished by running:
-* use --fix-type bash to request a bash script with the fixes
-* after the script is generated change its permissions so that we can run it
+. (Optional) Generate the bash remediation script.
+This can be accomplished by running:
+* use `--fix-type bash` to request a bash script with the fixes
 +
+----
  [root@openscap]# oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
- [root@openscap]# chmod +x bash-fix.sh
- [root@openscap]# ./bash-fix.sh
+----
+. By running either this automatically generated Ansible remediation playbook or bash remediation script, the *openscap.example.com* machine will be put into compliance to the OSPP security baseline profile.
 
-. Notice that in both cases we are using empty result-id. This is a trick to avoid specifying the full result ID.
+. Notice that in both cases we are using empty `--result-id`.
+This is a trick to avoid specifying the full result ID.
 
 . We will focus on the Ansible remediation options in this next part of the lab exercise.
 
-. Let's open the generated playbook using a text editor. In this example, we will use nano as our text editor (but feel free to use vi as well).
+. Let's open the generated playbook using a text editor.
+In this example, we will use nano as our text editor (but feel free to use vi as well).
 +
 ....
 [root@openscap]# nano playbook.yml
 ---
 ###############################################################################
 #
-# Ansible remediation role for the results of evaluation of profile xccdf_org.ssgproject.content_profile_ospp 
+# Ansible remediation role for the results of evaluation of profile xccdf_org.ssgproject.content_profile_ospp
 # XCCDF Version:  1.2
 #
 ...
@@ -219,7 +278,7 @@ Putting the machine into compliance (for example by changing its configuration) 
 ###############################################################################
 ....
 
-. Exploring the playbook further you will see the tasks that set up the machine:
+. When you look at the generated playbook in more detail, you will notice the various Ansible tasks for configuring this machine to make it compliant to the OSPP security baseline profile:
 +
 ....
    - name: Ensure gpgcheck Enabled For All Yum Package Repositories
@@ -244,7 +303,9 @@ Putting the machine into compliance (for example by changing its configuration) 
         - CJIS-5.10.4.1
 ....
 
-. You can customize the playbook by changing the variables listed at the top of the generated file. Let's change the password minimum length by setting the `var_password_pam_minlen` to `!!str 18`. After making this change, press *control + x* , then type *y* and press *enter* in your nano text editor to save your changes.
+. You can customize the playbook by changing the variables listed at the top of the generated file.
+Let's change the password minimum length by setting the `var_password_pam_minlen` to `!!str 18`.
+After making this change, press *control + x* , then type *y* and press *enter* in your nano text editor to save your changes.
 +
 ....
    vars:
@@ -255,7 +316,7 @@ Putting the machine into compliance (for example by changing its configuration) 
       var_accounts_passwords_pam_faillock_deny: !!str 3
       var_accounts_passwords_pam_faillock_unlock_time: !!str never
       var_accounts_passwords_pam_faillock_fail_interval: !!str 900
-      var_password_pam_minlen: !!str 12
+      var_password_pam_minlen: !!str 18
       var_password_pam_ocredit: !!str -1
       var_password_pam_lcredit: !!str -1
       var_password_pam_ucredit: !!str -1
@@ -266,10 +327,13 @@ Putting the machine into compliance (for example by changing its configuration) 
 ...
 ....
 
-
-. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance. Setting `ansible_python_interpreter` is workaround for known issue in Ansible 2.7 used on the machine. Make sure you run this on the *openscap.example.com* host:
+. Let's run the playbook locally in check mode to see how it would change the machine to put it into compliance to the OSPP security baseline profile.
+Setting `ansible_python_interpreter` is a workaround for a known issue in the Ansible 2.7 binary installed on the lab machines.
+Make sure you run this on the *openscap.example.com* host:
 +
+----
  [root@openscap]# ansible-playbook -i "localhost," -c local --check playbook.yml -e 'ansible_python_interpreter=/usr/bin/python3'
+----
 +
 ....
 [WARNING]: While constructing a mapping from /root/playbook.yml, line 26, column 7, found a duplicate dict key (var_accounts_passwords_pam_faillock_deny). Using last defined value only.
@@ -296,8 +360,11 @@ TASK [Set rsyslog remote loghost] **********************************************
 changed: [localhost]
 
 PLAY RECAP *********************************************************************
-localhost                  : ok=458  changed=260  unreachable=0    failed=0  
+localhost                  : ok=458  changed=260  unreachable=0    failed=0
 ....
+
+. This command will take a while to finish.
+If you omit the `--check` parameter from the previous command, you will get a machine compliant with the provided rules in the OSPP security baseline profile . Please note that you won't be able to log in again into the *openscap.example.com* machine after running the previous Ansible remediation command. This is because the machine is hardened with the Ansible remediation playbook for the OSPP security baseline profile and one of the requirements of the OSPP security baseline profile prohibits login as root.
 
 <<top>>
 

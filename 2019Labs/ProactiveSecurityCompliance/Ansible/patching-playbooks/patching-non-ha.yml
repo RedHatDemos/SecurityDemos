@@ -1,5 +1,5 @@
 - name: Patch non HA Linux Servers
-  hosts: all
+  hosts: "{{ HOSTS }}"
   tasks:
   - name: Ensure Yum-utils is installed
     yum:

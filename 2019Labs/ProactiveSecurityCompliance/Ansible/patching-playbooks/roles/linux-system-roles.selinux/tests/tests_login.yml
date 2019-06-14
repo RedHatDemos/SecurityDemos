@@ -1,0 +1,82 @@
+
+- name: Check if selinux role sets SELinux login mappings
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Add a System Api Roles SELinux User
+      user:
+        comment: System Api Roles SELinux User
+        name: sar-user
+
+    - name: initial changes
+      include_role:
+        name: selinux
+      vars:
+        selinux_logins_purge: true
+        selinux_logins:
+          - { login: 'sar-user', seuser: 'staff_u', serange: 's0-s0:c0.c1023', state: 'present' }
+
+
+    - include: set_selinux_variables.yml
+    - name: save state after initial changes and before other changes
+      set_fact:
+        login_before: "{{ selinux_role_login.stdout }}"
+
+    - name: Check if there are SELinux login mapping changes
+      assert:
+        that: "{{ login_before != '' }}"
+
+    - name: subsequent changes
+      include_role:
+        name: selinux
+      vars:
+        selinux_logins_purge: false
+        selinux_logins:
+          - { login: '__default__', seuser: 'staff_u', serange: 's0-s0:c0.c1023', state: 'present' }
+
+      
+    - include: set_selinux_variables.yml
+    - name: save state after other changes
+      set_fact:
+        login_after: "{{ selinux_role_login.stdout }}"
+
+    - name: Check if there are SELinux login mapping changes
+      assert:
+        that: "{{ login_before != login_after }}"
+
+    - name: revert subsequent changes
+      include_role:
+        name: selinux
+      vars:
+        selinux_logins_purge: false
+        selinux_logins:
+          - { login: '__default__', seuser: 'staff_u', serange: 's0-s0:c0.c1023', state: 'absent' }
+
+
+    - include: set_selinux_variables.yml
+    - name: save state after reverting other changes
+      set_fact:
+        login_after: "{{ selinux_role_login.stdout }}"
+
+    - name: Check if SELinux login mapping is as before
+      assert:
+        that: "{{ login_before == login_after }}"
+
+    - include_role:
+        name: selinux
+      vars:
+        selinux_logins_purge: true
+
+    - include: set_selinux_variables.yml
+    - name: Check if there are no SELinux login mapping changes
+      assert:
+        that: "{{ selinux_role_login.stdout == '' }}"
+
+    - name: Remove a System Api Roles SELinux User
+      user:
+        comment: System Api Roles SELinux User
+        name: sar-user
+        state: absent
+
+

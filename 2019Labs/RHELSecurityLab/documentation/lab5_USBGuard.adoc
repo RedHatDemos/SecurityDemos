@@ -1,5 +1,7 @@
 = Lab 5: USBGuard
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab
 The goal of this lab exercise is to introduce you to the basics of USBGuard.
 
@@ -15,7 +17,7 @@ There are three main use cases for USBGuard: USB device whitelisting, USB device
 
 If you want to read these pre-configured set up steps later and just start with the lab exercise steps, go here: <<Lab 5.1 exercise steps>>.
 
-This lab exercise is based on a RHEL 7.5 VM residing inside this lab environment. KVM/libvirt is used to create and manage the virtual machine inside the RHEL 7.5 VM.
+This lab exercise is based on a RHEL 8.0 VM residing inside this lab environment. KVM/libvirt is used to create and manage the virtual machine inside the RHEL 8.0 VM.
 
 === Virtual machine naming information
 
@@ -37,7 +39,7 @@ First, configure virt-builder to use our internal RHEL images:
 
 Then, create the usbguard VM image using virt-builder (from libguestfs-tools-c package):
 
-	> virt-builder rhel-7.4 -o usbguard-rhel-7.4-vm.qcow2 --format qcow2 --root-password password:redhat --update --install usbguard --install usbguard-tools --install usbutils --install udisks2
+	> virt-builder rhel-8.0 -o usbguard-rhel-8.0-vm.qcow2 --format qcow2 --root-password password:redhat --update --install usbguard --install usbguard-tools --install usbutils --install udisks2
 
 === Setting up the virtual machine
 
@@ -45,7 +47,7 @@ First transfer the usbguard VM image to the host VM.
 
 Then ssh into the host VM and install the usbguard VM using virt-install (from virt-install package):
 
-	[root@usbguard]# virt-install --name usbguard-demo --memory 512 --disk /var/lib/libvirt/images/usbguard-rhel-7.4-vm.qcow2 --graphics none --os-variant rhel7.4 --import
+	[root@usbguard]# virt-install --name usbguard-demo --memory 512 --disk /var/lib/libvirt/images/usbguard-rhel-8.0-vm.qcow2 --graphics none --os-variant rhel8.0 --import
 
 Stop the VM if it is running using virsh:
 
@@ -57,9 +59,11 @@ Stop the VM if it is running using virsh:
 
 	[root@usbguard]# virsh destroy 1
 
-== Preliminary knowledge and concepts for Lab exercise
+== **PLEASE READ CAREFULLY:** Preliminary knowledge and concepts for Lab exercise
 
-This section shortly describes some of the workflows and tools used in the <<Lab 5.1 exercise steps>> section.
+This section shortly describes some of the workflows, files and tools used in the <<Lab 5.1 exercise steps>> section.
+The minimum you have to read in this section is the <<Simulating hot plugging with virsh>> topic.
+Make sure you create both `usb-disk.xml` and `usb-disk-2.xml` (see below) files if they don't already exist in your environment.
 If you are familiar with tools like `lsblk`, `udisksctl` and `virsh`, then you can skip this section and go straight to the <<Lab 5.1 exercise steps>>.
 
 === Simulating hot plugging with virsh
@@ -98,7 +102,7 @@ From the host VM you can simulate USB disk hotplug using `virsh`:
 
 === usbguard-demo VM description
 
-The usbguard-demo VM contains pre-installed (by virt-builder) _usbguard_, _usbguard-tools_, _usbutils_ and _udisks2_ packages. The VM is running RHEL 7.4.
+The usbguard-demo VM contains pre-installed (by virt-builder) _usbguard_, _usbguard-tools_, _usbutils_ and _udisks2_ packages. The VM is running RHEL 8.0.
 
 You can also use `udisksctl` to show the available status of a USB drive in the examples instead of `lsblk`.  Where you see `lsblk` in the guide, you can replace it with `udisksctl status`
 
@@ -122,7 +126,7 @@ Output comparison with allowed drive attached as `sda`:
 == Lab 5.1 exercise steps
 
 === Lab 5.1.1 Logging into the *usbguard-demo* VM
-Most steps are taken on the *usbguard-demo* virtual machine residing inside the *host* , *usbguard.example.com* virtual machine.  Adding and removing USB drives are done from the RHEL 7.5 *host* VM - *usbguard.example.com* .
+Most steps are taken on the *usbguard-demo* virtual machine residing inside the *host* , *usbguard.example.com* virtual machine.  Adding and removing USB drives are done from the RHEL 8.0 *host* VM - *usbguard.example.com* .
 
 . If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
 +
@@ -136,6 +140,7 @@ Most steps are taken on the *usbguard-demo* virtual machine residing inside the 
 [source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@usbguard.example.com
+[root@usbguard ~]# export PS1="[\u@\[\e[44m\]\h\[\e[m\] \W]\\$ "
 ----
 
 . Now, let's start the *usbguard-demo* VM (which again resides INSIDE the *host* , *usbguard.example.com* virtual machine) and connect to its console. See steps below.
@@ -151,8 +156,8 @@ Connected to domain usbguard-demo
 Escape character is ^]
 <ENTER>
 
-Red Hat Enterprise Linux Server 7.4 (Maipo)
-Kernel 3.10.0-693.el7.x86_64 on an x86_64
+Red Hat Enterprise Linux Beta 8.0 (Ootpa)
+Kernel 4.18.0-74.el8.x86_64 on an x86_64
 
 localhost login:
 ....
@@ -164,9 +169,10 @@ Login as root using the password *redhat*.
 Now let's generate a base policy without any external devices attached. This will allow the USB hubs and any other system level USB devices. The default action of USBGuard is to block any device not in the policy.
 
 . On usbguard-demo:
-
+	[root@localhost ~]# export PS1="[\u@\[\e[41m\]\h\[\e[m\] \W]\\$ "
 	[root@localhost]# usbguard generate-policy -X
 	[root@localhost]# usbguard generate-policy -X > /etc/usbguard/rules.conf
+	[root@localhost]# chmod 0600 /etc/usbguard/rules.conf
 	[root@localhost]# systemctl enable usbguard --now
 	[root@localhost]# usbguard list-rules
 
@@ -192,7 +198,7 @@ Now let's generate a base policy without any external devices attached. This wil
 
 . On usbguard-demo:
 
-	[root@localhost]# usbguard list-devices
+	[root@localhost]# usbguard list-devices --blocked
     11: block id 46f4:0001 serial "RED" name "QEMU USB HARDDRIVE" hash "AKmuakTNktSfF54t2IHFRMaukoUw47v3lu/9ZebOsNo=" parent-hash "CsKOZ6IY8v3eojsc1fqKDW84V+MMhD6HsjjojcZBjSg=" via-port "1-2" with-interface 08:06:50
 
 __Please note that the device number (`*11*:` in the output above) might be different. If so, make sure you use that number in the commands below.__

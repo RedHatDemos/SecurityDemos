@@ -1,0 +1,25 @@
+- name: Test all the possible selinux_state transitions
+  hosts: all
+  become: true
+  vars:
+    states:
+      - permissive
+      - enforcing
+      - disabled
+
+  tasks:
+    - name: save config
+      include_tasks: selinux_config_save.yml
+
+    - name: test all the possible state transitions
+      include_tasks: selinux_test_transitions.yml
+      vars:
+        selinux_initial_state: "{{ item.0 }}"
+        selinux_desired_state: "{{ item.1 }}"
+      with_nested:
+        - "{{ states }}"
+        - "{{ states }}"
+
+    - name: restore config
+      include_tasks: selinux_config_restore.yml
+

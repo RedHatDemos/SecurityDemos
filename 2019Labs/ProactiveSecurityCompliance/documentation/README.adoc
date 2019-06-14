@@ -1,47 +1,46 @@
-= Implementing Proactive Security and Compliance Automation
+= Implementing Proactive Security and Compliance Automation and DevSecOps
 
 === [.underline]#Presenters/Lab Developers#:
-*Lucy Kerner*, Security Global Technical Evangelist and Strategist, Red Hat
+*Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat
 
-*Phil Avery*, Senior Solutions Architect, Red Hat
+*Will Tome*, Senior Solutions Architect, Red Hat
 
 *Justin Lacey*, Architect, Red Hat
 
-*Kevin Holmes*, Senior Solutions Architect, Red Hat
-
 *Khary Mendez*, Principal Consultant , Red Hat
 
+*Kevin Holmes*, Senior Solutions Architect, Red Hat
 
 == Overview and Prerequisites:
-In this hands-on lab and demo environment, you will learn how to automate security and compliance using a combination of Red Hat Ansible Automation, Red Hat Satellite, Red Hat Insights, OpenSCAP, and Red Hat CloudForms. Specifically, you will go through a series of exercises that will show you how, from a central place, you can: create a security compliant host at provisioning time, create and enforce control policies, automate security scans and remediations for various different security profiles and security controls, and do proactive security and automated risk management. The goal of this lab is to introduce you to a variety of Red Hat products that can help you with proactive security and compliance automation. We will demonstrate the power and flexibility of using either one or a combination of Red Hat products to help you with security and compliance automation.
+In this hands-on lab, you’ll learn how to implement security and compliance automation at scale for the infrastructure, operations, and application across a hybrid environment, in a controlled way,  using a combination of various Red Hat products and technologies. Specifically, you will go through a series of exercises that will show you how, from a central place, you can: create and enforce control policies in an automated way, perform automated security scans and remediations for various different security profiles and security controls, do proactive security and automated risk management, implement automated web application hardening, and more. The goal of this lab is to introduce you to a variety of Red Hat products that can help you with proactive security and compliance automation across the infrastructure, operations, and application across a hybrid environment. We will demonstrate the power and flexibility of using either one or a combination of Red Hat products to help you with various security and compliance automation use cases.
 
 This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to automate security and compliance across their heterogeneous infrastructure using one or more Red Hat Products.  The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills. Knowledge of virtualization and basic linux scripting would also be helpful, but not required.
 
 == Attendees, during this session, will learn:
-* What Security Content Automation Protocol (SCAP) is and how you can use it to automate compliance with security policies
-* How to provision a security compliant host using both Red Hat CloudForms and Red Hat Ansible Automation
+* How to perform automated audit scans to quickly detect and automatically remediate security and compliance issues in a controlled way to ensure compliance against regulatory or custom profiles and for automated configuration compliance.
+* How to implement infrastructure, security, and compliance as code.
+* How to implement consistent and automated patch and configuration management.
 * How to use Red Hat Satellite, OpenSCAP, Red Hat CloudForms, and Red Hat Ansible Automation to automatically apply and enforce security policies
-* How to manage the security of Red Hat Openshift container images from Red Hat CloudForms
-* How to use OpenSCAP, Red Hat Satellite, and Red Hat CloudForms to scan and audit systems for security compliance
-* How to use OpenSCAP, Red Hat CloudForms, and Red Hat Ansible Automation to automatically remediate systems that are out of compliance
-* How to create and view reports showing compliant and non-compliant systems in Red Hat CloudForms after running OpenSCAP security compliance scans on these systems
-* How to create and view security related reports for a hybrid environment, including: Red Hat Virtualization, Red Hat Openstack Platform, and Red Hat Openshift Container Platform.
-* How to use Red Hat Insights for proactive security and automated risk management
+* How to use Red Hat Insights and Red Hat Ansible Automation to proactively identify and remediate security threats at scale with automated risk management.
+* How to have centralized management of your hybrid infrastructure for continuous security and monitoring.
+* How to implement automated web application hardening.
+* How to build and automate security into your application by implementing DevSecOps at scale using Red Hat OpenShift Container Platform and several other tools, such as OWASP ZAP, SonarQube, Clair, and more to build a secure CI/CD application pipeline.
+
 
 == Lab Environment:
-Your entire lab environment is hosted online and includes: Red Hat Virtualization, Red Hat Openstack Platform, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat CloudForms, Red Hat Ansible Automation, Red Hat Insights, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
+Your entire lab environment is cloud hosted online and includes: Red Hat Ansible Automation, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat Insights, Red Hat Virtualization, Red Hat Openstack Platform, Red Hat CloudForms, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
 
 You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
 
-Each lab exercise is independent from each other, so feel free to do the lab exercises in whatever order you'd like.
+You must complete *Lab 0: Setup steps* and you must complete *Lab 4: Additional Automated Security Hardening of Host Systems* AFTER lab exercises #1-3.
+Other than that, feel free to do the lab exercises in whatever order you'd like.
 
 == Table of Contents
 * link:lab0.adoc[Lab 0: Setup steps]
-* link:lab1.adoc[Lab 1: Provisioning a security compliant host in Red Hat Virtualization]
-* link:lab2.adoc[Lab 2: Security scanning and auditing using OpenSCAP in Satellite]
-* link:lab3.adoc[Lab 3: Enforcing compliance with security policies using Red Hat CloudForms and Red Hat Ansible Automation]
-* link:lab4.adoc[Lab 4: Managing the security of Red Hat Openshift container images from Red Hat CloudForms]
-* link:lab5.adoc[Lab 5: OpenSCAP security scans and remediations at the push of a button]
-* link:lab6.adoc[Lab 6: Viewing SCAP compliant and non-compliant systems from a report in Red Hat CloudForms]
-* link:lab7.adoc[Lab 7: Viewing other security related reports for systems in Red Hat Virtualization, Red Hat Openstack, and Red Hat Openshift]
-* link:lab8.adoc[Lab 8: Proactive Security and Automated Risk Management with Red Hat Insights]
+* link:lab1.adoc[Lab 1: Automated Scanning and Remediations of Host Systems for Vulnerabilities and Security Compliance]
+* link:lab2.adoc[Lab 2: Enforcing Automated Compliance with Security Policies]
+* link:lab3.adoc[Lab 3: Automated Patching of Host Systems]
+* link:lab4.adoc[Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems]
+* link:lab5.adoc[Lab 5: Proactive Security and Automated Risk Management at Scale with Predictive Analytics]
+* link:lab6.adoc[Lab 6: Automated Security Hardening of a Hacked Web Application]
+* link:lab7.adoc[Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]

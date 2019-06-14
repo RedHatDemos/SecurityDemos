@@ -1,0 +1,23 @@
+---
+- name: configure SELinux
+  include_role:
+    name: linux-system-roles.selinux
+
+- name: reboot if SELinux was disabled
+  block:
+  - name: Reboot the machine
+    reboot:
+  - name: Wait for machine to come back
+    wait_for:
+      port: 22
+      host: "{{ ansible_default_ipv4.address }}"
+      delay: 5
+      timeout: 300
+    delegate_to: localhost
+    become: false
+  - name: Gather new facts
+    setup:
+  - debug:
+      msg: "SELinux status = {{ ansible_selinux.status }}"
+  when: ansible_selinux.status == "disabled"
+

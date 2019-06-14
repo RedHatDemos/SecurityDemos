@@ -12,18 +12,17 @@
     wait_for:
       host: "{{ ansible_host }}"
       port: 22
-      delay: 10
-      timeout: 15
+      delay: 30
+      timeout: 60
       state: started
     delegate_to: localhost
 
   - name: Install Packages
     yum:
-      name: "{{ item }}"
+      name: "{{ package_name }}"
       state: latest
     register: yum_output
-    with_items:
-      - "{{ package_name }}"
+    become: yes
 
   - name: Log yum_output
     debug:

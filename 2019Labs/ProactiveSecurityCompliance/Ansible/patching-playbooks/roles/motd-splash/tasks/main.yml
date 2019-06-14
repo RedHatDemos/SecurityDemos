@@ -1,0 +1,34 @@
+---
+- name: Define the custom MOTD file if this is a CentOS system
+  set_fact:
+    motd_template_file: templates/motd_centos
+  when: ansible_distribution == "CentOS"
+
+- name: Define the custom MOTD file if this is a RHEL system
+  set_fact:
+    motd_template_file: templates/motd_redhat
+  when: ansible_distribution == "RedHat"
+
+- name: Define the MOTD file for any non-RHEL and non-CENT machine
+  set_fact:
+    motd_template_file: templates/motd_generic
+  when: ansible_distribution != "CentOS" and ansible_distribution != "RedHat"
+
+- name: motd template
+  template:
+    src: "{{ motd_template_file }}"
+    dest: /etc/motd
+    owner: root
+    group: wheel
+    mode: 0644
+    backup: yes
+
+- name: issue template
+  template:
+    src: templates/issue
+    dest: /etc/issue
+    owner: root
+    group: wheel
+    mode: 0644
+    backup: yes
+

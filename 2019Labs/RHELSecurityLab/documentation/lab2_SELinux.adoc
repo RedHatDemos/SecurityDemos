@@ -1,10 +1,12 @@
 
-= Lab 2: Security Enhanced Linux
+= Lab 2: Security Enhanced Linux (SELinux)
+
+*Lab Length: Long*
 
 == Goal of Lab
-The goal of this lab is to use Security Enhanced Linux (SELinux) to help mitigate against attacks due to privilege escalation vulnerabilities in a three part exercise.
+The goal of this lab is to use Security Enhanced Linux (SELinux) to help mitigate attacks due to privilege escalation vulnerabilities in a three part exercise.
 
-* In the first part of this lab exercise, you will become a hacker and try to execute a real vulnerability on a given Red Hat Enterprise Linux 7 system and explore how SELinux can help to protect this system.
+* In the first part of this lab exercise, you will become a hacker and try to execute vulnerabilities on given Red Hat Enterprise Linux 7 and Fedora systems and explore how SELinux can help to protect these systems.
 * In the second part of this lab exercise, you will turn SELinux on for an environment of web servers in an automated fashion using Ansible.
 * In the last part of this lab exercise, you will configure SELinux according to a U.S. Department of Defense STIG security control policy rule.
 
@@ -24,7 +26,7 @@ image:images/lab2-shellshock-1.png[]
 
 If you had a _cgi_ script accessing user data or the internal network, then this script could compromise either the internal network or user data on your system.
 
-_So what can SELinux do to mitigate against the Shellshock bash exploit?_
+_So what can SELinux do to mitigate the Shellshock bash exploit?_
 
 The important fact to understand is that *SELinux does not block the exploit* but it will *prevent escalation of confined domains*. These confined domains are defined by the SELinux policy installed on a system. Because *SELinux controls on their types (SELinux labels)*, the process is doing what it was designed to do and can not access what is not allowed in the SELinux policy.
 
@@ -41,7 +43,7 @@ How is this done in reality? How do types, which ensure described process separa
 === Goal of Lab 2.1
 In this first exercise, let's become a hacker and try to exploit Red Hat Enterprise Linux 7 with the Shellshock vulnerability.
 
-As an administrator of Red Hat Enterprise Linux servers, I want to enable SELinux for the web servers in my environment to mitigate against damages caused by zero day vulnerabilities.
+As an administrator of Red Hat Enterprise Linux servers, I want to enable SELinux for the web servers in my environment to mitigate damages caused by zero day vulnerabilities.
 
 This lab exercise is split into three steps:
 
@@ -63,22 +65,22 @@ The exploit will be executed from the _selinux1.example.com_ system.
 [source]
 [lab-user@workstation-GUID ~]# ssh root@selinux1.example.com
 
-. Move to directory /root/selinux_sctipts/ where are all the scripts needed for provide attack.
+. Move to directory /root/selinux_scripts/ where are all the scripts needed to perform the attack.
 
     [root@selinux1 ~]# cd /root/selinux_scripts
 +
-NOTE: If you'd like copies of these selinux_scripts, they can also be found in this github link https://github.com/RedHatDemos/SecurityDemos/tree/master/RHELSecurityLabSummit/selinux_scripts[here^].
+NOTE: If you'd like copies of these selinux_scripts, they can also be found in this github link https://github.com/RedHatDemos/SecurityDemos/tree/master/2019Labs/RHELSecurityLab/scripts/selinux_scripts[here^].
 
 . Repeat steps #1-3 above on a second terminal (this terminal window will also be connected to *selinux1.example.com*)
 
 === Lab 2.1.2 Exploiting the system with SELinux in Permissive mode
 
 ==== Goal of Lab 2.1.2
-In this part of the lab exercise, we are going to utilize the two open open terminals from the previous exercise.
+In this part of the lab exercise, we are going to utilize the two open terminals from the previous exercise.
 (both selinux1.example.com). The first terminal window will be for listening on 9999 tcp port and the second terminal window will be for executing the exploit script.
 
 ==== Introduction
-Let's see this visually. Take a look at the image below. This image describes the flow of how the exploit that will be executed. On the left side is the victim server (selinux4 system). From the attacker machine (which is the selinux1 system), a http request will be sent and part of this httpd request will be to open the shell to the attacker machine listening on tcp port 9999.
+Let's see this visually. Take a look at the image below. This image describes the flow of how the exploit that will be executed. On the left side is the victim server (selinux4 system). From the attacker machine (which is the selinux1 system), a http request will be sent and part of this http request will be to open the shell to the attacker machine listening on tcp port 9999.
 
 image:images/lab2-shellshock-flow.png[]
 
@@ -122,8 +124,8 @@ Now let's go through the steps we just described above.
     Linux selinux4.example.com 3.10.0-418.el7.x86_64 #1 SMP Thu May 26 20:35:02 EDT 2016 x86_64 x86_64 x86_64 GNU/Linux
     bash-4.2$ exit
 
-* The _id_ command prints real and effecitve user and group IDs, where we could see that user and group is apache. This is because cgi scripts are started as the apache owner.
-* The _uname_ command prints system information. You can see the hostname *selinux4.example.com* being printed, which indicates that this is the victim system. These commands proves that the attack was successful.
+* The _id_ command prints real and effective user and group IDs, where we could see that user and group is apache. This is because cgi scripts are started as the apache owner.
+* The _uname_ command prints system information. You can see the hostname *selinux4.example.com* being printed, which indicates that this is the victim system. These commands prove that the attack was successful.
 
 === Lab 2.1.3 Set SELinux to enforcing mode
 
@@ -131,9 +133,7 @@ The victim server (_selinux4_ system) has SELinux in permissive mode. Now, let's
 
 Connect to _selinux4_ and switch to Enforcing mode
 
-    [root@selinux1 selinux_scripts]# ssh root@selinux4
-    [root@selinux4 ~]# setenforce 1
-    [root@selinux4 ~]# exit
+    [root@selinux1 selinux_scripts]# ssh root@selinux4 setenforce 1
 
 === Lab 2.1.4 Exploiting system with SELinux in Enforcing mode
 
@@ -168,12 +168,20 @@ This is the avc record from the Audit daemon. This output is saying that the cgi
 
 == Lab 2.2 Exploiting Fedora 27 with the Runcescape vulnerability
 
+==== Introduction
+CVE-2019-5736 runc escape is the latest vulnerability in containers world. It's privilege escalation vulnerability with arbitrary code execution as root, when malicious process inside container will escape from container namespace and will execute arbitary code on host system. This is really dangerous because in any container could be malicious process and when system administrator will start the container, they will add root access to the whole system.
+Fortunately, SELinux technology, which separates containers between each other and also separates containers from the host system, blocks this exploit.
+
+NOTE: If you'd like to read more about this exploit, information can be found in this link https://access.redhat.com/security/vulnerabilities/runcescape[here^].
+
 === Goal of Lab 2.2
-In this second exercise, let's become a hacker and try to exploit Fedora 27 with the Runcescape vulnerability.
+
+In this second exercise, let's become a hacker and try to exploit Fedora 27 with the Runcescape vulnerability. A vulnerability discovered in runc allows for a break out from the container to gain root-level access on the host machine.
+
 
 Old release of Fedora27 was used for the purpose, because docker is fixed in Red Hat Enterprise Linux 7. Fedora27 is in end of life state, which means no updates are provided, so docker there is still vulnerable.
 
-As an administrator of Red Hat Enterprise Linux servers, I want to enable SELinux for the containers in my environment to mitigate against damages caused by zero day vulnerabilities.
+As an administrator of Red Hat Enterprise Linux servers, I want to enable SELinux for the containers in my environment to mitigate damages caused by zero day vulnerabilities.
 
 This lab exercise is split into three steps:
 
@@ -181,7 +189,7 @@ This lab exercise is split into three steps:
 . Exploiting a Fedora system with SELinux in Permissive mode
 . Analyzing SELinux denials
 
-=== Lab 2.2.1 Logging into the *selinux6.example.com* system and navigating to the selinux scripts directory
+=== Lab 2.2.1 Logging into the *selinux6.example.com* system and navigating to the selinux directory
 
 The exploit will be executed from the _selinux6.example.com_ system.
 
@@ -193,18 +201,12 @@ The exploit will be executed from the _selinux6.example.com_ system.
 [source]
 [lab-user@workstation-GUID ~]# ssh root@selinux6.example.com
 
-. Move to directory /root/selinux_sctipts/ where are all the scripts needed for provide attack.
+. Move to directory /root/selinux_scripts/ where are all the scripts needed to perform the attack.
 [source]
 [root@selinux6 ~]# cd /root/selinux_scripts
 
 
-NOTE: If you'd like copies of these selinux_scripts, they can also be found in this github link https://github.com/RedHatDemos/SecurityDemos/tree/master/RHELSecurityLabSummit/selinux_scripts[here^].
-
-==== Introduction
-CVE-2019-5736 runc escape is the latest vulnerability in containers world. It's privilege escalation vulnerability with arbitrary code execution as root, when malicious process inside container will escape from container namespace and will execute arbitary code on host system. This is really dangerous because in any container could be malicious process and when system adminitrator will start the container, they will add root access to the whole system.
-Fortunately, SELinux technology separating containers between each other and also between the container and host system and blocking this exploit.
-
-NOTE: If you'd like read more about this exploit, informations can  be found in this link https://access.redhat.com/security/vulnerabilities/runcescape[here^].
+NOTE: If you'd like copies of these selinux_scripts, they can also be found in this github link https://github.com/RedHatDemos/SecurityDemos/tree/master/2019Labs/RHELSecurityLab/scripts/selinux_scripts[here^].
 
 ==== Lab 2.2.2 exercise steps
 Now, let's follow these steps to reproduce the attack.
@@ -223,7 +225,7 @@ Policy deny_unknown status:     allowed
 Memory protection checking:     actual (secure)
 Max kernel policy version:      31
 
-. Second step is prepare the environment, for this purpose there is *runcescape.sh* shell script prepared for you. The script will install and start docker container engine. This engine also using vulnerable runc bundled inside. Then regular container with the latest ubuntu distribution will be downloaded. Next step is to upload malicious program to container and prepare the exploit. Let's execute the script:
+. Second step is to prepare the environment, for this purpose there is *runcescape.sh* shell script prepared for you. The script will install and start docker container engine. This engine also uses a vulnerable runc bundled inside. Then regular container with the latest ubuntu distribution will be downloaded. Next step is to upload malicious program to container and prepare the exploit. Let's execute the script:
 [source]
 [root@selinux6 selinux_scripts]# ./runcescape.sh
 [+] Installing docker
@@ -232,7 +234,7 @@ Max kernel policy version:      31
 [+] Uploading exploit
 [+] Executing docker
 
-. Now, container with malicious program is ready, and waiting for system adminitrator who will execute the program inside the container. In this case, malicious program is renamed to _bash_ and replaced with the real _/bin/bash_. So, Let's execute the it inside the container:
+. Now, container with malicious program is ready, and waiting for system administrator who will execute the program inside the container. In this case, malicious program is renamed to _bash_ and replaced with the real _/bin/bash_. Let's execute it inside the container:
 [source]
 [root@selinux6 selinux_scripts]# docker exec -it pwnme /bin/bash
 [+] bad_libseccomp.so booted.
@@ -241,13 +243,13 @@ Max kernel policy version:      31
 [+] bad_init is ready -- see </tmp/bad_init_log> for logs.
 [*] dying to allow /proc/self/exe to be unused...
 
-. Because of type of the attack, sometimes it's nescessary to execute the last command multiple times, so to make sure the attack is sucessful execute the latest command _docker exec -it pwnme /bin/bash_ multiple times.
+. Because of type of the attack, sometimes it's necessary to execute the last command multiple times, so to make sure the attack is successful execute the latest command _docker exec -it pwnme /bin/bash_ multiple times.
 
 === Lab 2.2.3 Analyzing the SELinux denial
 
 Let's analyze what happened and why SELinux blocked the runc escape exploit.
 
-Run _ausearch_ command to see SELinuix denial:
+Run _ausearch_ command to see SELinux denial:
 [source]
 [root@selinux6 selinux_scripts]# ausearch -m AVC -ts today | grep container_runtime_exec_t
 type=AVC msg=audit(1554464510.001:479): avc:  denied  { write } for  pid=5190 comm="bad_init" name="docker-runc-current" dev="dm-0" ino=9162730 scontext=system_u:system_r:container_t:s0:c915,c946 tcontext=system_u:object_r:container_runtime_exec_t:s0 tclass=file permissive=0
@@ -263,9 +265,9 @@ The _selinux6_ system has SELinux in enforcing mode. Now, let's switch SELinux t
 Permissive
 
 ==== Lab 2.2.5 exercise steps in permissive mode
-Now, let's follow these again steps to reproduce the attack in permissive mode.
+Now, let's follow these steps again to reproduce the attack in permissive mode.
 
-. First step is prepare new container with the exploit
+. First step is to prepare new container with the exploit
 [source]
 [root@selinux6 selinux_scripts]# ./runcescape.sh
 [+] Installing docker
@@ -274,7 +276,7 @@ Now, let's follow these again steps to reproduce the attack in permissive mode.
 [+] Uploading exploit
 [+] Executing docker
 
-. Now, container with malicious program is ready, and waiting for system adminitrator who will execute the program inside the container. In this case, malicious program is renamed to _bash_ and replaced with the real _/bin/bash_. So, Let's repeate attack, now it will be sucessful because SELinux is in permissive mode.
+. Now, container with malicious program is ready, and waiting for system administrator who will execute the program inside the container. In this case, malicious program is renamed to _bash_ and replaced with the real _/bin/bash_. Let's repeat the attack, now it will be successful because SELinux is in permissive mode.
 [source]
 [root@selinux6 selinux_scripts]# docker exec -it pwnme /bin/bash
 [+] bad_libseccomp.so booted.
@@ -283,12 +285,12 @@ Now, let's follow these again steps to reproduce the attack in permissive mode.
 [+] bad_init is ready -- see </tmp/bad_init_log> for logs.
 [*] dying to allow /proc/self/exe to be unused...
 
-. Becuase of type of the attack, sometimes it's nescessary to execute the last command multiple times, so to make sure the attack is sucessful execute the latest command _docker exec -it pwnme /bin/bash_ multiple until you'll see this output:
+. Because of type of the attack, sometimes it's necessary to execute the last command multiple times, so to make sure the attack is successful execute the latest command _docker exec -it pwnme /bin/bash_ multiple until you'll see this output:
 [source]
 [root@selinux6 selinux_scripts]# docker exec -it pwnme /bin/bash
 rpc error: code = 2 desc = containerd: container not started
 
-This is prove that exploit was sucessful. Output of command _ausearch -m AVC -ts today_ will again show same SELinux denial, like in Enforcing but becasue we're in permissive also payload of exploit is executed. In our case, payload creates file in root filesystem with name *HACKED*. Let's prove it:
+This is a proof that exploit was successful. Output of command _ausearch -m AVC -ts today_ will again show same SELinux denial, like in Enforcing but because we're in permissive also payload of exploit is executed. In our case, payload creates file in root filesystem with name *HACKED*. Let's prove it:
 [source]
 [root@selinux6 selinux_scripts]# cd /
 [root@selinux6 /]# ls
@@ -305,7 +307,7 @@ SELinux brings additional security for your environment and very often needs to 
 
 In this lab, we used the SELinux Ansible role to distribute all needed changes in the SELinux policy to make our Apache configuration working with SELinux in Enforcing mode.
 
-Specifically, in this lab exercise, you will enable SELinux in your environment, which consists of an Apache server using both custom and standard paths for web files . You will enable SELinux so that your Apache server is fully confined by SELinux. Specifically, you will use the SELinux system roles feature as an Ansible role to configure SELinux in an automated fashion.
+Specifically, in this lab exercise, you will enable SELinux in your environment, which consists of an Apache server using both custom and standard paths for web files. You will enable SELinux so that your Apache server is fully confined by SELinux. Specifically, you will use the SELinux system roles feature as an Ansible role to configure SELinux in an automated fashion.
 
 === Introduction and Lab Background Info
 
@@ -380,7 +382,7 @@ selinux5
 
 ==== Pre-Configuration of Apache web servers with SELinux disabled
 
-The _apache_ web servers were set up using the _setup_webserver.yml_ playbook and this playbook was executed on the _selinux2_,  _selinux3_ and _selinux5_ hosts.  SELinux was also turned off.
+The _apache_ web servers were set up using the _setup-webserver.yml_ playbook and this playbook was executed on the _selinux2_,  _selinux3_ and _selinux5_ hosts.  SELinux was also turned off.
 
 All ansible commands below were executed from _selinux1.example.com_.
 
@@ -439,17 +441,11 @@ The following actions were performed for all hosts mentioned in the _inventory_ 
 
 At the end we installed the _setools-console_ package containing SELinux policy query tools which will be used for SELinux Troubleshooting.
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2
-	[root@selinux2 ~]# yum install setools-console
-	[root@selinux2 ~]# exit
+	[root@selinux1 selinux_scripts]# ssh root@selinux2 yum install setools-console -y
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux3
-	[root@selinux3 ~]# yum install setools-console
-	[root@selinux3 ~]# exit
+	[root@selinux1 selinux_scripts]# ssh root@selinux3 yum install setools-console -y
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux5
-	[root@selinux5 ~]# yum install setools-console
-	[root@selinux5 ~]# exit
+	[root@selinux1 selinux_scripts]# ssh root@selinux5 yum install setools-console -y
 
 === Lab 2.3.1 Testing the pre-configured setup
 In this section, we are going to test our pre-configured setup steps from before.
@@ -459,38 +455,25 @@ In this section, we are going to test our pre-configured setup steps from before
 
 	[root@selinux1 selinux_scripts]# cd /root/selinux_scripts
 
-	[root@selinux1 selinux_scripts]# curl selinux2
+	[root@selinux1 selinux_scripts]# curl selinux{2,3,5}
+	<h1>Default Document Root</h1>
+	<h1>Default Document Root</h1>
 	<h1>Default Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# curl selinux2:7070
+	[root@selinux1 selinux_scripts]# curl selinux{2,3,5}:7070
+	<h1>Custom Document Root</h1>
+	<h1>Custom Document Root</h1>
 	<h1>Custom Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# curl selinux3
-	<h1>Default Document Root</h1>
-
-	[root@selinux1 selinux_scripts]# curl selinux3:7070
-	<h1>Custom Document Root</h1>
-
-    [root@selinux1 selinux_scripts]# curl selinux5
-    <h1>Default Document Root</h1>
-
-    [root@selinux1 selinux_scripts]# curl selinux5:7070
-    <h1>Custom Document Root</h1>
-
-	[root@selinux1 selinux_scripts]# ssh root@selinux2
-	[root@selinux2 ~]# getenforce
+	[root@selinux1 selinux_scripts]# ssh root@selinux2 getenforce
 	Disabled
-	[root@selinux2 ~]# exit
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux3
-	[root@selinux3 ~]# getenforce
+    [root@selinux1 selinux_scripts]# ssh root@selinux3 getenforce
 	Disabled
-	[root@selinux3 ~]# exit
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux5
-	[root@selinux5 ~]# getenforce
+    [root@selinux1 selinux_scripts]# ssh root@selinux5 getenforce
 	Disabled
-	[root@selinux5 ~]# exit
+
 
 === Lab 2.3.2 Turning SELinux On
 
@@ -501,35 +484,36 @@ In this section, we are going to test our pre-configured setup steps from before
 
 . SELinux is switched to _permissive_ mode using the _enable-selinux_ playbook. It means that SELinux policy is enabled but is not enforced. We can use the _getenforce_ and _sestatus_ utility to view the current SELinux mode for our server(s).
 
-    [root@selinux1 selinux_scripts]# ssh root@selinux2
-    [root@selinux2 ~]# getenforce
-    [root@selinux2 ~]# sestatus
-    [root@selinux2 ~]# exit
+    [root@selinux1 selinux_scripts]# ssh root@selinux2 getenforce
+    [root@selinux1 selinux_scripts]# ssh root@selinux2 sestatus
 
 . SELinux does not deny access, but denials are logged for actions that would have been denied if running in enforcing mode. In order to show logged denials for certain actions we need to run the _curl_ command. AVC denial(s) will be generated and we can view it via the _ausearch_ command below.
 
-	[root@selinux1 selinux_scripts]# curl selinux2:7070
-	[root@selinux1 selinux_scripts]# curl selinux3:7070
-	[root@selinux1 selinux_scripts]# curl selinux5:7070
++
+[source,text]
+----
+[root@selinux1 selinux_scripts]# curl selinux{2,3,5}:7070
+<h1>Custom Document Root</h1>
+<h1>Custom Document Root</h1>
+<h1>Custom Document Root</h1>
 
-	[root@selinux1 selinux_scripts]# ssh root@selinux2
+[root@selinux1 selinux_scripts]# ssh root@selinux2
 
-	[root@selinux2 ~]# ausearch -m AVC -su httpd_t -ts recent
+[root@selinux2 ~]# ausearch -m AVC -su httpd_t -ts recent
 
-	avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
-	avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
-    avc:  denied  { map } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
-    avc:  denied  { open } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
-    avc:  denied  { getattr } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
-
-	[root@selinux2 ~]# exit
+avc:  denied  { name_bind } for  pid=1830 comm="httpd" src=7070 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:unreserved_port_t:s0 tclass=tcp_socket
+avc:  denied  { read } for  pid=1831 comm="httpd" name="index.html" dev="vda3" ino=8511801 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file
+avc:  denied  { map } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+avc:  denied  { open } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+avc:  denied  { getattr } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
+----
 
 === Lab 2.3.3 SELinux Troubleshooting
 In the previous step, we turned SELinux on and got AVC denials. Denial messages are logged when SELinux denies access. Let's find out why we got these AVC denials.
 
 SELinux Troubleshooting can be performed on both the _selinux2_ and _selinux3_ hosts. We will use the _selinux2_ host for the following examples.
 
-. Log into the _selinux2_ host.
+. Log into the _selinux2_ host, if you're not already logged in.
 
 	[root@selinux1 selinux_scripts]# ssh root@selinux2
 
@@ -538,20 +522,9 @@ SELinux Troubleshooting can be performed on both the _selinux2_ and _selinux3_ h
 . SELinux _httpd_t_ process domain used for Apache web servers is not able to bind to _tcp/7070_ port by default. There is no default rule for this access in the SELinux policy on the RHEL-7 _selinux5_ and RHEL-8 _selinux2_ hosts.
 
   [root@selinux2 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind | grep httpd_t
-  [root@selinux2 ~]# exit
-
-  [root@selinux5 ~]# sesearch -A -s httpd_t -t unreserved_port_t -c tcp_socket -p name_bind | grep httpd_t
-  [root@selinux5 ~]# exit
-
-. Use _port_ instead of _unreserved_port_t_ for this query on the _selinux3_ host.
-
-  [root@selinux1] ssh selinux3
-  [root@selinux3 ~]# sesearch -A -s httpd_t -t port_t -c tcp_socket -p name_bind -C | grep httpd_t
-  [root@selinux3 ~]# exit
 
 . Compare to that Apache webservers can bind to other ports and these SELinux port types can be assigned to our selected custom port (_tcp/7070_).
 
-  [root@selinux1] ssh selinux2
   [root@selinux2 ~]# sesearch -A -s httpd_t -c tcp_socket -p name_bind | grep httpd_t
 
 ==== Lab 2.3.3.2 SELinux File context
@@ -639,17 +612,11 @@ Let's take a quick look at this Ansible playbook.
 
 . Now let's test and view all our recent SELinux configuration changes.
 
-    [root@selinux1 selinux_scripts]# ssh selinux2
-    [root@selinux2 ~]# semanage export
-    [root@selinux2 ~]# exit
+    [root@selinux1 selinux_scripts]# ssh selinux2 semanage export
 
-    [root@selinux1 selinux_scripts]# ssh selinux5
-    [root@selinux5 ~]# semanage export
-    [root@selinux5 ~]# exit
+    [root@selinux1 selinux_scripts]# ssh selinux5 semanage export
 
-    [root@selinux1 selinux_scripts]# ssh selinux3
-    [root@selinux3 ~]# semanage -o -
-    [root@selinux3 ~]# exit
+    [root@selinux1 selinux_scripts]# ssh selinux3 semanage -o -
 
 . Check the current SELinux status for all servers..
 
@@ -657,14 +624,15 @@ Let's take a quick look at this Ansible playbook.
 
 . Check the functionality with enabled SELinux.
 
-    [root@selinux1 selinux_scripts]# curl selinux2
-    [root@selinux1 selinux_scripts]# curl selinux2:7070
+    [root@selinux1 selinux_scripts]# curl selinux{2,3,5}
+	<h1>Default Document Root</h1>
+	<h1>Default Document Root</h1>
+	<h1>Default Document Root</h1>
 
-    [root@selinux1 selinux_scripts]# curl selinux3
-    [root@selinux1 selinux_scripts]# curl selinux3:7070
-
-    [root@selinux1 selinux_scripts]# curl selinux5
-    [root@selinux1 selinux_scripts]# curl selinux5:7070
+    [root@selinux1 selinux_scripts]# curl selinux{2,3,5}:7070
+	<h1>Custom Document Root</h1>
+	<h1>Custom Document Root</h1>
+	<h1>Custom Document Root</h1>
 
 == Revert script
 

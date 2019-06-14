@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  roles:
+    - ansible-rhel7-pci-dss-role

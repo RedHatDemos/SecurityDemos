@@ -1,221 +1,274 @@
-= Say Hello to ComplianceAsCode
+= Lab 1: Say Hello to ComplianceAsCode
 
 :experimental:
 :imagesdir: images
 
+== Introduction
 
-== What will you learn
+In this lab, we will get familiar with the `ComplianceAsCode` project. The purpose of this project is to help users create security policy content for various platforms. The `ComplianceAsCode` project enables users to efficiently develop and share security content.
 
-* ... the project overview, so you will get a clearer idea what is where, and what can you use the project for.
-* ... how to build the content from the source, and you will go through what gets built.
-* ... how to find where to find source of a particular part of the built artifact.
-* ... how to parametrize rules that use variables.
-* ... where to find additional rule content s.a. checks and remediations.
+Using the powerful build system, you can generate output in various formats such as Ansible Playbooks or SCAP datastreams
+that you can use to automate security auditing and hardening.
+The project contains many useful rules and checks that form various security policies and enables users to easily add new rules and checks.
+
+We will work with the project source repository: https://github.com/ComplianceAsCode/content.
+
+In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode data is shipped as the `scap-security-guide` RPM package.
+
+== Goal of Lab 1:
+
+* Learn about the `ComplianceAsCode` project to understand what is where and what can you use the project for.
+* Learn how to build the content from the source and go through what gets built.
+* Understand how to find the source of a particular part of the built artifact.
+* Learn how to parametrize rules that use variables.
+* Learn where to find additional rule content, such as checks and remediations.
 
 
-== What have we done for you
+== Pre-Configured and Already Set Up for you:
 
-* We have cloned the ComplianceAsCode repository to the `content` directory.
-* We have installed dependencies that are required for the ComplianceAsCode content build using `dnf install`:
+* The `ComplianceAsCode` repository has already been cloned to all of the `/home/lab-user/labs/` directories. So for example, `/home/lab-user/labs/lab1_introduction` is a clone of the ComplianceAsCode project repository.
+* The following dependencies that are required for the `ComplianceAsCode` content build have already been installed using `yum install`:
 ** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
-* We have edited the project's source code and introduced some modifications, so there are things to do.
 
-== Hands-on
+=== Lab 1.1 Building the content
 
-=== Before you start
+The ComplianceAsCode project consists of human readable files that are compiled into standard-compliant files that are difficult to read and edit directly.
 
-* Open a terminal window by clicking `Activities` in the upper left corner, and then click on the terminal icon.
-* Make sure that you are in the project root when you start - run
-+
-----
-cd /home/lab-user/labs/lab1_introduction/content
-----
-+
-in the terminal.
+Now let's go ahead and start building the content!
 
-* For best experience, open one more terminal window and also navigate to the project root in that one as well.
-* Open the file explorer and also navigate to the project root.
-* Finally, open the Firefox browser.
-
-.Opening a new terminal window in Red Hat Enterprise Linux 8.
-image::0-01-setup.png[]
-
-=== Build the content
-
-The project consists of human-friendly files, that are compiled into standard-compliant files that are difficult to read and to edit directly.
-Therefore, let's see how the output looks, let's build the content!
-
-The https://github.com/ComplianceAsCode/content[ComplianceAsCode/content] project uses https://cmake.org/[cmake] build system.
-The build itself is based on Python, the `oscap` tool, and XSLT transformations.
+The https://github.com/ComplianceAsCode/content[ComplianceAsCode/content] project uses https://cmake.org/[CMake] build system.
+The build itself is based on: Python, the `oscap` tool, and XSLT transformations.
 
 To build the content, take the following steps:
 
-. Make sure that you are in the good starting directory - `/home/lab-user/labs/lab1_introduction/content`.
-. Go to the build subdirectory of the project - `/home/lab-user/labs/lab1_introduction/content/build`.
-. Execute `cmake ..` in the build directory to generate build files.
-. Run `make` to compile content for all applicable *products*.
-A product may be either an OS s.a. `RHEL8`, `RHEL7`, `Fedora` etc., or they can be applications s.a. `firefox`, `Java`, and so on.
-For reference, you can run `make <product>` to build only for the content you are interested in, or `make all` to explicitly build everything that is available, which takes a lot of time.
-. After the build finishes, let's explore the built content.
+. Log in to the VM using the text console if you haven't done so already:
++
+Go to the Terminal window on your laptop.
+SSH into the remote VM as *lab-user*.
+Don't forget to replace *GUID* with your lab provided *GUID*!
++
+----
+[... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$
+----
 
+. Go to the text console, i.e. the Terminal window of your laptop.
+Navigate to */home/lab-user/labs/lab1_introduction*.
+From this directory, run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
++
+----
+[... ~]$ cd /home/lab-user/labs/lab1_introduction
+[... lab1_introduction]$ ./build_product rhel8
+----
++
+It is possible to also build content for other products.
+A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, e.g. Firefox, Java, and so on.
++
+In general, you can run `./build_product <product>` to build only the content for a product you are interested in.
+The `<product>` is the lowercase form of the product, so you would run: `./build_product rhel8` to build content for RHEL 8, `./build_product fedora` to build content for Fedora, and so on.
+
+.Build of security content for RHEL 8 has finished in the terminal window.
 image::0-02-post_build.png[]
+{empty} +
+We will now explore the built content in the subsequent lab exercises.
+
+=== Lab 1.2 Viewing the provided HTML guides for the ComplianceAsCode project
+
+The `ComplianceAsCode` project provides HTML guides that are a great resource for those interested in what rules a policy consists of.
+The HTML guides are located in the respective `build/guides` of each lab exercise subdirectory. Therefore, the full path of the directory for this lab exercise is:
+
+----
+/home/lab-user/labs/lab1_introduction/build/guides/
+----
+
+In the `ComplianceAsCode` project, policies are referred to as security profiles.
+The HTML guide filenames have a `ssg-<product>-guide-<profile>.html` form, so the HTML guide for the RHEL 8 Protection Profile for General Purpose Operating Systems (OSPP profile) has the `ssg-rhel8-guide-ospp.html` form.
+
+. Now, let's take a look at one of the provided HTML guides in a web browser.
+Go back to the console of your lab VM by going to the tab that you have opened of the lab environment's *power control and consoles page* from Lab 0.
+If you need to log in again as the *Lab User*, the password is *r3dh4t1!*.
++
+image::vmconsole.png[200,200]
++
+On the remote desktop, we are going to open the guide in a web browser.
+Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
++
+image::desktopfilefolder.png[100,100]
++
+After the window appears, click the `Home` icon in the left upper part of the file explorer window.
+Then, navigate to the location of the exercise by double-clicking on the `labs` folder, followed by double-clicking the
+`lab1_introduction`, `build`, and finally the `guides` folder.
+As a last step, double click on the *ssg-rhel8-guide-ospp.html* file to open the HTML guide for the RHEL 8 OSPP profile.
++
+image::navigateospp.png[1000,1000]
+
+. Rules are organized in a system of hierarchical groups. Take a look through this HTML guide to see the various rules of the RHEL 8 OSPP profile.
+
+.HTML guide showing all the rules of the following profile: RHEL 8 Protection Profile for General Purpose Operating Systems (OSPP)
+image::html_guide.png[]
 
 
-=== Examine the guides
+=== Lab 1.3 Updating a Rule Description to Find the Source of a Specific Rule
 
-What people love about the project are HTML guides that are a great resource for those interested in of what rules a policy consists of.
-In the `ComplianceAsCode` project, policies are referred to as security profiles, and HTML guides are built in the `build/guides` subdirectory.
-Guide filenames have a `ssg-<product>-guide-<policy>.html` form, so the guide for the `RHEL8` `OSPP` profile has the `ssg-rhel8-guide-ospp.html` form.
-Give it a try - execute the following command in the terminal:
+We will now take a closer look at a specific rule in the HTML guide of the RHEL 8 OSPP profile.
+For example, let's take a closer look at the *Set Interactive Session Timeout*  rule entry.
 
-....
-firefox /home/lab-user/labs/lab1_introduction/content/build/guides/ssg-rhel8-guide-ospp.html
-....
+. In the HTML guide of the RHEL 8 OSPP profile that you have opened in Firefox, press `Ctrl+F` and search for `session timeout`.
++
+.The *Set Interactive Session Timeout* rule in the RHEL 8 OSPP profile HTML guide
+image::session_timeout.png[]
 
-As a security policy is an ordered list of rules, guide is an ordered list of descriptions of those rules.
-Rules are organized in a system of hierarchical groups.
-
-////
-Consider for example the `Set Password Minimum Length` rule entry - check out the description:
-
-....
-The pam_pwquality module's minlen parameter controls requirements for minimum characters required in a password.
-Add minlen=12 after pam_pwquality to set minimum password length requirements. after pam_pwquality to set minimum password length requirements.
-....
-
-We can clearly see that there is a typo in the description - there is the `after pam_pwquality to set minimum password length requirements.` twice in a row.
-So let’s fix the typo!
-////
-
-Consider for example the `Set Interactive Session Timeout` rule entry.
-Press Ctrl+F, and search for `session timeout`.
-Check out the rule's description just below the title:
-
-....
-Setting the TMOUT option in /etc/profile ensures that Setting the TMOUT option in /etc/profile ensures that all user sessions will terminate based on inactivity. The TMOUT setting in /etc/profile should read as follows:
+. Check out the description just below the *Set Interactive Session Timeout* rule:
++
+----
+Setting the TMOUT option in /etc/profile ensures that Setting the TMOUT option in /etc/profile ensures that all user
+sessions will terminate based on inactivity. The TMOUT setting in /etc/profile should read as follows:
 
 TMOUT=1800
-....
+----
 
-We can clearly see that there is a typo in the description - there is the `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that` twice in a row.
-So let’s fix the typo!
+. Notice that the following text is written twice in this rule, on purpose, for lab demonstration purposes: *Setting the TMOUT option in /etc/profile ensures that*. Let's go ahead and fix this so we can understand how rule definitions are created and updated.
 
-In order to fix it, we have to perform following steps:
+. Let's locate this twice written rule definition text.
+Rule definitions for Linux systems are under the `linux_os/guide` directory of the `ComplianceAsCode` project.
+Remember that the `ComplianceAsCode` project has already been cloned to all of the `/home/lab-user/labs/*` directories.
+So for example, `/home/lab-user/labs/lab1_introduction` is a clone of the ComplianceAsCode project repository.
+Since there is about a thousand rules, it is better to search all rules for the text, rather than trying a to find a particular rule in the directory hierarchy by browsing it.
 
-. Locate the rule definition that contains the incriminated description text.
-. Fix the typo.
-. Recompile the content.
-. Review the fix.
-
-Now, for those steps in greater detail:
-
-. Rule definitions for Linux systems are under the `linux_os/guide` directory of the project.
-As there is about a thousand rules, it is better to search all rules for the text, rather than trying a to find a particular rule in the directory hierarchy by browsing it.
-+
-Rules definitions are written as YAML files, that are particularly great at storing key-value data.
+. Rules definitions are written as YAML files, that are particularly great at storing key-value data.
 All rules are defined by the respective `rule.yml` file, and the parent folder is the respective rule’s ID.
-ID of the rule in question is `accounts_tmout`.
+ID of the rule in question is `accounts_tmout`. Given that, we can search for the directory.
+
+. Let's make sure that you are in the */home/lab-user/labs/lab1_introduction* directory and execute the following *find* command.
+This command searches for a file or directory named exactly `accounts_tmout` in the directory subtree below the linux_os directory.
+You will get the following output after typing in the above find command:
 +
-// TODO: Screenshot of rule ID in the description here.
-// As we know from the rule description, the respective ID is `accounts_tmout`.
+----
+[... ~]$ cd /home/lab-user/labs/lab1_introduction
+[... lab1_introduction]$ find linux_os -name accounts_tmout
+linux_os/guide/system/accounts/accounts-session/accounts_tmout
+----
 +
-Given that, we can search for the directory. Make sure that you are in the repository root, and execute
+Notice that the `linux_os/guide/system/accounts/accounts-session/accounts_tmout` directory reported as the result, and the rule is defined in the `rule.yml` file that is in that directory.
+
+. Now, open up the `rule.yml` file so we can remove this repeated text that we saw earlier: *Setting the TMOUT option in /etc/profile ensures that*:
 +
-....
-find linux_os -name accounts_tmout
-....
+----
+[... ~]$ cd /home/lab-user/labs/lab1_introduction
+[... lab1_introduction]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml
+----
+
+. Luckily, the rule’s description is right at the upper part of the `rule.yml`.
+Remove the repeated text occurrence of *Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that*.
+Press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
+
+. Now let's recompile the content to check whether our fix worked.
+Make sure that you are in the following directory: */home/lab-user/labs/lab1_introduction*.
+Then, recompile the content from this directory.
 +
-This command searches for file or directory named exactly `accounts_tmout` in the directory subtree below the linux_os directory.
-You should get the `linux_os/system/accounts/accounts-session/accounts_tmout` directory reported as the result, and the rule is defined in the `rule.yml` file that is in that directory.
-
-. So let’s open it in the editor!
-You can open it in an editor of your preference.
-When in doubt, you can just use the gedit editor: `gedit linux_os/system/accounts/accounts-session/accounts_tmout/rule.yml`
-Luckily, the rule’s description is right at the upper part of the `rule.yml`, and figuring out what to fix and fixing it is obvious - simply remove the spurious occurence of `Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that`, save the change, and close the editor.
-
-. It is time to recomplie the content, so we can check out whether our fix worked.
-We can do the same as we did at the beginning, but we will take a small shortcut.
-Make sure that you are at the project’s directory root, and run the following command in the terminal: `./build_product rhel8`
-The build will be considerably faster than the first build, as all other products are disabled.
-
-. If you have the old guide still opened in the browser, you can refresh it by clicking the refresh button or by pressing the F5 key, or you can open it again in Firefox from the file browser GUI, or from the command-line.
+----
+[... lab1_introduction]$ ./build_product rhel8
+----
 +
-....
-# following command assumes that you are located in the project root:
-firefox build/guides/ssg-rhel8-guide-ospp.html
-....
-+
-You should see the fixed description now.
+. Go back to the HTML guide of the RHEL 8 OSPP profile *that's open in Firefox of your lab environment's console*. Refresh your web browser.
+
+. Review the fix.
+You should see the fixed description now without the repeated *Setting the TMOUT option in /etc/profile ensures that* text if you scroll down to the *Set Interactive Session Timeout* rule.
 
 
-=== Customize a parametrized rule
+=== Lab 1.4 Customizing a Parametrized Rule
 
-What if we want to have a shorter timeout than the OSPP policy requires?
-In the following section, we will learn about parametrized rules by taking following steps:
+In this lab exercise, we will learn about parametrized rules. Parametrization can be used to set timeout durations, password length, umask, and other settings.
+We will learn about parametrized rules by: observing where the value comes from, changing the parametrized rule to see how it is applied, and finally, observing what happens when the parametrized variable is omitted.
 
-. Learn where the value comes from.
-. Learn how is it applied to the rule.
-. Change it, and observe the result.
-. Learn what happens when the variable is omitted.
-
-// TO BE DONE :-)
-. Modifying a rule like this is very easy, as this rule doesn’t have the timeout duration hardcoded - it is parametrized by a variable.
-As the description says, the rule uses the `timeout` variable, that is defined in the `var_accounts_tmout.var` file.
+. Modifying parametrized rules is very easy, as this rule doesn’t have the timeout duration hardcoded - it is parametrized by a variable.
+As the description for the *Set Interactive Session Timeout* rule says, the rule uses the `timeout` variable.
+This is defined in the `var_accounts_tmout.var` file.
 Similarly as in the previous step, we can search for the variable definition:
 +
-`find linux_os -name var_accounts_tmout.var`
+----
+[... lab1_introduction]$ find linux_os -name var_accounts_tmout.var
+linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+----
 +
-You should get `linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var` as result.
-The file contains variable description, which is helpful - one can't be sure what the number 1800 means, however the contents of the file indicate that it is the same as 30 minutes, i.e. 1800 seconds.
+That `var_accounts_tmout.var` file contains variable description, which is helpful - one can't be sure what the number 1800 means, however the contents of the file indicate that it is the same as 30 minutes, i.e. 1800 seconds.
 
 . The rule is parametrized per profile.
-As there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
+This is because there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
 +
-To see how the rule is connected to it’s variable, we have to check out the respective profile definition, i.e. `rhel8/profiles/ospp.profile`.
-Open it by e.g. `gedit`, and search for `accounts_tmout` (use the `Ctrl + F` keyboard shortcut to bring up the search field):
+To see how the rule is connected to its variable, we have to check out the respective profile definition, i.e. `rhel8/profiles/ospp.profile`.
+Open it in the editor, and search for `accounts_tmout`
+//(use the `Ctrl + F` keyboard shortcut or use the `Edit->Find in this page` menu item to bring up the search field):
 +
-....
+----
+[... lab1_introduction]$ nano rhel8/profiles/ospp.profile
+----
++
+In the editor, use the `Ctrl+W` to search for `accounts_tmout`.
+Then, `Alt+W` jumps to the next occurrence.
++
+----
     ...
     ### FMT_MOF_EXT.1 / AC-11(a)
     ### Set Screen Lock Timeout Period to 30 Minutes or Less
     - accounts_tmout
     - var_accounts_tmout=30_min
     ...
-....
+----
+. Modify the *var_accounts_tmout* variable to `10_min`. Press `Ctrl+x` and *y* to save and exit. Then, issue the rebuild of the content:
 +
-Therefore, it is obvious now where the timeout duration comes from and how to change it.
-
-. Let's modify the entry, and let's put `10_min` there.
-Then, rebuild the content by executing `./build_product rhel8` in the project root, and let's wait for the result.
-It is worth noting that variables aren't continuous - the set of possible values that the variable can have are pre-defined in the file.
+----
+[... lab1_introduction]$ ./build_product rhel8
+----
++
 After the build finishes, refresh the HTML guide by either reloading it in the browser, or by reopening `build/guides/ssg-rhel8-guide-ospp.html`.
-The variable's value should be updated to 600.
+The variable value should be updated to 600.
++
+.The Firefox Refresh Page button
+image::browser-refresh.png[500,500]
 
 . What happens if we omit the variable definition?
-Open the OSPP profile file in an editor, and comment the line containing `- var_accounts_tmout=30_min` out by inserting `#` just before the leading dash.
-Then, rebuild the content again by executing `./build_product rhel8` in the project root.
+Open the OSPP profile file in an editor.
+Again, use `Ctrl+W` in connection with `Alt+W` in the editor to search for `accounts_tmout`.
 +
-But we have things to do before the build finishes - let’s re-examine the variable definition - maybe we can tell what will be the result!
-Let's open the variable definition in an editor - execute
+----
+[... lab1_introduction]$ nano rhel8/profiles/ospp.profile
+----
 +
-....
-gedit linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
-....
+Comment the line containing `- var_accounts_tmout=30_min` out by inserting `#` just before the leading dash.
+After you are done,
+press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
++
+Then, rebuild the content again:
++
+----
+[... lab1_introduction]$ ./build_product rhel8
+----
++
+After the build finishes, we let's re-examine the variable definition - maybe we can tell what will be the result without looking!
+Open the variable definition in the editor - execute:
++
+----
+[... lab1_introduction]$ nano linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
+----
 +
 In this YAML file, we have the `options:` key, that defines mappings between the supplied and effective values.
 As the `default: 600` line indicates, if we don’t specify the timeout duration in a profile, it is going to be 600 seconds, i.e. 10 minutes.
+After you are finished with looking, press `Ctrl+x` to bring up the "save and exit" option.
+If you are asked about saving any changes, you probably don't want that, in which case press `n`.
++
 Time to review the HTML guide - when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp.html`, we can clearly see the rule's timeout indeed equals to 600.
 
-The set of values a variable can have is discrete - all values have to be defined in the variable file.
-Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile only after adding `20_min: 1200` to the `options:` key of the variable's definition.
+NOTE: The set of values a variable can have is discrete - all values have to be defined in the variable file.
+Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile only after adding `20_min: 1200` to the `options:` key of the variable definition.
 
 
-=== Associated content
+== Associated content
 
-A rule needs more than a description to be of any use - you need to be able
+A rule needs more than a description to be of any use - you need to be able:
 
 * to check whether the system complies to the rule definition, and
 * to restore an incompliant system to a compliant state.
@@ -223,56 +276,68 @@ A rule needs more than a description to be of any use - you need to be able
 For these reasons, a rule should contain a check, and possibly also remediations.
 The additional content is placed in subdirectories of the rule, so let's explore our `accounts_tmout` rule.
 
-We can browse it if we open the directory in the `nautilus` file browser.
-Run
+We can browse the associated content if we list the contents of the directory.
+Run in the terminal:
 
-....
-nautilus linux_os/guide/system/accounts/accounts-session/accounts_tmout
-....
+----
+[... lab1_introduction]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
+[... accounts_tmout]$ ls
+ansible  bash  oval  rule.yml
+----
 
-in the terminal - a file explorer window opened at that location should pop up.
-There is a remediation in form of a bash script located in the `bash` subdirectory of the rule directory.
-As you can see, there is a `shared.sh` file there.
-
-The `shared` basename has a special meaning - it indicates that the remediation can be used with any product.
-If the remediation had been named `rhel8.sh`, it would have meant that is a RHEL8-only remediation, i.e. one not to be used to remediate RHEL7 systems.
-This name-coding is relevant for all types of additional content.
-
-Now, let's describe currently-supported associated content types:
+We will describe currently-supported associated content types:
 
 
-==== Checks
+=== Checks
 
 Checks can be found under the `oval` directory.
-They are written in an standardized, declarative, XML-based language called OVAL (abbreviation of `Open Vulnerability and Assessment Language`).
-Writing checks in this language is considered cumbersome, and the `ComplianceAsCode` project helps it's users to write it more efficiently.
+They are written in an standardized, declarative, XML-based language called OVAL (Open Vulnerability and Assessment Language).
+Writing checks in this language is considered cumbersome, but the ComplianceAsCode project helps users to write it more efficiently.
 
 We won't go into details of OVAL now, we just point out that the OVAL content can be found in a rule's subdirectory `oval`.
-If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file, that features a shorthand OVAL, which is much simpler than the full-bodied OVAL that you would have to write otherwise.
+The OVAL checks will be described in the link:lab5_oval.adoc[Exercise 5].
+// The browser cannot handle the xml file because there are namespaces that are not bound, so we advise to open it with a text editor
+If you are familiar with the language, you may take the opportunity to examine the `oval` subdirectory of the `accounts_tmout` rule's directory - there is the `shared.xml` file.
+The `shared.xml` file features a shorthand OVAL, which is much simpler than the full-bodied OVAL that you would have to write otherwise.
 
 
-==== Remediations
+=== Remediations
 
-Remediations can be found under `bash`, `ansible`, `anaconda` or `puppet` directories.
-If the system is not set up according to the rule’s description, the scanner reports an error, and the system administrator is supposed to fix it.
+If the system is not set up according to the rule description, the scanner reports that the rule has failed, and the system administrator is supposed to fix it.
 The `ComplianceAsCode` content provides users with snippets that they can run and that can make the system compliant again, or that can provide administrators with hint of what they need to do.
 
 Remediations are expected to work on the clean installation configuration - if the administrator made some changes in the meantime, remediations are not guaranteed to work.
 
-The majority of rules present in profiles comes with a Bash remediation, and still a large number of them has Ansible remediations, which is preferred over Puppet.
+The majority of rules present in profiles comes with a Bash remediation, and still a large number of them has Ansible remediations.
 Anaconda remediations are used to guide the user during system installation.
+We also support remediations in a form of a Puppet script.
+
+Remediations can be found under `bash`, `ansible`, `anaconda` or `puppet` directories.
+
+For example, in rule `accounts_tmout` there is a remediation in form of a Bash script located in the `bash` subdirectory of the rule directory.
+Run `ls bash` to display contents of the `bash` directory - there is a `shared.sh` file there.
+The `shared` basename has a special meaning - it indicates that the remediation can be used with any product.
+If the remediation had been named `rhel8.sh`, it would have meant that is a RHEL8-only remediation, i.e. one not to be used to remediate RHEL7 systems.
+This name-coding is relevant for all types of additional content.
 
 Unlike checks, you can review remediations in the guide - there is a `(show)` clickable to do so.
 Therefore, bring back the browser window with the guide opened, and see for yourself.
 
+.Bash remediation snippet shown in the HTML guide
 image::0-03-remediation.png[]
+{empty} +
+We will improve the remediation script by adding a comment there that describes that the numerical value is number of seconds.
+Let's edit the remediation file:
 
-Let's try and edit the remediation - what about adding a comment that describes that the numerical value is number of seconds?
-Let's therefore check out the `linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh` file.
-We can see that there are some extra lines, but it corresponds to the content displayed in the guide.
-The line saying `populate var_accounts_tmout` is clearly the line that gets transformed into the variable assignment statement, so let's put the explanatory comment just above it:
+----
+[... lab1_introduction]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh
+----
 
-....
+We can see that there are some extra lines, but it corresponds to the content displayed in the HTML guide.
+The line saying `populate var_accounts_tmout` is the line that gets transformed into the variable assignment statement.
+We will put the explanatory comment just above it:
+
+----
 # platform = Red Hat Enterprise Linux 7,Red Hat Enterprise Linux 8,multi_platform_fedora,multi_platform_ol
 . /usr/share/scap-security-guide/remediation_functions
 # The timeout delay is defined by number of seconds
@@ -283,12 +348,21 @@ if grep --silent ^TMOUT /etc/profile ; then
 else
         echo -e "\n# Set TMOUT to $var_accounts_tmout per security requirements" >> /etc/profile
         echo "TMOUT=$var_accounts_tmout" >> /etc/profile
-fi  
-....
+fi
+----
 
-Don't forget to save the change after you are done with it.
+After you are done,
+press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
 
-Now is the time to rebuild the guide using `./build_product rhel8` invocation and refresh the guide - the remediation should contain the newly added comment.
+Now is the time to rebuild the guide:
+
+----
+[... lab1_introduction]$ ./build_product rhel8
+----
+
+Once it is done, refresh the guide - the remediation should contain the newly added comment.
+
+Congratulations, by completing the lab exercise, you became familiar with the leading content creation tool and largest open-source repository and in existence.
 
 
 == References
@@ -296,3 +370,7 @@ Now is the time to rebuild the guide using `./build_product rhel8` invocation an
 * The OSPP profile: https://www.niap-ccevs.org/Profile/Info.cfm?PPID=424&id=424[Protection Profile for General Purpose Operating Systems]
 * The PCI-DSS profile: https://www.pcisecuritystandards.org/merchants/process[Payment Card Industry Data Security Standard]
 * The OVAL language: https://oval.mitre.org/language/version5.11/[Open Vulnerability and Assessment Language v5.11 hub]
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2_openscap.adoc[Lab exercise 2 - Automated Security Scanning Using ComplianceAsCode]

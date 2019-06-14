@@ -1,5 +1,7 @@
 = Lab 4: Cloud encryption using RHEL Opportunistic IPsec
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab
 In this lab exercise, you will learn how to deploy Opportunistic
 IPsec to encrypt all host to host communication within an enterprise
@@ -150,6 +152,13 @@ other machines to reconfigure or debug:
 
 	[root@ipsec ~]# echo "192.168.0.3/32" >> /etc/ipsec.d/policies/clear
 
+. And finally, we need to tell the firewalld system service that we want to open the firewall
+for the required packets for IPsec:
+
+	[root@ipsec ~]# firewall-cmd --add-service=ipsec --permanent
+
+	[root@ipsec ~]# firewall-cmd --reload
+
 == Lab 4.3 Transfer the Configuration to a Second System
 
 . Now we will configure the next machine, ipsec2.example.com. Since the
@@ -196,6 +205,10 @@ certificate onto ipsec2.example.com via the workstation VM:
 [root@ipsec2 ~]# echo "192.168.0.0/24" >> /etc/ipsec.d/policies/private-or-clear
 
 [root@ipsec2 ~]# echo "192.168.0.3/32" >> /etc/ipsec.d/policies/clear
+
+[root@ipsec2 ~]# firewall-cmd --add-service=ipsec --permanent
+
+[root@ipsec2 ~]# firewall-cmd --reload
 ----
 
 Now you have configured the first two nodes. For each additional node, all you
@@ -341,6 +354,8 @@ the beginning
 	[root@ipsec ~]# rm /etc/ipsec.d/*.db
 	[root@ipsec ~]# ipsec initnss
 	Initializing NSS database
+
+Follow the same procedure for ipsec2.
 
 <<top>>
 

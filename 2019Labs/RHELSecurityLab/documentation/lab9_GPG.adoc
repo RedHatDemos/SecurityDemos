@@ -1,5 +1,7 @@
 == Lab 9: GNU Privacy Guard (GPG)
 
+*Lab Length: Short*
+
 === Goal of Lab
 The goal of this lab exercise is to introduce you to GNU Privacy Guard (GPG), which can be used to identify yourself and encrypt your communications.
 
@@ -45,10 +47,10 @@ Once you have created a new key pair, you can export these keys to identify your
 * Key Type - RSA is the default. Type *(1)* to pick this.
 * Key Size - Type *2048*.
 * Expiration - Type *0* for no expiration. This is generally fine for local encryption
-* User ID: Type *labuser*. This can be anything.
+* Real Name: Type *labuser*. This can be anything.
 * Email address: labuser@test.com. This can be any email address.
-*  Type (O) for Okay/Quit.
 * For *Comment*, just press enter to have a blank comment.
+*  Type (O) for Okay/Quit.
 * Passphrase: Type anything you want and can remember. Make this hard enough to protect against attacks.
 
 

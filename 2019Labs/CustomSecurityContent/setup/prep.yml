@@ -6,26 +6,25 @@
   become_user: lab-user
 
   vars:
-    LABS_LOCAL: "/home/lab-user/labs_data"
     LABS_CONTENT_PART: "2019Labs/CustomSecurityContent/documentation"
     TRACK_1_LABEL: "lab1_introduction"
-    TRACK_2_LABEL: "lab2_OpenSCAP"
+    TRACK_2_LABEL: "lab2_openscap"
     TRACK_3_LABEL: "lab3_profiles"
     TRACK_4_LABEL: "lab4_ansible"
     TRACK_5_LABEL: "lab5_oval"
-    CACC_LOCAL: "/home/lab-user/complianceAsCode"
+    CACC_LOCAL: "/tmp/complianceAsCode"
     LABS_ROOT: "/home/lab-user/labs"
 
   tasks:
-  - name: Clone the Labs Git repository
-    git:
-      repo: 'https://github.com/RedHatDemos/SecurityDemos.git'
-      dest: "{{ LABS_LOCAL }}"
-
   - name: Clone the CaC/c Git repository
     git:
       repo: 'https://github.com/ComplianceAsCode/content.git'
       dest: "{{ CACC_LOCAL }}"
+
+  - name: Remove the Labs directory, so we start from scratch.
+    file:
+      path: "{{ LABS_ROOT }}"
+      state: absent
 
   - name: Generate SSH keys
     shell: ssh-keygen -b 2048 -t rsa -f /home/lab-user/.ssh/id_rsa -q -N ""
@@ -53,12 +52,17 @@
   - name: Build a podman image for testing
 # TODO: The RHEL image doesn't work with subscription, even if the host is subscribed.
 # TODO: Building as the root user, as port binding requires root privileges, may not be the case for RHEL8 GA podman.
-# shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /home/lab-user/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-rhel .'
-    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-fedora .'
+    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-rhel   .'
+#   shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-fedora .'
     args:
       chdir: "{{ CACC_LOCAL }}/Dockerfiles"
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
     become_user: root
+
+  - name: Remove the lab3 tests
+    file:
+      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
+      state: absent
 
   - name: Creates directories for Lab Tracks
     file:
@@ -66,31 +70,25 @@
       state: directory
     loop:
       - "{{ TRACK_1_LABEL }}"
+      - "{{ TRACK_2_LABEL }}"
       - "{{ TRACK_3_LABEL }}"
+      - "{{ TRACK_4_LABEL }}"
       - "{{ TRACK_5_LABEL }}"
 
   - name: Clone the CaC/c Git for Lab Tracks
     git:
       repo: "{{ CACC_LOCAL }}"
       version: 'v0.1.43'
-      dest: "{{ LABS_ROOT }}/{{ item }}/content"
+      dest: "{{ LABS_ROOT }}/{{ item }}"
       force: yes
     loop:
       - "{{ TRACK_1_LABEL }}"
+      - "{{ TRACK_2_LABEL }}"
       - "{{ TRACK_3_LABEL }}"
+      - "{{ TRACK_4_LABEL }}"
       - "{{ TRACK_5_LABEL }}"
 
-  - name: Create symlink from the home directory
-    file:
-      src: "{{ LABS_ROOT }}/{{ item }}/content"
-      dest: "/home/lab-user/{{ item }}"
-      state: link
-    loop:
-      - "{{ TRACK_1_LABEL }}"
-      - "{{ TRACK_3_LABEL }}"
-      - "{{ TRACK_5_LABEL }}"
-
-  - name: Copy the track 0 documentation to the working directory
+  - name: Copy the track + documentation to the working directory
     copy:
       src: "{{ LABS_LOCAL }}/{{ LABS_CONTENT_PART }}/{{ TRACK_1_LABEL }}"
       dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/documentation"
@@ -99,47 +97,45 @@
 
   - name: Introduce a typo
     replace:
-      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/content/linux_os/guide/system/accounts/accounts-pam/password_quality/password_quality_pwquality/accounts_password_pam_minlen/rule.yml"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/linux_os/guide/system/accounts/accounts-pam/password_quality/password_quality_pwquality/accounts_password_pam_minlen/rule.yml"
       regexp: '(    after pam_pwquality to set minimum password length requirements.)'
       replace: '\1\n\1'
 
   - name: Introduce a typo
     replace:
-      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml"
       regexp: '(    Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that)'
       replace: '\1\n\1'
 
-  - name: Clone the CaC/c Git for Lab 3
-    git:
-      repo: "{{ CACC_LOCAL }}"
-      version: 'v0.1.43'
-      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content"
-      force: yes
+  - name: Build the content to be used in lab 2
+    shell: './build_product rhel8'
+    args:
+      chdir: "{{ LABS_ROOT }}/{{ TRACK_2_LABEL }}"
 
   - name: Remove the lab3 tests
     file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
+      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/tests/data/group_system/group_accounts/group_accounts-session/"
       state: absent
 
   - name: Copy bad lab3 tests
     copy:
       src: "data/rule_accounts_tmout"
-      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/tests/data/group_system/group_accounts/group_accounts-session/"
 
   - name: Bust the OVAL
     replace:
-      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
       regexp: '(operation=")greater than or equal(")'
       replace: '\1equals\2'
 
-  - name: Clone the CaC/c Git for Track 4
+  - name: Update the Ansible exercise to CaC master
     git:
       repo: "{{ CACC_LOCAL }}"
-      version: 'v0.1.43'
-      dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content"
+      version: 'master'
+      dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}"
       force: yes
 
   - name: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves
     file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/content/linux_os/system/accounts/accounts-session/accounts_tmout/ansible/"
+      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/"
       state: absent

@@ -1,3 +1,0 @@
-= CloudForms Ansible Playbooks
-
-Here lies all of the *Embedded Ansible* playbooks used by CloudForms.

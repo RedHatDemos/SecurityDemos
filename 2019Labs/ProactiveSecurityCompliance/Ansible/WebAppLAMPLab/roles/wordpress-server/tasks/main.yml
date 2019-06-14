@@ -1,0 +1,17 @@
+---
+- include: install/db-main.yml
+  when: my_purpose == 'db' and main_purpose != 'reset'
+
+- include: install/web-main.yml
+  when: my_purpose == 'web' and main_purpose != 'reset'
+
+- include: catsploit.yml
+  when: my_purpose == 'web' and main_purpose != 'reset'
+
+- include: catsploit-tools.yml
+  when: my_purpose == 'jump' and main_purpose != 'reset'
+
+- include: reset.yml
+  when: main_purpose == 'reset'
+
+

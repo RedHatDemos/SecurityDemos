@@ -1,5 +1,7 @@
 = Lab 8: How to create a single sign-on environment for all of your linux servers using Red Hat Identity Management
 
+*Lab Length: Medium/Average*
+
 == Goal of Lab
 In this exercise you are going to configure clients to attach to a Red Hat Identity Management (IdM) server.  The goal is to create a single-sign-on environment for all of your Linux servers to manage users, hosts, and sudo commands from a central console.  This exercise will already have an IdM server installed, and will focus on registering and managing clients.  The objectives for this exercise are:
 
@@ -201,7 +203,7 @@ image:images/idm-09-policy.png[700,700]
 +
 image:images/idm-disablepolicy.png[700,700]
 
-== Lab 8.4 User Group Based Access Control
+== (Optional) Lab 8.4 User Group Based Access Control
 In this exercise we are going to restrict access to hosts by user group.
 
 .  Navigate back to the *IdM1* console. If you need to log back in, the password for the Administrator is *r3dh4t1!*. Open up the Firefox web browser and navigate to *https://idm1.example.com* (if you're not already there).
@@ -281,7 +283,7 @@ Grouping users and hosts allows you to move users into and out of groups, thereb
 * That user will also inherit escalated privileges required to perform their role on those hosts
 * That user’s activity will be logged centrally
 
-== Lab 8.5 Creating sudo Command Groups
+== (Optional) Lab 8.5 Creating sudo Command Groups
 This exercise will build off the previous exercise by adding a sudo command group to the existing policy.  Therefore, in addition to having access to specific hosts, the users in the group will also be granted escalated privileges.  To simplify the demonstration, we will create a sudo command group with one command in it: the ability to execute yum.
 
 . Before creating this to the policy, log into a server that your user (user1) has access to (*IdM3*) from the previous step to verify that you do not have access to escalate and run yum. Use the password that you set earlier for this user.
@@ -343,12 +345,6 @@ image:images/idm-add-to-my-host-group.png[700,700]
 image:images/idm-sudo-command.png[700,700]
 image:images/idm-add-sudo-commands.png[700,700]
 
-
-. In the *As Whom* section, press *+Add* for *RunAs Groups* to add your user group under Run as Groups.
-+
-image:images/idm-runasgroup.png[700,700]
-image:images/idm-add-run-as-group.png[700,700]
-
 . Navigate to *Policy -> Host Based Access Control -> HBAC Rules*.
 +
 image:images/idm-hbac.png[300,300]
@@ -359,6 +355,15 @@ image:images/idm-hbac.png[300,300]
 +
 image:images/idm-viaservice-add.png[800,800]
 image:images/idm-19-sudo.png[700,700]
+
+. Make sure you are logged out as user1 on *IdM3* and log back in as root and clear the cache.  The kerberos ticket held by user1 may may not be updated with the change to the rules we just made.
+
++
+[source]
+[root@idm2 ~]$ systemctl stop sssd.service
+[root@idm2 ~]$ sss_cache -E
+[root@idm2 ~]$ systemctl start sssd.service
+
 
 . Log back into the server that your user (user1) has access to (*IdM3*) from the previous step to verify that you do have access to escalate and run yum. Use the password that you set earlier for this user.
 +

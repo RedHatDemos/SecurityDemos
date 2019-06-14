@@ -1,0 +1,21 @@
+- name: execute the role and catch errors
+  block:
+    - include_role:
+        name: selinux
+  rescue:
+    # Fail if failed for a different reason than selinux_reboot_required.
+    - name: handle errors
+      fail:
+        msg: "role failed"
+      when: not selinux_reboot_required
+
+    - name: restart managed host
+      shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+      async: 1
+      poll: 0
+      ignore_errors: true
+
+    - name: wait for managed host to come back
+      wait_for_connection:
+        delay: 10
+        timeout: 120

@@ -1,28 +1,25 @@
 = Lab 10: Firewalld
 
+*Lab Length: Short*
+
 == Goal of Lab
 In this lab exercise, we will learn how to use firewalld to dynamically manage firewall rules.
 
 == Introduction
 The firewalld daemon provides a dynamically managed firewall with support for network “zones” to assign a level of trust to a network and its associated connections and interfaces. It has support for IPv4 and IPv6 firewall settings. It supports Ethernet bridges and IP set and has a separation of runtime and permanent configuration options. It also has an interface for services or applications to add firewall rules directly. The complete communication with firewalld is done using D-Bus.
 
-You can get more granular by using the rich syntax language associated with the complex rules if necessary.  Also, you can have your applications use the direct interface as well.  This is rarely the case, but necessary to point out for those who take advantage of the granularity associated with iptables.
+You can get more granular by using the rich syntax language associated with the complex rules if necessary.  Also, you can have your applications use the direct interface as well.  This is rarely the case, but necessary to point out for those who take advantage of the granularity previously associated with iptables.
 
 === Architecture
 When assessing the architecture, things to note are as follows:
 
 * The netfiler kernel packet filter has not changed
-* The iptables toolset is unchanged
 * The service layer has changed and allows for dynamic updates
 * The user interface has changed and allows for xml configuration
 
-Below is a graphical representation of firewalld:
-
-image:images/lab10-architecture.png[500,500]
-
 *Firewalld Interfaces*
 
-The firewalld daemon allows for configuration via a command line interface, direct interface, or complex rules.  The direct interface passes rules directly to the firewall and is designed for applications that need to add firewall rules during runtime.  This method is not intended for end users, so you should use this with caution unless you are very familiar with iptables.  Complex rules use a rich language designed to be easier than direct interface for complex firewall rules that cannot be accomodated by the command line interface.  That said, the command line interface should be able to handle most, if not all, of your firewall rules and will be the focus of this lab exercise.  The firewall can also include multiple zones attached to different network interfaces, but we have a simple setup with one network interface and will confgure our default zone.
+The firewalld daemon allows for configuration via a command line interface, direct interface, or complex rules.  The direct interface passes rules directly to the firewall and is designed for applications that need to add firewall rules during runtime.  This method is not intended for end users, so you should use this with caution.  Complex rules use a rich language designed to be easier than direct interface for complex firewall rules that cannot be accomodated by the command line interface.  That said, the command line interface should be able to handle most, if not all, of your firewall rules and will be the focus of this lab exercise.  The firewall can also include multiple zones attached to different network interfaces, but we have a simple setup with one network interface and will confgure our default zone.
 
 == Lab 10.1 Verifying that the Firewall is Running
 The firewall is enabled by default, but we can check for that a couple of ways by running the following commands.
@@ -54,6 +51,11 @@ active
 [root@servera ~]# systemctl is-enabled firewalld.service
 enabled
 ----
+. After installing firewalld, you can always check to see if it is enabled at any time by running the previous two commands, of by running:
++
+[source]
+[root@servera ~]# systemctl status firewalld.service
+
 . If your firewalld service is not active and enabled, run the following commands:
 +
 [source]
@@ -146,7 +148,7 @@ success
 [root@servera ~]# firewall-cmd --reload
 success
 [root@servera ~]# firewall-cmd --list-services
-ssh dhcpv6-client dns
+cockpit ssh dhcpv6-client dns
 
 . You can remove this rule by running the following command:
 +
@@ -187,9 +189,6 @@ success
   <port protocol="udp" port="123"/>
 </service>
 
-. For those not familiar with vi, press *dd* to delete all the lines in the existing file above. Then, copy the text above and paste it into the file by pressing *i* and then pasting the text into the file.
-Press *esc* and then save and exit by pressing *:wq!*.
-
 . When a server boots, or when you reload the firewall, the firewalld daemon will look at the custom and default directories and load the services.  Services defined in the custom directory take precedence over those in the default if the names of the files match.  Now we will reload our firewall and look to see which services are available.
 +
 [source]
@@ -205,7 +204,7 @@ success
 [root@servera services]# firewall-cmd --reload
 success
 [root@servera services]# firewall-cmd --list-services
-ssh dhcpv6-client idm
+cockpit ssh dhcpv6-client idm
 
 . You can remove this rule by running the following command:
 +
@@ -221,4 +220,4 @@ You will now see that the *idm* service has been removed successfully.
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ]
+link:README.adoc#table-of-contents[ Table of Contents ]| link:lab11_cryptopolicies.adoc[ Lab 11: Crypto Policies ]

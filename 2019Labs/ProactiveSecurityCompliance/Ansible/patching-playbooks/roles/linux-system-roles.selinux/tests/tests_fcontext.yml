@@ -1,0 +1,67 @@
+
+- name: Check if selinux role sets SELinux fcontext mappings
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: initial changes
+      include_role:
+        name: selinux
+      vars:
+        selinux_fcontexts_purge: true
+        selinux_fcontexts:
+          - { target: '/tmp/test_dir1(/.*)?', setype: 'user_home_dir_t', ftype: 'd' }
+
+    - include: set_selinux_variables.yml
+    - name: save state after initial changes and before other changes
+      set_fact:
+        fcontext_before: "{{ selinux_role_fcontext.stdout }}"
+
+    - name: Check if there are SELinux fcontext mapping changes
+      assert:
+        that: "{{ fcontext_before != '' }}"
+
+    - name: subsequent changes
+      include_role:
+        name: selinux
+      vars:
+        selinux_fcontexts_purge: false
+        selinux_fcontexts:
+          - { target: '/tmp/test_dir2(/.*)?', setype: 'user_home_dir_t', ftype: 'd' }
+
+    - include: set_selinux_variables.yml
+    - name: save state after other changes
+      set_fact:
+        fcontext_after: "{{ selinux_role_fcontext.stdout }}"
+
+    - name: Check if there are SELinux fcontext mapping changes
+      assert:
+        that: "{{ fcontext_before != fcontext_after }}"
+
+    - name: revert subsequent changes
+      include_role:
+        name: selinux
+      vars:
+        selinux_fcontexts_purge: false
+        selinux_fcontexts:
+          - { target: '/tmp/test_dir2(/.*)?', setype: 'user_home_dir_t', ftype: 'd', state: absent }
+
+    - include: set_selinux_variables.yml
+    - name: save state after reverting other changes
+      set_fact:
+        fcontext_after: "{{ selinux_role_fcontext.stdout }}"
+
+    - name: Check if SELinux fcontext mapping is as before
+      assert:
+        that: "{{ fcontext_before == fcontext_after }}"
+
+    - include_role:
+        name: selinux
+      vars:
+        selinux_fcontexts_purge: true
+
+    - include: set_selinux_variables.yml
+    - name: Check if there are no SELinux fcontext mapping changes
+      assert:
+        that: "{{ selinux_role_fcontext.stdout == '' }}"

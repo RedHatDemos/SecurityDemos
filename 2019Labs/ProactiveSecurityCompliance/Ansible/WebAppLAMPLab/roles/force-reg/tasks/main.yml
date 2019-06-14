@@ -1,0 +1,6 @@
+---
+# tasks file for force-reg
+
+- name: Force Satellite registration
+  raw: 'subscription-manager register --org="Default_Organization" --activationkey="RHEL7_Prod" --force'
+
