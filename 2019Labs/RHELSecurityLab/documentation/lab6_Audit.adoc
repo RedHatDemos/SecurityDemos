@@ -1,10 +1,10 @@
-= Lab 6: Auditing on Red Hat Enterprise Linux 8.0
+= Lab 6: Auditing on Red Hat Enterprise Linux 8
 
 *Lab Length: Medium/Average*
 
 == Goal of Lab
 
-The following lab is an introduction to the auditing capabilities of Red Hat Enterprise Linux. The exercises below are done on a system installed with Red Hat Enterprise Linux 8.0, and may require modification to work in other lab environments.
+The following lab is an introduction to the auditing capabilities of Red Hat Enterprise Linux. The exercises below are done on a system installed with Red Hat Enterprise Linux 8, and may require modification to work in other lab environments.
 
 == Introduction
 The Linux Audit system provides a way to track security-relevant information on your system. Based on pre-configured rules, Audit generates log entries to record as much information about the events that are happening on your system as possible. This information is crucial for mission-critical environments to determine the violator of the security policy and the actions they performed. Audit does not provide additional security to your system; rather, it can be used to discover violations of security policies used on your system. These violations can further be prevented by additional security measures such as SELinux.
