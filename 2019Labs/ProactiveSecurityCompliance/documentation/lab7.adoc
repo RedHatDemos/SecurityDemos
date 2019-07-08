@@ -70,7 +70,7 @@ image:images/gg-ad2.png[2000,2000]
 
 . Log in to each of the tools that we previously mentioned  with the credentials shown below. Replace *{GUID}* with your provided lab cluster GUID and replace *{USERID}* with your provided user id - e.g., *user1* . Both the lab cluster GUID and USERID can be found on the Lab Information page where you got your assigned GUID and USERID. (see previous step for more details)
 
-* Red Hat OpenShift console - https://master.{GUID}.summit.opentlc.com
+* Red Hat OpenShift console - https://master.{GUID}.example.opentlc.com
 +
 *login:* {USERID}
 +
@@ -78,14 +78,14 @@ image:images/gg-ad2.png[2000,2000]
 +
 image:images/lab7.2-openshift.png[]
 +
-* Gogs - http://gogs-ocp-workshop.apps.{GUID}.summit.opentlc.com
+* Gogs - http://gogs-ocp-workshop.apps.{GUID}.example.opentlc.com
 +
 *login:* {USERID}
 +
 *password:* openshift
 +
 image:images/lab7.2-gogs.png[]
-* Jenkins - https://jenkins-{USERID}.apps.{GUID}.summit.opentlc.com
+* Jenkins - https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
 (Click on Log In with OpenShift)
 +
 **login:** {USERID}
@@ -100,18 +100,18 @@ The main Jenkins page will appear as below:
 +
 image:images/lab7.2-jenkins.png[]
 
-* Nexus - http://nexus-ocp-workshop.apps.{GUID}.summit.opentlc.com
+* Nexus - http://nexus-ocp-workshop.apps.{GUID}.example.opentlc.com
 +
 no login necessary
 +
 image:images/lab7.2-nexus.png[]
-* Sonarqube - http://sonarqube-ocp-workshop.apps.{GUID}.summit.opentlc.com
+* Sonarqube - http://sonarqube-ocp-workshop.apps.{GUID}.example.opentlc.com
 +
 no login necessary
 +
 image:images/lab7.2-sonarqube.png[]
 
-* Quay - http://quayecosystem-quay-quay-enterprise.apps.{GUID}.summit.opentlc.com
+* Quay - http://quayecosystem-quay-quay-enterprise.apps.{GUID}.example.opentlc.com
 +
 **login:** admin
 +
@@ -169,7 +169,7 @@ Similar to the previous _Promote to Stage?_ step, requiring manual intervention 
 
 === Lab 7.4 Exercise an initial run through the pipeline
 
-. Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.summit.opentlc.com
+. Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
 +
 . Click the folder label with your user id (e.g., user1)
 +
@@ -225,21 +225,21 @@ image:images/lab7.4-openscap-vulnerabilities.png[]
 +
 image:images/lab7.4-owasp-zap.png[]
 +
-. Navigate to the SonarQube url http://sonarqube-ocp-workshop.apps.{GUID}.summit.opentlc.com Click on the number link above *Projects Analyzed* section:
+. Navigate to the SonarQube url http://sonarqube-ocp-workshop.apps.{GUID}.example.opentlc.com Click on the number link above *Projects Analyzed* section:
 +
 image:images/lab7.4-sonarqube-projects.png[]
 +
 . Find the project prefixed with your userid. Note 3 vulnerabilities were found and that the unit test code coverage has been recorded. SonarQube also provides code metrics on items including potential bugs and code smells. Click the Project prefixed with your userid and determine where the vulnerabilities are in the source code.
 +
 image:images/lab7.4-sonarqube-project-link.png[]
-. Navigate to the nexus url http://nexus-ocp-workshop.apps.{GUID}.summit.opentlc.com, click *browse* then *maven-snapshots*
+. Navigate to the nexus url http://nexus-ocp-workshop.apps.{GUID}.example.opentlc.com, click *browse* then *maven-snapshots*
 +
 image:images/lab7.4-nexus-snapshots.png[]
 +
 . Navigate the folder structure and verify your JAR file exists within it.
 +
 image:images/lab7.4-nexus-jar.png[]
-. Navigate to the quay url http://quayecosystem-quay-quay-enterprise.apps.{GUID}.summit.opentlc.com, login as *admin* with the password *admin123* if you haven't already
+. Navigate to the quay url http://quayecosystem-quay-quay-enterprise.apps.{GUID}.example.opentlc.com, login as *admin* with the password *admin123* if you haven't already
 +
 . Navigate to the image tagged with your userid by clicking the *ecommerce* repository
 +
@@ -256,13 +256,13 @@ image:images/lab7.4-quay-vulnerabilities.png[]
 +
 image:images/lab7.4-quay-packages.png[]
 +
-. You can also view the deployed application at http://ecommerce-{USERID}.apps.{GUID}.summit.opentlc.com/
+. You can also view the deployed application at http://ecommerce-{USERID}.apps.{GUID}.example.opentlc.com/
 
 === Lab 7.5 Update the base image and source code
 
 An old base image was used to build the application, we will update the base image to use a newer version. This will reduce the number of vulnerabilities that are detected. We will also update the source code to remove the vulnerabilities detected by SonarQube.
 
-. Navigate to your source code repository in gogs http://gogs-ocp-workshop.apps.{GUID}.summit.opentlc.com and login if you haven't already (userid / openshift)
+. Navigate to your source code repository in gogs http://gogs-ocp-workshop.apps.{GUID}.example.opentlc.com and login if you haven't already (userid / openshift)
 +
 . Click on the *SecurityDemos* repository under *My Repositories*
 +
@@ -334,12 +334,12 @@ image:images/lab7.5-jenkins-promote-stage.png[]
 +
 . The staging version of the app can be viewed here:
 +
-http://ecommerce-{userid}-stage.apps.{GUID}.summit.opentlc.com
+http://ecommerce-{userid}-stage.apps.{GUID}.example.opentlc.com
 +
 image:images/lab7.5-jenkins-promote-prod.png[]
 . The production version of the app can be viewed here:
 +
-http://ecommerce-{userid}-prod.apps.{GUID}.summit.opentlc.com
+http://ecommerce-{userid}-prod.apps.{GUID}.example.opentlc.com
 +
 . Time permitting, go back to your gogs repository, open up the Jenkinsfile and take a look at some of the pipeline implementation details.
 

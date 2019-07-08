@@ -6,7 +6,7 @@ link:README.adoc#table-of-contents[ Table of Contents ]
 
 . Login to the quay console from a web browser:
 +
-      http://quayecosystem-quay-quay-enterprise.apps.{GUID}.summit.opentlc.com
+      http://quayecosystem-quay-quay-enterprise.apps.{GUID}.example.opentlc.com
 +
 . Set the database type from the pull down to `mysql`.  Set the database server to `mysql.quay-mysql.svc`, username, password and database name should be set to `quay`
 +
@@ -54,7 +54,7 @@ image:images/lab7-prep-security-scanner.png[]
 +
 . Scale down then scale back up the clair pod:
  
-       oc login -u admin https://master.{GUID}.summit.opentlc.com
+       oc login -u admin https://master.{GUID}.example.opentlc.com
        oc scale rc/clair --replicas=0 -n quay-enterprise  
        # Wait for the pod to scale down, then scale it back up
        oc get pods -n quay-enterprise 
