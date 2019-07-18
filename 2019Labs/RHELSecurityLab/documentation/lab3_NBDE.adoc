@@ -15,7 +15,7 @@ Clevis and Tang are generic client and server components that provide network bo
 This lab covers setting up NBDE using command line interface, but Cockpit also provides same functionality in cockpit-storaged. You are able to add, edit and remove both passphrase based keys and keyserver key.
 
 == Lab 3.1 Installing the Tang server
-. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE1*. Login to the NBDE1 server as *root* using the password *r3dh4t1!*.
+. Navigate to the Lab information page from *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *NBDE1*. Login to the NBDE1 server as *root* using the password *r3dh4t1!* (if you are prompted for the disk decryption password, it is *r3d4t1!*).
 
 +
 image:images/lab3-console.png[200,200]
