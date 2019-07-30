@@ -1,4 +1,4 @@
-= Lab exercies 2: Automated Security Scanning Using ComplianceAsCode
+= Lab Exercise 2: Automated Security Scanning Using ComplianceAsCode
 
 :imagesdir: images
 
@@ -41,7 +41,8 @@ OpenSCAP provides a command line tool `oscap` that can be used for automated sec
 You can verify a successful installation of `oscap` tool by running:
 
 ----
-[... lab1_introduction]$ oscap --version
+[... lab1_introduction]$ cd /home/lab-user/labs/lab2_openscap
+[... lab2_openscap]$ oscap --version
 
 OpenSCAP command line tool (oscap) 1.3.0
 Copyright 2009--2018 Red Hat Inc., Durham, North Carolina.
@@ -64,14 +65,7 @@ Notice that this command outputs the OpenSCAP version and versions of supported 
 
 In this Section we will build the security content for Red Hat Enterprise Linux 8 from ComplianceAsCode source code and then we will use the built content with OpenSCAP command line tool to scan our machine.
 
-. Build the content for Red Hat Enterprise Linux 8.
-+
-----
-[... lab1_introduction]$ cd /home/lab-user/labs/lab2_openscap
-[... lab2_openscap]$ ./build_product rhel8
-----
-+
-. Take a look at the generated files in the `build` directory.
+. The content has been built, so we can take a look at the generated files in the `build` directory right away:
 +
 ----
 [... lab2_openscap]$ cd build
@@ -113,33 +107,39 @@ Therefore, the `scap-security-guide` package in RHEL 8 contains only the OSPP an
 Notice in our command below that we can skip the profile ID prefix to make the command simpler.
 The real ID is `xccdf_org.ssgproject.content_profile_ospp`.
 +
-Run the command as the privileged user using the `sudo` command to scan the system parts that the common users does not have access.
+The scanning command has to be executed by a privileged user using `sudo`, so the scanner can access system parts that are off-limits to common users.
+The simplest scanner invocation can look like this:
 +
 ----
-[... build]$ sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
-...
+sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
 ----
 +
-Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
-+
-. Now, let's store the results of the scan this time:
+However, we will also want to store the scan results, so we can process them later.
+Therefore, we have to supply additional arguments:
 +
 --
 * use `--results-arf` to get machine readable results archive
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 * use `--oval-results` to get detailed results in the report
-+
+
+So now, execute
+
 ----
 [... build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /home/lab-user/labs/lab2_openscap/report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
 
+Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
+
 [NOTE]
 ====
 You can also generate the HTML report later by executing
+
 ----
-build]$ oscap xccdf generate report /tmp/arf.xml > /home/lab-user/labs/lab2_openscap/report.html
+[... build]$ sudo rm -f /home/lab-user/labs/lab2_openscap/report.html
+[... build]$ oscap xccdf generate report /tmp/arf.xml > /home/lab-user/labs/lab2_openscap/report.html
 ----
+
 ====
 --
 

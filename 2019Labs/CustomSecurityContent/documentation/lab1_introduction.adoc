@@ -1,4 +1,4 @@
-= Lab 1: Say Hello to ComplianceAsCode
+= Lab Exercise 1: Say Hello to ComplianceAsCode
 
 :experimental:
 :imagesdir: images
@@ -33,16 +33,14 @@ In Red Hat Enterprise Linux, the SCAP content generated from ComplianceAsCode da
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
 
-=== Lab 1.1 Building the content
+== Lab 1 Hands-on
 
 The ComplianceAsCode project consists of human readable files that are compiled into standard-compliant files that are difficult to read and edit directly.
 
-Now let's go ahead and start building the content!
+For your convenience, we have set up the environment, so the content is built and ready to be used.
+No worries though - you will rebuild it later in the exercise.
 
-The https://github.com/ComplianceAsCode/content[ComplianceAsCode/content] project uses https://cmake.org/[CMake] build system.
-The build itself is based on: Python, the `oscap` tool, and XSLT transformations.
-
-To build the content, take the following steps:
+To start the hands-on section, take the following steps:
 
 . Log in to the VM using the text console if you haven't done so already:
 +
@@ -57,25 +55,14 @@ Don't forget to replace *GUID* with your lab provided *GUID*!
 
 . Go to the text console, i.e. the Terminal window of your laptop.
 Navigate to */home/lab-user/labs/lab1_introduction*.
-From this directory, run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
 +
 ----
 [... ~]$ cd /home/lab-user/labs/lab1_introduction
-[... lab1_introduction]$ ./build_product rhel8
+[... lab1_introduction]$
 ----
-+
-It is possible to also build content for other products.
-A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, e.g. Firefox, Java, and so on.
-+
-In general, you can run `./build_product <product>` to build only the content for a product you are interested in.
-The `<product>` is the lowercase form of the product, so you would run: `./build_product rhel8` to build content for RHEL 8, `./build_product fedora` to build content for Fedora, and so on.
 
-.Build of security content for RHEL 8 has finished in the terminal window.
-image::0-02-post_build.png[]
-{empty} +
-We will now explore the built content in the subsequent lab exercises.
 
-=== Lab 1.2 Viewing the provided HTML guides for the ComplianceAsCode project
+=== Lab 1.1 Viewing the provided HTML guides for the ComplianceAsCode project
 
 The `ComplianceAsCode` project provides HTML guides that are a great resource for those interested in what rules a policy consists of.
 The HTML guides are located in the respective `build/guides` of each lab exercise subdirectory. Therefore, the full path of the directory for this lab exercise is:
@@ -111,7 +98,7 @@ image::navigateospp.png[1000,1000]
 image::html_guide.png[]
 
 
-=== Lab 1.3 Updating a Rule Description to Find the Source of a Specific Rule
+=== Lab 1.2 Updating a Rule Description to Find the Source of a Specific Rule
 
 We will now take a closer look at a specific rule in the HTML guide of the RHEL 8 OSPP profile.
 For example, let's take a closer look at the *Set Interactive Session Timeout*  rule entry.
@@ -166,23 +153,44 @@ Remove the repeated text occurrence of *Setting the <tt>TMOUT</tt> option in <tt
 Press `Ctrl+x` to bring up the "save and exit" option, and confirm that you want to save the changes and exit by pressing `y` followed by `Enter`.
 
 . Now let's recompile the content to check whether our fix worked.
-Make sure that you are in the following directory: */home/lab-user/labs/lab1_introduction*.
-Then, recompile the content from this directory.
++
+The https://github.com/ComplianceAsCode/content[ComplianceAsCode/content] project uses https://cmake.org/[CMake] build system.
+The build itself is based on: Python, the `oscap` tool, and XSLT transformations.
++
+Make sure that you are in the `/home/lab-user/labs/lab1_introduction` directory in the Terminal window of your laptop.
+From this directory, run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8.
 +
 ----
 [... lab1_introduction]$ ./build_product rhel8
 ----
 +
-. Go back to the HTML guide of the RHEL 8 OSPP profile *that's open in Firefox of your lab environment's console*. Refresh your web browser.
+It is possible to also build content for other products.
+A product may be either an operating system, eg. RHEL 8, RHEL 7, Fedora, or they can be applications, e.g. Firefox, Java, and so on.
++
+In general, you can run `./build_product <product>` to build only the content for a product you are interested in.
+The `<product>` is the lowercase form of the product, so you would run: `./build_product rhel8` to build content for RHEL 8, `./build_product fedora` to build content for Fedora, and so on.
++
+.Build of security content for RHEL 8 has finished in the terminal window.
+image::0-02-post_build.png[]
+
+. Go back to the HTML guide of the RHEL 8 OSPP profile *that's open in Firefox of your lab environment's console*.
+Refresh your web browser.
 
 . Review the fix.
 You should see the fixed description now without the repeated *Setting the TMOUT option in /etc/profile ensures that* text if you scroll down to the *Set Interactive Session Timeout* rule.
 
 
-=== Lab 1.4 Customizing a Parametrized Rule
+=== Lab 1.3 Customizing a Parametrized Rule
 
-In this lab exercise, we will learn about parametrized rules. Parametrization can be used to set timeout durations, password length, umask, and other settings.
-We will learn about parametrized rules by: observing where the value comes from, changing the parametrized rule to see how it is applied, and finally, observing what happens when the parametrized variable is omitted.
+In this lab exercise, we will learn about parametrized rules.
+Parametrization can be used to set timeout durations, password length, umask, and other settings.
+We will learn about parametrized rules by:
+
+- observing where the value comes from,
+- changing the parametrized rule to see how it is applied, and finally,
+- observing what happens when the parametrized variable is omitted.
+
+{empty}
 
 . Modifying parametrized rules is very easy, as this rule doesn’t have the timeout duration hardcoded - it is parametrized by a variable.
 As the description for the *Set Interactive Session Timeout* rule says, the rule uses the `timeout` variable.
@@ -201,7 +209,6 @@ This is because there can be multiple profiles in one datastream file, one rule 
 +
 To see how the rule is connected to its variable, we have to check out the respective profile definition, i.e. `rhel8/profiles/ospp.profile`.
 Open it in the editor, and search for `accounts_tmout`
-//(use the `Ctrl + F` keyboard shortcut or use the `Edit->Find in this page` menu item to bring up the search field):
 +
 ----
 [... lab1_introduction]$ nano rhel8/profiles/ospp.profile
@@ -330,6 +337,7 @@ We will improve the remediation script by adding a comment there that describes 
 Let's edit the remediation file:
 
 ----
+[... accounts_tmout]$ cd /home/lab-user/labs/lab1_introduction
 [... lab1_introduction]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh
 ----
 

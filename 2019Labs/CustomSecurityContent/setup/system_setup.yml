@@ -6,10 +6,10 @@
   tasks:
   - name: Enable Ansible repository
     yum_repository:
-      name: ansible-2.7-rhel-8
-      file: ansible-2.7-rhel-8
-      description: Ansible 2.7 RHEL8
-      baseurl: http://download.devel.redhat.com/nightly/rhel-8/ANSIBLE/latest-ANSIBLE-2.7-RHEL-8/compose/Base/$basearch/os/
+      name: ansible-2.8-for-rhel-8-x86_64-rpms
+      file: ansible-2.8-rhel-8
+      description: "Red Hat Ansible Engine 2.8 for RHEL 8 x86_64 (RPMs)"
+      baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.8/os
       gpgcheck: no
 
   - name: Ensure SCAP Security Guide dependencies are installed
@@ -22,7 +22,7 @@
       - openscap-scanner
       - scap-workbench
       - wget  # needed for the NIST test suite for SSG
-# - ansible  # needed for Ansible validation
+      - ansible  # needed for Ansible validation
       - gedit
       state: installed
 
@@ -48,6 +48,7 @@
       - python3-jinja2
       - python3-pytest  # needed for unit tests + coverage
       - python3-PyYAML
+      - ninja  # needed for fast builds
       state: installed
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
 
