@@ -16,7 +16,7 @@
 
 * We have cloned the `ComplianceAsCode` repository to the `lab5_oval` directory.
 * We have installed dependencies that are required for the content build using `yum install`:
-** generic build utilities: `cmake`, `make`,
+** generic build utilities: `cmake`, `make` (`ninja` for faster builds),
 ** utilities for generating SCAP content: `openscap-utils`, and finally
 ** python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 

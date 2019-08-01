@@ -32,9 +32,9 @@ Moreover, it generates separated Playbooks for every rule.
 
 * We have cloned the ComplianceAsCode repository to the `lab4_ansible` directory.
 * We have installed Ansible.
-It is available from the `ansible-2.8-for-rhel-8-x86_64-rpms` repository, which is enabled automatically by the subscription manager.
+It is available from the `ansible-2.8-for-rhel-8-x86_64-rpms` repository, which is enabled by the subscription manager.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
-** generic build utilities: `cmake`, `make`,
+** generic build utilities: `cmake`, `make` (`ninja` for faster builds),
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
@@ -394,7 +394,7 @@ It is not convenient to have a separated Ansible Playbook for each rule, because
 Fortunately, ComplianceAsCode also generates Ansible Playbook that contain all tasks for a given profile in a single Playbook.
 
 The Playbooks are located in the `build/ansible` directory.
-This directory contains both Ansible Playbooks for each profile.
+This directory contains Ansible Playbooks for each profile.
 The Playbooks files have `.yml` extension.
 
 ----

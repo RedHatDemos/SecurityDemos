@@ -25,7 +25,7 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 
 * We have cloned the ComplianceAsCode repository to the `lab2_openscap` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
-** generic build utilities: `cmake`, `make`,
+** generic build utilities: `cmake`, `make` (`ninja` for faster builds),
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 * We have installed the OpenSCAP ecosystem packages, using `yum install`:
@@ -122,14 +122,14 @@ Therefore, we have to supply additional arguments:
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 * use `--oval-results` to get detailed results in the report
 
-So now, execute
+So now, execute:
 
 ----
 [... build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /home/lab-user/labs/lab2_openscap/report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
 
-Now, you will see the compliance scan results for every security control in the OSPP security baseline profile.
+to run the scan, generating the HTML report as a side-effect.
 
 [NOTE]
 ====

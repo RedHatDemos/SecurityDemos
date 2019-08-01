@@ -1,3 +1,5 @@
+# This is a modified OSPP profile from v0.1.43
+
 documentation_complete: true
 
 title: 'Protection Profile for General Purpose Operating Systems'
