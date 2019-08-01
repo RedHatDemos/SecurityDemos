@@ -25,7 +25,7 @@ Several integrations for continuous scanning also exist but in this lab Exercise
 
 * We have cloned the ComplianceAsCode repository to the `lab2_openscap` directory.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
-** generic build utilities: `cmake`, `make` (`ninja` for faster builds),
+** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 * We have installed the OpenSCAP ecosystem packages, using `yum install`:

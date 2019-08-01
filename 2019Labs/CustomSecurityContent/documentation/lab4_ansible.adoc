@@ -34,7 +34,7 @@ Moreover, it generates separated Playbooks for every rule.
 * We have installed Ansible.
 It is available from the `ansible-2.8-for-rhel-8-x86_64-rpms` repository, which is enabled by the subscription manager.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
-** generic build utilities: `cmake`, `make` (`ninja` for faster builds),
+** generic build utilities: `cmake`, `make`,
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 

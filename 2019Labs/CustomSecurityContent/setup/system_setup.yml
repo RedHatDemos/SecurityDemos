@@ -48,7 +48,6 @@
       - python3-jinja2
       - python3-pytest  # needed for unit tests + coverage
       - python3-PyYAML
-      - ninja  # needed for fast builds
       state: installed
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
 
