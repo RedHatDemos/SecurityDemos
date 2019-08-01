@@ -31,8 +31,10 @@ Moreover, it generates separated Playbooks for every rule.
 == What we have done for you
 
 * We have cloned the ComplianceAsCode repository to the `lab4_ansible` directory.
+* We have installed Ansible.
+It is available from the `ansible-2.8-for-rhel-8-x86_64-rpms` repository, which is enabled by the subscription manager.
 * We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
-** generic build utilities: `cmake`, `make`,
+** generic build utilities: `cmake`, `make` (`ninja` for faster builds),
 ** utilities for generating SCAP content: `openscap-utils`,
 ** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
@@ -391,42 +393,28 @@ However, security policies are usually complex which in turn means that profiles
 It is not convenient to have a separated Ansible Playbook for each rule, because that means to apply many Ansible Playbooks to the systems.
 Fortunately, ComplianceAsCode also generates Ansible Playbook that contain all tasks for a given profile in a single Playbook.
 
-The Playbooks are located in the `build/roles` directory.
-This directory contains both Ansible Playbooks and Bash remediation scripts for each profile.
+The Playbooks are located in the `build/ansible` directory.
+This directory contains Ansible Playbooks for each profile.
 The Playbooks files have `.yml` extension.
 
 ----
-[... lab4_ansible]$ ls build/roles
-all-roles-rhel8-sh
-all-roles-rhel8-yml
-ssg-rhel8-role-cjis.sh
-ssg-rhel8-role-cjis.yml
-ssg-rhel8-role-cui.sh
-ssg-rhel8-role-cui.yml
-ssg-rhel8-role-default.sh
-ssg-rhel8-role-default.yml
-ssg-rhel8-role-hipaa.sh
-ssg-rhel8-role-hipaa.yml
-ssg-rhel8-role-ospp.sh
-ssg-rhel8-role-ospp.yml
-ssg-rhel8-role-pci-dss.sh
-ssg-rhel8-role-pci-dss.yml
-ssg-rhel8-role-rht-ccp.sh
-ssg-rhel8-role-rht-ccp.yml
-ssg-rhel8-role-standard.sh
-ssg-rhel8-role-standard.yml
+[... lab4_ansible]$ ls build/ansible
+all-profile-playbooks-rhel8
+rhel8-playbook-cjis.yml
+rhel8-playbook-cui.yml
+rhel8-playbook-default.yml
+rhel8-playbook-hipaa.yml
+rhel8-playbook-ospp.yml
+rhel8-playbook-pci-dss.yml
+rhel8-playbook-rht-ccp.yml
+rhel8-playbook-standard.yml
 ----
-
-Although the directory name is `roles`, and the files are called roles, these files are not Ansible Roles, but they are Ansible Playbooks.
 
 Check the contents of the OSPP profile Playbook in your editor and verify that a task for rule `accounts_tmout` is there among all the other tasks.
 
 ----
-[... lab4_ansible]$ nano build/roles/ssg-rhel8-role-ospp.yml
+[... lab4_ansible]$ nano build/ansible/rhel8-playbook-ospp.yml
 ----
-
-Keep in mind that even if the comments in the headers say that it is an Ansible Role, it is not an Ansible Role, it is an Ansible Playbook.
-This might be confusing.
 
 At this moment, you have per-rule Ansible playbooks available, as well as per-profile ones.
 You can integrate these into your CI/CD pipelines and infrastructure management as per your preferences.

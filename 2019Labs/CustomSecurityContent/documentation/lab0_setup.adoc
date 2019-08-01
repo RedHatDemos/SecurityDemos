@@ -1,8 +1,8 @@
-== Lab exercise 0: Setup steps
+= Lab exercise 0: Setup steps
 
 :imagesdir: images
 
-=== Accessing your dedicated lab environment using your provided GUID
+== Accessing your dedicated lab environment using your provided GUID
 
 . On your Red Hat Summit provided laptop, notice that the https://www.opentlc.com/gg/gg.cgi?profile=generic_summit[*Lab GUID Assignment page*^] is already loaded onto your Firefox web browser.
 From this page, you will be assigned your unique GUID, which you will use to access your unique lab environment and systems.

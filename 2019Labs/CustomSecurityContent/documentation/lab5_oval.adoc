@@ -16,7 +16,7 @@
 
 * We have cloned the `ComplianceAsCode` repository to the `lab5_oval` directory.
 * We have installed dependencies that are required for the content build using `yum install`:
-** generic build utilities: `cmake`, `make`,
+** generic build utilities: `cmake`, `make` (`ninja` for faster builds),
 ** utilities for generating SCAP content: `openscap-utils`, and finally
 ** python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
 
@@ -73,15 +73,8 @@ Finally, we will discover that the check has been written incorrectly, and we wi
 
 === Lab 5.3 Anatomy of an existing check-remediation pair
 
-Select one of your terminals, go to the lab directory and build the content:
-
-----
-[... ~]$ cd /home/lab-user/labs/lab5_oval
-[... lab5_oval]$ ./build_product rhel8
-----
-
-When the build finishes, we will take a look at the RHEL8 OSPP profile.
-Open the file explorer, and open the guide in the browser:
+There is the already a built HTML guide in the build directory.
+To examine it, we navigate to it, and then we open the guide in the browser:
 
 Click on `Activites` at the top left of your desktop and click on the file cabinet icon to open the file explorer.
 
@@ -127,6 +120,7 @@ We want to make sure that the rule's check will allow both forms - with and with
 Let's examine the bash remediation - open the respective file in the text editor:
 
 ----
+[... ~]$ cd /home/lab-user/labs/lab5_oval
 [... lab5_oval]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/bash/shared.sh
 ----
 
