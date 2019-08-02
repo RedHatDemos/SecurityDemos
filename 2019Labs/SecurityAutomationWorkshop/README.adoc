@@ -1,0 +1,27 @@
+= Security Automation Workshop
+
+
+== Overview and Prerequisites:
+In this instructor lead workshop, you will learn how automation helps you implement security and compliance for infrastructure at scale. To achieve this, we will use several Red Hat products and technologies. This lab is geared towards systems administrators, cloud administrators, operators, architects, and others working on infrastructure operations management. 
+
+Here are the things we will need for the workshop. 
+ 
+* Internet connection is required. Attendees must come with a laptop with the ability to SSH to a lab environment hosted in a public cloud. Additionally, web interfaces will be accessed over HTTPS and attendees must be able to accept SSL certificate warnings.
+* Attendees should have working knowledge of using SSH and command line shell (BASH) as well as a conceptual understanding of linux system admin, DevOps, and virtualization.
+* We recommend Google Chrome or Firefox for best compatibility with web application.
+* The presenter will need a projector and preferably a whiteboard.
+* Guest internet connection for presenter is required. 
+
+Attendees should also be fun, entertaining or both!
+
+== Agenda
+* link:lab1.adoc[Lab 1: Explore The Lab Environment]
+* link:lab2.adoc[Lab 2: Automated Scanning and Remediation]
+* link:lab3.adoc[Lab 3: Automated Configuration Management]
+* link:lab4.adoc[Lab 4: Automation with Predictive Analytics]
+* link:lab5.adoc[Lab 5: Automated Patching]
+
+== About the Red Hat Portfolio
+Your entire lab environment is cloud hosted online and includes: Red Hat Ansible Automation, Red Hat Satellite, Red Hat Insights, Red Hat Virtualization, and Red Hat Enterprise Linux. You will be able 
+
+You will be given your own unique *GUID*, which you will use to access your own environment for your lab exercises.
