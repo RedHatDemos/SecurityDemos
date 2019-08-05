@@ -78,7 +78,7 @@
   - name: Clone the CaC/c Git for Lab Tracks
     git:
       repo: "{{ CACC_LOCAL }}"
-      version: 'v0.1.43'
+      version: 'v0.1.45'
       dest: "{{ LABS_ROOT }}/{{ item }}"
       force: yes
     loop:
@@ -95,47 +95,57 @@
       remote_src: yes
     when: False
 
-  - name: Introduce a typo
+  - name: "Ex. 1: Introduce a typo 1/2"
     replace:
       dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/linux_os/guide/system/accounts/accounts-pam/password_quality/password_quality_pwquality/accounts_password_pam_minlen/rule.yml"
       regexp: '(    after pam_pwquality to set minimum password length requirements.)'
       replace: '\1\n\1'
 
-  - name: Introduce a typo
+  - name: "Ex. 1: Introduce a typo 2/2"
     replace:
       dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml"
       regexp: '(    Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that)'
       replace: '\1\n\1'
 
-  - name: Build the content to be used in lab 2
-    shell: './build_product rhel8'
-    args:
-      chdir: "{{ LABS_ROOT }}/{{ TRACK_2_LABEL }}"
-
-  - name: Remove the lab3 tests
+  - name: "Ex. 3: Remove tests"
     file:
       path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/tests/data/group_system/group_accounts/group_accounts-session/"
       state: absent
 
-  - name: Copy bad lab3 tests
+  - name: "Ex. 3: Copy bad tests"
     copy:
       src: "data/rule_accounts_tmout"
       dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/tests/data/group_system/group_accounts/group_accounts-session/"
 
-  - name: Bust the OVAL
+  - name: "Ex. 4: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves"
+    file:
+      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/"
+      state: absent
+
+  - name: "Ex. 5: Bust the OVAL"
     replace:
       dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
       regexp: '(operation=")greater than or equal(")'
       replace: '\1equals\2'
 
-  - name: Update the Ansible exercise to CaC master
-    git:
-      repo: "{{ CACC_LOCAL }}"
-      version: 'master'
-      dest: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}"
-      force: yes
+  - name: "Copy our OSPP profile to the target system"
+    copy:
+      src: "data/ospp.profile"
+      dest: "{{ LABS_ROOT }}/{{ item }}/rhel8/profiles/"
+    loop:
+      - "{{ TRACK_1_LABEL }}"
+      - "{{ TRACK_2_LABEL }}"
+      - "{{ TRACK_3_LABEL }}"
+      - "{{ TRACK_4_LABEL }}"
+      - "{{ TRACK_5_LABEL }}"
 
-  - name: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves
-    file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/"
-      state: absent
+  - name: Build the content to be used in exercises
+    command: "./build_product rhel8"
+    args:
+      chdir: "{{ LABS_ROOT }}/{{ item }}"
+    loop:
+      - "{{ TRACK_1_LABEL }}"
+      - "{{ TRACK_2_LABEL }}"
+#     - "{{ TRACK_3_LABEL }}"  # This exercise creates new profile before doing anything, so there is no need to build it in advance.
+#     - "{{ TRACK_4_LABEL }}"  # This exercise creates new Ansible content before doing anything, so there is no need to build it in advance.
+      - "{{ TRACK_5_LABEL }}"
