@@ -370,7 +370,7 @@ Now is the time to rebuild the guide:
 
 Once it is done, refresh the guide - the remediation should contain the newly added comment.
 
-Congratulations, by completing the lab exercise, you became familiar with the leading content creation tool and largest open-source repository and in existence.
+Congratulations, by completing the lab exercise, you became familiar with the leading content creation tool and largest open-source repository in existence.
 
 
 == References
