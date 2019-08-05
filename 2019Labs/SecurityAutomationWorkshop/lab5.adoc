@@ -1,0 +1,134 @@
+== Lab 5: Automated Patching
+
+=== Goal of Lab 1
+The goal of this lab is to learn how you can use a combination of Ansible Tower and Satellite to implement an automated patching strategy to automatically update and patch host systems at scale in different life cycle environments. Specifically, you will learn how you can automatically apply patches to host systems and how to automate the tasks that have to happen behind the scenes to manage content in Satellite.
+
+=== Lab 1.1 Explore Satellite Configuration
+
+. On the Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
+. Navigate to *Content -> Content Views*. Here you will find a content view called *RHEL7_Standard*. This is used for all base builds of RHEL7.
++
+image:images/lab5/1-content-views.png[300,300]
+
+. Click on the *RHEL7_Standard* content view.
++
+image:images/lab5/2-rhel7standard.png[1500,1500]
+
+. Once the page loads, click the *Versions* tab at the top of the frame (if not already there). You will see one version (*Version 1.0*) associated with all lifecycle environments (*RHEL7_Dev, RHEL7_QA, and RHEL7_Prod*).
++
+image:images/lab5/1-content_versions.png[2000,2000]
+
+
+=== Lab 1.2 Patching and Scanning with Ansible Tower and Satellite
+
+To patch our systems, we will need to create a new version of the content view that contains any newly synchronized packages. Next, we want to promote that version to the lower environments (such as Dev and QA) to test the patches prior to releasing to higher environments (such as Production). This would all have to be done manually if we did not have automation in place. As the number of content views and environments grows, so does the workload in doing this manually.
+
+In this lab exercise, we will automatically create and promote new content views with our updated patches and packages in Satellite automatically using Ansible Tower. After that, we will automatically patch our host systems with the new content view and do automated compliance scanning on our host systems as well.
+
+. On Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
+. Navigate to *Templates* and click the *rocket ship* next to the job template named *PATCHING / 1 - Dev*. This will launch the job and we will observe what actions it automates as it runs.
++
+image:images/lab5/4-templates.png[100,100]
+image:images/lab5/5-launch_dev.png[2000,2000]
+
+. Notice how this job kicks off an automation workflow in Ansible Tower. *This automation workflow in this job will take about 15 minutes to complete.* In the meantime, let's take a deeper look at this automation workflow in Ansible Tower to see what's happening behind the scenes.
++
+image:images/lab5/6-dev-automationworkflow.png[2000,2000]
+
+. Notice that this automation workflow has several steps: Publish Content, Promote Content, Recalculate Errata, Install Updates, SCAP Scan, and Schedule Next (which schedules our next patching event). Click on the *Expand Output* button at the top right to see the full workflow. You can click the *Expand Output* button again if you want to exit the full workflow view. Also, feel free to click on *Details* in each of the workflow steps if you want to dive deeper into that particular job template and the automation tasks it is performing.
++
+image:images/lab5/7-fullworkflow.png[2000,2000]
+
+. In this automation workflow, after clicking on the *Details* of each of these workflow steps, you will notice that the *Recalculate Errata, Install Updates, and SCAP Scan* steps are all run against the *foreman_lifecycle_environment_rhel7_dev* hosts.
+
+. Now, let's find out which hosts are part of *foreman_lifecycle_environment_rhel7_dev* group.
+
+. Navigate to *Inventories -> Satellite Inventory -> GROUPS -> foreman_lifecycle_environment_rhel7_dev -> HOSTS*. Notice that there are 1 hosts that are part of the foreman_lifecycle_environment_rhel7_dev group: rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com. That means that the Recalculate Errata, Install Updates, and SCAP Scan job templates will run on these 1 hosts.
+
+. Let's go back to our automated patching workflow by clicking on *Jobs -> PATCHING / 1 - Dev*.  In this automated patching workflow for our Dev environment, notice that the first step in our automation workflow is *Publish Content*. This step automates the publishing of a new version of content that has our new package updates and patches that have been released since our first version was created.
++
+image:images/lab5/8-devjob.png[500,500]
+image:images/lab5/9-publish-content.png[1000,1000]
+
+. Go back to the Satellite server (https://sat64-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
+. Navigate to *Content -> Content Views*.
++
+image:images/lab5/1-content-views.png[300,300]
+
+. Click on the *RHEL7_Standard* content view.
+image:images/lab5/2-rhel7standard.png[1500,1500]
+
+. Notice in the *Versions* tab that a new version is being created. This step of creating and publishing our new content view in Satellite may take about 8 minutes to complete.
++
+image:images/lab5/10-newversion-creation.png[500,500]
+
+. Next, notice that the *RHEL7_Dev* lifecycle environment is being promoted to use the new version of the content view so that our host in the Dev lifecycle environment will start receiving updates from the newer set of updated packages and patches.
++
+image:images/lab5/11-devpromotion.png[500,500]
+
+. Go back to Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
+. Navigate to *Jobs* and click on your recently launched *PATCHING / 1 - Dev* job.
++
+image:images/lab5/8-devjob.png[500,500]
+
+. Notice that the second step of our automated patching workflow is to *Promote Content*  which is why we saw that step execute in Satellite previously.
+
+. Next, notice that the third step in our automated patching workflow is *Recalculate Errata*. In this step, we scan the hosts for new Errata. This simply updates Satellite with the patches missing on the system now that we have a new version of content.
++
+image:images/lab5/12-nextsteps.png[500,500]
+
+. Next, notice that the next step of our automated workflow is *Install Updates*. In this step, Ansible Tower will run a `yum update` on the hosts in the Dev lifecycle to install the new content. Click on *Details* while the *Install Updates* job is running.
++
+image:images/lab5/installupdates.png[500,500]
+
+. Notice that the *patching-non-ha.yml* playbook is executing on the RHEL 7 Dev Hosts (foreman_lifecycle_environment_rhel7_dev). This playbook will go to each of the hosts in the Dev lifecycle environment, run `yum update`, record the packages that have been installed and if a reboot is required based on any of the updated packages, only that host system that requires a reboot will be rebooted. In the Ansible Tower log, you can see these tasks being executed. Specifically, notice that we're gathering facts, checking that the yum utils is installed, checking for updates, and upgrading all packages. *This job will take about 4 minutes to complete*.
++
+image:images/lab5/14-job-details.png[500,500]
+
+. Click the back button in your browser to go back and monitor the full automation workflow. Notice that the next two jobs are *SCAP Scan* and *Recalculate Errata* which are running in parallel. These next 2 jobs will run in parallel since they are not dependent on each other.
++
+image:images/lab5/15-next2-jobs.png[2000,2000]
+
+. The *SCAP Scan* job will run an OpenSCAP scan on the host systems post updates to provide the latest SCAP compliance report. Specifically, it will run the *RHEL7_Standard* compliance scan on these hosts in the Dev environment. You can confirm this by clicking on *Details* in the SCAP Scan workflow step box to look at this job template in more detail. Notice that this SCAP Scan job template is being run against the RHEL7_Standard compliance policy.
++
+image:images/lab5/16-policyscan.png[300,300]
+
+. When the *SCAP Scan* job completes, you can take a look at the RHEL7_Standard compliance reports in Satellite for the three hosts(rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com) in the foreman_lifecycle_environment_rhel7_dev group.
+
+. On the Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
+. Navigate to *Hosts → Reports*.
++
+image:images/lab5/17-hostreports.png[300,300]
+
+. Looking at the list of compliance reports in Satellite, notice that there is a RHEL7_Standard compliance report for each of the three hosts(rhel7-vm3.hosts.example.com, rhel7-vm4.hosts.example.com, and rhel7-vm5.hosts.example.com) that are part of the foreman_lifecycle_environment_rhel7_dev group.
++
+image:images/lab5/18-satreports-standard.png[2000,2000]
+
+. Go back to your Ansible Tower(https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
+. Navigate to *Jobs* and click on *PATCHING / 1 - Dev* job (if not already there).
++
+image:images/lab5/8-devjob.png[500,500]
+
+. After the  *SCAP Scan* job , notice that the *Recalculate Errata* job will run. This job will rescan the host again and upload the patch status to Satellite.
+
+. Finally, if all of the previous steps were successful, a schedule will be created in Ansible Tower to patch the QA environment 7 days from now.
++
+image:images/lab5/19-schedule-step.png[2000,2000]
+
+. Once the entire automation workflow is complete in Ansible Tower, select *Schedules* from the navigation menu on the left. Then, click on the schedule titled *Linux_patching_** The date that you see after *Linux_patching* will be 7 days from when you ran this *PATCHING / 1 - Dev* Ansible Tower job workflow.
++
+image:images/lab5/20-scheduletower.png[2000,2000]
+
+. Inspect the schedule to take note of the automation workflow it will run and the date that is scheduled for. From this page you can disable the schedule, reschedule the schedule, cancel the schedule, etc. If no changes are made, it will automatically promote and patch your QA environment. Since we do not have 7 days to wait, if you would like to watch the process again, return to the *Templates* page in Ansible Tower and manually run the *PATCHING / 2 - QA* job template. You will notice that this workflow is similar to the one for our Dev lifecycle environment patch automation workflow. This patch automation workflow for our QA lifecycle environment will aoso promote the new content view, patch the QA host systems, and perform an OpenSCAP compliance scan on the QA host systems against the RHEL7_Standard compliance profile.
++
+image:images/lab5/21-view_schedule.png[1500,1500]
++
+NOTE: We don't have to do the *Publish Content* step in our automation workflow for the QA lifecycle host systems since we're just moving QA to use the version that we created for our Dev lifecycle environment. As a result, we're just going to do the *Promote Content* and *Install Updates* steps in our patching automation workflow on those QA host systems (in addition to doing the *SCAP Scan* and *Recalculate Errata* steps afterwards).
+
+link:README.adoc#agenda[ Table of Contents ]

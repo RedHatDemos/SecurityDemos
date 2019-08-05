@@ -5,7 +5,8 @@
 In this instructor lead workshop, you will learn how automation helps you implement security and compliance for infrastructure at scale. To achieve this, we will use several Red Hat products and technologies. This lab is geared towards systems administrators, cloud administrators, operators, architects, and others working on infrastructure operations management. 
 
 Here are the things we will need for the workshop. 
- 
+
+
 * Internet connection is required. Attendees must come with a laptop with the ability to SSH to a lab environment hosted in a public cloud. Additionally, web interfaces will be accessed over HTTPS and attendees must be able to accept SSL certificate warnings.
 * Attendees should have working knowledge of using SSH and command line shell (BASH) as well as a conceptual understanding of linux system admin, DevOps, and virtualization.
 * We recommend Google Chrome or Firefox for best compatibility with web application.
