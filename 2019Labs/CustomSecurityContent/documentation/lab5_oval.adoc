@@ -619,7 +619,7 @@ If you are asked about saving any changes, you probably don't want that, in whic
 
 Let's add another check for a correct value - let's check for timeout of 100.
 In case of a timeout, 100 seconds is more secure than 600 seconds.
-Therefore, the scenario is represents a *supercompliant* case, i.e. the setting is stricter than necessary, but it is within the area of allowed values.
+Therefore, the scenario represents a *supercompliant* case, i.e. the setting is stricter than necessary, but it is within the area of allowed values.
 So let's copy that one, and make a new test scenario out of it.
 Run this command in the terminal in the `rule_accounts_tmout` directory:
 
