@@ -70,7 +70,7 @@ You can get inspired by them.
 Create new file `travel.profile` file there and open it in the editor:
 
 ----
-[... lab3_profiles]$ nano travel.profile
+[... profiles]$ nano travel.profile
 ----
 
 Next, create the basic structure and fill in the profile title and description as specified in this listing.
