@@ -45,7 +45,7 @@ To start the hands-on section, take the following steps:
 . Log in to the VM using the text console if you haven't done so already:
 +
 Go to the Terminal window on your laptop.
-SSH into the remote VM as *lab-user*.
+SSH into the remote VM as *lab-user*. Use *r3dh4t1!* as your password.
 Don't forget to replace *GUID* with your lab provided *GUID*!
 +
 ----

@@ -35,7 +35,7 @@ Log in to the VM using the text console if you haven't done so already.
 Open the terminal window on the lab laptop.
 Execute the following command,
 but don't forget to replace `GUID` with your lab provided GUID:
-
+Use *r3dh4t1!* as your password.
 ----
 [... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 [lab-user@workstation-GUID ~]$
@@ -712,7 +712,7 @@ As discussed at the beginning of this exercise, the `TMOUT` variable may be pref
 So let's modify the passing test scenario `correct_value.pass.sh` to test a correct value in addition to the usage of the `export` keyword:
 
 ----
-[... lab5_oval]$ nano tests/data/group_system/group_accounts/group_accounts-session/rule_accounts_tmout/correct_value.pass.sh 
+[... lab5_oval]$ nano tests/data/group_system/group_accounts/group_accounts-session/rule_accounts_tmout/correct_value.pass.sh
 ----
 
 [source,bash]

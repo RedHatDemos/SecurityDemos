@@ -38,7 +38,7 @@ Then, enter the following command, replacing `GUID` with your actual GUID:
 [... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
-For example, if your `GUID` was `3fa1`, you would execute: `$ ssh lab-user@workstation-3fa1.rhpds.opentlc.com`
+For example, if your `GUID` was `3fa1`, you would execute: `$ ssh lab-user@workstation-3fa1.rhpds.opentlc.com`. Type *r3dh4t1!* as your password.
 
 If everything goes correctly, you will end up in the lab's test system shell.
 You can tell that by listing the directory with lab exercises:
