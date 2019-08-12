@@ -112,26 +112,34 @@ There are also various formats in which this is provided - human readable HTML g
 You can see in our command below that we can skip the profile ID prefix to make the command simpler.
 The real ID is *xccdf_org.ssgproject.content_profile_ospp*.
 +
+The scanning command has to be executed by a privileged user `root` or using `sudo`, so the scanner can access system parts that are off-limits to common users.
+The simplest scanner invocation can look like this:
++
 ----
-  [root@openscap content]# oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
+oscap xccdf eval --profile ospp ./ssg-rhel8-ds.xml
 ----
 +
-Now, you will see the security compliance scan results for every security control in the OSPP security baseline profile. Specifically, you will see the title of each security control and whether or not that security control check passed or failed.
-
-. Now, let's store the results of the scan this time:
+However, we will also want to store the scan results, so we can process them later.
+Therefore, we have to supply additional arguments:
++
 --
 * use `--results-arf` to get machine readable results archive
 * use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
 * use `--oval-results` for extended details of failing rules
 --
 +
+So now, execute:
++
 ----
  [root@openscap content]# oscap xccdf eval --oval-results --profile ospp --results-arf /tmp/arf.xml --report /tmp/report.html ./ssg-rhel8-ds.xml
 ----
++
+to run the scan, generating the HTML report as a side-effect.
 
 . (Optional) You can also generate the HTML report separately:
 +
 ----
+ [root@openscap content]# rm -f /tmp/report.html
  [root@openscap content]# oscap xccdf generate report /tmp/arf.xml > /tmp/report.html
 ----
 
@@ -199,7 +207,9 @@ image:images/lab1.2-selectcustomize.png[700,700]
 +
 image:images/lab1.2-newprofileID.png[500,500]
 
-. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile. Feel free to customize this profile however you would like. After you are done customizing this profile, click *OK* to save the profile.
+. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile.
+Notice the toolbar at the top of the window with options that can help you with the profile composition - especially the `Deselect All` and `Search` functionality buttons are likely to be very useful when composing a new profile from scratch.
+Feel free to customize this profile however you would like. After you are done customizing this profile, click *OK* to save the profile.
 You have now created a new custom profile.
 +
 image::images/lab1.2-workbench_tailoring.png[SCAP Workbench content customization]
