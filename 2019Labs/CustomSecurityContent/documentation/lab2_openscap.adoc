@@ -190,6 +190,7 @@ image:select_profile.png[]
 image:lab1.2-newprofileID.png[500,500]
 
 . Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile.
+Notice the toolbar at the top of the window with options that can help you with the profile composition - especially the `Deselect All` and `Search` functionality buttons are likely to be very useful when composing a new profile from scratch.
 After you are done customizing click *OK* to save the profile.
 You have now created a new custom profile.
 +
