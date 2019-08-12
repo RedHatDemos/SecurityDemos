@@ -565,7 +565,7 @@ Either way, you will see your Travel profile with 4 rules, including the newly a
 .New rule Install Hexchat Application displayed in HTML guide
 image::2-04-rule.png[New rule]
 
-For more details about the `rule.yml` format, please refer to https://github.com/ComplianceAsCode/blob/master/docs/manual/developer_guide.adoc#711-rules
+For more details about the `rule.yml` format, please refer to https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules
 
 <<top>>
 
