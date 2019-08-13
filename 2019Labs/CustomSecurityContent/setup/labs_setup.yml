@@ -34,7 +34,7 @@
   - name: Set root's .ssh directory permission
     file:
       state: directory
-      mode: "u=rwx"
+      mode: 0700
       path: /root/.ssh
     become_user: root
 
@@ -43,7 +43,7 @@
       src: /home/lab-user/.ssh/{{ item }}
       remote_src: yes
       dest: /root/.ssh/
-      mode: "u=rw"
+      mode: 0600
     loop:
      - id_rsa
      - id_rsa.pub
@@ -139,7 +139,7 @@
       - "{{ TRACK_4_LABEL }}"
       - "{{ TRACK_5_LABEL }}"
 
-  - name: Build the content to be used in exercises
+  - name: Build the RHEL8 content to be used in exercises
     command: "./build_product rhel8"
     args:
       chdir: "{{ LABS_ROOT }}/{{ item }}"
@@ -148,4 +148,10 @@
       - "{{ TRACK_2_LABEL }}"
 #     - "{{ TRACK_3_LABEL }}"  # This exercise creates new profile before doing anything, so there is no need to build it in advance.
 #     - "{{ TRACK_4_LABEL }}"  # This exercise creates new Ansible content before doing anything, so there is no need to build it in advance.
+
+  - name: Build the RHEL7 content to be used in the container scanning exercise
+    command: "./build_product rhel7"
+    args:
+      chdir: "{{ LABS_ROOT }}/{{ item }}"
+    loop:
       - "{{ TRACK_5_LABEL }}"
