@@ -1,16 +1,30 @@
-== Lab 0: Setup steps
+:toc2:
+:linkattrs:
 
-=== Accessing your dedicated lab environment using your provided GUID
-. On your Red Hat Summit provided laptop, notice that the https://www.opentlc.com/gg/gg.cgi?profile=generic_summit[*Lab GUID Assignment page*^] is already loaded onto your Firefox web browser.
-From this page, you will be assigned your unique GUID, which you will use to access your unique lab environment and systems.
+== Lab 0: Setup Steps
 
-. Select the proper *Lab Code*. Select *Defend Yourself Using Built-in Red Hat Enterprise Linux Security Technologies* from the drop down list.
+In this lab, you access your dedicated lab environment using a unique GUID provided to you.
 
-. Enter the *Activation Key*, which is *security*.
+:numbered:
 
-. The resulting *Lab GUID Assignment page* will display your lab's GUID and other useful information about your lab environment. Take note of your assigned GUID. You will use this GUID to access your lab's environment and systems.  Your unique GUID will also be embedded in your lab environment's host names. From this *Lab GUID Assignment page*, you will also be able to access your unique lab environment's power control and consoles.
+== Accessing Your Dedicated Lab Environment
+
+. On your Red Hat^(R)^ Summit-provided laptop, go to the link:https://www.opentlc.com/gg/gg.cgi?profile=generic_summit[Lab GUID Assignment page^], which is already loaded into your Firefox web browser.
+
+. Select *Defend Yourself Using Built-in Red Hat Enterprise Linux Security Technologies* from the list for the *Lab Code*.
+
+. Enter *security* for the *Activation Key*.
 +
-image:images/rhelguid.png[500,500]
+The resulting *Lab GUID Assignment page* displays your lab's GUID and other useful information about your lab environment.
+
+. Make a note of your assigned GUID.
++
+You use this GUID to access your lab's environment and systems, and it will also be embedded in your lab environment's host names.
+
+You are also able to access your lab environment's power control and consoles from this *Lab GUID Assignment page*:
+
+image::images/rhelguid.png[500,500]
 
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP]
+link:README.adoc#table-of-contents[Table of Contents^] | link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP^]
+
