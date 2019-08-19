@@ -1,78 +1,81 @@
-= Defend Yourself Using Built-in Red Hat Enterprise Linux Security Technologies
+:linkattrs:
 
-== [.underline]#Presenters/Lab Developers#:
-*Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat
+== Defend Yourself Using Built-in Red Hat Enterprise Linux Security Technologies
 
-*Peter Beniaris*, Manager - Solutions Architecture, Red Hat
+== Presenters/Lab Developers
+*Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
 
-*Lukas Vrabec*, Senior Software Engineer - RHEL Security, Red Hat
+*Peter Beniaris*, Manager--Solutions Architecture, Red Hat
 
-*Marek Haicman*, Senior Quality Engineer and Product Owner - Security Compliance, Red Hat
+*Lukas Vrabec*, Senior Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat
 
-*Simo Sorce*, Senior Principal Software Engineer - RHEL Security, Red Hat
+*Marek Haicman*, Senior Quality Engineer and Product Owner--Security Compliance, Red Hat
 
-== [.underline]#Additional Lab Developers#:
-*Paul Wouters*, Senior Software Engineer - RHEL Security, Red Hat
+*Simo Sorce*, Senior Principal Software Engineer--RHEL Security, Red Hat
 
-*Daniel Kopecek*, Senior Software Engineer - RHEL Security, Red Hat
+== Lab Developers
+*Paul Wouters*, Senior Software Engineer--RHEL Security, Red Hat
 
-*Kirill Gliebov*, Software Engineer - RHEL Security, Red Hat
+*Daniel Kopecek*, Senior Software Engineer--RHEL Security, Red Hat
 
-*Matej Tyc*, Software Engineer and Tech Lead - Security Compliance in RHEL Security, Red Hat
+*Kirill Gliebov*, Software Engineer--RHEL Security, Red Hat
 
-*Steve Grubb*, Senior Principal Software Engineer - RHEL Security, Red Hat
+*Matej Tyc*, Software Engineer and Tech Lead--Security Compliance in RHEL Security, Red Hat
 
-*Richard Guy Briggs*, Senior Software Engineer - RHEL Security, Red Hat
+*Steve Grubb*, Senior Principal Software Engineer--RHEL Security, Red Hat
+
+*Richard Guy Briggs*, Senior Software Engineer--RHEL Security, Red Hat
+
+== Overview and Prerequisites
+In this lab, you learn how to build defense-in-depth in the operating system by implementing the key security technologies available to you in the latest version of Red Hat Enterprise Linux.
+
+In a defense-in-depth approach, you implement security at all layers to build a strong foundation to proactively defend against possible security attacks and breaches. You provide security compliance by using technologies such as OpenSCAP, Audit, Audit Intrusion Detection Environment (AIDE), session recording, and system-wide cryptographic policies. You implement physical security with technologies such as USBGuard and add network security with technologies such as firewalld, SELinux port security, and IPSec. You implement access management with Ansible^(R)^ system roles, identity management, and SELinux process isolation. You implement data security with Linux Unified Key Setup (LUKS), Network Bound Disk Encryption (NBDE), and GNU Privacy Guard (GPG).
+
+Specifically, you use OpenSCAP to scan and remediate against vulnerabilities and configuration security baselines. You also block possible attacks from vulnerabilities using SELinux and use Network Bound Disk Encryption to securely decrypt your encrypted boot volumes unattended. You learn how to deploy opportunistic IPsec to encrypt all host-to-host communication within an enterprise network and also use USBGuard to implement basic whitelisting and blacklisting to define which USB devices are and are not authorized and how a USB device may interact with your system. You also take advantage of the system-wide cryptographic policies for further security. Throughout your investigation of the security issues in your systems, you use audit logs and the web console, and you automate as much of your tasks as possible using Ansible. For example, you make automated configuration changes to your systems across multiple versions of Red Hat Enterprise Linux running in your environment using the Systems Roles feature. You also learn how to use AIDE, session recording, logging, and playback to look for abnormal behavior. In addition, you learn how to create a single sign-on environment for all of your Linux servers using Identity Management in Red Hat Enterprise Linux (IdM). Finally, you discover how to identify yourself and encrypt your communications with GPG and also learn how to use firewalld to dynamically manage firewall rules.
+
+This lab is geared toward systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to take advantage of the built-in security technologies in Red Hat Enterprise Linux.
+
+The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA^(R)^) or equivalent system administration skills.
+
+== Session Goals
+
+In this session, you learn how to:
+
+* Automate security compliance using OpenSCAP to scan and remediate against vulnerabilities and configuration security baselines.
+* Use SELinux to isolate running processes to mitigate against attacks.
+* Use NBDE to securely decrypt LUKS-encrypted volumes unattended.
+* Deploy opportunistic IPSec to encrypt all host-to-host communication within an enterprise network.
+* Take advantage of system-wide cryptographic policies.
+* Use USBGuard to protect against rogue USB devices and implement basic whitelisting and blacklisting to define which USB devices are authorized.
+* Take advantage of the auditing capabilities and the web console for easier centralized management.
+* Use the AIDE to detect intrusions.
+* Create a single sign-on environment for all of your Linux servers using IdM.
+* Use GPG to identify yourself and encrypt your communications.
+* Use firewalld to dynamically manage firewall rules.
+* Configure system-wide cryptographic policies and set a machine in Federal Information Processing Standards (FIPS) mode.
+* Take advantage of session recording, logging, and playback features and AIDE to look for abnormal behavior.
+* Use systems roles to make multiple automated configuration changes across different versions of Red Hat Enterprise Linux using Red Hat Ansible Automation.
 
 
-== Overview and Prerequisites:
-In this lab, you'll learn how you can build defense-in-depth in the OS by implementing the key security technologies available to you in the latest version of Red Hat Enterprise Linux.
+== Lab Environment
+Your entire lab environment is hosted online and includes Red Hat Enterprise Linux and Red Hat Ansible Automation.
 
-You will implement security at all layers, in a defense-in-depth approach, to build a strong foundation to proactively defend against possible security attacks and breaches. You will ensure security compliance by using technologies such as OpenSCAP, Audit, AIDE, session recording, and system wide crypto policies. You will implement physical security with technologies such as USBGuard and add network security with technologies such as firewalld, SELinux port security, and IPSec. You will implement access management with Ansible system roles, Identity Management, and SELinux process isolation. You will implement data security with Linux Unified Key Setup(LUKS), Network Bound Disk Encryption, and GNU Privacy Guard.
+You obtain your own unique *GUID*, which you use to access your instance of these Red Hat products for the labs.
 
-Specifically, you will use OpenSCAP to scan and remediate against vulnerabilities and configuration security baselines. You will also block possible attacks from vulnerabilities using SELinux and use Network Bound Disk Encryption to securely decrypt your encrypted boot volumes unattended. You will learn how to deploy opportunistic IPsec to encrypt all host to host communication within an enterprise network and also use USBGuard to implement basic whitelisting and blacklisting to define which USB devices are and are not authorized and how a USB device may interact with your system. You will also take advantage of the system-wide crypto policies for further security. Throughout your investigation of the security issues in your systems, you will utilize audit logs and the web console and you will automate as much of your tasks as possible using Ansible. For example, you will make automated configuration changes to your systems across multiple versions of Red Hat Enterprise Linux running in your environment using the Systems Roles feature. You will also learn how to use the Audit Intrusion Detection Environment (AIDE), session recording, logging, and playback to look for abnormal behavior. Also, you will learn how to create a single sign-on environment for all of your linux servers using Red Hat Identity Management. Finally, you will discover how to identify yourself and encrypt your communications with GNU Privacy Guard (GPG) and will also learn how to use firewalld to dynamically manage firewall rules.
-
-
-This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to take advantage of the built-in security technologies in Red Hat Enterprise Linux.
-
-The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills.
-
-== Attendees, during this session, will learn:
-* How to automate security compliance using OpenSCAP to scan and remediate against vulnerabilities and configuration security baselines.
-* How to use SELinux to isolate running processes to mitigate against attacks
-* How to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKs encrypted volumes unattended
-* How to deploy opportunistic IPsec to encrypt all host to host communication within an enterprise network
-* How to take advantage of system-wide crypto policies
-* How to use USBGuard to protect against rogue USB devices and implement basic whitelisting and blacklisting to define which USB devices are authorized.
-* How to take advantage of the auditing capabilities and the web console for easier centralized Management.
-* How to use the Audit Intrusion Detection Environment (AIDE)
-* How to create a single sign-on environment for all of your Linux servers using Red Hat Identity Management.
-* How to use GNU Privacy Guard (GPG) to identify yourself and encrypt your communications.
-* How to use firewalld to dynamically manage firewall rules.
-* How to configure system-wide crypto policies and set a machine in Federal Information Processing Standards(FIPS) mode.
-* How to take advantage of session recording, logging, and playback features and AIDE to look for abnormal behavior.
-* How to use systems roles to make multiple automated configuration changes across different versions of Red Hat Enterprise Linux using Red Hat Ansible Automation.
-
-
-== Lab Environment:
-Your entire lab environment is hosted online and includes: Red Hat Enterprise Linux and Red Hat Ansible Automation.
-
-You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
-
-Each lab exercise is independent from each other, so feel free to do the lab exercises in whatever order you'd like.
-
+Each lab is independent from the others and it is not necessary to perform them sequentially.
 
 == Table of Contents
-* link:lab0_setup.adoc[Lab 0: Setup steps]
-* link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP]
-* link:lab2_SELinux.adoc[Lab 2: SELinux]
-* link:lab3_NBDE.adoc[Lab 3: Network Bound Disk Encryption (NBDE)]
-* link:lab4_IPsec.adoc[Lab 4: IPSec]
-* link:lab5_USBGuard.adoc[Lab 5: USBGuard]
-* link:lab6_Audit.adoc[Lab 6: Audit]
-* link:lab7_AIDE.adoc[Lab 7: Advanced Intrusion Detection Environment (AIDE)]
-* link:lab8_IdM.adoc[Lab 8: Identity Management (IdM)]
-* link:lab9_GPG.adoc[Lab 9: GNU Privacy Guard (GPG)]
-* link:lab10_firewalld.adoc[Lab 10: Firewalld]
-* link:lab11_cryptopolicies.adoc[Lab 11: Crypto Policies]
-* link:lab12_SessionRecording.adoc[Lab 12: Session Recording]
+* link:lab0_setup.adoc[Lab 0: Setup Steps^]
+* link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP^]
+* link:lab2_SELinux.adoc[Lab 2: SELinux^]
+* link:lab3_NBDE.adoc[Lab 3: Network Bound Disk Encryption (NBDE)^]
+* link:lab4_IPsec.adoc[Lab 4: IPSec^]
+* link:lab5_USBGuard.adoc[Lab 5: USBGuard^]
+* link:lab6_Audit.adoc[Lab 6: Audit^]
+* link:lab7_AIDE.adoc[Lab 7: Advanced Intrusion Detection Environment (AIDE)^]
+* link:lab8_IdM.adoc[Lab 8: Identity Management (IdM)^]
+* link:lab9_GPG.adoc[Lab 9: GNU Privacy Guard (GPG)^]
+* link:lab10_firewalld.adoc[Lab 10: Firewalld^]
+* link:lab11_cryptopolicies.adoc[Lab 11: Crypto Policies^]
+* link:lab12_SessionRecording.adoc[Lab 12: Session Recording^]
+
