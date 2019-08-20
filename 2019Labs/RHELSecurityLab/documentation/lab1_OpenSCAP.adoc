@@ -1,18 +1,15 @@
 :toc2:
 :linkattrs:
 
-== Lab 1: OpenSCAP Basics and Command Line Scanning
+= Lab 1: OpenSCAP Basics and Command Line Scanning
 
-:numbered:
-
-== Introduction
-
-.Lab Length
+.*Lab Length*
 * Medium/Average
 
-.Goal
+.*Goal*
 * Become familiar with the basics of automated security and compliance scanning and remediations with OpenSCAP and Red Hat^(R)^ Ansible^(R)^ Automation
 
+== 1.1: Introduction
 Security Content Automation Protocol (SCAP) is a collection of standards to enable automated vulnerability and configuration compliance.
 OpenSCAP is a family of open source SCAP tools, and the SCAP Security Guide (SSG) is a collection of XML-based SCAP benchmarks and content in various formats to help with compliance configuration assessment of Red Hat Enterprise Linux^(R)^ (RHEL) machines.
 Natively shipping in Red Hat Enterprise Linux, OpenSCAP provides practical security hardening advice and remediations for Red Hat technologies and helps with meeting security compliance requirements, making it easier to obtain security certifications and accreditations.
@@ -23,7 +20,7 @@ OpenSCAP is integrated into Red Hat Satellite for automated security and complia
 
 In this lab, you focus on single host scanning and remediations for security vulnerabilities and compliance to security baselines using the security tools built info Red Hat Enterprise Linux.
 
-.Setup Steps (Preconfigured)
+=== 1.1.1: Setup Steps (Preconfigured)
 All of the steps in this setup section are already completed for you.
 This section is for reference only so that you know what is already configured in this lab environment.
 
@@ -79,7 +76,7 @@ If during your own installation a message indicates that the `oscap` command is 
 [root@openscap ~] yum install scap-workbench
 ----
 
-== Using Automated Security and Compliance Scanning with OpenSCAP
+== 1.2: Using Automated Security and Compliance Scanning with OpenSCAP
 
 . If not already there, log in to the workstation bastion host as *lab-user* from your desktop system, replacing `GUID` with your lab-provided GUID and, if needed, using the password *r3dh4t1!*:
 +
@@ -200,9 +197,9 @@ The machine is in a state equivalent to a default installation.
 
 . When you are finished, close the Firefox window.
 
-== Customizing SCAP Security Profiles Using SCAP Workbench
+== 1.3: Customizing SCAP Security Profiles Using SCAP Workbench
 
-=== Using SCAP Workbench
+=== 1.3.1: Using SCAP Workbench
 
 . Return to the workstation console page, click the console button for your workstation bastion host, and log in as *lab-user* with *r3dh4t1!* as the password:
 +
@@ -223,7 +220,7 @@ image:images/lab1.2-scapsecurityguide.png[600,600]
 +
 image::images/lab1.2-workbench_opened.png[SCAP Workbench opened, profile selected]
 
-=== Customizing PCI-DSS Control Baseline and Tests 
+=== 1.3.2: Customizing PCI-DSS Control Baseline and Tests 
 
 . For *Profile*, select *PCI-DSS v3 Control Baseline for Red Hat Enterprise Linux 8 (18)*, then click *Customize*:
 +
@@ -254,12 +251,12 @@ You may proceed with the remainder of this lab before the scan completes. You ca
 +
 image:images/lab1.2-savecustomization.png[300,300]
 
-== Automated Security Remediations with OpenSCAP and Ansible
+== 1.4: Automated Security Remediations with OpenSCAP and Ansible
 Putting the machine into compliance--for example, by changing its configuration--is called *remediation* in SCAP terminology.
 Because remediation changes the configuration of the machine to restrict its capabilities, it is possible for you to lock yourself out or disable workloads important to you.
 As a result, it is a best practice to test the remediation and its effects before deploying.
 
-=== Testing Remediation
+=== 1.4.1: Testing Remediation
 . If not already there, open Terminal and log in to the workstation bastion host as *lab-user* from your desktop system, replacing `GUID` with your lab-provided GUID and using the password *r3dh4t1!*:
 +
 ----
@@ -294,7 +291,7 @@ By running either the automatically generated Ansible remediation playbook or th
 +
 TIP: Note that in both cases you use an empty `--result-id`. This is a trick to avoid specifying the full result ID.
 
-=== Setting Ansible Remediation Options
+=== 1.4.2: Setting Ansible Remediation Options
 
 In this section, you focus on the Ansible remediation options.
 
