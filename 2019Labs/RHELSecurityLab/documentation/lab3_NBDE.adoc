@@ -1,18 +1,15 @@
 
 :toc2:
 
-== Lab 3: How to use Network Bound Disk Encryption (NBDE) to Securely Decrypt LUKS-Encrypted Volumes
+= Lab 3: Network Bound Disk Encryption (NBDE)
 
-:numbered:
-
-== Introduction
-
-.Lab Length
+.*Lab Length*
 * Medium/Average
 
-.Goal
+.*Goal*
 * Understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKS-encrypted volumes
 
+== 3.1: Introduction
 Network Bound Disk Encryption (NBDE) allows the user to encrypt root volumes of hard drives on physical and virtual machines without requiring manual entry of a password when systems are restarted.
 
 Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL) implements NBDE with a central server named Tang and a client framework named Clevis. Tang is used to bind data to a secure network. It is stateless and does not require TLS or authentication. Tang does not interact with client keys, so it never obtains identifying information from the client. Clevis provides automated unlocking of LUKS volumes.
@@ -23,7 +20,7 @@ This lab covers setting up NBDE using the command line interface, but Cockpit al
 
 You install the *Tang* server on the *NBDE1* server and the Clevis client on *NBDE3*.
 
-== Installing the Tang Server
+== 3.2: Installing the Tang Server
 . Navigate to the lab information page from *Lab 0: Setup Steps* and click *CONSOLE* for *NBDE1*:
 +
 image:images/lab3-console.png[200,200]
@@ -55,7 +52,7 @@ image:images/console-textbox.png[500,500]
 +
 Because `tangd` uses the `systemd` socket activation mechanism, the server starts as soon as it receives the first connection. A new set of cryptographic keys is automatically generated upon initial startup.
 
-== Installing the Clevis Client
+== 3.3: Installing the Clevis Client
 Your *NBDE3* client is already encrypted. In this section, you install the client packages that allow you to decrypt the root device drive upon boot without manual intervention.
 
 . Navigate to the lab information page from *Lab 0: Setup Steps*.
@@ -110,7 +107,7 @@ This command performs four steps:
 
 This disk can now be unlocked with your existing passphrase, as well as with the Clevis policy.
 
-== Verifying the LUKS Header
+== 3.4: Verifying the LUKS Header
 
 . Use the `cryptsetup luksDump` command on *NBDE3* to verify that the Clevis JWE object is successfully placed in a LUKS header:
 +
@@ -179,7 +176,7 @@ Digests:
 +
 The `0` key slot represents the static password you entered when booting the machine for the first time and key slot `1` is the newly added entry by the `clevis luks bind` command.
 
-== Enabling Decryption on the Boot Process
+== 3.5: Enabling Decryption on the Boot Process
 
 . Enter the following command on *NBDE3* to enable the early boot system to process the disk binding:
 +
@@ -192,7 +189,7 @@ The `0` key slot represents the static password you entered when booting the mac
 Pass the *-vf* parameter if you want to see verbose output.
 ====
 
-== Rebooting NBDE3 and Testing the NBDE Configuration
+== 3.6: Rebooting NBDE3 and Testing the NBDE Configuration
 
 . Reboot *NBDE3*:
 +
@@ -204,9 +201,9 @@ Pass the *-vf* parameter if you want to see verbose output.
 +
 This may take up to five minutes in the virtualized environment.
 
-== Initializing the LUKS Binding to the Tang Server using Cockpit
+== 3.7: Initializing the LUKS Binding to the Tang Server using Cockpit
 
-=== Accessing NBDE2 Console
+=== 3.7.1: Accessing NBDE2 Console
 
 Your *NBDE2* server is already encrypted. In this section, you install the client packages that allow you to decrypt the root device drive upon boot without manual intervention.
 
@@ -229,7 +226,7 @@ image:images/console-textbox.png[500,500]
 +
 The `cockpit-storaged` package is already installed for you, and Cockpit is already enabled as well.
 
-=== Initializing the LUKS Binding
+=== 3.7.2: Initializing the LUKS Binding
 
 In this section, you initialize the LUKS binding to the *Tang* server using Cockpit.
 
