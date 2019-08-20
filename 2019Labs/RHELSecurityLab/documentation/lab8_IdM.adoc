@@ -1,380 +1,454 @@
-= Lab 8: How to create a single sign-on environment for all of your linux servers using Red Hat Identity Management
+:toc2:
+:linkattrs:
 
-*Lab Length: Medium/Average*
+= Lab 8: Single-Sign-on Environment Creation for Linux Servers Using Identity Management in Red Hat Enterprise Linux
 
-== Goal of Lab
-In this exercise you are going to configure clients to attach to a Red Hat Identity Management (IdM) server.  The goal is to create a single-sign-on environment for all of your Linux servers to manage users, hosts, and sudo commands from a central console.  This exercise will already have an IdM server installed, and will focus on registering and managing clients.  The objectives for this exercise are:
+.*Lab Length*
+* Medium/Average
 
+.*Goal*
+* Create a single-sign-on (SSO) environment for all of your Linux^(R)^ servers to manage users, hosts, and sudo commands from a central console
+
+.*Objectives*
 * Install the IdM client on your client systems
 * Configure the client to be part of the IdM realm
-* Create users on the idm server and demonstrate single-sign-on
+* Create users on the IdM server and exercise SSO
 * Create user groups and assign users to those groups
 * Create host groups and assign hosts to those groups
 * Create sudo command groups that allow escalated privileges
-* Integrate user, host and sudo command groups into a policy
+* Integrate user, host, and sudo command groups into a policy
 
-We will be doing this lab exercise using the consoles for both your IdM server and clients. You will access the consoles and your lab environment's power control from the Lab GUID information UI page.
+== 8.1: Introduction
 
-== Introduction
-The IdM server is a 389 based server that has been configured to manage users, hosts, and sudo commands.  It is kerberos based and can operate as a standalone directory server, or can integrate with any LDAP compliant directory servers (e.g. Microsoft Active Directory).  IdM can also be configured to manage DNS for you Linux environment and provide for dynamic DNS updates.   Because the lab already provides DNS we will not have that enabled.  It will also be configured to create user home directories upon first login.
+In this lab, you configure clients to attach to an Identity Management in Red Hat^(R)^ Enterprise Linux (IdM) server. This lab environment already has an IdM server installed, and the lab focuses on registering and managing clients.
 
-== Lab 8.1 Attaching the Clients to the IdM Realm
-. Navigate to the *Lab information page* from the *Lab 0 Setup steps*. This page has your environment's power control and consoles. Click on the console for *IdM1*.
+You use the consoles for both your IdM server and clients. You access the consoles and your lab environment's power control from the Lab GUID information UI page.
+
+The IdM server is a 389-based server that is configured to manage users, hosts, and sudo commands. It is Kerberos-based and can operate as a standalone directory server or integrate with any LDAP-compliant directory servers such as Microsoft Active Directory. IdM can also be configured to manage DNS for your Linux environment and provide for dynamic DNS updates. Because the lab already provides DNS, you do not need dynamic DNS updates enabled.
+
+The IdM server is also configured to create user home directories upon first login.
+
+== 8.2: Attaching the Clients to the IdM Realm
+
+=== 8.2.1: Accessing the IdM Web Interface
+
+. Navigate to the *Lab information page* from the *Lab 0: Setup Steps* and click the console link for *IdM1*:
 +
 image:images/idm-console.png[300,300]
++
+This page has your environment's power control and consoles.
++
+Note that the *IdM1* system was installed with a GUI and already has an IdM server installed on it.
 
-. Notice that the *IdM1* system has been installed with a GUI.
-*IdM1* already has an IdM server installed on it.
-Login with username *admin* and *r3dh4t1!* as the password.
+. Log in with the *admin* username and *r3dh4t1!* as the password:
 +
 image:images/idm-login.png[400,400]
 
-. Navigate to the Firefox web browser (which is under  *Applications*). Open up the Firefox web browser and navigate to *https://idm1.example.com*. This is the UI for the IdM server. Login as *admin* with *r3dh4t1!* as the password. Take a quick glance around. We will revisit this IdM server GUI later in this exercise.
+. Open the Firefox web browser (under *Applications*) and navigate to link:https://idm1.example.com[https://idm1.example.com^]:
 +
 image:images/idm-initiallogin.png[500,500]
++
+This is the UI for the IdM server.
 
-. Next, we are going to attach our client servers to the IdM realm.  The servers we are going to attach are:
+. Log in as *admin* with *r3dh4t1!* as the password, and examine the interface.
++
+You revisit this IdM server GUI later in this exercise.
 
-* idm2.example.com
-* idm3.example.com
+=== 8.2.2: Attaching Client Servers to IdM Realm
 
-. The ipa-client package has already been installed for your convenience.  Next we are going to log into idm2 and idm3 and configure the client.
+In this section, you attach the *idm2.example.com* and *idm3.example.com* client servers to the IdM realm. (The `ipa-client` package is already installed for your convenience.) Then you log in to *idm2* and *idm3* and configure the clients.
 
-. Navigate to the Lab GUID information UI page again. This page has your environment's power control and consoles. Click on the consoles for *IdM2* and *IdM3*.
+. Navigate to the lab GUID information UI page again and click the console links for *IdM2* and *IdM3*:
 +
 image:images/idm2-console.png[200,200]
 image:images/idm3-console.png[200,200]
 
-. Log into *IdM2* as *root* with *r3dh4t1!* as the password.
+. Log in to *IdM2* as *root* with *r3dh4t1!* as the password.
 
-. Now, let's install the IdM client and configure the client to be part of the IdM realm.
-
-. In the console window for *IdM2*, type the following:
+. In the console window for *IdM2*, install the IdM client and configure the client to be part of the IdM realm:
 +
-[source]
 ----
 [root@idm2 ~]# ipa-client-install --mkhomedir --no-ntp
 ----
-. NOTE:
-* mkhomedir - this allows you to create a user home directory upon first login
-* no-ntp - our lab is using chronyd to synchronize time
-* In a production environment, you may want to mount home directories remotely so that there are no user accounts or home directories on your servers.
++
+`--mkhomedir` causes a user home directory to be created upon first login.
++
+`--no-ntp` indicates that the lab is using `chronyd` to synchronize time.
 
-. You will be asked a series of questions during the installation and configuration of your IdM client. Here are the answers to these questions:
++
+[TIP]
+====
+In a production environment, you may want to mount home directories remotely so that there are no user accounts or home directories on your servers.
+====
 
+. Enter the following responses for the installation and configuration of your IdM client:
 * Provide the domain name of your IPA server: *example.com*
 * Provide your IPA server name: *idm1.example.com*
 * Proceed with fixed values and no DNS discovery? *yes*
 * Continue to configure the system with these values? *yes*
 * User authorized to enroll computers: *admin*
-* Password for admin@EXAMPLE.COM: *r3dh4t1!*
+* Password for *admin@EXAMPLE.COM*: *r3dh4t1!*
 +
-NOTE: Had we been using IdM with embedded DNS, it would have auto discovered and input all parameters and simply asked us to confirm.
+[NOTE]
+====
+If using IdM with embedded DNS, all of the parameters and input are auto-discovered and simply require confirmation.
+====
 
-. Repeat the above steps 6-9 for *IdM3*. The *root* password for *IdM3* is also *r3dh4t1!*.
+. Repeat the previous steps to install and configure the IdM client on *IdM3*, logging in as *root* with *r3dh4t1!* as the password.
 
-. Your systems are now configured and enrolled in the IdM realm.  Let's verify enrollment of our 2 client systems.
+=== 8.2.3: Verifying Enrollment of Client Systems
 
-. Navigate back to *IdM1*. If you need to log back in, the password for the Administrator is *r3dh4t1!*. If your Firefox web browser was closed, open up the Firefox web browser and navigate to *https://idm1.example.com* (if you're not already there).
+Your systems are now configured and enrolled in the IdM realm. In this section, you verify enrollment of the two client systems.
 
-. Navigate to the *Identity* -> *Hosts* tab. Notice that both of our client systems, *idm2.example.com* and *idm3.example.com* are showing as Enrolled (in addition to our IdM server, *idm1.example.com*).
+. Navigate back to *IdM1*.
++
+If you need to log in again, the password for the administrator is *r3dh4t1!*.
 
+. If your Firefox web browser is closed, open it again and, if you are not already there, navigate to link:https://idm1.example.com[https://idm1.example.com^].
+
+. Navigate to the *Identity* -> *Hosts* tab.
++
+Note that both of your client systems, *idm2.example.com* and *idm3.example.com* (in addition to the IdM server, *idm1.example.com*) display as *Enrolled*:
++
 image:images/idm-01-hosts.png[700,700]
 
+== 8.3: Configuring a Simple User
 
+In this section, you create a user and exercise SSO.
 
-== Lab 8.2 Configuring a Simple User
-In this exercise we will create a user and demonstrate single-sign-on.
+.  Navigate back to the *IdM1* console.
++
+If you need to log in again, the password for the administrator is *r3dh4t1!*.
 
-.  Navigate back to the *IdM1* console. If you need to log back in, the password for the Administrator is *r3dh4t1!*. Open up the Firefox web browser and navigate to *https://idm1.example.com* (if you're not already there).
+. Open the Firefox web browser and navigate to link:https://idm1.example.com[https://idm1.example.com^] (if you are not already there).
 
-. Navigate to the *Identity* -> *Users* tab. Click on the *Add* button at the far right.
+. Navigate to the *Identity* -> *Users* tab and click *+Add*:
 +
 image:images/idm-02-user1.png[500,500]
 
-. Fill in the form with the following information:
+. Complete the form with the following information:
 
-* User login - *user1*
-* User first name - *User*
-* User last name - *One*
-* New password - *password* (initial password that will have to be changed on first logon)
-* Verify password - *password*
-
-* You do not need to fill in the other items on this form (Class, GID, etc)
-
+* *User login*: *user1*
+* *First name*: *User*
+* *Last name*: *One*
+* *New Password*: *password* (initial password that must be changed on first logon)
+* *Verify Password*: *password*
 +
 image:images/idm-03-user1.png[500,500]
++
+You do not need to fill in the other items on this form (such as *Class* and *GID*).
 
-. When you are done filling out the form, Press *Add*.
-
+. When you finish completing the form, click *Add*:
++
 image:images/idm-04-user1.png[500,500]
 
-
-. Navigate to the *Policy* -> *Host-Based-Access-Control* -> *HBAC Rules* tab.
+. Navigate to the *Policy* -> *Host-Based-Access Control* -> *HBAC Rules* tab:
 +
 image:images/idm-host-based-access-control.png[700,700]
-
 +
-NOTE: Notice the default *allow_all* policy, which allows access to all users and all hosts. This is something that we will delete shortly, but is good for testing for now.
+[NOTE]
+====
+The default *allow_all* policy allows access to all users and all hosts. This is something that you delete shortly, but is useful for testing for now.
+====
 
-. Navigate back to the console for *IdM2* (idm2.example.com). If you are still logged in as *root*, type *exit*. Now, login as follows:
-* username: user1
-* password: password
+. Navigate back to the console for *IdM2* (*idm2.example.com*), and if you are still logged in as *root*, type *exit*, and then log in as *user1* with the *password* password.
 
-. You will be prompted to change your initial password. Feel free to change your initial password to any new password that you can easily remember.
+. When prompted, change your initial password to any new password that you can easily remember.
++
+A home directory is automatically created for *user1*.
 
-* A home directory will be automatically be created for user1.
-
-. From the command line, verify that this local *user1* account does not exist in /etc/passwd. This is because IdM caches credentials locally in the sssd.
-[source]
+. From the command line, verify that this local *user1* account does not exist in `/etc/passwd`:
++
+----
 [user1@idm2 ~]$ grep user1 /etc/passwd
 [user1@idm2 ~]$ exit
+----
++
+This is because IdM caches credentials locally in the System Security Services Daemon (SSSD).
 
+== 8.4: Controlling User-Based Access
 
+In this section, you allow and then restrict access to hosts by specific users.
 
+.  Navigate back to the *IdM1* console.
++
+If you need to log in again, the password for the administrator is *r3dh4t1!*.
 
-== Lab 8.3 User Based Access Control
-In this exercise, we are going to allow/restrict access to hosts by user.
+. Open the Firefox web browser and, if not already there, navigate to link:https://idm1.example.com[https://idm1.example.com^].
 
-.  Navigate back to the *IdM1* console. If you need to log back in, the password for the Administrator is *r3dh4t1!*. Open up the Firefox web browser and navigate to *https://idm1.example.com* (if you're not already there).
+. Navigate to the *Policy* -> *Host-Based-Access-Control* -> *HBAC Rules* tab.
 
-. Navigate to the *Policy* -> *Host-Based-Access-Control* -> *HBAC Rules* tab
-. Click on the box next to the *allow_all* HBAC rule and press *Disable* at the far right. Press *Ok*.
+. For the HBAC rule name, select *allow_all* and click *Disable* on the right, then click *Ok*:
 +
 image:images/idm-05-policy.png[700,700]
-
-. The kerberos ticket you are currently holding may continue to allow/disallow access to a resource after you make a change to a resource on the IdM server.
-As a result, let's go ahead and clear cache for IdM2 and IdM3.
-
-. While there are ways to configure the cache for your specific needs, a quick way to clear the sssd cache is as the root user.  After clearing the cache, you will no longer be able to login. Do these steps on *IdM2* as the *root* user. Log back into *IdM2* as *root*. The password for the *root* user is *r3dh4t1!*.
 +
-[source]
+The Kerberos ticket that you are currently holding may continue to allow and disallow access to a resource after you make a change to a resource on the IdM server. As a result, you must clear the cache for *IdM2* and *IdM3*.
++
+While there are ways to configure the cache for your specific needs, a quick way to clear the SSSD cache is as the *root* user. After clearing the cache, you can no longer log in.
+
+. Stop the SSSD service, clear the cache, and restart the service on *IdM2* as the *root* user--logging back in to *IdM2* as *root* if necessary (using the password *r3dh4t1!*):
++
+----
 [root@idm2 ~]$ systemctl stop sssd.service
 [root@idm2 ~]$ sss_cache -E
 [root@idm2 ~]$ systemctl start sssd.service
+----
 
-. Clear the cache for *IdM3* as well by repeating the step above on *IdM3*.
+. Clear the cache for *IdM3* as well by repeating the previous step on *IdM3*.
 
-. Press the *Add* button at the far right to create a new rule that allows you access to a specific server. For the rule name, type any name of your choice (For example, *my_hbac_rule*).
+. On the right, click *+Add* to create a new rule that allows you access to a specific server, using any name you want for the rule--for example, *my_hbac_rule*.
 
-. Select the *Add and Edit* button to create and edit your rule.
-
+. Click *Add and Edit* to create and edit your rule:
 +
 image:images/idm-06-policy.png[700,700]
 
-. Under *Who*, click on the *+Add* button on the far right in the *Users* section. Press *Add*.
+. Under *Who*, click *+Add* on the far right in the *Users* section, then click *Add*:
 +
 image:images/idm-whoadd.png[700,700]
 
-. Click on the box next to *user1* and add them to the policy by clicking on the *>* button to move user1 from the *Available Users* section to the *Prospective Users* section.
-
+. Select *user1* and click the *>* button to move *user1* from the *Available Users* section to the *Prospective Users* section to add the user to the policy:
 +
 image:images/idm-07-policy.png[700,700]
 
-. Under *Accessing*, select the *+Add* button at the far right.
+. Under *Accessing*, click *+Add* at the far right:
 +
 image:images/idm-accessingadd.png[700,700]
 
-. Click on the box next to *idm2.example.com* and add it to the policy by clicking on the *>* button to move idm2.example.com from the *Available Hosts* section to the *Prospective Hosts* section. Press *Add*.
-
+. Select *idm2.example.com* and click the *>* button to move *idm2.example.com* from the *Available Hosts* section to the *Prospective Hosts* section, then click *Add* to add it to the policy:
 +
 image:images/idm-08-policy.png[700,700]
 
-. Under *Via Service*, select the *+Add* button at the far right.
+. Under *Via Service*, click *+Add* at the far right:
 +
 image:images/idm-viaservice.png[700,700]
 
-. Click on the box next to both *login* and *sshd* and add them to the policy by clicking on the *>* button to move them from the *Available HBAC Services* section to the *Prospective HBAC Services* section. Press *Add*.
+. Select *login* and *sshd* and click the *>* button to move them from the *Available HBAC Services* section to the *Prospective HBAC Services* section, then click *Add* to add them to the policy:
 
 +
 image:images/idm-09-policy.png[700,700]
 
-. Now, let's try logging into the *IdM2* server as *user1* with the password that you set previously. You should be able to successfully login as *user1* on *IdM2* since our policy that we just created above allows both login and ssh for user1 on idm2.example.com.
+. Attempt to log in to the *IdM2* server as *user1* with the password that you set previously.
++
+Expect to be able to successfully log in as *user1* on *IdM2* because the policy that you just created allows both login and SSH for *user1* on *idm2.example.com*.
 
-. Now, let's try logging into the *IdM3* server as *user1* with the password that you set previously. You should be restricted from logging into *IdM3* with a *Permission denied* error since this server is not in the policy that we created previously.
+. Attempt to log in to the *IdM3* server as *user1* with the password that you set previously.
++
+Expect to be restricted from logging in to *IdM3* with a *Permission denied* error because this server is not in the policy that you created previously.
 
-. Clear the cache on the server where you successfully logged in (IdM2). Log into *IdM2* from the console as *root* with password *r3dh4t1!* and execute the following commands below to clear the cache.
-[source]
+. Log in to *IdM2* from the console as *root* with password *r3dh4t1!*, and execute the following commands to clear the cache:
++
+----
 [root@idm2 ~]$ systemctl stop sssd.service
 [root@idm2 ~]$ sss_cache -E
 [root@idm2 ~]$ systemctl start sssd.service
+----
 
-. Now let's disable the policy to ready the system for the next exercise. Navigate to the *Policy* -> *Host-Based Access Control* -> *HBAC Rules* tab and click on the box next to the policy you created previously. Then, click on *Disable* on the far right.
+.  Navigate to the *Policy* -> *Host-Based Access Control* -> *HBAC Rules* tab, select *my_hbac_rule* and click *Disable* on the far right to disable the policy:
 +
-image:images/idm-disablepolicy.png[700,700]
+image:images/idm-disablepolicy.png[700,700]+
++
+The system is ready for the next section.
 
-== (Optional) Lab 8.4 User Group Based Access Control
-In this exercise we are going to restrict access to hosts by user group.
+== 8.5: (Optional) Controlling User Group-Based Access
 
-.  Navigate back to the *IdM1* console. If you need to log back in, the password for the Administrator is *r3dh4t1!*. Open up the Firefox web browser and navigate to *https://idm1.example.com* (if you're not already there).
+In this section, you restrict access to hosts by user group.
 
-. Navigate to the *Identity* -> *Groups* tab. Select *User Groups* under Group Categories on the left panel and add a group by pressing the *+Add* button.
+. Navigate back to the *IdM1* console.
++
+If you need to log in again, the password for the administrator is *r3dh4t1!*.
+
+. Open the Firefox web browser and, if you are not already there, navigate to link:https://idm1.example.com[https://idm1.example.com^].
+
+. Navigate to the *Identity* -> *Groups* tab, select *User Groups* on the left under *Group categories*, and click *+Add* to add a group:
 +
 image:images/idm-usergroups.png[700,700]
 
-. Provide a User Group name (For example, *my_user_group*) and press  the *Add and Edit* button.
+. Provide a user group name (for example, *my_user_group*), then click *Add and Edit*:
 +
 image:images/idm-10-group.png[700,700]
 
-. Add a user to your user group by pressing the *+Add* button.
+. Click *+Add* to add a user to your user group:
 +
 image:images/idm-add.png[700,700]
 
-. Click on the box next to *user1* and add it to your user group by clicking on the *>* button to move it from the *Available User login* section to the *Prospective User login* section. Press *Add*.
+. Select *user1* and click the *>* button to move it from the *Available User login* section to the *Prospective User login* section, then click *Add* it to your user group:
 +
 image:images/idm-11-group.png[700,700]
 
-. Navigate to the *Identity* -> *Groups* -> *Host Groups* tab. Click on the *+Add* button at the far right.
+. Navigate to the *Identity* -> *Groups* -> *Host Groups* tab and click *+Add*:
 +
 image:images/idm-hostgroups.png[700,700]
 
-. Enter a *Host-group* name (For example, my_host_group ) and Click on the *Add and Edit button*.
+. Enter a host group name (for example, *my_host_group*) and click *Add and Edit button*:
 +
 image:images/idm-12-group.png[700,700]
-. Then, press *+Add* on the Host Group page.
+
+. Click *+Add* on the *Host Group* page:
 +
 image:images/idm-add-my-hostgroup.png[700,700]
 
-. Click on the box next to *idm3.example.com* and add this host into your host group by clicking on the *>* button to move it from the *Available Host name* section to the *Prospective Host name* section. Press *Add*.
+. Select *idm3.example.com* and click the *>* button to move it from the *Available Host name* section to the *Prospective Host name* section, then click *Add* to add this host into your host group:
 +
 image:images/idm-13-group.png[700,700]
 
-. Navigate to the *Policy -> Host-Based-Access-Control -> HBAC Rules* tab. Press the *+Add* button at the far right.
+. Navigate to the *Policy -> Host-Based-Access-Control -> HBAC Rules* tab and click *+Add*:
 +
 image:images/idm-host-based-access-control-add.png[700,700]
 
-. Give the new HBAC Rule a name (For example, name it *my_group_hbac* ). Press *Add and Edit*.
+. Give the new HBAC rule a name (for example, *my_group_hbac*), then click *Add and Edit*:
 
 +
 image:images/idm-14-hbac.png[700,700]
 
-. Under the *Who* section, select your user group. Press *+Add*. Then, move your user group from the *Available User Groups* section into the *Prospective User Groups* section. Press *Add*.
+. Under the *Who* section, select your user group, click *+Add*, then move your user group from the *Available User Groups* section into the *Prospective User Groups* section and click *Add*:
 +
 image:images/idm-usergroup-add.png[700,700]
 image:images/idm-add-user-groups-into-hbac.png[700,700]
 
-. Under the *Accessing* section, select your host group. Press *+Add*. Then, move your host group from the *Available Host Groups* section to the *Prospective Host Groups* section. Press *Add*.
+. Under the *Accessing* section, select your host group, click *+Add*, then move your host group from the *Available Host Groups* section to the *Prospective Host Groups* section and click *Add*:
 +
 image:images/idm-accessing-hostgroup.png[700,700]
 image:images/idm-add-hostgroup-hbac.png[700,700]
 
-. Under the *Via Service* section, press *+Add* next to *Services*. Then, select *login* and *sshd* under *Available HBAC Services* and move that to *Prospective HBAC Services*.
+. Under the *Via Service* section, click *+Add* next to *Services*, then select *login* and *sshd* under *Available HBAC Services* and move them to *Prospective HBAC Services*:
 +
 image:images/idm-viaservice-add.png[700,700]
 image:images/idm-addservice-hbac.png[700,700]
 
-. Now, go back to your console for *IdM3* and login as *user1* with the password that you set. You should be able to logon to this server since it is specified in the your group HBAC policy that we created in this exercise.
+. Return to the *IdM3* console and log in as *user1* with the password that you set.
++
+Expect to be able to log in to this server because it is specified in the your group HBAC policy that you created in this section.
 
-. Navigate to your console for *IdM2* and login as *user1* with the password that you set. You should be restricted from logging into *IdM2* with a Permission denied error since *IdM2* is not in your group HBAC policy that we created in this exercise.
+. Navigate to your *IdM2* console and login as *user1* with the password that you set.
++
+Expect to be restricted from logging in to *IdM2* with a *Permission Denied* error because *IdM2* is not in your group HBAC policy that you created in this exercise.
 
-. Now, let's clear the cache on the server where you successfully logged in (IdM3). Log into *IdM3* from the console as *root* with password *r3dh4t1!* and execute the following commands below to clear the cache.
-[source]
+. Return to the *IdM3* console where you successfully logged in, log into *IdM3* as *root* using *r3dh4t1!* as the password, and execute the commands below to clear the cache:
++
+----
 [root@idm3 ~]$ systemctl stop sssd.service
 [root@idm3 ~]$ sss_cache -E
 [root@idm3 ~]$ systemctl start sssd.service
+----
 
+. Do not disable the policy because you are going to add to it in the next step.
 
-. Do not disable the policy because we are going to add to it in the next step
+== 8.6: (Optional) Creating `sudo` Command Groups
 
-Grouping users and hosts allows you to move users into and out of groups, thereby, inheriting and disinheriting access.  The real strength with this method comes in the next exercise where we create sudo command groups.  Rather than creating service accounts with shared passwords for a group of administrators, you can do the following:
+Grouping users and hosts allows you to move users into and out of groups, thereby inheriting and disinheriting access. In this section, where you create sudo command groups, you witness the clear advantage of using this method.
+
+Rather than creating service accounts with shared passwords for a group of administrators, you can do the following:
 
 * Add a user to a user group
-* That user will inherit access to a specific group of hosts
-* That user will also inherit escalated privileges required to perform their role on those hosts
-* That user’s activity will be logged centrally
+* That user inherits access to a specific group of hosts
+* That user also inherits escalated privileges required to perform their role on those hosts
+* That user’s activity is logged centrally
 
-== (Optional) Lab 8.5 Creating sudo Command Groups
-This exercise will build off the previous exercise by adding a sudo command group to the existing policy.  Therefore, in addition to having access to specific hosts, the users in the group will also be granted escalated privileges.  To simplify the demonstration, we will create a sudo command group with one command in it: the ability to execute yum.
+This section expands on the previous section by adding a sudo command group to the existing policy.  Therefore, in addition to having access to specific hosts, the users in the group are also granted escalated privileges. To simplify the lab, you create a sudo command group with one command in it--the ability to execute `yum`.
 
-. Before creating this to the policy, log into a server that your user (user1) has access to (*IdM3*) from the previous step to verify that you do not have access to escalate and run yum. Use the password that you set earlier for this user.
+. Before adding this to the policy, log in to a server that your user (*user1*) has access to (*IdM3*) from the previous step to verify that you do not have access to escalate and run `yum`:
 +
-[source]
+----
 [user1@idm3 ~]# sudo yum update
+----
++
+Use the password that you set earlier for this user.
 
-. Even though you type in the password that you set for *user1*, you will get a *Sorry, try again* error. After three attempts,  you will be prevented from trying further.
+. Even though you type in the password that you set for *user1*, you get a *Sorry, try again* error. After three attempts, you are prevented from trying further.
 
-.  Navigate back to the *IdM1* console. If you need to log back in, the password for the Administrator is *r3dh4t1!*. Open up the Firefox web browser and navigate to *https://idm1.example.com* (if you're not already there).
+.  Navigate back to the *IdM1* console.
++
+If you need to log in again, the password for the administrator is *r3dh4t1!*.
 
-. Navigate to *Policy -> Sudo* tab. Select *Sudo Commands*.
+. Open the Firefox web browser and navigate to link:https://idm1.example.com[https://idm1.example.com^].
+
+. Navigate to the *Policy -> Sudo* tab and select *Sudo Commands*:
 +
 image:images/idm-sudo-commands.png[700,700]
 
-. Click on *+Add* at the far right to add a command.
+. On the far right, click *+Add* to add a command:
 +
 image:images/idm-sudo-add.png[700,700]
 
-. For the Sudo Command, enter */usr/bin/yum*. Press *Add and Edit*.
+. For the sudo command, enter */usr/bin/yum*, then click *Add and Edit*:
 +
 image:images/idm-15-sudo.png[700,700]
 
-. Select *Sudo Command Groups* from the *Sudo* drop down. Press the *+Add* button at the far right to create a group.
+. From the *Sudo* menu, select *Sudo Command Groups* and click *+Add* at the far right to create a group:
 +
 image:images/idm-sudo-command-group.png[700,700]
 
-. Create a new group by providing a Sudo Command Group Name (For example, my_sudo_group). Press *Add and Edit*.
+. Create a new group by providing a *Sudo Command Group* name (for example, *my_sudo_group*), then click *Add and Edit*:
 +
 image:images/idm-16-sudo.png[700,700]
 
-. Press the *+Add* button.  Add the /usr/bin/yum command from the previous step from the *Available Sudo Command* section to the *Prospective Sudo Command* section. Press *Add*.
+. Click *+Add* and add the `/usr/bin/yum` command from the previous step from the *Available Sudo Command* section to the *Prospective Sudo Command* section, then click *Add*:
 +
 image:images/idm-17-sudo.png[700,700]
 
-. Select *Sudo Rules* from the *Sudo* drop down. Then, click on the *+Add* button on the far right to create a new rule.
+. Select *Sudo Rules* from the *Sudo* menu, then click *+Add* on the right to create a new rule:
 +
 image:images/idm-add-sudo-rules.png[700,700]
 
-. Provide a Sudo Rule Name (For example, my_sudo_rule). Press the *Add and Edit* button.
+. Enter a sudo *Rule name* (for example, *my_sudo_rule*), then click *Add and Edit*:
 +
 image:images/idm-18-sudo.png[700,700]
 
-. In the *Who* section, add your user group under *User Groups*. Press *+Add*.
+. In the *Who* section, add your user group under *User Groups*, then click *+Add*:
 +
 image:images/idm-whoadd2.png[1000,1000]
 
-. Next, select *my_user_group* from the list of *Available User Groups* and add it to the *Prospective User Groups* by pressing the > button. Press *Add*.
+. From the list of *Available User Groups*, select *my_user_group* and click the *>* button to add it to the *Prospective User Groups*, then click *Add*:
 +
 image:images/idm-addmyusergroup.png[500,500]
 
-. Add your host group under *Access this host -> Host Groups*. Press *+Add*.
+. Add your host group under *Access this host -> Host Groups*, then click *+Add*:
 +
 image:images/idm-add-host-group.png[700,700]
 image:images/idm-add-to-my-host-group.png[700,700]
 
-. In the *Run Commands* section, add your sudo group under *Sudo Allow Command Groups*. Press *+Add*.
+. In the *Run Commands* section, add your sudo group (*my_sudo_group* in this example) under *Sudo Allow Command Groups* and then click *+Add*:
 +
 image:images/idm-sudo-command.png[700,700]
 image:images/idm-add-sudo-commands.png[700,700]
 
-. Navigate to *Policy -> Host Based Access Control -> HBAC Rules*.
+. Navigate to *Policy -> Host Based Access Control -> HBAC Rules*:
 +
 image:images/idm-hbac.png[300,300]
 
-. Click on the rule you created earlier (*my_group_hbac*).
+. Click the *my_group_hbac* rule that you created earlier:
 
-. Navigate to *Via Service*. Click on *+Add* in the *Services* section. Next, select *sudo* from the list of *Available* HBAC Services and add it to the *Prospective HBAC Services* by pressing the > button. Now, you should see sudo as a service in addition to logon and sshd.
+. Navigate to *Via Service* and click *+Add* in the *Services* section.
+
+. From the list of *Available* *HBAC Services*, select *sudo* and click the *>* button to add it to *Prospective* *HBAC Services*:
 +
 image:images/idm-viaservice-add.png[800,800]
 image:images/idm-19-sudo.png[700,700]
-
-. Make sure you are logged out as user1 on *IdM3* and log back in as root and clear the cache.  The kerberos ticket held by user1 may may not be updated with the change to the rules we just made.
-
 +
-[source]
+Expect to see *sudo* as a service in addition to *logon* and *SSHD*.
+
+. Make sure that you are logged out as *user1* on *IdM3*, then log in again as *root* and clear the cache:
++
+----
 [root@idm2 ~]$ systemctl stop sssd.service
 [root@idm2 ~]$ sss_cache -E
 [root@idm2 ~]$ systemctl start sssd.service
-
-
-. Log back into the server that your user (user1) has access to (*IdM3*) from the previous step to verify that you do have access to escalate and run yum. Use the password that you set earlier for this user.
+----
 +
-[source]
+The Kerberos ticket held by *user1* may not be updated with the change to the rules that you just made.
+
+. Using the password for this user that you set earlier, log in again to the server that your user (*user1*) has access to (*IdM3*), and verify that you have access to escalate, by running `yum`:
++
+----
 [user1@idm3 ~]# sudo yum update
-
+----
 +
-NOTE:
-You could have simplified this by adding a user and a command rather than a user group and command group. However, what we want to show is how you can group users, hosts, and sudo commands into one policy, which allows you to add and remove users that will inherit and dis-inherit access respectively.
-
+[NOTE]
+====
+You can simplify this by adding a user and a command rather than a user group and command group. However, this lab attempts to illustrate how you can group users, hosts, and sudo commands into one policy, which allows you to add and remove users that inherit and disinherit access, respectively.
+====
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab9_GPG.adoc[ Lab 9: GNU Privacy Guard ]
+link:README.adoc#table-of-contents[ Table of Contents^] | link:lab9_GPG.adoc[Lab 9: GNU Privacy Guard^]
+
