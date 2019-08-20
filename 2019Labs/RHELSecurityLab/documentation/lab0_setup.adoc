@@ -5,9 +5,8 @@
 
 In this lab, you access your dedicated lab environment using a unique GUID provided to you.
 
-:numbered:
 
-== Accessing Your Dedicated Lab Environment
+== 0.1: Accessing Your Dedicated Lab Environment
 
 . On your Red Hat^(R)^ Summit-provided laptop, go to the link:https://www.opentlc.com/gg/gg.cgi?profile=generic_summit[Lab GUID Assignment page^], which is already loaded into your Firefox web browser.
 
