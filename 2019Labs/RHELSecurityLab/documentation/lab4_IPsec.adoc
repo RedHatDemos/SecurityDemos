@@ -3,22 +3,19 @@
 
 == Lab 4: Cloud Encryption Using RHEL Opportunistic IPsec
 
-:numbered:
-
-== Introduction
-
-.Lab Length
+.*Lab Length*
 * Medium/Average
 
-.Goal
-Learn how to deploy Opportunistic IPsec to encrypt all host-to-host communication
+.*Goal*
+* Learn how to deploy Opportunistic IPsec to encrypt all host-to-host communication
 within an enterprise network
 
-.Objectives
+.*Objectives*
 * Generate X.509 certificates using a Python helper script
 * Configure Opportunistic IPsec on two or more nodes
 * Debug and monitor the network for IPsec encryption
 
+== 4.1: Introduction
 Whenever two hosts in the network send any kind of
 traffic, IPsec security automatically activates and encrypts all
 traffic between those hosts. This is also called mesh encryption.
@@ -36,7 +33,7 @@ you can use another X.509 certificate and repeat the process for any
 other provided lab VM. But be careful--if you misconfigure IPsec
 and do not allow fallback to cleartext, you can lock yourself out of a VM.
 
-== Creating and Installing X.509 Certificates
+== 4.2: Creating and Installing X.509 Certificates
 
 In this section, you generate the required X.509 certificates. To make this
 easier, a script (`/root/vpn-cert-gen.py`) provided on *ipsec.example.com* generates x.509 certificates for *ipsec.example.com* and
@@ -91,9 +88,9 @@ this mesh host-to-host encryption using Opportunistic IPsec.
 Due to security issues, the certificates must have a `SubjectAltName` specifying the IP address they are using, to prevent one machine from impersonating another. Because `my_sudo_group` does not have full reverse DNS and DNSSEC in this lab, `libreswan` cannot link the IP address to the host name securely. This is why the Python script hard-codes the IP address in the `SubjectAltName` of the X.509 certificate.
 ====
 
-== Configuring Opportunistic IPsec
+== 4.3: Configuring Opportunistic IPsec
 
-=== Installing and Initializing `libreswan` and Importing the Certificate
+=== 4.3.1: Installing and Initializing `libreswan` and Importing the Certificate
 
 . Install `libreswan` and initialize the certificate database using the following commands to first set up *ipsec.example.com*:
 +
@@ -126,7 +123,7 @@ mycert                                                       u,u,u
 Certificate Agency (CA) - Test Org                           CT,,
 ----
 
-=== Configuring Hosts for IPsec
+=== 4.3.2: Configuring Hosts for IPsec
 
 In this section, you configure the *ipsec.example.com* and *ipsec2.example.com* hosts
 for IPsec. For these two hosts, the configuration file is already created for
@@ -191,7 +188,7 @@ for the required packets for IPsec:
 [root@ipsec ~]# firewall-cmd --reload
 ----
 
-== Transferring the Configuration to a Second System
+== 4.4: Transferring the Configuration to a Second System
 
 In this section, you configure the next machine, *ipsec2.example.com*. Because the
 *ipsec.example.com* host contains all of the certificates, you must copy the
@@ -250,7 +247,7 @@ as the new nodes. Because all of the configuration files (other then the PKCS#12
 identical on all or the nodes, in a production setting, you should be able to populate new nodes
 using Ansible^(R)^.
 
-== Using Opportunistic IPsec
+== 4.5: Using Opportunistic IPsec
 
 You are now ready to test the configuration.
 
@@ -302,7 +299,7 @@ A more verbose command is:
 
 Your two nodes now have an IPsec-encrypted mesh network running.
 
-== Troubleshooting (Optional)
+== 4.6: Troubleshooting (Optional)
 
 . If you think something went wrong and the `ipsec status` command does not show you
 the `private`, `private-or-clear`, and `clear-or-private` connections (and their
@@ -398,7 +395,7 @@ services on your cluster on every startup--on each node run:
 
 For more information on Opportunistic IPsec, see link:https://libreswan.org/wiki/Main_Page[Opportunistic IPsec^].
 
-== Resetting the IPsec NSS Certificate Database (Optional)
+== 4.7: Resetting the IPsec NSS Certificate Database (Optional)
 
 Libreswan uses the NDD cryptographic library. It keeps all of its X.509
 certificates and keys in its own NSS database in `/etc/ipsec.d`.
