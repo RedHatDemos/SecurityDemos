@@ -3,28 +3,26 @@
 
 == Lab 2: Security Enhanced Linux (SELinux)
 
-:numbered:
 
-== Introduction
-
-.Lab Length
+.*Lab Length*
 * Long
 
-.Goal
+.*Goal*
 Use Security Enhanced Linux^(R)^ (SELinux) to mitigate attacks that exploit privilege escalation vulnerabilities
 
+== 2.1: Introduction
 Security Enhanced Linux (SELinux) can help proactively mitigate systems from the consequences of exploits during the window of vulnerability--that period of time after an exploit is discovered and before a security fix is released. This protection is provided by defining SELinux policies on your systems.
 
 * In the first and second sections of the lab, you assume the role of a hacker and exploit vulnerabilities on given Red Hat^(R)^ Enterprise Linux^(R)^ 7 and Fedora systems, and then you explore how SELinux can help to protect these systems.
 * In the third section, you use Ansible^(R)^ to turn SELinux on for an environment of web servers in an automated fashion.
 * In the last section, you configure SELinux according to a U.S. Department of Defense STIG security control policy rule.
 
-.SELinux Policy
+=== 2.1.1: SELinux Policy
 SELinux *isolates* all of the processes running on the system to *mitigate* attacks that take advantage of privilege escalation vulnerabilities. A privilege escalation vulnerability exists whenever a process gains more access rights than it is allowed to have. To prevent this, SELinux enforces a Mandatory Access Control (MAC) policy over processes running on the system. It labels every process, file, or directory according to rules specified in a security policy known as the SELinux policy. The policy also specifies how processes interact with each other and how they can access files and directories. SELinux denies every action that it is not explicitly allowed by the policy.
 
 In the following sections, you see examples where using this process isolation can help protect you from an exploit of a privilege escalation vulnerability.
 
-.Shellshock Vulnerability and SELinux
+=== 2.1.2: Shellshock Vulnerability and SELinux
 The Shellshock vulnerability is a `bash` exploit that adds a command after the `env` variable in a command, which allows an attacker to execute arbitrary code. The following image shows an example of the `bash` exploit on an Apache server:
 
 image:images/lab2-shellshock-1.png[]
@@ -43,7 +41,7 @@ While the attacker can execute the CGI script, the attacker is not able to acces
 
 The following sections describe how types provide process separation and how SELinux is able to mitigate the exploit's effects.
 
-== Exploiting Red Hat Enterprise Linux 7 with Shellshock Vulnerability
+== 2.2: Exploiting Red Hat Enterprise Linux 7 with Shellshock Vulnerability
 
 In this part of the lab, you assume the role of a hacker and exploit Red Hat Enterprise Linux 7 (RHEL 7) using the Shellshock vulnerability.
 
@@ -51,7 +49,7 @@ As an administrator of Red Hat Enterprise Linux servers, you want to enable SELi
 
 In this section, you exploit a RHEL system first with SELinux in permissive mode and again with SELinux in enforcing mode. You then analyze the SELinux denials.
 
-=== Logging in to the System and Navigating to the SELinux Scripts Directory
+=== 2.2.1: Logging in to the System and Navigating to the SELinux Scripts Directory
 
 In this section, you log in to the *selinux1.example.com* system and navigate to the SELinux scripts directory.
 
@@ -79,7 +77,7 @@ NOTE: You can find copies of these `selinux_scripts` at this link:https://github
 
 . Repeat the previous steps in this section on a second terminal that is also connected to *selinux1.example.com*.
 
-=== Exploiting the System with SELinux in Permissive Mode
+=== 2.2.2: Exploiting the System with SELinux in Permissive Mode
 
 In this section, using the two terminal shells that you opened on *selinux1.example.com*, you listen on TCP port 9999 (in the first shell) and execute the exploit script (in the second).
 
@@ -142,7 +140,7 @@ The `uname` command prints system information. You can see the *selinux4.example
 +
 These commands indicate that the attack succeeded.
 
-=== Exploiting the System with SELinux in Enforcing Mode
+=== 2.2.4: Exploiting the System with SELinux in Enforcing Mode
 
 The victim server (*selinux4*) has been running SELinux in permissive mode. In this section, you switch SELinux to enforcing mode and then repeat the attack.
 
@@ -169,7 +167,7 @@ Ncat: Listening on 0.0.0.0:9999
 +
 This time there is no `bash` prompt on the terminal where you executed the `nc` command. This is because SELinux blocked this access.
 
-=== Analyzing the SELinux Denial
+=== 2.2.5: Analyzing the SELinux Denial
 
 In this section, you analyze what happened and why SELinux blocked the Shellshock exploit.
 
@@ -183,7 +181,7 @@ type=AVC msg=audit(1524909646.681:86): avc:  denied  { name_connect } for  pid=2
 +
 This is the AVC record from the *audit* daemon. It says that the CGI script, called `bashbug.sh` (labeled as `httpd_sys_script_t`) tried to connect to TCP port 9999 (labeled as `jboss_management_port_t`). There is no `allow` rule for this access, so the kernel denied access. This demonstrates that SELinux mitigated this attack.
 
-== Exploiting Fedora 27 with a Runcescape Vulnerability
+== 2.3: Exploiting Fedora 27 with a Runcescape Vulnerability
 
 The CVE-2019-5736 `runc` escape is the latest vulnerability in the area of containers. It is a privilege escalation vulnerability that allows arbitrary code execution as *root* when a malicious process inside a container escapes from the container namespace and executes on the host system. Because any container can contain a malicious process, a container can gain root access to the entire system when a system administrator starts that container.
 
@@ -203,7 +201,7 @@ This lab exercise consists of three key parts:
 * Exploiting a Fedora system with SELinux in _permissive_ mode
 * Analyzing SELinux denials
 
-=== Logging in to the *selinux6.example.com* System and Navigating to the `selinux` Directory
+=== 2.3.1: Logging in to the *selinux6.example.com* System and Navigating to the `selinux` Directory
 
 The exploit is executed from the *selinux6.example.com* system.
 
@@ -227,7 +225,7 @@ The exploit is executed from the *selinux6.example.com* system.
 +
 NOTE: You can find copies of these `selinux_scripts` at this  link:https://github.com/RedHatDemos/SecurityDemos/tree/master/2019Labs/RHELSecurityLab/scripts/selinux_scripts[Red Hat GitHub security demos link^].
 
-=== Reproducing the Attack
+=== 2.3.2: Reproducing the Attack
 
 In this section, you reproduce the attack. First, you verify the state of the host system, then you prepare the environment, and finally you execute the program within the container.
 
@@ -277,7 +275,7 @@ Due to the nature of the attack, it may be necessary to execute the last command
 
 . Execute the `docker exec -it pwnme /bin/bash` command multiple times.
 
-=== Analyzing the SELinux Denial
+=== 2.3.3: Analyzing the SELinux Denial
 
 In this section, you analyze what happened and why SELinux blocked the `runc` escape exploit.
 
@@ -290,7 +288,7 @@ type=AVC msg=audit(1554464510.001:479): avc:  denied  { write } for  pid=5190 co
 +
 This is the AVC record from the *audit* daemon. It says that a malicious process inside the *bad_init* container (labeled `container_t`) is trying to modify the *docker-runc-current* container (labeled as `container_runtime_exec_t`) on the host system. SELinux blocked this clearly malicious behavor.
 
-=== Repeating the Attack in Permissive Mode
+=== 2.3.4: Repeating the Attack in Permissive Mode
 
 The *selinux6* system has been running SELinux in enforcing mode. In this section, you switch SELinux to permissive mode and then you repeat the attack with SELinux in permissive mode.
 
@@ -352,7 +350,7 @@ The payload creates a file named `HACKED` in the root file system.
 +
 Note the `HACKED` file. This is simply an example--a real exploit, rather than merely creating a file in the `/` directory, would have allowed arbitrary and far more dangerous code execution as *root*.
 
-== Enabling SELinux via Ansible
+== 2.4: Enabling SELinux via Ansible
 
 SELinux brings additional security to an environment and often needs to be modified to reflect the current environment configuration. In such cases, SELinux can be switched during debugging to permissive mode so that it does not block the basic functionality of the system. In permissive mode, you can run the system for some time to debug all possible SELinux AVC denials. Once you have adjusted the rules to handle all of the desired functionality, you can switch SELinux back to enforcing mode.
 
@@ -360,7 +358,7 @@ There are many ways to view or modify the installed SELinux policy. In this sect
 
 More specifically, you enable SELinux in your environment, which consists of an Apache server using both custom and standard paths for web files, so that the Apache server is fully confined by SELinux. You do this by using the SELinux system roles feature as an Ansible role to configure SELinux in an automated fashion.
 
-=== Setting Up Environment
+=== 2.4.1: Setting Up Environment
 
 In this section, you have an environment with Apache web servers, where both default and custom paths for Apache web files are used. Specifically:
 
@@ -389,12 +387,12 @@ The SELinux part of the lab environment consists of four machines:
 
 The first *selinux1.example.com* host is used as an administrative interface to set up the other hosts, where you complete all of the configuration steps.
 
-=== Reviewing Setup Steps (Preconfigured)
+=== 2.4.2: Reviewing Setup Steps (Preconfigured)
 
 [IMPORTANT]
 All of the steps in this _Setup Steps_ section have already been performed in the lab environment for you. They are described here for informative purposes, and must be executed _only_ if you use the revert script for this lab.
 
-==== Viewing Basic Preconfigured Environment
+==== 2.4.2.1: Viewing Basic Preconfigured Environment
 
 In this section, you explore what is already configured for you in this part of the lab.
 
@@ -442,7 +440,7 @@ selinux3
 selinux5
 ----
 
-==== Testing Preconfigured Apache Web Servers with SELinux Disabled
+==== 2.4.2.2: Testing Preconfigured Apache Web Servers with SELinux Disabled
 
 The Apache web servers are already set up using the `setup-webserver.yml` playbook, which was executed on the *selinux2*, *selinux3*, and *selinux5* hosts. SELinux is also turned off.
 
@@ -517,7 +515,7 @@ This playbook performs the following actions for all of the hosts mentioned in t
 ----
 
 
-=== Testing the Preconfigured Setup
+=== 2.4.3: Testing the Preconfigured Setup
 
 . Test the preconfigured setup steps:
 +
@@ -559,7 +557,7 @@ Disabled
 Disabled
 ----
 
-=== Turning SELinux On
+=== 2.4.4: Turning SELinux On
 
 . Set SELinux to _permissive_ mode and relabel the entire file system:
 +
@@ -601,7 +599,7 @@ avc:  denied  { open } for  pid=778 comm="httpd" path="/var/www_new/html/index.h
 avc:  denied  { getattr } for  pid=778 comm="httpd" path="/var/www_new/html/index.html" dev="dm-0" ino=8751871 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1
 ----
 
-=== SELinux Troubleshooting
+=== 2.4.5: SELinux Troubleshooting
 In the previous section, you enabled SELinux and AVC denials occurred. Denial messages are logged when SELinux denies access. In this section, you investigate why these denials occurred.
 
 SELinux troubleshooting can be performed on both the *selinux2* and *selinux3* hosts. You use the *selinux2* host in the following examples.
@@ -612,7 +610,7 @@ SELinux troubleshooting can be performed on both the *selinux2* and *selinux3* h
 [root@selinux1 selinux_scripts]# ssh root@selinux2
 ----
 
-==== Checking SELinux Port
+==== 2.4.5.1: Checking SELinux Port
 
 . Verify that SELinux `httpd_t` process domain used for Apache web servers is not able to bind to *TCP/7070* port by default:
 +
@@ -628,7 +626,7 @@ There is no default rule for this access in the SELinux policy on the RHEL-7 *se
 [root@selinux2 ~]# sesearch -A -s httpd_t -c tcp_socket -p name_bind | grep httpd_t
 ----
 
-==== Checking SELinux File Context
+==== 2.4.5.2: Checking SELinux File Context
 
 The SELinux `httpd_t` process domain used for Apache web servers is not able to read a general `/var` content with the SELinux `var_t` file type.
 
@@ -652,7 +650,7 @@ The SELinux `httpd_t` process domain used for Apache web servers is not able to 
 [root@selinux2 ~]# exit
 ----
 
-=== Viewing and Executing the SELinux `setup-selinux.yml` Ansible Playbook
+=== 2.4.6: Viewing and Executing the SELinux `setup-selinux.yml` Ansible Playbook
 
 In this section, you examine and then execute an Ansible Playbook that switches SELinux to enforcing mode and applies all of the required changes for your web servers' configurations.
 
@@ -727,7 +725,7 @@ All web servers are bound to the custom *TCP/7070* port in the configuration. Th
 ----
 
 
-=== Viewing SELinux Configuration Changes
+=== 2.4.7: Viewing SELinux Configuration Changes
 
 . Test and view all of the recent SELinux configuration changes:
 +
@@ -761,7 +759,7 @@ All web servers are bound to the custom *TCP/7070* port in the configuration. Th
 	<h1>Custom Document Root</h1>
 ----
 
-=== Reverting Script
+=== 2.4.8: Reverting Script
 
 This `revert` script is needed to proceed to the next lab section (or if you plan to repeat the lab again from the beginning). Additionally, all of the steps in the _Setup Steps_ section mentioned in the beginning of this lab must be executed, with the exception of the package installation steps.
 
@@ -784,7 +782,7 @@ selinux5
 [root@selinux1 selinux_scripts]# ansible-playbook -i inventory -u root revert-all.yml
 ----
 
-== Setting Up a System with SELinux Confined Users
+== 2.5: Setting Up a System with SELinux Confined Users
 
 As an enterprise system administrator, you may want your systems to follow the U.S. Department of Defense STIG security rule V-71971 so that your system is fully confined without unconfined users.
 In addition, you may want to have only one administrator user who can become *root* and manage the system, and to limit the access of other users.
@@ -797,7 +795,7 @@ This lab section is comprised of three key parts:
 * Confining Linux root users
 * Using the revert script
 
-=== Confining Regular Linux Users
+=== 2.5.1: Confining Regular Linux Users
 
 . Execute the `revert` script if you did not do this in the previous section:
 +
@@ -828,7 +826,7 @@ All actions are performed on the *selinux5* host, which is a RHEL 7.5 system.
 +
 Users are mapped to `unconfined_u` by default.
 
-==== Changing the Default Mapping
+==== 2.5.1.1: Changing the Default Mapping
 
 . Modify the record with `+__default__+`, which represents all of the users without an explicit mapping, to change the mapping of all Linux users:
 +
@@ -839,7 +837,7 @@ Users are mapped to `unconfined_u` by default.
 +
 *system_u* is a special user used only for system processes and is not listed.
 
-==== Adding a Test User
+==== 2.5.1.2: Adding a Test User
 
 After this, when users who are not *root* log in, their processes run in the `user_t` domain.
 
@@ -952,7 +950,7 @@ User_u:user_r:user_t:s0
 +
 Because SELinux denials are not enforced in permissive mode, `user42` can become *root*. But you can see that the context stayed `user_t` and did not change to `unconfined_t`.
 
-=== Confining the Administrator
+=== 2.5.2: Confining the Administrator
 
 There are two basic methods for confining the administrator user:
 
@@ -1093,7 +1091,7 @@ staff_u:sysadm_r:sysadm_t:s0-s0:c0.c1023
 [admin2@selinux5 ~]# exit
 ----
 
-=== Reverting Script
+=== 2.5.3: Reverting Script
 
 In this section, you use a `revert` script to restore the default SELinux user's configuration.
 
