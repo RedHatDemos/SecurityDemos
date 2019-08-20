@@ -1,7 +1,7 @@
 
 :toc2:
 
-= Lab 3: Network Bound Disk Encryption (NBDE)
+= Lab 3: Secure Decryption of LUKS-Encrypted Volumes Using Network Bound Disk Encryption (NBDE)
 
 .*Lab Length*
 * Medium/Average
