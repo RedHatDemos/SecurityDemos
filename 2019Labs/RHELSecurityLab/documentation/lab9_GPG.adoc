@@ -1,98 +1,130 @@
-== Lab 9: GNU Privacy Guard (GPG)
+:toc2:
+:linkattrs:
 
-*Lab Length: Short*
+= Lab 9: GNU Privacy Guard (GPG)
 
-=== Goal of Lab
-The goal of this lab exercise is to introduce you to GNU Privacy Guard (GPG), which can be used to identify yourself and encrypt your communications.
+.*Lab Length*
+* Short
 
-There are various tools that you can use to manage GPG on your system, graphical as well as command line.  We will use the command line tools for the steps in this exercise.
+.*Goal*
+* Become familiar with GNU Privacy Guard (GPG), which can be used to identify yourself and encrypt your communications.
 
-This exercise will demonstrate a simple use case in which you encrypt personal documents.  You can build on what you have learned by using your key to sign documents, encrypt email communications. sign RPM packages, or simply share documents with a colleague.
+* There are various tools you can use to manage GPG on your system--graphical as well as command line. You use the command line tools for the steps in this lab.
 
-=== Introduction
-All Red Hat Enterprise Linux packages are signed with the Red Hat GPG key. GPG stands for GNU Privacy Guard, or GnuPG, a free software package used for ensuring the authenticity of distributed files. For example, a private key (secret key) locks the package while the public key unlocks and verifies the package. If the public key distributed by Red Hat Enterprise Linux does not match the private key during RPM verification, the package may have been altered and therefore cannot be trusted.
+* This lab demonstrates a simple use case where you encrypt personal documents. You can build on what you have learned by using your GPG key to sign documents, encrypt email communications, sign RPM packages, or simply share documents with a colleague.
 
-GNU Privacy Guard (GPG) is a cryptographic software package that is included in your Red Hat Enterprise Linux subscription.  GPG is used to identify yourself and encrypt and authenticate your communications, including those with people you do not know. GPG allows anyone reading a GPG-signed email to verify its authenticity. In other words, GPG allows someone to be reasonably certain that communications signed by you actually are from you. GPG is useful because it helps prevent third parties from altering code or intercepting conversations and altering the message.
+== 9.1: Introduction
 
-GPG can also be used to encrypt files at rest, which will be the focus of this lab exercise.
+All Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL) packages are signed with the Red Hat GPG key. GPG is also known as GnuPG, a free software package used for verifying the authenticity of distributed files. For example, a private key (secret key) locks the package while the public key unlocks and verifies the package. If the public key distributed by Red Hat Enterprise Linux does not match the private key during RPM verification, the package may have been altered and therefore cannot be trusted.
 
-This lab exercise will allow you to become comfortable with some the basics of GPG, after which point, you can delve further into the documentation to use more advanced features. These include signing RPM packages, encrypting email communications, and more.
+GPG is a cryptographic software package that is included in your Red Hat Enterprise Linux subscription. GPG is used to identify yourself and to encrypt and authenticate your communications, including those with people you do not know. GPG allows anyone reading a GPG-signed email to verify its authenticity. In other words, GPG allows the recipient to be reasonably certain that communications signed by you are actually from you. GPG is useful because it helps prevent third parties from altering code or intercepting conversations and altering messages.
 
-More information can be found on the https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-encryption#sec-Creating_GPG_Keys[Red Hat Enterprise Linux 7 Security Guide] and on the https://gnupg.org/index.html[GNU Privacy Guard webpage].
+GPG can also be used to encrypt files at rest, which is the focus of this lab.
 
+This lab allows you to become comfortable with some the basics of GPG, after which you can delve further into the documentation to use more advanced features. These include signing RPM packages, encrypting email communications, and more.
 
-=== Lab 9.1 Generating a New Key Pair
-Once you have created a new key pair, you can export these keys to identify yourself to the rest of the world, or simply use it locally to encrypt your files at rest.
+More information can be found on the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-encryption#sec-Creating_GPG_Keys[Red Hat Enterprise Linux 7 Security Guide^] and on the link:https://gnupg.org/index.html[GNU Privacy Guard webpage^].
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
+== 9.2: Generating a New Key Pair
+
+In this section, you generate a new GPG key pair. After you create a new key pair, you can export this keys to identify yourself to the rest of the world, or simply use it locally to encrypt your files at rest.
+
+. If you are not already there, log in to the workstation bastion host as *lab-user* from your desktop system (replacing `GUID` with your lab-provided GUID and using *r3dh4t1!* as the password):
 +
-[source]
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
-. Log into the *servera.example.com* host as *root*.
+. Log in to the *servera.example.com* host as *root*:
 +
-[source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@servera.example.com
 ----
 
-. Now let's generate your new key pair as *root* on *servera.example.com*.
+. Generate your new key pair as *root* on *servera.example.com*:
++
+----
+[root@servera ~]# gpg2 --full-generate-key
+----
 
-	[root@servera ~]# gpg2 --full-generate-key
+. When asked, enter or provide this information:
+* *Key Type*: *(1)* to select the default, RSA is the default
+* *Key Size*: *2048*
+* *Expiration*: *0* for no expiration, this is generally fine for local encryption
+* *Real Name*: *labuser*, but this can be anything
+* *Email address*: *labuser@test.com*, but this can be any email address
+* *Comment*, press *Enter* to leave the comment empty
+* *Okay/Quit*: *(O)*
+* *Passphrase*: A sufficiently difficult passphrase that can protect against attack and that you can remember
++
+After providing these details, your system starts generating the key pair.
 
-. You will be asked to provide the following information:
+. When asked, move your mouse or type random keystrokes to assist in generating entropy.
++
+Eventually, the process completes and the new key pair is ready for you to use. The output lists your key and your fingerprint.
 
-* Key Type - RSA is the default. Type *(1)* to pick this.
-* Key Size - Type *2048*.
-* Expiration - Type *0* for no expiration. This is generally fine for local encryption
-* Real Name: Type *labuser*. This can be anything.
-* Email address: labuser@test.com. This can be any email address.
-* For *Comment*, just press enter to have a blank comment.
-*  Type (O) for Okay/Quit.
-* Passphrase: Type anything you want and can remember. Make this hard enough to protect against attacks.
+. Run these commands, which may be useful at a later time when you want to view your keys and fingerprints:
++
+----
+[root@servera ~]# gpg2 --list-keys
+[root@servera ~]# gpg2 --fingerprint
+----
++
+The contents of your key is stored in your home directory in the file `.gnupg`. Even if someone were to compromise your computer, this would be of no use to them as long as your passphrase is sufficiently hard to crack. That said, always maintain a backup.
 
+== 9.3: Encrypting Documents
+In this section, you encrypt and decrypt a document for private use.
 
-. At this point you system will start generating the key pair.  You will be asked to assist in helping generate entropy by moving your mouse or typing random keystrokes.  Eventually it will complete and you will have your new key pair that you can now use.  The output will list your key and your fingerprint.  If you wish to view them at a later time, run the following commands:
+. Type the following to create a document with sensitive information:
++
+----
+[root@servera ~]# echo “I love Red Hat” > sensitive.txt
+----
 
-	[root@servera ~]# gpg2 --list-keys
-	[root@servera ~]# gpg2 --fingerprint
+. Verify that you can read the document in its unencrypted format:
++
+----
+[root@servera ~]# cat sensitive.txt
+----
 
-The contents of your key is stored in your home directory at .gnupg.  Even if someone were to compromise your computer, this would be of no use to them as long as your passphrase is sufficiently hard to crack.  That said, always maintain a backup.
+. Encrypt the file by typing the following command and, when asked, enter the user ID you used when creating your key, followed by a carriage return to complete the task:
++
+----
+[root@servera ~]# gpg2 -e sensitive.txt
+----
++
+You now have a new file entitled `sensitive.txt.gpg`. The `.gpg` extension indicates that it is a file that was encrypted with a GPG key.
 
-=== Lab 9.2 Encrypting Documents
-In this step we will show you how to encrypt and un-encrypt a document for private use.  We will start by creating a document with sensitive information.
+. Verify the encryption:
++
+----
+[root@servera ~]# cat sensitive.txt.gpg
+----
+Note that the output is encrypted and cannot be read.
 
-. Please type the following:
+. Invoke the following command, which prompts you for the passphrase you created earlier to read the file:
++
+----
+[root@servera ~]# gpg2 -d sensitive.txt.gpg
+----
 
-	[root@servera ~]# echo “I love Red Hat” > sensitive.txt
-
-. To verify that you can read the document in it’s un-encrypted format, type the following:
-
-	[root@servera ~]# cat sensitive.txt
-
-. Now we can encrypt the file by typing the following command. You will be asked to enter the User ID you used when creating your key, followed by a carriage return to complete the task.
-
-	[root@servera ~]# gpg2 -e sensitive.txt
-
-. You now have a new file entitled sensitive.txt.gpg.  The .gpg extension indicates that it is a file that has been encrypted with a GPG key.  Verify the encryption by typing the following:
-
-	[root@servera ~]# cat sensitive.txt.gpg
-
-. You will see that the output is encrypted and cannot be read.  You can read this file by typing the following command, which will prompt you for the passphrase you created earlier:
-
-	[root@servera ~]# gpg2 -d sensitive.txt.gpg
-
-. Next, we will delete the original file and then recreate it in its un-encrypted format from the encrypted file:
-
-	[root@servera ~]# rm sensitive.txt
-	[root@servera ~]# gpg2 sensitive.txt.gpg
-	[root@servera ~]# ls -l sensitive*
-
-. You now have a new copy of your original file.  Also, note that during an active session, you may not be asked to provide a passphrase within a period of time.  You can modify the duration of the cache.  View the GPG documentation at the link provided earlier for more information.
+. Delete the original file and then recreate it in its unencrypted format from the encrypted file:
++
+----
+[root@servera ~]# rm sensitive.txt
+[root@servera ~]# gpg2 sensitive.txt.gpg
+[root@servera ~]# ls -l sensitive*
+----
++
+You now have a new copy of your original file.
++
+[NOTE]
+====
+During an active session, you may not be asked to provide a passphrase within a period of time. You can modify the duration of the cache. View the GPG documentation at the link provided earlier for more information.
+====
 
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab10_firewalld.adoc[ Lab 10: Firewalld ]
+link:README.adoc#table-of-contents[Table of Contents^] | link:lab10_firewalld.adoc[Lab 10: Firewalld^]
+
