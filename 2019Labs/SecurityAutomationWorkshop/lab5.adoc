@@ -17,7 +17,7 @@ image:images/lab5/2-rhel7standard.png[1500,1500]
 
 . Once the page loads, click the *Versions* tab at the top of the frame (if not already there). You will see one version (*Version 1.0*) associated with all lifecycle environments (*RHEL7_Dev, RHEL7_QA, and RHEL7_Prod*).
 +
-image:images/lab5/1-content_versions.png[2000,2000]
+image:images/lab5/3-content_versions.png[2000,2000]
 
 
 === Lab 1.2 Patching and Scanning with Ansible Tower and Satellite
@@ -83,7 +83,7 @@ image:images/lab5/12-nextsteps.png[500,500]
 
 . Next, notice that the next step of our automated workflow is *Install Updates*. In this step, Ansible Tower will run a `yum update` on the hosts in the Dev lifecycle to install the new content. Click on *Details* while the *Install Updates* job is running.
 +
-image:images/lab5/installupdates.png[500,500]
+image:images/lab5/13-installupdates.png[500,500]
 
 . Notice that the *patching-non-ha.yml* playbook is executing on the RHEL 7 Dev Hosts (foreman_lifecycle_environment_rhel7_dev). This playbook will go to each of the hosts in the Dev lifecycle environment, run `yum update`, record the packages that have been installed and if a reboot is required based on any of the updated packages, only that host system that requires a reboot will be rebooted. In the Ansible Tower log, you can see these tasks being executed. Specifically, notice that we're gathering facts, checking that the yum utils is installed, checking for updates, and upgrading all packages. *This job will take about 4 minutes to complete*.
 +
