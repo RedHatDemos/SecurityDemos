@@ -1,45 +1,46 @@
 = Lab Exercise 2: Automated Security Scanning Using ComplianceAsCode
-
+:toc2:
+:linkattrs:
 :imagesdir: images
 
-== Introduction
+== 2.1 Introduction
 
-As we already know from link:lab1_introduction.adoc[Exercise 1], the ComplianceAsCode project provides security content that can be used for automated security scanning of the system.
+As you already know from link:lab1_introduction.adoc[Lab Exercise 1^], the `ComplianceAsCode` project provides security content that can be used for automated security scanning of your system.
 
-Red Hat Enterprise Linux 8 contains OpenSCAP Scanner, which is a security scanner that works perfectly with ComplianceAsCode content.
-The content that we build in ComplianceAsCode can be simply passed to OpenSCAP Scanner and the scan can be started right away.
+Red Hat^(R)^ Enterprise Linux^(R)^ 8 (RHEL 8) contains OpenSCAP Scanner, which is a security scanner that works with `ComplianceAsCode` content.
+The content that you build in `ComplianceAsCode` can be simply passed to OpenSCAP Scanner and the scan can be started right away.
 
 OpenSCAP Scanner allows you to perform security compliance checks in a fully automated way.
-It is possible to run the scan using either a command line  tool `oscap` or a graphical application SCAP Workbench.
-Several integrations for continuous scanning also exist but in this lab Exercise, we will focus on one-off scanning.
+It is possible to run the scan using either the `oscap` command line tool or the SCAP Workbench graphical application.
+Several integrations for continuous scanning also exist, but in this lab exercise, you focus on one-off scanning.
 
-== What you will learn
+.*Goals*
 
-* ... basics of automated security scanning in Red Hat Enterprise Linux 8
-* ... using ComplianceAsCode for automated security scanning.
-* ... how to do lightweight customization of a predefined security policy using a GUI tool.
-* ... what are the possibilities for remediations of failing rules.
-
-
-== What we have done for you
-
-* We have cloned the ComplianceAsCode repository to the `lab2_openscap` directory.
-* We have installed dependencies that are required for the ComplianceAsCode content build using `yum install`:
-** generic build utilities: `cmake`, `make`,
-** utilities for generating SCAP content: `openscap-utils`,
-** and Python dependencies for putting content together: `python3-pyyaml`, `python3-jinja2`.
-* We have installed the OpenSCAP ecosystem packages, using `yum install`:
-** The scanner: `openscap-scanner`,
-** utilities for scanning remote systems `openscap-utils`,
-** GUI frontend and datastream tool `scap-workbench`
+* Learn the basics of automated security scanning in Red Hat Enterprise Linux 8
+* Learn how to use `ComplianceAsCode` for automated security scanning
+* Learn how to do lightweight customization of a predefined security policy using a GUI tool
+* Explore the possibilities for remediations of failing rules
 
 
-== Introducing OpenSCAP command line tool
+.*Preconfigured Lab Environment*
 
-OpenSCAP provides a command line tool `oscap` that can be used for automated security scanning.
+* The `ComplianceAsCode` repository was cloned to the `lab2_openscap` directory.
+* The dependencies required for the `ComplianceAsCode` content build were installed using `yum install`:
+** Generic build utilities: `cmake` and `make`
+** Utilities for generating SCAP content: `openscap-utils`
+** Python dependencies for putting content together: `python3-pyyaml` and `python3-jinja2`
+* The following OpenSCAP ecosystem packages were installed using `yum install`:
+** The scanner: `openscap-scanner`
+** Utilities for scanning remote systems: `openscap-utils`
+** The GUI front end and datastream tool: `scap-workbench`
 
-You can verify a successful installation of `oscap` tool by running:
 
+== 2.2 Introduction to OpenSCAP Command Line Tool
+
+OpenSCAP provides a command line tool called `oscap` that can be used for automated security scanning.
+
+. You can verify a successful installation of `oscap` by running the following commands:
++
 ----
 [... lab1_introduction]$ cd /home/lab-user/labs/lab2_openscap
 [... lab2_openscap]$ oscap --version
@@ -58,14 +59,14 @@ Asset Reporting Format Version: 1.1
 CVRF Version: 1.1
 ...
 ----
++
+Note that this command outputs the OpenSCAP version and versions of supported standards.
 
-Notice that this command outputs the OpenSCAP version and versions of supported standards.
+== 2.3 Using `ComplianceAsCode` Content with OpenSCAP Command Line Tool
 
-== Using ComplianceAsCode content with OpenSCAP command line tool
+In this section, you build the security content for Red Hat Enterprise Linux 8 from `ComplianceAsCode` source code and then you use the built content with the OpenSCAP command line tool to scan your machine.
 
-In this Section we will build the security content for Red Hat Enterprise Linux 8 from ComplianceAsCode source code and then we will use the built content with OpenSCAP command line tool to scan our machine.
-
-. The content has been built, so we can take a look at the generated files in the `build` directory right away:
+. The content has been built, so you can take a look at the generated files in the `build` directory right away:
 +
 ----
 [... lab2_openscap]$ cd build
@@ -79,7 +80,7 @@ ssg-rhel8-oval.xml
 +
 There are multiple files produced by the build. The file that is going to be used with the OpenSCAP scanner is `ssg-rhel8-ds.xml`. This file is called a SCAP Datastream.
 +
-. Check which compliance profiles are available for RHEL8.
+. Check which compliance profiles are available for RHEL 8.
 +
 ----
 [... build]$ oscap info ssg-rhel8-ds.xml
@@ -94,46 +95,43 @@ There are multiple files produced by the build. The file that is going to be use
 ...
 ----
 +
-In the "Profiles:" section you can see a list of profiles contained in the datastream.
+In the "Profiles:" section, you can see a list of profiles contained in the datastream.
 The datastream contains multiple profiles that cover different security baselines for different purposes.
 Each profile is identified by a profile ID.
 +
-The built ComplianceAsCode content is available as a RHEL `scap-security-guide` RPM package.
-Unlike the upstream repository that we work with now, the package contains only content that is officially tested and supported by Red Hat.
+The built `ComplianceAsCode` content is available as a RHEL `scap-security-guide` RPM package.
+Unlike the upstream repository that you work with now, the package contains only content that is officially tested and supported by Red Hat.
 Therefore, the `scap-security-guide` package in RHEL 8 contains only the OSPP and PCI-DSS profiles at the moment.
 +
-. Perform our first baseline testing scan with the vanilla OSPP profile.
+. Perform your first baseline testing scan with the vanilla OSPP profile.
 +
-Notice in our command below that we can skip the profile ID prefix to make the command simpler.
+Note in the command below that you can skip the profile ID prefix to make the command simpler.
 The real ID is `xccdf_org.ssgproject.content_profile_ospp`.
 +
-The scanning command has to be executed by a privileged user using `sudo`, so the scanner can access system parts that are off-limits to common users.
+The scanning command has to be executed by a privileged user using `sudo`, so the scanner can access parts of the system that are off-limits to common users.
 The simplest scanner invocation can look like this:
 +
 ----
 sudo oscap xccdf eval --profile ospp ssg-rhel8-ds.xml
 ----
 +
-However, we will also want to store the scan results, so we can process them later.
-Therefore, we have to supply additional arguments:
+However, you also want to store the scan results so you can process them later.
+Therefore, you have to supply additional arguments:
+
+* Use `--results-arf` to get a machine-readable results archive
+* Use `--report` to get a human-readable report (this can also be generated from ARF after the scan, as you see in the next optional step)
+* Use `--oval-results` to get detailed results in the report
 +
---
-* use `--results-arf` to get machine readable results archive
-* use `--report` to get human readable report (can also be generated from ARF after the scan as you see in the next optional step)
-* use `--oval-results` to get detailed results in the report
-
-So now, execute:
-
+Now execute the following to run the scan and generate the HTML report as a side-effect:
++
 ----
 [... build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /home/lab-user/labs/lab2_openscap/report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
-
-to run the scan, generating the HTML report as a side-effect.
-
++
 [NOTE]
 ====
-You can also generate the HTML report later by executing
+You can also generate the HTML report later by executing these commands:
 
 ----
 [... build]$ sudo rm -f /home/lab-user/labs/lab2_openscap/report.html
@@ -141,124 +139,122 @@ You can also generate the HTML report later by executing
 ----
 
 ====
---
 
-. Open the file explorer application by clicking `Activities`, and then the blue cabinet icon.
-Once it comes up, click the `Home` entry at the upper left part of the browser's window.
-Then, click `labs` and `lab2_openscap` directories.
-The `lab2_report.html` file should be one of the files there, so double-click it to open it in the browser.
+
+. Open the file explorer by clicking `Activities` and then the "file cabinet" icon.
+Once it opens, click the `Home` icon in the top left portion of the browser's window.
+Click `labs` then `lab2_openscap` folders.
+Expect to see the `lab2_report.html` file there. Double-click it to open it in the browser.
 +
 image:getting-report.png[]
 +
-You will see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
+You see the compliance scan results for every security control in the OSPP security baseline profile in HTML format.
 +
 image:lab1.1-scapreport.png[]
++
+Rules can have several types of results, but the most common ones are *pass* and *fail*, which indicate whether a particular security control has passed or failed the scan.
+Other results you frequently encounter are *notapplicable* for rules that have been skipped as not relevant to the scanned system, and *notchecked* for rules without an automated check.
 
-. Rules can have several types of results but the most common ones are *pass* and *fail*, which indicate whether a particular security control has passed or failed the scan.
-Other results you can frequently encounter are *notapplicable*, for rules that have been skipped as not relevant to the scanned system and *notchecked*, for rules without an automated check.
-
-. Click on the rule title in the HTML report.
+. Click the rule title in the HTML report.
 +
 image:lab1.1-clickrule.png[]
-
-. This will bring up a pop-up dialog that allows you to examine why a particular rule failed or passed.
-For example, if a rule is testing file permissions on a list of files, it will specify which files failed and what are their permission bits.
++
+This brings up a pop-up dialog that allows you to examine why a particular rule failed or passed.
+For example, if a rule is testing file permissions on a list of files, it specifies which files failed and what their permission bits are.
 +
 image::scap_report_pass.png[]
 +
 image::scap_report_fail.png[]
 
 
-== Customizing existing SCAP security content using SCAP Workbench
+== 2.4 Customizing Existing SCAP Security Content Using SCAP Workbench
 
-. In the console view, click *Activities* at the top left part of the screen, and select the green circular icon of SCAP Workbench.
+. In the console view, click `Activities` in the top left corner of the screen, then select the green circle icon for SCAP Workbench.
 
-. After Workbench starts, select *Other SCAP content* in a drop-down list, and click on *Load Content*. A file browser window will show up. Locate `ssg-rhel8-ds.xml` from `/home/lab-user/labs/lab2_openscap/build` directory and click to *Open* to open the compliance content for Red Hat Enterprise Linux 8 that we have built in the previous Section.
+. After Workbench starts, select `Other SCAP content` in the drop-down list and click `Load Content`. A file browser window appears.
+. Locate `ssg-rhel8-ds.xml` from the `/home/lab-user/labs/lab2_openscap/build` directory and click `Open` to open the compliance content for Red Hat Enterprise Linux 8 that you built in the previous section.
 +
 image:load_content.png[]
 +
 image::scap_workbench_opened.png[SCAP Workbench opened, profile selected]
 
-. Let's customize the PCI-DSS Control baseline.
-Select this profile from the *Profile* drop-down list.
-Click *Customize*.
+. Customize the PCI-DSS Control baseline.
+.. Select this profile from the `Profile` drop-down list.
+.. Click `Customize`.
 +
 image:select_profile.png[]
 
-. In the *Customize Profile* pop-up window, leave the default New Profile ID name and click *OK*.
+.. In the `Customize Profile` pop-up window, leave the name generated by default for `New Profile ID` and click `OK`.
 +
 image:lab1.2-newprofileID.png[500,500]
 
-. Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile.
-Notice the toolbar at the top of the window with options that can help you with the profile composition - especially the `Deselect All` and `Search` functionality buttons are likely to be very useful when composing a new profile from scratch.
-After you are done customizing click *OK* to save the profile.
+.. Now you can select and deselect rules according to your organization's needs, and change values such as minimum password length, to tailor the compliance profile.
+. After you are done customizing, click `OK` to save the profile.
 You have now created a new custom profile.
 +
 image::scap_workbench_tailoring.png[SCAP Workbench content customization]
 
-. Now let's run a test scan with the new custom profile we just created.
-Click *Scan* and inspect the results.
-When prompted for the password for Lab User, type *r3dh4t1!*.
-This will take a few minutes so feel free to move on with the lab exercise and not wait until the scan is completed.
-Close the *Diagnostics* window.
+. Run a test scan with the new custom profile you just created.
+.. Click `Scan` and inspect the results.
+.. When prompted for the password for Lab User, type *r3dh4t1!*.
+This takes a few minutes, so feel free to move on with the lab exercise and not wait for the scan to complete.
 +
 image:lab1.2-scapworkbenchscan.png[500,500]
-
+.. Close the *Diagnostics* window.
++
 [TIP]
 ====
-You can save the customization to a tailoring file by selecting File->Save Customization Only.
-+
+You can save the customization to a tailoring file by selecting `File->Save Customization Only`.
+
 image:lab1.2-savecustomization.png[300,300]
 ====
 
-== Security Remediations with OpenSCAP, Ansible and Bash
-Putting the machine into compliance (for example by changing its configuration) is called *remediation* in the SCAP terminology.
-Remediation changes the configuration of the machine and it is possible that you will lock yourself out or disable important workloads!
-As a result, it is best practice to test the remediation changes before deploying.
+== 2.5 Security Remediations with OpenSCAP, Red Hat Ansible Automation, and Bash
+Putting the machine into compliance (for example, by changing its configuration) is called *remediation* in the SCAP terminology.
+Remediation changes the configuration of the machine, and it is possible to lock yourself out or disable important workloads!
+As a result, it is a best practice to test the remediation changes before deploying.
 
-We will use terminal on your laptop again - there's no need to use console view for this part.
+You use Terminal on your laptop for the next part--there is no need to use the console.
 
-. Generate an Ansible Playbook that will put your machine into compliance.
-We will generate a playbook from the scan results:
-+
-Use the `--fix-type ansible` option to request an ansible playbook with the fixes:
+. Generate an Ansible^(R)^ Playbook that puts your machine into compliance.
+.. Generate a playbook from the scan results.
+Use the `--fix-type ansible` option to request an Ansible Playbook with the fixes:
 +
 ----
 [... build]$ oscap xccdf generate fix --fix-type ansible --result-id "" /tmp/arf.xml > playbook.yml
 ----
 +
-We have specified the empty `result-id` because `oscap` supports generation of fixes from  a result file that has results from multiple scans. However, as there is only one result from a single scan, we don't have to specify the result ID explicitly.
-+
-Check the output using a text editor:
+You specified the empty `result-id` because `oscap` supports generation of fixes from a result file that has results from multiple scans. However, as there is only one result from a single scan, you do not have to specify the result ID explicitly.
+
+. Check the output using a text editor:
 +
 ----
 [... build]$ nano playbook.yml
 ----
-+
-. You can exit `nano` by pressing *ctrl + x*
-. Generate Bash remediation script from the scan results. This can be accomplished by running:
-+
-Use `--fix-type bash` to request a bash script with the fixes
+
+. When finished, exit `nano` by pressing `Ctrl+X`.
+. Generate a Bash remediation script from the scan results.
+..Run the following command, using `--fix-type bash` to request a bash script with the fixes:
 +
 ----
 [... build]$ oscap xccdf generate fix --fix-type bash --result-id "" /tmp/arf.xml > bash-fix.sh
 ----
 +
-We have specified the empty `result-id` because `oscap` supports generation of fixes from  a result file that has results from multiple scans. However, as there is only one result from a single scan, we don't have to specify the result ID explicitely.
-+
-Check the output using a text editor:
+You specified the empty `result-id` because `oscap` supports generation of fixes from a result file that has results from multiple scans. However, as there is only one result from a single scan, you do not have to specify the result ID explicitly.
+
+. Check the output using a text editor:
 +
 ----
 [... build]$ nano bash-fix.sh
 ----
 
-. You can exit `nano` by pressing *ctrl + x*
+. When finished, exit `nano` by pressing `Ctrl+X`.
 
 
-The Ansible Playbook can be used to configure a system to meet a compliant state. We will discuss using Ansible Playbooks in link:lab4_ansible.adoc[Lab Exercise 4].
+The Ansible Playbook can be used to configure a system to meet a compliant state. Using Ansible Playbooks is discussed in link:lab4_ansible.adoc[Lab Exercise 4^].
 The Bash remediation script also can be used to change the configuration of the system.
-We recommend to review the contents of these scripts and test them in a testing environment first, as they potentially can do unexpected or harmful changes.
+It is recommended that you review the contents of these scripts and test them in a testing environment first, as they have the potential to make unexpected or harmful changes.
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_profiles.adoc[Lab exercise 3 - Create your own security policy from scratch ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_profiles.adoc[Lab exercise 3 - Create your own security policy from scratch^ ]
