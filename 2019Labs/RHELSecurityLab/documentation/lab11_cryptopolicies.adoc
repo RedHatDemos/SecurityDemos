@@ -1,43 +1,47 @@
 
+:toc2:
+:linkattrs:
+
 = Lab 11: Crypto Policies
 
-*Lab Length: Short*
 
-== Goal of Lab
-The goal of this lab is to use the new Crypto Policies tools to have a consistent security configuration across all cryptographic libraries in the system. The lab will also show how to configure the system so that it is FIPS compliant using the new simplified workflow in Red Hat Enterprise Linux 8.
+.*Lab Length*
+* Short
 
-== Introduction
-The idea behind System-wide Crypto Policies is to give Administrator a simple interface to change the security level of a system, so that all cryptographic libraries follow the same set of rules and enable or disable the same set of cryptographic primitives and protocols.
+.*Goals*
+* Use the new crypto policies tools in Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL) 8 to have a consistent security configuration across all cryptographic libraries in the system
+* Configure the system so that it is FIPS-compliant using the new simplified workflow in Red Hat Enterprise Linux 8
 
-In the past each application required individual configuration changes to be performed on multiple different configuration files to have the system configured so that it consistently used the same cryptographic primitives across all programs. This process was difficult to maintain and operate.
+== 11.1: Introduction
 
-With the introduction of crypto policies we have made it much simpler to set a default policy for all applications. The policy can still be overriden at the application level if exceptions are desired.
+The idea behind system-wide crypto policies is to give the administrator a simple interface to change the security level of a system, so that all cryptographic libraries follow the same set of rules and enable or disable the same set of cryptographic primitives and protocols.
 
-== Pre-Configured Items
-The machines have been pre-configured to use a Root CA certificate and individual X509 certificates for the Servers used for testing. The Root CA certificate has been imported in the system trust store so all applications can trust the test certificates used by the servers in the exercise.
+In the past, each application required individual configuration changes to be performed on multiple different configuration files to have the system configured so that it consistently used the same cryptographic primitives across all programs. This process was difficult to maintain and operate.
 
-== Lab 11.1 Connecting to a Web Server using TLS 1.1
-TLS 1.1 is disabled in RHEL 8 default security policy, so connecting to a TLS 1.1 server will result in an error by client tools.
-In this exercise we will explore how to enable the system to connect to legacy systems that are limited to use only TLS 1.0 or TLS 1.1 protocols.
-We will use two tools, `curl` and `wget`, as they use two different cryptographic libraries (openSSL and GnuTLS respectively), to show the crypto policy setting work across application and libraries.
+With the introduction of crypto policies, Red Hat has made it much simpler to set a default policy for all applications. The policy can still be overridden at the application level if exceptions are desired.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
+=== 11.1.1: Machine Configurations
+The machines are already configured to use a Root CA certificate and individual X.509 certificates for the servers used for testing. The Root CA certificate was imported into the system trust store, so all applications can trust the test certificates used by the servers in the exercise.
+
+== 11.2: Connecting to a Web Server Using TLS 1.1
+Transport Layer Security (TLS) 1.1 is disabled in the default security policy of RHEL 8, so connecting to a TLS 1.1 server using client tools results in an error.
+In this section, you explore how to enable the system to connect to legacy systems that are limited to using only TLS 1.0 or TLS 1.1 protocols.
+You use two tools, `curl` and `wget`, because they use two different cryptographic libraries (openSSL and GnuTLS, respectively) to show that the cryptographic policy settings work across applications and libraries.
+
+. If you are not already there, log in to the workstation bastion host as *lab-user* from your desktop system (replacing `GUID` with your lab-provided GUID and using *r3dh4t1!* as the password):
 +
-[source]
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
-. Log into the *crypto.example.com* host as *root*.
+. Log in to the *crypto.example.com* host as *root*:
 +
-[source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
 ----
 
-. Try to connect to the web server https://crypto2-tls11.example.com:1443 and verify that the connection is refused
+. Try to connect to the link:https://crypto2-tls11.example.com:1443[https://crypto2-tls11.example.com:1443^] web server and verify that the connection is refused:
 +
-[source]
 ----
 [root@crypto ~]# curl https://crypto2-tls11.example.com:1443
 curl: (35) error:1409442E:SSL routines:ssl3_read_bytes:tlsv1 alert protocol version
@@ -51,17 +55,15 @@ GnuTLS: received alert [70]: Error in protocol version
 Unable to establish SSL connection.
 ----
 
-. Now change the system policy to allow legacy protocols
+. Change the system policy to allow legacy protocols:
 +
-[source]
 ----
 [root@crypto ~]# update-crypto-policies --set LEGACY
 Setting system policy to LEGACY
 ----
 
-. Try again with curl and wget, the default page returns the simple text *WORKS!*
+. Try again with `curl` and `wget`, and note that the default page returns the simple text `WORKS!`:
 +
-[source]
 ----
 [root@crypto ~]# curl https://crypto2-tls11.example.com:1443
 WORKS!
@@ -69,28 +71,25 @@ WORKS!
 WORKS!
 ----
 
-== Lab 11.2 Connecting to a Web Server using a SHA-1 Certificate
-SHA-1 Certificates are still enabled in RHEL 8 default security policy for compatibility reasons.
-In this exercise we will explore how to change the system to the FUTURE policy which disables SHA-1 signatures.
-We will use two tools, curl and wget, as they use two different cryptographic libraries (openSSL and GnuTLS respectively), to show the crypto policy setting work across application and libraries.
+== 11.3: Connecting to a Web Server Using a SHA-1 Certificate
+SHA-1 certificates are still enabled in the default security policy of RHEL 8 for compatibility reasons.
+In this section, you explore how to change the system to the `FUTURE` policy, which disables SHA-1 signatures.
+You use two tools, `curl` and `wget`, because they use two different cryptographic libraries (openSSL and GnuTLS, respectively), to show that the cryptographic policy settings work across applications and libraries.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
+. If you are not already there, log in to the workstation bastion host as *lab-user* from your desktop system (replacing `GUID` with your lab-provided GUID and using *r3dh4t1!* as the password):
 +
-[source]
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
-. Log into the *crypto.example.com* host as *root*.
+. Log in to the *crypto.example.com* host as *root*:
 +
-[source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
 ----
 
-. Try to connect to the web server https://crypto2-sha1.example.com:2443 and verify that the connection is accepted
+. Try to connect to the link:https://crypto2-sha1.example.com:2443[https://crypto2-sha1.example.com:2443^] web server and verify that the connection is accepted:
 +
-[source]
 ----
 [root@crypto ~]# curl https://crypto2-sha1.example.com:2443
 WORKS!
@@ -98,17 +97,15 @@ WORKS!
 WORKS!
 ----
 
-. Now change the system policy to disable SHA-1
+. Now change the system policy to disable SHA-1:
 +
-[source]
 ----
 [root@crypto ~]# update-crypto-policies --set FUTURE
 Setting system policy to FUTURE
 ----
 
-. Try again with curl and wget, and see that the connection is refused!
+. Try again to connect with `curl` and `wget`, and see that the connection is refused:
 +
-[source]
 ----
 [root@crypto ~]# curl https://crypto2-sha1.example.com:2443
 curl: (60) SSL certificate problem: EE certificate key too weak
@@ -121,26 +118,25 @@ ERROR: The certificate of 'crypto2-sha1.example.com' is not trusted.
 ERROR: The certificate of 'crypto2-sha1.example.com' was signed using an insecure algorithm.
 ----
 
-== Lab 11.3 Switching the system into FIPS mode
+== 11.4: Switching the System into FIPS mode
 When a system is configured to work in FIPS mode, only a restricted set of approved cryptographic algorithms is permitted.
-In this exercise we will learn how to put a system into FIPS mode and we'll test that specific algorithms are disabled in this mode.
 
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab’s GUID*. Use the password *r3dh4t1!*
+In this section, you learn how to put a system into FIPS mode, then you test that specific algorithms are disabled in this mode.
+
+. If you are not already there, log in to the workstation bastion host as *lab-user* from your desktop system (replacing `GUID` with your lab-provided GUID and using *r3dh4t1!* as the password):
 +
-[source]
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
 ----
 
-. Log into the *crypto.example.com* host as *root*.
+. Log in to the *crypto.example.com* host as *root*:
 +
-[source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
 ----
 
-. Let's change the system configuration to run in FIPS mode.
-[source]
+. Change the system configuration to run in FIPS mode:
++
 ----
 [root@crypto ~]# fips-mode-setup --enable
 Setting system policy to FIPS
@@ -151,32 +147,29 @@ FIPS mode will be enabled.
 Please reboot the system for the setting to take effect.
 ----
 
-. Now let's reboot the system to activate FIPS mode.
+. Reboot the system to activate FIPS mode:
 +
-[source]
 ----
 [root@crypto ~]# reboot
 Connection to crypto.example.com closed by remote host.
 Connection to crypto.example.com closed.
 ----
 
-. Log again into the *crypto.example.com* host as *root* after reboot (retry multiple times if the command fails).
+. Log in again to the *crypto.example.com* host as *root* after reboot (retry multiple times if the command fails):
 +
-[source]
 ----
 [lab-user@workstation-GUID ~]$ ssh root@crypto.example.com
 ----
 
-. Let's check that the system is in FIPS mode.
-[source]
+. Verify that the system is in FIPS mode:
++
 ----
 [root@crypto ~]# fips-mode-setup --check
 FIPS mode is enabled.
 ----
 
-. Let's check that SHA-1 signed certificates are disabled in FIPS mode.
+. Verify that SHA-1 signed certificates are disabled in FIPS mode:
 +
-[source]
 ----
 [root@crypto ~]# curl https://crypto2-sha1.example.com:2443
 curl: (60) SSL certificate problem: EE certificate key too weak
@@ -189,9 +182,8 @@ ERROR: The certificate of 'crypto2-sha1.example.com' is not trusted.
 ERROR: The certificate of 'crypto2-sha1.example.com' was signed using an insecure algorithm.
 ----
 
-. Let's also check that unapproved Elliptic Curves are not accepted.
+. Verify that unapproved elliptic curves are not accepted:
 +
-[source]
 ----
 [root@crypto ~]# wget https://crypto2-ed25519.example.com:3443
 --2019-03-06 19:35:20--  https://crypto2-ed25519.example.com:3443/
@@ -202,9 +194,8 @@ GnuTLS: received alert [40]: Handshake failed
 Unable to establish SSL connection.
 ----
 
-. Now let's disable FIPS and return the system to the default policy
+. Disable FIPS and return the system to the default policy:
 +
-[source]
 ----
 [root@crypto ~]# fips-mode-setup --disable
 Setting system policy to DEFAULT
@@ -215,15 +206,15 @@ FIPS mode will be disabled.
 Please reboot the system for the setting to take effect.
 ----
 
-. Let's check that certificates using Ed25519 are accepted again.
+. Verify that certificates using Ed25519 are accepted again:
 +
-[source]
 ----
 [root@crypto ~]# wget -q -O - https://crypto2-ed25519.example.com:3443
 WORKS!
 ----
-NOTE: This step works even without a reboot because the wget is a command line binary and not a long term running process. Reboot is recommended to make sure all resident services are restarted and re-read their configuration (including the libraries they instantiate).
+NOTE: This step works even without a reboot because `wget` is a command-line binary and not a long-term running process. A reboot is recommended to make sure that all of the resident services are restarted and their configuration re-read (including the libraries that they instantiate).
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab12_SessionRecording.adoc[ Lab 12: Session Recording ]
+link:README.adoc#table-of-contents[Table of Contents^] | link:lab12_SessionRecording.adoc[Lab 12: Session Recording^]
+
