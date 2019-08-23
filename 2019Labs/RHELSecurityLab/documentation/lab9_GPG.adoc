@@ -73,7 +73,7 @@ Eventually, the process completes and the new key pair is ready for you to use. 
 The contents of your key is stored in your home directory in the file `.gnupg`. Even if someone were to compromise your computer, this would be of no use to them as long as your passphrase is sufficiently hard to crack. That said, always maintain a backup.
 
 == 9.3: Encrypting Documents
-In this section, you encrypt and decrypt a document for private use.
+In this section, you encrypt and decrypt a document for private use. You begin by creating a document with sensitive information.
 
 . Type the following to create a document with sensitive information:
 +
