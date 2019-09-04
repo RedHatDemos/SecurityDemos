@@ -18,7 +18,8 @@ A number of tools have been installed and pre-configured to support the DevSecOp
 
 image:images/lab7.3-pipeline.png[]
 
-The pipeline will checkout java web application source code from a git repository, build it, run automated tests, perform a static code analysis scan with SonarQube, send the produced artifact to Sonatype Nexus for storage, build a docker image containing our application, push it to quay for additional security scanning, perform OpenSCAP scans, deploy the application to OpenShift so that it can be scanned for web vulnerabilities by OWASP ZAP, then we have the opportunity to promote the application to other OpenShift projects if we are satisfied with the results. The following sections describe the tools we will be using in this pipeline lab.
+The Ansible role that deploys this entire pipeline can be found link:https://github.com/redhat-cop/agnosticd/tree/development/ansible/roles/ocp4-workload-security-compliance-lab[here].
+This pipeline will checkout java web application source code from a git repository, build it, run automated tests, perform a static code analysis scan with SonarQube, send the produced artifact to Sonatype Nexus for storage, build a docker image containing our application, push it to quay for additional security scanning, perform OpenSCAP scans, deploy the application to OpenShift so that it can be scanned for web vulnerabilities by OWASP ZAP, then we have the opportunity to promote the application to other OpenShift projects if we are satisfied with the results. The following sections describe the tools we will be using in this pipeline lab.
 
 
 ==== Gogs
