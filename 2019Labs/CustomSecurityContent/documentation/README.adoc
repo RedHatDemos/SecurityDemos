@@ -1,9 +1,10 @@
+:linkattrs:
+
 = Creating Customized Security Policy Content to Automate Security Compliance
 
+== [.underline]#Presenters/Lab Developers#
 
-== [.underline]#Presenters/Lab Developers#:
-
-*Matej Tyc*, Software Engineer and Tech Lead - Security Compliance in RHEL Security, Red Hat
+*Matej Tyc*, Software Engineer and Tech Lead - Security Compliance in Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL) Security, Red Hat
 
 *Marek Haicman*, Senior Quality Engineer and Product Owner - Security Compliance in RHEL Security, Red Hat
 
@@ -14,7 +15,7 @@
 *Simo Sorce*, Senior Principal Software Engineer - RHEL Security, Red Hat
 
 
-== [.underline]#Additional Lab Developers#:
+== [.underline]#Additional Lab Developers#
 
 *Jan Cerny*, Software Engineer - Security Compliance in RHEL Security, Red Hat
 
@@ -25,42 +26,43 @@
 *Matúš Marhefka*, Quality Engineer - Security Compliance in RHEL Security, Red Hat
 
 
-== Overview and Prerequisites:
+== Overview and Prerequisites
 
-This lab will introduce you to the https://github.com/ComplianceAsCode/content[ComplianceAsCode] project, the ultimate tool that creates content for automated security tools.
-The project contains over one thousand rules - elements of security policies. Rules have descriptions, justifications, and reference to existing security standards. They also have Open Vulnerability and Assessment Language (OVAL) checks, bash remediations and Ansible content to a varying degree.
+This lab introduces you to the link:https://github.com/ComplianceAsCode/content[ComplianceAsCode^] project, a comprehensive tool that creates content for automated security tools.
+The project contains over 1,000 rules--elements of security policies. Rules have descriptions, justifications, and references to existing security standards. They also have Open Vulnerability and Assessment Language (OVAL) checks, bash remediations, and Red Hat(R) Ansible(R) Automation content to a varying degree.
 
-`ComplianceAsCode` enables automated evaluation and fast and  efficient remediations against security controls for compliance with regulatory or custom profiles and for automated configuration compliance. It allows you to produce a tailor-made security policy for your company with minimal effort, and the OpenSCAP ecosystem can do the scanning and support for problem resolution. Specifically, OpenSCAP is a National Institute of Standards and Technology (NIST) certified scanner designed to perform configuration and vulnerability scans on a system, to validate security compliance content, and to generate reports and guides based on these scans and evaluations.
+`ComplianceAsCode` enables automated evaluation and fast and efficient remediations against security controls for compliance with regulatory or custom profiles, and for automated configuration compliance. It allows you to produce a tailor-made security policy for your company with minimal effort, and the OpenSCAP ecosystem can do the scanning and support for problem resolution. Specifically, OpenSCAP is a National Institute of Standards and Technology (NIST) certified scanner designed to perform configuration and vulnerability scans on a system, validate security compliance content, and generate reports and guides based on these scans and evaluations.
 
-Red Hat Enterprise Linux provides tools that allow for fully automated compliance audit. These tools are based on `ComplianceAsCode` and the Security Content Automation Protocol (SCAP) standard and are designed for automated tailoring of compliance policies.
+Red Hat Enterprise Linux provides tools that allow for fully automated compliance audits. These tools are based on `ComplianceAsCode` and the Security Content Automation Protocol (SCAP) standard and are designed for automated tailoring of compliance policies.
 
-This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to take advantage of the built-in security technologies in Red Hat Enterprise Linux.
+This lab is geared toward system administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to take advantage of the built-in security technologies in Red Hat Enterprise Linux.
 
-The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills.
+The prerequisites for this lab include basic Linux skills gained from a Red Hat Certified System Administrator (RHCSA^(R)^) certification or equivalent system administration skills.
 
 
-== Attendees, during this session, will learn how to:
+== What Attendees Learn During this Session
 
 * Use the OpenSCAP scanner to scan systems and perform security fixes as needed.
-* Navigate among existing rules and learn how to modify them and  take advantage of parametrization.
+* Navigate among existing rules and learn how to modify them and take advantage of parametrization.
 * Create new security profiles and populate them with existing rules.
 * Create new rules from scratch and add them to security profiles.
 * Write OVAL checks with minimal effort and ensure correctness.
-* Create Ansible content for scanning and remediations of systems.
+* Create Ansible Automation content for scanning and remediations of systems.
 
 
-== Lab Environment:
+== Lab Environment
 
-Your entire lab environment is hosted online and includes: Red Hat Enterprise Linux and Red Hat Ansible Automation.
+Your entire lab environment is hosted online and includes Red Hat Enterprise Linux and Red Hat Ansible Automation.
 
-You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
+You are provided with a unique *GUID*, which you use to access your own instance of these Red Hat products for the lab exercises.
 
 
 == Table of Contents
 
-* link:lab0_setup.adoc[Lab exercise 0: Setup steps]
-* link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
-* link:lab2_openscap.adoc[Lab exercise 2: Automated Security Scanning Using ComplianceAsCode]
-* link:lab3_profiles.adoc[Lab exercise 3: Create your own security policy from scratch]
-* link:lab4_ansible.adoc[Lab exercise 4: Using Ansible in ComplianceAsCode]
-* link:lab5_oval.adoc[Lab exercise 5: The Art of OVAL Checks]
+* link:lab0_setup.adoc[Lab Exercise 0: Setup Steps^]
+* link:lab1_introduction.adoc[Lab Exercise 1: Say Hello to ComplianceAsCode^]
+* link:lab2_openscap.adoc[Lab Exercise 2: Automated Security Scanning Using ComplianceAsCode^]
+* link:lab3_profiles.adoc[Lab Exercise 3: Create Your Own Security Policy from Scratch^]
+* link:lab4_ansible.adoc[Lab Exercise 4: Using Ansible in ComplianceAsCode^]
+* link:lab5_oval.adoc[Lab Exercise 5: The Art of OVAL Checks^]
+
