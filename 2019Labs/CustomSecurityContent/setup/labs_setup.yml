@@ -122,6 +122,11 @@
       path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/"
       state: absent
 
+  - name: "Ex. 5: Copy rule from v0.1.43"
+    copy:
+      src: "data/accounts_tmout"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/"
+
   - name: "Ex. 5: Bust the OVAL"
     replace:
       dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
