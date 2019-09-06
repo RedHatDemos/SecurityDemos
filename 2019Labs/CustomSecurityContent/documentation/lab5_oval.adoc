@@ -124,6 +124,7 @@ In this case, you want to make sure that the rule's check allows both forms--wit
 ----
 +
 The remediation body looks like this:
++
 NOTE: The header of the remediation is processed by the build system, so the actual file contents and the remediation displayed in the HTML guide are different.
 +
 [source,sh]
@@ -282,12 +283,8 @@ In this exercise, you are going to use a `podman` container with the Red Hat^(R)
 
 === 5.4.1 Tests Hands-on
 
-. To produce the RHEL 7 content that you need to test the RHEL 7 image, you need to build it:
-+
-----
-[... lab5_oval]$ cd /home/lab-user/labs/lab5_oval
-[... lab5_oval]$ ./build_product rhel7
-----
+. We need the RHEL 7 content to test the RHEL 7 image.
+As we have already seen earlier, the initial build of the content including build of the guide has already been done for us.
 
 . You test the `accounts_tmout` rule included in the `ospp` profile of the RHEL 7 datastream.
 You need to run the test suite as a superuser, because it involves spinning up a container that exposes an SSH port.
@@ -401,6 +398,7 @@ TIP: To delete a text section in `nano`, move the cursor to the start of the tex
 Press `Alt+A` to mark the start, then move the cursor to the end of the section you want to select.
 Finally, press `Ctrl+K` to erase the selection.
 Undo by pressing `Alt+U`, redo by pressing `Alt+E`.
+Also remember that if you paste to the terminal, you have to press `Ctrl+Shift+V`.
 
 . Open the `oval/shared.xml` file in the editor:
 +
