@@ -25,7 +25,7 @@ image:images/idm-console.png[300,300]
 
 . Notice that the *IdM1* system has been installed with a GUI.
 *IdM1* already has an IdM server installed on it.
-Login with username *admin* and *r3dh4t1!* as the password.
+Login with username *admin* and *r3dh4t1!* as the password. If you are required to update the expired admin password in the web UI, just keep the password the same (*r3dh4t1!*). 
 +
 image:images/idm-login.png[400,400]
 
