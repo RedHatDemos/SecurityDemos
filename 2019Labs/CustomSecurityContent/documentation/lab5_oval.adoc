@@ -32,7 +32,7 @@ The steps for how to accomplish this are in the `tests/README.md` file of the `C
 . Log in to the VM using the text console if you have not done so already.
 . Open the terminal window on the lab laptop.
 . Execute the following command,
-replacing `GUID` with your lab-provided GUID:
+replacing `GUID` with your lab-provided GUID. Type *r3dh4t1!* for the password.
 +
 ----
 [... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
