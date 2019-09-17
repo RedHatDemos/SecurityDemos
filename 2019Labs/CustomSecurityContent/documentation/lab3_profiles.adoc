@@ -575,4 +575,4 @@ For more details about the `rule.yml` format, please refer to link:https://githu
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4_ansible.adoc[Lab exercise 4 - Using Ansible in ComplianceAsCode^]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab4_ansible.adoc[Lab exercise 4 - Using Ansible in ComplianceAsCode]

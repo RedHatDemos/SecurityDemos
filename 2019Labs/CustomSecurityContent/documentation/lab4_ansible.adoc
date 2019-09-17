@@ -421,4 +421,4 @@ You can integrate these into your CI/CD pipelines and infrastructure management 
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5_oval.adoc[Lab 5 - The Art of OVAL Checks^]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab5_oval.adoc[Lab 5 - The Art of OVAL Checks]

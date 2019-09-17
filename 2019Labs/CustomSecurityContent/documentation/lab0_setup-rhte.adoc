@@ -110,4 +110,4 @@ The extension displays previews of the web page next to occurrences of the expre
 +
 image:0-05-supersearch.png[600,600]
 
-link:README.adoc#table-of-contents[ Table of Contents^ ] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode^]
+link:README.adoc#table-of-contents[ Table of Contents] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]

@@ -49,7 +49,7 @@ To start the hands-on section, take the following steps:
 +
 .. Go to the Terminal window on your laptop.
 .. Use SSH to access the remote VM as `lab-user`.
-Do not forget to replace `GUID` with your lab-provided GUID! Use *r3dh4t1!* for the password.
+Do not forget to replace `GUID` with your lab-provided GUID! Type *r3dh4t1!* for the password.
 +
 ----
 [... ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
@@ -386,4 +386,4 @@ Congratulations, by completing the lab exercise, you became familiar with a comp
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2_openscap.adoc[Lab exercise 2 - Automated Security Scanning Using ComplianceAsCode^]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab2_openscap.adoc[Lab exercise 2 - Automated Security Scanning Using ComplianceAsCode]

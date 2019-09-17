@@ -257,4 +257,4 @@ It is recommended that you review the contents of these scripts and test them in
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_profiles.adoc[Lab exercise 3 - Create your own security policy from scratch^ ]
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab3_profiles.adoc[Lab exercise 3 - Create your own security policy from scratch]
