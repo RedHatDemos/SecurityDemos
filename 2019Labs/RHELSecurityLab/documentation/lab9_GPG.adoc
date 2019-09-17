@@ -1,6 +1,6 @@
 == Lab 9: GNU Privacy Guard (GPG)
 
-*Lab Length: Short*
+*Lab Length: Short (~10 mins)*
 
 === Goal of Lab
 The goal of this lab exercise is to introduce you to GNU Privacy Guard (GPG), which can be used to identify yourself and encrypt your communications.
