@@ -31,9 +31,9 @@ Several packages were pre-installed for your convenience. Those are:
 
 == Lab 12.1 Accessing the Session Recording Lab System
 
-All of the exercises in this lab are run on the _sessionrecording.example.com_ host. You will have user *q*. Their terminal sessions will be recorded.
+All of the exercises in this lab are run on the *sessionrecording.example.com* host. You set up for user *q* to have its terminal session recorded.
 
-== Lab 12.2 Setup recording
+== Lab 12.2 Setting up recording
 
 Go to your *Lab Information* webpage from the *Lab 0 setup steps* and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
 +
