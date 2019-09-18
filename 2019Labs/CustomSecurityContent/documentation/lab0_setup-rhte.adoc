@@ -7,8 +7,9 @@
 
 == 0.1 Accessing Your Dedicated Lab Environment Using Your Provided GUID
 
-. On your Red Hat Summit provided laptop, notice that the https://www.opentlc.com/gg/gg.cgi?profile=generic_summit[*Lab GUID Assignment page*^] is already loaded onto your Firefox web browser.
+. From your laptop, navigate to the https://www.opentlc.com/gg/gg.cgi?profile=generic_rhte[*Lab GUID Assignment page*^]. Firefox with plugins disabled recommended.
 From this page, you will be assigned your unique GUID, which you will use to access your unique lab environment and systems.
+
 
 . Select the proper *Lab Code* from the drop-down list. Find the `R2004 - Creating customized security policy content to automate security compliance` lab.
 The activation key is *security*.
