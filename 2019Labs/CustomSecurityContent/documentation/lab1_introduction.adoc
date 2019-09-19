@@ -91,7 +91,7 @@ image::desktopfilefolder.png[100,100]
 .. After the window appears, click the `Home` icon in the top left portion of the file explorer window.
 .. Then, navigate to the location of the exercise by double-clicking the `labs` folder, followed by double-clicking the
 `lab1_introduction`, `build`, and `guides` folders.
-.. As a last step, double-click the `ssg-rhel8-guide-ospp.html` file to open the HTML guide for the RHEL 8 OSPP profile.
+.. As a last step, double-click the `ssg-rhel8-guide-ospp-rhel8.html` file to open the HTML guide for the RHEL 8 OSPP profile.
 +
 image::navigateospp.png[1000,1000]
 
