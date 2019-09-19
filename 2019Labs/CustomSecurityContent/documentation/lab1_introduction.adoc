@@ -215,7 +215,7 @@ To see how the rule is connected to its variable, you have to review the respect
 Open it in the editor and search for `accounts_tmout`:
 +
 ----
-[... lab1_introduction]$ nano rhel8/profiles/ospp.profile
+[... lab1_introduction]$ nano rhel8/profiles/ospp-rhel8.profile
 ----
 
 .. In the editor, press `Ctrl+W` to search for `accounts_tmout`.
