@@ -125,7 +125,7 @@ Therefore, you have to supply additional arguments:
 Now execute the following to run the scan and generate the HTML report as a side-effect:
 +
 ----
-[... build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /home/lab-user/labs/lab2_openscap/report.html --oval-results ./ssg-rhel8-ds.xml
+[... build]$ sudo oscap xccdf eval --profile ospp --results-arf /tmp/arf.xml --report /home/lab-user/labs/lab2_openscap/lab2-report.html --oval-results ./ssg-rhel8-ds.xml
 ...
 ----
 +
@@ -134,8 +134,8 @@ Now execute the following to run the scan and generate the HTML report as a side
 You can also generate the HTML report later by executing these commands:
 
 ----
-[... build]$ sudo rm -f /home/lab-user/labs/lab2_openscap/report.html
-[... build]$ oscap xccdf generate report /tmp/arf.xml > /home/lab-user/labs/lab2_openscap/report.html
+[... build]$ sudo rm -f /home/lab-user/labs/lab2_openscap/lab2-report.html
+[... build]$ oscap xccdf generate report /tmp/arf.xml > /home/lab-user/labs/lab2_openscap/lab2-report.html
 ----
 
 ====
