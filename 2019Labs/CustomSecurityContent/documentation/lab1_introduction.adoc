@@ -211,7 +211,7 @@ Though the `var_accounts_tmout.var` file contains the variable description--whic
 . The rule is parametrized per profile.
 This is because there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
 +
-To see how the rule is connected to its variable, you have to review the respective profile definition, `rhel8/profiles/ospp.profile`.
+To see how the rule is connected to its variable, you have to review the respective profile definition, `rhel8/profiles/ospp-rhel8.profile`.
 Open it in the editor and search for `accounts_tmout`:
 +
 ----
@@ -247,7 +247,7 @@ image::browser-refresh.png[500,500]
 .. Open the OSPP profile file in an editor.
 +
 ----
-[... lab1_introduction]$ nano rhel8/profiles/ospp.profile
+[... lab1_introduction]$ nano rhel8/profiles/ospp-rhel8.profile
 ----
 .. Again, use `Ctrl+W` in connection with `Alt+W` in the editor to search for `accounts_tmout`.
 .. Comment out the line containing `- var_accounts_tmout=30_min` by inserting `#` just before the leading dash.
