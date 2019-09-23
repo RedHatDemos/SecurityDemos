@@ -10,10 +10,6 @@
 
 *Lucy Kerner*, Senior Principal Security Global Technical Evangelist and Strategist, Red Hat
 
-*Lukas Vrabec*, Senior Software Engineer - RHEL Security, Red Hat
-
-*Simo Sorce*, Senior Principal Software Engineer - RHEL Security, Red Hat
-
 
 == [.underline]#Additional Lab Developers#
 
