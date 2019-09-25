@@ -266,28 +266,28 @@ Check the contents of this directory:
 +
 ----
 [... lab4_ansible]$ ls build/rhel8/playbooks
-cjis  cui  hipaa  ospp  pci-dss  rht-ccp  standard
+cjis  cui  hipaa  ospp   ospp-rhel8  pci-dss  rht-ccp  standard
 ----
 +
 Note that there is a directory for each profile in the RHEL8 product.
 That is because each profile consists of a different set of rules and the rules are parametrized by variables which can have different values in each profile.
 
-. The `accounts_tmout` rule is, for example, a part of the OSPP profile, so take a peek into the `ospp` directory:
+. The `accounts_tmout` rule is, for example, a part of the OSPP profile, so take a peek into the `ospp-rhel8` directory:
 +
 ----
-[... lab4_ansible]$ ls build/rhel8/playbooks/ospp
+[... lab4_ansible]$ ls build/rhel8/playbooks/ospp-rhel8
 ----
 +
-There are many playbook files in the `ospp` directory.
+There are many playbook files in the `ospp-rhel8` directory.
 One of them is the `accounts_tmout.yml` file, which is the Ansible Playbook that contains the Ansible tasks you added in the `accounts_tmout` rule.
 
 . Open it in the text editor:
 +
 ----
-[... lab4_ansible]$ nano build/rhel8/playbooks/ospp/accounts_tmout.yml
+[... lab4_ansible]$ nano build/rhel8/playbooks/ospp-rhel8/accounts_tmout.yml
 ----
 +
-The contents of the `build/rhel8/playbooks/ospp/accounts_tmout.yml` file look like this:
+The contents of the `build/rhel8/playbooks/ospp-rhel8/accounts_tmout.yml` file look like this:
 +
 ----
 
@@ -330,7 +330,7 @@ After that, you need to replace the placeholder string, `'@@HOSTS@@'`.
 ----
 [... lab4_ansible]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/shared.yml
 [... lab4_ansible]$ ./build_product rhel8
-[... lab4_ansible]$ nano build/rhel8/playbooks/ospp/accounts_tmout.yml
+[... lab4_ansible]$ nano build/rhel8/playbooks/ospp-rhel8/accounts_tmout.yml
 ----
 ====
 +
@@ -358,7 +358,7 @@ Finally, the `tasks:` section contains the Ansible task that you created.
 . Run the playbook:
 +
 ----
-[... lab4_ansible]$ ansible-playbook build/rhel8/playbooks/ospp/accounts_tmout.yml
+[... lab4_ansible]$ ansible-playbook build/rhel8/playbooks/ospp-rhel8/accounts_tmout.yml
 ----
 
 . Check if it has any effect:
@@ -375,7 +375,7 @@ The biggest advantage of using Ansible tasks in `ComplianceAsCode` is that it ge
 . Run the following command to open the HTML guide for the OSPP profile for Red Hat Enterprise Linux 8 in your Firefox web browser, or navigate to the OSPP guide the same way you have in previous exercises:
 +
 ----
-[... ~]$ firefox /home/lab-user/labs/lab4_ansible/build/guides/ssg-rhel8-guide-ospp.html
+[... ~]$ firefox /home/lab-user/labs/lab4_ansible/build/guides/ssg-rhel8-guide-ospp-rhel8.html
 ----
 
 . Check the "Set Interactive Session Timeout" rule.
@@ -405,6 +405,7 @@ rhel8-playbook-cui.yml
 rhel8-playbook-default.yml
 rhel8-playbook-hipaa.yml
 rhel8-playbook-ospp.yml
+rhel8-playbook-ospp-rhel8.yml
 rhel8-playbook-pci-dss.yml
 rhel8-playbook-rht-ccp.yml
 rhel8-playbook-standard.yml
@@ -413,7 +414,7 @@ rhel8-playbook-standard.yml
 . Check the contents of the OSPP profile playbook in your editor and verify that a task for the `accounts_tmout` rule is there among all the other tasks.
 +
 ----
-[... lab4_ansible]$ nano build/ansible/rhel8-playbook-ospp.yml
+[... lab4_ansible]$ nano build/ansible/rhel8-playbook-ospp-rhel8.yml
 ----
 +
 At this point, you have per-rule Ansible Playbooks available, as well as per-profile ones.
