@@ -16,7 +16,7 @@ The activation key is *security*.
 
 . The resulting *Lab Information page* displays your GUID and other useful information about your lab environment.
 Take note of your assigned GUID.
-You use this GUID to access your lab's environment and systems.
+You will use this GUID to access your lab's environment and systems.
 Your GUID is also embedded in your lab environment's host names.
 From the *Lab Information page*, you can also access your unique lab environment's power control and consoles.
 Go to the last bullet and click `here` to access the environment's power control and consoles.
@@ -24,7 +24,7 @@ Go to the last bullet and click `here` to access the environment's power control
 image:labinfopage.png[1200,1200]
 
 . Note that one workstation VM is shown on the *power control and consoles page*.
-This is a Red Hat Enterprise Linux ^(R)^8 system with GUI. It is the machine that you use throughout all of the exercises in this lab.
+This is a Red Hat Enterprise Linux ^(R)^8 system with GUI. It is the machine that you will use throughout all of the exercises in this lab.
 Click `CONSOLE`.
 Log in as *Lab User* with the password *r3dh4t1!*.
 +
@@ -44,7 +44,7 @@ Then, enter the following command, replacing `GUID` with your assigned GUID. Typ
 +
 For example, if your GUID is `3fa1`, you execute `$ ssh lab-user@workstation-3fa1.rhpds.opentlc.com`.
 
-. If everything works correctly, you end up in the lab's test system shell.
+. If everything works correctly, you end up in the lab's system shell.
 You can confirm this by listing the directory with lab exercises:
 +
 ----
