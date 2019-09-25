@@ -8,7 +8,7 @@
 
 == 1.1 Introduction
 
-In this lab, you become familiar with the `ComplianceAsCode` project. The purpose of this project is to help users create security policy content for various platforms. The `ComplianceAsCode` project enables users to efficiently develop and share security content.
+In this lab, you will become familiar with the `ComplianceAsCode` project. The purpose of this project is to help users create security policy content for various platforms. The `ComplianceAsCode` project enables users to efficiently develop and share security content.
 
 Using the powerful build system, you can generate output in various formats such as Ansible^(R)^ Playbooks or SCAP datastreams
 that you can use to automate security auditing and hardening.
@@ -103,7 +103,7 @@ image::html_guide.png[]
 
 === 1.2.2 Updating a Rule Description to Find the Source of a Specific Rule
 
-You now take a closer look at a specific rule in the HTML guide of the RHEL 8 OSPP profile.
+You will now take a closer look at a specific rule in the HTML guide of the RHEL 8 OSPP profile.
 For example, take a closer look at the *Set Interactive Session Timeout* rule entry.
 
 . In the HTML guide of the RHEL 8 OSPP profile that you opened in Firefox, press `Ctrl+F` and search for `session timeout`.
@@ -186,9 +186,9 @@ Expect to now see the fixed description, without the duplicate *Setting the TMOU
 
 === 1.2.3 Customizing a Parametrized Rule
 
-In this lab exercise, you learn about parametrized rules.
+In this lab exercise, you will learn about parametrized rules.
 Parametrization can be used to set timeout durations, password length, umask, and other settings.
-You learn about parametrized rules by:
+You will learn about parametrized rules by:
 
 - Observing where the value comes from
 - Changing the parametrized rule to see how it is applied
