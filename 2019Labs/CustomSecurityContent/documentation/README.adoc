@@ -36,21 +36,21 @@ This lab is geared toward system administrators, cloud administrators and operat
 The prerequisites for this lab include basic Linux skills gained from a Red Hat Certified System Administrator (RHCSA^(R)^) certification or equivalent system administration skills.
 
 
-== What Attendees Learn During this Session
+== What Attendees Will Learn In This Lab:
 
-* Use the OpenSCAP scanner to scan systems and perform security fixes as needed.
-* Navigate among existing rules and learn how to modify them and take advantage of parametrization.
-* Create new security profiles and populate them with existing rules.
-* Create new rules from scratch and add them to security profiles.
-* Write OVAL checks with minimal effort and ensure correctness.
-* Create Ansible Automation content for scanning and remediations of systems.
+* How to use the OpenSCAP scanner to scan systems and perform security fixes as needed.
+* How to navigate among existing rules and learn how to modify them and take advantage of parametrization.
+* How to create new security profiles and populate them with existing rules.
+* How to create new rules from scratch and add them to security profiles.
+* How to write OVAL checks with minimal effort and ensure correctness.
+* How to create Ansible Automation content for remediations of systems.
 
 
 == Lab Environment
 
 Your entire lab environment is hosted online and includes Red Hat Enterprise Linux and Red Hat Ansible Automation.
 
-You are provided with a unique *GUID*, which you use to access your own instance of these Red Hat products for the lab exercises.
+You are provided with a unique *GUID*, which you will use to access your own instance of these Red Hat products for the lab exercises.
 
 
 == Table of Contents
