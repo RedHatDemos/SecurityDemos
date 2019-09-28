@@ -136,7 +136,7 @@
   - name: "Copy our OSPP profile to the target system (RHEL8)"
     copy:
       src: "data/ospp-rhel8.profile"
-      dest: "{{ LABS_ROOT }}/{{ item }}/rhel8/profiles/"
+      dest: "{{ LABS_ROOT }}/{{ item }}/rhel8/profiles/ospp.profile"
     loop:
       - "{{ TRACK_1_LABEL }}"
       - "{{ TRACK_2_LABEL }}"
@@ -146,7 +146,7 @@
   - name: "Copy our OSPP profile to the target system (RHEL7)"
     copy:
       src: "data/ospp-rhel7.profile"
-      dest: "{{ LABS_ROOT }}/{{ item }}/rhel8/profiles/ospp.profile"
+      dest: "{{ LABS_ROOT }}/{{ item }}/rhel7/profiles/ospp.profile"
     loop:
       - "{{ TRACK_5_LABEL }}"
 
