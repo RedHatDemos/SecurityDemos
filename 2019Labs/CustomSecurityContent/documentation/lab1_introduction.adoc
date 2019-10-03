@@ -75,7 +75,7 @@ The HTML guides are located in the respective `build/guides` of each lab exercis
 ----
 
 In the `ComplianceAsCode` project, policies are referred to as security profiles.
-The HTML guide filenames have a `ssg-<product>-guide-<profile>.html` format, so the HTML guide for the RHEL 8 Protection Profile for General Purpose Operating Systems (OSPP profile) is `ssg-rhel8-guide-ospp-rhel8.html`.
+The HTML guide filenames have a `ssg-<product>-guide-<profile>.html` format, so the HTML guide for the RHEL 8 Protection Profile for General Purpose Operating Systems (OSPP profile) is `ssg-rhel8-guide-ospp.html`.
 
 . Now, take a look at one of the provided HTML guides in a web browser.
 .. Go back to the console of your lab VM by going to the tab that you opened of the lab environment's *power control and consoles page* in Lab 0.
@@ -91,9 +91,9 @@ image::desktopfilefolder.png[100,100]
 .. After the window appears, click the `Home` icon in the top left portion of the file explorer window.
 .. Then, navigate to the location of the exercise by double-clicking the `labs` folder, followed by double-clicking the
 `lab1_introduction`, `build`, and `guides` folders.
-.. As a last step, double-click the `ssg-rhel8-guide-ospp-rhel8.html` file to open the HTML guide for the RHEL 8 OSPP profile.
-// +
-// image::navigateospp.png[1000,1000]
+.. As a last step, double-click the `ssg-rhel8-guide-ospp.html` file to open the HTML guide for the RHEL 8 OSPP profile.
++
+image::navigateospp.png[1000,1000]
 
 . Rules are organized in a system of hierarchical groups. Take a look through this HTML guide to see the various rules of the RHEL 8 OSPP profile.
 +
@@ -211,11 +211,11 @@ Though the `var_accounts_tmout.var` file contains the variable description--whic
 . The rule is parametrized per profile.
 This is because there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
 +
-To see how the rule is connected to its variable, you have to review the respective profile definition, `rhel8/profiles/ospp-rhel8.profile`.
+To see how the rule is connected to its variable, you have to review the respective profile definition, `rhel8/profiles/ospp.profile`.
 Open it in the editor and search for `accounts_tmout`:
 +
 ----
-[... lab1_introduction]$ nano rhel8/profiles/ospp-rhel8.profile
+[... lab1_introduction]$ nano rhel8/profiles/ospp.profile
 ----
 
 .. In the editor, press `Ctrl+W` to search for `accounts_tmout`.
@@ -237,7 +237,7 @@ Open it in the editor and search for `accounts_tmout`:
 [... lab1_introduction]$ ./build_product rhel8
 ----
 +
-After the build finishes, refresh the HTML guide either by reloading it in the browser, or by reopening `build/guides/ssg-rhel8-guide-ospp-rhel8.html`.
+After the build finishes, refresh the HTML guide either by reloading it in the browser, or by reopening `build/guides/ssg-rhel8-guide-ospp.html`.
 Expect the variable value to be updated to `600`.
 +
 .The Firefox Refresh Page button
@@ -247,7 +247,7 @@ image::browser-refresh.png[500,500]
 .. Open the OSPP profile file in an editor.
 +
 ----
-[... lab1_introduction]$ nano rhel8/profiles/ospp-rhel8.profile
+[... lab1_introduction]$ nano rhel8/profiles/ospp.profile
 ----
 .. Again, use `Ctrl+W` in connection with `Alt+W` in the editor to search for `accounts_tmout`.
 .. Comment out the line containing `- var_accounts_tmout=30_min` by inserting `#` just before the leading dash.
@@ -272,7 +272,7 @@ As the `default: 600` line indicates, if you do not specify the timeout duration
 .. After you are finished looking, press `Ctrl+X` to bring up the "save and exit" option.
 If you are asked about saving any changes, you probably do not want that, so enter `n`.
 
-.. Time to review the HTML guide--when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp-rhel8.html`, you can clearly see the rule's timeout indeed equals 600.
+.. Time to review the HTML guide--when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp.html`, you can clearly see the rule's timeout indeed equals 600.
 
 NOTE: The set of values a variable can have is discrete--all values have to be defined in the variable file.
 Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile only after adding `20_min: 1200` to the `options:` key of the variable definition.
