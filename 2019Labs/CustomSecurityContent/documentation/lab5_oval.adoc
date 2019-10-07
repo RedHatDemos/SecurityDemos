@@ -82,7 +82,7 @@ image::desktopfilefolder.png[100,100]
 .. Just to make sure, click the `Home` icon in the upper left portion of the file explorer window.
 .. Navigate to the location of the exercise by double-clicking the `labs` folder, followed by double-clicking the
 `lab5_oval`, `build`, and `guides` folders.
-.. Finally, double-click the `ssg-rhel8-guide-ospp.html` file.
+.. Finally, double-click the `ssg-rhel7-guide-ospp.html` file.
 
 . In this lab exercise, you focus on the `accounts_tmout` rule.
 To find the rule entry in the guide, press `Ctrl+F` or use the `Edit -> Find in this page` menu item, and search for the `Set Interactive Session Timeout` string, which is the rule title.
