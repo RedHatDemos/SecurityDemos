@@ -571,7 +571,7 @@ Either way, you see your "Travel" profile with four rules, including the newly a
 .New "Install Hexchat Application" rule displayed in the HTML guide
 image::2-04-rule.png[New rule]
 
-For more details about the `rule.yml` format, please refer to link:https://github.com/ComplianceAsCode/blob/master/docs/manual/developer_guide.adoc#711-rules[https://github.com/ComplianceAsCode/blob/master/docs/manual/developer_guide.adoc#711-rules^]
+For more details about the `rule.yml` format, please refer to link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules[contributor's section of the developer guide]
 
 <<top>>
 
