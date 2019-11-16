@@ -57,7 +57,14 @@ but the structure is the same for all rules in `ComplianceAsCode`.
 
 As you already know from Lab Exercise 1, source code for the `accounts_tmout` rule is located in the `linux_os/guide/system/accounts/accounts-session/accounts_tmout` directory.
 
-. First, switch to the rule directory and examine its content.
+. First, navigate to the lab4_ansible directory.
++
+----
+[lab-user@workstation-GUID labs]$ cd lab4_ansible/
+[lab-user@workstation-GUID lab4_ansible]$
+----
+
+. Next, switch to the rule directory and examine its content.
 +
 ----
 [... lab4_ansible]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
