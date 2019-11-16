@@ -266,7 +266,7 @@ Check the contents of this directory:
 +
 ----
 [... lab4_ansible]$ ls build/rhel8/playbooks
-cjis  cui  hipaa  ospp  pci-dss  rht-ccp  standard
+cjis  cui  hipaa  ospp   pci-dss  rht-ccp  standard
 ----
 +
 Note that there is a directory for each profile in the RHEL8 product.
@@ -404,6 +404,7 @@ rhel8-playbook-cjis.yml
 rhel8-playbook-cui.yml
 rhel8-playbook-default.yml
 rhel8-playbook-hipaa.yml
+rhel8-playbook-ospp.yml
 rhel8-playbook-ospp.yml
 rhel8-playbook-pci-dss.yml
 rhel8-playbook-rht-ccp.yml

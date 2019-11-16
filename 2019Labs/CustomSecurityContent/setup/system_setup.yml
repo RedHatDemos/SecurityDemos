@@ -51,7 +51,7 @@
       state: installed
     when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
 
-  - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL7)
+  - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL8)
     pip:
       name:
       - ansible
