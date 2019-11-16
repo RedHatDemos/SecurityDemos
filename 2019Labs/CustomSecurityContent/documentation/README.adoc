@@ -55,7 +55,7 @@ You are provided with a unique *GUID*, which you will use to access your own ins
 
 == Table of Contents
 
-* link:lab0_setup-rhte.adoc[Lab Exercise 0: Setup Steps^]
+* link:lab0_setup-workshops.adoc[Lab Exercise 0: Setup Steps^]
 * link:lab1_introduction.adoc[Lab Exercise 1: Say Hello to ComplianceAsCode^]
 * link:lab2_openscap.adoc[Lab Exercise 2: Automated Security Scanning Using ComplianceAsCode^]
 * link:lab3_profiles.adoc[Lab Exercise 3: Create Your Own Security Policy from Scratch^]
