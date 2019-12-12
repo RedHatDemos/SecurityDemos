@@ -4,16 +4,24 @@
 . From your laptop, navigate to the https://www.opentlc.com/gg/gg.cgi?profile=generic_rhte[*Lab GUID Assignment page*^]. Firefox with plugins disabled recommended.
 From this page, you will be assigned your unique GUID, which you will use to access your unique lab environment and systems.
 
-. Select the proper *Lab Code*. This *Implementing proactive security and compliance automation and DevSecOps* lab has two main sections: *infrastructure/operations security and compliance automation* lab exercises and *application security and compliance automation* lab exercises. Decide which section you want to work on first. If you want to work on the *infrastructure/operations security and compliance automation* lab exercises, select *TC9818 - Implementing proactive security and compliance automation and DevSecOps* from the drop down list. If you want to work on the *application security and compliance automation* lab exercises, select *TC9818 -AD - Implementing proactive security and compliance automation and DevSecOps* from the drop down list.
+. Select the proper *Lab Code*
+ 
+ This New England Security Symposium lab has Three main sections:
 
+ Decide which section you want to work on first via the selection from the drop-down menu.  
++
+ SECURITYMA1 - Implementing Proactive Security and Compliance Automation
+ SECURITYMA2 - Defend Yourself with RHEL Security Technologies
+ SECURITYMA3 - Creating Customized Security Policy Content to Automate Security Compliance
++
 . Enter the *Activation Key*, which is *security*.
 
 . The resulting *Lab GUID Assignment page* will display your lab's GUID and other useful information about your lab environment. Take note of your assigned GUID. You will use this GUID to access your lab's environment and systems.  Your unique GUID will also be embedded in your lab environment's host names. From this *Lab GUID Assignment page*, you will also be able to access your unique lab environment's power control and consoles.
 +
 image:images/gg.png[500,500]
-
-. When you are completely done with your lab environment, please click *FORGET SESSION* so that you can move on to the next lab.  If you fail to do this, you will be locked into the GUID from the previous lab. In order to move from the *infrastructure/operations security and compliance automation* lab exercises (Lab Exercises #1-6) to the *application security and compliance automation* lab exercises (Lab Exercise #7) and vice versa, you will have to push the *FORGET SESSION* button, select the appropriate option from the drop down list as mentioned above, and get your GUID.
 +
+. When you are completely done with your lab environment, please click *FORGET SESSION* so that you can move on to the next lab.  If you fail to do this, you will be locked into the GUID from the previous lab. In order to move from the *infrastructure/operations security and compliance automation* lab exercises (Lab Exercises #1-6) to the *application security and compliance automation* lab exercises (Lab Exercise #7) and vice versa, you will have to push the *FORGET SESSION* button, select the appropriate option from the drop down list as mentioned above, and get your GUID.
+
 [NOTE]
 Clicking *FORGET SESSION* will not stop or delete the lab environment.
 
