@@ -7,11 +7,11 @@
 
 == 0.1 Accessing Your Dedicated Lab Environment Using Your Provided GUID
 
-. From your laptop, navigate to the https://www.opentlc.com/gg/gg.cgi?profile=generic_naps_lkerner[*Lab GUID Assignment page*^]. Firefox with plugins disabled recommended.
+. From your laptop, navigate to the https://www.opentlc.com/gg/gg.cgi?profile=generic_na_jmentzel[*Lab GUID Assignment page*^]. Firefox with plugins disabled recommended.
 From this page, you will be assigned your unique GUID, which you will use to access your unique lab environment and systems.
 
 
-. Select the proper *Lab Code* from the drop-down list. Find the `Lab2 - Creating customized security policy content to automate security compliance` lab.
+. Select the proper *Lab Code* from the drop-down list. Find the `SECURITYMA3 - Creating customized security policy content to automate security compliance` lab.
 The activation key is *security*.
 
 . The resulting *Lab Information page* displays your GUID and other useful information about your lab environment.
