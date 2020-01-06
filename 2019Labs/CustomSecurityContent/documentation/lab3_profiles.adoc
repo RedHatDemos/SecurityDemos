@@ -523,31 +523,36 @@ press `Ctrl+X`, then enter `y` to save and exit.
 
 . Use templates to generate checks automatically.
 +
-There is a template that generates the automated checks in OVAL, Ansible, Bash, Anaconda, and Puppet languages.
-There are multiple templates that can generate different checks.
-However, not everything is covered by the template.
-//Commented out because this IS the section that discusses it, right?
+There exists a templating system which helps with generation of checks in OVAL format and remediations in Bash, Ansible and Puppet formats.
+Some templates are already created and new templates can be added if needed.
+There exists a template which fits our case.
 //Writing OVAL from scratch is discussed in the third lab exercise of this lab.
 +
-You only need to add the package to the list of packages for which the checks should be generated using a template.
+You need to append a special block at the end of the particular `rule.yml` file.
 
-.. Add the `hexchat` package to the list of installed packages to be checked.
-This list is called `package_installed.csv` and is located in the `templates/csv` directory.
+.. Open  the particular file.
 +
 ----
-[... lab3_profiles]$ nano rhel8/templates/csv/packages_installed.csv
+[... lab3_profiles]$ nano linux_os/guide/system/software/package_hexchat_installed/rule.yml
 ----
 
-.. Add `hexchat` as a new line to this file, so it looks like this:
+.. At the special block at the end of the file, so that it looks like this:
 +
 ----
-aide
-audit
-...
-postfix
-tmux
-sssd
-hexchat
+documentation_complete: true
+
+title: Install Hexchat Application
+
+description: As of company policy, the traveling laptops have to have the Hexchat application installed.
+
+rationale: The Hexchat application enables IRC communication with the corporate IT support centre.
+
+severity: medium
+
+template:
+    name: package_installed
+    vars:
+        pkgname: hexchat
 ----
 
 .. When you have finished editing,
@@ -571,7 +576,8 @@ Either way, you see your "Travel" profile with four rules, including the newly a
 .New "Install Hexchat Application" rule displayed in the HTML guide
 image::2-04-rule.png[New rule]
 
-For more details about the `rule.yml` format, please refer to link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules[contributor's section of the developer guide]
+For more details about the `rule.yml` format, please refer to link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules[contributor's section of the developer guide].
+For more information about the templating system, including list of currently available templates, refer to the link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#templating[Templating section of the developer guide].
 
 <<top>>
 
