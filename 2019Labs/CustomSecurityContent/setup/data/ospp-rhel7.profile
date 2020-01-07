@@ -148,9 +148,6 @@ selections:
     - audit_rules_immutable
     - audit_rules_kernel_module_loading_delete
     - audit_rules_kernel_module_loading_init
-    - audit_rules_kernel_module_loading_insmod
-    - audit_rules_kernel_module_loading_modprobe
-    - audit_rules_kernel_module_loading_rmmod
     - audit_rules_login_events_faillock
     - audit_rules_login_events_lastlog
     - audit_rules_login_events_tallylog
@@ -401,7 +398,6 @@ selections:
     - network_sniffer_disabled
     - network_ipv6_disable_rpc
     - network_ipv6_privacy_extensions
-    - dconf_use_text_backend
     - dconf_gnome_banner_enabled
     - dconf_gnome_disable_automount
     - dconf_gnome_disable_ctrlaltdel_reboot

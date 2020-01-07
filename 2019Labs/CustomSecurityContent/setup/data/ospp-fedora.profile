@@ -221,6 +221,7 @@ selections:
     ### FMT_MOF_EXT.1 / AC-11(a)
     ### Enable Screen Lock
     - package_tmux_installed
+    # - dconf_use_text_backend
     - dconf_gnome_screensaver_idle_activation_enabled
     - dconf_gnome_screensaver_idle_delay
     - dconf_gnome_screensaver_lock_delay
@@ -518,7 +519,7 @@ selections:
     ### FPT_TUD_EXT.1.1: https://www.niap-ccevs.org/MMO/PP/-424-/#FPT_TUD_EXT.1.1
     ### The OS shall provide the ability to check for updates
     ### to the OS software itself.
-    - security_patches_up_to_date
+    # - security_patches_up_to_date  # Not available on Fedora
 
     ### FPT_TUD_EXT.1.2: https://www.niap-ccevs.org/MMO/PP/-424-/#FPT_TUD_EXT.1.2
     ### The OS shall cryptographically verify updates to itself using
@@ -714,7 +715,7 @@ selections:
     - audit_rules_immutable
     - var_selinux_policy_name=targeted
     - var_selinux_state=enforcing
-    - ensure_redhat_gpgkey_installed
+    # - ensure_redhat_gpgkey_installed  # Not available on Fedora
     - ensure_gpgcheck_globally_activated
     - ensure_gpgcheck_never_disabled
     - ensure_gpgcheck_local_packages
