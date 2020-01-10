@@ -432,6 +432,10 @@ You want to add a check to your new profile that checks if Hexchat is installed.
 `ComplianceAsCode` does not have a rule ready for installing this application yet.
 That means you need to add a new rule for that.
 
+=== 3.6.1 Creating the rule definition file
+
+You will now create the `rule.yml` file for your new rule.
+
 . Find a group directory that best fits your new rule.
 +
 The rules are located in the `linux_os` directory.
@@ -521,36 +525,65 @@ selections:
 .. When you have finished editing,
 press `Ctrl+X`, then enter `y` to save and exit.
 
-. Use templates to generate checks automatically.
-+
-There is a template that generates the automated checks in OVAL, Ansible, Bash, Anaconda, and Puppet languages.
-There are multiple templates that can generate different checks.
-However, not everything is covered by the template.
-//Commented out because this IS the section that discusses it, right?
-//Writing OVAL from scratch is discussed in the third lab exercise of this lab.
-+
-You only need to add the package to the list of packages for which the checks should be generated using a template.
 
-.. Add the `hexchat` package to the list of installed packages to be checked.
-This list is called `package_installed.csv` and is located in the `templates/csv` directory.
+=== 3.6.2 Use templates to generate checks automatically
+
+You have successfully defined the rule and added it to the profile.
+However, the rule currently has no check nor remediation.
+That means that Openscap can't check if the Hexchat package is installed.
+Writing OVAL checks is a process out of scope of this chapter and it is described in a separate lab.
+However, in some cases you can use already created templates.
+You can try to search by keyword  in link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#732-list-of-available-templates[list of templates] to find out if some template suits your case.
+In this case it does.
+
+Templates are a great way of simplifying development of new rules and avoiding unnecessarily large amount of duplicate code.
+There exist sets of rules which are performing very similar checks and can be remediated in similar way.
+This applies for example to checks that a certain package is installed, that a certain Systemd service is disabled etc.
+Using templates is recommended whenever possible to avoid code duplication and possible inconsistencies.
+Another benefit of templates is ease of creation of new rules.
+As demonstrated below, you don't have to know how to write OVAL checks or Bash remediations to create a fully working rule.
+The template will create this for you automatically.
+You only need to append a special block at the end of the particular `rule.yml` file.
+
+. Open the link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#732-list-of-available-templates[list of templates] in your web browser.
+
+. You can quickly glance through the list of templates.
+Notice that every template is accompanied by a description and one or more parameters.
+Finally, search for the `package_installed` template.
+Notice that the template has two parameters:
++
+pkgname:: name of the RPM or DEB package, eg. tmux
++
+evr:: Optional parameter. It can be used to check if the package is of a specific version or newer. Provide epoch, version, release in epoch:version-release format, eg. 0:2.17-55.0.4.el7_0.3. Used only in OVAL checks. The OVAL state uses operation "greater than or equal" to compare the collected package
+
+. Open  the `rule.yml` file for the `package_hexchat_installed` rule .
 +
 ----
-[... lab3_profiles]$ nano rhel8/templates/csv/packages_installed.csv
+[... lab3_profiles]$ nano linux_os/guide/system/software/package_hexchat_installed/rule.yml
 ----
 
-.. Add `hexchat` as a new line to this file, so it looks like this:
+. At the special block at the end of the file, so that it looks like this:
 +
 ----
-aide
-audit
-...
-postfix
-tmux
-sssd
-hexchat
-----
+documentation_complete: true
 
-.. When you have finished editing,
+title: Install Hexchat Application
+
+description: As of company policy, the traveling laptops have to have the Hexchat application installed.
+
+rationale: The Hexchat application enables IRC communication with the corporate IT support centre.
+
+severity: medium
+
+template:
+    name: package_installed
+    vars:
+        pkgname: hexchat
+----
++
+Notice that you used one of two possible parameters; `pkgname`.
+
+. When you have finished editing,
 press `Ctrl+X`, then enter `y` to save and exit.
 +
 . Build the content.
@@ -571,7 +604,8 @@ Either way, you see your "Travel" profile with four rules, including the newly a
 .New "Install Hexchat Application" rule displayed in the HTML guide
 image::2-04-rule.png[New rule]
 
-For more details about the `rule.yml` format, please refer to link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules[contributor's section of the developer guide]
+For more details about the `rule.yml` format, please refer to link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules[contributor's section of the developer guide].
+For more information about the templating system, including list of currently available templates, refer to the link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#templating[Templating section of the developer guide].
 
 <<top>>
 
