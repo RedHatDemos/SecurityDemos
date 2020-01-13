@@ -24,7 +24,7 @@ In this lab exercise, you learn how to solve the task using `ComplianceAsCode`.
 * The `ComplianceAsCode` repository was cloned to the `lab3_profiles` directory.
 * The following dependencies required for the `ComplianceAsCode` content build were installed using `yum install`:
 ** Generic build utilities: `cmake` and `make`
-** Utilities for generating SCAP content: `openscap-utils`
+** Utilities for generating SCAP content: `openscap-scanner`
 ** The Python dependencies for putting content together: `python3-pyyaml` and `python3-jinja2`
 
 

@@ -32,7 +32,7 @@ In Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL), the SCAP content generated from `C
 * The `ComplianceAsCode` repository is already cloned to all of the `/home/lab-user/labs/` directories. For example, `/home/lab-user/labs/lab1_introduction` is a clone of the `ComplianceAsCode` project repository.
 * The following required dependencies for the `ComplianceAsCode` content build are already installed using `yum install`:
 ** Generic build utilities: `cmake` and `make`
-** Utilities for generating SCAP content: `openscap-utils`
+** Utilities for generating SCAP content: `openscap-scanner`
 ** Python dependencies for putting content together: `python3-pyyaml` and `python3-jinja2`
 
 
