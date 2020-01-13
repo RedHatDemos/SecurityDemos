@@ -272,7 +272,7 @@ As the `default: 600` line indicates, if you do not specify the timeout duration
 .. After you are finished looking, press `Ctrl+X` to bring up the "save and exit" option.
 If you are asked about saving any changes, you probably do not want that, so enter `n`.
 
-.. Time to review the HTML guide--when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp.html`, you can clearly see the rule's timeout indeed equals 600.
+.. Time to review the HTML guide--when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp.html`, you can clearly see the rule's timeout indeed equals to 600.
 
 NOTE: The set of values a variable can have is discrete--all values have to be defined in the variable file.
 Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile only after adding `20_min: 1200` to the `options:` key of the variable definition.
@@ -283,7 +283,7 @@ Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile 
 A rule needs more than a description to be of any use. You need to be able to:
 
 * check whether the system complies with the rule definition, and
-* restore an uncompliant system to a compliant state.
+* restore a noncompliant system to a compliant state.
 
 For these reasons, a rule should contain a check and possibly also remediations.
 The additional content is placed in subdirectories of the rule, so explore your `accounts_tmout` rule.
