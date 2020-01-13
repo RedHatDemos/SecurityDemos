@@ -320,7 +320,7 @@ The `ComplianceAsCode` content provides users with snippets that they can run to
 
 Remediations are expected to work on the clean installation configuration--if the administrator has made some changes in the meantime, remediations are not guaranteed to work.
 
-The majority of rules present in profiles come with a Bash remediation, and a large number of them have Ansible remediations.
+The majority of rules present in profiles come with a Bash remediation, and a large number of them have Ansible remediation.
 Anaconda remediations are used to guide the user during system installation.
 Remediations in the form of a Puppet script are also supported.
 
