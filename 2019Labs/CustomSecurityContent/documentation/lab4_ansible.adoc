@@ -52,7 +52,7 @@ This rule is about the interactive session timeout for inactive users.
 Terminating an idle session within a short time period reduces the risk of unauthorized operations.
 The Ansible task that you add configures the session timeout in the respective configuration file.
 
-You work in the context of Red Hat Enterprise Linux^(R)^ 8 (RHEL 8) product and the OSPP profile for Red Hat Enterprise Linux 8,
+You work in the context of Red Hat Enterprise Linux^(R)^ 8 (RHEL 8) product and the OSPP profile for Red Hat^(R)^ Enterprise Linux^(R)^ 8,
 but the structure is the same for all rules in `ComplianceAsCode`.
 
 As you already know from Lab Exercise 1, source code for the `accounts_tmout` rule is located in the `linux_os/guide/system/accounts/accounts-session/accounts_tmout` directory.
@@ -255,7 +255,7 @@ Expect the contents of the `shared.yml` file to look like this:
 == 4.4 Generating and Using Ansible Playbooks for a Rule
 
 You now generate a playbook for the `accounts_tmout` rule you modified.
-You do this in the context of the Red Hat Enterprise Linux 8 product and the OSPP profile for Red Hat Enterprise Linux 8.
+You do this in the context of the Red Hat^(R)^ Enterprise Linux^(R)^ 8 product and the OSPP profile for Red Hat^(R)^ Enterprise Linux^(R)^ 8.
 
 To generate Ansible Playbooks, a complete build of the content for the product needs to be performed.
 That means that all of the other playbooks for all of the other rules are generated as well.
@@ -379,7 +379,7 @@ Note that `TMOUT=1800` is at the end of the file!
 The biggest advantage of using Ansible tasks in `ComplianceAsCode` is that it gets integrated with the SCAP content, the HTML report, and the HTML guide as well.
 
 . Switch to the console view and open the terminal if it is not yet open.
-. Run the following command to open the HTML guide for the OSPP profile for Red Hat Enterprise Linux 8 in your Firefox web browser, or navigate to the OSPP guide the same way you have in previous exercises:
+. Run the following command to open the HTML guide for the OSPP profile for Red Hat^(R)^ Enterprise Linux^(R)^ 8 in your Firefox web browser, or navigate to the OSPP guide the same way you have in previous exercises:
 +
 ----
 [... ~]$ firefox /home/lab-user/labs/lab4_ansible/build/guides/ssg-rhel8-guide-ospp.html

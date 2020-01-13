@@ -162,7 +162,7 @@ The link:https://github.com/ComplianceAsCode/content[ComplianceAsCode/content^] 
 The build itself is based on Python, the `oscap` tool, and XSLT transformations.
 
 .. Make sure that you are in the `/home/lab-user/labs/lab1_introduction` directory in the Terminal window of your laptop.
-.. From this directory, run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8:
+.. From this directory, run `./build_product rhel8` to compile content for Red Hat^(R)^ Enterprise Linux^(R)^ 8:
 +
 ----
 [... lab1_introduction]$ ./build_product rhel8

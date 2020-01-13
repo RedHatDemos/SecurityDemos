@@ -49,12 +49,12 @@ The profiles are located in the `profiles` directory in the product directory.
 The profiles are represented by a simple YAML (YAML Ain't Markup Language) file, such as
 `ospp.profile`, which defines a profile.
 
-In this lab, you create a new “Travel” profile for Red Hat Enterprise Linux 8.
+In this lab, you create a new “Travel” profile for Red Hat^(R)^ Enterprise Linux^(R)^ 8.
 The profile represents your company's new security policy for laptops.
 
 === 3.2.1 Navigating the Profiles Directory
 
-. Go to the profiles directory for Red Hat Enterprise Linux 8:
+. Go to the profiles directory for Red Hat^(R)^ Enterprise Linux^(R)^ 8:
 +
 ----
 [... ~]$ cd /home/lab-user/labs/lab3_profiles
@@ -125,7 +125,7 @@ It cannot be an empty list, so for now you add the `security_patches_up_to_date`
 ...
 ----
 +
-This command rebuilds content for all of the product profiles in Red Hat Enterprise Linux 8, including your new “Travel” profile.
+This command rebuilds content for all of the product profiles in Red Hat^(R)^ Enterprise Linux^(R)^ 8, including your new “Travel” profile.
 The command builds the human-readable HTML guide that can be displayed in a web browser and the machine-readable SCAP files that can be consumed by OpenSCAP.
 
 . Check the resulting HTML guide to see your new profile.

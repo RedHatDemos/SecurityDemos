@@ -64,7 +64,7 @@ Note that this command outputs the OpenSCAP version and versions of supported st
 
 == 2.3 Using `ComplianceAsCode` Content with OpenSCAP Command Line Tool
 
-In this section, you build the security content for Red Hat Enterprise Linux 8 from `ComplianceAsCode` source code and then you use the built content with the OpenSCAP command line tool to scan your machine.
+In this section, you build the security content for Red Hat^(R)^ Enterprise Linux^(R)^ 8 from `ComplianceAsCode` source code and then you use the built content with the OpenSCAP command line tool to scan your machine.
 
 . The content has been built, so you can take a look at the generated files in the `build` directory right away:
 +
@@ -100,7 +100,7 @@ The datastream contains multiple profiles that cover different security baseline
 Each profile is identified by a profile ID.
 +
 The built `ComplianceAsCode` content is available as a RHEL `scap-security-guide` RPM package.
-Unlike the upstream repository that you work with now, the package contains only content that is officially tested and supported by Red Hat.
+Unlike the upstream repository that you work with now, the package contains only content that is officially tested and supported by Red Hat^(R)^.
 Therefore, the `scap-security-guide` package in RHEL 8 contains only the OSPP and PCI-DSS profiles at the moment.
 +
 . Perform your first baseline testing scan with the vanilla OSPP profile.
@@ -172,7 +172,7 @@ image::scap_report_fail.png[]
 . In the console view, click `Activities` in the top left corner of the screen, then select the green circle icon for SCAP Workbench.
 
 . After Workbench starts, select `Other SCAP content` in the drop-down list and click `Load Content`. A file browser window appears.
-. Locate `ssg-rhel8-ds.xml` from the `/home/lab-user/labs/lab2_openscap/build` directory and click `Open` to open the compliance content for Red Hat Enterprise Linux 8 that you built in the previous section.
+. Locate `ssg-rhel8-ds.xml` from the `/home/lab-user/labs/lab2_openscap/build` directory and click `Open` to open the compliance content for Red Hat^(R)^ Enterprise Linux^(R)^ 8 that you built in the previous section.
 +
 image:load_content.png[]
 +
