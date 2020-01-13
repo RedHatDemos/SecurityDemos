@@ -16,7 +16,7 @@ Several integrations for continuous scanning also exist, but in this lab exercis
 
 .*Goals*
 
-* Learn the basics of automated security scanning in Red Hat Enterprise Linux 8
+* Learn the basics of automated security scanning in Red Hat^(R)^ Enterprise Linux^(R)^ 8
 * Learn how to use `ComplianceAsCode` for automated security scanning
 * Learn how to do lightweight customization of a predefined security policy using a GUI tool
 * Explore the possibilities for remediations of failing rules
