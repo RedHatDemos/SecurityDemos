@@ -294,7 +294,7 @@ In the terminal, run the following commands:
 ----
 [... lab1_introduction]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
 [... accounts_tmout]$ ls
-ansible  bash  oval  rule.yml
+ansible  bash  oval  rule.yml  tests/
 ----
 
 The following sections describe the currently supported associated content types.
