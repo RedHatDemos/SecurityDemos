@@ -624,7 +624,7 @@ If you are asked about saving any changes, you probably do not want that, so ent
 In the case of a timeout, 100 seconds is more secure than 600 seconds.
 Therefore, the scenario represents a *supercompliant* case, that is, the setting is stricter than necessary, but it is within the area of allowed values.
 .. Copy that one, and make a new test scenario out of it.
-Run this command in the terminal in the `rule_accounts_tmout` directory:
+Run this command in the terminal in the `tests` directory:
 +
 ----
 [... tests]$ cp correct_value.pass.sh supercompliant.pass.sh
