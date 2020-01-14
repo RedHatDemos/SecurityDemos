@@ -69,17 +69,18 @@ As you already know from Lab Exercise 1, source code for the `accounts_tmout` ru
 ----
 [... lab4_ansible]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
 [... accounts_tmout]$ ls
-bash  oval  rule.yml
+bash  oval  rule.yml  tests
 ----
 +
 As you learned in previous lab exercises, the `rule.yml` file contains the rule description, rationale, and metadata.
 +
 [NOTE]
 ====
-Apart from `rule.yml`, there are also two subdirectories in the `accounts_tmout` directory:
+Apart from `rule.yml`, there are also three subdirectories in the `accounts_tmout` directory:
 
 * `bash` contains source code for a Bash script that can fix the timeout settings, also called "Bash remediation."
 * `oval` contains source code for an OVAL check that checks if the timeout is set.
+* `tests` contains test scenarios which are used to test checks and remediations of a rule.
 ====
 
 . To add Ansible tasks in this rule, you first create a new directory called `ansible` in the rule directory, at the same level as the `bash` and `oval` directories.
