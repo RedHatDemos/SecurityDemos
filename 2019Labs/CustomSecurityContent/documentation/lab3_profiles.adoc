@@ -109,7 +109,7 @@ Also check that there is no trailing whitespace.
 
 The profile consists of four items that are required:
 
-.. `documentation_complete: true` means that your rule is not in a draft state, so the build system picks it up.
+.. `documentation_complete: true` means that your profile is not in a draft state, so the build system picks it up.
 .. `title` is a short profile title.
 .. `description` consists of a few paragraphs that describe the purpose of the profile.
 .. `selections` is a list of rules and variables that make up the profile.
@@ -530,15 +530,15 @@ press `Ctrl+X`, then enter `y` to save and exit.
 
 You have successfully defined the rule and added it to the profile.
 However, the rule currently has no check nor remediation.
-That means that Openscap can't check if the Hexchat package is installed.
+That means OpenSCAP can't check if the Hexchat package is installed.
 Writing OVAL checks is a process out of scope of this chapter and it is described in a separate lab.
-However, in some cases you can use already created templates.
-You can try to search by keyword  in link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#732-list-of-available-templates[list of templates] to find out if some template suits your case.
+However, in some cases you can use the already created templates.
+You can try to search by keyword in link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#732-list-of-available-templates[list of templates] to find out if some template suits your case.
 In this case it does.
 
-Templates are a great way of simplifying development of new rules and avoiding unnecessarily large amount of duplicate code.
-There exist sets of rules which are performing very similar checks and can be remediated in similar way.
-This applies for example to checks that a certain package is installed, that a certain Systemd service is disabled etc.
+Templates are a great way of simplifying development of new rules and avoiding unnecessarily large amount of duplicated code.
+There are sets of rules which perform very similar checks and can be remediated in a similar way.
+This applies for example to checks that a certain package is installed, that a certain Systemd service is disabled, etc.
 Using templates is recommended whenever possible to avoid code duplication and possible inconsistencies.
 Another benefit of templates is ease of creation of new rules.
 As demonstrated below, you don't have to know how to write OVAL checks or Bash remediations to create a fully working rule.
@@ -562,7 +562,7 @@ evr:: Optional parameter. It can be used to check if the package is of a specifi
 [... lab3_profiles]$ nano linux_os/guide/system/software/package_hexchat_installed/rule.yml
 ----
 
-. At the special block at the end of the file, so that it looks like this:
+. Add the special block at the end of the file, so it looks like this:
 +
 ----
 documentation_complete: true
@@ -581,7 +581,7 @@ template:
         pkgname: hexchat
 ----
 +
-Notice that you used one of two possible parameters; `pkgname`.
+Notice that you used one of the two possible parameters; `pkgname`.
 
 . When you have finished editing,
 press `Ctrl+X`, then enter `y` to save and exit.
@@ -605,7 +605,7 @@ Either way, you see your "Travel" profile with four rules, including the newly a
 image::2-04-rule.png[New rule]
 
 For more details about the `rule.yml` format, please refer to link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#711-rules[contributor's section of the developer guide].
-For more information about the templating system, including list of currently available templates, refer to the link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#templating[Templating section of the developer guide].
+For more information about the templating system, including the list of currently available templates, refer to the link:https://github.com/ComplianceAsCode/content/blob/master/docs/manual/developer_guide.adoc#templating[Templating section of the developer guide].
 
 <<top>>
 
