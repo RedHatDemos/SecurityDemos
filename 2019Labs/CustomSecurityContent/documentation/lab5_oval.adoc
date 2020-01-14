@@ -438,7 +438,7 @@ So, did you do everything correctly?
 TIP:You can use the `Up` arrow key to browse the command history so you do not have to retype them every time.
 +
 ....
-[... rule_accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
+[... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
 [... lab5_oval]$ ./build_product rhel7
 ...
 [... lab5_oval]$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
@@ -568,7 +568,7 @@ This way, you do not have to worry about possibly introducing those link:https:/
 . Finally, run the rule's test again--it may be that a typo was introduced, so the OVAL is not actually correct:
 +
 ....
-[... rule_accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
+[... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
 [... lab5_oval]$ ./build_product rhel7
 ...
 [... lab5_oval]$ sudo tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
@@ -590,21 +590,20 @@ As there are no errors, this proves that your check-remediation combination work
 === 5.6.1 Correct Handling of Supercompliance
 
 . Examine the test scenarios--for example, the `wrong_value.fail.sh` scenario.
-.. Open a new terminal window, and change to the test definitions directory.
-The directory structure under the `tests/data` directory is analogous to the directory structure under `linux_os/guide`:
+.. Open a new terminal window, and change to the test definitions directory. Tests reside within the same directory as the `rule.yml`:
 +
 ----
-[... lab5_oval]$ cd tests/data/group_system/group_accounts/group_accounts-session/rule_accounts_tmout
+[... lab5_oval]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout/tests
 ----
 
 .. Open the `wrong_value.fail.sh` file:
 +
 ----
-[... rule_accounts_tmout]$ nano wrong_value.fail.sh
+[... tests]$ nano wrong_value.fail.sh
 ----
 +
-As you can see, the test sets the `TMOUT` value to 1234.
-The value is correctly considered to be noncompliant--the timeout should be 600, and 1234 is longer and therefore less secure.
+As you can see, the test sets the `TMOUT` value to 3600.
+The value is correctly considered to be noncompliant--the timeout should be 600, and 3600 is longer and therefore less secure.
 
 .. After you finish looking, press `Ctrl+X` to bring up the "save and exit" option.
 If you are asked about saving any changes, you probably do not want that, so enter `n`.
@@ -613,7 +612,7 @@ If you are asked about saving any changes, you probably do not want that, so ent
 Open it in the editor, as well:
 +
 ----
-[... rule_accounts_tmout]$ nano correct_value.pass.sh
+[... tests]$ nano correct_value.pass.sh
 ----
 +
 As you can see, this one sets the `TMOUT` value to 600, which is the value defined by the profile.
@@ -628,13 +627,13 @@ Therefore, the scenario represents a *supercompliant* case, that is, the setting
 Run this command in the terminal in the `rule_accounts_tmout` directory:
 +
 ----
-[... rule_accounts_tmout]$ cp correct_value.pass.sh supercompliant.pass.sh
+[... tests]$ cp correct_value.pass.sh supercompliant.pass.sh
 ----
 
 .. Then, open it in the `nano` editor, and change the value from 600 to 100.
 +
 ----
-[... rule_accounts_tmout]$ nano supercompliant.pass.sh
+[... tests]$ nano supercompliant.pass.sh
 ----
 
 .. After you finish editing, press `Ctrl+X`, then enter `y` to save and exit.
@@ -657,7 +656,7 @@ fi
 +
 ....
 
-[... rule_accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
+[... tests]$ cd /home/lab-user/labs/lab5_oval
 [... lab5_oval]$ ./build_product rhel7
 ...
 [... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
@@ -718,7 +717,7 @@ As discussed at the beginning of this exercise, the `TMOUT` variable can be pref
 . Modify the passing `correct_value.pass.sh` test scenario to test a correct value in addition to the usage of the `export` keyword:
 +
 ----
-[... lab5_oval]$ nano tests/data/group_system/group_accounts/group_accounts-session/rule_accounts_tmout/correct_value.pass.sh
+[... lab5_oval]$ nano linux_os/guide/system/accounts/accounts-session/accounts_tmout/tests/correct_value.pass.sh
 ----
 +
 [source,sh]
