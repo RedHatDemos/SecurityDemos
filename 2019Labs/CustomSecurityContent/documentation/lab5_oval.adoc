@@ -602,8 +602,8 @@ As there are no errors, this proves that your check-remediation combination work
 [... tests]$ nano wrong_value.fail.sh
 ----
 +
-As you can see, the test sets the `TMOUT` value to 3600.
-The value is correctly considered to be noncompliant--the timeout should be 600, and 3600 is longer and therefore less secure.
+As you can see, the test sets the `TMOUT` value to 1234.
+The value is correctly considered to be noncompliant--the timeout should be 600, and 1234 is longer and therefore less secure.
 
 .. After you finish looking, press `Ctrl+X` to bring up the "save and exit" option.
 If you are asked about saving any changes, you probably do not want that, so enter `n`.
