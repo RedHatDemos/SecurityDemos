@@ -57,20 +57,6 @@
      - id_rsa.pub
     become_user: root
 
-  - name: Build a RHEL7 podman image for testing
-    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-rhel   .'
-    args:
-      chdir: "{{ CACC_LOCAL }}/Dockerfiles"
-    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
-    become_user: root
-
-  - name: Build a Fedora podman image for testing
-    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-fedora .'
-    args:
-      chdir: "{{ CACC_LOCAL }}/Dockerfiles"
-    when: ansible_distribution == 'Fedora'
-    become_user: root
-
   - name: Remove the lab3 tests
     file:
       path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
@@ -119,15 +105,15 @@
       regexp: '(    Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that)'
       replace: '\1\n\1'
 
-  - name: "Ex. 3: Remove tests"
+  - name: "Ex. 5: Remove tests"
     file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/tests/data/group_system/group_accounts/group_accounts-session/"
+      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/tests"
       state: absent
 
-  - name: "Ex. 3: Copy bad tests"
+  - name: "Ex. 5: Copy bad tests"
     copy:
-      src: "data/rule_accounts_tmout"
-      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/tests/data/group_system/group_accounts/group_accounts-session/"
+      src: "data/rule_accounts_tmout/"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/tests/"
 
   - name: "Ex. 4: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves"
     file:
@@ -189,3 +175,17 @@
       chdir: "{{ LABS_ROOT }}/{{ item }}"
     loop:
       - "{{ TRACK_5_LABEL }}"
+
+  - name: Build a RHEL7 podman image for testing
+    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-rhel   .'
+    args:
+      chdir: "{{ CACC_LOCAL }}/Dockerfiles"
+    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
+    become_user: root
+
+  - name: Build a Fedora podman image for testing
+    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-fedora .'
+    args:
+      chdir: "{{ CACC_LOCAL }}/Dockerfiles"
+    when: ansible_distribution == 'Fedora'
+    become_user: root
