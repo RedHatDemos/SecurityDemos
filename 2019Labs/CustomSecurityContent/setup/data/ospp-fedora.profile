@@ -235,7 +235,7 @@ selections:
     ### FMT_MOF_EXT.1 / AC-11(a)
     ### Set Screen Lock Timeout Period to 30 Minutes or Less
     - accounts_tmout
-    - var_accounts_tmout=30_min
+    - var_accounts_tmout=10_min
 
     ### FIA_AFL.1
     ### Disable Unauthenticated Login (such as Guest Accounts)
