@@ -117,7 +117,7 @@ image::session_timeout.png[]
 Setting the TMOUT option in /etc/profile ensures that Setting the TMOUT option in /etc/profile ensures that all user
 sessions will terminate based on inactivity. The TMOUT setting in /etc/profile should read as follows:
 
-TMOUT=1800
+TMOUT=600
 ----
 +
 Note that some text is incorrectly written twice in this rule: *Setting the TMOUT option in /etc/profile ensures that*. This was done on purpose for you to fix, so you can understand how rule definitions are created and updated.
@@ -206,7 +206,7 @@ Just as you did in the previous step, you can search for the variable definition
 linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
 ----
 +
-Though the `var_accounts_tmout.var` file contains the variable description--which is helpful--you cannot be sure what the number `1800` means. However, the contents of the file indicate that it is the same as 30 minutes, which is 1800 seconds.
+Though the `var_accounts_tmout.var` file contains the variable description--which is helpful--you cannot be sure what the number `600` means. However, the contents of the file indicate that it is the same as 30 minutes, which is 600 seconds.
 
 . The rule is parametrized per profile.
 This is because there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
@@ -224,12 +224,12 @@ Open it in the editor and search for `accounts_tmout`:
 ----
     ...
     ### FMT_MOF_EXT.1 / AC-11(a)
-    ### Set Screen Lock Timeout Period to 30 Minutes or Less
+    ### Set Screen Lock Timeout Period to 10 Minutes or Less
     - accounts_tmout
-    - var_accounts_tmout=30_min
+    - var_accounts_tmout=10_min
     ...
 ----
-. Modify the `var_accounts_tmout` variable to `10_min`.
+. Modify the `var_accounts_tmout` variable to `30_min`.
 .. Press `Ctrl+X`, then enter `y` to save and exit.
 .. Rebuild the content:
 +
@@ -238,7 +238,7 @@ Open it in the editor and search for `accounts_tmout`:
 ----
 +
 After the build finishes, refresh the HTML guide either by reloading it in the browser, or by reopening `build/guides/ssg-rhel8-guide-ospp.html`.
-Expect the variable value to be updated to `600`.
+Expect the variable value to be updated to `1800`.
 +
 .The Firefox Refresh Page button
 image::browser-refresh.png[500,500]
