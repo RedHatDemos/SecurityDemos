@@ -26,6 +26,8 @@ The SSH keys for `root` are authorized by the container's root user.
 The steps for how to accomplish this are in the `tests/README.md` file of the `ComplianceAsCode` project.
 * The OVAL check for `accounts_tmout` was modified so you can improve it.
 
+IMPORTANT: Content used in this lab has been altered to increase its educative potential, and is therefore different from the content in ComplianceAsCode upstream repository or the content in the scap-security-guide package shipped in Red Hat^(R)^ products.
+
 
 == 5.1 Before You Start
 

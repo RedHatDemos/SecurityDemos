@@ -34,6 +34,8 @@ Several integrations for continuous scanning also exist, but in this lab exercis
 ** Utilities for scanning remote systems: `openscap-utils`
 ** The GUI front end and datastream tool: `scap-workbench`
 
+IMPORTANT: Content used in this lab has been altered to increase its educative potential, and is therefore different from the content in ComplianceAsCode upstream repository or the content in the scap-security-guide package shipped in Red Hat^(R)^ products.
+
 
 == 2.2 Introduction to OpenSCAP Command Line Tool
 

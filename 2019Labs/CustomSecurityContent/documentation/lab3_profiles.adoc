@@ -27,6 +27,8 @@ In this lab exercise, you learn how to solve the task using `ComplianceAsCode`.
 ** Utilities for generating SCAP content: `openscap-scanner`
 ** The Python dependencies for putting content together: `python3-pyyaml` and `python3-jinja2`
 
+IMPORTANT: Content used in this lab has been altered to increase its educative potential, and is therefore different from the content in ComplianceAsCode upstream repository or the content in the scap-security-guide package shipped in Red Hat^(R)^ products.
+
 
 == 3.2 Creating a New Empty Profile
 
