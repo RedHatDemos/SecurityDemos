@@ -3,13 +3,16 @@
   become: yes
   become_method: sudo
 
+  vars:
+    ANSIBLE_VERSION: "2.9"
+
   tasks:
-  - name: Enable Ansible repository
+  - name: Enable Ansible {{ ANSIBLE_VERSION }} repository
     yum_repository:
-      name: ansible-2.9-for-rhel-8-x86_64-rpms
+      name: ansible-{{ ANSIBLE_VERSION }}-for-rhel-8-x86_64-rpms
       file: redhat # To use the same file as the subscription-manager
-      description: "Red Hat Ansible Engine 2.8 for RHEL 8 x86_64 (RPMs)"
-      baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.8/os
+      description: "Red Hat Ansible Engine {{ ANSIBLE_VERSION }} for RHEL 8 x86_64 (RPMs)"
+      baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/{{ ANSIBLE_VERSION }}/os
       gpgcheck: no
     when: ansible_distribution == 'RedHat'  # i.e. RHEL, not Fedora
 
