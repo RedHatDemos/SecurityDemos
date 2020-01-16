@@ -232,7 +232,7 @@ selections:
     - configure_tmux_lock_command
 
     ### FMT_MOF_EXT.1 / AC-11(a)
-    ### Set Screen Lock Timeout Period to 30 Minutes or Less
+    ### Set Screen Lock Timeout Period to 10 Minutes or Less
     - accounts_tmout
     - var_accounts_tmout=10_min
 
