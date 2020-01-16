@@ -32,8 +32,10 @@ In Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL), the SCAP content generated from `C
 * The `ComplianceAsCode` repository is already cloned to all of the `/home/lab-user/labs/` directories. For example, `/home/lab-user/labs/lab1_introduction` is a clone of the `ComplianceAsCode` project repository.
 * The following required dependencies for the `ComplianceAsCode` content build are already installed using `yum install`:
 ** Generic build utilities: `cmake` and `make`
-** Utilities for generating SCAP content: `openscap-utils`
+** Utilities for generating SCAP content: `openscap-scanner`
 ** Python dependencies for putting content together: `python3-pyyaml` and `python3-jinja2`
+
+IMPORTANT: Content used in this lab has been altered to increase its educative potential, and is therefore different from the content in ComplianceAsCode upstream repository or the content in the scap-security-guide package shipped in Red Hat^(R)^ products.
 
 
 == 1.2 Hands-on Lab
@@ -117,7 +119,7 @@ image::session_timeout.png[]
 Setting the TMOUT option in /etc/profile ensures that Setting the TMOUT option in /etc/profile ensures that all user
 sessions will terminate based on inactivity. The TMOUT setting in /etc/profile should read as follows:
 
-TMOUT=1800
+TMOUT=600
 ----
 +
 Note that some text is incorrectly written twice in this rule: *Setting the TMOUT option in /etc/profile ensures that*. This was done on purpose for you to fix, so you can understand how rule definitions are created and updated.
@@ -162,7 +164,7 @@ The link:https://github.com/ComplianceAsCode/content[ComplianceAsCode/content^] 
 The build itself is based on Python, the `oscap` tool, and XSLT transformations.
 
 .. Make sure that you are in the `/home/lab-user/labs/lab1_introduction` directory in the Terminal window of your laptop.
-.. From this directory, run `./build_product rhel8` to compile content for Red Hat Enterprise Linux 8:
+.. From this directory, run `./build_product rhel8` to compile content for Red Hat^(R)^ Enterprise Linux^(R)^ 8:
 +
 ----
 [... lab1_introduction]$ ./build_product rhel8
@@ -206,7 +208,7 @@ Just as you did in the previous step, you can search for the variable definition
 linux_os/guide/system/accounts/accounts-session/var_accounts_tmout.var
 ----
 +
-Though the `var_accounts_tmout.var` file contains the variable description--which is helpful--you cannot be sure what the number `1800` means. However, the contents of the file indicate that it is the same as 30 minutes, which is 1800 seconds.
+Though the `var_accounts_tmout.var` file contains the variable description--which is helpful--you cannot be sure what the number `600` means. However, the contents of the file indicate that it is the same as 30 minutes, which is 600 seconds.
 
 . The rule is parametrized per profile.
 This is because there can be multiple profiles in one datastream file, one rule can exist in multiple profiles, and it can be parametrized differently in different profiles.
@@ -224,12 +226,12 @@ Open it in the editor and search for `accounts_tmout`:
 ----
     ...
     ### FMT_MOF_EXT.1 / AC-11(a)
-    ### Set Screen Lock Timeout Period to 30 Minutes or Less
+    ### Set Screen Lock Timeout Period to 10 Minutes or Less
     - accounts_tmout
-    - var_accounts_tmout=30_min
+    - var_accounts_tmout=10_min
     ...
 ----
-. Modify the `var_accounts_tmout` variable to `10_min`.
+. Modify the `var_accounts_tmout` variable to `30_min`.
 .. Press `Ctrl+X`, then enter `y` to save and exit.
 .. Rebuild the content:
 +
@@ -238,7 +240,7 @@ Open it in the editor and search for `accounts_tmout`:
 ----
 +
 After the build finishes, refresh the HTML guide either by reloading it in the browser, or by reopening `build/guides/ssg-rhel8-guide-ospp.html`.
-Expect the variable value to be updated to `600`.
+Expect the variable value to be updated to `1800`.
 +
 .The Firefox Refresh Page button
 image::browser-refresh.png[500,500]
@@ -272,7 +274,7 @@ As the `default: 600` line indicates, if you do not specify the timeout duration
 .. After you are finished looking, press `Ctrl+X` to bring up the "save and exit" option.
 If you are asked about saving any changes, you probably do not want that, so enter `n`.
 
-.. Time to review the HTML guide--when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp.html`, you can clearly see the rule's timeout indeed equals 600.
+.. Time to review the HTML guide--when refreshing or reopening `build/guides/ssg-rhel8-guide-ospp.html`, you can clearly see the rule's timeout indeed equals to 600.
 
 NOTE: The set of values a variable can have is discrete--all values have to be defined in the variable file.
 Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile only after adding `20_min: 1200` to the `options:` key of the variable definition.
@@ -283,7 +285,7 @@ Therefore, it is possible to specify `var_accounts_tmout=20_min` in the profile 
 A rule needs more than a description to be of any use. You need to be able to:
 
 * check whether the system complies with the rule definition, and
-* restore an uncompliant system to a compliant state.
+* restore a noncompliant system to a compliant state.
 
 For these reasons, a rule should contain a check and possibly also remediations.
 The additional content is placed in subdirectories of the rule, so explore your `accounts_tmout` rule.
@@ -294,7 +296,7 @@ In the terminal, run the following commands:
 ----
 [... lab1_introduction]$ cd linux_os/guide/system/accounts/accounts-session/accounts_tmout
 [... accounts_tmout]$ ls
-ansible  bash  oval  rule.yml
+ansible  bash  oval  rule.yml  tests
 ----
 
 The following sections describe the currently supported associated content types.
@@ -320,7 +322,7 @@ The `ComplianceAsCode` content provides users with snippets that they can run to
 
 Remediations are expected to work on the clean installation configuration--if the administrator has made some changes in the meantime, remediations are not guaranteed to work.
 
-The majority of rules present in profiles come with a Bash remediation, and a large number of them have Ansible remediations.
+The majority of rules present in profiles come with a Bash remediation, and a large number of them have Ansible remediation.
 Anaconda remediations are used to guide the user during system installation.
 Remediations in the form of a Puppet script are also supported.
 
