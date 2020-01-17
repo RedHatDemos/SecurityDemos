@@ -24,7 +24,7 @@ Go to the last bullet and click `here` to access the environment's power control
 image:labinfopage.png[1200,1200]
 
 . Note that one workstation VM is shown on the *power control and consoles page*.
-This is a Red Hat Enterprise Linux ^(R)^8 system with GUI. It is the machine that you will use throughout all of the exercises in this lab.
+This is a Red Hat^(R)^ Enterprise Linux^(R)^ 8 system with GUI. It is the machine that you will use throughout all of the exercises in this lab.
 Click `CONSOLE`.
 Log in as *Lab User* with the password *r3dh4t1!*.
 +
