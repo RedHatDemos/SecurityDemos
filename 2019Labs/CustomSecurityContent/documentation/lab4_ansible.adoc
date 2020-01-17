@@ -164,7 +164,7 @@ Again, do not close the file just yet.
       create: yes
       dest: /etc/profile
       regexp: "^#?TMOUT"
-      line: "TMOUT=1800"
+      line: "TMOUT=600"
 ----
 +
 At this point, expect the entire file to look like this:
@@ -181,7 +181,7 @@ At this point, expect the entire file to look like this:
       create: yes
       dest: /etc/profile
       regexp: "^#?TMOUT"
-      line: "TMOUT=1800"
+      line: "TMOUT=600"
 ----
 +
 [NOTE]
@@ -194,10 +194,10 @@ You can use link:https://docs.ansible.com/ansible/latest/modules/modules_by_cate
 
 Using Ansible language, you have defined a new Ansible task with the name "configure timeout".
 It uses the link:https://docs.ansible.com/ansible/latest/modules/lineinfile_module.html[lineinfile^] Ansible module, which can add, modify, and remove lines in configuration files.
-Using the `lineinfile` module, you insert the line `TMOUT=1800` to `/etc/profile`.
+Using the `lineinfile` module, you insert the line `TMOUT=600` to `/etc/profile`.
 
 Note that the `regexp` line defines a regular expression that determines what Ansible Automation is going to do.
-If the regular expression matches a line, it is substituted with `line`, so the lines `TMOUT=3600` and `#TMOUT=1800` are replaced by `TMOUT=1800`.
+If the regular expression matches a line, it is substituted with `line`, so the lines `TMOUT=1800` and `#TMOUT=600` are replaced by `TMOUT=600`.
 If no line matches the regular expression, contents of `line` are simply appended to `dest`, which in this case is `/etc/profile`.
 ====
 +
@@ -215,12 +215,12 @@ Think of the rule description as a natural language specification of what needs 
 At this point, your task does not fully conform to the rule description in `rule.yml`.
 The difference is that `rule.yml` does not define a specific value for the timeout.
 
-. Check that `rule.yml` does not specify whether the timeout should be 1800 seconds or a different amount of time.
+. Check that `rule.yml` does not specify whether the timeout should be 600 seconds or a different amount of time.
 In fact, the rule is parametrized by a variable, `var_accounts_tmout`.
 The specific value for a timeout variable is set by setting `var_accounts_tmout` in the profile definition.
 This way, every profile can define a different timeout but still reuse the same source code.
 +
-You need to fix the Ansible task to use the `var_accounts_tmout` variable instead of explicitly setting 1800 seconds in the task.
+You need to fix the Ansible task to use the `var_accounts_tmout` variable instead of explicitly setting 600 seconds in the task.
 The general format for binding a variable from `ComplianceAsCode` profiles is `- (xccdf-var name_of_the_variable)`.
 
 . Add the following line (including the dash at the beginning of the line) right after the `# disruption = low` line in the `shared.yml` file:
@@ -232,7 +232,7 @@ The general format for binding a variable from `ComplianceAsCode` profiles is `-
 Now, you can use the bound variable in the `configure timeout` Ansible task as an Ansible variable using the standard Ansible syntax.
 When the `shared.yml` file is processed by the `ComplianceAsCode` build system, this variable binding is resolved automatically and a new Ansible variable is created in the `vars` list in the generated playbook.
 
-. Replace `line: "TMOUT=1800"` with `line: "TMOUT={{ var_accounts_tmout }}"` to use the variable in the task.
+. Replace `line: "TMOUT=600"` with `line: "TMOUT={{ var_accounts_tmout }}"` to use the variable in the task.
 +
 At this point you have completed adding Ansible tasks for the `accounts_tmout` rule.
 Expect the contents of the `shared.yml` file to look like this:
@@ -310,7 +310,7 @@ The contents of the `build/rhel8/playbooks/ospp/accounts_tmout.yml` file look li
   hosts: '@@HOSTS@@'
   become: true
   vars:
-    var_accounts_tmout: '1800'
+    var_accounts_tmout: '600'
   tags:
     - CCE-80673-7
     - NIST-800-171-3.1.11
@@ -359,7 +359,7 @@ To use your playbook on your machine (on a local host), replace `'@@HOSTS@@'` wi
 ...
 ----
 +
-Note that the timeout value supplied by the `var_accounts_tmout` variable was set to a specific value (1800 seconds) during the build process, and the variable was added to the `vars` section of the playbook.
+Note that the timeout value supplied by the `var_accounts_tmout` variable was set to a specific value (600 seconds) during the build process, and the variable was added to the `vars` section of the playbook.
 +
 Note also that the playbook has tags in the `tags` section that were added based on metadata in `rule.yml`.
 At the beginning, it contains the CCE (Common Configuration Enumeration) identifier.
@@ -377,7 +377,7 @@ Finally, the `tasks:` section contains the Ansible task that you created.
 [... lab4_ansible]$ cat /etc/profile
 ----
 +
-Note that `TMOUT=1800` is at the end of the file!
+Note that `TMOUT=600` is at the end of the file!
 +
 The biggest advantage of using Ansible tasks in `ComplianceAsCode` is that it gets integrated with the SCAP content, the HTML report, and the HTML guide as well.
 
