@@ -173,7 +173,7 @@ Use password:
 ...password: r3dh4t1!
 ----
 
-=== Important thing to keep in mind (Fedora only)
+=== 0.4.3 Important thing to keep in mind (Fedora only)
 
 . This lab was primarily created to work on Red Hat^(R)^ Enterprise Linux^(R)^ machines, but it is totally compatible with Fedora. So whenever you see `rhel8` or `rhel7` throughout the lab you switch to `fedora`. For example:
 
