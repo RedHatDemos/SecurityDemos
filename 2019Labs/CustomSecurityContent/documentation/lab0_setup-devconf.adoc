@@ -157,7 +157,7 @@ image:0-06-ipaddress.png[600,600]
 ----
 +
 
-NOTE: Replace `<VM_IPv4_ADDRESS>` with the Virtual Machine's IPv4 address and `<VM_USER>` with the user you created in your Virtual Machine. Pay attention at the required `comma` after the IPv4 address parameter. You will be prompted to input the password of `<VM_USER>` twice, the second time you can press `Enter` so it uses the first password as input.
+NOTE: Replace `<VM_IPv4_ADDRESS>` with the Virtual Machine's IPv4 address and `<VM_USER>` with the user you created in your Virtual Machine. Pay attention at the required comma after the IPv4 address parameter. You will be prompted to input the password of `<VM_USER>` twice, the second time you can press `Enter` so it uses the first password as input.
 
 . After the `ansible-playbook` command finishes, you are now able to start the lab. First login to the user `lab-user` (the setup playbooks have created it) on you Virtual Machine using the password *r3dh4t1!*. And for convenience you can run all the commands through a `SSH` terminal, run the following command:
 
