@@ -113,7 +113,7 @@ image:0-05-supersearch.png[600,600]
 
 == 0.4 Setting up the Lab Environment using Fedora Virtual Machine
 
-NOTE: If you use the provided lab environment you can skip this entire section.
+NOTE: If you use the provided lab environment you can skip this entire section and go to: link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
 
 This section contains instructions on how to setup a Fedora environment for the lab.
 
