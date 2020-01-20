@@ -175,10 +175,15 @@ Use password:
 
 === Important thing to keep in mind (Fedora only)
 
-. This lab was primarily created to work on Red Hat^(R)^ Enterprise Linux^(R)^ machines, but it is totally compatible with Fedora. So whenever you see `rhel8` or `rhel7` in commands that need to be run you switch to `fedora`. For example:
+. This lab was primarily created to work on Red Hat^(R)^ Enterprise Linux^(R)^ machines, but it is totally compatible with Fedora. So whenever you see `rhel8` or `rhel7` throughout the lab you switch to `fedora`. For example:
+
 +
 ----
 [... ~]$ ./build_product rhel8
+[... ~]$ nano rhel8/profiles/travel.profile
+[... ~]$ sudo oscap xccdf eval --results results.xml --oval-results --report report.html --profile travel build/ssg-rhel8-ds.xml
+[... ~]$ ./build_product rhel7
+[... ~]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
 ----
 +
 
@@ -186,8 +191,12 @@ But instead you execute:
 +
 ----
 [... ~]$ ./build_product fedora
+[... ~]$ nano fedora/profiles/travel.profile
+[... ~]$ sudo oscap xccdf eval --results results.xml --oval-results --report report.html --profile travel build/ssg-fedora-ds.xml
+[... ~]$ ./build_product fedora
+[... ~]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-fedora-ds.xml accounts_tmout
 ----
 +
-
+nano rhel8/profiles/ospp.profile
 
 link:README.adoc#table-of-contents[ Table of Contents] | link:lab1_introduction.adoc[Lab exercise 1: Say Hello to ComplianceAsCode]
