@@ -130,7 +130,7 @@ This section contains instructions on how to setup a Fedora environment for the 
 ----
 +
 . Go to `Settings->Network` and write down the IPv4 address of this Virtual Machine so we can run Ansible^(R)^ playbooks to setup the lab environment and also to access the terminal through `SSH`. The following image illustrates how to find the IPv4 address:
-
++
 image:0-06-ipaddress.png[600,600]
 
 === 0.4.2 Setting up the Lab environment
