@@ -1,0 +1,23 @@
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+
+  - name: Set authorized key taken from file for root
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+
+  # 3. Our lab does not have the firewall enabled by default so we will install it as root. 
+  - name: Remove firewalld lab package
+    package:
+      name: firewalld
+      state: absent
+
+#  - name: Enable and start firewalld.service
+#    service:
+#      name: firewalld
+#      enabled: yes
+#      state: started
