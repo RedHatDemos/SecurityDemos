@@ -1,19 +1,27 @@
-== Lab 1: Automated Scanning and Remediations of Host Systems for Vulnerabilities and Security Compliance
+== Lab 1: OpenShift blocks rouge containers from running as privileged user
 
-*Lab Length: Long*
 
 === Goal of Lab 1
-The goal of this lab is to learn how to use a combination of Red Hat Ansible Automation , Red Hat Satellite, Red Hat CloudForms, and OpenSCAP to automatically detect and remediate security and compliance issues in a controlled way for automated security compliance at scale.
+The goal of this lab is to learn about the default security technologies in Red Hat OpenShift Container Platform. Specifically, you will see how OpenShift blocks rouge containers from Docker Hub to run as a privileged root user.
 
 === Introduction
-Security compliance management is the ongoing process of defining security policies, auditing for compliance with those policies and resolving instances of non-compliance. Once a security policy is defined, an audit is conducted to verify compliance with the policy. Any non-compliance is managed according to the organization's configuration management policies. Security policies vary in their scope, from being host-specific to industry-wide, so there is a need for flexibility in their definition.
 
-The Security Content Automation Protocol (SCAP) enables the definition of security configuration policies. For example, a security policy might specify that for hosts running Red Hat Enterprise Linux, login via SSH is not permitted for the root account. OpenSCAP is the integrated security scanning, auditing, and remediation tool in both Red Hat Enterprise Linux and Red Hat Satellite.
 
-In Red Hat Satellite, tools provided by the OpenSCAP project are used to implement security compliance auditing. For more information about OpenSCAP see the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/index[Red Hat Enterprise Linux 7 Security Guide] and the link:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8-beta/html/configuring_and_managing_security/scanning-the-system-for-security-compliance-and-vulnerabilities_configuring-and-managing-security[Red Hat Enterprise Linux 8 Security Guide]. The Satellite web UI enables scheduled compliance auditing and reporting on all hosts under management by Red Hat Satellite.
+=== Lab 1.1 Pull rouge container image from Docker Hub and observe how OpenShift locks down the container by default
 
-Red Hat Ansible Automation is automation software powered by Red Hat Ansible Engine-an execution engine with hundreds of modules that can automate all aspects of IT environments and processes—and Red Hat Ansible Tower—a management interface that can integrate with other services. In this lab exercise, you will use Red Hat Ansible Tower for centralized automation.
+. Create a new project called *testproject*.
++
+[source]
+----
+[localhost ~]$ oc new-project testproject
+----
 
-Red Hat CloudForms is an infrastructure management platform that allows IT departments to control users’ self-service abilities to provision, manage, and ensure compliance across virtual machines and private clouds. In this lab exercise, you will use Red Hat CloudForms to launch Red Hat Ansible Automation security compliance scan and remediation automation tasks from a custom button.
+. In the OpenShift console, navigate to Home->Projects and click on *testproject*.
 
-=== Lab 1.1 Introduction
+. Then, go to the Workload tab and click on *add other content*.
+
+. Then, click on *Container Image* . Make sure that *Image name from external registry* is selected and for the Image Name, type *docker.io/httpd*. Press the magnifying glass.
+
+. Notice that this container image requires to be run as root on port 80.
+
+. Press *Create*. 
