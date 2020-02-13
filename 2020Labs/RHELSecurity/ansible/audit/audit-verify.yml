@@ -1,0 +1,72 @@
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+
+  - name: Gather state of 'auditlab' user
+    user:
+      name: auditlab
+    check_mode: yes
+    register: auditlab_user
+
+  - name: Check whether 'auditlab' user exists
+    assert:
+      that: "{{ auditlab_user.changed == false }}"
+
+  - name: Gather state of root's authorized_keys file
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+    check_mode: yes
+    register: user_key
+
+  - name: Check whether authorized_keys contains our key
+    assert:
+      that: "{{ user_key.changed == false }}"
+
+  - name: Gather state of auditlab's authorized_keys file
+    authorized_key:
+      user: auditlab
+      state: present
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+    check_mode: yes
+    register: user_key
+
+  - name: Check whether authorized_keys contains our key
+    assert:
+      that: "{{ user_key.changed == false }}"
+
+  - name: Gather state of required packages
+    package:
+      name:
+        - sed
+        - initscripts
+        - audit
+        - iputils
+        - grub2-tools
+        - vim-minimal
+    check_mode: yes
+    register: packages_installed
+
+  - name: Check whether required packages are installed
+    assert:
+      that: "{{ packages_installed.changed == false }}"
+
+  - name: Run "auditctl -s"
+    command: auditctl -s
+
+  - name: Run "augenrules --check"
+    command: augenrules --check
+
+  - name: Gather state of "/usr/share/doc/audit/rules" for Lab 6.2.2.1 Pre-Configured Rules
+    file:
+      path: /usr/share/doc/audit/rules
+      state: directory
+    check_mode: yes
+    register: rules_directory
+
+  - name: Check whether rules directory exists
+    assert:
+      that: "{{ rules_directory.changed == false }}"
