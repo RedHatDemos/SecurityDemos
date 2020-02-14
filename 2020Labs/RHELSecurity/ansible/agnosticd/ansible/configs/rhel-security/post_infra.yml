@@ -5,3 +5,11 @@
   tasks:
     - debug:
         msg: "Step 002 Post Infrastructure"
+
+- name: install SSH key to RHEL 8 all hosts
+  hosts: all
+  tasks:
+    - copy:
+        src: ~/.ssh/id_rsa
+        dest: ~/.ssh/id_rsa
+        mode: 0600
