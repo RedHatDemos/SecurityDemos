@@ -1,0 +1,40 @@
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+
+  - name: Set authorized key taken from file for root
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+
+  - name: Remove libreswan lab package
+    package:
+      name: libreswan
+      state: absent
+
+  - name: Install firewalld lab package
+    package:
+      name:
+        - firewalld
+        - policycoreutils
+        - tcpdump
+      state: present
+
+  - name: Enable and start firewalld.service
+    service:
+      name: firewalld
+      enabled: yes
+      state: started
+
+  - name: Install ipsec scripts
+    copy:
+      src: scripts/
+      dest: /root
+
+  - name: Set executable bit on /root/vpn-cert-gen.py
+    file:
+      path: /root/vpn-cert-gen.py
+      mode: +x
