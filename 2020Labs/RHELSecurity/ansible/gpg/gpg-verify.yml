@@ -1,0 +1,33 @@
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+
+  - name: Gather state of authorized_keys file
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+    check_mode: yes
+    register: user_key
+
+  - name: Check whether authorized_keys contains our key
+    assert:
+      that: "{{ user_key.changed == false }}"
+
+  - name: Gather state of required packages
+    package:
+      name:
+        - gnupg2
+      state: present
+    check_mode: yes
+    register: packages_installed
+
+  - name: Check whether required packages are installed
+    assert:
+      that: "{{ packages_installed.changed == false }}"
+
+  - name: Run "gpg2 -h"
+    command: gpg2 -h
+

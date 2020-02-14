@@ -38,14 +38,14 @@
       - PyYAML
       - python-pip
       state: installed
-    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "7"
+    when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == "7"
 
   - name: Ensure SCAP Security Guide Tests dependencies are installed (RHEL7)
     pip:
       name:
       - pytest
       - docker
-    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "7"
+    when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == "7"
 
   - name: Ensure that package dependencies are installed (RHEL8, Fedora)
     package:
@@ -58,7 +58,7 @@
       - dbus-daemon  # ditto
       - podman  # needed for tests
       state: installed
-    when: (ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8") or ansible_distribution == 'Fedora'
+    when: (ansible_distribution == 'RedHat' and ansible_distribution_major_version == "8") or ansible_distribution == 'Fedora'
 
   - name: Ensure that Fedora-specific convenience packages are installed (Fedora)
     package:

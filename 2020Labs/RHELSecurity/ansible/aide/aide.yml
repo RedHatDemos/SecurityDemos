@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+
+  - name: Set authorized key taken from file for root
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+
+  - name: Remove aide if it's installed
+    package:
+      name: aide
+      state: absent
+
+  - name: Install required packages
+    package:
+      name:
+        - audit
+        - vim-minimal
+      state: present
+

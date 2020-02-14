@@ -1,4 +1,8 @@
 ---
+
+# Run me as a verification-only playbook:
+# ansible-playbook ... -e VERIFICATION_RUN=true --check --diff
+
 - hosts: all
 
   become: yes
@@ -14,16 +18,18 @@
     TRACK_5_LABEL: "lab5_oval"
     CACC_LOCAL: "/tmp/complianceAsCode"
     LABS_ROOT: "/home/lab-user/labs"
-    TARGET_PRODUCT: "rhel8"
-    CONTAINER_PRODUCT: "rhel7"
+    TARGET_PRODUCT:
+      RedHat: "rhel8"
+      Fedora: "fedora"
+    CONTAINER_PRODUCT:
+      RedHat: "rhel7"
+      Fedora: "fedora"
+    DOCKERFILE_BASENAME:
+      RedHat: "test_suite-rhel"
+      Fedora: "test_suite-fedora"
+    VERIFICATION_RUN: false
 
   tasks:
-  - name: Set variables (Fedora)
-    set_fact:
-      TARGET_PRODUCT: "fedora"
-      CONTAINER_PRODUCT: "fedora"
-    when: ansible_distribution == 'Fedora'
-
   - name: Clone the CaC/c Git repository
     git:
       repo: 'https://github.com/ComplianceAsCode/content.git'
@@ -33,11 +39,13 @@
     file:
       path: "{{ LABS_ROOT }}"
       state: absent
+    when: "VERIFICATION_RUN == false"
 
   - name: Generate SSH keys
     shell: ssh-keygen -b 2048 -t rsa -f /home/lab-user/.ssh/id_rsa -q -N ""
     args:
       creates: /home/lab-user/.ssh/id_rsa
+    when: "VERIFICATION_RUN == false"
 
   - name: Set root's .ssh directory permission
     file:
@@ -56,11 +64,6 @@
      - id_rsa
      - id_rsa.pub
     become_user: root
-
-  - name: Remove the lab3 tests
-    file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/content/tests/data/group_system/group_accounts/group_accounts-session/"
-      state: absent
 
   - name: Creates directories for Lab Tracks
     file:
@@ -86,39 +89,35 @@
       - "{{ TRACK_4_LABEL }}"
       - "{{ TRACK_5_LABEL }}"
 
-  - name: Copy the track + documentation to the working directory
-    copy:
-      src: "{{ LABS_LOCAL }}/{{ LABS_CONTENT_PART }}/{{ TRACK_1_LABEL }}"
-      dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/documentation"
-      remote_src: yes
-    when: False
-
   - name: "Ex. 1: Introduce a typo 1/2"
     replace:
       dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/linux_os/guide/system/accounts/accounts-pam/password_quality/password_quality_pwquality/accounts_password_pam_minlen/rule.yml"
       regexp: '(    after pam_pwquality to set minimum password length requirements.)'
       replace: '\1\n\1'
+    when: "VERIFICATION_RUN == false"
 
   - name: "Ex. 1: Introduce a typo 2/2"
     replace:
       dest: "{{ LABS_ROOT }}/{{ TRACK_1_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/rule.yml"
       regexp: '(    Setting the <tt>TMOUT</tt> option in <tt>/etc/profile</tt> ensures that)'
       replace: '\1\n\1'
-
-  - name: "Ex. 5: Remove tests"
-    file:
-      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/tests"
-      state: absent
-
-  - name: "Ex. 5: Copy bad tests"
-    copy:
-      src: "data/rule_accounts_tmout/"
-      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/tests/"
+    when: "VERIFICATION_RUN == false"
 
   - name: "Ex. 4: Remove the Ansible content from rule accounts_tmout so that the attendees can create them themselves"
     file:
       path: "{{ LABS_ROOT }}/{{ TRACK_4_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/ansible/"
       state: absent
+
+  - name: "Ex. 5: Remove tests"
+    file:
+      path: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/tests"
+      state: absent
+    when: "VERIFICATION_RUN == false"
+
+  - name: "Ex. 5: Copy bad tests"
+    copy:
+      src: "data/rule_accounts_tmout/"
+      dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/tests/"
 
   - name: "Ex. 5: Copy rule from v0.1.43"
     copy:
@@ -130,6 +129,7 @@
       dest: "{{ LABS_ROOT }}/{{ TRACK_5_LABEL }}/linux_os/guide/system/accounts/accounts-session/accounts_tmout/oval/shared.xml"
       regexp: '(operation=")greater than or equal(")'
       replace: '\1equals\2'
+    when: "VERIFICATION_RUN == false"
 
   - name: "Copy our RHEL8 OSPP profile to the target system"
     copy:
@@ -159,8 +159,8 @@
     loop:
       - "{{ TRACK_5_LABEL }}"
 
-  - name: "Build the {{ TARGET_PRODUCT }} content to be used in exercises"
-    command: "./build_product {{ TARGET_PRODUCT }}"
+  - name: "Build the {{ TARGET_PRODUCT[ansible_distribution] }} content to be used in exercises"
+    command: "./build_product {{ TARGET_PRODUCT[ansible_distribution] }}"
     args:
       chdir: "{{ LABS_ROOT }}/{{ item }}"
     loop:
@@ -168,24 +168,19 @@
       - "{{ TRACK_2_LABEL }}"
 #     - "{{ TRACK_3_LABEL }}"  # This exercise creates new profile before doing anything, so there is no need to build it in advance.
 #     - "{{ TRACK_4_LABEL }}"  # This exercise creates new Ansible content before doing anything, so there is no need to build it in advance.
+    when: "VERIFICATION_RUN == false"
 
-  - name: Build the {{ CONTAINER_PRODUCT }} content to be used in the container scanning exercise
-    command: "./build_product {{ CONTAINER_PRODUCT }}"
+  - name: "Build the {{ CONTAINER_PRODUCT[ansible_distribution] }} content to be used in the container scanning exercise"
+    command: "./build_product {{ CONTAINER_PRODUCT[ansible_distribution] }}"
     args:
       chdir: "{{ LABS_ROOT }}/{{ item }}"
     loop:
       - "{{ TRACK_5_LABEL }}"
+    when: "VERIFICATION_RUN == false"
 
-  - name: Build a RHEL7 podman image for testing
-    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-rhel   .'
+  - name: "Build a {{ CONTAINER_PRODUCT[ansible_distribution] }} podman image for testing"
+    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f {{ DOCKERFILE_BASENAME[ansible_distribution] }} .'
     args:
       chdir: "{{ CACC_LOCAL }}/Dockerfiles"
-    when: ansible_distribution == 'RedHat' and ansible_distribution_version.split(".")[0] == "8"
-    become_user: root
-
-  - name: Build a Fedora podman image for testing
-    shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f test_suite-fedora .'
-    args:
-      chdir: "{{ CACC_LOCAL }}/Dockerfiles"
-    when: ansible_distribution == 'Fedora'
+    when: "VERIFICATION_RUN == false"
     become_user: root

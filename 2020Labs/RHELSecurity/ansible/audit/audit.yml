@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+
+  - name: Add the user 'auditlab'
+    user:
+      name: auditlab
+
+  - name: Set authorized key taken from file for root
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+
+  - name: Set authorized key taken from file for adminlab
+    authorized_key:
+      user: auditlab
+      state: present
+      key: "{{ lookup('file', 'id_rsa.pub') }}"
+
+  - name: install Audit lab packages
+    package:
+      name:
+        - sed
+        - initscripts
+        - audit
+        - iputils
+        - grub2-tools
+        - vim-minimal

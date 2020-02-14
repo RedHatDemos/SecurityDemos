@@ -1,0 +1,27 @@
+== Lab 1: OpenShift blocks rouge containers from running as privileged user
+
+
+=== Goal of Lab 1
+The goal of this lab is to learn about the default security technologies in Red Hat OpenShift Container Platform. Specifically, you will see how OpenShift blocks rouge containers from Docker Hub to run as a privileged root user.
+
+=== Introduction
+
+
+=== Lab 1.1 Pull rouge container image from Docker Hub and observe how OpenShift locks down the container by default
+
+. Create a new project called *testproject*.
++
+[source]
+----
+[localhost ~]$ oc new-project testproject
+----
+
+. In the OpenShift console, navigate to Home->Projects and click on *testproject*.
+
+. Then, go to the Workload tab and click on *add other content*.
+
+. Then, click on *Container Image* . Make sure that *Image name from external registry* is selected and for the Image Name, type *docker.io/httpd*. Press the magnifying glass.
+
+. Notice that this container image requires to be run as root on port 80.
+
+. Press *Create*. 
