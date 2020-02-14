@@ -1,0 +1,20 @@
+= Obtaining your GUID to access your dedicated lab environment
+
+This document explains how to obtain your unique GUID.  This GUID will be used to access your dedicated lab environment.
+
+. Begin by going to https://bit.ly/2N5cEe5
++
+image:images/gg1.png[GuidGrabber Landing Page]
+
+. From this page select the proper *Lab Code* for the current lab.  The *Lab Code* for this lab is *RHELSecurityLab*.  The full name of this lab is *Red Hat Enterprise Linux Security Technologies Lab*.
+
+. Enter the *Activation Key*. The *Activation Key* for this lab is *security*.
+
+. Click *Next*.
+
+. The resulting page will display your lab's GUID and other useful information about your lab environment. You will use your GUID for all the lab exercises, so take note of your unique GUID.
+
+. When you are completely done with your lab environment, please click *Reset Workstation* so that you can move on to the next lab.  If you fail to do this, you will be locked into the GUID from the previous lab.
++
+[NOTE]
+Clicking *Reset Workstation* will not stop or delete the lab environment.
