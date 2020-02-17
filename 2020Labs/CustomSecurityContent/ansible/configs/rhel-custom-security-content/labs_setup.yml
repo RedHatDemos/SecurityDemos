@@ -3,7 +3,7 @@
 # Run me as a verification-only playbook:
 # ansible-playbook ... -e VERIFICATION_RUN=true --check --diff
 
-- hosts: all
+- hosts: nodes
 
   become: yes
   become_method: sudo
@@ -22,10 +22,10 @@
       RedHat: "rhel8"
       Fedora: "fedora"
     CONTAINER_PRODUCT:
-      RedHat: "rhel7"
+      RedHat: "rhel8"
       Fedora: "fedora"
     DOCKERFILE_BASENAME:
-      RedHat: "test_suite-rhel"
+      RedHat: "test_suite-rhel8"
       Fedora: "test_suite-fedora"
     VERIFICATION_RUN: false
 
@@ -40,6 +40,11 @@
       path: "{{ LABS_ROOT }}"
       state: absent
     when: "VERIFICATION_RUN == false"
+
+  - name: Create lab-user SSH directory
+    file:
+      path: /home/lab-user/.ssh/
+      state: directory
 
   - name: Generate SSH keys
     shell: ssh-keygen -b 2048 -t rsa -f /home/lab-user/.ssh/id_rsa -q -N ""
@@ -140,6 +145,7 @@
       - "{{ TRACK_2_LABEL }}"
       - "{{ TRACK_3_LABEL }}"
       - "{{ TRACK_4_LABEL }}"
+      - "{{ TRACK_5_LABEL }}"
 
   - name: "Copy our Fedora OSPP profile to the target system"
     copy:
@@ -150,13 +156,6 @@
       - "{{ TRACK_2_LABEL }}"
       - "{{ TRACK_3_LABEL }}"
       - "{{ TRACK_4_LABEL }}"
-      - "{{ TRACK_5_LABEL }}"
-
-  - name: "Copy our RHEL7 OSPP profile to the target system"
-    copy:
-      src: "data/ospp-rhel7.profile"
-      dest: "{{ LABS_ROOT }}/{{ item }}/rhel7/profiles/ospp.profile"
-    loop:
       - "{{ TRACK_5_LABEL }}"
 
   - name: "Build the {{ TARGET_PRODUCT[ansible_distribution] }} content to be used in exercises"
@@ -177,6 +176,11 @@
     loop:
       - "{{ TRACK_5_LABEL }}"
     when: "VERIFICATION_RUN == false"
+
+  - name: "Copy custom Dockerfiles"
+    copy:
+      src: "data/Dockerfiles"
+      dest: "{{ CACC_LOCAL }}"
 
   - name: "Build a {{ CONTAINER_PRODUCT[ansible_distribution] }} podman image for testing"
     shell: 'podman build --build-arg "CLIENT_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub)" -t ssg_test_suite -f {{ DOCKERFILE_BASENAME[ansible_distribution] }} .'

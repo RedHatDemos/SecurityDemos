@@ -7,17 +7,8 @@
     - debug:
         msg: "Software tasks Started"
 
-- name: Configure software 
-  hosts: all
-  tasks:
-  - name: Pull UBI images
-    command: podman pull registry.access.redhat.com/ubi8/python-36
-  - name: Pull registry image
-    command: podman pull docker.io/library/registry:2
-  - name: Copying files
-    copy:
-      src: files
-      dest: $HOME
+- import_playbook: system_setup.yml
+- import_playbook: labs_setup.yml
 
 - name: Deploy Roles if infra_workloads defined
   hosts:
