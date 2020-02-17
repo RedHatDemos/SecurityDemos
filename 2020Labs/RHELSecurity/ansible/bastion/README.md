@@ -1,5 +1,7 @@
 This playbook provisions the RHEL 7.x bastion host, and pulls down the required tools and git repositiories, and pre-configures the variable files that are used by the agnisticd deployer to create the RHEL 8 hosts.
 
+**NOTE: The AWS keys in this document aren't valid, so don't try to use them**
+
 Instructions:
 1. record the variables that are presented when you provision the OpenTLC AWS deployer environment, from the **custom attributes** section:
     
