@@ -1,6 +1,6 @@
 This playbook provisions the RHEL 7.x bastion host, and pulls down the required tools and git repositiories, and pre-configures the variable files that are used by the agnisticd deployer to create the RHEL 8 hosts.
 
-**NOTE: The AWS keys in this document aren't valid, so don't try to use them**
+**NOTE: The AWS keys in this document aren't valid (randomly typed characters!), so don't try to use them**
 
 Instructions:
 1. record the variables that are presented when you provision the OpenTLC AWS deployer environment, from the **custom attributes** section:
@@ -8,10 +8,10 @@ Instructions:
     ```Top level domain: .sandbox744.opentlc.com
     WARNING: with great power comes great responsibility. We monitor usage.
     Your AWS programmatic access:
-    aws_access_key_id = SADAIUSHFDIAUUIHSA61
-    aws_secret_access_key = iusayd9872y3ruh9fd2h9GDLjShhhkjashd212jE
+    aws_access_key_id = AAAAAAAAAAAAAAAAAAAA
+    aws_secret_access_key = bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     SSH Access: ssh generic_naps_ajacocks@bastion.3724.sandbox744.opentlc.com
-    SSH password: AQP97gjBBjyJ
+    SSH password: CCCCCCCCCCCC
     GUID 	3724
     account 	sandboxes-gpte
     className 	PROD_OCP4_AWS_INSTALL_LAB
@@ -32,8 +32,8 @@ Instructions:
     bastion.3724.sandbox744.opentlc.com
     [bastion:vars]
     # put your AWS access key ID, and secure access key, here
-    AWS_ACCESS_KEY_ID=SADAIUSHFDIAUUIHSA61
-    AWS_SECRET_ACCESS_KEY=iusayd9872y3ruh9fd2h9GDLjShhhkjashd212jE 
+    AWS_ACCESS_KEY_ID=AAAAAAAAAAAAAAAAAAAA
+    AWS_SECRET_ACCESS_KEY=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     # put the DNS domain here, not including any leading or trailing periods
     dns_domain=sandbox744.opentlc.com
     # put the AWS region, that you wish to deploy on, here
@@ -45,7 +45,7 @@ Instructions:
     ansible_connection=ssh
     # put the user and password, from OpenTLC CloudForms, here
     ansible_user=generic_naps_ajacocks
-    ansible_password=AQP97gjBBjyJ```
+    ansible_password=CCCCCCCCCCCC```
 
 3. Run the playbook, to configure the bastion host:
    
