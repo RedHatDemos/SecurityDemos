@@ -21,7 +21,7 @@
 ** Utilities for generating SCAP content: `openscap-scanner`
 ** Python dependencies for putting content together: `python3-pyyaml` and `python3-jinja2`
 
-* A `podman` `ssg_test_suite` image was built using the `Dockerfiles/test_suite-rhel` files.
+* A `podman` `ssg_test_suite` image was built using the `Dockerfiles/test_suite-rhel8` files.
 The SSH keys for `root` are authorized by the container's root user.
 The steps for how to accomplish this are in the `tests/README.md` file of the `ComplianceAsCode` project.
 * The OVAL check for `accounts_tmout` was modified so you can improve it.
@@ -84,7 +84,7 @@ image::desktopfilefolder.png[100,100]
 .. Just to make sure, click the `Home` icon in the upper left portion of the file explorer window.
 .. Navigate to the location of the exercise by double-clicking the `labs` folder, followed by double-clicking the
 `lab5_oval`, `build`, and `guides` folders.
-.. Finally, double-click the `ssg-rhel7-guide-ospp.html` file.
+.. Finally, double-click the `ssg-rhel8-guide-ospp.html` file.
 
 . In this lab exercise, you focus on the `accounts_tmout` rule.
 To find the rule entry in the guide, press `Ctrl+F` or use the `Edit -> Find in this page` menu item, and search for the `Set Interactive Session Timeout` string, which is the rule title.
@@ -293,10 +293,10 @@ You need to run the test suite as a superuser, because it involves spinning up a
 With that in mind, execute the test suite:
 +
 ----
-[... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+[... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel8-ds.xml accounts_tmout
 INFO - The DataStream contains 2 Benchmarks
-INFO - 0 - scap_org.open-scap_cref_ssg-rhel7-xccdf-1.2.xml
-INFO - 1 - scap_org.open-scap_cref_ssg-rhel7-pcidss-xccdf-1.2.xml
+INFO - 0 - scap_org.open-scap_cref_ssg-rhel8-xccdf-1.2.xml
+INFO - 1 - scap_org.open-scap_cref_ssg-rhel8-pcidss-xccdf-1.2.xml
 INFO - Selected Benchmark is 0
 INFO - To select a different Benchmark, use --xccdf-id-number option.
 INFO - The base image option has been specified, choosing Podman-based test environment.
@@ -319,7 +319,7 @@ The alternative mode is `profile` mode, which is simpler--there are no test scen
 
 * You want to use `podman` with the `ssg_test_suite` image as the back end, so you supply the `--container ssg_test_suite` arguments.
 
-* Of course you have to specify which datastream to use for testing--you use the built one, so you specify `--datastream build/ssg-rhel7-ds.xml` arguments.
+* Of course you have to specify which datastream to use for testing--you use the built one, so you specify `--datastream build/ssg-rhel8-ds.xml` arguments.
 
 * Finally, you specify what to test--a rule regular expression: `accounts_tmout` or `^accounts_tmout$`.
 ====
@@ -441,9 +441,9 @@ TIP:You can use the `Up` arrow key to browse the command history so you do not h
 +
 ....
 [... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
-[... lab5_oval]$ ./build_product rhel7
+[... lab5_oval]$ ./build_product rhel8
 ...
-[... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel7-ds.xml accounts_tmout
+[... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite --datastream build/ssg-rhel8-ds.xml accounts_tmout
 ...
 INFO - Logging into /home/lab-user/labs/lab5_oval/logs/...
 INFO - xccdf_org.ssgproject.content_rule_accounts_tmout
@@ -574,7 +574,7 @@ TIP: You do not need to specify the parameter `--datastream` when there is only 
 +
 ....
 [... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
-[... lab5_oval]$ ./build_product rhel7
+[... lab5_oval]$ ./build_product rhel8
 ...
 [... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite accounts_tmout
 ...
@@ -662,7 +662,7 @@ fi
 ....
 
 [... tests]$ cd /home/lab-user/labs/lab5_oval
-[... lab5_oval]$ ./build_product rhel7
+[... lab5_oval]$ ./build_product rhel8
 ...
 [... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite accounts_tmout
 ...
@@ -701,7 +701,7 @@ This time, when rebuilt and executed again, the tests pass:
 +
 ....
 [... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
-[... lab5_oval]$ ./build_product rhel7
+[... lab5_oval]$ ./build_product rhel8
 ...
 [... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
@@ -785,7 +785,7 @@ The non-capturing group that consists of `export` followed by at least one white
 +
 ....
 [... accounts_tmout]$ cd /home/lab-user/labs/lab5_oval
-[... lab5_oval]$ ./build_product rhel7
+[... lab5_oval]$ ./build_product rhel8
 ...
 [... lab5_oval]$ sudo python3 tests/test_suite.py rule --container ssg_test_suite accounts_tmout
 INFO - The base image option has been specified, choosing Podman-based test environment.
