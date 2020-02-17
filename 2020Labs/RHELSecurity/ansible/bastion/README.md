@@ -8,8 +8,8 @@ Instructions:
     ```Top level domain: .sandbox744.opentlc.com
     WARNING: with great power comes great responsibility. We monitor usage.
     Your AWS programmatic access:
-    aws_access_key_id = AKIAUEZXEPYMM7QFXLWA
-    aws_secret_access_key = 5LbKFByShFqUgQNeIo4qRNqesa5pzgZKQihwymoE
+    aws_access_key_id = SADAIUSHFDIAUUIHSA61
+    aws_secret_access_key = iusayd9872y3ruh9fd2h9GDLjShhhkjashd212jE
     SSH Access: ssh generic_naps_ajacocks@bastion.3724.sandbox744.opentlc.com
     SSH password: AQP97gjBBjyJ
     GUID 	3724
@@ -32,8 +32,8 @@ Instructions:
     bastion.3724.sandbox744.opentlc.com
     [bastion:vars]
     # put your AWS access key ID, and secure access key, here
-    AWS_ACCESS_KEY_ID=AKIAUEZXEPYMM7QFXLWA
-    AWS_SECRET_ACCESS_KEY=5LbKFByShFqUgQNeIo4qRNqesa5pzgZKQihwymoE 
+    AWS_ACCESS_KEY_ID=SADAIUSHFDIAUUIHSA61
+    AWS_SECRET_ACCESS_KEY=iusayd9872y3ruh9fd2h9GDLjShhhkjashd212jE 
     # put the DNS domain here, not including any leading or trailing periods
     dns_domain=sandbox744.opentlc.com
     # put the AWS region, that you wish to deploy on, here
