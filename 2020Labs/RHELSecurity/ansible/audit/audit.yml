@@ -8,17 +8,22 @@
     user:
       name: auditlab
 
-  - name: Set authorized key taken from file for root
-    authorized_key:
-      user: root
-      state: present
-      key: "{{ lookup('file', 'id_rsa.pub') }}"
+  - name: Prepare /home/auditlab/.ssh
+    file:
+      path: /home/auditlab/.ssh
+      state: directory
+      owner: auditlab
+      group: auditlab
+      mode: '0700'
 
-  - name: Set authorized key taken from file for adminlab
-    authorized_key:
-      user: auditlab
-      state: present
-      key: "{{ lookup('file', 'id_rsa.pub') }}"
+  - name: Use root's authorized_key for auditlab user
+    copy:
+      src: /root/.ssh/authorized_keys
+      dest: /home/auditlab/.ssh/authorized_keys
+      remote_src: yes
+      owner: auditlab
+      group: auditlab
+      mode: '0600'
 
   - name: install Audit lab packages
     package:
