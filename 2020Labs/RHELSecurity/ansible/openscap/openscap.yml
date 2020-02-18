@@ -3,12 +3,6 @@
   become: yes
 
   tasks:
-  - name: Set authorized key taken from file for root
-    authorized_key:
-      user: root
-      state: present
-      key: "{{ lookup('file', 'id_rsa.pub') }}"
-
   - name: Install used packages
     package:
       name:

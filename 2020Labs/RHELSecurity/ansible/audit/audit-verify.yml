@@ -14,30 +14,6 @@
     assert:
       that: "{{ auditlab_user.changed == false }}"
 
-  - name: Gather state of root's authorized_keys file
-    authorized_key:
-      user: root
-      state: present
-      key: "{{ lookup('file', 'id_rsa.pub') }}"
-    check_mode: yes
-    register: user_key
-
-  - name: Check whether authorized_keys contains our key
-    assert:
-      that: "{{ user_key.changed == false }}"
-
-  - name: Gather state of auditlab's authorized_keys file
-    authorized_key:
-      user: auditlab
-      state: present
-      key: "{{ lookup('file', 'id_rsa.pub') }}"
-    check_mode: yes
-    register: user_key
-
-  - name: Check whether authorized_keys contains our key
-    assert:
-      that: "{{ user_key.changed == false }}"
-
   - name: Gather state of required packages
     package:
       name:
