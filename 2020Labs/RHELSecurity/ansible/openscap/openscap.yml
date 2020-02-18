@@ -17,21 +17,8 @@
       - scap-workbench
       - xorg-x11-xauth
       - firefox
-      state: present
-    tags: setup
-
-  - name: Install ansible dependency
-    package:
-      name:
-      - python3-pip
-      state: present
-    tags: setup
-
-  - name: Install ansible
-    pip:
-      name:
       - ansible
-    tags: setup
+      state: present
 
   - name: Set SSH X Forwarding
     lineinfile:
@@ -41,12 +28,3 @@
       line: "X11Forwarding yes"
     tags: setup
 
-  - name: Remove produced artefacts
-    file:
-      path: "{{ item }}"
-      state: absent
-    with_items:
-      - /tmp/arf.xml
-      - /tmp/report.html
-      - /root/playbook.yml
-    tags: rewind
