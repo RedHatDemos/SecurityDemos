@@ -4,18 +4,6 @@
 
   tasks:
 
-  - name: Gather state of authorized_keys file
-    authorized_key:
-      user: root
-      state: present
-      key: "{{ lookup('file', 'id_rsa.pub') }}"
-    check_mode: yes
-    register: user_key
-
-  - name: Check whether authorized_keys contains our key
-    assert:
-      that: "{{ user_key.changed == false }}"
-
   - name: Gather state of required packages
     package:
       name:
