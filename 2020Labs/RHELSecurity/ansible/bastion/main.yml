@@ -1,5 +1,8 @@
 ---
 - hosts: bastion
+  vars:
+    ssh_key_file_public: "~/.ssh/id_rsa-{{ dns_domain }}.pub"
+    ssh_key_file_private: "~/.ssh/id_rsa-{{ dns_domain }}"
 
   tasks:
     - name: create aws credentials directory
@@ -8,13 +11,7 @@
         state: directory
         mode: 0700
   
-    - name: create aws credentials file
-      template:
-        src: credentials.j2
-        dest: ~/.aws/credentials
-        mode: 0600
-  
-    - name: create aws directory
+    - name: create aws subdirectories
       file:
         path: "~/aws/{{ item }}"
         state: directory
@@ -22,6 +19,12 @@
       with_items:
         - myconfigs
         - testrun
+  
+    - name: create aws credentials file
+      template:
+        src: credentials.j2
+        dest: ~/.aws/credentials
+        mode: 0600
 
     - name: create deployer vars credentials file
       template:
@@ -80,28 +83,40 @@
     - debug:
         msg: "Zone ID for domain {{ dns_domain }} is {{ zone_id }}."
 
+    - name: create ssh key
+      openssh_keypair:
+        path: "{{ ssh_key_file_private }}"
+
+    - name: retrieve generated key
+      fetch:
+        src: "{{ item }}"
+        dest: "{{ item }}"
+        flat: yes
+      with_items:
+        - "{{ ssh_key_file_private }}"
+        - "{{ ssh_key_file_public }}"
+
     - name: create AWS key
       ec2_key:
         name: id_rsa
         region: "{{ region }}"
         state: present
+        key_material: "{{ lookup('file', ssh_key_file_public ) }}"
       register: ec2_key
 
     - debug:
         var: ec2_key
-
-    - name: create ssh keypair
-      copy:
-        content: "{{ ec2_key.key.private_key }}\n"
-        dest: ~/.ssh/id_rsa
-        mode: 0400
-      when: ec2_key.changed
 
     - name: create deployment template
       template:
         src: sample_vars.j2
         dest: ~/aws/myconfigs/sample_vars.yml
         mode: 0644
-      
+
+    - name: copy ssh key for login
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ lookup('file', ssh_key_file_public ) }}"
 
 ...
