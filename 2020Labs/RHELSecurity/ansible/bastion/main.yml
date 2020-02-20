@@ -87,6 +87,12 @@
       openssh_keypair:
         path: "{{ ssh_key_file_private }}"
 
+    - name: link key to id_rsa
+      file:
+        src: "{{ ssh_key_file_private }}"
+        dest: ~/.ssh/id_rsa
+        state: link
+
     - name: retrieve generated key
       fetch:
         src: "{{ item }}"
