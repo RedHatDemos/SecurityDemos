@@ -4,6 +4,8 @@
 
   tasks:
 
+  - import_tasks: fix-authorized_keys.yml
+
   - name: Install required packages
     package:
       name:
