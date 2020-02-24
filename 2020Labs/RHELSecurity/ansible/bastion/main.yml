@@ -53,11 +53,17 @@
         repo: https://github.com/RedHatDemos/SecurityDemos.git
         dest: ~/aws/testrun
         clone: yes
+  
+    - name: clone ajacocks/agnosticd repo
+      git:
+        repo: https://github.com/ajacocks/agnosticd.git
+        dest: ~/aws/testrun/agnosticd
+        clone: yes
 
     - name: create symbolic link to ansible deployer directory
       file:
         src: ~/aws/testrun/2020Labs/RHELSecurity/ansible/agnosticd
-        dest: ~/aws/testrun/agnosticd
+        dest: ~/aws/testrun/agnosticd.old
         state: link
   
     - name: install required python modules
@@ -117,6 +123,12 @@
       template:
         src: sample_vars.j2
         dest: ~/aws/myconfigs/sample_vars.yml
+        mode: 0644
+
+    - name: create deployment template for SELinux workshop
+      template:
+        src: sample_vars-selinux.j2
+        dest: ~/aws/myconfigs/sample_vars-selinux.yml
         mode: 0644
 
     - name: copy ssh key for login
