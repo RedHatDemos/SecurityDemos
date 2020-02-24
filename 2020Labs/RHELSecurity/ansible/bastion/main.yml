@@ -51,13 +51,13 @@
     - name: clone RedHatDemos/SecurityDemos repo
       git:
         repo: https://github.com/RedHatDemos/SecurityDemos.git
-        dest: ~/aws/testrun
+        dest: ~/aws/testrun/SecurityDemos
         clone: yes
   
     - name: clone ajacocks/agnosticd repo
       git:
         repo: https://github.com/ajacocks/agnosticd.git
-        dest: ~/aws/testrun
+        dest: ~/aws/testrun/agnosticd
 
     - name: create symbolic link to ansible deployer directory
       file:
