@@ -4,6 +4,8 @@
 
   tasks:
 
+  - import_tasks: fix-authorized_keys.yml
+
   - name: Add the user 'auditlab'
     user:
       name: auditlab
