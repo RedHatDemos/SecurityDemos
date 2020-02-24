@@ -19,6 +19,18 @@
       with_items:
         - myconfigs
         - testrun
+
+    - name: copy execution script
+      copy:
+        src: run.sh
+        dest: "~/run.sh"
+        mode: 0755
+
+    - name: create symbolic link to run script for stop
+      file:
+        src: ~/run.sh
+        dest: ~/stop.sh
+        state: link
   
     - name: create aws credentials file
       template:
