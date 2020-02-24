@@ -61,7 +61,7 @@
 
     - name: create symbolic link to ansible deployer directory
       file:
-        src: ~/aws/testrun/2020Labs/RHELSecurity/ansible/agnosticd
+        src: ~/aws/testrun/SecurityDemos/2020Labs/RHELSecurity/ansible/agnosticd
         dest: ~/aws/testrun/agnosticd.old
         state: link
 
