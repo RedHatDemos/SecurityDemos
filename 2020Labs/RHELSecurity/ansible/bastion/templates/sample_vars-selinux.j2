@@ -23,7 +23,7 @@ cloud_provider: ec2                     # Which AgnosticD Cloud Provider to use
 aws_region: {{ region }}                   # AWS Region to deploy in
 bastion_instance_image: RHEL81
 node_instance_image: RHEL81
-#remote_user: ec2-user                   # Needed to workaround some bug.
+remote_user: ec2-user                   # Needed to workaround some bug.
 key_name: id_rsa              # Keyname must exist in AWS
 ansible_ssh_private_key_file: ~/.ssh/id_rsa
 # DANGER ZONE
