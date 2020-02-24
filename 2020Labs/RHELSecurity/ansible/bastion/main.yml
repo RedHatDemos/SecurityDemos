@@ -58,7 +58,6 @@
       git:
         repo: https://github.com/ajacocks/agnosticd.git
         dest: ~/aws/testrun
-        clone: yes
 
     - name: create symbolic link to ansible deployer directory
       file:
