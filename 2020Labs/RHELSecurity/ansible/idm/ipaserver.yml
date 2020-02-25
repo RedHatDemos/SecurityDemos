@@ -1,0 +1,21 @@
+---
+- name: Set IPA server and client variables
+  hosts: ipaserver
+  become: yes
+  tasks:
+    - name: Set variables.
+      set_fact:
+        ipaserver_domain: example.com
+        ipaserver_realm: EXAMPLE.COM
+        ipaserver_setup_dns: no
+        ipaserver_auto_forwarders: no
+        ipaadmin_password: RedHat1234
+        ipadm_password: RedHat1234
+        ipaclient_mkhomedir: yes
+
+- name: Deploy role ipaserver to node7
+  hosts: ipaserver
+  become: yes
+  roles:
+    - role: ipaserver
+      state: present

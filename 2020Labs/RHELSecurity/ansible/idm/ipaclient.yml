@@ -1,0 +1,17 @@
+- name: Set IPA client variables
+  hosts: all
+  become: yes
+  tasks:
+    - name: Set variables.
+      set_fact:
+        ipaserver_domain: rjeffman.internal
+        ipaadmin_password: RedHat1234
+        ipaclient_mkhomedir: yes
+        ipaservers: ipaserver.example.com
+
+- name: Deploy role ipaclient
+  hosts: all
+  become: yes
+  roles:
+    - role: ipaclient
+      state: present
