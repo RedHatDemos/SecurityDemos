@@ -437,47 +437,6 @@ commands to see samples of the *csv* and *text* formats:
 LibreOffice or any other spreadsheet program that accepts files in the
 Comma Separated Values (CSV) format.
 
-. While logged into the _audit.example.com_
-system as *root*, run the following command to transform today's audit log into
-the CSV format suitable for use within LibreOffice:
-
-	[root@audit ~]# ausearch --start today --format csv --extra-labels --extra-obj2 > /tmp/audit.log.csv
-
-. Next, let's transfer this CSV file from the _audit.example.com_ system to the workstation bastion host
-system using `scp`. Then, we'll open the CSV file using LibreOffice from the workstation bastion host.
-
-=== Lab 6.3.5 Viewing the CSV output Audit Log from the workstation bastion host
-
-. If not already there, log into to the workstation bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
-+
-[source]
-----
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-----
-. Now, let's transfer the CSV file from the _audit.example.com_ system to the Desktop of the workstation bastion host
-system using `scp`.
-
-	[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv ~/Desktop/
-
-. Now, let's take a look at this CSV file from your workstation bastion host.
-. Go back to your *Lab Information* webpage and click on the console button for your workstation bastion host. Login as *lab-user* with *r3dh4t1!* as the password.
-+
-image:images/lab1.1-workstationconsole.png[300,300]
-image:images/lab1.1-labuserlogin.png[300,300]
-
-. Notice the CSV file you just copied over from the _audit.example.com_ system on the Desktop of your workstation bastion
-host.
-+
-image:images/audit-csvdesktop.png[200,200]
-
-. Double click on the audit report to view it. Click *Ok* on the Text Import box.
-+
-image:images/audit-textimportok.png[400,400]
-
-. Take a look at your CSV report.
-+
-image:images/audit-csvoutput.png[500,500]
-
 == Reset the Lab System (Optional)
 
 If you wanted to re-do all of these audit lab exercises from scratch, you can reset your lab system. In order to reset the system used for this audit lab exercise, run the following commands as
