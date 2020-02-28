@@ -4,11 +4,7 @@
 
   tasks:
 
-  - name: Set authorized key taken from file for root
-    authorized_key:
-      user: root
-      state: present
-      key: "{{ lookup('file', 'id_rsa.pub') }}"
+  - import_tasks: fix-authorized_keys.yml
 
   # 3. Our lab does not have the firewall enabled by default so we will install it as root. 
   - name: Remove firewalld lab package

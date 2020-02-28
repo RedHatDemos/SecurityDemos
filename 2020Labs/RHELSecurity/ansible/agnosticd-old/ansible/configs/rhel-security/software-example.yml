@@ -52,3 +52,39 @@
   tasks:
     - debug:
         msg: "Software checks completed successfully"
+
+
+- name: Configure AIDE on RHEL 8 node1
+  hosts: node1.lkerner.internal
+  become: yes
+  tasks:
+  - name: Remove aide if it's installed
+    package:
+      name: aide
+      state: absent
+
+  - name: Install required packages
+    package:
+      name:
+        - audit
+        - vim-minimal
+      state: present 
+
+- name: Configure gpg on RHEL 8 node 2
+  hosts: node2.lkerner.internal
+  become: yes 
+  tasks: 
+  - name: Install required packages
+    package:
+      name:
+        - gnupg2
+      state: present
+
+- name: Configure firewalld on RHEL 8 node 3
+  hosts: node3.lkerner.internal
+  become: yes
+  tasks: 
+  - name: Remove firewalld lab package
+    package:
+      name: firewalld
+      state: absent

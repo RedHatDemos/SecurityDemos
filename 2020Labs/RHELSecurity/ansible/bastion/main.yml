@@ -1,0 +1,128 @@
+---
+- hosts: bastion
+  vars:
+    ssh_key_file_public: "~/.ssh/id_rsa-{{ dns_domain }}.pub"
+    ssh_key_file_private: "~/.ssh/id_rsa-{{ dns_domain }}"
+
+  tasks:
+    - name: create aws credentials directory
+      file:
+        path: ~/.aws
+        state: directory
+        mode: 0700
+  
+    - name: create aws subdirectories
+      file:
+        path: "~/aws/{{ item }}"
+        state: directory
+        mode: 0755
+      with_items:
+        - myconfigs
+        - testrun
+  
+    - name: create aws credentials file
+      template:
+        src: credentials.j2
+        dest: ~/.aws/credentials
+        mode: 0600
+
+    - name: create deployer vars credentials file
+      template:
+        src: opentlc_creds.j2
+        dest: ~/.aws/opentlc_creds.yml
+        mode: 0600
+  
+    - name: install required software
+      yum:
+        name:
+          - git
+          - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+        state: present
+      become: yes
+
+    - name: install pip for python2
+      yum:
+        name:
+          - python2-pip
+          - python2-simplejson
+        state: present
+      become: yes
+  
+    - name: clone RedHatDemos/SecurityDemos repo
+      git:
+        repo: https://github.com/RedHatDemos/SecurityDemos.git
+        dest: ~/aws/testrun
+        clone: yes
+
+    - name: create symbolic link to ansible deployer directory
+      file:
+        src: ~/aws/testrun/2020Labs/RHELSecurity/ansible/agnosticd
+        dest: ~/aws/testrun/agnosticd
+        state: link
+  
+    - name: install required python modules
+      pip:
+        name:
+          - awscli
+          - ansible
+          - boto3
+          - selinux
+      become: yes
+
+    - name: get zone ID for domain {{ dns_domain }}
+      route53_info:
+        query: hosted_zone
+      register: hosted_zones
+
+    - name: store zone ID
+      set_fact:
+        zone_id: "{{ hosted_zones | json_query(query) | regex_replace('.*/','') | regex_replace('.]$','') }}"
+      vars:
+        query: "HostedZones[?Name=='{{ dns_domain }}.'].Id"
+
+    - debug:
+        msg: "Zone ID for domain {{ dns_domain }} is {{ zone_id }}."
+
+    - name: create ssh key
+      openssh_keypair:
+        path: "{{ ssh_key_file_private }}"
+
+    - name: link key to id_rsa
+      file:
+        src: "{{ ssh_key_file_private }}"
+        dest: ~/.ssh/id_rsa
+        state: link
+
+    - name: retrieve generated key
+      fetch:
+        src: "{{ item }}"
+        dest: "{{ item }}"
+        flat: yes
+      with_items:
+        - "{{ ssh_key_file_private }}"
+        - "{{ ssh_key_file_public }}"
+
+    - name: create AWS key
+      ec2_key:
+        name: id_rsa
+        region: "{{ region }}"
+        state: present
+        key_material: "{{ lookup('file', ssh_key_file_public ) }}"
+      register: ec2_key
+
+    - debug:
+        var: ec2_key
+
+    - name: create deployment template
+      template:
+        src: sample_vars.j2
+        dest: ~/aws/myconfigs/sample_vars.yml
+        mode: 0644
+
+    - name: copy ssh key for login
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ lookup('file', ssh_key_file_public ) }}"
+
+...

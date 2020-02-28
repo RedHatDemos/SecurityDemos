@@ -4,18 +4,14 @@
 
   tasks:
 
-  - name: Set authorized key taken from file for root
-    authorized_key:
-      user: root
-      state: present
-      key: "{{ lookup('file', 'id_rsa.pub') }}"
+  - import_tasks: fix-authorized_keys.yml
 
   - name: Remove libreswan lab package
     package:
       name: libreswan
       state: absent
 
-  - name: Install firewalld lab package
+  - name: Install libreswan lab package
     package:
       name:
         - firewalld
