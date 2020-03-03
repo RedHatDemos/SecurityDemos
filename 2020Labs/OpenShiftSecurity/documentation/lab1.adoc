@@ -55,4 +55,8 @@ image:images/lab1.1-noport80.png[1500,1500]
 [localhost ~]$ oc describe pod httpd-f958ccb88-r5542
 ----
 
+<<<<<<< HEAD
 . Notice that the output shows that the container failed after trying to start on port 80 and terminated due to a CrashLoopBackOff error. Also notice the default OpenShift Security Context Constraints policy that is in place is restricted (openshift.io/scc: restricted).
+=======
+. Notice that the output shows that the container failed after trying to start on port 80 and terminated due to a CrashLoopBackOff error. Also notice the default OpenShift Security Context Constraints policy that is in place is restricted (openshift.io/scc: restricted). 
+>>>>>>> e024dcc72ebf66b4577db7402d9a96c586e219be
