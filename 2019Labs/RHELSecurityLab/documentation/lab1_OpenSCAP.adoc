@@ -4,7 +4,7 @@
 = Lab 1: OpenSCAP Basics and Command Line Scanning
 
 .*Lab Length*
-* Medium/Average
+* Medium/Average (~10-20 mins)
 
 .*Goal*
 * Become familiar with the basics of automated security and compliance scanning and remediations with OpenSCAP and Red Hat^(R)^ Ansible^(R)^ Automation
@@ -33,7 +33,7 @@ Read the comments above each installation command for more details. If needed, t
 Versions of installed packages may not be up to date, but this does not affect the lab.
 ====
 
-* Additionally, *openscap-scanner*, *scap-security-guide*, and *Ansible* are installed on the *openscap.example.com* host:
+* Additionally, *openscap-scanner*, *scap-security-guide*, and *Ansible* are installed on the *openscap.example.com* host. Take a look at the comments above each installation command for more details. If needed, the *root* password for the *openscap.example.com* host is *r3dh4t1!*. Also, don't forget to replace the *GUID* with unique lab provided *GUID*! Note that the versions of packages installed may not be up to date. However, this will not affect this lab:
 +
 ----
 [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
