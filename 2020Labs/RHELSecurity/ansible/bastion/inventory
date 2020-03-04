@@ -1,0 +1,20 @@
+[bastion]
+# put the name of the bastion host (targetHost), here
+bastion.[some_number].sandbox[some_number].opentlc.com
+
+[bastion:vars]
+# put your AWS access key ID, and secure access key, here
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+# put the DNS domain here, not including any leading or trailing periods
+dns_domain=sandbox[some_number}.opentlc.com
+# put the AWS region, that you wish to deploy on, here
+region=us-east-1
+# put your email address here
+email=[you]@redhat.com
+# put your guid (your *nix user name, no special characters), here
+guid=[jdoe]
+ansible_connection=ssh
+# put the user and password, from OpenTLC CloudForms, here
+ansible_user=
+ansible_password=

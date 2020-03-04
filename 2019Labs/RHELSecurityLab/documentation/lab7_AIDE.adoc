@@ -3,9 +3,8 @@
 
 = Lab 7: Advanced Intrusion Detection Environment (AIDE)
 
-
 .*Lab Length*
-* Medium/Average
+* Medium/Average (~15 mins)
 
 .*Goal*
 * Understand how to use the Advanced Intrusion Detection Environment (AIDE)
