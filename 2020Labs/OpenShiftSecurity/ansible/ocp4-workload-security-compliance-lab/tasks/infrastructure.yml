@@ -1,0 +1,202 @@
+---
+
+- name: install oscap tools
+  yum:
+    name:
+      - docker
+      - openscap-utils
+      - openscap-scanner
+      - scap-security-guide
+      - atomic
+  delegate_to: "{{ bastion_internal }}"
+
+- name: ensure docker group exists
+  group:
+    name: docker
+    state: present
+  delegate_to: "{{ bastion_internal }}"
+
+- name: enable ssh password
+  replace:
+    regexp: "PasswordAuthentication no"
+    path: /etc/ssh/sshd_config
+    replace: "PasswordAuthentication yes"
+  delegate_to: "{{ bastion_internal }}"
+
+- name: restart sshd service
+  service:
+    name: sshd
+    state: restarted
+  delegate_to: "{{ bastion_internal }}"
+
+- name: retrieve registry route
+  shell: "{{ openshift_cli }} get routes --all-namespaces | grep registry | grep default | grep -v console | awk '{print $3}'"
+  register: image_route
+
+- set_fact:
+    ocp_registry_route: "{{ image_route.stdout }}"
+
+- name: add exposed registry as insecure
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    mode: '0644'
+    backup: yes
+  register: reg_result
+  delegate_to: "{{ bastion_internal }}"
+
+- name: enable docker service
+  service:
+    name: docker
+    enabled: true
+  delegate_to: "{{ bastion_internal }}"
+
+- name: restart docker service
+  service:
+    name: docker
+    state: restarted
+  when: reg_result.changed
+  delegate_to: "{{ bastion_internal }}"
+
+- name: allow group to use oscap-docker without sudo password
+  lineinfile:
+    dest: /etc/sudoers
+    line: "%docker ALL=NOPASSWD: /usr/bin/oscap-docker"
+    validate: '/usr/sbin/visudo -cf %s'
+  become: true
+  delegate_to: "{{ bastion_internal }}"
+
+- name: create custom jenkins image
+  shell: |
+    {{ openshift_cli }} new-build -D $'FROM jenkins:latest\nUSER 0\nRUN curl -kL https://updates.jenkins-ci.org/download/plugins/ssh-steps/1.2.1/ssh-steps.hpi -o /usr/lib/jenkins/ssh-steps.hpi && chmod 665 /usr/lib/jenkins/ssh-steps.hpi && sed -i '\''s/{ print $1; }/ {a=$1} END{print a}/'\'' /usr/libexec/s2i/run' --to=custom-jenkins -n openshift
+  ignore_errors: true
+
+- name: wait for custom jenkins build to finish
+  shell: "{{ openshift_cli }} get builds -n openshift | grep custom-jenkins | grep Complete"
+  register: result_jenkins
+  until: result_jenkins.rc == 0
+  retries: 60
+  delay: 20
+
+- name: create owasp zap image
+  command: "{{ openshift_cli }} new-build --name owasp-zap -l 'role=jenkins-slave' https://github.com/RedHatDemos/SecurityDemos.git --context-dir=2019Labs/ProactiveSecurityCompliance/OpenShiftSecurityPipeline/jenkins-slave-zap -n openshift"
+  ignore_errors: true
+
+- name: wait for owasp zap build to finish
+  shell: "{{ openshift_cli }} get builds -n openshift | grep owasp-zap | grep Complete"
+  register: result_owasp
+  until: result_owasp.rc == 0
+  retries: 60
+  delay: 20
+
+- name: create image management image
+  command: "{{ openshift_cli }} new-build --name image-management -l 'role=jenkins-slave' https://github.com/siamaksade/jenkins-slave-skopeo.git -n openshift"
+  ignore_errors: true
+
+- name: wait for image mgmt build to finish
+  shell: "{{ openshift_cli }} get builds -n openshift | grep image-management | grep Complete"
+  register: result_mgmt
+  until: result_mgmt.rc == 0
+  retries: 60
+  delay: 20
+
+- name: check if project {{ admin_project }} exists
+  command: "{{ openshift_cli }} get project {{ admin_project }}"
+  register: shared_project_result
+  ignore_errors: true
+  changed_when: false
+  tags: always
+
+- name: expose registry
+  command: "{{ openshift_cli }} create route passthrough --service=image-registry -n openshift-image-registry"
+  tags: always
+  ignore_errors: true
+
+- name: create project {{ admin_project }}
+  command: "{{ openshift_cli }} new-project {{ admin_project }}"
+  when: shared_project_result is failed
+  tags: always
+
+- name: remove limitrange in {{ admin_project }}
+  command: "{{ openshift_cli }} delete limitrange --all -n {{ admin_project }}"
+  ignore_errors: true
+
+- name: deploy gogs
+  import_tasks: ./gogs.yml
+  become: true
+  tags: gogs
+
+- name: check if project quay project exists
+  command: "{{ openshift_cli }} get project {{ quay_project_name }}"
+  register: quay_project_result
+  ignore_errors: true
+  changed_when: false
+  tags: always
+
+- name: deploy quay
+  import_tasks: ./quay.yml
+  become: true
+  when: quay_project_result is failed
+  tags: quay
+
+- name: deploy clair
+  import_tasks: ./clair.yml
+  become: true
+  when: quay_project_result is failed
+  tags: quay
+
+- name: deploy nexus
+  import_tasks: ./nexus.yml
+  become: true
+  tags: nexus
+
+- name: deploy sonarqube
+  import_tasks: ./sonarqube.yml
+  become: true
+  tags: sonarqube
+
+- name: check if project {{ codeready_project_name }} exists
+  command: "{{ openshift_cli }} get project {{ codeready_project_name }}"
+  register: codeready_project_name_result
+  ignore_errors: true
+  changed_when: false
+  tags: codeready
+
+- name: create codeready project {{ codeready_project_name }}
+  command: "{{ openshift_cli }} new-project {{ codeready_project_name }}"
+  when: codeready_project_name_result is failed
+  tags: codeready
+
+- name: remove codeready limitrange
+  command: "{{ openshift_cli }} delete limitrange --all -n {{ codeready_project_name }}"
+  when: codeready_project_name_result is failed
+  tags: codeready
+
+- name: check codeready installed
+  shell: command -v crwctl >/dev/null 2>&1
+  register: result
+  tags: codeready
+  ignore_errors: yes
+
+- name: extract codeready archive
+  shell: tar -zxvf codeready-workspaces-2.0.0-crwctl-linux-x64.tar.gz -C /opt/
+  args:
+    chdir: "{{ tmp_dir }}/files"
+  become: true
+  when: "{{ result.rc }} != 0"
+  tags: codeready
+
+- name: create symbolic link to crwctl
+  shell: ln -s /opt/crwctl/bin/crwctl /usr/bin/crwctl
+  become: true
+  when: "{{ result.rc }} != 0"
+  tags: codeready
+
+- name: deploy codeready
+  shell: "crwctl server:start --platform=openshift --installer=operator --domain={{ ocp_cluster_domain }} --chenamespace={{ codeready_project_name }}"
+  tags: codeready
+  ignore_errors: true
+
+- name: infrastructure tasks complete
+  debug:
+    msg: "Infrastructure Tasks completed successfully."

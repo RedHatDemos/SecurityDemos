@@ -1,0 +1,124 @@
+---
+silent: False
+admin_project: labs-infra
+tmp_dir: "/tmp/{{ guid }}"
+
+user_count_start: 0
+user_count: 3
+user_format: user%d
+user_password: "openshift"
+
+ocp_username: opentlc-mgr
+ocp_master: "master.{{ guid }}{{ subdomain_base_suffix }}"
+ocp_bastion: "bastion.{{ guid }}{{ subdomain_base_suffix }}"
+bastion_internal: "bastion.{{ guid }}.internal"
+ocp_cluster_domain: "cluster.{{ guid }}{{ subdomain_base_suffix }}"
+ocp_apps_domain: "apps.{{ guid }}{{ subdomain_base_suffix }}"
+ocp_user_needs_quota: "false"
+
+repo_url: https://github.com/RedHatDemos/SecurityDemos.git
+reponame_local: SecurityDemos
+reponame: SecurityDemos
+demoapp_location: 2019Labs/ProactiveSecurityCompliance/OpenShiftSecurityPipeline/spring-boot-angular-ecommerce
+
+etherpad_text: "Welcome to our OpenShift Workshop!!!\\n\\n"
+etherpad_urlprefix: "etherpad-{{ admin_project }}"
+etherpad_hostname: "{{ etherpad_urlprefix }}.{{ ocp_apps_domain }}"
+
+guide_urlprefix: "guide-{{ admin_project }}"
+guide_hostname: "{{ guide_urlprefix }}.{{ ocp_apps_domain }}"
+
+quota_requests_cpu: 5
+quota_limits_cpu: 10
+quota_requests_memory: '6Gi'
+quota_limits_memory: '20Gi'
+quota_configmaps: 4
+quota_pods: 20
+quota_persistentvolumeclaims: 5
+quota_services: 15
+quota_secrets: 30
+quota_requests_storage: 10Gi
+
+quay_pull_user: changeme
+quay_pull_password: changeme
+
+set_hostname_suffix: false
+oc_kube_config: "/root/.kube/config"
+project_suffix: tmp
+openshift_cli: oc
+
+ephemeral: false
+clean_deploy: false
+
+ocp_registry_route: unset
+
+###### Quay defaults
+quay_project_name: quay-enterprise
+gogs_project_display_name: Quay
+gogs_project_desc: Quay Enterprise Server
+
+quay_service_name: quayecosystem-quay
+
+quay_admin_user: quayadmin
+quay_admin_password: openshift
+
+quay_user: quay
+quay_user_password: openshift
+
+###### Gogs defaults
+gogs_project_name: "{{ admin_project }}"
+gogs_project_display_name: Gogs
+gogs_project_desc: Gogs Git Server
+
+gogs_service_name: gogs
+
+gogs_urlprefix: "gogs-{{ admin_project }}"
+gogs_route: "{{ gogs_urlprefix }}.{{ ocp_apps_domain }}"
+
+gogs_admin_user: gogsadmin
+gogs_admin_password: openshift
+
+gogs_user: gogs
+gogs_user_password: openshift
+gogs_generate_user_count: 0
+
+gogs_image_version: 0.11.34
+gogs_database_version: 9.6
+
+gogs_max_memory: 1Gi
+gogs_min_memory: 128Mi
+gogs_max_cpu: 400m
+gogs_min_cpu: 100m
+
+######### Nexus defaults
+nexus_project_name: "{{ admin_project }}"
+nexus_project_display_name: Nexus
+nexus_project_desc: Nexus Repository Manager
+
+nexus_service_name: nexus
+
+nexus_urlprefix: "nexus-{{ admin_project }}"
+nexus_route: "{{ nexus_urlprefix }}.{{ ocp_apps_domain }}"
+
+nexus_admin_user: admin
+nexus_admin_password_current: admin123
+nexus_admin_password: admin123
+
+nexus_image_version: 3.20.1
+
+nexus_max_memory: 2Gi
+nexus_min_memory: 512Mi
+nexus_max_cpu: 1
+nexus_min_cpu: 200m
+nexus_volume_capacity: 10Gi
+
+###### Sonarqube defaults
+sonarqube_project_name: "{{ admin_project }}"
+
+sonarqube_service_name: sonarqube
+
+sonarqube_urlprefix: "sonarqube-{{ admin_project }}"
+sonarqube_route: "{{ sonarqube_urlprefix }}.{{ ocp_apps_domain }}"
+
+###### Codeready defaults
+codeready_project_name: "{{ admin_project }}"

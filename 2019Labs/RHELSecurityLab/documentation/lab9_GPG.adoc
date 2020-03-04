@@ -4,7 +4,7 @@
 = Lab 9: GNU Privacy Guard (GPG)
 
 .*Lab Length*
-* Short
+* Short (~10 mins)
 
 .*Goal*
 * Become familiar with GNU Privacy Guard (GPG), which can be used to identify yourself and encrypt your communications.
