@@ -1,0 +1,20 @@
+#vim: set ft=ansible:
+---
+######################### Set up Subscription Method (File/Satellite/RHN)
+
+- when: not hostvars.localhost.skip_packer_tasks | d(false)
+  tags:
+    - set_repositories
+    - packer
+  block:
+    - name: Configure Satellite Subscription
+      import_tasks: ./satellite-repos.yml
+      when: repo_method == "satellite"
+
+    - name: Configure RHN Subscription
+      import_tasks: ./rhn-repos.yml
+      when: repo_method == "rhn"
+
+    - name: Configure Repository File
+      import_tasks: ./file-repos.yml
+      when: repo_method == "file"

@@ -3,9 +3,8 @@
 
 = Lab 10: Firewalld
 
-
 .*Lab Length*
-* Short
+* Short (~10 mins)
 
 .*Goal*
 * Learn how to use `firewalld` to dynamically manage firewall rules

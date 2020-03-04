@@ -1,0 +1,65 @@
+---
+# Implement your Workload deployment tasks here
+
+- name: Setting up workload for user
+  debug:
+    msg: "Setting up workload for user ocp_username = {{ ocp_username }}"
+
+- name: Setting up num_users for workshop
+  debug:
+    msg: "Setting up num_users for workshop num_users = {{ num_users }}"
+
+- name: Setting up module_type for workshop
+  debug:
+    msg: "Setting up module_type for workshop module_type = {{ module_type }}"
+
+- name: Transfer executable script script
+  copy: 
+    src=../files/preparelab_ccn.sh dest=/tmp/preparelab_ccn.sh mode=0777
+
+- name: Execute the preparelab_ccn.sh 
+  shell: /tmp/preparelab_ccn.sh -c {{ num_users }} -m {{ module_type }} 
+
+- name: Remove the preparelab_ccn.sh 
+  file: path=/tmp/preparelab_ccn.sh state=absent
+
+# get ingress host
+- name: Get ingress host
+  k8s_facts:
+    api_version: v1
+    kind: Service
+    name: router-default
+    namespace: openshift-ingress
+  register: r_router_default
+
+- name: Show ingress object
+  debug:
+    msg: "Ingress object: {{ r_router_default }}"
+
+- name: Show ingress host name
+  debug:
+    msg: "Ingress hostname: {{ r_router_default.resources[0].status.loadBalancer.ingress[0].hostname }}"
+
+# Fix AWS ELB connection timeout
+- name: Get ELB name
+  become_user: ec2-user
+  shell: |
+    sudo -u ec2-user aws elb describe-load-balancers --region {{ aws_region }} | jq  '.LoadBalancerDescriptions |
+      map(select( .DNSName == "{{ r_router_default.resources[0].status.loadBalancer.ingress[0].hostname }}"))' |
+      jq -r '.[0].LoadBalancerName'
+  register: lbname
+
+- name: Show load balancer name
+  debug:
+    msg: "Load balancer name: {{ lbname.stdout }}"
+
+- name: Fix load balancer
+  become_user: ec2-user
+  shell: |
+    sudo -u ec2-user aws elb modify-load-balancer-attributes --region {{ aws_region }} --load-balancer-name {{ lbname.stdout }} --load-balancer-attributes "{\"ConnectionSettings\":{\"IdleTimeout\":300}}"
+
+# Leave this as the last task in the playbook.
+- name: workload tasks complete
+  debug:
+    msg: "Workload Tasks completed successfully."
+  when: not silent|bool
