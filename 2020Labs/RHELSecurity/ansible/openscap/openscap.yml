@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+  - import_tasks: fix-authorized_keys.yml
+
+  - name: Install used packages
+    package:
+      name:
+      - scap-security-guide
+      - openscap-scanner
+      - scap-workbench
+      - xorg-x11-xauth
+      - firefox
+      - ansible
+      state: present
+
+  - name: Set SSH X Forwarding
+    lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: ^X11Forwarding
+      line: "X11Forwarding yes"
+    tags: setup
+

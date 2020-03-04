@@ -4,7 +4,7 @@
 == Lab 4: Cloud Encryption Using RHEL Opportunistic IPsec
 
 .*Lab Length*
-* Medium/Average
+* Medium/Average (~15 mins)
 
 .*Goal*
 * Learn how to deploy Opportunistic IPsec to encrypt all host-to-host communication
