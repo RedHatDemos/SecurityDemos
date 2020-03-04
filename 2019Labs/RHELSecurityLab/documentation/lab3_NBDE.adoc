@@ -1,10 +1,9 @@
-
 :toc2:
 
 = Lab 3: Secure Decryption of LUKS-Encrypted Volumes Using Network Bound Disk Encryption (NBDE)
 
 .*Lab Length*
-* Medium/Average
+* Medium/Average (~15 mins)
 
 .*Goal*
 * Understand how to use Network Bound Disk Encryption (NBDE) to securely decrypt LUKS-encrypted volumes

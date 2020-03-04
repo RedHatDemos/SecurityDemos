@@ -1,6 +1,6 @@
 = Lab 6: Auditing on Red Hat Enterprise Linux 8
 
-*Lab Length: Medium/Average*
+*Lab Length: Medium/Average (~15 mins)*
 
 == Goal of Lab
 
