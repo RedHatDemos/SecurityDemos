@@ -4,7 +4,7 @@
 = Lab 8: Single-Sign-on Environment Creation for Linux Servers Using Identity Management in Red Hat Enterprise Linux
 
 .*Lab Length*
-* Medium/Average
+* Medium/Average (~15-20 mins)
 
 .*Goal*
 * Create a single-sign-on (SSO) environment for all of your Linux^(R)^ servers to manage users, hosts, and sudo commands from a central console
@@ -40,7 +40,8 @@ This page has your environment's power control and consoles.
 +
 Note that the *IdM1* system was installed with a GUI and already has an IdM server installed on it.
 
-. Log in with the *admin* username and *r3dh4t1!* as the password:
+. Log in with the *admin* username and *r3dh4t1!* as the password. If you are required to update the expired admin password in the web UI, just keep the password the same (*r3dh4t1!*). 
+
 +
 image:images/idm-login.png[400,400]
 

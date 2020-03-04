@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+
+  - import_tasks: fix-authorized_keys.yml
+
+  - name: Remove aide if it's installed
+    package:
+      name: aide
+      state: absent
+
+  - name: Install required packages
+    package:
+      name:
+        - audit
+        - vim-minimal
+      state: present
+
