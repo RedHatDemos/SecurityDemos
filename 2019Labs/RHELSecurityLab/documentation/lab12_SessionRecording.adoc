@@ -4,9 +4,8 @@
 
 = Lab 12: Session Recording
 
-
 .*Lab Length*
-* Medium/Average
+* Medium/Average (~15 mins)
 
 .*Goal*
 * Use Session Recording to help log and audit users' terminal sessions and correlate them with system logs
