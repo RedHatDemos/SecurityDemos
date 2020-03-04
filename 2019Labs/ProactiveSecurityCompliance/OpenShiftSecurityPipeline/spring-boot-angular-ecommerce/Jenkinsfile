@@ -68,7 +68,7 @@ pipeline {
          remote.user="${JENKINS_GOGS_USER}"
          remote.password="${JENKINS_SSH_PASSWORD}"
          
-         sshCommand remote: remote, command: "oc login -u ${JENKINS_GOGS_USER} -p r3dh4t1! --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
+         sshCommand remote: remote, command: "oc login -u ${JENKINS_GOGS_USER} -p openshift --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
          sshCommand remote: remote, command: "docker login -u ${JENKINS_GOGS_USER} -p " + '"$(oc whoami -t)"' + " ${JENKINS_INTERNAL_REGISTRY}"
          sshCommand remote: remote, command: "docker pull ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest"
          sshCommand remote: remote, command: "sudo oscap-docker image ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
