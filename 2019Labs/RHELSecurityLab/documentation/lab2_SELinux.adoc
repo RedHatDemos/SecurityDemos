@@ -3,9 +3,8 @@
 
 == Lab 2: Security Enhanced Linux (SELinux)
 
-
 .*Lab Length*
-* Long
+* Long (~30 mins)
 
 .*Goal*
 Use Security Enhanced Linux^(R)^ (SELinux) to mitigate attacks that exploit privilege escalation vulnerabilities

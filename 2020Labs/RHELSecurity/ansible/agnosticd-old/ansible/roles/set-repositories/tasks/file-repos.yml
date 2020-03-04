@@ -1,0 +1,43 @@
+# vim: set ft=ansible:
+---
+- name: list current repository files
+  command: "ls -1 /etc/yum.repos.d/"
+  register: repodircontents
+  changed_when: false
+  tags:
+    - configure_repos
+    - remove_existing_repos
+
+- name: remove epel-release
+  package:
+    name: epel-release
+#    use: yum
+    use: dnf
+    state: absent
+
+- name: remove current repository files
+  file:
+    path: /etc/yum.repos.d/{{ item }}
+    state: absent
+  # TODO: use with_fileglob here
+  with_items: "{{ repodircontents.stdout_lines }}"
+  ignore_errors: true
+  tags:
+    - configure_repos
+    - remove_existing_repos
+
+- name: create open.repo template on host
+  template:
+    src: "./files/repos_template.j2"
+    dest: /etc/yum.repos.d/open_{{ env_type }}.repo
+  tags:
+   - create_open_repo_template
+  ignore_errors: true
+
+- name: clean repositories
+  command: "yum clean all"
+  args:
+    warn: false
+  tags:
+    - configure_repos
+    - run_yum_repolist
