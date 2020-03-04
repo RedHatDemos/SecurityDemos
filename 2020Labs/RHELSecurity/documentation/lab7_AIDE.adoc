@@ -112,20 +112,20 @@ AIDE found NO differences between database and filesystem. Looks okay!!
 [root@servera ~]# vi /etc/aide.conf
 ----
 
-. Type the command *:200* to go to line 200 and expect to see these two lines in the results:
+. Type the command *:265* to go to line 265 and expect to see these two lines in the results:
 +
 ----
-/etc/ssh/sshd_config$ LSPP
-/etc/ssh/ssh_config$ LSPP
+/etc/ssh/sshd_config CONTENT_EX
+/etc/ssh/ssh_config CONTENT_EX
 ----
 +
-This means that AIDE is monitoring these two files and is looking specifically for changes to content based on the `sha256` and `sha512` hashes.
+This means that AIDE is monitoring these two files and is looking specifically for changes to content based on the `sha512` hash, file type and access attributes.
 
-. Find the definition for LSPP, by typing the command *:81* to go to line 81, and expect to see these two lines:
+. Find the definition for LSPP, by typing the command *:82* to go to line 82, and expect to see these two lines:
 +
 ----
-# Just do sha256 and sha512 hashes
-LSPP = FIPSR+sha512
+# Extended content + file type + access.
+CONTENT_EX = sha512+ftype+p+u+g+n+acl+selinux+xattrs
 ----
 
 . Examine the default rules beginning at line 26, by typing *:26*, and note the included parameters.
