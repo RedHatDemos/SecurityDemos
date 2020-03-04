@@ -483,48 +483,6 @@ The CSV output is particularly interesting as it can be imported into
 LibreOffice or any other spreadsheet program that accepts files in the
 Comma Separated Values (CSV) format.
 
-. As *root*, transform today's audit log into the CSV format suitable for use within LibreOffice:
-+
-----
-[root@audit ~]# ausearch --start today --format csv --extra-labels --extra-obj2 > /tmp/audit.log.csv
-----
-
-=== 6.4.5: Viewing the CSV Output Audit Log from the Workstation Bastion Host
-
-In this section, you transfer the CSV file you just created from the *audit.example.com* system to the workstation bastion host system by using `scp`. Then you open the CSV file using LibreOffice from the workstation bastion host.
-
-. If you are not already there, log in to the workstation bastion host as *lab-user* from your desktop system (replacing `GUID` with your lab-provided GUID and using *r3dh4t1!* as the password):
-+
-----
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
-----
-
-. Use `scp` to transfer the CSV file from the *audit.example.com* system to the desktop of the workstation bastion host system:
-+
-----
-[lab-user@workstation-GUID ~]$ scp root@audit.example.com:/tmp/audit.log.csv ~/Desktop/
-----
-
-. Return to your *Lab Information* web page and click *CONSOLE* for your workstation bastion host:
-+
-image:images/lab1.1-workstationconsole.png[300,300]
-
-. Log in as *lab-user* with *r3dh4t1!* as the password:
-+
-image:images/lab1.1-labuserlogin.png[300,300]
-
-. Locate the CSV file you just copied from the *audit.example.com* system on your workstation bastion host's desktop:
-+
-image:images/audit-csvdesktop.png[200,200]
-
-. Double-click the audit report to view it, then click *Ok* on the *Text Import* dialog:
-+
-image:images/audit-textimportok.png[400,400]
-
-. Take a look at your CSV report:
-+
-image:images/audit-csvoutput.png[500,500]
-
 == 6.5: Resetting the Lab System (Optional)
 
 . If you want to restart the lab from scratch, run the following as *root* on *audit.example.com*:
