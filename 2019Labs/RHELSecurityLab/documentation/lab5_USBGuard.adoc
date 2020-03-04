@@ -4,7 +4,7 @@
 == Lab 5: USBGuard
 
 .*Lab Length*
-* Medium/Average
+* Medium/Average (~15 mins)
 
 .*Goal*
 * Become familiar with the basics of USBGuard

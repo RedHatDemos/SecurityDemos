@@ -1,0 +1,31 @@
+ceph_namespace: openshift-storage
+ceph_expected_crds:
+- ocsinitializations.ocs.openshift.io
+- storageclusters.ocs.openshift.io
+- storageclusterinitializations.ocs.openshift.io
+
+ceph_osd:
+  resources:
+    requests:
+      cpu: '0.1'
+      memory: 2Gi
+ceph_mon:
+  resources:
+    requests:
+      cpu: '0.2'
+      memory: 3Gi
+ceph_mgr:
+  resources:
+    requests:
+      cpu: '0.2'
+      memory: 3Gi
+ceph_mds:
+  resources:
+    requests:
+      cpu: '0.1'
+      memory: 2Gi
+
+ocs_operator_channel: stable-4.2
+ocs_operator_csv: ocs-operator.v4.2.1
+ocs_source_namespace: openshift-marketplace
+ocs_source: redhat-operators

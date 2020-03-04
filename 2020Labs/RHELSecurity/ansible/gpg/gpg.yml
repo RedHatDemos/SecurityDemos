@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+
+  - import_tasks: fix-authorized_keys.yml
+
+  - name: Install required packages
+    package:
+      name:
+        - gnupg2
+      state: present
+
