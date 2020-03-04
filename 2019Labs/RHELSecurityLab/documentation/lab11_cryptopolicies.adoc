@@ -4,9 +4,8 @@
 
 = Lab 11: Crypto Policies
 
-
 .*Lab Length*
-* Short
+* Short (~10 mins)
 
 .*Goals*
 * Use the new crypto policies tools in Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL) 8 to have a consistent security configuration across all cryptographic libraries in the system
