@@ -65,7 +65,7 @@ You obtain your own unique *GUID*, which you use to access your instance of thes
 Each lab is independent from the others and it is not necessary to perform them sequentially.
 
 == Table of Contents
-* link:lab0_setup.adoc[Lab 0: Setup Steps^]
+* link:lab0_setup-workshops.adoc[Lab 0: Setup Steps^]
 * link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP^]
 * link:lab2_SELinux.adoc[Lab 2: SELinux^]
 * link:lab3_NBDE.adoc[Lab 3: Network Bound Disk Encryption (NBDE)^]
@@ -78,4 +78,3 @@ Each lab is independent from the others and it is not necessary to perform them 
 * link:lab10_firewalld.adoc[Lab 10: Firewalld^]
 * link:lab11_cryptopolicies.adoc[Lab 11: Crypto Policies^]
 * link:lab12_SessionRecording.adoc[Lab 12: Session Recording^]
-
