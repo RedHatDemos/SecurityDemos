@@ -4,7 +4,7 @@
 = Lab 6: Auditing on Red Hat Enterprise Linux 8
 
 .*Lab Length*
-* Medium/Average
+* Medium/Average (~15 mins)
 
 .*Goal*
 * Become familiar with the auditing capabilities of Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL)
