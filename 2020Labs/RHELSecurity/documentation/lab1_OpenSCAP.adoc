@@ -220,7 +220,7 @@ image:images/lab1.2-scapsecurityguide.png[600,600]
 +
 image::images/lab1.2-workbench_opened.png[SCAP Workbench opened, profile selected]
 
-=== 1.3.2: Customizing PCI-DSS Control Baseline and Tests 
+=== 1.3.2: Customizing PCI-DSS Control Baseline and Tests
 
 . For *Profile*, select *PCI-DSS v3 Control Baseline for Red Hat Enterprise Linux 8 (18)*, then click *Customize*:
 +
@@ -232,7 +232,7 @@ image:images/lab1.2-newprofileID.png[500,500]
 +
 Now you can select and unselect rules according to your organization's needs and change values such as minimum password length to tailor the compliance profile.
 +
-The toolbar at the top of the window provides options to help you create and customize the profile. Notice the *Deselect All* and *Search* buttons, which can be very useful when creating a new profile from scratch. 
+The toolbar at the top of the window provides options to help you create and customize the profile. Notice the *Deselect All* and *Search* buttons, which can be very useful when creating a new profile from scratch.
 
 . Customize the profile as you like, then click *OK* to save it:
 +
@@ -412,5 +412,4 @@ IMPORTANT: If you omit the `--check` parameter from the previous command, the re
 
 <<top>>
 
-link:README.adoc#table-of-contents[ Table of Contents^ ] | link:lab2_SELinux.adoc[Lab 2: SELinux^]
-
+link:README.adoc#table-of-contents[ Table of Contents^ ] | link:lab2_SELinux_part1.adoc[Lab 2: SELinux Part1 - SELinux Fundamentals^]

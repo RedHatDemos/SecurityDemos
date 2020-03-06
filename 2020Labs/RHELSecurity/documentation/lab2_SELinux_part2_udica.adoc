@@ -1,5 +1,5 @@
-= Lab 3: How to generate SELinux security policy for custom continer
-
+= Lab 2 Part 2: How to generate tailored SELinux policies for containers
+ 
 *Lab Length: Medium/Average (~15 mins)*
 
 == Goal of Lab
