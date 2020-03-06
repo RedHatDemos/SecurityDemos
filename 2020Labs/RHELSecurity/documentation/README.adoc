@@ -5,26 +5,25 @@
 == Presenters/Lab Developers
 *Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
 
-*Peter Beniaris*, Manager--Solutions Architecture, Red Hat
+*Alex Jacocks*, Senior Solution Architect, Red Hat
 
-*Lukas Vrabec*, Senior Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat
+*Lukas Vrabec*, Senior Software Engineer and SELinux Product Owner--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Marek Haicman*, Senior Quality Engineer and Product Owner--Security Compliance, Red Hat
+*Gabriel Becker*, Software Engineer--Security Compliance in Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Simo Sorce*, Senior Principal Software Engineer--RHEL Security, Red Hat
 
-== Lab Developers
-*Paul Wouters*, Senior Software Engineer--RHEL Security, Red Hat
+== Additional Lab Developers
+*Rafael Jeffman*, Senior Software Engineer--Identity Management in Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Daniel Kopecek*, Senior Software Engineer--RHEL Security, Red Hat
+*Petr Lautrbach*, Senior Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Kirill Gliebov*, Software Engineer--RHEL Security, Red Hat
+*Paul Wouters*, Senior Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Matej Tyc*, Software Engineer and Tech Lead--Security Compliance in RHEL Security, Red Hat
+*Matej Tyc*, Software Engineer and Tech Lead--Security Compliance in Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Steve Grubb*, Senior Principal Software Engineer--RHEL Security, Red Hat
+*Sergio Correia*, Senior Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Richard Guy Briggs*, Senior Software Engineer--RHEL Security, Red Hat
+*Tomas Mraz*, Principal Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
 == Overview and Prerequisites
 In this lab, you learn how to build defense-in-depth in the operating system by implementing the key security technologies available to you in the latest version of Red Hat Enterprise Linux.
@@ -67,7 +66,8 @@ Each lab is independent from the others and it is not necessary to perform them 
 == Table of Contents
 * link:lab0_setup-workshops.adoc[Lab 0: Setup Steps^]
 * link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP^]
-* link:lab2_SELinux.adoc[Lab 2: SELinux^]
+* link:lab2_SELinux_part1.adoc[Lab 2 Part 1: SELinux Fundamentals^]
+* link:lab2_SELinux_part2.adoc[Lab 2 Part 2: How to generate tailored SELinux policies for containers^]
 * link:lab3_NBDE.adoc[Lab 3: Network Bound Disk Encryption (NBDE)^]
 * link:lab4_IPsec.adoc[Lab 4: IPSec^]
 * link:lab5_USBGuard.adoc[Lab 5: USBGuard^]

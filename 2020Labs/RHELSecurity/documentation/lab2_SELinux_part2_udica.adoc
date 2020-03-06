@@ -1,5 +1,5 @@
 = Lab 2 Part 2: How to generate tailored SELinux policies for containers
- 
+
 *Lab Length: Medium/Average (~15 mins)*
 
 == Goal of Lab
@@ -141,5 +141,6 @@ Proof that SELinux allows binding only to tcp/udp *21* port.
     [root@5bd8cb2ad911 /]# nc -lvp 21
     Ncat: Version 7.60 ( https://nmap.org/ncat )
 
-<<top>>
-link:README.adoc#table-of-contents[ Table of Contents ]
+    <<top>>
+
+    link:README.adoc#table-of-contents[Table of Contents^] | link:lab3_NBDE.adoc[Lab 3: NBDE^]
