@@ -5,7 +5,7 @@
 == Presenters/Lab Developers
 *Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
 
-*Alex Jacocks*, Senior Solution Architect, Red Hat
+*Alex Jacocks*, Senior Solution Architect, Red Hat^(R)^
 
 *Lukas Vrabec*, Senior Software Engineer and SELinux Product Owner--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
@@ -67,7 +67,7 @@ Each lab is independent from the others and it is not necessary to perform them 
 * link:lab0_setup-workshops.adoc[Lab 0: Setup Steps^]
 * link:lab1_OpenSCAP.adoc[Lab 1: OpenSCAP^]
 * link:lab2_SELinux_part1.adoc[Lab 2 Part 1: SELinux Fundamentals^]
-* link:lab2_SELinux_part2.adoc[Lab 2 Part 2: How to generate tailored SELinux policies for containers^]
+* link:lab2_SELinux_part2_udica.adoc[Lab 2 Part 2: How to generate tailored SELinux policies for containers^]
 * link:lab3_NBDE.adoc[Lab 3: Network Bound Disk Encryption (NBDE)^]
 * link:lab4_IPsec.adoc[Lab 4: IPSec^]
 * link:lab5_USBGuard.adoc[Lab 5: USBGuard^]
