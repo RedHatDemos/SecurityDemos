@@ -44,7 +44,7 @@ pipeline {
         sh "cp target/spring-boot-angular-ecommerce-0.0.1-SNAPSHOT.jar deploy"
         sh "cp Dockerfile deploy"
         sh "oc start-build ecommerce --from-dir=deploy --follow --wait --build-arg BASE_IMAGE=quay-secure-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-golden:${JENKINS_GOGS_USER}"
-        #sh "oc start-build ecommerce --from-dir=deploy --follow --wait --build-arg BASE_IMAGE=registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.0"
+        //sh "oc start-build ecommerce --from-dir=deploy --follow --wait --build-arg BASE_IMAGE=registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.0"
       } // steps
     } // stage
 
@@ -72,7 +72,7 @@ pipeline {
          sshCommand remote: remote, command: "oc login -u ${JENKINS_GOGS_USER} -p openshift --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
          sshCommand remote: remote, command: "docker login -u ${JENKINS_GOGS_USER} -p " + '"$(oc whoami -t)"' + " ${JENKINS_INTERNAL_REGISTRY}"
          sshCommand remote: remote, command: "docker pull ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest"
-         sshCommand remote: remote, command: "sudo oscap-docker image ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-disa --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+         sshCommand remote: remote, command: "sudo oscap-docker image ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel8-disa --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml"
          sshCommand remote: remote, command: "sudo oscap-docker image-cve ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest --report report-cve.html"
          sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report.html", into: 'openscap-compliance-report.html', override: true
          sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report-cve.html", into: 'openscap-cve-report.html', override: true
