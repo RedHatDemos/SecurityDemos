@@ -54,22 +54,63 @@ pipeline {
       } // steps
     } // stage
 
-    stage('Quality Gates') {
+    stage('Compliance Gate') {
       steps {
-        sh "echo TODO"
+        script {
+        compliance_percent = sh (script: "grep Score openscap-compliance-report.html | grep -P '\\d+\\.\\d+(?=<)' -o | head -1",
+          returnStdout: true).trim()
+
+        echo "Compliance score: $compliance_percent"
+
+        double compliance = compliance_percent
+          
+        if ( compliance < 80) {
+          echo 'Compliance score below threshold'
+          sh 'exit 1'
+        } else {
+          echo 'Compliance gate passed'
+          }
+        } // script
+      } // steps
+    } // stage
+
+    stage('Vulnerability Gate') {
+      steps {
+        script {
+        vuln_percent = sh (script: "grep 'Non-Compliant/Vulnerable/Unpatched' openscap-cve-report.html | grep -P '\\d+(?=<)' -o",
+          returnStdout: true).trim()
+
+        echo "Vulnerability score: $vuln_percent"
+
+        double vuln = vuln_percent
+          
+        if ( vuln > 0 ) {
+          echo 'One or more vulnerabilities found'
+          sh 'exit 1'
+        } else {
+          echo 'Vulnerability gate passed'
+          }
+        } // script
       } // steps
     } // stage
 
     stage('Smoke Test') {
       steps {
-        sh "echo TODO"
+        sh "oc create secret docker-registry quay --docker-server=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN} --docker-username='admin' --docker-password='admin123'
+ --docker-email='nobody@nowhere.com -n ${JENKINS_GOGS_USER}-hardening' || true"
+        sh "oc secret link default quay -n ${JENKINS_GOGS_USER}-hardening"
+        sh 'oc delete dc/hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
+        sh "oc new-app --allow-missing-images --insecure-registry --docker-image=quayecosystem-quay-quay-enterprise.apps.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:user0 -n ${JENKINS_GOGS_USER}-hardening"
+        sh 'oc patch -n ${JENKINS_GOGS_USER}-hardening dc/hardened-openjdk-candidate -p \'{"spec" : { "template" : { "spec" : { "containers" : [{ "name" : "hardened-openjdk-candidate" , "command" : ["bash"], "args" : [ "-c", "java -version ; sleep 86400"] }]}}}}\''
+        sh 'oc rollout status dc/hardened-openjdk-candidate -w -n ${JENKINS_GOGS_USER}-hardening'
+        sh 'oc delete dc/hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
       } // steps
     } // stage
 
     stage('Golden Image') {
       agent { label 'image-management' }
       steps {
-        sh "skopeo --debug copy --src-creds=admin:admin123 --src-tls-verify=false --dest-tls-verify=false --dest-creds=admin:admin123 docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-golden:${JENKINS_GOGS_USER}  || true"
+        sh "skopeo --debug copy --src-creds=admin:admin123 --src-tls-verify=false --dest-tls-verify=false --dest-creds=admin:admin123 docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-golden:${JENKINS_GOGS_USER}"
       } // steps
     } // stage
 
@@ -77,7 +118,7 @@ pipeline {
       steps {
         script {
           try {
-            build "${JENKINS_GOGS_USER}-ecommerce-pipeline"
+            build "${JENKINS_GOGS_USER}-${JENKINS_GOGS_USER}-ecommerce-pipeline"
           } catch (err) {}
          } // script
       } //steps
