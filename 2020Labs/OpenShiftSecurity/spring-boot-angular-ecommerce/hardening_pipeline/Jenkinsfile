@@ -96,14 +96,15 @@ pipeline {
 
     stage('Smoke Test') {
       steps {
-        sh "oc create secret docker-registry quay --docker-server=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN} --docker-username='admin' --docker-password='admin123'
- --docker-email='nobody@nowhere.com -n ${JENKINS_GOGS_USER}-hardening' || true"
-        sh "oc secret link default quay -n ${JENKINS_GOGS_USER}-hardening"
-        sh 'oc delete dc/hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
-        sh "oc new-app --allow-missing-images --insecure-registry --docker-image=quayecosystem-quay-quay-enterprise.apps.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:user0 -n ${JENKINS_GOGS_USER}-hardening"
-        sh 'oc patch -n ${JENKINS_GOGS_USER}-hardening dc/hardened-openjdk-candidate -p \'{"spec" : { "template" : { "spec" : { "containers" : [{ "name" : "hardened-openjdk-candidate" , "command" : ["bash"], "args" : [ "-c", "java -version ; sleep 86400"] }]}}}}\''
+        sh "oc create secret docker-registry quay --docker-server=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN} --docker-username='admin' --docker-password='admin123' --docker-email='nobody@nowhere.com -n ${JENKINS_GOGS_USER}-hardening' || true"
+        sh "oc secret link default quay -n ${JENKINS_GOGS_USER}-hardening --for=pull"
+        sh 'oc delete all -l app=hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
+        sh "oc new-app --allow-missing-images --insecure-registry --docker-image=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:user0 -n ${JENKINS_GOGS_USER}-hardening"
+        sh "oc rollout cancel dc/hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true"
+        sh 'oc patch -n ${JENKINS_GOGS_USER}-hardening dc/hardened-openjdk-candidate -p \'{"spec" : { "template" : { "spec" : { "containers" : [{ "name" : "hardened-openjdk-candidate" , "command" : ["bash"], "args" : [ "-c", "java -version && sleep 86400"] }]}}}}\''
+        sh 'oc rollout latest dc/hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening'
         sh 'oc rollout status dc/hardened-openjdk-candidate -w -n ${JENKINS_GOGS_USER}-hardening'
-        sh 'oc delete dc/hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
+        sh 'oc delete all -l app=hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
       } // steps
     } // stage
 
