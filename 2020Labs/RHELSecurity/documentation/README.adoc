@@ -7,23 +7,36 @@
 
 *Alex Jacocks*, Senior Solution Architect, Red Hat^(R)^
 
-*Lukas Vrabec*, Senior Software Engineer and SELinux Product Owner--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
+*Lukas Vrabec*, Senior Software Engineer and Security Controls Product Owner--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
 *Gabriel Becker*, Software Engineer--Security Compliance in Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
 
 == Additional Lab Developers
-*Rafael Jeffman*, Senior Software Engineer--Identity Management in Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Petr Lautrbach*, Senior Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
 
-*Paul Wouters*, Senior Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
+*Rafael Jeffman*, Senior Software Engineer—Identity Management in Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
 
-*Matej Tyc*, Software Engineer and Tech Lead--Security Compliance in Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
+*Petr Lautrbach*, Senior Software Engineer—Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
 
-*Sergio Correia*, Senior Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
+*Paul Wouters*, Senior Software Engineer—Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
 
-*Tomas Mraz*, Principal Software Engineer--Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
+*Matej Tyc*, Senior Software Engineer and Tech Lead—Security Compliance in Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
+
+*Sergio Correia*, Senior Software Engineer—Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
+
+*Tomas Mraz*, Principal Software Engineer—Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
+
+*Marek Haicman*, Product Owner —Security Compliance in Red Hat Enterprise Linux^(R)^ (RHEL) Security, Red Hat^(R)^
+
+*Ondrej Moris*, Senior Software Quality Engineer —Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
+
+*Radovan Sroka*, Software Engineer—Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
+
+*Attila Lakatos*, Intern —Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
+
+*Justin Stephenson*, Software Engineer—Identity Management in Red Hat Enterprise Linux^(R)^  (RHEL) Security, Red Hat^(R)^
+
 
 == Overview and Prerequisites
 In this lab, you learn how to build defense-in-depth in the operating system by implementing the key security technologies available to you in the latest version of Red Hat Enterprise Linux.
