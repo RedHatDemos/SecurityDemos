@@ -21,9 +21,16 @@ image:images/lab7.3-pipeline.png[]
 The Ansible role that deploys this entire pipeline can be found link:https://github.com/redhat-cop/agnosticd/tree/development/ansible/roles/ocp4-workload-security-compliance-lab[here].
 This pipeline will checkout java web application source code from a git repository, build it, run automated tests, perform a static code analysis scan with SonarQube, send the produced artifact to Sonatype Nexus for storage, build a docker image containing our application, push it to quay for additional security scanning, perform OpenSCAP scans, deploy the application to OpenShift so that it can be scanned for web vulnerabilities by OWASP ZAP, then we have the opportunity to promote the application to other OpenShift projects if we are satisfied with the results. The following sections describe the tools we will be using in this pipeline lab.
 
+==== CodeReady Workspaces
+
+CodeReady Workspaces is a collaborative Kubernetes-native development solution that delivers Eclipse workspaces and in-browser integrated development environment (IDE) for rapid cloud application development.
+
+Built on the open source Eclipse Che project, CodeReady Workspaces uses containers to provide any member of the development or IT team with a consistent, secure, and zero-configuration development environment.
+
+The user experience is as fast and familiar as an IDE on your laptop.
 
 ==== Gogs
-Gogs is the Go Git Service- a github-like git server written in the Go programming language.
+Gogs is the Go Git Service - a github-like git server written in the Go programming language.
 
 _The goal of the Gogs open source project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, Mac OS X, Windows and ARM._
 
