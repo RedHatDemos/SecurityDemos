@@ -303,7 +303,7 @@ image:images/lab7.5-gogs-settings.png[]
 +
 image:images/lab7.5-add-gogs-webhook.png[]
 +
-. Update the payload with the ecommerce pipeline generic webhook (e.g. https://api.cluster-{GUID}.{GUID}.example.opentlc.com:6443/apis/build.openshift.io/v1/namespaces/{USERID}/buildconfigs/{USERID}-ecommerce-pipeline/webhooks/{USERID}-ecommerce-pipeline/generic).
+. Update the payload with the ecommerce pipeline generic webhook (e.g. https://api.{GUID}.example.opentlc.com:6443/apis/build.openshift.io/v1/namespaces/{USERID}/buildconfigs/{USERID}-ecommerce-pipeline/webhooks/{USERID}-ecommerce-pipeline/generic).
 +
 image:images/lab7.5-add-payload.png[]
 +
@@ -312,6 +312,8 @@ image:images/lab7.5-add-payload.png[]
 image:images/lab7.5-crwx-register1.png[]
 +
 . Select the Java Spring Boot stack and import the SecurityDemos project.
++
+NOTE: When entering the Git URL for adding or importing the SecurityDemos project prefix the url with your Gogs username and password, like so: http://{USERID}:openshift@gogs-ocp-workshop.apps.{GUID}.example.opentlc.com/{USERID}/SecurityDemos.git
 +
 image:images/lab7.5-crwx-stack-project.png[]
 +
