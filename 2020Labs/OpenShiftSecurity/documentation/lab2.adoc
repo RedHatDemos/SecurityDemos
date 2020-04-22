@@ -291,9 +291,13 @@ NOTE: For the purposes of this lab we are committing changes directly into the m
 +
 image:images/lab7.5-gogs-commit-changes.png[]
 +
-. Navigate back to the root of the SecurityDemos folder
+. Navigate back to the root of the SecurityDemos folder.
 +
 image:images/lab7.5-gogs-navigate-root.png[]
++
+. Click on Settings in the top right hand corner.
++
+image:images/lab7.5-gogs-settings.png[]
 +
 . Click down through the following folders src -> main -> java -> com -> baeldung -> ecommerce -> controller -> OrderController.java
 +
