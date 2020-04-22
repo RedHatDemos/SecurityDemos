@@ -299,6 +299,10 @@ image:images/lab7.5-gogs-navigate-root.png[]
 +
 image:images/lab7.5-gogs-settings.png[]
 +
+. Navigate to the Webhooks tab and then select Gogs from the Add Webhook drop-down menu.
++
+image:images/lab7.5-add-gogs-webhook.png[]
++
 . Click down through the following folders src -> main -> java -> com -> baeldung -> ecommerce -> controller -> OrderController.java
 +
 image:images/lab7.5-gogs-src.png[]
