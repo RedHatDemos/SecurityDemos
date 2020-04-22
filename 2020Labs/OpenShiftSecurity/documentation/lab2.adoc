@@ -307,7 +307,7 @@ image:images/lab7.5-add-gogs-webhook.png[]
 +
 image:images/lab7.5-add-payload.png[]
 +
-. Navigate to CodeReady Workspaces URL http://codeready-ocp-workshop.apps.{GUID}.example.opentlc.com and register an account if you haven't already and login (userid / openshift).
+. Navigate to CodeReady Workspaces http://codeready-ocp-workshop.apps.{GUID}.example.opentlc.com and register an account if you haven't already and login (userid / openshift).
 +
 image:images/lab7.5-crwx-register1.png[]
 +
