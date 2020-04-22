@@ -323,7 +323,10 @@ image:images/lab7.5-gogs-src.png[]
 +
 image:images/lab7.5-gogs-delete-password.png[]
 +
-. Click the commit changes button
+. Click the commit changes button.
++
+image:images/lab7.5-crwx-commit-changes.png[]
++
 +
 . Navigate back to jenkins and *abort* the current build, then navigate to the pipeline page
 +
