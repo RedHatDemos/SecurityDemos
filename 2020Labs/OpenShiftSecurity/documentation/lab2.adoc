@@ -1,8 +1,8 @@
-== Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
+== Lab 2: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
 
 *Lab Length: Medium/Average*
 
-=== Goal of Lab 7
+=== Goal of Lab 2
 
 The goal of this lab is to learn how to automate and build security into the application and build a _secure software factory_ that orchestrates a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
 
@@ -21,9 +21,16 @@ image:images/lab7.3-pipeline.png[]
 The Ansible role that deploys this entire pipeline can be found link:https://github.com/redhat-cop/agnosticd/tree/development/ansible/roles/ocp4-workload-security-compliance-lab[here].
 This pipeline will checkout java web application source code from a git repository, build it, run automated tests, perform a static code analysis scan with SonarQube, send the produced artifact to Sonatype Nexus for storage, build a docker image containing our application, push it to quay for additional security scanning, perform OpenSCAP scans, deploy the application to OpenShift so that it can be scanned for web vulnerabilities by OWASP ZAP, then we have the opportunity to promote the application to other OpenShift projects if we are satisfied with the results. The following sections describe the tools we will be using in this pipeline lab.
 
+==== CodeReady Workspaces
+
+CodeReady Workspaces is a collaborative Kubernetes-native development solution that delivers Eclipse workspaces and in-browser integrated development environment (IDE) for rapid cloud application development.
+
+Built on the open source Eclipse Che project, CodeReady Workspaces uses containers to provide any member of the development or IT team with a consistent, secure, and zero-configuration development environment.
+
+The user experience is as fast and familiar as an IDE on your laptop.
 
 ==== Gogs
-Gogs is the Go Git Service- a github-like git server written in the Go programming language.
+Gogs is the Go Git Service - a github-like git server written in the Go programming language.
 
 _The goal of the Gogs open source project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, Mac OS X, Windows and ARM._
 
@@ -63,7 +70,7 @@ For the purposes of this lab, we will be examining a simple, all-in-one https://
 
 image:images/lab7-ecommerce-webapp.png[]
 
-=== Lab 7.1 Logging into the environment
+=== Lab 2.1 Logging into the environment
 
 . After following Lab 0 and choosing *TC9818 -AD - Implementing proactive security and compliance automation and DevSecOps* from the drop down, you will be presented with your user id and GUID.
 +
@@ -120,7 +127,7 @@ image:images/lab7.2-sonarqube.png[]
 +
 image:images/lab7.2-quay.png[]
 
-=== Lab 7.3 Explore the pipeline stages
+=== Lab 2.3 Explore the pipeline stages
 
 
 The following sections describe each of the stages in the CI/CD pipeline that we will be running during this lab.
@@ -168,7 +175,7 @@ Configures the OpenShift production project (i.e., userid-prod)
 ==== Promote to Prod?
 Similar to the previous _Promote to Stage?_ step, requiring manual intervention before promoting the application image to an even higher level environment.
 
-=== Lab 7.4 Exercise an initial run through the pipeline
+=== Lab 2.4 Exercise an initial run through the pipeline
 
 . Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
 +
@@ -259,7 +266,7 @@ image:images/lab7.4-quay-packages.png[]
 +
 . You can also view the deployed application at http://ecommerce-{USERID}.apps.{GUID}.example.opentlc.com/
 
-=== Lab 7.5 Update the base image and source code
+=== Lab 2.5 Update the base image and source code
 
 An old base image was used to build the application, we will update the base image to use a newer version. This will reduce the number of vulnerabilities that are detected. We will also update the source code to remove the vulnerabilities detected by SonarQube.
 
@@ -284,9 +291,31 @@ NOTE: For the purposes of this lab we are committing changes directly into the m
 +
 image:images/lab7.5-gogs-commit-changes.png[]
 +
-. Navigate back to the root of the SecurityDemos folder
+. Navigate back to the root of the SecurityDemos folder.
 +
 image:images/lab7.5-gogs-navigate-root.png[]
++
+. Click on Settings in the top right hand corner.
++
+image:images/lab7.5-gogs-settings.png[]
++
+. Navigate to the Webhooks tab and then select Gogs from the Add Webhook drop-down menu.
++
+image:images/lab7.5-add-gogs-webhook.png[]
++
+. Update the payload with the ecommerce pipeline generic webhook (e.g. https://api.{GUID}.example.opentlc.com:6443/apis/build.openshift.io/v1/namespaces/{USERID}/buildconfigs/{USERID}-ecommerce-pipeline/webhooks/{USERID}-ecommerce-pipeline/generic).
++
+image:images/lab7.5-add-payload.png[]
++
+. Navigate to CodeReady Workspaces http://codeready-ocp-workshop.apps.{GUID}.example.opentlc.com and register an account if you haven't already and login (userid / openshift).
++
+image:images/lab7.5-crwx-register1.png[]
++
+. Select the Java Spring Boot stack and import the SecurityDemos project.
++
+NOTE: When entering the Git URL for adding or importing the SecurityDemos project prefix the url with your Gogs username and password, like so: http://{USERID}:openshift@gogs-ocp-workshop.apps.{GUID}.example.opentlc.com/{USERID}/SecurityDemos.git
++
+image:images/lab7.5-crwx-stack-project.png[]
 +
 . Click down through the following folders src -> main -> java -> com -> baeldung -> ecommerce -> controller -> OrderController.java
 +
@@ -296,7 +325,10 @@ image:images/lab7.5-gogs-src.png[]
 +
 image:images/lab7.5-gogs-delete-password.png[]
 +
-. Click the commit changes button
+. Click the commit changes button.
++
+image:images/lab7.5-crwx-commit-changes.png[]
++
 +
 . Navigate back to jenkins and *abort* the current build, then navigate to the pipeline page
 +
