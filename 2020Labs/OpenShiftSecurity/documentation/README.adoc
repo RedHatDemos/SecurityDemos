@@ -42,3 +42,5 @@ Please do the lab exercises in order, starting with Lab 0.
 * link:lab0-summit.adoc[Lab 0: Setup steps]
 * link:lab1.adoc[Lab 1: OpenShift blocks rogue containers from running as privileged user]
 * link:lab2.adoc[Lab 2: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
+* link:lab3.adoc[Lab 3: OpenShift Role Based Access Control]
+
