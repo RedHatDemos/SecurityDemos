@@ -30,5 +30,5 @@ This lab is geared towards systems administrators, cloud administrators and oper
 
 == Table of Contents
 * link:lab1.adoc[Lab 1: OpenShift blocks rogue containers from running as privileged user]
-* link:lab4.adoc[Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
 * link:lab3.adoc[Lab 3: OpenShift Role Based Access Control]
+* link:lab4.adoc[Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]

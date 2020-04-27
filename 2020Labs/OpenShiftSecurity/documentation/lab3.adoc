@@ -72,7 +72,7 @@ More information on OpenShift RBAC can be found in the link:https://docs.openshi
 
 === Lab Implementation
 
-To demonstrate many of the capabilities around managing Role Based Access Control in OpenShift, a sample application will be used showcase not only applications how applications can be used to communicate with the OpenShift API, but also the levels of permissions that can be granted. 
+To demonstrate many of the capabilities around managing Role Based Access Control in OpenShift, a sample application will be used showcase not only applications how applications can be used to communicate with the OpenShift API, but also the levels of permissions that can be granted.
 
 ==== Prerequisites
 
@@ -92,9 +92,9 @@ By expanding _Workloads_ on the lefthand side, select *Deployment Configs is pre
 
 image:images/lab3.2-deploymentconfigs.png[]
 
-NOTE: If `openshift-rbac` is not present, confirm you are in the `rbac-lab` project by selecting `rbac-lab` from the _Project_ dropdown at the top of the screen. 
+NOTE: If `openshift-rbac` is not present, confirm you are in the `rbac-lab` project by selecting `rbac-lab` from the _Project_ dropdown at the top of the screen.
 
-Feel free to browse the around to view the _Pods_, _Secrets_, and _ConfigMaps_ that are part of the application. 
+Feel free to browse the around to view the _Pods_, _Secrets_, and _ConfigMaps_ that are part of the application.
 
 Once complete, navigate to the _Route_ that is exposed for the application. Expand the _Networking_ pane on the lefthand navigation pane and select *Routes*.
 
@@ -108,7 +108,7 @@ The application is a simple golang based service that communicates with the Open
 
 ==== API Access For Applications
 
-Every pod that is deployed with OpenShift includes a set of tools that make it possible to communicate with the OpenShift API. These tools are found in the `/var/run/secrets/kubernetes.io/serviceaccount` directory. 
+Every pod that is deployed with OpenShift includes a set of tools that make it possible to communicate with the OpenShift API. These tools are found in the `/var/run/secrets/kubernetes.io/serviceaccount` directory.
 
 Using the OpenShift CLI, ensure that you are logged into the cluster and change into the `rbac-lab` namespace.
 
@@ -171,7 +171,7 @@ If you'd like to turn off curl's verification of the certificate, use
  the -k (or --insecure) option.
 ----
 
-The error displayed indicates that the certificate for Kubernetes is not trusted. Fortunately, we have the CA for Kubernetes in our pod that we can specify. Execute the following command that refers to the CA file as described previously. 
+The error displayed indicates that the certificate for Kubernetes is not trusted. Fortunately, we have the CA for Kubernetes in our pod that we can specify. Execute the following command that refers to the CA file as described previously.
 
 [source]
 ----
@@ -180,13 +180,13 @@ sh-4.2$ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt https
   "kind": "Status",
   "apiVersion": "v1",
   "metadata": {
-    
+
   },
   "status": "Failure",
   "message": "forbidden: User \"system:anonymous\" cannot get path \"/\"",
   "reason": "Forbidden",
   "details": {
-    
+
   },
 }
 ----
@@ -215,7 +215,7 @@ sh-4.2$ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "A
     ...
 ----
 
-Great! We have successfully authenticated against the OpenShift api and see a list of endpoints that are exposed by the OpenShift API. 
+Great! We have successfully authenticated against the OpenShift api and see a list of endpoints that are exposed by the OpenShift API.
 
 You can exit out of the running pod by typing `exit` and hit the _Return_ key.
 
@@ -223,7 +223,7 @@ You can exit out of the running pod by typing `exit` and hit the _Return_ key.
 
 With a basic understanding how applications can query information from the OpenShift API, let's return focus to the example application in the `rbac-lab` namespace. As you can see from the application viewed in the web browser, each of the requests against the API are returning a HTTP 403 error. This error indicates that authentication was successful, however the user does not have the appropriate rights to access the requested service.
 
-The first query attempts to list all _pods_ that are found in the current namespace. Recall that permission scope in OpenShift can either be at a namespace or cluster level. Since listing _pods_ in the current namespace is limited to only a single namespace, a `role` would be applicable for defining the policies that could be applied. 
+The first query attempts to list all _pods_ that are found in the current namespace. Recall that permission scope in OpenShift can either be at a namespace or cluster level. Since listing _pods_ in the current namespace is limited to only a single namespace, a `role` would be applicable for defining the policies that could be applied.
 
 As covered in the overview section, any policy requires the following considerations:
 
@@ -265,7 +265,7 @@ rules:
   - list
 ----
 
-Notice how the resources and verbs are organized based on our desired intentions. 
+Notice how the resources and verbs are organized based on our desired intentions.
 
 With the new role created, the next step is to associate the `pod-lister` role to the Service Account that is used to run the application. By default, all pods in OpenShift execute using the `default` Service Account. The association of namespace scoped roles to an entity, such as a Service Account, is accomplished using a `RoleBinding`.
 
@@ -371,7 +371,7 @@ replicasets                           rs               apps                     
 ...
 ----
 
-You can also add the `--namespaced` flag to limit resources that are either namespaced or cluster scoped. 
+You can also add the `--namespaced` flag to limit resources that are either namespaced or cluster scoped.
 
 For the final exercise, we will make use of a resource outside of the core API group to query all registered users.
 
@@ -389,7 +389,7 @@ Warning: resource 'users' is not namespace scoped in group 'user.openshift.io'
 yes
 ----
 
-As indicated, since you are logged in with a user with elevated access to OpenShift, you can successfully list all users. 
+As indicated, since you are logged in with a user with elevated access to OpenShift, you can successfully list all users.
 
 Now, use User Impersonation capabilities to determine if the _default_ Service Account int the `rbac-lab` namespace can list users
 
@@ -415,10 +415,10 @@ The first step is to determine the API group that users are part of. Use the `oc
 ----
 # oc api-resources | grep users
 
-users                                                  user.openshift.io                     false        User  
+users                                                  user.openshift.io                     false        User
 ----
 
-The first column indicates the resource while the second column indicates the API Group. 
+The first column indicates the resource while the second column indicates the API Group.
 
 Now that we know the API Group users are part of, we can create a ClusterRole called `user-lister` using the following command:
 
@@ -427,7 +427,7 @@ Now that we know the API Group users are part of, we can create a ClusterRole ca
 # oc create clusterrole user-lister --verb=list --resource=users.user.openshift.io
 ----
 
-The combination of the resource name and the API Group is used in the `--resource` flag. 
+The combination of the resource name and the API Group is used in the `--resource` flag.
 
 Finally, create a `ClusterRoleBinding` to grant access to the default Service Account to the newly created `ClusterRole`
 
@@ -451,5 +451,7 @@ yes
 With access verified, navigate to the application in the web browser and refresh the page to confirm all of the queries against the OpenShift API return valid results.
 
 image:images/lab3.3-users-list-application.png[]
+
+<<top>>
 
 link:README.adoc#table-of-contents[ Table of Contents ]
