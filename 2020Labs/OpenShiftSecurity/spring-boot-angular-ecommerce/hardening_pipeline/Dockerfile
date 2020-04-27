@@ -26,7 +26,6 @@ ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN set -ex; \
         \
-        yum update -y --nogpgcheck && \
         yum install -y --nogpgcheck java-1.8.0-openjdk && \
         yum -y clean all && [ ! -d /var/cache/yum ] || rm -rf /var/cache/yum
     
