@@ -1,8 +1,6 @@
-== Lab 2: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
+== Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
 
-*Lab Length: Medium/Average*
-
-=== Goal of Lab 2
+=== Goal of Lab 4
 
 The goal of this lab is to learn how to automate and build security into the application and build a _secure software factory_ that orchestrates a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in both a hardening pipeline and a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
 
@@ -77,7 +75,7 @@ For the purposes of this lab, we will be examining a simple, all-in-one https://
 
 image:images/lab7-ecommerce-webapp.png[]
 
-=== Lab 2.1 Logging into the environment
+=== Lab 4.1 Logging into the environment
 
 . After following Lab 0 and choosing *TC9818 -AD - Implementing proactive security and compliance automation and DevSecOps* from the drop down, you will be presented with your user id and GUID.
 +
@@ -134,7 +132,7 @@ image:images/lab7.2-sonarqube.png[]
 +
 image:images/lab7.2-quay.png[]
 
-=== Lab 2.3 Explore the pipeline stages
+=== Lab 4.3 Explore the pipeline stages
 
 The following sections describe each of the stages in the image hardening pipeline that we will be running during this lab.
 
@@ -224,7 +222,7 @@ Configures the OpenShift production project (i.e., userid-prod)
 ==== Promote to Prod?
 Similar to the previous _Promote to Stage?_ step, requiring manual intervention before promoting the application image to an even higher level environment.
 
-=== Lab 2.4 The image hardening pipeline
+=== Lab 4.4 The image hardening pipeline
 
 . Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
 +
@@ -266,7 +264,7 @@ image:images/lab2.4-jenkins-hardening-artifacts.png[]
 . Take a look at the source for the Jenkinsfile and hardening scripts located in gogs within the `hardening_pipeline` folder
 +
 . Open the Dockerfile within the `hardening_pipeline` folder and select the edit button
-+ 
++
 image:images/lab2.4-jenkins-hardening-edit-dockerfile.png[]
 . Next we set the image to an old version, to verify the pipeline fails. Change the `FROM` statement on line 1 to
 +
@@ -306,7 +304,7 @@ and uncomment the `yum update` lines in the `Dockerfile` and `fix-2.sh` script.
 +
 . Rerun the pipeline to make sure it is once again successful.
 
-=== Lab 2.5 Exercise a run of the application pipeline
+=== Lab 4.5 Exercise a run of the application pipeline
 
 . Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
 +
@@ -397,7 +395,7 @@ image:images/lab7.4-quay-packages.png[]
 +
 . You can also view the deployed application at http://ecommerce-{USERID}.apps.{GUID}.example.opentlc.com/
 
-=== Lab 2.6 Update the base image and source code
+=== Lab 4.6 Update the base image and source code
 
 An old base image was used to build the application, we will update the base image to use a newer version. This will reduce the number of vulnerabilities that are detected. We will also update the source code to remove the vulnerabilities detected by SonarQube.
 

@@ -16,7 +16,7 @@
 In this hands-on lab, we will cover the comprehensive container and Kubernetes security capabilities available in Red Hat OpenShift. You will gain experience with:
 
 
-* Host OS (Red Hat Core OS and Red Hat Enterprise Linux) security technologies
+* Host OS (Red Hat CoreOS and Red Hat Enterprise Linux) security technologies
 * Evaluating container content and sources for vulnerabilities
 * Designing the build and CI/CD pipeline to proactively check container content and ensure content governance across the application life cycle, including image policy management and enforcement, image scanning, and image signing
 * Certificate & Secrets management
@@ -29,7 +29,6 @@ This lab is geared towards systems administrators, cloud administrators and oper
 
 
 == Table of Contents
-* link:lab0-summit.adoc[Lab 0: Setup steps]
 * link:lab1.adoc[Lab 1: OpenShift blocks rogue containers from running as privileged user]
-* link:lab2.adoc[Lab 2: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
+* link:lab4.adoc[Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
 * link:lab3.adoc[Lab 3: OpenShift Role Based Access Control]
