@@ -10,8 +10,6 @@
 * Create a single-sign-on (SSO) environment for all of your Linux^(R)^ servers to manage users, hosts, and sudo commands from a central console
 
 .*Objectives*
-* Install the IdM client on your client systems
-* Configure the client to be part of the IdM realm
 * Create users on the IdM server and exercise SSO
 * Create user groups and assign users to those groups
 * Create host groups and assign hosts to those groups
@@ -20,32 +18,21 @@
 
 == 8.1: Introduction
 
-In this lab, you configure clients to attach to an Identity Management in Red Hat^(R)^ Enterprise Linux (IdM) server. This lab environment already has an IdM server installed, and the lab focuses on registering and managing clients.
+In this lab, you will manage user identities and policies using Identity Management in Red Hat^(R)^ Enterprise Linux (IdM) server. This lab environment already has an IdM server and two clients installed, and the lab focuses on managing clients.
 
-You use the consoles for both your IdM server and clients. You access the consoles and your lab environment's power control from the Lab GUID information UI page.
+You will use the GUI interface available on your IdM server, and will log into the clients using *ssh* on a terminal.
 
-The IdM server is a 389-based server that is configured to manage users, hosts, and sudo commands. It is Kerberos-based and can operate as a standalone directory server or integrate with any LDAP-compliant directory servers such as Microsoft Active Directory. IdM can also be configured to manage DNS for your Linux environment and provide for dynamic DNS updates. Because the lab already provides DNS, you do not need dynamic DNS updates enabled.
+The IdM server is a 389-based server that is configured to manage users, hosts, and sudo commands. It is Kerberos-based and can operate as a standalone directory server or integrate with any LDAP-compliant directory servers such as Microsoft Active Directory. IdM can also be configured to manage DNS for your Linux environment and provide for dynamic DNS updates.
 
-The IdM server is also configured to create user home directories upon first login.
+The lab environment was configured using link:https://github.com/freeipa/ansible-freeipa[ansible-freeipa^]. Since the lab already provides DNS, you do not need dynamic DNS updates enabled. Also, server and clients were configured to create a user home directory upon first login.
 
 == 8.2: Attaching the Clients to the IdM Realm
 
 === 8.2.1: Accessing the IdM Web Interface
 
-. Navigate to the *Lab information page* from the *Lab 0: Setup Steps* and click the console link for *IdM1*:
-+
-image:images/idm-console.png[300,300]
-+
-This page has your environment's power control and consoles.
-+
-Note that the *IdM1* system was installed with a GUI and already has an IdM server installed on it.
+. Following the istructions on *Lab 0: Setup Steps*, section 0.2, open the graphical user interface on the IdM server.
 
-. Log in with the *admin* username and *r3dh4t1!* as the password. If you are required to update the expired admin password in the web UI, just keep the password the same (*r3dh4t1!*). 
-
-+
-image:images/idm-login.png[400,400]
-
-. Open the Firefox web browser (under *Applications*) and navigate to link:https://idm1.example.com[https://idm1.example.com^]:
+. Open the Firefox web browser (under *Applications*) and navigate to link:http://idm1.example.com/ipa/ui/[http://idm1.example.com/ipa/ui^]. IdM will redirect you to the Red Hat^(R)^ Identity Management web interface:
 +
 image:images/idm-initiallogin.png[500,500]
 +
@@ -53,61 +40,11 @@ This is the UI for the IdM server.
 
 . Log in as *admin* with *r3dh4t1!* as the password, and examine the interface.
 +
-You revisit this IdM server GUI later in this exercise.
+You'll revisit this IdM server GUI later in this exercise.
 
-=== 8.2.2: Attaching Client Servers to IdM Realm
+=== 8.2.2: Verifying Enrollment of Client Systems
 
-In this section, you attach the *idm2.example.com* and *idm3.example.com* client servers to the IdM realm. (The `ipa-client` package is already installed for your convenience.) Then you log in to *idm2* and *idm3* and configure the clients.
-
-. Navigate to the lab GUID information UI page again and click the console links for *IdM2* and *IdM3*:
-+
-image:images/idm2-console.png[200,200]
-image:images/idm3-console.png[200,200]
-
-. Log in to *IdM2* as *root* with *r3dh4t1!* as the password.
-
-. In the console window for *IdM2*, install the IdM client and configure the client to be part of the IdM realm:
-+
-----
-[root@idm2 ~]# ipa-client-install --mkhomedir --no-ntp
-----
-+
-`--mkhomedir` causes a user home directory to be created upon first login.
-+
-`--no-ntp` indicates that the lab is using `chronyd` to synchronize time.
-
-+
-[TIP]
-====
-In a production environment, you may want to mount home directories remotely so that there are no user accounts or home directories on your servers.
-====
-
-. Enter the following responses for the installation and configuration of your IdM client:
-* Provide the domain name of your IPA server: *example.com*
-* Provide your IPA server name: *idm1.example.com*
-* Proceed with fixed values and no DNS discovery? *yes*
-* Continue to configure the system with these values? *yes*
-* User authorized to enroll computers: *admin*
-* Password for *admin@EXAMPLE.COM*: *r3dh4t1!*
-+
-[NOTE]
-====
-If using IdM with embedded DNS, all of the parameters and input are auto-discovered and simply require confirmation.
-====
-
-. Repeat the previous steps to install and configure the IdM client on *IdM3*, logging in as *root* with *r3dh4t1!* as the password.
-
-=== 8.2.3: Verifying Enrollment of Client Systems
-
-Your systems are now configured and enrolled in the IdM realm. In this section, you verify enrollment of the two client systems.
-
-. Navigate back to *IdM1*.
-+
-If you need to log in again, the password for the administrator is *r3dh4t1!*.
-
-. If your Firefox web browser is closed, open it again and, if you are not already there, navigate to link:https://idm1.example.com[https://idm1.example.com^].
-
-. Navigate to the *Identity* -> *Hosts* tab.
+In the web interface, navigate to the *Identity* -> *Hosts* tab.
 +
 Note that both of your client systems, *idm2.example.com* and *idm3.example.com* (in addition to the IdM server, *idm1.example.com*) display as *Enrolled*:
 +
@@ -117,11 +54,7 @@ image:images/idm-01-hosts.png[700,700]
 
 In this section, you create a user and exercise SSO.
 
-.  Navigate back to the *IdM1* console.
-+
-If you need to log in again, the password for the administrator is *r3dh4t1!*.
-
-. Open the Firefox web browser and navigate to link:https://idm1.example.com[https://idm1.example.com^] (if you are not already there).
+. Open the Firefox web browser and navigate to link:http://idm1.example.com/ipa/ui/[http://idm1.example.com/ipa/ui^] (if you are not already there).
 
 . Navigate to the *Identity* -> *Users* tab and click *+Add*:
 +
@@ -152,7 +85,7 @@ image:images/idm-host-based-access-control.png[700,700]
 The default *allow_all* policy allows access to all users and all hosts. This is something that you delete shortly, but is useful for testing for now.
 ====
 
-. Navigate back to the console for *IdM2* (*idm2.example.com*), and if you are still logged in as *root*, type *exit*, and then log in as *user1* with the *password* password.
+. Start a `Terminal` application and execute the command `kinit user1`, providing *passwords* as your password.
 
 . When prompted, change your initial password to any new password that you can easily remember.
 +
@@ -171,11 +104,7 @@ This is because IdM caches credentials locally in the System Security Services D
 
 In this section, you allow and then restrict access to hosts by specific users.
 
-.  Navigate back to the *IdM1* console.
-+
-If you need to log in again, the password for the administrator is *r3dh4t1!*.
-
-. Open the Firefox web browser and, if not already there, navigate to link:https://idm1.example.com[https://idm1.example.com^].
+. Open the Firefox web browser and navigate to link:http://idm1.example.com/ipa/ui/[http://idm1.example.com/ipa/ui^] (if you are not already there).
 
 . Navigate to the *Policy* -> *Host-Based-Access-Control* -> *HBAC Rules* tab.
 
@@ -254,11 +183,7 @@ The system is ready for the next section.
 
 In this section, you restrict access to hosts by user group.
 
-. Navigate back to the *IdM1* console.
-+
-If you need to log in again, the password for the administrator is *r3dh4t1!*.
-
-. Open the Firefox web browser and, if you are not already there, navigate to link:https://idm1.example.com[https://idm1.example.com^].
+. Open the Firefox web browser and navigate to link:http://idm1.example.com/ipa/ui/[http://idm1.example.com/ipa/ui^] (if you are not already there).
 
 . Navigate to the *Identity* -> *Groups* tab, select *User Groups* on the left under *Group categories*, and click *+Add* to add a group:
 +
@@ -316,21 +241,21 @@ image:images/idm-add-hostgroup-hbac.png[700,700]
 image:images/idm-viaservice-add.png[700,700]
 image:images/idm-addservice-hbac.png[700,700]
 
-. Return to the *IdM3* console and log in as *user1* with the password that you set.
+. Open a terminal and try to loging with `ssh` into *idm3.example.com* as *user1*:
+---
+[root@idm2 ~]$ ssh user1@idm3.example.com
+---
 +
 Expect to be able to log in to this server because it is specified in the your group HBAC policy that you created in this section.
 
-. Navigate to your *IdM2* console and login as *user1* with the password that you set.
-+
-Expect to be restricted from logging in to *IdM2* with a *Permission Denied* error because *IdM2* is not in your group HBAC policy that you created in this exercise.
+. Logut (e.g. `CTRL+d`) from *idm3*.
 
-. Return to the *IdM3* console where you successfully logged in, log into *IdM3* as *root* using *r3dh4t1!* as the password, and execute the commands below to clear the cache:
+. Try to login with `ssh` into *idm3.example.com* as *user1*:
+---
+[root@idm2 ~]$ ssh user1@idm3.example.com
+---
 +
-----
-[root@idm3 ~]$ systemctl stop sssd.service
-[root@idm3 ~]$ sss_cache -E
-[root@idm3 ~]$ systemctl start sssd.service
-----
+Expect to be restricted from logging in to *IdM2* with an error because *IdM2* is not in your group HBAC policy that you created in this exercise.
 
 . Do not disable the policy because you are going to add to it in the next step.
 
@@ -357,11 +282,7 @@ Use the password that you set earlier for this user.
 
 . Even though you type in the password that you set for *user1*, you get a *Sorry, try again* error. After three attempts, you are prevented from trying further.
 
-.  Navigate back to the *IdM1* console.
-+
-If you need to log in again, the password for the administrator is *r3dh4t1!*.
-
-. Open the Firefox web browser and navigate to link:https://idm1.example.com[https://idm1.example.com^].
+.  Open the Firefox web browser and navigate to link:http://idm1.example.com/ipa/ui/[http://idm1.example.com/ipa/ui^] (if you are not already there).
 
 . Navigate to the *Policy -> Sudo* tab and select *Sudo Commands*:
 +
@@ -452,4 +373,3 @@ You can simplify this by adding a user and a command rather than a user group an
 <<top>>
 
 link:README.adoc#table-of-contents[ Table of Contents^] | link:lab9_GPG.adoc[Lab 9: GNU Privacy Guard^]
-
