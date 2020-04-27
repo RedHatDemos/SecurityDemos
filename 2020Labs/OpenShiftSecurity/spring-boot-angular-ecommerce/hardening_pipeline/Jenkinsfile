@@ -25,6 +25,8 @@ pipeline {
       steps {
         sh "oc login -u ${JENKINS_GOGS_USER} -p openshift --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
         sh 'skopeo --debug copy --src-creds=$(oc whoami):$(oc whoami -t) --src-tls-verify=false --dest-tls-verify=false' + " --dest-creds=admin:admin123 docker://${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}-hardening/hardened-openjdk:latest docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} || true"
+        // TODO: Quay fails on the first push due to the repo not existing yet. It succeeds on the second attempt.  Call the Quay API to create the repo first
+        sh 'skopeo --debug copy --src-creds=$(oc whoami):$(oc whoami -t) --src-tls-verify=false --dest-tls-verify=false' + " --dest-creds=admin:admin123 docker://${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}-hardening/hardened-openjdk:latest docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER}"
       } // steps
     } // stage
 
@@ -99,7 +101,7 @@ pipeline {
         sh "oc create secret docker-registry quay --docker-server=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN} --docker-username='admin' --docker-password='admin123' --docker-email='nobody@nowhere.com -n ${JENKINS_GOGS_USER}-hardening' || true"
         sh "oc secret link default quay -n ${JENKINS_GOGS_USER}-hardening --for=pull"
         sh 'oc delete all -l app=hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
-        sh "oc new-app --allow-missing-images --insecure-registry --docker-image=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:user0 -n ${JENKINS_GOGS_USER}-hardening"
+        sh "oc new-app --allow-missing-images --insecure-registry --docker-image=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} -n ${JENKINS_GOGS_USER}-hardening"
         sh "oc rollout cancel dc/hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true"
         sh 'oc patch -n ${JENKINS_GOGS_USER}-hardening dc/hardened-openjdk-candidate -p \'{"spec" : { "template" : { "spec" : { "containers" : [{ "name" : "hardened-openjdk-candidate" , "command" : ["bash"], "args" : [ "-c", "java -version && sleep 86400"] }]}}}}\''
         sh 'oc rollout latest dc/hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening'
@@ -111,6 +113,9 @@ pipeline {
     stage('Golden Image') {
       agent { label 'image-management' }
       steps {
+        sh "skopeo --debug copy --src-creds=admin:admin123 --src-tls-verify=false --dest-tls-verify=false --dest-creds=admin:admin123 docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-golden:${JENKINS_GOGS_USER}" || true
+
+        // TODO: Quay fails on the first push due to the repo not existing yet. It succeeds on the second attempt.  Call the Quay API to create the repo first
         sh "skopeo --debug copy --src-creds=admin:admin123 --src-tls-verify=false --dest-tls-verify=false --dest-creds=admin:admin123 docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-golden:${JENKINS_GOGS_USER}"
       } // steps
     } // stage
