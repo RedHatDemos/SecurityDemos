@@ -80,13 +80,15 @@ In Red Hat CoreOS files should not be modified directly on the nodes.  All confi
 Open up `deploy/lab_extras/trust-machineconifg.yaml` and take a look.  You will see three files we are adding to nodes to set up the trust policy.
 
 * `/root/pubkey.gpg`
- - This is the public key to the private key we created a secret for earlier.
+ - This is the public key to verify the signatures.
 * `/etc/containers/policy.json`
  - Here we define that we require signatures for `docker.io` but accept unsigned images from other repositories.
  - In a production like environment we would want to enforce signatures on all images, but this is useful configuration for a lab.
 * `/etc/containers/registries.d/docker.io.yaml`
  - Here we define where the signature store is for `docker.io`
  - In this step we will replace `{{token}}` with the base64 encoded version of this file.
+
+NOTE: We will take a look at plain text version of these files later, but feel free to decode now if you want. 
 
 Run the following command to get route for the signature store.  You should still be in the image-management namespace.  If you are not switch back.
 [source]
