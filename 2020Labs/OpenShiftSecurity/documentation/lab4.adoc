@@ -1,16 +1,22 @@
-== Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
+== Lab 4: Implement Development - Security - Operation (*DevSecOps*) to apply Security and Compliance during CI/CD automated pipeline.
 
 === Goal of Lab 4
 
-The goal of this lab is to learn how to automate and build security into the application and build a _secure software factory_ that orchestrates a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in both a hardening pipeline and a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
+The lab's purpose is to promote the "*Security First*" practice. You learn how to secure applications using automation to build a _secure software factory_. The orchestration of security tools including
+  
+- [SonarQube](https://github.com/SonarSource/sonarqube),
+- [OWASP Zed Attack Proxy](https://www.zaproxy.org/) (ZAP),
+- [Red Hat Quay](https://www.redhat.com/en/technologies/cloud-computing/quay),
+- [Clair](https://github.com/quay/clair), and the
+- [Open Security Content Automation Protocol](https://www.open-scap.org/) (OpenSCAP)
 
+in the Hardening stage of the Continuous Integration (CI) and Delivery (CD) pipeline (with [Jenkins](https://www.openshift.com/blog/deploy-jenkins-pipelines-in-openshift-4-with-openshift-container-storage-4)). Finally, tackle automated security compliance at scale, learning how to detect security and compliance issues automatically.
 
 === Introduction
 
-The benefits of DevOps and Continuous Integration / Continuous Delivery (CI/CD) have been demonstrated with great success over the years. Security was initially treated as a second class citizen in many cases - left until the end usually to much detriment. With the advent of DevSecOps, security is put front and center - it is addressed in terms of people, processes and technology. Security tools are integrated right into the build process and you could easily break the build if security requirements are not met with the security gates that you build into your CI/CD pipeline.
+The benefits of DevOps (Development - Operations Strategy), Continuous Integration, and Continuous Delivery (CI/CD) demonstrated with great success over the years. Initially, security treated as a second class citizen in many cases - left until the end, usually to much detriment. With the advent of DevSecOps, security is front and center - addressed in terms of people, processes, and technology. Integrated security tools into the build process to met security and compliance requirements, the security gates to build into the pipeline to protect data and environment.
 
-This lab exercise will focus on some of the technologies used to implement automated security compliance controls within a typical CI/CD application pipeline.
-
+The lab exercise will focus on some of the technologies used to implement automated security compliance controls within a typical CI/CD application pipeline.
 
 A number of tools have been installed and pre-configured to support the DevSecOps pipeline. Most of these tools are running containerized within the Red Hat OpenShift cluster. Here are the pipelines we will be stepping through during our lab:
 
