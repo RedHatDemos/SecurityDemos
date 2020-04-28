@@ -33,3 +33,4 @@ This lab is geared towards systems administrators, cloud administrators and oper
 * link:lab2.adoc[Lab 2: Implementing network isolation between running containers using Network Policies]
 * link:lab3.adoc[Lab 3: OpenShift Role Based Access Control]
 * link:lab4.adoc[Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
+* link:lab5.adoc[Lab 5: Image Signing using Image Signing Operator]
