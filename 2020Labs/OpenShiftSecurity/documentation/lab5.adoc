@@ -88,11 +88,11 @@ Open up `deploy/lab_extras/trust-machineconifg.yaml` and take a look.  You will 
  - Here we define where the signature store is for `docker.io`
  - In this step we will replace `{{token}}` with the base64 encoded version of this file.
 
-NOTE: We will take a look at plain text version of these files later, but feel free to decode now if you want. 
+NOTE: We will take a look at plain text version of these files later, but feel free to decode now if you want.
 
 Run the following command to get route for the signature store.  You should still be in the image-management namespace.  If you are not switch back.
 [source]
-$ oc get Routes
+$ oc get routes
 
 There should just be a single route, copy the url and paste it into `deploy/lab_extras/registry-conf.yaml` replacing `{{replace_with_sigstore_route}}`
 The url for the route must begin with `http://`. If it does not add it when pasting into the file.
@@ -101,14 +101,14 @@ Next we need to base64 encode this file.  If running on a linux system this comm
 [source]
 $ base64 deploy/lab_extras/registry-conf.yaml -w 0
 
-Copy the result and past it into `deploy/lab_extras/trust-machineconifg.yaml`.  This must be a single line. That is what the `-w 0` is for.  Telling it to not wrap the result onto a new line.  If using some other tool to encode make sure the result has no new lines in it.
+Copy the result and paste it into `deploy/lab_extras/trust-machineconifg.yaml`.  You should replace `{{token}}.` This must be a single line. That is what the `-w 0` is for.  Telling it to not wrap the result onto a new line.  If using some other tool to encode make sure the result has no new lines in it.
 
 Now apply the machine config.
 [source]
 $ oc apply -f deploy/lab_extras/trust-machineconifg.yaml
 
 This will take a few minutes to update the worker nodes in a cluster.  Wait until all nodes have been updated to move forward.
-To validate that this worked and is finished run the following commands:
+To validate that this worked and is finished run the following command:
 [source]
 $ oc get machineconfig
 
@@ -116,7 +116,10 @@ You should see at the bottom of the list something that looks like this `rendere
 
 Now run:
 [source]
+----
 $ oc get machineconfigpools
+# if you want add a -w to the end of the previous command.  It will wait and update with new results.  You must exit when the machineconfigpool is finished being updated.
+----
 
 Wait until the worker is no longer updating. MACHINECOUNT = READYMACHINECOUNT = UPDATEDMACHINECOUNT
 
@@ -147,6 +150,15 @@ Now if we try to pull a image from `docker.io` directly on this node, we should 
 [source]
 $ podman pull docker.io/library/mysql
 
+Now exit from the debug pod.
+[source]
+----
+$ exit
+# that exited from from the chroot command.
+$ exit
+# now we are exited from the pod.
+----
+
 ==== Step 5 Lets Deploy a Application
 In this step we will sign and deploy an application from docker.io
 
@@ -160,9 +172,12 @@ $ oc new-app nginx
 
 If we set up everything correctly this pod should not have deployed.
 [source]
+----
 $ oc get pods
+# if it is still in status CreatingContainer just run the command a few more times or add -w.
+----
 
-We should see an image pull error.  If we describe the pod we can see the events that show the image pull error occurs because the image is not signed.
+We should see an image pull backoff.  If we describe the pod we can see the events that show the image pull error occurs because the image is not signed.
 [source]
 $ oc describe pod {paste pod id from above}
 
@@ -170,7 +185,7 @@ Now lets sign the image so it can deploy.  Lets take a look at the ImageSigningR
 [source]
 $ oc apply -f deploy/lab_extras/signing-request.yaml
 
-The signing operator is now going to see this now ImageSigningRequest and launch a signing pod to actually sign the image.  Lets take a look at the logs of that signing pod:
+The signing operator is now going to see this new ImageSigningRequest and launch a signing pod to actually sign the image.  Lets take a look at the logs of that signing pod:
 [source]
 ----
 $ oc get pods -n image-management
