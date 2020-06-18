@@ -1,4 +1,4 @@
-= Implementing Comprehensive Container and Kubernetes Security with OpenShift for Automated DevSecOps
+= Implementing Multi-Layer Container and Kubernetes Security with OpenShift for Automated DevSecOps
 
 === [.underline]#Presenters/Lab Developers#:
 *Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
