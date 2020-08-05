@@ -7,7 +7,7 @@ The goal of this lab is to learn about the capabilities provided by OpenShift Ro
 
 === Introduction
 
-OpenShift, being a secure platform by default, has included support for authentication and authorization since the beginning of its' Kubernetes lineage with version 3.0. Since that time, many of the features that were originally found in OpenShift have been upstreamed and are now part of Kubernetes itself. As part of this lab, you will learn the differences between authentication and authorization including how they are implemented within OpenShift along with how they can be configured. Finally, you will use an application running within the platform to extend your knowledge of authentication and authorization to configure custom policies for the application to access cluster based resources.
+OpenShift, being a secure platform by default, has included support for authentication and authorization since the beginning of its Kubernetes lineage with version 3.0. Since that time, many of the features that were originally found in OpenShift have been upstreamed and are now part of Kubernetes itself. As part of this lab, you will learn the differences between authentication and authorization including how they are implemented within OpenShift along with how they can be configured. Finally, you will use an application running within the platform to extend your knowledge of authentication and authorization to configure custom policies for the application to access cluster based resources.
 
 
 === Authentication and Authorization in OpenShift
@@ -21,11 +21,11 @@ Within the context of security, two of the fundamental terms are Authentication 
 
 There are multiple forms that identifies a user in OpenShift including the following:
 
-* Regular users - Typical individuals access the cluster
+* Regular users - Typical individuals that access the cluster
 * System users - For use by infrastructure related assets, such as _nodes_
-* Service Accounts - Special system users that are associated with Projects/Namespaces, These are typically use to run pods or access the cluster within external systems
+* Service Accounts - Special system users that are associated with Projects/Namespaces. These users are typically used to run pods or access the cluster within external systems.
 
-Multiple users can then be organized into *Groups* to better manage policies within the cluster
+Multiple users can then be organized into *Groups* to better manage policies within the cluster.
 
 Authentication against the OpenShift API is accomplished using one of the following methods:
 
@@ -72,15 +72,15 @@ More information on OpenShift RBAC can be found in the link:https://docs.openshi
 
 === Lab Implementation
 
-To demonstrate many of the capabilities around managing Role Based Access Control in OpenShift, a sample application will be used showcase not only applications how applications can be used to communicate with the OpenShift API, but also the levels of permissions that can be granted.
+To demonstrate many of the capabilities around managing Role Based Access Control in OpenShift, a sample application will be used to showcase not only how applications can be used to communicate with the OpenShift API, but also the levels of permissions that can be granted.
 
 ==== Prerequisites
 
-Prior to starting the lab, the following should be available to you
+Prior to starting the lab, the following should be available to you:
 
-#. OpenShift environment with Cluster level permissions
-#. OpenShift Command Line Interface (CLI)
-#. Environment to support the implementation of this lab
+* OpenShift environment with cluster level permissions
+* OpenShift Command Line Interface (CLI)
+* Environment to support the implementation of this lab
 
 ==== Environment Walkthrough
 
@@ -104,7 +104,7 @@ Under the _Location_ column, select the hyperlink to navigate to the application
 
 image:images/lab3.1-applicationoverview.png[]
 
-The application is a simple golang based service that communicates with the OpenShift to query various assets. The "_403 Forbidden_" error that is displayed is expected and we will work to resolve these conditions throughout the course of the lab.
+The application is a simple golang based service that communicates with OpenShift to query various assets. The "_403 Forbidden_" error that is displayed is expected and we will work to resolve these conditions throughout the course of this exercise.
 
 ==== API Access For Applications
 
@@ -117,11 +117,11 @@ Using the OpenShift CLI, ensure that you are logged into the cluster and change 
 # oc project rbac-lab
 ----
 
-Once in the project, list the running pods
+Once in the project, list the running pods by typing *oc get pods*.
 
 [source]
 ----
-# oc project rbac-lab
+# oc get pods
 
 NAME                      READY   STATUS      RESTARTS   AGE
 openshift-rbac-1-build    0/1     Completed   0          5h9m
@@ -221,7 +221,7 @@ You can exit out of the running pod by typing `exit` and hit the _Return_ key.
 
 ==== Roles and RoleBindings
 
-With a basic understanding how applications can query information from the OpenShift API, let's return focus to the example application in the `rbac-lab` namespace. As you can see from the application viewed in the web browser, each of the requests against the API are returning a HTTP 403 error. This error indicates that authentication was successful, however the user does not have the appropriate rights to access the requested service.
+With a basic understanding of how applications can query information from the OpenShift API, let's return our focus to the example application in the `rbac-lab` namespace. As you can see from the application viewed in the web browser, each of the requests against the API are returning a HTTP 403 error. This error indicates that authentication was successful, however, the user does not have the appropriate rights to access the requested service.
 
 The first query attempts to list all _pods_ that are found in the current namespace. Recall that permission scope in OpenShift can either be at a namespace or cluster level. Since listing _pods_ in the current namespace is limited to only a single namespace, a `role` would be applicable for defining the policies that could be applied.
 
@@ -351,7 +351,7 @@ rules:
   ...
 ----
 
-  Notice how the `apiGroups` field is empty. This indicates that the desired resource is part of the core group. To view all of the API's that are registered the following command can be used:
+Notice how the `apiGroups` field is empty. This indicates that the desired resource is part of the core group. To view all of the API's that are registered, the following command can be used:
 
 [source]
 ----
@@ -391,7 +391,7 @@ yes
 
 As indicated, since you are logged in with a user with elevated access to OpenShift, you can successfully list all users.
 
-Now, use User Impersonation capabilities to determine if the _default_ Service Account int the `rbac-lab` namespace can list users
+Now, use the User Impersonation capabilities to determine if the _default_ Service Account in the `rbac-lab` namespace can list users.
 
 [source]
 ----
@@ -401,7 +401,7 @@ Warning: resource 'users' is not namespace scoped in group 'user.openshift.io'
 no
 ----
 
-As expected, the _default_ Service Account does not have access. You may also notice that we needed to give the full name for the Service Account. In prior commands when creating `RoleBinding's` and `ClusterRoleBinidng's`, we did not need to provide `system:serviceaccount` as it was assumed through the `--serviceaccount` flag.
+As expected, the _default_ Service Account does not have access. You may also notice that we needed to give the full name for the Service Account. In prior commands when creating `RoleBindings` and `ClusterRoleBindings`, we did not need to provide `system:serviceaccount` as it was assumed through the `--serviceaccount` flag.
 
 In the final section, we wil create policies to enable the application to be able to query the number of users in OpenShift.
 
@@ -436,9 +436,9 @@ Finally, create a `ClusterRoleBinding` to grant access to the default Service Ac
 # oc create clusterrolebinding user-listers --clusterrole=user-lister --serviceaccount=rbac-lab:default
 ----
 
-While we could confirm that the application can now query for users, lets use User Impersonation to determine ahead of time whether the default Service Account as the appropriate rights.
+While we could confirm that the application can now query for users, let's use User Impersonation to determine ahead of time whether the default Service Account has the appropriate rights.
 
-Execute the following command to impersonate the default Service Account.
+Execute the following command to impersonate the default Service Account:
 
 [source]
 ----
