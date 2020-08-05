@@ -34,6 +34,7 @@ This operator listens for a custom resource called a ImageSigningRequest.  This 
 === Step 1 - Clone Git Repository
 [source]
 $ git clone https://github.com/redhat-cop/image-scanning-signing-service.git
+$ cd image-scanning-signing-service
 
 === Step 2 - Install the Operator
 At this point you should be in the directory of the repository you just cloned, and should be logged into a OpenShift cluster as a cluster admin.
