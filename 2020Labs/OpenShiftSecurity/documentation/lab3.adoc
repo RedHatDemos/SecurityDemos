@@ -7,7 +7,7 @@ The goal of this lab is to learn about the capabilities provided by OpenShift Ro
 
 === Introduction
 
-OpenShift, being a secure platform by default has included support for Authentication and Authorization since the beginning of its' Kubernetes lineage with version 3.0. Since that time, many of the features that were originally found in OpenShift have been upstreamed and are now part of Kubernetes itself. As part of this lab, you will learn the differences between Authentication and Authorization including how they are implemented within OpenShift along wit how they can be configured. Finally, you will use an application running within the platform the extend your knowledge of authentication and authorization to configure custom policies for the application to access cluster based resources.
+OpenShift, being a secure platform by default, has included support for authentication and authorization since the beginning of its' Kubernetes lineage with version 3.0. Since that time, many of the features that were originally found in OpenShift have been upstreamed and are now part of Kubernetes itself. As part of this lab, you will learn the differences between authentication and authorization including how they are implemented within OpenShift along with how they can be configured. Finally, you will use an application running within the platform to extend your knowledge of authentication and authorization to configure custom policies for the application to access cluster based resources.
 
 
 === Authentication and Authorization in OpenShift
