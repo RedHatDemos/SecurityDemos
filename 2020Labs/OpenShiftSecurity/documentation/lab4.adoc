@@ -77,17 +77,13 @@ image:images/lab7-ecommerce-webapp.png[]
 
 === Lab 4.1 Logging into the environment
 
-. After following Lab 0 and choosing *TC9818 -AD - Implementing proactive security and compliance automation and DevSecOps* from the drop down, you will be presented with your user id and GUID.
-+
-image:images/gg-ad2.png[2000,2000]
-
-. Log in to each of the tools that we previously mentioned  with the credentials shown below. Replace *{GUID}* with your provided lab cluster GUID and replace *{USERID}* with your provided user id - e.g., *user1* . Both the lab cluster GUID and USERID can be found on the Lab Information page where you got your assigned GUID and USERID. (see previous step for more details)
+. Log into each of the tools that we previously mentioned  with the credentials shown below. Replace *{GUID}* with your provided lab cluster GUID and replace *{USERID}* with your provided user id - e.g., *user1* . Both the lab cluster GUID and USERID can be found on the Lab Information page where you got your assigned GUID and USERID. (see previous step for more details)
 
 * Red Hat OpenShift console - https://master.{GUID}.example.opentlc.com
 +
 *login:* {USERID}
 +
-*password:* r3dh4t1!
+*password:* openshift
 +
 image:images/lab7.2-openshift.png[]
 +
