@@ -42,7 +42,7 @@ A full discussion on OpenShift authentication can be found within the link:https
 
 OpenShift emphasizes the use of declarative configurations and is the foundation for this schema. As a distributed system, all requests (whether they be from internal infrastructure resources or external components) invoke the API. The API is exposed as a series of RESTful endpoints and any request undergoes a series of steps prior to it being fulfilled completely. The following diagram depicts the steps of an API request:
 
-**TODO: Insert Diagram**
+image:images/admission-controller-phases.png[]
 
 ==== OpenShift Role Based Access Control (RBAC)
 
@@ -80,7 +80,6 @@ Prior to starting the lab, the following should be available to you:
 
 * OpenShift environment with cluster level permissions
 * OpenShift Command Line Interface (CLI)
-* Environment to support the implementation of this lab
 
 ==== Environment Walkthrough
 
