@@ -6,37 +6,36 @@ The goal of this lab is to learn about image signing and the capabilities provid
 === Introduction
 
 ==== Signing Images
-In order to sign a image you must have a private key.  Others can than use a public key to verify the image that was signed.
+In order to sign a image you must have a private key.  Others can then use a public key to verify that the image that was signed.
 
 ==== Trust Policy
 The trust policy is defined by modifying the following files:
 
 * /etc/containers/policy.json
- - This file defines the whether a signature is needed for a specific repository.
- - It also defines the public key required to verify the signature.
+ - This file defines whether a signature is needed for a specific repository.
+ - It also defines the public key that is required to verify the signature.
 * /etc/containers/registries.d/{{file/for/repository.yaml}}
  - The file here contains the location of the signature store for each repository.  This is typically some kind of web server like Apache Httpd.
 
-For more information on the format of these files please read through the following article: link:https://access.redhat.com/articles/3116561[signing guide].  During the course of this lab you will also see what these files look like.
+For more information on the format of these files, please read through the following article: link:https://access.redhat.com/articles/3116561[signing guide].  During the course of this lab exercise, you will also see what these files look like.
 
 ==== Signing Operator
-For the purposes of this lab, signing will be done with an operator built to sign images.  This operator is not an officially supported Red Hat product.  It was built by the consulting team and is used by several clients in production.
+For the purposes of this lab, signing will be done with an operator built to sign images.  This operator is not an officially supported Red Hat product.  It was built by the Red Hat Consulting team and is used by several clients in production.
 
 This operator listens for a custom resource called a ImageSigningRequest.  This triggers the launch of a new Pod that then pulls and signs the requested image.  link:https://github.com/redhat-cop/image-scanning-signing-service/tree/signing-webinar[Github Link - Image Signing Operator]
 
-=== Lab
-==== Requirements
-* OpenShift 4.3 cluster with CoreOS worker nodes
+=== Lab Exercise Requirements
+* OpenShift 4.x cluster with CoreOS worker nodes
  - It will likely work on any 4.x cluster but has not been specifically tested.
  - This should be a personal cluster, as changes made will most likely break other users.
 * Cluster admin access
 * oc cli
 
-==== Step 1 - Clone Git Repository
+=== Step 1 - Clone Git Repository
 [source]
 $ git clone https://github.com/redhat-cop/image-scanning-signing-service.git
 
-==== Step 2 - Install the Operator
+=== Step 2 - Install the Operator
 At this point you should be in the directory of the repository you just cloned, and should be logged into a OpenShift cluster as a cluster admin.
 The steps below are very similar to the install directions in the README of the repository cloned, but differ in a few ways.  Please follow the instructions here.  The instructions in the repository tell you how to build from source, and run the operator in a local development mode.  In this lab we will be using images that already exist.
 
@@ -74,7 +73,7 @@ $ oc apply -f deploy/lab_extras/sigstore.yaml
 $ oc get pods
 ----
 
-==== Step 3 - Set Trust Policy
+=== Step 3 - Set Trust Policy
 In Red Hat CoreOS files should not be modified directly on the nodes.  All configuration should either be done at start up via ignition, or by using machine configs to update clusters after they have been installed.  For more information check out the OpenShift documentation link:https://docs.openshift.com/container-platform/4.3/architecture/architecture-rhcos.html[here.]
 
 Open up `deploy/lab_extras/trust-machineconifg.yaml` and take a look.  You will see three files we are adding to nodes to set up the trust policy.
@@ -159,7 +158,7 @@ $ exit
 # now we are exited from the pod.
 ----
 
-==== Step 5 Lets Deploy a Application
+=== Step 5 Lets Deploy a Application
 In this step we will sign and deploy an application from docker.io
 
 First lets watch the application fail to deploy.  We will use a basic nginx container to test this.
