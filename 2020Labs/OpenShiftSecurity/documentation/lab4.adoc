@@ -128,7 +128,7 @@ image:images/lab7.2-sonarqube.png[]
 +
 image:images/lab7.2-quay.png[]
 
-=== Lab 4.3 Explore the pipeline stages
+=== Lab 4.2 Explore the pipeline stages
 
 The following sections describe each of the stages in the image hardening pipeline that we will be running during this lab.
 
@@ -218,7 +218,7 @@ Configures the OpenShift production project (i.e., userid-prod)
 ==== Promote to Prod?
 Similar to the previous _Promote to Stage?_ step, requiring manual intervention before promoting the application image to an even higher level environment.
 
-=== Lab 4.4 The image hardening pipeline
+=== Lab 4.3 The image hardening pipeline
 
 . Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
 +
@@ -300,7 +300,7 @@ and uncomment the `yum update` lines in the `Dockerfile` and `fix-2.sh` script.
 +
 . Rerun the pipeline to make sure it is once again successful.
 
-=== Lab 4.5 Exercise a run of the application pipeline
+=== Lab 4.4 Exercise a run of the application pipeline
 
 . Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
 +
@@ -391,7 +391,7 @@ image:images/lab7.4-quay-packages.png[]
 +
 . You can also view the deployed application at http://ecommerce-{USERID}.apps.{GUID}.example.opentlc.com/
 
-=== Lab 4.6 Update the base image and source code
+=== Lab 4.5 Update the base image and source code
 
 An old base image was used to build the application, we will update the base image to use a newer version. This will reduce the number of vulnerabilities that are detected. We will also update the source code to remove the vulnerabilities detected by SonarQube.
 
