@@ -4,7 +4,7 @@
 :sectnums: true
 :toc: true
 
-== [.underline]#Presenters/Lab Developers#:
+== [.underline]#Presenters/Lab Developers#
 *Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
 
 *Khary Mendez*, Senior Principal Consultant , Red Hat^(R)^
