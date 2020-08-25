@@ -16,7 +16,7 @@
 *Justin Goldsmith*, Senior Architect, Red Hat^(R)^
 
 
-== Lab Overview:
+== Lab Overview
 In this hands-on lab, we will cover the comprehensive container and Kubernetes security capabilities available in Red Hat OpenShift. You will gain experience with:
 
 
@@ -28,5 +28,5 @@ In this hands-on lab, we will cover the comprehensive container and Kubernetes s
 * Red Hat OpenShift Container Platform security technologies, including Security Context Constraints (SCC), role-based access control (RBAC), and network security with network policies
 * Logging, Monitoring, & Audit.
 
-== Prerequisites:
+== Prerequisites
 This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to automate security and compliance across their heterogeneous infrastructure using one or more Red Hat Products.  The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills. Knowledge of virtualization and basic linux scripting would also be helpful, but not required.
