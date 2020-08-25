@@ -1,0 +1,121 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+message: |
+  Created ${NAME} Deployment, Service, and Route
+
+metadata:
+  annotations:
+    openshift.io/display-name: Bookbag
+    tags: gpte
+    template.openshift.io/bindable: "false"
+  name: bookbag
+
+parameters:
+  - name: NAME
+    required: true
+    value: bookbag
+  - name: IMAGE_STREAM_NAME
+    required: true
+    value: bookbag
+  - name: IMAGE_STREAM_NAMESPACE
+  - name: IMAGE
+    value: set-by-trigger
+  - name: WORKSHOP_VARS
+    required: true
+    value: '{}'
+  - name: AUTH_USERNAME
+    required: true
+    value: '*'
+  - name: AUTH_PASSWORD
+    value: ''
+
+objects:
+  - apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    metadata:
+      labels:
+        app: ${NAME}
+      name: ${NAME}
+    spec:
+      replicas: 1
+      selector:
+        name: ${NAME}
+      strategy:
+        type: Recreate
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - terminal
+            from:
+              kind: ImageStreamTag
+              name: ${IMAGE_STREAM_NAME}:latest
+              namespace: ${IMAGE_STREAM_NAMESPACE}
+      template:
+        metadata:
+          labels:
+            app: ${NAME}
+            name: ${NAME}
+        spec:
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          containers:
+            - name: terminal
+              env:
+                - name: APPLICATION_NAME
+                  value: ${NAME}
+                - name: AUTH_USERNAME
+                  value: ${AUTH_USERNAME}
+                - name: AUTH_PASSWORD
+                  value: ${AUTH_PASSWORD}
+                - name: CLUSTER_SUBDOMAIN
+                - name: OAUTH_SERVICE_ACCOUNT
+                  value: ${NAME}
+                - name: DOWNLOAD_URL
+                - name: WORKSHOP_FILE
+                - name: OC_VERSION
+                - name: ODO_VERSION
+                - name: KUBECTL_VERSION
+                - name: WORKSHOP_VARS
+                  value: ${WORKSHOP_VARS}
+              image: ${IMAGE}
+              imagePullPolicy: IfNotPresent
+              ports:
+                - containerPort: 10080
+                  protocol: TCP
+              resources: {}
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: ${NAME}
+      name: ${NAME}
+    spec:
+      ports:
+      - name: 10080-tcp
+        port: 10080
+        protocol: TCP
+        targetPort: 10080
+      selector:
+        name: ${NAME}
+      type: ClusterIP
+
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        app: ${NAME}
+      name: ${NAME}
+    spec:
+      port:
+        targetPort: 10080-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}

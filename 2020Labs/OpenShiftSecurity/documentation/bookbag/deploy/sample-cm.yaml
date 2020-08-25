@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  username: "panni-redhat.com"
+  guid: "acdc"
+kind: ConfigMap
+metadata:
+  labels:
+    app: bookbag-004
+  name: bookbag-004-userinfo

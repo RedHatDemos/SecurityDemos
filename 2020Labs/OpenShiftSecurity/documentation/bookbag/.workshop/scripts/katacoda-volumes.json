@@ -1,0 +1,216 @@
+{
+    "apiVersion": "v1",
+    "kind": "List",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-01"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-01"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-02"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-02"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-03"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-03"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-04"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-04"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-05"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-05"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-06"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-06"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-07"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-07"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-08"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-08"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-09"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-09"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "name": "pv-10"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce",
+                    "ReadWriteMany",
+                    "ReadOnlyMany"
+                ],
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "hostPath": {
+                    "path": "/data/pv-10"
+                },
+                "persistentVolumeReclaimPolicy": "Recycle"
+            }
+        }
+    ]
+}
