@@ -18,9 +18,9 @@ Almost all software you are running in your containers does not require root. Yo
 
 . Create a new project called *myproject*.
 +
-[source]
+[source,bash,role=execute]
 ----
-[localhost ~]$ oc new-project myproject
+oc new-project myproject
 ----
 
 . In the OpenShift console, navigate to *Home->Projects*, search for *myproject* and click on it.
@@ -48,7 +48,7 @@ You can get the name of the pod from the previous oc get pods command.
 +
 [source]
 ----
-[localhost ~]$ oc logs httpd-f958ccb88-r5542
+oc logs httpd-f958ccb88-r5542
 ----
 
 . Notice that you get permission denied errors saying that you cannot bind to port 80.
@@ -59,7 +59,7 @@ image:images/lab1.1-noport80.png[1500,1500]
 +
 [source]
 ----
-[localhost ~]$ oc describe pod httpd-f958ccb88-r5542
+oc describe pod httpd-f958ccb88-r5542
 ----
 +
 image:images/lab1.1-describepod-error.png[]
