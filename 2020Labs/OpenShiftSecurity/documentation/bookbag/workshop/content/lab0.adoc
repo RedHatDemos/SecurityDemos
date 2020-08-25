@@ -1,7 +1,8 @@
-:USER_GUID: %GUID%
-:USERNAME: %USERNAME%
+:linkattrs:
 :markup-in-source: verbatim,attributes,quotes
 :show_solution: true
+:sectnums: true
+:toc: true
 
 == [.underline]#Presenters/Lab Developers#:
 *Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
