@@ -2,6 +2,8 @@
 :USERNAME: %USERNAME%
 :markup-in-source: verbatim,attributes,quotes
 :show_solution: true
+:sectnums: true
+:toc: true
 
 == Lab 1: OpenShift blocks rogue containers from running as privileged user
 
