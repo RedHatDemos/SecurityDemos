@@ -2,6 +2,8 @@
 :USERNAME: %USERNAME%
 :markup-in-source: verbatim,attributes,quotes
 :show_solution: true
+:sectnums: true
+:toc: true
 
 == Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
 
