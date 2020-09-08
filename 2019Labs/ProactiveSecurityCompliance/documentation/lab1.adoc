@@ -32,7 +32,7 @@ The default SCAP content provided with the OpenSCAP components of Red Hat Satell
 
 When you install the SCAP components in Satellite as defined in the link:https://access.redhat.com/documentation/en-us/red_hat_satellite/6.4/html/administering_red_hat_satellite/chap-red_hat_satellite-administering_red_hat_satellite-security_compliance_management/[Administering Red Hat Satellite Guide], all of the Red Hat default content will show up in Satellite so no extra steps are necessary to add the SCAP content to Satellite.  But if you had customized content that you wrote yourself or if you have a modified policy and you wanted to upload that modified version , you can do that in the Satellite UI under *Hosts → SCAP contents*.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+. On the Red Hat Satellite server, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Take a look at the default SCAP content provided with the OpenSCAP components of Satellite 6 by navigating to *Hosts → SCAP contents*.
 +
@@ -87,7 +87,7 @@ image:images/cancel.png[800,800]
 . Now that you have defined SCAP compliance policies in Red Hat Satellite,
 let's run a SCAP compliance policy scan on a few hosts using Red Hat Ansible Tower.
 
-. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. On Red Hat Ansible Tower, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
 . Navigate to *Inventories* and click on the *Satellite Inventory*.
 +
@@ -136,7 +136,7 @@ image:images/pciscanfinish.png[1000,1000]
 
 . Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished running on our specified hosts from the previous lab exercise, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+. On the Red Hat Satellite server,log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -164,7 +164,7 @@ image:images/lab2-moredetails1.png[1500,1500]
 
 . Now let's fix the OpenSCAP scan failures from the *RHEL7_PCI* compliance policy on the hosts from the previous lab exercise.
 
-. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. On Red Hat Ansible Tower, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
 . Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Remediate PCI*. This job template will launch the Red Hat provided Ansible role that will do all the configuration changes and remediations to the host(s) that this role is applied to so that the host(s) are compliant the the RHEL 7 PCI-DSS compliance profile.
 +
@@ -191,7 +191,7 @@ image:images/pciremediatefinish.png[1000,1000]
 
 === Lab 1.5 Re-executing the security compliance policy scan on hosts at scale from Red Hat Ansible Tower after Remediations & Viewing the resulting scan reports from Red Hat Satellite
 
-. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. On Red Hat Ansible Tower, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
 . Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*.
 +
@@ -214,7 +214,7 @@ image:images/pciscanfinish.png[1000,1000]
 
 . Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished re-running on our specified hosts, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+. On the Red Hat Satellite server, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -240,7 +240,7 @@ image:images/hoststailoringfile.png[300,300]
 +
 image:images/pcidsstailoring.png[1500,1500]
 
-. Let's take a look at each of the tabs in this *PCI DSS Tailoring* file that was pre-configured. In the *File Upload* tab, notice that the *Scap File* that was used is the *ssg-rhel7-ds-tailoring-pcidss.xml* tailoring file, which was downloaded from http://sat64-GUID.rhpds.opentlc.com/pub. Feel free to download this and the other tailoring files for your own use as well if you wish.
+. Let's take a look at each of the tabs in this *PCI DSS Tailoring* file that was pre-configured. In the *File Upload* tab, notice that the *Scap File* that was used is the *ssg-rhel7-ds-tailoring-pcidss.xml* tailoring file, which was downloaded from the pub directory of your Satellite server. Feel free to download this and the other tailoring files for your own use as well if you wish.
 +
 image:images/uploadtailoringfile.png[600,600]
 +
@@ -268,7 +268,7 @@ NOTE: Tailoring files are able to contain multiple XCCDF Profiles. Also, Satelli
 
 In the previous lab exercise steps, we assigned the PCI DSS tailoring file to the *RHEL7_PCI* compliance policy. Now, let's re-execute the compliance policy scan on our hosts from Red Hat Ansible Tower and view the resulting OpenSCAP compliance scan reports from Red Hat Satellite.
 
-. On Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. On Red Hat Ansible Tower, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
 . Navigate to *Templates* and click the *rocket ship* next to the job template named *LINUX / SCAP Scan*.
 +
@@ -290,7 +290,7 @@ image:images/pciscanfinish.png[1000,1000]
 
 . Now that the SCAP compliance scans for the RHEL_PCI compliance policy have finished re-running on our specified hosts, let's view the resulting SCAP scan  reports for the hosts in Red Hat Satellite.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+. On the Red Hat Satellite server, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -304,7 +304,7 @@ image:images/cleanscan.png[1500,1500]
 
 In this lab exercise, you will use Red Hat CloudForms to launch Red Hat Ansible Automation security compliance scan and remediation automation tasks from a custom button. Specifically, you will launch OpenSCAP security compliance scans and remediations by pressing custom buttons on a VM in Red Hat CloudForms. The buttons will launch automation jobs in Red Hat Ansible Tower and upload the resulting OpenSCAP compliance scan reports to Red Hat Satellite.
 
-. Log into CloudForms(https://cfme-GUID.rhpds.opentlc.com) with *admin* as the username and *r3dh4t1!* as the password.
+. Log into CloudForms with *admin* as the username and *r3dh4t1!* as the password.
 
 . Navigate to the *Compute -> Infrastructure -> Virtual Machines*.
 +
@@ -318,7 +318,7 @@ image:images/cf-vm3.png[1000,1000]
 +
 image:images/lab5.1-scapscan.png[200,200]
 
-. Let's look at this job run in Red Hat Ansible Tower. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Let's look at this job run in Red Hat Ansible Tower. Go to Red Hat Ansible Tower and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
 . Navigate to *Jobs* and click on the job that is being run at the top , which is *CLOUDFORMS / SCAP SCAN*. This job will take about 3 minutes to complete.
 +
@@ -332,7 +332,7 @@ image:images/cf-scan-job-finish.png[1000,1000]
 
 . Now that all the SCAP compliance scans have finished running on this *rhel7-vm3.hosts.example.com* host, let's view the resulting compliance reports for this host in Red Hat Satellite.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+. On the Red Hat Satellite server, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
@@ -353,7 +353,7 @@ image:images/aideerror.png[1000,1000]
 . Let's fix this error at the push of a button in Red Hat CloudForms. Before we do that, let's go into our *rhel7-vm3.hosts.example.com* by SSH or via the console button on the main *Lab Information* webpage. In this step, we'll use SSH. SSH into the *rhel7-vm3.hosts.example.com* VM. First, SSH into your workstation VM as *lab-user* (using the password *r3dh4t1!*) and then from there, SSH into your **rhel7-vm3.hosts.example.com* using its IP address (192.168.0.53).
 +
 [source, text]
-[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[localhost ~]$ ssh lab-user@workstation-GUID.green.osp.opentlc.com
 [lab-user@workstation-GUID ~]$ sudo -i
 [root@workstation-GUID ~]$ ssh 192.168.0.53
 
@@ -379,7 +379,7 @@ image:images/scap-remediate.png[1000,1000]
 +
 image:images/scap-remediate-dialog.png[1000,1000]
 
-. Let's look at this job run in Red Hat Ansible Tower. Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
+. Let's look at this job run in Red Hat Ansible Tower. Go to Red Hat Ansible Tower and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in).
 
 . Navigate to *Jobs* and click on the job that is being run at the top , which is *CLOUDFORMS / SCAP Remediate*. Notice that the playbook that is being run in this job template is *openscap_remediate.yml*. If you want to take a closer look at this playbook , you can find it link:https://github.com/RedHatDemos/SecurityDemos/blob/master/2019Labs/ProactiveSecurityCompliance/cloudforms/ansible/satellite/openscap_remediate.yml[here^]. In this playbook, you will notice that after the remediation is completed, the OpenSCAP scan is automatically run and the resulting compliance report is automatically uploaded to Red Hat Satellite.
 +
@@ -394,7 +394,7 @@ image:images/aidecheck.png[1000,1000]
 
 . Now that the AIDE package is installed, we should now pass the OpenSCAP scan against the *rhel7-custom* security policy profile. Let's confirm.
 
-. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+. On the Red Hat Satellite server, log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
 
 . Navigate to *Hosts → Reports*.
 +
