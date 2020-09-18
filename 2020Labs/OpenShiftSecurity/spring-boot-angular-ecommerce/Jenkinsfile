@@ -138,7 +138,7 @@ pipeline {
           sh "oc new-app ecommerce --image-stream=ecommerce --allow-missing-images --allow-missing-imagestream-tags -n ${JENKINS_GOGS_USER}-prod || true"
           sh "oc expose deployment/ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
           sh "oc expose deployment/ecommerce --port 8080 -n ${JENKINS_GOGS_USER}-prod || true"
-          sh "oc expose deployment/ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
+          sh "oc expose svc/ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
         } // script
       }// steps
     } // stage
