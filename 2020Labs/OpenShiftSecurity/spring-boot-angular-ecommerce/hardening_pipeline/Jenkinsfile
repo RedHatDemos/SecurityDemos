@@ -45,7 +45,7 @@ pipeline {
          sshCommand remote: remote, command: "oc login -u ${JENKINS_GOGS_USER} -p openshift --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
          sshCommand remote: remote, command: "sudo docker login -u admin -p admin123 quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}"
          sshCommand remote: remote, command: "sudo docker pull quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER}"
-         sshCommand remote: remote, command: "sudo oscap-docker quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} xccdf eval --profile xccdf_org.ssgproject.content_profile_stig --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
+         sshCommand remote: remote, command: "sudo oscap-docker quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_stig --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
          sshCommand remote: remote, command: "sudo oscap-docker quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} --report report-cve.html"
          sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report.html", into: 'openscap-compliance-report.html', override: true
          sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report-cve.html", into: 'openscap-cve-report.html', override: true
