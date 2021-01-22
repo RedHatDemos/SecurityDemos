@@ -73,10 +73,11 @@ pipeline {
          remote.password="${JENKINS_SSH_PASSWORD}"
 
          sshCommand remote: remote, command: "oc login -u ${JENKINS_GOGS_USER} -p openshift --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
-         sshCommand remote: remote, command: "docker login -u ${JENKINS_GOGS_USER} -p " + '"$(oc whoami -t)"' + " ${JENKINS_INTERNAL_REGISTRY}"
-         sshCommand remote: remote, command: "docker pull ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest"
-         sshCommand remote: remote, command: "sudo oscap-docker image ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest xccdf eval --profile xccdf_org.ssgproject.content_profile_stig --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml"
-         sshCommand remote: remote, command: "sudo oscap-docker image-cve ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest --report report-cve.html"
+         sshCommand remote: remote, command: "sudo docker login -u ${JENKINS_GOGS_USER} -p " + '"$(oc whoami -t)"' + " ${JENKINS_INTERNAL_REGISTRY}"
+         sshCommand remote: remote, command: "sudo docker pull ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest"
+         sshCommand remote: remote, command: "sudo oscap-docker ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_stig --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml || true"
+         sshCommand remote: remote, command: "wget -O - https://www.redhat.com/security/data/oval/v2/RHEL7/rhel-7.oval.xml.bz2 | bzip2 --decompress > rhel-7.oval.xml"
+         sshCommand remote: remote, command: "sudo oscap-docker ${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}/ecommerce:latest oval eval --report report-cve.html rhel-7.oval.xml"
          sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report.html", into: 'openscap-compliance-report.html', override: true
          sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report-cve.html", into: 'openscap-cve-report.html', override: true
          publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-compliance-report.html', reportName: 'OpenSCAP Compliance Report', reportTitles: 'OpenSCAP Compliance Report'])
