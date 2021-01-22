@@ -89,10 +89,10 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        sh "oc new-app ecommerce || true"
-        sh "oc set env deployment/ecommerce JAVA_ARGS=/deployments/root.jar"
-        sh "oc expose svc/ecommerce || true"
-        sh "oc rollout status deployment/ecommerce"
+        sh "oc new-app ecommerce -n ${JENKINS_GOGS_USER} || true"
+        sh "oc set env deployment/ecommerce JAVA_ARGS=/deployments/root.jar -n ${JENKINS_GOGS_USER}"
+        sh "oc expose svc/ecommerce -n ${JENKINS_GOGS_USER} || true"
+        sh "oc rollout status deployment/ecommerce -n ${JENKINS_GOGS_USER}"
       } // steps
     } // stage
 
