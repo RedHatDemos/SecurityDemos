@@ -14,7 +14,7 @@ RUN yum install -y epel-release && \
     firefox nss_wrapper java-1.8.0-openjdk-headless \
     java-1.8.0-openjdk-devel nss_wrapper git && \
     yum clean all && \
-    pip install --upgrade pip && \
+    pip install --upgrade "pip < 21.0" && \
     pip install zapcli && \
     pip install python-owasp-zap-v2.4 && \
     mkdir -p /zap/wrk && \
