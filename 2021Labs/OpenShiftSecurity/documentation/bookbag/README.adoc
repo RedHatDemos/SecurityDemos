@@ -1,0 +1,276 @@
+:markup-in-source: verbatim,attributes,quotes
+
+
+
+= Bookbag Template
+
+NOTE: This project is based on OpenShift Homeroom: https://github.com/openshift-homeroom.
+This repository is based on https://github.com/openshift-homeroom/lab-asciidoc-sample.
+If you are using OpenShift Homeroom project already, please continue using it.
+If you want to integrate it with AgnosticD and Babylon, follow the instructions in 
+<<For the existing Homeroom users>>
+
+
+This repository should be used as a template for creating (converting) lab content to
+be used in Bookbag environments. 
+
+== Creating (converting) Lab Content
+
+. Create a new repository using this one as a template (replace `mylab-bookbag` with your project name):
+.. `$ git clone https://gitlab.com/2020-summit-labs/bookbag-template.git mylab-bookbag`
+.. `$ cd mylab-bookbag`
+.. `$ git remote set-url origin git@gitlab.com:2020-summit-labs/mylab-bookbag.git`
+.. `$ git push -u origin --all`
+
+. Define which modules you want to include in your lab.
+
+. List the modules in the `workshop.yaml` file.
+
+. Edit the `modules.yaml` file to specify modules names and transitions.
+
+. Edit the modules Asciidoc files (`workshop/content/*.adoc`).
+
+. Define which variables you are going to use in your lab instructions (e.g. `GUID`, `user`, `user_info_messages`, and custom variables set by `agnosticd_user_info`).
+(This is explained in more detail below.)
+
+== Building the Bookbag Image
+
+. You can build your bookbag image using the https://console-openshift-console.apps.cluster-rhsummit-dev.rhsummit-dev.events.opentlc.com/[Red Hat Summit development OpenShift cluster].
+Login with your OpenTLC credentials, "_username_-redhat.com".
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc login --server=https://api.cluster-rhsummit-dev.rhsummit-dev.events.opentlc.com:6443*
+Authentication required for https://api.cluster-rhsummit-dev.rhsummit-dev.events.opentlc.com:6443 (openshift)
+Username: *_username_-redhat.com*
+Password: *_password_*
+----
+
+. A namespace will be automatically created for you named for your username, "user-_username_-redhat-com".
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc project user-_username_-redhat-com*
+----
+
+. Create the bookbag BuildConfig and ImageStream:
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc process -f build-template.yaml -p GIT_REPO="https://github.com/<ACCOUNT>/<LABREPO>.git" | oc apply -f -*
+----
+
+. Build your image from local source or directly from GitLab.
++
+To build from local source (aka "binary build"):
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc start-build bookbag --follow --from-dir=.*
+----
++
+Build your Bookbag Image from Git:
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc start-build bookbag --follow*
+----
++
+If your bookbag source is hosted using a private repository then you will need to create a GitLab Deploy Token and configure a secret in OpenShift to store the token.
+Within the GitLab web interface, deploy tokens are managed under "Settings -> CI/CD -> Deploy Tokens".
+Create a deploy token that expires after May 1st, 2020 and then create a secret to store deploy token username and password
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc create secret generic bookbag-git --from-literal=username=<USERNAME> --from-literal=password=<PASSWORD> --type=kubernetes.io/basic-auth*
+----
++
+Then patch your bookbag build config to use the secret:
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc patch buildconfig bookbag -p '{"spec":{"source":{"sourceSecret":{"name":"bookbag-git"}}}}'*
+----
+
+== Deploying the Bookbag image
+
+To deploy a Bookbag with lab instructions on an OpenShift cluster:
+
+. Use the same OpenShift project namespace where you built the image:
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc project user-_username_-redhat-com*
+----
+
+. Process the deploy template:
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc process -f deploy-template.yaml | oc apply -f -*
+----
+
+. Get the Bookbag's Route:
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc get route bookbag*
+NAME     HOST/PORT                                                                                    PATH  SERVICES  PORT       TERMINATION    WILDCARD
+bookbag  bookbag-user-_username_-redhat-com.apps.cluster-rhsummit-dev.rhsummit-dev.events.opentlc.com       bookbag   10080-tcp  edge/Redirect  None
+----
+
+. Use this Route hostname to open the Bookbag page in your browser.
+
+=== Customizing Bookbag's Layout
+
+. By default Bookbag creates three frames: Lab instructions on the left and a terminal windows on the right.
+If you want to change the number of terminal windows, change the `TERMINAL_TAB` environment variable in the
+`envvars/gateway.sh` container to the following:
++
+* `split` split for two vertitically stacked terminals
+* `split/2` split twice for three vertitically stacked terminals
+
+. If your lab content includes slides then simply add your slides HTML into the directory `workshop/slides/`.
+
+. If you are not using the OpenShift terminal or slides then you may wish to only include the workshop instructions.
+This may be done by setting `DEFAULT_PAGE="workshop"` in `envvars/gateway.sh`.
+
+== Customizing Lab Instructions for Bookbag
+
+Bookbag accepts lab instructions written in Asciidoc or Markdown although in Red Hat Asciidoc is considered the standard.
+When editing your instructions for Bookbag some Asciidoc elements might be helpful:
+
+* You can use environment variables throughout the text to provide users with lab-specific information such as
+GUID, user credentials, URLs, etc.
+* You can use font formatting such as *bold*, _italic_, etc. in command line and code examples.
+For example you can use bold font for commands that the user should input on the keyboard, 
+italic for parameters that should be replaced, etc.
+You can make certain parts of the output bold to attract attention to the changes.
+
+=== AgnosticD User Info in Acsiidoc
+
+Bookbag pods will be deployed and configured so that information set by `agnosticd_user_info` when provisioning the lab is accessible within the content as macros.
+In production your bookbag pods will be deployed for you with these settings.
+During content development you will likely want to pass thes yourself.
+
+All lab environments have a variable, `guid` set.
+Single-user lab environments also have `user_info_messages` set, containing any messages passed with `agnosticd_user_info`, concatenated into a string with line breaks.
+For multi-user lab environments, the variable `user` may be used to get the user name and `user_info_messages` is not available.
+
+You can pass environment variable to the Bookbag container and then use them in lab instructions.
+For example, instead of telling the user: "Use this URL and don't forget to replace 'GUID' with your actual GUID"
+you can pass the actual GUID to the Bookbag container and create a URL that can be copied and pasted without any changes.
+
+. Create a file called `workshop-vars.js` and define your variables like this for a single-user lab environment:
++
+----
+{
+    "guid": "acdc",
+    "user_info_messages": "hello\nworld\n",
+    "some_custom_var": "example"
+}
+----
++
+Or if developing for a multi-user lab environment:
++
+----
+{
+    "guid": "acdc",
+    "user": "student1",
+    "some_custom_var": "example"
+}
+----
+
+. In the beginning of each of your Asciidoc files include these variables and define Asciidoc's attributes 
+("attributes" is the Asciidoc's word for variables). Here is the example:
+----
+:USER_GUID: %guid%
+:USERNAME: %user%
+:CUSTOM_VAR: %some_custom_var%
+----
+
+. Use those variables in Asciidoc files like this: `You username for this lab is {USERNAME}`. 
+Avoid mixing environment variables you use in shell commands and variables you use in Asciidoc text.
+For example, you might use `${GUID}` in your shell commands--in this case use `{USER_GUID}` in
+the text.
+
+. You may want to use a multi-line variable such as output of the deployment command with 
+user information. The variable `user_info_messages` in the example above havs multi-line content.
+In this case use the `[%hardbreaks]` directive to preserve formatting, like this:
++
+----
+Here are your informational messages:
+
+[%hardbreaks]
+%user_info_messages%
+----
+
+. Use the following command to deploy the image and pass the variables:
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc process -f deploy-template.yaml -p WORKSHOP_VARS="$(cat workshop-vars.json)" | oc apply -f -*
+----
+
+=== Text formatting in preformatted parts
+
+If you want to use text formatting in command line or source code examples, use the following:
+
+. Add this line at the top of your Asciidoc file:
++
+----
+:markup-in-source: verbatim,attributes,quotes
+----
+
+. Format your command line or source code blocks the following way:
++
+------
+[source,subs="{markup-in-source}"]
+----
+$ *oc get pods*
+NAME                           READY   STATUS    RESTARTS   AGE
+bookbag-005-5ffcccf9cf-584rt   2/2     Running   0          21h
+----
+------
++
+It will look like this:
++
+[source,subs="{markup-in-source}"]
+----
+$ *oc get pods*
+NAME                           READY   STATUS    RESTARTS   AGE
+bookbag-005-5ffcccf9cf-584rt   2/2     Running   0          21h
+----
+
+
+It is recommended to use a bold font to distinguish the command user is expected to type on the keyboard
+from its output.
+Also, place a dollar sign prompt `$` in the beginning of the line. 
+If the command should be run as root, place a hash `#`.
+
+== If you Deploy Homeroom Directly from Agnosticd
+
+If you deploy your own openshift-homeroom lab interface directly from your AgnosticD config or workload then use the `agnosticd_user_info` ansible module to set `openshift_homeroom_url`.
+We will use this variable to direct students to your openshift-homeroom workshop lab interface.
+
+For example, if your AgnosticD configuration provisions a single lab environment to be used for a single student then you can set `openshift_homeroom_url` with:
+
+----
+  - name: Print User Information for each User
+    agnosticd_user_info:
+      data:
+        openshift_homeroom_url: https://{{ openshift_homeroom_route_hostname }}/
+----
+
+If your AgnosticD configration deploys infrastructure for several students then set `openshift_homeroom_url` for each user:
+
+----
+  - name: Print User Information for each User
+    agnosticd_user_info:
+      user: "{{ ocp4_idm_htpasswd_user_base }}{{ n }}"
+      data:
+        openshift_homeroom_url: https://student-{{ n }}.{{ openshift_homeroom_route_domain }}/
+    loop: "{{ range(1, 1 + ocp4_idm_htpasswd_user_count | int) | list }}"
+    loop_control:
+      loop_var: n
+----

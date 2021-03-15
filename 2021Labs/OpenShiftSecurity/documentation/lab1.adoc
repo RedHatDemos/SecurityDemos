@@ -1,0 +1,64 @@
+== Lab 1: OpenShift blocks rogue containers from running as privileged user
+
+
+=== Goal of Lab 1
+The goal of this lab is to learn about the default security technologies in Red Hat OpenShift Container Platform. Specifically, you will see how OpenShift blocks rogue containers from Docker Hub to run as a privileged root user.
+
+=== Introduction
+Almost all software you are running in your containers does not require root. Your web applications, databases, load balancers, number crunchers, etc. do not need to be run as root ever. Building container images that do not require root at all and basing images off of non-privileged container images are needed for container security. However, the vast majority of container images in the world today, such as the community container images available on Docker Hub, require root. By default, no containers are allowed to run as root in Red Hat OpenShift Container Platform. An admin can override this, otherwise all user containers run without ever being root. This is particularly important in multi-tenant OpenShift Kubernetes clusters, where a single cluster may be serving multiple applications and multiple development teams. It is not always practical or even advisable for administrators to run separate clusters for each.
+
+=== Lab 1.1 Pull rogue container image from Docker Hub and observe how OpenShift locks down the container by default
+
+. Create a new project called *myproject*.
++
+[source]
+----
+[localhost ~]$ oc new-project myproject
+----
+
+. In the OpenShift console, navigate to *Home->Projects*, search for *myproject* and click on it.
++
+image:images/lab1.1-myproject.png[]
+
+. Then, go to the Workload tab and click on *add other content*.
++
+image:images/lab1.1-workloads.png[]
+
+. Then, click on *Container Image* . Make sure that *Image name from external registry* is selected and for the Image Name, type *docker.io/httpd*. Press the magnifying glass.
++
+image:images/lab1.1-image-external.png[]
++
+NOTE: Notice that this container image requires to be run as root on port 80.
+
+. Press *Create*.
+
+. Now, go back to your terminal and go into the project you just created by typing *oc project myproject*. Then, take a look at your pods by typing *oc get pods*. Notice that one of your pods has a CrashLoopBackOff error.
++
+image:images/lab1.1-crashloopbackofferror.png[]
+
+. Let's investigate further what is causing this error. Take a look at the log of the pod that is causing this error.
+You can get the name of the pod from the previous oc get pods command.
++
+[source]
+----
+[localhost ~]$ oc logs httpd-f958ccb88-r5542
+----
+
+. Notice that you get permission denied errors saying that you cannot bind to port 80.
++
+image:images/lab1.1-noport80.png[1500,1500]
+
+. For a more detailed look, type oc describe pod with the name of your pod.
++
+[source]
+----
+[localhost ~]$ oc describe pod httpd-f958ccb88-r5542
+----
++
+image:images/lab1.1-describepod-error.png[]
++
+NOTE: Notice that the output shows that the container failed after trying to start on port 80 and terminated due to a CrashLoopBackOff error. Also notice the default OpenShift Security Context Constraints policy that is in place is restricted (openshift.io/scc: restricted).
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ]

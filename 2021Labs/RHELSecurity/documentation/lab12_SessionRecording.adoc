@@ -1,0 +1,240 @@
+
+:toc2:
+:linkattrs:
+
+= Lab 12: Session Recording
+
+.*Lab Length*
+* Medium/Average (~15 mins)
+
+.*Goal*
+* Use Session Recording to help log and audit users' terminal sessions and correlate them with system logs
+
+== 12.1: Introduction
+
+The Terminal Session Recording project aims to log users' terminal sessions for the purposes of audit, security, and monitoring. It provides an interface in Cockpit to analyze these recordings and correlate them with system logs. This provides a comprehensive picture of the activity that took place.
+
+In this lab, you first assume the role of a third-party contractor who breaks something on your system and then the role of a system administrator who needs to find out what has happened on that system.
+
+=== 12.1.1: Prerequisites
+* Install the required `tlog` and `cockpit-session-recording` packages
+* Configure them to record terminal activity for specific users
+
+The `tlog` package allows you to records terminal activity by putting itself between the user and the terminal. Systemd Journal is used as a storage for recorded sessions.
+
+The `cockpit-session-recording` package for Cockpit uses provided APIs to access the Systemd Journal and obtain sessions from it. It provides a JavaScript-based player, which produces text output, but with video player-style controls.
+
+A few packages are already installed for you:
+
+* tlog
+* Cockpit
+* cockpit-session-recording
+* mc
+* nginx
+* vim
+
+=== 12.1.2: Accessing the Session Recording Lab System
+All of the exercises in this lab are run on the *sessionrecording.example.com* host. You set up for user *q* to have its terminal session recorded.
+
+== 12.2: Setting Up Recording
+
+. Return to your *Lab Information* web page from the *Lab 0: Setup Steps* and click *CONSOLE* for your workstation bastion host:
++
+image:images/lab1.1-workstationconsole.png[300,300]
+
+. Log in as *lab-user* with *r3dh4t1!* as the password:
++
+image:images/lab1.1-labuserlogin.png[300,300]
+
+. Open a Firefox web browser:
++
+image:images/session_recording_firefox.png[]
+
+. Go to link:https://sessionrecording.example.com:9090/[https://sessionrecording.example.com:9090/^]:
++
+image:images/session_recording_firefox_1.png[]
+
+. Log in as the *root* user with *r3dh4t1!* as the password:
++
+image:images/session_recording_cockpit_login.png[]
+
+. Click the *Session Recording* menu item:
++
+image:images/session_recording_menu.png[]
+
+. In the upper right corner, click the cog button to access the configuration:
++
+image:images/session_recording_config.png[]
+
+. Examine the configuration of `tlog-rec-session.conf`, shown in Cockpit in the *General Configuration* dialog:
++
+image:images/session_recording_tlog_conf.png[]
+
+. Click *Log User's Input* to enable logging of the user's input, then click *Save*:
++
+image:images/session_recording_tlog_conf_1.png[]
+
+. In the SSD Configuration dialog, entering *Some* for *Scope* and *q* for *Users* to set up the *q* user to be recorded using `cockpit-session-recording`, and then click *Save*:
++
+image:images/session_recording_sssd.png[]
++
+The *q* user is set up to be recorded.
+
+== 12.3: Creating Sessions Recorded by `tlog`
+
+In this section, you create some activity by one of the recorded users to be able to play it back in Cockpit.
+
+. Open *Terminal*:
++
+image:images/session_recording_terminal.png[]
+
+. Use SSH to log in to the same machine, using *session1* as the password:
++
+----
+[lab-user@sessionrecording]# ssh q@sessionrecording.example.com
+----
++
+image:images/session_recording_terminal1.png[]
+
+. Upon login, expect to see a terminal message informing the user that the session is being recorded:
++
+image:images/session_recording_notice.png[]
++
+Remember that this session is being recorded. Later, you can try to resize the session window to see if that is supported.
+
+. Launch GNU Midnight Commander (`mc`):
++
+----
+[q@sessionrecording]$ mc
+----
++
+Expect `mc` to launch:
++
+image:images/session_recording_mc.png[]
+
+. Navigate to various directories to explore them, then press *F10* or click *Quit* in the right corner.
+
+== 12.4: Investigating Problems Using Session Recording
+
+In this section, you imitate a real-world scenario by breaking the `nginx` web server configuration file and then address the problem using session recording in Cockpit.
+
+. Edit the nginx configuration file:
++
+----
+[q@sessionrecording]$ sudo vi /etc/nginx/nginx.conf
+----
++
+image:images/session_recording_vi_nginx.png[]
++
+image:images/session_recording_nginx.png[]
+
+. In the line `worker_connections 1024;`, remove the `;` to introduce an error:
++
+image:images/session_recording_nginx_broken.png[]
+
+. Restart the `nginx` server:
++
+----
+[q@sessionrecording]$ sudo systemctl restart nginx
+----
++
+The restart fails due to the error you created in the `nginx.conf` file.
++
+Expect to see an error message similar to this:
++
+image:images/session_recording_nginx_error.png[]
+
+
+== 12.5: Using Session Player from Cockpit UI
+
+=== 12.5.1: Exploring Session Recording
+
+In this section, you log in to Cockpit and use `cockpit-session-recording` to investigate why the web server does not work.
+
+. Go to your *Lab Information* webpage from *Lab 0: Setup Steps* and click *CONSOLE* for your workstation's bastion host:
++
+image:images/lab1.1-workstationconsole.png[300,300]
+
+. Log in as *lab-user* with *r3dh4t1!* as the password:
++
+image:images/lab1.1-labuserlogin.png[300,300]
+
+. Open a Firefox web browser:
++
+image:images/session_recording_firefox.png[]
+
+. Go to link:https://sessionrecording.example.com:9090/[https://sessionrecording.example.com:9090/^]:
++
+image:images/session_recording_firefox_1.png[]
+
+. Log in as *root* with *r3dh4t1!* as the password:
++
+image:images/session_recording_cockpit_login.png[]
+
+. Click the *Session Recording* menu item:
++
+image:images/session_recording_menu.png[]
+
+. When your session appears in the list of sessions, click it to open it:
++
+image:images/session_recording_session_list.png[]
++
+Expect your data to be different.
+
+. Click *Play* to start the playback of the session (you can also press the hotkey *p* to achieve the same results):
++
+image:images/session_recording_play.png[]
++
+[TIP]
+====
+You can also navigate the session frame by frame by clicking the "*Skip Frame*" button or the hotkey *.* (period):
+
+image:images/session_recording_skipframe.png[]
+====
+
+=== 12.5.2: Using Other Session Recording Controls
+
+. Try the speed controls:
++
+image:images/session_recording_speed_control.png[]
+
+. Restart the playback and fast-forward to the end:
++
+image:images/session_recording_fastforward.png[]
+
+. Use the zoom controls:
++
+image:images/session_recording_zoom_controls.png[]
+
+. Switch between a selection of text and the drag-n-pan of zoomed content:
++
+image:images/session_recording_dragnpan.png[]
+
+=== 12.5.3: Locating the nginx Failure Cause
+
+. Enter `nginx` in the search bar to search for the first instance of the `nginx` keyword in the session:
++
+image:images/session_recording_search_button.png[]
++
+This shows the closest beginning of "frame" that matches the keyword entered.
++
+In Session Player, the action of restarting `nginx` looks similar to this:
++
+image:images/session_recording_cockpit_nginx_restart.png[]
++
+Expect to find the corresponding messages at the bottom of the page:
++
+image:images/session_recording_cockpit_nginx_error.png[]
+
+. Click the timestamp event in the logs panel to jump to the same time in the session.
+
+. Search for `nginx.conf` to find the time when the configuration file was edited, showing the nearest time:
++
+image:images/session_recording_search.png[]
+
+. Rewind the player position to that time.
+
+<<top>>
+
+link:README.adoc#table-of-contents[Table of Contents^]
+

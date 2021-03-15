@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# This 'build' script is where you can add steps that should be run when
+# building the image for your custom workshop.
+
+# Move the workshop content to '/opt/app-root/workshop'. It could be left
+# at it's default location of '/opt/app-root/src/workshop', but by moving it,
+# it is out of view of the user doing the workshop and they aren't likely to
+# delete it by accident and break the display of the workshop content.
+mv workshop /opt/app-root/workshop
+
+# Move the workshop envvars
+mv envvars /opt/app-root/envvars
+
+# Also delete some of the other files from the top of the Git repository we
+# don't need for running the workshop.
+rm -f Dockerfile README.md LICENSE
+
+# If the workshop requires Git, it is necessary to set some defaults for
+# the name and email of the user for Git.
+#git config --global user.email "user@example.com"
+#git config --global user.name "Example User"
