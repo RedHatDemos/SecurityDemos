@@ -1,0 +1,136 @@
+// Jenkinsfile
+pipeline {
+    agent { label 'master' }
+
+  stages {
+
+    stage('Checkout') {
+      steps {
+       git url: "http://gogs-ocp-workshop.${JENKINS_APP_DOMAIN}/${JENKINS_GOGS_USER}/SecurityDemos.git"
+      } // steps
+    } // stage
+
+    stage('Build / Harden') {
+      steps {
+        sh "oc login -u ${JENKINS_GOGS_USER} -p openshift --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
+        sh "oc new-project ${JENKINS_GOGS_USER}-hardening || true"
+        sh "oc new-build --name=harden-build --strategy=docker --binary --to=hardened-openjdk -n ${JENKINS_GOGS_USER}-hardening || true"
+        sh "oc start-build harden-build --follow --from-dir=hardening_pipeline --wait --follow -n ${JENKINS_GOGS_USER}-hardening"
+
+      } // steps
+    } // stage
+
+    stage('Push Candidate Image') {
+      agent { label 'image-management' }
+      steps {
+        sh "oc login -u ${JENKINS_GOGS_USER} -p openshift --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
+        sh 'skopeo --debug copy --src-creds=$(oc whoami):$(oc whoami -t) --src-tls-verify=false --dest-tls-verify=false' + " --dest-creds=admin:admin123 docker://${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}-hardening/hardened-openjdk:latest docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} || true"
+        // TODO: Quay fails on the first push due to the repo not existing yet. It succeeds on the second attempt.  Call the Quay API to create the repo first
+        sh 'skopeo --debug copy --src-creds=$(oc whoami):$(oc whoami -t) --src-tls-verify=false --dest-tls-verify=false' + " --dest-creds=admin:admin123 docker://${JENKINS_INTERNAL_REGISTRY}/${JENKINS_GOGS_USER}-hardening/hardened-openjdk:latest docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER}"
+      } // steps
+    } // stage
+
+    stage('OpenSCAP Scans') {
+      steps {
+
+      script {
+         def remote = [:]
+         remote.name = "bastion"
+         //remote.host = "bastion.${JENKINS_GUID}.openshiftworkshop.com"
+         remote.host = "${JENKINS_BASTION}"
+         remote.allowAnyHosts = true
+         remote.user="${JENKINS_GOGS_USER}"
+         remote.password="${JENKINS_SSH_PASSWORD}"
+         
+         sshCommand remote: remote, command: "oc login -u ${JENKINS_GOGS_USER} -p openshift --insecure-skip-tls-verify ${JENKINS_OCP_API_ENDPOINT}"
+         sshCommand remote: remote, command: "sudo docker login -u admin -p admin123 quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}"
+         sshCommand remote: remote, command: "sudo docker pull quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER}"
+         sshCommand remote: remote, command: "sudo oscap-docker quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_stig --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml || true"
+         sshCommand remote: remote, command: "wget -O - https://www.redhat.com/security/data/oval/v2/RHEL7/rhel-7.oval.xml.bz2 | bzip2 --decompress > rhel-7.oval.xml"
+         sshCommand remote: remote, command: "sudo oscap-docker quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} oval eval --report report-cve.html rhel-7.oval.xml"
+         sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report.html", into: 'openscap-compliance-report.html', override: true
+         sshGet remote: remote, from: "/home/${JENKINS_GOGS_USER}/report-cve.html", into: 'openscap-cve-report.html', override: true
+         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-compliance-report.html', reportName: 'OpenSCAP Hardening Compliance Report', reportTitles: 'OpenSCAP Compliance Report'])
+         publishHTML([alwaysLinkToLastBuild: false, keepAll: false, reportDir: './', reportFiles: 'openscap-cve-report.html', reportName: 'OpenSCAP Hardening Vulnerability Report', reportTitles: 'OpenSCAP Vulnerability Report'])
+         archiveArtifacts 'openscap-compliance-report.html,openscap-cve-report.html'
+        } // script
+      } // steps
+    } // stage
+
+    stage('Compliance Gate') {
+      steps {
+        script {
+        compliance_percent = sh (script: "grep Score openscap-compliance-report.html | grep -P '\\d+\\.\\d+(?=<)' -o | head -1",
+          returnStdout: true).trim()
+
+        echo "Compliance score: $compliance_percent"
+
+        double compliance = compliance_percent
+          
+        if ( compliance < 80) {
+          echo 'Compliance score below threshold'
+          sh 'exit 1'
+        } else {
+          echo 'Compliance gate passed'
+          }
+        } // script
+      } // steps
+    } // stage
+
+    stage('Vulnerability Gate') {
+      steps {
+        script {
+        vuln_percent = sh (script: "grep 'Non-Compliant/Vulnerable/Unpatched' openscap-cve-report.html | grep -P '\\d+(?=<)' -o",
+          returnStdout: true).trim()
+
+        echo "Vulnerability score: $vuln_percent"
+
+        double vuln = vuln_percent
+          
+        if ( vuln > 0 ) {
+          echo 'One or more vulnerabilities found'
+          sh 'exit 1'
+        } else {
+          echo 'Vulnerability gate passed'
+          }
+        } // script
+      } // steps
+    } // stage
+
+    stage('Smoke Test') {
+      steps {
+        sh "oc create secret docker-registry quay --docker-server=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN} --docker-username='admin' --docker-password='admin123' --docker-email='nobody@nowhere.com -n ${JENKINS_GOGS_USER}-hardening' || true"
+        sh "oc secret link default quay -n ${JENKINS_GOGS_USER}-hardening --for=pull"
+        sh 'oc delete all -l app=hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
+        sh "oc new-app --allow-missing-images --insecure-registry --docker-image=quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} -n ${JENKINS_GOGS_USER}-hardening"
+        sh "oc scale deployment hardened-openjdk-candidate --replicas=0 -n ${JENKINS_GOGS_USER}-hardening || true"
+        sh 'oc patch -n ${JENKINS_GOGS_USER}-hardening deployment/hardened-openjdk-candidate -p \'{"spec" : { "template" : { "spec" : { "containers" : [{ "name" : "hardened-openjdk-candidate" , "command" : ["bash"], "args" : [ "-c", "java -version && sleep 86400"] }]}}}}\''
+        sh "oc scale deployment hardened-openjdk-candidate --replicas=1 -n ${JENKINS_GOGS_USER}-hardening || true"
+        sh 'oc rollout status deployment hardened-openjdk-candidate -w -n ${JENKINS_GOGS_USER}-hardening'
+        sh 'oc delete all -l app=hardened-openjdk-candidate -n ${JENKINS_GOGS_USER}-hardening || true'
+      } // steps
+    } // stage
+
+    stage('Golden Image') {
+      agent { label 'image-management' }
+      steps {
+        sh "skopeo --debug copy --src-creds=admin:admin123 --src-tls-verify=false --dest-tls-verify=false --dest-creds=admin:admin123 docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-golden:${JENKINS_GOGS_USER} || true"
+
+        // TODO: Quay fails on the first push due to the repo not existing yet. It succeeds on the second attempt.  Call the Quay API to create the repo first
+        sh "skopeo --debug copy --src-creds=admin:admin123 --src-tls-verify=false --dest-tls-verify=false --dest-creds=admin:admin123 docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-candidate:${JENKINS_GOGS_USER} docker://quayecosystem-quay-quay-enterprise.${JENKINS_APP_DOMAIN}/admin/hardened-openjdk-golden:${JENKINS_GOGS_USER}"
+      } // steps
+    } // stage
+
+    stage('Trigger App Pipeline') {
+      steps {
+        script {
+          try {
+            build "${JENKINS_GOGS_USER}-${JENKINS_GOGS_USER}-ecommerce-pipeline"
+          } catch (err) {}
+         } // script
+      } //steps
+    } // stage
+
+  } // stages
+
+} // pipeline

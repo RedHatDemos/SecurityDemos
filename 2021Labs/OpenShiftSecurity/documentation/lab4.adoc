@@ -1,0 +1,506 @@
+== Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
+
+=== Goal of Lab 4
+
+The goal of this lab is to learn how to automate and build security into the application and build a _secure software factory_ that orchestrates a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in both a hardening pipeline and a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
+
+
+=== Introduction
+
+The benefits of DevOps and Continuous Integration / Continuous Delivery (CI/CD) have been demonstrated with great success over the years. Security was initially treated as a second class citizen in many cases - left until the end usually to much detriment. With the advent of DevSecOps, security is put front and center - it is addressed in terms of people, processes and technology. Security tools are integrated right into the build process and you could easily break the build if security requirements are not met with the security gates that you build into your CI/CD pipeline.
+
+This lab exercise will focus on some of the technologies used to implement automated security compliance controls within a typical CI/CD application pipeline.
+
+
+A number of tools have been installed and pre-configured to support the DevSecOps pipeline. Most of these tools are running containerized within the Red Hat OpenShift cluster. Here are the pipelines we will be stepping through during our lab:
+
+image:images/lab7-hardening-pipeline.png[]
+Image hardening pipeline
+
+image:images/lab7.3-pipeline.png[]
+Application CI/CD Pipeline
+
+The Ansible role that deploys these pipelines can be found link:https://github.com/redhat-cop/agnosticd/tree/development/ansible/roles/ocp4-workload-security-compliance-lab[here].
+
+The image hardening pipeline checks out the image specification file and supporting hardening scripts from the git repository. These file are use to construct container base image for Java 1.8 application images. A link:https://catalog.redhat.com/software/containers/detail/5c3592dcd70cc534b3a37814?container-tabs=overview[Universal Base Image (UBI) provided by Red Hat] is used as the foundation for our hardened image. OpenShift performs a build to create the initial image, which is pushed using link:https://github.com/containers/skopeo[skopeo] into Red Hat Quay and marked as a candidate image. From there compliance and vulnerability scans are performed. If the compliance percentage is less than 80%, the pipeline fails. Likewise if one or more vulnerabilities are found, the pipeline fails. A simple smoke test is performed and if that passes, the image is tagged as a golden image. The application pipeline is then triggered, using this newly built and vetted base image.
+
+The application CI/CD pipeline will checkout java web application source code from a git repository, build it, run automated tests, perform a static code analysis scan with SonarQube, send the produced artifact to Sonatype Nexus for storage, build a docker image containing our application, push it to quay for additional security scanning, perform OpenSCAP scans, deploy the application to OpenShift so that it can be scanned for web vulnerabilities by OWASP ZAP, then we have the opportunity to promote the application to other OpenShift projects if we are satisfied with the results. The following sections describe the tools we will be using in this pipeline lab.
+
+==== CodeReady Workspaces
+
+CodeReady Workspaces is a collaborative Kubernetes-native development solution that delivers Eclipse workspaces and in-browser integrated development environment (IDE) for rapid cloud application development.
+
+Built on the open source Eclipse Che project, CodeReady Workspaces uses containers to provide any member of the development or IT team with a consistent, secure, and zero-configuration development environment.
+
+The user experience is as fast and familiar as an IDE on your laptop.
+
+==== Gogs
+Gogs is the Go Git Service - a github-like git server written in the Go programming language.
+
+_The goal of the Gogs open source project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, Mac OS X, Windows and ARM._
+
+Gogs is great ligtweight git server for use in lab environments such as this. Most enterprise projects will use more fully-featured git repositories such as GitHub Enterprise, Gitlab, Atlassian BitBucket, etc.
+
+==== Jenkins
+Jenkins is an open-source continuous integration software tool written in the Java programming language for testing and reporting on isolated changes in a larger code base in real time. The software enables developers to find and solve defects in a code base rapidly and to automate testing of their builds.
+
+While there are other tools available for implementing CI/CD pipelines, jenkins is the most widely used. A containerized version is provided with OpenShift and integrates natively with it.
+
+==== Apache Maven
+Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project's build, reporting and documentation from a central piece of information.
+
+Maven provides an opinionated framework defining a structure and layout for Java source code. By following this structure, a myriad of plugins can be used to simplify the build, documentation, testing and deployment of source code. The pipeline in this lab uses maven to build and package our source code as well as transmit the application to nexus (described below) and submit static code analysis requests to SonarQube (also described below).
+
+==== Nexus
+Sonatype Nexus is a repository manager. It allows you to proxy, collect, and manage your dependencies so that you are not constantly juggling a collection of Java ARchives (JARs). It makes it easy to distribute your software. Internally, you configure your build to publish artifacts to Nexus and they then become available to other developers.
+
+When we build our application as a part of the lab, the resulting JAR file will be stored within nexus.
+
+==== SonarQube
+SonarQube is a static code analysis system that provides continuous inspection including the detection of common code issues, including in the areas of security.
+
+In this lab we will upload the source code to SonarQube, which will perform static code analysis and produce various metrics, such as unit test code coverage.
+
+==== Quay / Clair
+Red Hat Quay is a private container registry that stores, builds, and deploys container images. It analyzes your images for security vulnerabilities (using Clair), identifying potential issues that can help you mitigate security risks. The pipeline will send our application image to quay where it will be automatically scanned for security vulnerabilities by Clair.
+
+==== OWASP Zed Attack Proxy (ZAP)
+_The OWASP Zed Attack Proxy (ZAP) is one of the world’s most popular free security tools and is actively maintained by hundreds of international volunteers. It can help you automatically find security vulnerabilities in your web applications while you are developing and testing your applications. Its also a great tool for experienced pentesters to use for manual security testing._
+
+In our pipeline, we will stand up an instance of our web application then point OWASP ZAP to that instance so that it can perform a baseline security scan.
+
+=== Sample application used in this lab exercise
+
+For the purposes of this lab, we will be examining a simple, all-in-one https://spring.io/projects/spring-boot[spring boot] application. The application presents a simple e-commerce web user interface, which is backed by a self-contained restful API.
+
+image:images/lab7-ecommerce-webapp.png[]
+
+=== Lab 4.1 Logging into the environment
+
+. Log into each of the tools that we previously mentioned  with the credentials shown below. Replace *{GUID}* with your provided lab cluster GUID and replace *{USERID}* with your provided user id - e.g., *user1* . Both the lab cluster GUID and USERID can be found on the Lab Information page where you got your assigned GUID and USERID. (see previous step for more details)
+
+* Red Hat OpenShift console - https://master.{GUID}.example.opentlc.com
++
+*login:* {USERID}
++
+*password:* openshift
++
+image:images/lab7.2-openshift.png[]
++
+* Gogs - http://gogs-ocp-workshop.apps.{GUID}.example.opentlc.com
++
+*login:* {USERID}
++
+*password:* openshift
++
+image:images/lab7.2-gogs.png[]
+* Jenkins - https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
+(Click on Log In with OpenShift)
++
+**login:** {USERID}
++
+**password:** r3dh4t1!
++
+When prompted, press the *Allow selected permissions* button.
++
+image:images/lab7-jenkinslogin.png[]
++
+The main Jenkins page will appear as below:
++
+image:images/lab7.2-jenkins.png[]
+
+* Nexus - http://nexus-ocp-workshop.apps.{GUID}.example.opentlc.com
++
+no login necessary
++
+image:images/lab7.2-nexus.png[]
+* Sonarqube - http://sonarqube-ocp-workshop.apps.{GUID}.example.opentlc.com
++
+no login necessary
++
+image:images/lab7.2-sonarqube.png[]
+
+* Quay - http://quayecosystem-quay-quay-enterprise.apps.{GUID}.example.opentlc.com
++
+**login:** admin
++
+**password:** admin123
++
+image:images/lab7.2-quay.png[]
+
+=== Lab 4.2 Explore the pipeline stages
+
+The following sections describe each of the stages in the image hardening pipeline that we will be running during this lab.
+
+==== Checkout
+This stage checks the image building code out the gogs git repository. This includes a container image specification file along with bash scripts that perform hardening of the image. The scripts are derived from the remediaton scripts generated by OpenSCAP, in accordance with the Security Technical Implementation Guideline (STIG) for Red Hat Enterprise Linux 7. Once the code is checked out, we can proceed with the rest of the pipeline.
+
+==== Build / Harden
+This stage uses OpenShift to create an image from the inputs retrieved from the git repository. The base image used is the UBI 7 image from Red Hat. The security posture of the UBI image is maintained by Red Hat, and is regularly updated with new security vulnerabilites (CVEs) are discovered and remedied.
+
+==== Push Candidate Image
+This stage uses skopeo to push the newly built candidate image into the Red Hat Quay image repository.
+
+==== OpenSCAP Scans
+During this stage we run the Maven SonarQube plugin to send the code, unit test results and code coverage metrics to our sonarqube server for static code analysis.
+
+==== Archive to Nexus
+The result of our build is the creation of a Java ARchive, or JAR file. This file is the Java bytecode that is run to deploy our web application. We send the JAR file to nexus for storage so that it can be retrieved in the future if needed (rather than having to rebuild the same version of code). This also allows our artifacts to be shared easily to other interested parties. The supported version of SonaType Nexus also has the ability to analyze any dependencies (libraries) used by our uploaded code to detect potential known vulnerabilities they may introduce.
+
+==== Build Image
+During this step, we use the *Dockerfile* provided along with our source code to construct a new docker image. A *Dockerfile* contains the instructions for building a docker image. The Dockerfile we are using to deploy the ecommerce application takes a base, Red Hat provided OpenJDK 1.8 image (Open JDK is the Java Development Kit - the runtime required to execute a Java application) and superimposes our executable JAR file on top of it to form a new Docker image, capable of running our application.
+
+==== Push Image to Quay
+In this stage we take the docker image that we just built and push it into Red Hat Quay - our centralized image registry.  Once the image is pushed to a registry, it can be made available to interested parties and promoted to different OpenShift or kubernetes based clusters. Quay has also been configured with Clair - which will perform a vulnerability scan of any images pushed to Quay. The Clair report will become available shortly after the image has been pushed into Quay.
+
+==== OpenSCAP Scans
+This will perform two OpenSCAP scans. A vulnerability scan and a Defense Information Systems Agency (DISA) Security Technical Implementation Guideline (STIG) compliance scan. Both reports will be collected by Jenkins and made available for viewing.
+
+==== Compliance Gate
+This gate will explicitly examine the OpenSCAP compliance scan results and verify that at least 80% of the STIG compliance requirements have passed.
+
+==== Vulnerability Gate
+This gate will explicitly examine the OpenSCAP vulnerability scan results and verify that there are no CVEs detected in the built image. Note that this pipeline will immediately fail if a CVE is detected, however one could also configure the pipeline to simply pause and notify the appropriate people to inspect the results and make a determination as to whether the pipeline should continue.
+
+==== Configure Stage Project
+Configures the OpenShift staging project (i.e., userid-stage) so that the image can be promoted into it
+
+==== Smoke Test
+This stage performs a simple smoke test. The image is deployed in OpenShift and runs the `java -version` command. If the command returns successfully, the smoke test is passed.
+
+==== Golden Image
+At this point in the pipeline, the image has passed all tests and can be marked as a golden image within the Red Hat Quay image repository.
+
+==== Trigger Application Pipeline
+Now that a new, vetted base image has been created, the pipeline can trigger the application pipeline. The application pipeline will use this golden image as the base image for building the application. Note that the application pipeline reruns the same compliance/vulnerability tests to verify no potential security issues were introduced in the process of creating the application image.
+
+The following sections describe each of the stages in the application CI/CD pipeline that we will be running during this lab.
+
+==== Checkout
+This stage checks the source code out the gogs git repository. Once the code is checked out, we can proceed with the rest of the pipeline.
+
+==== Build
+This stage uses Apache Maven to build our spring boot Java application from source. If the build fails, our pipeline will terminate since we cannot proceed with the remaining steps
+
+==== Run tests
+This stage again uses Maven to run any unit tests that were written. Unit tests are important in that they prevent our code from becoming brittle.  Without unit tests we can not be confident that any changes made to the source code will not adversely affect other parts of the code. By running unit tests we can also collect metrics in terms of what percentage of the code is being exercised by the tests. This is called code coverage and will be visible within SonarQube.
+
+==== SonarQube Scan
+During this stage we run the Maven SonarQube plugin to send the code, unit test results and code coverage metrics to our sonarqube server for static code analysis.
+
+==== Archive to Nexus
+The result of our build is the creation of a Java ARchive, or JAR file. This file is the Java bytecode that is run to deploy our web application. We send the JAR file to nexus for storage so that it can be retrieved in the future if needed (rather than having to rebuild the same version of code). This also allows our artifacts to be shared easily to other interested parties. The supported version of SonaType Nexus also has the ability to analyze any dependencies (libraries) used by our uploaded code to detect potential known vulnerabilities they may introduce.
+
+==== Build Image
+During this step, we use the *Dockerfile* provided along with our source code to construct a new docker image. A *Dockerfile* contains the instructions for building a docker image. The Dockerfile we are using to deploy the ecommerce application takes a base, Red Hat provided OpenJDK 1.8 image (Open JDK is the Java Development Kit - the runtime required to execute a Java application) and superimposes our executable JAR file on top of it to form a new Docker image, capable of running our application.
+
+==== Push Image to Quay
+In this stage we take the docker image that we just built and push it into Red Hat Quay - our centralized image registry.  Once the image is pushed to a registry, it can be made available to interested parties and promoted to different OpenShift or kubernetes based clusters. Quay has also been configured with Clair - which will perform a vulnerability scan of any images pushed to Quay. The Clair report will become available shortly after the image has been pushed into Quay.
+
+==== OpenSCAP Scans
+This will perform two OpenSCAP scans. A vulnerability scan and a Defense Information Systems Agency (DISA) Security Technical Implementation Guideline (STIG) compliance scan. Both reports will be collected by Jenkins and made available for viewing.
+
+==== Deploy
+This step will deploy the application into your Openshift user project, which will serve as a development environment. This environment is typically used by developers to verify applications come up as expected and also for performing automated integration tests.
+
+==== OWASP ZAP Scan
+During this stage a Jenkins Agent Pod will be started within OpenShift for the purposes of performing an OWASP ZAP baseline scan against the running container image.  The scan will analyze and crawl starting from the main page of our web application, searching for potential vulnerabilities lurking within javascript including things such as potential cross-site scripting (XSS) exploits. The resulting report will also be published by Jenkins.
+
+==== Configure Stage Project
+Configures the OpenShift staging project (i.e., userid-stage) so that the image can be promoted into it
+
+==== Promote to Stage?
+This step pauses the pipeline and waits for an authorized person (e.g., a QA test lead) to confirm promotion into a higher level environment.
+
+==== Configure Prod Project
+Configures the OpenShift production project (i.e., userid-prod)
+
+==== Promote to Prod?
+Similar to the previous _Promote to Stage?_ step, requiring manual intervention before promoting the application image to an even higher level environment.
+
+=== Lab 4.3 The image hardening pipeline
+
+. Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
++
+. Click the folder label with your user id (e.g., user1)
++
+image:images/lab7.4-jenkins-folder.png[]
++
+. Click the hardening pipeline (e.g., user1/openjdk-hardening-pipeline)
++
+image:images/lab2.4-jenkins-hardening-pipeline.png[]
++
+. Click the *Build with Parameters* link in the left menu
++
+image:images/lab2.4-jenkins-hardening-build.png[]
+. Keep the default values and press the *Build* button
++
+image:images/lab2.4-jenkins-hardening-start-build.png[]
+
+. Click the build label (e.g., #1) next to the build in the *Build History* pane on the left
++
+image:images/lab2.4-jenkins-hardening-click-job.png[]
++
+. Click the *Console Output* link to monitor the build progress
++
+image:images/lab2.4-jenkins-hardening-console.png[]
++
+. Wait for the hardening pipeline to complete. Once it finishes, it will automatically start the application CI/CD pipeline, which will use the hardened image as its base.
++
+. Scroll to the top of the screen and click the `Open Blue Ocean` link
++
+image:images/lab2.4-jenkins-hardening-blueocean.png[]
++
+. Click the `Artifacts` link at the top of the screen
++
+image:images/lab2.4-jenkins-hardening-artifacts.png[]
++
+. Browse the `openscap-compliance-report.html` report and the `openscap-cve-report.html` reports.
++
+. Take a look at the source for the Jenkinsfile and hardening scripts located in gogs within the `hardening_pipeline` folder
++
+. Open the Dockerfile within the `hardening_pipeline` folder and select the edit button
++
+image:images/lab2.4-jenkins-hardening-edit-dockerfile.png[]
+. Next we set the image to an old version, to verify the pipeline fails. Change the `FROM` statement on line 1 to
++
+```
+FROM registry.access.redhat.com/ubi7/ubi:7.6-73
+```
++
+image:images/lab2.4-jenkins-hardening-image-version.png[]
++
+. Comment out the following line in the Dockerfile as well.
++
+```
+RUN yum update -y && rm -rf /var/cache/yum/ /var/tmp/* /tmp/* /var/tmp/.???* /tmp/.???*
+```
++
+image:images/lab2.4-jenkins-hardening-yum-update.png[]
++
+. Comment out the `yum update -y` line in the `fix-2.sh` remediation script as well:
++
+image:images/lab2.4-jenkins-hardening-fix-2-yum.png[]
++
+Skipping this `yum update` will prevent the image build from applying CVE fixes.
++
+. Click the `Commit Changes` button on the bottom of the page.
++
+. From Jenkins, restart the hardening pipeline.
++
+. Notice that the compliance gate passed since the hardening script was able to perform compliance remediaton. Go to the blue ocean view again and look at the vulnerability report under `Artifacts`
++
+. Revert the FROM statement in the Dockerfile back to:
++
+```
+FROM registry.access.redhat.com/ubi7/ubi:latest
+```
++
+and uncomment the `yum update` lines in the `Dockerfile` and `fix-2.sh` script.
++
+. Rerun the pipeline to make sure it is once again successful.
+
+=== Lab 4.4 Exercise a run of the application pipeline
+
+. Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
++
+. Click the folder label with your user id (e.g., user1)
++
+image:images/lab7.4-jenkins-folder.png[]
++
+. Click the pipeline (e.g., user1/user1-ecommerce-pipeline)
++
+image:images/lab7.4-jenkins-pipeline.png[]
++
+. Click the *Build with Parameters* link in the left menu
++
+image:images/lab7.4-jenkins-build.png[]
+. Keep the default values and press the *Build* button
++
+image:images/lab7.4-build-with-params.png[]
++
+. Click the build label (e.g., #1) next to the build in the *Build History* pane on the left
++
+image:images/lab7.4-jenkins-select-build.png[]
++
+. Click the *Console Output* link to monitor the build progress
++
+image:images/lab7.4-jenkins-output.png[]
++
+. Once the build has completed successfully (and is prompting you to proceed or abort), click the *user#/user#-ecommerce-pipeline* link at the top of the display. We will inspect the security scan artifacts before allowing the pipeline to promote our code into the staging project. *Do not press either of the Proceed or Abort links at this time.*
++
+image:images/lab7.4-jenkins-build-complete.png[]
++
+. Click the the drop down arrow next to the build number in the left hand menu. Select Open Blue Ocean
++
+image:images/lab7.4-jenkins-blueocean.png[]
++
+Click *Artifacts* in the blue ocean view:
++
+image:images/lab7.5-jenkins-blueocean-artifacts.png[]
++
+. Then view each of the reports. You may need to refresh the browser.
++
+image:images/lab7.5-jenkins-blueocean-artifacts-links.png[]
++
+
+* OpenSCAP Compliance Report
++
+Experiment with the filters to adjust the output of the report.
++
+image:images/lab7.4-compliance-filters.png[]
+* OpenSCAP Vulnerability Report
++
+Note the number of vulnerabilities identified by the OpenSCAP Report:
++
+image:images/lab7.4-openscap-vulnerabilities.png[]
+* OWASP ZAP Baseline Report
++
+image:images/lab7.4-owasp-zap.png[]
++
+. Navigate to the SonarQube url http://sonarqube-ocp-workshop.apps.{GUID}.example.opentlc.com Click on the number link above *Projects Analyzed* section:
++
+image:images/lab7.4-sonarqube-projects.png[]
++
+. Find the project prefixed with your userid. Note 3 vulnerabilities were found and that the unit test code coverage has been recorded. SonarQube also provides code metrics on items including potential bugs and code smells. Click the Project prefixed with your userid and determine where the vulnerabilities are in the source code.
++
+image:images/lab7.4-sonarqube-project-link.png[]
+. Navigate to the nexus url http://nexus-ocp-workshop.apps.{GUID}.example.opentlc.com, click *browse* then *maven-snapshots*
++
+image:images/lab7.4-nexus-snapshots.png[]
++
+. Navigate the folder structure and verify your JAR file exists within it.
++
+image:images/lab7.4-nexus-jar.png[]
+. Navigate to the quay url http://quayecosystem-quay-quay-enterprise.apps.{GUID}.example.opentlc.com, login as *admin* with the password *admin123* if you haven't already
++
+. Navigate to the image tagged with your userid by clicking the *ecommerce* repository
++
+image:images/lab7.4-quay-repo.png[]
++
+. Click the tag icon on the left (second icon from the top) then click the image hash id
++
+image:images/lab7.4-quay-tag.png[]
+. Click the bug icon to see the vulnerabilities detected by Clair. Make a note of the number of vulnerabilities
++
+image:images/lab7.4-quay-vulnerabilities.png[]
++
+. Click the package icon to see the packages that are affected
++
+image:images/lab7.4-quay-packages.png[]
++
+. You can also view the deployed application at http://ecommerce-{USERID}.apps.{GUID}.example.opentlc.com/
+
+=== Lab 4.5 Update the base image and source code
+
+An old base image was used to build the application, we will update the base image to use a newer version. This will reduce the number of vulnerabilities that are detected. We will also update the source code to remove the vulnerabilities detected by SonarQube.
+
+. Navigate to your source code repository in gogs http://gogs-ocp-workshop.apps.{GUID}.example.opentlc.com and login if you haven't already (userid / openshift)
++
+. Click on the *SecurityDemos* repository under *My Repositories*
++
+image:images/lab7.5-gogs-repo.png[]
+. Click the *Dockerfile*
++
+image:images/lab7.5-gogs-dockerfile.png[]
+. Click the edit icon (small pencil) and change the image version from 1.0 to latest.
++
+The current line in the Dockerfile is referring to an older image, with associated vulnerabilities.  The latest image we are using will resolve many (potentially all) of these known vulnerabilities. You can explore the https://registry.access.redhat.com[Red Hat Container Catalog] to search for images provided by Red Hat as well as inspect their current security posture.
++
+       FROM registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest
++
+image:images/lab7.5-gogs-edit-dockerfile.png[]
+. Click the *Commit Changes* button
++
+NOTE: For the purposes of this lab we are committing changes directly into the master branch of our git repository for demonstration purposes. A true development environment will have processes and procedures for submitting and peer reviewing code changes before they are accepted into a master branch.
++
+image:images/lab7.5-gogs-commit-changes.png[]
++
+. Navigate back to the root of the SecurityDemos folder.
++
+image:images/lab7.5-gogs-navigate-root.png[]
++
+. Click on Settings in the top right hand corner.
++
+image:images/lab7.5-gogs-settings.png[]
++
+. Navigate to the Webhooks tab and then select Gogs from the Add Webhook drop-down menu.
++
+image:images/lab7.5-add-gogs-webhook.png[]
++
+. Update the payload with the ecommerce pipeline generic webhook (e.g. https://api.{GUID}.example.opentlc.com:6443/apis/build.openshift.io/v1/namespaces/{USERID}/buildconfigs/{USERID}-ecommerce-pipeline/webhooks/{USERID}-ecommerce-pipeline/generic).
++
+image:images/lab7.5-add-payload.png[]
++
+. Navigate to CodeReady Workspaces http://codeready-ocp-workshop.apps.{GUID}.example.opentlc.com and register an account if you haven't already and login (userid / openshift).
++
+image:images/lab7.5-crwx-register1.png[]
++
+. Select the Java Spring Boot stack and import the SecurityDemos project.
++
+NOTE: When entering the Git URL for adding or importing the SecurityDemos project prefix the url with your Gogs username and password, like so: http://{USERID}:openshift@gogs-ocp-workshop.apps.{GUID}.example.opentlc.com/{USERID}/SecurityDemos.git
++
+image:images/lab7.5-crwx-stack-project.png[]
++
+. Click down through the following folders src -> main -> java -> com -> baeldung -> ecommerce -> controller -> OrderController.java
++
+image:images/lab7.5-gogs-src.png[]
++
+. Edit the file and remove line 28, which has a hardcoded password. This password is not actually used by the application so it is safe to remove it.
++
+image:images/lab7.5-gogs-delete-password.png[]
++
+. Click the commit changes button.
++
+image:images/lab7.5-crwx-commit-changes.png[]
++
++
+. Navigate back to jenkins and *abort* the current build, then navigate to the pipeline page
++
+image:images/lab7.5-jenkins-abort.png[]
++
+. Start another build by clicking *Build with Parameters*
++
+image:images/lab7.4-jenkins-build.png[]
++
+. Then click the *Build* button
++
+image:images/lab7.4-build-with-params.png[]
++
+. Once the build has started,navigate to the blue ocean view of the build.  First select the current build
++
+image:images/lab7.5-jenkins-build-2.png[]
++
+. Click the *Open Blue Ocean* Link
+image:images/lab7.5-jenkins-blueocean.png[]
++
+. View the build progress
+image:images/lab7.5-jenkins-blueocean-view.png[]
++
+. Once the build is complete review the reports, quay vulnerability scan and sonarqube to verify that the number of vulnerabilities has been reduced. Click *Artifacts* in the blue ocean view:
++
+image:images/lab7.5-jenkins-blueocean-artifacts.png[]
++
+. Then view each of the reports. You may need to refresh the browser.
++
+image:images/lab7.5-jenkins-blueocean-artifacts-links.png[]
++
+. After viewing the reports, feel free to promote the application image into the staging and prod projects:
++
+image:images/lab7.5-jenkins-promote-stage.png[]
+
++
+. The staging version of the app can be viewed here:
++
+http://ecommerce-{userid}-stage.apps.{GUID}.example.opentlc.com
++
+image:images/lab7.5-jenkins-promote-prod.png[]
+. The production version of the app can be viewed here:
++
+http://ecommerce-{userid}-prod.apps.{GUID}.example.opentlc.com
++
+. Time permitting, go back to your gogs repository, open up the Jenkinsfile and take a look at some of the pipeline implementation details.
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ]

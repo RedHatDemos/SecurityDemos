@@ -1,0 +1,20 @@
+---
+modules:
+  lab0:
+    name: Workshop Overview
+    exit_sign: Block Rogue Containers
+  lab1:
+    name: Block Rogue Containers
+    exit_sign: Implementing Network Isolation
+  lab2:
+    name: Implementing Network Isolation
+    exit_sign: OpenShift RBAC
+  lab3:
+    name: OpenShift RBAC
+    exit_sign: Implementing DevSecOps
+  lab4:
+    name: Implementing DevSecOps
+    exit_sign: Image Signing Operator
+  lab5:
+    name: Image Signing Operator
+    exit_sign: Finish Lab

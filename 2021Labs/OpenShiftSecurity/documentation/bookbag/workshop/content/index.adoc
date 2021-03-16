@@ -1,0 +1,27 @@
+:data-uri:
+:favicon: favicon.ico 
+:toc: left
+:sectanchors: true
+:sectlinks: true
+:sectnums: true
+:encoding: UTF-8
+
+= Implementing Multi-Layer Container and Kubernetes Security with OpenShift for Automated DevSecOps
+
+== Workshop Introduction
+include::lab0.adoc[]
+
+== Lab 1: OpenShift blocks rogue containers from running as privileged user
+include::lab1.adoc[]
+
+== Lab 2: Implementing network isolation between running containers using Network Policies
+include::lab2.adoc[]
+
+== Lab 3: OpenShift Role Based Access Control
+include::lab3.adoc[]
+
+== Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
+include::lab4.adoc[]
+
+== Lab 5: Image Signing using Image Signing Operator
+include::lab5.adoc[]

@@ -1,0 +1,36 @@
+= Implementing Multi-Layer Container and Kubernetes Security with OpenShift for Automated DevSecOps
+
+=== [.underline]#Presenters/Lab Developers#:
+*Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
+
+*Khary Mendez*, Senior Principal Consultant , Red Hat^(R)^
+
+*Andy Block*, Senior Principal Consultant, Red Hat^(R)^
+
+*Mike Surbey*, Specialist Solution Architect, Red Hat^(R)^
+
+*Justin Goldsmith*, Senior Architect, Red Hat^(R)^
+
+
+== Lab Overview:
+In this hands-on lab, we will cover the comprehensive container and Kubernetes security capabilities available in Red Hat OpenShift. You will gain experience with:
+
+
+* Host OS (Red Hat CoreOS and Red Hat Enterprise Linux) security technologies
+* Evaluating container content and sources for vulnerabilities
+* Designing the build and CI/CD pipeline to proactively check container content and ensure content governance across the application life cycle, including image policy management and enforcement, image scanning, and image signing
+* Certificate & Secrets management
+* Implementing methods to control access to containers via authentication and authorization
+* Red Hat OpenShift Container Platform security technologies, including Security Context Constraints (SCC), role-based access control (RBAC), and network security with network policies
+* Logging, Monitoring, & Audit.
+
+== Prerequisites:
+This lab is geared towards systems administrators, cloud administrators and operators, architects, and others working on infrastructure operations management who are interested in learning how to automate security and compliance across their heterogeneous infrastructure using one or more Red Hat Products.  The prerequisite for this lab include basic Linux skills gained from Red Hat Certified System Administrator (RHCSA) or equivalent system administration skills. Knowledge of virtualization and basic linux scripting would also be helpful, but not required.
+
+
+== Table of Contents
+* link:lab1.adoc[Lab 1: OpenShift blocks rogue containers from running as privileged user]
+* link:lab2.adoc[Lab 2: Implementing network isolation between running containers using Network Policies]
+* link:lab3.adoc[Lab 3: OpenShift Role Based Access Control]
+* link:lab4.adoc[Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
+* link:lab5.adoc[Lab 5: Image Signing using Image Signing Operator]

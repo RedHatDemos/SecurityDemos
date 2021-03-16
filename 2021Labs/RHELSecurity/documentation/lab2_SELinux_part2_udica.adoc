@@ -1,0 +1,146 @@
+= Lab 2 Part 2: How to generate tailored SELinux policies for containers
+
+*Lab Length: Medium/Average (~15 mins)*
+
+== Goal of Lab
+The goal of this lab is to understand how you can install udica the tool for generating SELinux security policies for container and generate and load the policy for your container.
+
+== Introduction
+The current solution brings several problems with confining containers. For all containers there is just one general SELinux policy(container_t). This cannot fulfill the ideal balance between security and usability for containers.
+
+For certain use cases container type (container_t) is too strict, such as when some directory is bind mounted to container filesystem namespace. This is required to allow container processes to access this directory. On the other hand,  for certain use cases the container type is too loose. There are two main situations when SELinux policy should be tighter.  The first one is network controlling, when all container processes can bind to any network port. The second one is capability controlling, when all container processes can use all Linux capabilities.
+
+To bring a solution which can address the disadvantages mentioned above, the Udica tool was created. Udica is a tool for generating SELinux security policies for containers. The whole concept is based on the "block inheritance" feature inside SELinux's Common Intermediate Language (CIL). This is an intermediate language supported by SELinux utilities.
+
+Udica creates a policy which combines templates using rules inherited from a specified CIL block and rules discovered by the inspection of the container JSON (lightweight data-interchange format) file, which contains mount points and ports definitions.
+
+For more information, please visit https://www.redhat.com/en/blog/generate-selinux-policies-containers-with-udica[Red Hat Security Blog].
+
+== Lab 13.1 Installing the udica and podman
+The udica example will be performed on the _udica.example.com_ system.
+
+. If not already there, log into to the bastion host as *lab-user* from your desktop system *replacing GUID with your lab's GUID*. Use the password *r3dh4t1!*
+
+    [localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+
+. If not already root, become *root* and then log into the _udica.example.com_ system.
+
+    [lab-user@workstation-GUID ~]# ssh root@udica.example.com
+
+Repeat steps #1-2 above on a second terminal (this terminal window will also be connected to *udica.example.com*)
+
+First step is to install udica and container runtime engine, in this case _podman_ engine will be used and rest of dependencies
+
+    # yum install -y udica podman setools-console container-selinux
+
+Then, make sure that SELinux is in Enforcinf mode
+
+    # setenforce 1
+    # getenforce
+    Enforcing
+
+== Lab 13.2 Current situation
+
+Let's start podman container with following parameters:
+
+    # podman run -v /home:/home:ro -v /var/spool:/var/spool:rw -p 21:21 -it ubi8 bash
+
+ - Container will bind mount /home with read only perms
+ - Container will bind mount /var/spool with read/write perms
+ - Container will publish container's port 21 to the host
+
+Container runs with **container_t** type and **c447,c628** categories.
+
+Access mounted */home* is not working:
+
+    [root@37a3635afb8f /]# cd /home/
+    [root@37a3635afb8f home]# ls
+    ls: cannot open directory '.': Permission denied
+
+Also, access mounted */var/spool* is not working:
+
+    [root@37a3635afb8f home]# cd /var/spool/
+    [root@37a3635afb8f spool]# ls
+    ls: cannot open directory '.': Permission denied
+    [root@37a3635afb8f spool]# touch test
+    touch: cannot touch 'test': Permission denied
+
+Because there is no allow rule for **container_t** to access */home* and access to */var/spool*. (Please run following commands in second opened terminal)
+
+    # sesearch -A -s container_t -t home_root_t -c dir -p read
+    #
+    # sesearch -A -s container_t -t var_spool_t -c dir -p read
+    #
+
+On the other hand, what is completely allowed is network access.
+
+    # sesearch -A -s container_t -t port_type -c tcp_socket
+    allow container_net_domain port_type:tcp_socket { name_bind name_connect recv_msg send_msg };
+    allow sandbox_net_domain port_type:tcp_socket { name_bind name_connect recv_msg send_msg };
+
+    # sesearch -A -s container_t -t port_type -c udp_socket
+    allow container_net_domain port_type:udp_socket { name_bind recv_msg send_msg };
+    allow sandbox_net_domain port_type:udp_socket { name_bind recv_msg send_msg };
+
+It would be great to restrict this access and allow container bind just on tcp port *21* or with the same label.
+
+== Lab 13.3 Creating SELinux policy for container
+
+To create policy for container, it's necessary to have running container for which a policy will be generated. Container from previous chapter will be used.
+
+Let's find container id using *podman ps* command:
+
+    # podman ps
+    CONTAINER ID   IMAGE                             COMMAND   CREATED          STATUS              PORTS   NAMES
+    37a3635afb8f   registry.access.redhat.com/ubi8:latest   bash      15 minutes ago   Up 15 minutes ago           heuristic_lewin
+
+Container ID is **37a3635afb8f**.(In your case container ID will be different and please use yours)
+
+To create policy for it **udica** tool could be used. Container will be inspected by running *podman inspect*. Udica takex one parameter which is name of created SELinux security policy.
+
+    # podman inspect 37a3635afb8f | udica  my_container
+
+    Policy my_container with container id 37a3635afb8f created!
+
+    Please load these modules using:
+    # semodule -i my_container.cil /usr/share/udica/templates/{base_container.cil,net_container.cil,home_container.cil}
+
+    Restart the container with: "--security-opt label=type:my_container.process" parameter
+
+Policy is generated. Let's follow instructions from output(to install generated SELinux policy):
+
+    # semodule -i my_container.cil /usr/share/udica/templates/{base_container.cil,net_container.cil,home_container.cil}
+
+Let's exit the running container and start new one.
+
+    [root@37a3635afb8f spool]# exit
+    # podman run --security-opt label=type:my_container.process -v /home:/home:ro -v /var/spool:/var/spool:rw -p 21:21 -it ubi8 bash
+
+Container is now running with **my_container.process** type:
+
+    # ps -efZ | grep my_container.process
+    unconfined_u:system_r:container_runtime_t:s0-s0:c0.c1023 root 2275 434  1 13:49 pts/1 00:00:00 podman run --security-opt label=type:my_container.process -v /home:/home:ro -v /var/spool:/var/spool:rw -p 21:21 -it ubi8 bash
+    system_u:system_r:my_container.process:s0:c270,c963 root 2317 2305  0 13:49 pts/0 00:00:00 bash
+
+Proof that SELinux now allowing access */home* and */var/spool* mount points:
+
+    [root@814ec56079e5 /]# cd /home
+    [root@814ec56079e5 home]# ls
+    user
+
+    [root@814ec56079e5 ~]# cd /var/spool/
+    [root@814ec56079e5 spool]# touch test
+    [root@814ec56079e5 spool]#
+
+Proof that SELinux allows binding only to tcp/udp *21* port.
+
+    [root@5bd8cb2ad911 /]# yum install -y nc
+    [root@5bd8cb2ad911 /]# nc -lvp 1111
+    Ncat: Version 7.70 ( https://nmap.org/ncat )
+    Ncat: bind to :::34: Permission denied. QUITTING.
+    [root@5bd8cb2ad911 /]# nc -lvp 21
+    Ncat: Version 7.60 ( https://nmap.org/ncat )
+
+<<top>>
+
+link:README.adoc#table-of-contents[Table of Contents^] | link:lab3_NBDE.adoc[Lab 3: NBDE^]
