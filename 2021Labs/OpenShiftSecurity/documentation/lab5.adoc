@@ -24,15 +24,13 @@ For the purposes of this lab, signing will be done with an operator built to sig
 
 This operator listens for a custom resource called a ImageSigningRequest.  This triggers the launch of a new Pod that then pulls and signs the requested image.  link:https://github.com/redhat-cop/image-scanning-signing-service/tree/signing-webinar[Github Link - Image Signing Operator]
 
-=== Lab Exercise Requirements
-* OpenShift 4.x cluster with CoreOS worker nodes
- - It will likely work on any 4.x cluster but has not been specifically tested.
- - This should be a personal cluster, as changes made will most likely break other users.
-* Cluster admin access
-* oc cli
-
+==== Lab exercise
 === Step 1 - Clone Git Repository
+Using the OpenShift CLI in the bastion, ensure that you are logged into the cluster as system:admin and follow execute the following steps.
+
 [source]
+$ oc whoami
+system:admin
 $ git clone https://github.com/redhat-cop/image-scanning-signing-service.git
 $ cd image-scanning-signing-service
 
