@@ -89,9 +89,9 @@ pipeline {
     stage('Deploy') {
       steps {
         sh "oc new-app ecommerce || true"
-        sh "oc set env dc/ecommerce JAVA_ARGS=/deployments/root.jar"
+        sh "oc set env deployment/ecommerce JAVA_ARGS=/deployments/root.jar"
         sh "oc expose svc/ecommerce || true"
-        sh "oc rollout status dc/ecommerce"
+        sh "oc rollout status deployment/ecommerce"
       } // steps
     } // stage
 
@@ -113,8 +113,8 @@ pipeline {
           sh "set +x ; oc login -u ${JENKINS_GOGS_USER} -p ${JENKINS_SSH_PASSWORD} --insecure-skip-tls-verify https://kubernetes.default.svc"
           sh "oc create is ecommerce -n ${JENKINS_GOGS_USER}-stage || true"
           sh "oc new-app ecommerce --image-stream=ecommerce --allow-missing-images --allow-missing-imagestream-tags -n ${JENKINS_GOGS_USER}-stage || true"
-          sh "oc expose dc/ecommerce -n ${JENKINS_GOGS_USER}-stage || true"
-          sh "oc expose dc/ecommerce --port 8080 -n ${JENKINS_GOGS_USER}-stage || true"
+          sh "oc expose deployment/ecommerce -n ${JENKINS_GOGS_USER}-stage || true"
+          sh "oc expose deployment/ecommerce --port 8080 -n ${JENKINS_GOGS_USER}-stage || true"
           sh "oc expose svc/ecommerce -n ${JENKINS_GOGS_USER}-stage || true"
         } // script
       }// steps
@@ -126,7 +126,7 @@ pipeline {
           input message: "Do you want to deploy to ${JENKINS_GOGS_USER}-stage?"
         } // timeout
         sh "oc tag ${JENKINS_GOGS_USER}/ecommerce:latest ${JENKINS_GOGS_USER}-stage/ecommerce:latest"
-        sh "oc rollout status dc/ecommerce -n ${JENKINS_GOGS_USER}-stage"
+        sh "oc rollout status deployment/ecommerce -n ${JENKINS_GOGS_USER}-stage"
       } // steps
     } // stage
 
@@ -136,8 +136,8 @@ pipeline {
           sh "set +x ; oc login -u ${JENKINS_GOGS_USER} -p ${JENKINS_SSH_PASSWORD} --insecure-skip-tls-verify https://kubernetes.default.svc"
           sh "oc create is ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
           sh "oc new-app ecommerce --image-stream=ecommerce --allow-missing-images --allow-missing-imagestream-tags -n ${JENKINS_GOGS_USER}-prod || true"
-          sh "oc expose dc/ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
-          sh "oc expose dc/ecommerce --port 8080 -n ${JENKINS_GOGS_USER}-prod || true"
+          sh "oc expose deployment/ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
+          sh "oc expose deployment/ecommerce --port 8080 -n ${JENKINS_GOGS_USER}-prod || true"
           sh "oc expose svc/ecommerce -n ${JENKINS_GOGS_USER}-prod || true"
         } // script
       }// steps
@@ -149,7 +149,7 @@ pipeline {
           input message: "Do you want to deploy to ${JENKINS_GOGS_USER}-prod?"
         } // timeout
         sh "oc tag ${JENKINS_GOGS_USER}-stage/ecommerce:latest ${JENKINS_GOGS_USER}-prod/ecommerce:latest"
-        sh "oc rollout status dc/ecommerce -n ${JENKINS_GOGS_USER}-prod"
+        sh "oc rollout status deployment/ecommerce -n ${JENKINS_GOGS_USER}-prod"
       } // steps
     } // stage
 

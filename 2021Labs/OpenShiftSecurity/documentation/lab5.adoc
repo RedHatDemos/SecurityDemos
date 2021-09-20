@@ -1,0 +1,215 @@
+== Lab 5: Signing Images with Image Signing Operator
+
+=== Goal of Lab 5
+The goal of this lab is to learn about image signing and the capabilities provided by OpenShift and Red Hat Enterprise Linux.
+
+=== Introduction
+
+==== Signing Images
+In order to sign a image you must have a private key.  Others can then use a public key to verify that the image that was signed.
+
+==== Trust Policy
+The trust policy is defined by modifying the following files:
+
+* /etc/containers/policy.json
+ - This file defines whether a signature is needed for a specific repository.
+ - It also defines the public key that is required to verify the signature.
+* /etc/containers/registries.d/{{file/for/repository.yaml}}
+ - The file here contains the location of the signature store for each repository.  This is typically some kind of web server like Apache Httpd.
+
+For more information on the format of these files, please read through the following article: link:https://access.redhat.com/articles/3116561[signing guide].  During the course of this lab exercise, you will also see what these files look like.
+
+==== Signing Operator
+For the purposes of this lab, signing will be done with an operator built to sign images.  This operator is not an officially supported Red Hat product.  It was built by the Red Hat Consulting team and is used by several clients in production.
+
+This operator listens for a custom resource called a ImageSigningRequest.  This triggers the launch of a new Pod that then pulls and signs the requested image.  link:https://github.com/redhat-cop/image-scanning-signing-service/tree/signing-webinar[Github Link - Image Signing Operator]
+
+=== Lab Exercise Requirements
+* OpenShift 4.x cluster with CoreOS worker nodes
+ - It will likely work on any 4.x cluster but has not been specifically tested.
+ - This should be a personal cluster, as changes made will most likely break other users.
+* Cluster admin access
+* oc cli
+
+=== Step 1 - Clone Git Repository
+[source]
+$ git clone https://github.com/redhat-cop/image-scanning-signing-service.git
+$ cd image-scanning-signing-service
+
+=== Step 2 - Install the Operator
+At this point you should be in the directory of the repository you just cloned, and should be logged into a OpenShift cluster as a cluster admin.
+The steps below are very similar to the install directions in the README of the repository cloned, but differ in a few ways.  Please follow the instructions here.  The instructions in the repository tell you how to build from source, and run the operator in a local development mode.  In this lab we will be using images that already exist.
+
+[source]
+----
+$ oc new-project image-management
+$ oc apply -f deploy/crds/imagesigningrequests.cop.redhat.com_imagesigningrequests_crd.yaml
+$ oc apply -f deploy/service_account.yaml
+$ oc apply -f deploy/role.yaml
+$ oc apply -f deploy/role_binding.yaml
+$ oc apply -f deploy/scc.yaml
+$ oc apply -f deploy/secret.yaml
+----
+
+Feel free to explore the files we just applied to the OpenShift clusters.  The first file is the custom resource definition defining the ImageSigningRequest.  The next several files are about permissions, as the pods that run in this operator require elevated permissions.  And the last file is a secret that contains the private key used for signing.
+
+This next batch of files will install the actual operator and the signature store server.
+But first we have to label a specific worker node for signing.  This is not a requirement if you have storage that can be mounted and written to by multiple pods at the same time, but for this lab we assume you do not and we use host path storage.  Because of this the signature store, and the signing pods must run on the same node.
+
+[source]
+$ oc get nodes
+
+Copy the node name of one of the worker nodes. You know its a worker because under the ROLES column it says worker.
+
+[source]
+$ oc label node {paste node name here} type=builder
+
+Now we can finally install the operator and signature store.
+
+[source]
+----
+$ oc apply -f deploy/lab_extras/operator.yaml
+$ oc apply -f deploy/lab_extras/sigstore.yaml
+# Run the following command to take a look at the pods being deployed
+$ oc get pods
+----
+
+=== Step 3 - Set Trust Policy
+In Red Hat CoreOS files should not be modified directly on the nodes.  All configuration should either be done at start up via ignition, or by using machine configs to update clusters after they have been installed.  For more information check out the OpenShift documentation link:https://docs.openshift.com/container-platform/4.3/architecture/architecture-rhcos.html[here.]
+
+Open up `deploy/lab_extras/trust-machineconifg.yaml` and take a look.  You will see three files we are adding to nodes to set up the trust policy.
+
+* `/root/pubkey.gpg`
+ - This is the public key to verify the signatures.
+* `/etc/containers/policy.json`
+ - Here we define that we require signatures for `docker.io` but accept unsigned images from other repositories.
+ - In a production like environment we would want to enforce signatures on all images, but this is useful configuration for a lab.
+* `/etc/containers/registries.d/docker.io.yaml`
+ - Here we define where the signature store is for `docker.io`
+ - In this step we will replace `{{token}}` with the base64 encoded version of this file.
+
+NOTE: We will take a look at plain text version of these files later, but feel free to decode now if you want.
+
+Run the following command to get route for the signature store.  You should still be in the image-management namespace.  If you are not switch back.
+[source]
+$ oc get routes
+
+There should just be a single route, copy the url and paste it into `deploy/lab_extras/registry-conf.yaml` replacing `{{replace_with_sigstore_route}}`
+The url for the route must begin with `http://`. If it does not add it when pasting into the file.
+
+Next we need to base64 encode this file.  If running on a linux system this command is as follows:
+[source]
+$ base64 deploy/lab_extras/registry-conf.yaml -w 0
+
+Copy the result and paste it into `deploy/lab_extras/trust-machineconifg.yaml`.  You should replace `{{token}}.` This must be a single line. That is what the `-w 0` is for.  Telling it to not wrap the result onto a new line.  If using some other tool to encode make sure the result has no new lines in it.
+
+Now apply the machine config.
+[source]
+$ oc apply -f deploy/lab_extras/trust-machineconifg.yaml
+
+This will take a few minutes to update the worker nodes in a cluster.  Wait until all nodes have been updated to move forward.
+To validate that this worked and is finished run the following command:
+[source]
+$ oc get machineconfig
+
+You should see at the bottom of the list something that looks like this `rendered-worker-XXXXXXXXXXXXXX` that was created moments after you applied the machine config.  This combines all the machine configs that apply to a node and renders them into one to be applied.
+
+Now run:
+[source]
+----
+$ oc get machineconfigpools
+# if you want add a -w to the end of the previous command.  It will wait and update with new results.  You must exit when the machineconfigpool is finished being updated.
+----
+
+Wait until the worker is no longer updating. MACHINECOUNT = READYMACHINECOUNT = UPDATEDMACHINECOUNT
+
+==== Step 4  - Explore Worker Nodes
+[source]
+$ oc get nodes
+
+Copy the node name of one of the worker nodes.  You know its a worker because under the ROLES column it says worker.
+
+[source]
+$ oc debug node/{paste node name here}
+
+You should now have a shell on a debug container running on one of the worker nodes.
+Run the following command to use host binaries:
+[source]
+$ chroot /host
+
+This makes it so you have access to the host binaries and file system.  Run the following commands and take a look at the files that control trust on the nodes.
+
+[source]
+----
+$ cat /etc/containers/policy.json
+$ cat /etc/containers/registries.d/docker.io.yaml
+----
+
+Now if we try to pull a image from `docker.io` directly on this node, we should get an error saying the image has not been signed.
+
+[source]
+$ podman pull docker.io/library/mysql
+
+Now exit from the debug pod.
+[source]
+----
+$ exit
+# that exited from from the chroot command.
+$ exit
+# now we are exited from the pod.
+----
+
+=== Step 5 Lets Deploy a Application
+In this step we will sign and deploy an application from docker.io
+
+First lets watch the application fail to deploy.  We will use a basic nginx container to test this.
+[source]
+----
+$ oc new-project nginx-test
+$ oc import-image nginx --from="docker.io/nginxinc/nginx-unprivileged" --confirm
+$ oc new-app nginx
+----
+
+If we set up everything correctly this pod should not have deployed.
+[source]
+----
+$ oc get pods
+# if it is still in status CreatingContainer just run the command a few more times or add -w.
+----
+
+We should see an image pull backoff.  If we describe the pod we can see the events that show the image pull error occurs because the image is not signed.
+[source]
+$ oc describe pod {paste pod id from above}
+
+Now lets sign the image so it can deploy.  Lets take a look at the ImageSigningRequest custom resource.  Open up the file `deploy/lab_extras/signing-request.yaml` and take a look.  You can see we are telling it to sign the latest nginx ImageStreamTag.  Now lets apply that file.
+[source]
+$ oc apply -f deploy/lab_extras/signing-request.yaml
+
+The signing operator is now going to see this new ImageSigningRequest and launch a signing pod to actually sign the image.  Lets take a look at the logs of that signing pod:
+[source]
+----
+$ oc get pods -n image-management
+# copy the pod id of the most recently created pod (its a 32 character hex string)
+$ oc logs -f {paste pod id} -n image-management
+----
+
+You can see that the pod first pulls, then signs the image.
+
+[source]
+$ oc get imagesigningrequests nginx-1 -o yaml
+
+If you look at the status section, it will show you that the signing process completed successfully.
+
+We can take a look at the signature itself too:
+[source]
+$ oc get routes -n image-management
+
+Copy the route url and paste it into your browser as follows: `{route_url}/nginxinc`. If you navigate down, you should see a signature created a few moments ago.  You can click it and download it if you want, but it is just binary content.
+
+By this point the application should have deployed since we created the signature.  OpenShift will periodically retry pulling the image and once the signature is in the signature store the app should deploy.
+[source]
+$ oc get pods
+
+The nginx pod should be running and ready. If it is not you can give it another minute or two, if you want to force a redeployment which will attempt to pull again run this:
+[source]
+$ oc rollout latest nginx

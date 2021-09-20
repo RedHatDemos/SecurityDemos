@@ -1,0 +1,214 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+message: Created a Bookbag instance
+metadata:
+  annotations:
+    openshift.io/display-name: Bookbag
+    tags: gpte
+    template.openshift.io/bindable: "false"
+  name: bookbag 
+objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    annotations:
+      serviceaccounts.openshift.io/oauth-redirectreference.first: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"${NAME}-${SUFFIX}"}}'
+      serviceaccounts.openshift.io/oauth-redirecturi.first: oauth_callback
+      serviceaccounts.openshift.io/oauth-want-challenges: "false"
+    labels:
+      app: ${NAME}-${SUFFIX}
+    name: ${NAME}-${SUFFIX}-user
+- apiVersion: v1
+  kind: RoleBinding
+  metadata:
+    labels:
+      app: ${NAME}-${SUFFIX}
+    name: ${NAME}-${SUFFIX}-admin
+  roleRef:
+    name: admin
+  subjects:
+  - kind: ServiceAccount
+    name: ${NAME}-${SUFFIX}-user
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    labels:
+      app: ${NAME}-${SUFFIX}
+    name: ${NAME}-${SUFFIX}
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        name: ${NAME}-${SUFFIX}
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: ${NAME}-${SUFFIX}
+          name: ${NAME}-${SUFFIX}
+      spec:
+        containers:
+        - env:
+          - name: PROJECT_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: ${NAME}-${SUFFIX}-userinfo
+                key: username
+          - name: GUID
+            valueFrom:
+              configMapKeyRef:
+                name: ${NAME}-${SUFFIX}-userinfo
+                key: guid
+          - name: APPLICATION_NAME
+            value: ${NAME}-${SUFFIX}
+          - name: AUTH_USERNAME
+            value: workshop
+          - name: AUTH_PASSWORD
+            value: workshop
+          - name: CLUSTER_SUBDOMAIN
+          - name: OAUTH_SERVICE_ACCOUNT
+            value: ${NAME}-${SUFFIX}-user
+          - name: DOWNLOAD_URL
+          - name: WORKSHOP_FILE
+          - name: CONSOLE_URL
+            value: http://0.0.0.0:10083
+          - name: OC_VERSION
+          - name: ODO_VERSION
+          - name: KUBECTL_VERSION
+          image: ${IMAGE}
+          imagePullPolicy: ${IMAGE_PULL_POLICY}
+          name: terminal
+          ports:
+          - containerPort: 10080
+            protocol: TCP
+          resources: {}
+          volumeMounts:
+          - mountPath: /opt/workshop/envvars
+            name: envvars
+          - mountPath: /var/run/workshop
+            name: shared
+        - command:
+          - /var/run/workshop/start-console.sh
+          env:
+          - name: BRIDGE_K8S_MODE
+            value: in-cluster
+          - name: BRIDGE_LISTEN
+            value: http://0.0.0.0:10083
+          - name: BRIDGE_BASE_PATH
+            value: /console/
+          - name: BRIDGE_PUBLIC_DIR
+            value: /opt/bridge/static
+          - name: BRIDGE_USER_AUTH
+            value: disabled
+          - name: BRIDGE_BRANDING
+            value: openshift
+          image: quay.io/openshift/origin-console:4.1
+          imagePullPolicy: IfNotPresent
+          name: console
+          resources: {}
+          volumeMounts:
+          - mountPath: /var/run/workshop
+            name: shared
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - /opt/workshop/bin/setup-console.sh
+          env:
+          - name: CLUSTER_SUBDOMAIN
+          - name: OPENSHIFT_PROJECT
+          - name: OPENSHIFT_USERNAME
+          - name: OPENSHIFT_PASSWORD
+          - name: OPENSHIFT_TOKEN
+          - name: OC_VERSION
+          - name: ODO_VERSION
+          - name: KUBECTL_VERSION
+          image: ${IMAGE}
+          imagePullPolicy: ${IMAGE_PULL_POLICY}
+          name: setup-console
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/run/workshop
+            name: shared
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccountName: ${NAME}-${SUFFIX}-user
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: ${NAME}-${SUFFIX}-env
+          name: envvars
+        - emptyDir: {}
+          name: shared
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${NAME}-${SUFFIX}
+    name: ${NAME}-${SUFFIX}
+  spec:
+    ports:
+    - name: 10080-tcp
+      port: 10080
+      protocol: TCP
+      targetPort: 10080
+    selector:
+      name: ${NAME}-${SUFFIX}
+    type: ClusterIP
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: ${NAME}-${SUFFIX}
+    name: ${NAME}-${SUFFIX}
+  spec:
+    port:
+      targetPort: 10080-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ${NAME}-${SUFFIX}
+- apiVersion: v1
+  data:
+    gateway.sh: ""
+    terminal.sh: ""
+    workshop.sh: ""
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: ${NAME}-${SUFFIX}
+    name: ${NAME}-${SUFFIX}-env
+- apiVersion: v1
+  data:
+    username: "waiting..."
+    guid: "waiting..."
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: ${NAME}-${SUFFIX}
+    name: ${NAME}-${SUFFIX}-userinfo
+parameters:
+- name: NAME
+  required: true
+  value: bookbag 
+- name: SUFFIX
+  required: true
+- name: IMAGE
+  required: true
+  value: image-registry.openshift-image-registry.svc:5000/workshop/ocp4-disconnected-install:latest
+- name: IMAGE_PULL_POLICY
+  required: true
+  value: IfNotPresent

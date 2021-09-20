@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+  - name: install Udica lab packages
+    package:
+      name:
+          - udica
+          - podman
+          - container-selinux
+          - setools-console

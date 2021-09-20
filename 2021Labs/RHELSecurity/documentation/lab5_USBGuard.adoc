@@ -1,0 +1,361 @@
+:toc2:
+:linkattrs:
+
+== Lab 5: USBGuard
+
+.*Lab Length*
+* Medium/Average (~15 mins)
+
+.*Goal*
+* Become familiar with the basics of USBGuard
+
+== 5.1: Introduction
+
+USBGuard is a software framework that protects your systems against rogue USB devices by implementing basic whitelisting and blacklisting capabilities based on device attributes. This allows you to define access control for USB devices. For example, you can define what kind of USB devices are authorized and how a USB device may interact with your system. It enables you to lock down all USB devices from user space.
+
+There are three main use cases for USBGuard: USB device whitelisting, USB device blacklisting, and triggering actions on USB device events. USBGuard can permit only known devices to create interfaces to it via USB (also known as USB device whitelisting). Conversely, if a user does not want to use a particular class of interfaces, the user can block devices that want to communicate with the computer as an interface from that class (also known as USB device blacklisting). The final use case for USBGuard is triggering actions on USB device events, such as when a particular USB device or USB device class is inserted or removed. This feature is often used for auditing USB usage or screen locking.
+
+[[Configuration]]
+== 5.2: Reviewing Preconfigured Setup Steps
+
+[IMPORTANT]
+All of the steps in this setup section are already completed for you.
+This section is for reference only so that you know what is already configured in this lab environment.
+
+If you want to read these set up steps later, go directly to the <<Preliminary Knowledge and Concepts for the Lab>>.
+
+This lab is based on a Red Hat^(R)^ Enterprise Linux^(R)^ (RHEL) 8.0 VM residing inside this lab environment. KVM/libvirt is used to create and manage the virtual machine inside the RHEL 8.0 VM.
+
+=== 5.2.1: Reviewing Virtual Machine Naming Information
+
+Note that the instructions in this document refer to one of two VMs (apart from the workstation bastion host VM that is used as the common starting point):
+
+* The name *host* refers to the *USBGuard* VM in this lab environment. The host name of this VM is *usbguard.example.com*.
+
+* The name *usbguard-demo* refers to a VM running on the *host* VM. The VM is managed from inside the *host* VM. No custom host name is assigned to this machine. After logging in via `virsh console`, expect to see *localhost* as the host name.
+
+During the lab, you are asked to run commands on one VM or the other. This requires two parallel shell sessions--one connected to the *host* VM and the other connected to the *usbguard-demo* VM. How to connect from the *host* to *usbguard-demo* is explained in the <<Logging in to the *usbguard-demo* VM>> section.
+
+=== 5.2.2: Creating the Virtual Machine
+
+. Configure `virt-builder` to use the internal RHEL images:
++
+----
+# cat -> /etc/virt-builder/repos.d/rhel.conf <<EOF
+[rhel]
+uri=http://file.rdu.redhat.com/~rjones/builder/index.asc
+EOF
+----
+
+. Create the `usbguard` VM image using `virt-builder` (from the `libguestfs-tools-c` package):
++
+----
+> virt-builder rhel-8.0 -o usbguard-rhel-8.0-vm.qcow2 --format qcow2 --root-password password:redhat --update --install usbguard --install usbguard-tools --install usbutils --install udisks2
+----
+
+=== 5.2.3: Setting Up the Virtual Machine
+
+. Transfer the `usbguard` VM image to the host VM.
+
+. SSH into the host VM and install the *usbguard* VM using `virt-install` (from the `virt-install` package):
++
+----
+[root@usbguard]# virt-install --name usbguard-demo --memory 512 --disk /var/lib/libvirt/images/usbguard-rhel-8.0-vm.qcow2 --graphics none --os-variant rhel8.0 --import
+
+Stop the VM if it is running using virsh:
+
+[root@usbguard]# virsh list
+	Id    Name                           State
+----------------------------------------------------
+	1     usbguard-demo                  running
+
+
+	root@usbguard]# virsh destroy 1
+----
+
+== 5.3: Reviewing Preliminary Knowledge and Concepts for the Lab
+
+[IMPORTANT]
+====
+Read this section carefully.
+====
+
+This section describes some of the workflows, files, and tools used in the lab.
+Make sure you read the <<Simulating Hot Plugging with Virsh>> topic
+and create both the `usb-disk.xml` and `usb-disk-2.xml` files (see the next section) if they do not already exist in your environment.
+Then, if you are familiar with tools such as `lsblk`, `udisksctl` and `virsh`, you can skip the remainder of this section and go straight to the <<Logging in to the *usbguard-demo* VM>> section.
+
+=== 5.3.1: Simulating Hot Plugging with Virsh
+
+Instead of configuring a hot plug passthrough, it is easier to attach and detach USB drives to the VM via `virsh`.
+
+. Create a file called `usb-disk.xml` to be used to create the virtual USB disk with the following contents:
++
+----
+[root@usbguard]# cat usb-disk.xml
+<disk type='file' device='disk'>
+   <driver name='qemu' type='raw' cache='none'/>
+   <source file='/tmp/usb-disk.img'/>
+   <target dev='vdd' bus='usb'/>
+   <serial>RED</serial>
+</disk>
+----
+
+. Create a USB disk using the `usb-disk.xml` file that you created:
++
+----
+[root@usbguard]# dd if=/dev/zero of=/tmp/usb-disk.img bs=1M count=32
+----
++
+Note that you must create the file referenced in the `<source>` file attribute.
++
+Create as many XML files as you want to have available drives with unique serial values.
+
+. Use the same steps to create another USB disk for use in this lab (`usb-disk-2.xml`):
++
+----
+[root@usbguard]# cat usb-disk-2.xml
+<disk type='file' device='disk'>
+   <driver name='qemu' type='raw' cache='none'/>
+   <source file='/tmp/usb-disk-2.img'/>
+   <target dev='vde' bus='usb'/>
+   <serial>BLUE</serial>
+</disk>
+
+[root@usbguard]# dd if=/dev/zero of=/tmp/usb-disk-2.img bs=1M count=32
+----
+
+. From the host VM, use `virsh` to simulate the USB disk hot plug:
++
+----
+[root@usbguard]# virsh attach-device usbguard-demo usb-disk.xml
+[root@usbguard]# virsh detach-device usbguard-demo usb-disk.xml
+----
+
+=== 5.3.2: Viewing *usbguard-demo* VM
+
+The *usbguard-demo* VM, running RHEL 8.0, contains the `usbguard`, `usbguard-tools`, `usbutils`, and `udisks2` packages, which were preinstalled by `virt-builder`.
+
+You can also use `udisksctl` to show the available status of a USB drive in the examples instead of `lsblk`. Where you see `lsblk` in the guide, you can replace it with `udisksctl status`.
+
+. Compare the output of these two commands with the allowed drive attached as `sda`:
++
+----
+[root@localhost]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    1  7.6G  0 disk
+└─sda1   8:1    1  7.6G  0 part
+vda    253:0    0    6G  0 disk
+├─vda1 253:1    0    1G  0 part /boot
+├─vda2 253:2    0  615M  0 part [SWAP]
+└─vda3 253:3    0  4.4G  0 part /
+
+[root@localhost]# udisksctl status
+MODEL                     REVISION  SERIAL                        DEVICE
+--------------------------------------------------------------------------
+VirtIO Disk                                                          vda
+SMI USB DISK              1100      SMI_USB_DISK-0:0        sda
+----
+
+== 5.4: Logging in to the *usbguard-demo* VM
+Most of the steps in this section are performed on the *usbguard-demo* VM residing inside the *host*, *usbguard.example.com* VM. Adding and removing USB drives are done from the RHEL 8.0 *host* VM (*usbguard.example.com*).
+
+. If you are not already there, log in to the workstation bastion host as *lab-user* from your desktop system (replacing `GUID` with your lab-provided GUID and using *r3dh4t1!* as the password):
++
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+----
+
+. Log in to the *usbguard.example.com* host as *root*:
++
+----
+[lab-user@workstation-GUID ~]$ ssh root@usbguard.example.com
+[root@usbguard ~]# export PS1="[\u@\[\e[44m\]\h\[\e[m\] \W]\\$ "
+----
+
+. Start the *usbguard-demo* VM (which resides _inside_ the *usbguard.example.com* VM host) and connect to its console:
++
+----
+[root@usbguard]# hostname
+usbguard
+[root@usbguard]# virsh start usbguard-demo
+[root@usbguard]# virsh console usbguard-demo
+Connected to domain usbguard-demo
+Escape character is ^]
+<ENTER>
+
+Red Hat Enterprise Linux Beta 8.0 (Ootpa)
+Kernel 4.18.0-74.el8.x86_64 on an x86_64
+
+localhost login:
+----
++
+[IMPORTANT]
+====
+You may see a blank console when connecting to the *usbguard-demo* VM if it is slow to start.
+====
+
+. Log in as *root* using *redhat* as the password.
+
+== 5.5: Generating USBGuard Dynamic Policy
+
+In this section, you generate a base policy without any external devices attached. This allows USB hubs and any other system-level USB devices. The default action of USBGuard is to block any device not in the policy.
+
+. On *usbguard-demo*, invoke the following commands to generate a USBGuard policy, enable USBGuard, and list the rules:
++
+----
+[root@localhost ~]# export PS1="[\u@\[\e[41m\]\h\[\e[m\] \W]\\$ "
+[root@localhost]# usbguard generate-policy -X
+[root@localhost]# usbguard generate-policy -X > /etc/usbguard/rules.conf
+[root@localhost]# chmod 0600 /etc/usbguard/rules.conf
+[root@localhost]# systemctl enable usbguard --now
+[root@localhost]# usbguard list-rules
+----
+
+. Attach a USB drive to see the effect of a blocking policy.
++
+You can see the device in the USB tree, but it is not available for mounting. The native USBGuard tools see the device and show the current action for it.
+
+. Open a separate terminal shell and repeat the steps in the <<Logging in to the *usbguard-demo* VM>> section to log in to the *host* *usbguard.example.com* VM as *root*.
+
+. On *host*, invoke the following:
++
+----
+[root@usbguard]# hostname
+usbguard
+[root@usbguard]# dd if=/dev/zero of=/tmp/usb-disk.img bs=1M count=32
+[root@usbguard]# virsh attach-device usbguard-demo usb-disk.xml
+----
+
+. On *usbguard-demo*, invoke the following:
++
+----
+[root@localhost]# lsusb
+[root@localhost]# lsblk
+[root@localhost]# usbguard list-devices
+[root@localhost]# usbguard list-devices --blocked
+----
++
+USBGuard allows administrators to dynamically change the action on a specific device.
+
+. On *usbguard-demo*, change the policy on the USB drive and see that it becomes available for mounting when allowed:
++
+----
+[root@localhost]# usbguard list-devices --blocked
+  11: block id 46f4:0001 serial "RED" name "QEMU USB HARDDRIVE" hash "AKmuakTNktSfF54t2IHFRMaukoUw47v3lu/9ZebOsNo=" parent-hash "CsKOZ6IY8v3eojsc1fqKDW84V+MMhD6HsjjojcZBjSg=" via-port "1-2" with-interface 08:06:50
+----
++
+[IMPORTANT]
+====
+The device number, `*11*` in this output, may be different from your output. Make sure to use the number that is in your output in the following commands.
+====
++
+----
+[root@localhost]# usbguard allow-device 11
+[root@localhost]# usbguard list-devices
+[root@localhost]# usbguard list-rules
+[root@localhost]# lsblk
+
+[root@localhost]# usbguard block-device 11
+[root@localhost]# usbguard list-devices
+----
++
+Setting `dynamic block` and `allow` works in the current boot, but they do not survive a reboot. To make the policy settings permanent, you must update the policy in `/etc/usbguard/rules.conf`.
+
+=== 5.5.1: Creating USBGuard Permanent Policy
+
+. On *usbguard-demo*, use the same dynamic commands to create a permanent entry in addition to immediate action using the `-p` option:
++
+----
+[root@localhost]# usbguard allow-device -p 11
+[root@localhost]# usbguard list-rules
+[root@localhost]# cat /etc/usbguard/rules.conf
+
+[root@localhost]# usbguard block-device -p 11
+[root@localhost]# usbguard list-rules
+
+[root@localhost]# usbguard allow-device -p 11
+[root@localhost]# usbguard list-rules
+----
+
+=== 5.5.2: (Optional) Testing USBGuard Policy for Multiple USB Devices
+
+This policy was created for a specific device. In this section, you test whether other USB devices are blocked by adding a second USB drive from the host. The _hash_ is calculated by USBGuard to identify individual devices.
+
+
+. On *host*, run the following to create and attach a USB disk:
++
+----
+[root@usbguard]# dd if=/dev/zero of=/tmp/usb-disk-2.img bs=1M count=32
+[root@usbguard]# virsh attach-device usbguard-demo usb-disk-2.xml
+----
+
+. On *usbguard-demo*, execute the following:
++
+----
+[root@localhost]# usbguard list-devices
+----
+
+=== 5.5.3: Rejecting USB Device via USBGuard Policy
+
+Policies built to allow or block specific devices are useful when devices can be vetted and identified. For other environments, more flexible rules based on device characteristics are useful. Blocking devices in this environment may not be strict enough. You can also reject devices, which tells the kernel to remove the device from the system. A rejected device is not visible in the output of `lsusb`, `usbguard list-devices` or in the `/sys/bus/usb/devices` tree.
+
+In this section, you generate a new base policy with the `reject` action. You also investigate how the `reject` action differs from the `block` action. The journal records the kernel action as well as the USBguard action.
+
+. On *host*, run the following:
++
+----
+[root@usbguard]# virsh detach-device usbguard-demo usb-disk.xml
+----
+
+. On *usbguard-demo*, invoke the following:
++
+----
+[root@localhost]# systemctl stop usbguard
+[root@localhost]# usbguard generate-policy -X -t reject > /etc/usbguard/rules.conf
+[root@localhost]# cat /etc/usbguard/rules.conf
+[root@localhost]# systemctl start usbguard
+[root@localhost]# usbguard list-rules
+----
+
+. On *host*, execute the following:
++
+----
+[root@usbguard]# virsh attach-device usbguard-demo usb-disk.xml
+----
+
+. On *usbguard-demo*, run the following and examine the highlighted the entries in the logs:
++
+----
+[root@localhost]# lsusb
+[root@localhost]# lsblk
+[root@localhost]# journalctl -b -e
+
+----
++
+image:images/lab5.1.5-reject.png[500,500]
++
+Note the *Device is not authorized* line on the `journalctl` output. As mentioned before, the journal records the kernel action as well as the USBguard action.
+
+
+. Remove the USBGuard rules configuration file and exit:
++
+----
+[root@localhost]# rm /etc/usbguard/rules.conf
+[root@localhost]# exit
+----
+
+=== 5.5.4: (Optional) Resetting VM Steps
+If you want to start this lab from scratch, make sure to perform these reset VM steps.
+
+. On *host*, invoke the following:
++
+----
+[root@usbguard]# virsh detach-device usbguard-demo usb-disk.xml
+[root@usbguard]# virsh detach-device usbguard-demo usb-disk-2.xml
+[root@usbguard]# virsh destroy 1
+----
+
+<<top>>
+link:README.adoc#table-of-contents[Table of Contents^] | link:lab6_Audit.adoc[Lab 6: Audit^]
+
