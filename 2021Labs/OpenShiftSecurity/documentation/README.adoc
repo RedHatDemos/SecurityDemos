@@ -13,6 +13,7 @@
 
 === [.underline]#Additional Lab Developers#:
 *Roberto Carratala Sanchez*, Senior Specialist Solution Architect, Red Hat^(R)^
+
 *Shanna Chan*, Senior Solutions Architect, Red Hat^(R)^
 
 == Lab Overview:
