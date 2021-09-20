@@ -1,16 +1,19 @@
 = Implementing Multi-Layer Container and Kubernetes Security with OpenShift for Automated DevSecOps
 
 === [.underline]#Presenters/Lab Developers#:
-*Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
+*Lucy Kerner*, Director, Security Global Strategy and Evangelism, Red Hat^(R)^
 
 *Khary Mendez*, Senior Principal Consultant , Red Hat^(R)^
 
-*Andy Block*, Senior Principal Consultant, Red Hat^(R)^
+*Andy Block*, Distinguished Architect - Services, Red Hat^(R)^
 
 *Mike Surbey*, Specialist Solution Architect, Red Hat^(R)^
 
-*Justin Goldsmith*, Senior Architect, Red Hat^(R)^
+*Justin Goldsmith*, Principal Architect, Red Hat^(R)^
 
+=== [.underline]#Additional Lab Developers#:
+*Roberto Carratala Sanchez*, Senior Specialist Solution Architect, Red Hat^(R)^
+*Shanna Chan*, Senior Solutions Architect, Red Hat^(R)^
 
 == Lab Overview:
 In this hands-on lab, we will cover the comprehensive container and Kubernetes security capabilities available in Red Hat OpenShift. You will gain experience with:
