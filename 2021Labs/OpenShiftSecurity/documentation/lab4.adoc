@@ -422,7 +422,7 @@ image:images/lab4-devsecops43.png[300,300]
 .. Login as user admin and please run the follow command to get the auto generated password as shown below:
 +
 ....
-argoPass=$(oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d)
+oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d
 ....
 +
 .. Once logged in, you will see the applications from the Argo CD console as shown below.
