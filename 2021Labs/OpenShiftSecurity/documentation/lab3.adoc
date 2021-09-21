@@ -7,7 +7,7 @@ The goal of this lab is to learn about the capabilities provided by OpenShift Ro
 
 === Introduction
 
-OpenShift, being a secure platform by default, has included support for authentication and authorization since the beginning of its Kubernetes lineage with version 3.0. Since that time, many of the features that were originally found in OpenShift have been upstreamed and are now part of Kubernetes itself. As part of this lab, you will learn the differences between authentication and authorization including how they are implemented within OpenShift along with how they can be configured. Finally, you will use an application running within the platform to extend your knowledge of authentication and authorization to configure custom policies for the application to access cluster based resources.
+OpenShift, being a secure platform by default, has included support for authentication and authorization since the beginning of its Kubernetes lineage with version 3.0. Kubernetes originally did not have any form of Role Based Access Control and the work that was pioneered in OpenShift was eventually upstreamed and is now part of core capabilities of Kubernetes. As part of this lab, you will learn the differences between authentication and authorization including how they are implemented within OpenShift along with how they can be configured. Finally, you will use an application running within the platform to extend your knowledge of authentication and authorization to configure custom policies for the application to access cluster based resources.
 
 
 === Authentication and Authorization in OpenShift
@@ -19,7 +19,7 @@ Within the context of security, two of the fundamental terms are Authentication 
 
 === OpenShift Authentication
 
-There are multiple forms that identifies a user in OpenShift including the following:
+A _User_ is an entity that can make requests against the OpenShift API. They are broken out in the following types:
 
 * Regular users - Typical individuals that access the cluster
 * System users - For use by infrastructure related assets, such as _nodes_
@@ -34,9 +34,9 @@ Authentication against the OpenShift API is accomplished using one of the follow
 
 ==== OpenShift OAuth Server and Identity Providers
 
-OpenShift contains an included OAuth server for allowing users to obtain access tokens for communicating with the API. The OAuth server can integrate with a number of identity providers that stores information about users. Common examples are link:https://docs.openshift.com/container-platform/4.1/authentication/identity_providers/configuring-ldap-identity-provider.html#configuring-ldap-identity-provider[LDAP], link:https://docs.openshift.com/container-platform/4.1/authentication/identity_providers/configuring-htpasswd-identity-provider.html#configuring-htpasswd-identity-provider[HTPasswd] and link:https://docs.openshift.com/container-platform/4.1/authentication/identity_providers/configuring-oidc-identity-provider.html#configuring-oidc-identity-provider[OpenID Connect (OIDC)].
+OpenShift contains an included OAuth server for allowing users to obtain access tokens for communicating with the API. The OAuth server can integrate with a number of identity providers that stores information about users. Common examples are link:https://docs.openshift.com/container-platform/4.7/authentication/identity_providers/configuring-ldap-identity-provider.html#configuring-ldap-identity-provider[LDAP], link:https://docs.openshift.com/container-platform/4.7/authentication/identity_providers/configuring-htpasswd-identity-provider.html#configuring-htpasswd-identity-provider[HTPasswd] and link:https://docs.openshift.com/container-platform/4.7/authentication/identity_providers/configuring-oidc-identity-provider.html#configuring-oidc-identity-provider[OpenID Connect (OIDC)].
 
-A full discussion on OpenShift authentication can be found within the link:https://docs.openshift.com/container-platform/4.1/authentication/understanding-authentication.html[OpenShift Documentation].
+A full discussion on OpenShift authentication can be found within the link:https://docs.openshift.com/container-platform/4.7/authentication/understanding-authentication.html[OpenShift Documentation].
 
 === OpenShift API
 
@@ -67,7 +67,7 @@ To simplify access within the platform, several default cluster roles are automa
 * `self-provisioner` - A user that can create their own projects.
 * `view` - A user who cannot make any modifications, but can see most objects in a project. They cannot view or modify roles or bindings.
 
-More information on OpenShift RBAC can be found in the link:https://docs.openshift.com/container-platform/4.1/authentication/using-rbac.html[OpenShift Documentation].
+More information on OpenShift RBAC can be found in the link:https://docs.openshift.com/container-platform/4.7/authentication/using-rbac.html[OpenShift Documentation].
 
 
 === Lab Implementation
@@ -113,28 +113,40 @@ Using the OpenShift CLI, ensure that you are logged into the cluster and change 
 
 [source]
 ----
-# oc project rbac-lab
+$ oc project rbac-lab
 ----
 
 Once in the project, list the running pods by typing *oc get pods*.
 
 [source]
 ----
-# oc get pods
+$ oc get pods
+----
 
+[source]
+----
 NAME                      READY   STATUS      RESTARTS   AGE
 openshift-rbac-1-build    0/1     Completed   0          5h9m
 openshift-rbac-1-deploy   0/1     Completed   0          5h7m
 openshift-rbac-1-xgh4g    1/1     Running     0          5h7m
 ----
 
-Next, start a remote shell session in the running pod and list the contents of the `/var/run/secrets/kubernetes.io/serviceaccount` directory
+Next, start a remote shell session in the running pod.
 
 [source]
 ----
-# oc rsh $(oc get pod -l=app=openshift-rbac -o jsonpath="{ .items[0].metadata.name }")
-sh-4.2$ ls -l /var/run/secrets/kubernetes.io/serviceaccount
+$ oc rsh $(oc get pod -l=app=openshift-rbac -o jsonpath="{ .items[0].metadata.name }")
+----
 
+Once a session has been established within the pod, list the contents of the `/var/run/secrets/kubernetes.io/serviceaccount` directory
+
+[source]
+----
+sh-4.2$ ls -l /var/run/secrets/kubernetes.io/serviceaccount
+----
+
+[source]
+----
 total 0
 lrwxrwxrwx. 1 root root 13 Apr 25 14:35 ca.crt -> ..data/ca.crt
 lrwxrwxrwx. 1 root root 16 Apr 25 14:35 namespace -> ..data/namespace
@@ -153,28 +165,18 @@ The contents provided in this directory make it possible for applications to que
 
 [source]
 ----
-sh-4.2$ curl https://kubernetes.default.svc
-
-curl: (60) Peer's certificate issuer has been marked as not trusted by the user.
-More details here: http://curl.haxx.se/docs/sslcerts.html
-
-curl performs SSL certificate verification by default, using a "bundle"
- of Certificate Authority (CA) public keys (CA certs). If the default
- bundle file isn't adequate, you can specify an alternate file
- using the --cacert option.
-If this HTTPS server uses a certificate signed by a CA represented in
- the bundle, the certificate verification probably failed due to a
- problem with the certificate (it might be expired, or the name might
- not match the domain name in the URL).
-If you'd like to turn off curl's verification of the certificate, use
- the -k (or --insecure) option.
+[sh-4.4] curl https://kubernetes.default.svc
 ----
 
-The error displayed indicates that the certificate for Kubernetes is not trusted. Fortunately, we have the CA for Kubernetes in our pod that we can specify. Execute the following command that refers to the CA file as described previously.
+Executing the command will result in an error being displayed and indicates that the certificate for Kubernetes is not trusted. Fortunately, we have the CA for Kubernetes in our pod that we can specify. Execute the following command that refers to the CA file as described previously.
 
 [source]
 ----
-sh-4.2$ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt https://kubernetes.default.svc
+[sh-4.4] $ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt https://kubernetes.default.svc
+----
+
+[source]
+----
 {
   "kind": "Status",
   "apiVersion": "v1",
@@ -195,6 +197,10 @@ Better. We are able to invoke the API, but we are receiving _Forbidden_ error. N
 [source]
 ----
 sh-4.2$ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" https://kubernetes.default.svc
+----
+
+[source]
+----
 {
   "paths": [
     "/api",
@@ -235,8 +241,11 @@ Execute the following command to create a new `Role` called `pod-lister` that gr
 
 [source]
 ----
-# oc create role pod-lister --verb=list --resource=pods
+$ oc create role pod-lister --verb=list --resource=pods
+----
 
+[source]
+----
 role.rbac.authorization.k8s.io/pod-lister created
 ----
 
@@ -244,8 +253,11 @@ We can view the contents of the `pod-lister` role by executing the following com
 
 [source]
 ----
-# oc get role pod-lister -o yaml
+$ oc get role pod-lister -o yaml
+----
 
+[source]
+----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -272,7 +284,7 @@ Execute the following command to create a new `RoleBinding` called `pod-listers`
 
 [source]
 ----
-# oc create rolebinding pod-listers --role=pod-lister --serviceaccount=rbac-lab:default
+$ oc create rolebinding pod-listers --role=pod-lister --serviceaccount=rbac-lab:default
 ----
 
 The `--serviceacount` flag takes the form `<namespace>:<serviceaccount>`
@@ -281,8 +293,11 @@ View the contents of the `RoleBinding` by executing the following command:
 
 [source]
 ----
-# oc get rolebinding pod-listers -o yaml
+$ oc get rolebinding pod-listers -o yaml
+----
 
+[source]
+----
 kind: RoleBinding
 metadata:
   creationTimestamp: "2020-04-26T16:08:25Z"
@@ -313,7 +328,7 @@ Execute the following command to create a new _ClusterRole_ called `namespace-li
 
 [source]
 ----
-# oc create clusterrole namespace-lister --verb=list --resource=namespace
+$ oc create clusterrole namespace-lister --verb=list --resource=namespace
 ----
 
 NOTE: If you receive an authorization error, be sure that you are logged into OpenShift using an account with elevated access.
@@ -322,7 +337,7 @@ Now, create a `ClusterRoleBinding` to associate the `pod-lister` _ClusterRole_ t
 
 [source]
 ----
-# oc create clusterrolebinding namespace-listers --clusterrole=namespace-lister --serviceaccount=rbac-lab:default
+$ oc create clusterrolebinding namespace-listers --clusterrole=namespace-lister --serviceaccount=rbac-lab:default
 ----
 
 With the _ClusterRole_ and _ClusterRoleBinding_ created, return once again to the application in the web browser and refresh the page. The second query should now display a valid response.
@@ -354,23 +369,29 @@ Notice how the `apiGroups` field is empty. This indicates that the desired resou
 
 [source]
 ----
-# oc api-resources
+$ oc api-resources
+----
 
-NAME                                  SHORTNAMES       APIGROUP                              NAMESPACED   KIND
-bindings                                                                                     true         Binding
-componentstatuses                     cs                                                     false        ComponentStatus
-mutatingwebhookconfigurations                          admissionregistration.k8s.io          false        MutatingWebhookConfiguration
-validatingwebhookconfigurations                        admissionregistration.k8s.io          false        ValidatingWebhookConfiguration
-customresourcedefinitions             crd,crds         apiextensions.k8s.io                  false        CustomResourceDefinition
-apiservices                                            apiregistration.k8s.io                false        APIService
-controllerrevisions                                    apps                                  true         ControllerRevision
-daemonsets                            ds               apps                                  true         DaemonSet
-deployments                           deploy           apps                                  true         Deployment
-replicasets                           rs               apps                                  true         ReplicaSet
+[source]
+----
+NAME                                  SHORTNAMES         APIVERSION                                    NAMESPACED   KIND
+bindings                                                 v1                                            true         Binding
+componentstatuses                     cs                 v1                                            false        ComponentStatus
+configmaps                            cm                 v1                                            true         ConfigMap
+endpoints                             ep                 v1                                            true         Endpoints
+events                                ev                 v1                                            true         Event
+mutatingwebhookconfigurations                            admissionregistration.k8s.io/v1               false        MutatingWebhookConfiguration
+validatingwebhookconfigurations                          admissionregistration.k8s.io/v1               false        ValidatingWebhookConfiguration
+customresourcedefinitions             crd,crds           apiextensions.k8s.io/v1                       false        CustomResourceDefinition
+apiservices                                              apiregistration.k8s.io/v1                     false        APIService
+apirequestcounts                                         apiserver.openshift.io/v1                     false        APIRequestCount
+controllerrevisions                                      apps/v1                                       true         ControllerRevision
+daemonsets                            ds                 apps/v1                                       true         DaemonSet
+deployments                           deploy             apps/v1                                       true         Deployment
 ...
 ----
 
-You can also add the `--namespaced` flag to limit resources that are either namespaced or cluster scoped.
+The _APIVERSION_ column is a representation of both the version and the API group. Notice how the first few results only include the version `v1`. This indicates that they are part of the core group while _daemonsets_ are part of the _apps_ group. You can also add the `--namespaced` flag to limit resources that are either namespaced or cluster scoped.
 
 For the final exercise, we will make use of a resource outside of the core API group to query all registered users.
 
@@ -382,8 +403,11 @@ The `--as` flag can be used to specify the user to impersonate. When combined wi
 
 [source]
 ----
-# oc auth can-i list users
+$ oc auth can-i list users
+----
 
+[source]
+----
 Warning: resource 'users' is not namespace scoped in group 'user.openshift.io'
 yes
 ----
@@ -394,8 +418,11 @@ Now, use the User Impersonation capabilities to determine if the _default_ Servi
 
 [source]
 ----
-# oc auth can-i list users --as=system:serviceaccount:rbac-lab:default
+$ oc auth can-i list users --as=system:serviceaccount:rbac-lab:default
+----
 
+[source]
+----
 Warning: resource 'users' is not namespace scoped in group 'user.openshift.io'
 no
 ----
@@ -412,9 +439,12 @@ The first step is to determine the API group that users are part of. Use the `oc
 
 [source]
 ----
-# oc api-resources | grep users
+$ oc api-resources | grep users
+----
 
-users                                                  user.openshift.io                     false        User
+[source]
+----
+users                                                  user.openshift.io/v1                     false        User
 ----
 
 The first column indicates the resource while the second column indicates the API Group.
@@ -423,7 +453,7 @@ Now that we know the API Group users are part of, we can create a ClusterRole ca
 
 [source]
 ----
-# oc create clusterrole user-lister --verb=list --resource=users.user.openshift.io
+$ oc create clusterrole user-lister --verb=list --resource=users.user.openshift.io
 ----
 
 The combination of the resource name and the API Group is used in the `--resource` flag.
@@ -432,7 +462,7 @@ Finally, create a `ClusterRoleBinding` to grant access to the default Service Ac
 
 [source]
 ----
-# oc create clusterrolebinding user-listers --clusterrole=user-lister --serviceaccount=rbac-lab:default
+$ oc create clusterrolebinding user-listers --clusterrole=user-lister --serviceaccount=rbac-lab:default
 ----
 
 While we could confirm that the application can now query for users, let's use User Impersonation to determine ahead of time whether the default Service Account has the appropriate rights.
@@ -441,8 +471,11 @@ Execute the following command to impersonate the default Service Account:
 
 [source]
 ----
-# oc auth can-i list users --as=system:serviceaccount:rbac-lab:default
+$ oc auth can-i list users --as=system:serviceaccount:rbac-lab:default
+----
 
+[source]
+----
 Warning: resource 'users' is not namespace scoped in group 'user.openshift.io'
 yes
 ----
@@ -450,6 +483,8 @@ yes
 With access verified, navigate to the application in the web browser and refresh the page to confirm all of the queries against the OpenShift API return valid results.
 
 image:images/lab3.3-users-list-application.png[]
+
+By completing this lab, you should have a better understanding of the key components of OpenShift's Role Based Access Control and how these capabilities provide for a more secure operating environment.
 
 <<top>>
 
