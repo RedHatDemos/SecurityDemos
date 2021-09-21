@@ -127,7 +127,7 @@ echo $POD
 +
 image:images/lab2.1-echopod.png[]
 +
-This returns this returns *client*, which is the pod name.
+This returns *client*, which is the pod name.
 Next, go into the pod and curl the service in project, *proj-c*. Notice that this is allowed since it's open access by default.
 +
 [source]
