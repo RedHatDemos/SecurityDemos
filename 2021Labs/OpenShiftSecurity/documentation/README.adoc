@@ -1,6 +1,6 @@
 = Implementing Multi-Layer Container and Kubernetes Security with OpenShift for Automated DevSecOps
 
-=== [.underline]#Presenters/Lab Developers#:
+=== [.underline]Lab Developers#:
 *Lucy Kerner*, Director, Security Global Strategy and Evangelism, Red Hat^(R)^
 
 *Khary Mendez*, Senior Principal Consultant , Red Hat^(R)^
@@ -11,7 +11,6 @@
 
 *Justin Goldsmith*, Principal Architect, Red Hat^(R)^
 
-=== [.underline]#Additional Lab Developers#:
 *Roberto Carratala Sanchez*, Senior Specialist Solution Architect, Red Hat^(R)^
 
 *Shanna Chan*, Senior Solutions Architect, Red Hat^(R)^
