@@ -124,7 +124,7 @@ The command line is a convenient way to start the pipeline while testing, and it
 .. Run:
 +
 |===
-|oc create -f https://raw.githubusercontent.com/piggyvenus/devsecops-demo/develop/run/pipeline-build-dev-run.yaml[https://raw.githubusercontent.com/piggyvenus/devsecops-demo/develop/run/pipeline-build-dev-run.yaml] -n ocp-workshop
+|oc create -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml[https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml] -n ocp-workshop
 |===
 +
 ** Option 3: When new code is pushed to the git repo, it will also trigger the pipeline to start.
@@ -609,12 +609,12 @@ image:images/lab4-devsecops93.png[300,700]
 . Apply the new update task from your command terminal:
 +
 |===
-|kubectl apply -f ++https://raw.githubusercontent.com/piggyvenus/devsecops-docs/main/s2ijava-mgr.yaml++ --namespace=ocp-workshop
+|kubectl apply -f ++https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml++ --namespace=ocp-workshop
 
 |===
 +
 . Re-run the pipeline, your deployment now succeeds. Congratulations to the developers!
-[Note] You can check the https://raw.githubusercontent.com/rcarrata/devsecops-demo/main/fix-image/s2ijava-mgr.yaml[*fix-image/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed. We have added a step to the build task, and we leverage buildah to remove the package managers from the image (search for "rpm" or "yum" in the file).
+[Note] You can check the https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml[*labs-artifacts/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed. We have added a step to the build task, and we leverage buildah to remove the package managers from the image (search for "rpm" or "yum" in the file).
 +
 image:images/lab4-devsecops94.png[300,700]
 
