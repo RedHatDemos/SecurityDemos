@@ -2,7 +2,7 @@
 
 === Lab Objective
 
-The goal of this lab is to learn how to build a secure software factory that orchestrates a combination of different security tools. With the advent of DevSecOps, security is put front and center - it is addressed in terms of people, processes, and technology. Security tools are integrated right into the build process and you could easily break the build if security requirements are not met with the security gates that you build into your CI/CD pipeline.
+The goal of this lab is to learn how to build a secure software factory that orchestrates a combination of different security tools. With the advent of DevSecOps, security is put front and center - it is addressed in terms of people, processes, and technology. Security tools are integrated right into the build process and we could easily break the build if security requirements are not met with the security gates that we build into the CI/CD pipeline.
 
 === Introduction
 
@@ -14,8 +14,8 @@ image:images/lab4-devsecops01.png[800,800]
 
 In our DevSecOps CI/CD pipeline we will be using several technologies such as:
 
-- https://www.openshift.com/learn/topics/ci-cd[OpenShift Pipelines] based on Tekton
-- https://www.openshift.com/blog/announcing-openshift-gitops[OpenShift GitOps] based on ArgoCD
+- https://www.openshift.com/learn/topics/ci-cd[OpenShift Pipelines] based on https://tekton.dev[Tekton]
+- https://www.openshift.com/blog/announcing-openshift-gitops[OpenShift GitOps] based on https://argoproj.github.io/[ArgoCD]
 - https://www.redhat.com/en/resources/advanced-cluster-security-for-kubernetes-datasheet[Red Hat Advanced Cluster Security for Kubernetes]
 - https://docs.openshift.com/container-platform/latest/registry/architecture-component-imageregistry.html[OpenShift Container Registry]
 - https://www.sonarqube.org/[SonarQube]
@@ -29,7 +29,7 @@ In our DevSecOps CI/CD pipeline we will be using several technologies such as:
 [#beforeyoustart]
 === Before you start
 
-The information from your instructor will be used in this lab:
+The information from the instructor will be used in this lab:
 
 - Access to RHEL 8 VM (bastion) with username and password
 - OpenShift Console URL
@@ -45,14 +45,14 @@ image:images/lab4-devsecops02.png[800,800]
 - Up-To-Date Browser: Chrome and Firefox recommended
 - Command-line with ‘oc’ tool is included in the bastion VM that comes with the lab.
 
-* SSH into your assigned VM similar to the below command:
+* SSH into the assigned VM similar to the below command:
 +
 |===
 | ssh lab-user@bastion.GUID.sandbox####.opentlc.com
 
 |===
 +
-* To check if you have the oc command line utility, open the terminal and run the following command:
+* To check if the oc command line utility is available, open the terminal and run the following command:
 +
 |===
 | oc version
@@ -68,7 +68,7 @@ image:images/lab4-devsecops02.png[800,800]
 +
 API server information for ‘oc login’ can be found in the xref:beforeyoustart[Before You Start].
 +
-* Alternatively, if you want to setup oc client on your laptop, perform the following steps:
+* Alternatively, if we want to setup oc client on our laptop, perform the following steps:
 +
 ** Login to the OpenShift console. OpenShift console admin user password information is provided by the instructor.
 Select the question mark in the top right corner and select “Command Line Tools”
@@ -76,7 +76,7 @@ Select the question mark in the top right corner and select “Command Line Tool
 image:images/lab4-devsecops03.png[200,200]
 +
 ** Download the oc command line tool for the operating system of your choice.
-** Move the oc command line tool to your system executables location for simplicity of access throughout the exercise.
+** Move the oc command line tool to the system executables location for simplicity of access throughout the exercise.
 +
 |===
 |For example, on Macbook, run the command mv <insert-download-path> /usr/local/bin ++/usr/local/bin/
@@ -87,14 +87,14 @@ image:images/lab4-devsecops03.png[200,200]
 
 === Lab 4.1 Continuous Integration
 
-This first module will run an OpenShift Pipeline and let you explore the steps in a sample secure pipeline. +
-In this lab, you will learn how to start the Tekton pipeline and how to use the tasks to integrate the security and gitops tools within the development lifecycle.
+This first module will run an OpenShift Pipeline and let us explore the steps in a sample secure pipeline. +
+In this lab, we will learn how to start the Tekton pipeline and how to use the tasks to integrate the security and gitops tools within the development lifecycle.
 
 . There are three ways to start the pipeline:
 ** Option 1: Use Developer UI to start
-.. Browse to the OpenShift Console URL in your browser
-.. Login to the console using your provided credentials
-.. If you are not already in the Developer Perspective, select Developer to switch to the developer console in the top left corner.
+.. Browse to the OpenShift Console URL in the browser
+.. Login to the console using the provided credentials
+.. If we are not already in the Developer Perspective, select Developer to switch to the developer console in the top left corner.
 +
 image:images/lab4-devsecops04.png[200,200]
 +
@@ -114,7 +114,7 @@ image:images/lab4-devsecops07.png[600,800]
 +
 image:images/lab4-devsecops08.png[200,700]
 +
-.. Under “Workspaces”, select PVC and then choose the PVC petclinic-build-workspace as the shared storage path that your pipelines will use at runtime.
+.. Under “Workspaces”, select PVC and then choose the PVC petclinic-build-workspace as the shared storage path that the pipelines will use at runtime.
 .. Under “maven-settings” select Config Map and choose “maven-settings” as the Config Map
 .. Click start
 +
@@ -130,8 +130,8 @@ The command line is a convenient way to start the pipeline while testing, and it
 ** Option 3: When new code is pushed to the git repo, it will also trigger the pipeline to start.
 This option may be the most popular from a developer perspective. The pipeline starts from a PR or a push into the git repo and the webhook automatically starts the pipeline.
 +
-.. From the dev console, click `Search` on the left nav menu
-.. Type 'route' and click `Route` from the list
+.. From the dev console, click `Search` on the left nav menu.
+.. Type 'route' and click `Route` from the list.
 +
 image:images/lab4-devsecops09.png[400,400]
 +
@@ -156,25 +156,25 @@ image:images/lab4-devsecops12.png[400,700]
 +
 image:images/lab4-devsecops13.png[400,700]
 +
-.. Commit the change that you introduced into the README.md:
+.. Commit the change that we introduced into the README.md:
 +
 image:images/lab4-devsecops14.png[400,700]
 +
-[NOTE] This is only for demo purposes. Usually the push to master is not recommended, and it’s a Pull Request / Merge Request from another branch (such as develop) that is used instead.
+[Note] This is only for demo purposes. Usually the push to master is not recommended, and it’s a Pull Request / Merge Request from another branch (such as develop) that is used instead.
 +
 .. The pipeline will start automatically, so jump to step 6 to see the Pipeline Runs console in order to check the pipeline running.
 +
-. Open the browser using the provided OpenShift console URL
-. Login to the console using the provided credential
-. Click to `Developer` to switch to the developer console
+. Open the browser using the provided OpenShift console URL.
+. Login to the console using the provided credential.
+. Click to `Developer` to switch to the developer console.
 +
 image:images/lab4-devsecops04.png[200,200]
 +
-. Make sure you are in the `ocp-workshop` project
+. Make sure the `ocp-workshop` project is selected.
 +
 image:images/lab4-devsecops15.png[300,300]
 +
-. Click `Pipelines` on the left menu to view all pipelines
+. Click `Pipelines` on the left menu to view all pipelines.
 +
 image:images/lab4-devsecops16.png[400,700]
 +
@@ -182,9 +182,9 @@ image:images/lab4-devsecops16.png[400,700]
 +
 image:images/lab4-devsecops17.png[400,700]
 +
-.  Click onto the Pipeline Run
+.  Click onto the Pipeline Run.
 +
-You will see the Pipeline Run as shown below when it starts.
+Please see the Pipeline Run as shown below when it starts.
 +
 image:images/lab4-devsecops18.png[500,700]
 +
@@ -192,20 +192,21 @@ When the pipeline run completes, this is the view.
 +
 image:images/lab4-devsecops19.png[500,700]
 +
-[Note] Step “image-check” has failed in your pipeline run. This is due to an important severity vulnerability in the image being caught by a pipeline gate policy, stopping the deployment:
+[Note] Step “image-check” has failed in the pipeline run. This is due to an important severity vulnerability in the image being caught by a pipeline gate policy, stopping the deployment:
 +
 image:images/lab4-devsecops20.png[500,700]
 +
-The next module, lab 4.2 will walk you through what’s happened and how to resolve it securely. +
+The next module, lab 4.2 will walk through what’s happened and how to resolve it securely. +
 [Note] In addition to triggering a pipeline run manually, every push to the spring-petclinic git repository on the Gogs git server executes the pipeline.
-. Explore the pipeline! Once the pipeline is started, you can click on each detailed step to explore logs for each step. We’ll direct some of the explorations in the next few steps.
-.. *Source Clone* - app source code is pulled from the Git (Gogs) server installed in your lab.
+. Explore the pipeline! Once the pipeline is started, we can click on each detailed step to explore logs for each step. We’ll direct some of the explorations in the next few steps.
+.. *Source Clone* - app source code is pulled from the Git (Gogs) server installed in this lab.
++
 [Note] Files persist between steps in the pipeline via workspace that is pre-defined in the pipeline.
 +
 image:images/lab4-devsecops24.png[400,700]
 +
 ... Copy the git repo URL. Open a browser tab to explore the code
-... The URL should take you to the Gogs git repo as shown below.
+... The URL takes us to the Gogs git repo as shown below.
 +
 image:images/lab4-devsecops25.png[600,700]
 +
@@ -238,7 +239,7 @@ image:images/lab4-devsecops27.png[300,700]
 image:images/lab4-devsecops28.png[300,500]
 +
 ... Continue to click on spring-petclinic → target → site
-... Click on the `Dependencies` from the page. You may examine the details from that page by scrolling down
+... Click on the `Dependencies` from the page. We may examine the details from that page by scrolling down
 +
 image:images/lab4-devsecops29.png[300,700]
 +
@@ -259,7 +260,7 @@ image:images/lab4-devsecops32.png[300,700]
 Red Hat Advanced Cluster Security (ACS) for Kubernetes controls clusters and applications from a single console, with built-in security policies. +
 First-generation container security platforms focus on the container. ACS’s focus on Kubernetes helps DevOps and Security teams operationalize security, with a Kubernetes-native architecture that leverages Kube's declarative data and built-in controls for richer context, native enforcement, and continuous hardening. In addition, ACS focuses on Kubernetes helps DevOps and Security teams operationalize security, simplifying the process of protecting the cloud-native application stack.
 
-In this lab, you will learn how ACS integrates into the CI/CD process. ACS not only simplifies the process, but provides visibility to the security team in your organization.
+In this lab, we will learn how ACS integrates into the CI/CD process. ACS not only simplifies the process, but provides visibility to the security team in our organization.
 Using https://docs.openshift.com/acs/cli/getting-started-cli.html[roxctl] and ACS API, we integrated several additional security steps into our DevSecOps pipeline:
 
 . The *image scan* step uses the ACS Scanner to scan the image generated and pushed in the last step.
@@ -267,7 +268,7 @@ Using https://docs.openshift.com/acs/cli/getting-started-cli.html[roxctl] and AC
 image:images/lab4-devsecops33.png[300,700]
 +
 In the logs of this step, there is a direct link to the image scan in ACS.  +
-[NOTE] If you see a security certificate warning proceeding to that link, ignore it. +
+[Note] If we see a security certificate warning proceeding to that link, ignore it. +
 Copy and paste it into another tab in order to get more information about the scanned image. Enter the following information:
 +
 |===
@@ -275,7 +276,7 @@ Copy and paste it into another tab in order to get more information about the sc
 |Pass: stackrox
 |===
 +
-The URL takes you to Vulnerability Management. Here you can see an overview of the vulnerabilities (CVEs) included in this image.
+The URL takes us to Vulnerability Management. Here is an overview of the vulnerabilities (CVEs) included in this image.
 +
 .. Under the Deployment tab
 The ACS tool is aware of if this image is deployed. Since the first pipeline didn’t pass all of its gates, at first there will be no deployments displayed.
@@ -285,7 +286,7 @@ This is a view of all of the components in this image. It lists relevant informa
 +
 image:images/lab4-devsecops34.png[500,700]
 +
-For example, if you click on the tomcat 9.0.31 component, you will see the details of the component as shown below. This page shows the risk priority, the CVE's information, location of the component and the version of the component to upgrade to in order to remediate the CVE.
+For example, if we click on the tomcat 9.0.31 component, we will see the details of the component as shown below. This page shows the risk priority, the CVE's information, location of the component and the version of the component to upgrade to in order to remediate the CVE.
 +
 image:images/lab4-devsecops35.png[500,700]
 +
@@ -294,17 +295,19 @@ image:images/lab4-devsecops35.png[500,700]
 +
 image:images/lab4-devsecops36.png[500,700]
 +
-.. Go back to the Overview, and scroll down to the `Image findings` section, you will see the fixable CVEs. These are CVEs where ACS knows there are fixes available.
+.. Go back to the Overview, and scroll down to the `Image findings` section, we will see the fixable CVEs. These are CVEs where ACS knows there are fixes available.
 +
 image:images/lab4-devsecops37.png[300,700]
 +
-.. In the ‘Dockerfile’ tab of the ‘Image Findings’ section, you can see detailed image components and related CVEs per each step, per the ACS CVE database.
+.. In the ‘Dockerfile’ tab of the ‘Image Findings’ section, the detailed image components and related CVEs are shown per each step, per the ACS CVE database.
 +
 image:images/lab4-devsecops38.png[400,700]
 +
-Feel free to continue to explore ACS before continuing to review the pipeline. Understanding security checks and tool capabilities are a key part of this lab and can help raise your knowledge of a secure software delivery pipeline.
+Feel free to continue to explore ACS before continuing to review the pipeline. Understanding security checks and tool capabilities are a key part of this lab and can help raise the knowledge of a secure software delivery pipeline.
 
-. The *Image Check* step of the pipeline notes the build-time violations of the different security policies defined in ACS.
+. The *Image Check* step of the pipeline
++
+[Note] The build-time violations of the different security policies defined in ACS.
 +
 image:images/lab4-devsecops39.png[400,700]
 +
@@ -320,14 +323,14 @@ image:images/lab4-devsecops41.png[400,700]
 [Note] These 3 steps (*deploy-check, image-check, and image-scan*) are executed in parallel to save time in our DevSecOps pipeline.
 +
 . If *image-check* fails, go to the pipeline run and click `image-check`. The bottom of the log shows `Error: Violated a policy with CI enforcement set.` The reason for the error is because ACS enforces the policy from building and deploying if a violation occurs. The pipeline integrates ACS via the roxctl in the Tekton task.
-. When an image violates the policies, the best practice is to fix the code and execute the pipeline until it passes the checks. As you can see, the logs reported the list of violations and remediation. Developers can take the information from `image-check` task’s log and make changes accordingly. When the fix is checked into Git, the pipeline will be triggered. We have prepared the xref:fiximage[bonus exercise for fixing the image]. If you would like to continue to test other tasks on the pipeline, we can add an exception to the policy to exclude the spring-petclinic.
+. When an image violates the policies, the best practice is to fix the code and execute the pipeline until it passes the checks. The logs reported the list of violations and remediation. Developers can take the information from the `image-check` task’s log and make changes accordingly. When the fix is checked into Git, the pipeline will be triggered. We have prepared the xref:fiximage[bonus exercise for fixing the image]. If we would like to continue to test other tasks on the pipeline, we can add an exception to the policy to exclude the spring-petclinic.
 Adding an exception to a policy can be useful when developers need to fix the code, and the CI process needs to continue the testing.
 +
-[NOTE] Please be aware that fixing the code to pass the violation will be the recommended approach.
+[Note] Please be aware that fixing the code to pass the violation will be the recommended approach.
 +
-Assuming that you will want to add an exception to bypass the policy for spring-petclinic build.
+Assuming that we will want to add an exception to bypass the policy for spring-petclinic build.
 +
-.. When you inspect the log from the *image-check* task, you will find the below message which caused the failure:
+.. When we inspect the log from the *image-check* task, we will find the below message which caused the failure:
 +
 |===
 |✗ Image image-registry.openshift-image-registry.svc:5000/ocp-workshop/spring-petclinic@sha256:ece54d2923654c36f4e97bc0410f5c027871c5b7483e977cfc6c2bd56fef625d failed policy '*Fixable Severity at least Important*' *(policy enforcement caused failure)*
@@ -337,7 +340,7 @@ Assuming that you will want to add an exception to bypass the policy for spring-
 +
 image:images/lab4-devsecops43.png[700,300]
 +
-.. You will be prompted to log in to the ACS console → click `Advanced` → Click the `Proceed to central-stackrox.apps.cluster...` link to proceed.
+.. We will be prompted to log in to the ACS console → click `Advanced` → Click the `Proceed to central-stackrox.apps.cluster...` link to proceed.
 .. Enter the following information:
 +
 |===
@@ -345,7 +348,7 @@ image:images/lab4-devsecops43.png[700,300]
 |Pass: stackrox
 |===
 +
-.. Click login, and you will see the ACS dashboard screen as shown below.
+.. Click login, and see the ACS dashboard screen as shown below.
 +
 image:images/lab4-devsecops44.png[300,700]
 +
@@ -357,7 +360,7 @@ image:images/lab4-devsecops46.png[100,200]
 +
 image:images/lab4-devsecops47.png[300,700]
 +
-.. Click on the policy to get to the policy details page. The Policy page allows you to clone, export, and edit the policy. If it is available, it shows the remediation, so the developer can use the information to fix the image. The lifecycle stage information is where the policy enforcement takes place. Since the enabled policy is violated, it will not pass the build and deploy stages in the pipeline.
+.. Click on the policy to get to the policy details page. The Policy page allows cloning, exporting, and editing the policy. If it is available, it shows the remediation, so the developer can use the information to fix the image. The lifecycle stage information is where the policy enforcement takes place. Since the enabled policy is violated, it will not pass the build and deploy stages in the pipeline.
 +
 image:images/lab4-devsecops48.png[300,700]
 +
@@ -371,7 +374,8 @@ image:images/lab4-devsecops48.png[300,700]
 |===
 +
 .. Click onto the “Create “image...”
-[Note] You may need to scroll to the bottom of the list to find “Create …”
++
+[Note] Please scroll to the bottom of the list to find “Create …”
 +
 image:images/lab4-devsecops49.png[300,400]
 +
@@ -381,7 +385,7 @@ This step can be helpful when the development team wants to continue to test the
 +
 image:images/lab4-devsecops51.png[200,300]
 +
-.. You can review the enforcement behavior before clicking in 'save' icon the following screen.
+.. Please review the enforcement behavior before clicking in 'save' icon the following screen.
 .. Switch back to the OpenShift developer console, and click pipeline on the nav under “ocp-workshop” project
 +
 image:images/lab4-devsecops52.png[300,700]
@@ -398,7 +402,7 @@ image:images/lab4-devsecops54.png[300,700]
 +
 image:images/lab4-devsecops55.png[300,700]
 +
-.. If you finish the xref:fiximage[bonus lab] to fix the image, go back to the policy and remove the exception in the Policy.
+.. If we finish the xref:fiximage[bonus lab] to fix the image, go back to the policy and remove the exception in the Policy.
 .. Kubernetes kustomization files are updated in the *update deployment step* with the latest image [commit-sha] in the overlays for dev. This will ensure that our applications are deployed using the specific built image in this pipeline.
 +
 image:images/lab4-devsecops56.png[300,700]
@@ -406,8 +410,8 @@ image:images/lab4-devsecops56.png[300,700]
 
 === Lab 4.3 Continuous Delivery Using GitOps
 
-GitOps is a declarative way to implement continuous deployment for cloud-native applications. You can use GitOps to create repeatable processes for managing OpenShift Container Platform clusters and applications across multi-cluster Kubernetes environments. GitOps handles and automates complex deployments at a fast pace, saving time during deployment and release cycles. +
-The GitOps workflow pushes an application through development, testing, staging, and production. GitOps either deploys a new application or updates an existing one, so you only need to update the repository; GitOps automates everything else.
+GitOps is a declarative way to implement continuous deployment for cloud-native applications. We can use GitOps to create repeatable processes for managing OpenShift Container Platform clusters and applications across multi-cluster Kubernetes environments. GitOps handles and automates complex deployments at a fast pace, saving time during deployment and release cycles. +
+The GitOps workflow pushes an application through development, testing, staging, and production. GitOps either deploys a new application or updates an existing one, so we only need to update the repository; GitOps automates everything else.
 
 Argo CD continuously monitors the configurations stored in the Git repository and uses Kustomize to overlay environment-specific configurations when deploying the application to DEV and STAGE environments.
 
@@ -418,14 +422,14 @@ image:images/lab4-devsecops57.png[300,700]
 +
 image:images/lab4-devsecops43.png[300,300]
 +
-.. It will take you to the Argo CD login. If it is the first time you log in to Argo CD, you will need to click `Advanced` → click `Proceed to openshift-gitops-server-openshift-gitops.apps…` link
+.. The link redirects to the Argo CD login. If it is the first time logging in to Argo CD, please click `Advanced` → click `Proceed to openshift-gitops-server-openshift-gitops.apps…` link.
 .. In order to be able to login as an "admin" user, please first retrieve its password by running the command as shown below.
 +
 ....
 oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d
 ....
 +
-.. Once logged in, you will see the applications from the Argo CD console as shown below.
+.. Once logged in, the applications are listed on the Argo CD console as shown below.
 +
 image:images/lab4-devsecops58.png[500,600]
 +
@@ -469,7 +473,7 @@ image:images/lab4-devsecops67.png[300,500]
 
 === Lab 4.4 PostCI - Dynamic Application Security and Testing (DAST)
 
-*Dynamic application security testing (DAST)* is designed to detect conditions indicative of a security vulnerability in an application in its running state. DAST has an important role in helping to identify vulnerabilities in an application during production. Running a DAST penetration test enables you to find those vulnerabilities before an attacker does.
+*Dynamic application security testing (DAST)* is designed to detect conditions indicative of a security vulnerability in an application in its running state. DAST has an important role in helping to identify vulnerabilities in an application during production. Running a DAST penetration test enables us to find those vulnerabilities before an attacker does.
 In this lab, ZAP is used to perform application security testing as an example. Performance tests and penetration tests start in parallel after the application is promoted from Dev to QA.
 
 . Our CI in Openshift Pipelines waits until the ArgoCD app is fully synced (*Wait Application step*) and our app and all the resources are deployed
@@ -477,7 +481,9 @@ In this lab, ZAP is used to perform application security testing as an example. 
 +
 image:images/lab4-devsecops68.png[300,700]
 +
-.. Click onto the step, it will take you to the log as shown below
+.. Click onto the step, the log is shown below.
++
+This step authenticates into an ArgoCD instance and initiates synchronization process for 'dev-spring-petclinic' application from Git repo (gogs) to the target project in OCP cluster.
 +
 image:images/lab4-devsecops69.png[300,700]
 +
@@ -500,11 +506,11 @@ image:images/lab4-devsecops72.png[300,700]
 image:images/lab4-devsecops73.png[300,700]
 +
 .. The link has the name that corresponds to the name of the PipelineRun.
-.. You will click on the link with the same name as your PipelineRun
+.. Please click on the link with the same name as the PipelineRun.
 +
 image:images/lab4-devsecops74.png[300,400]
 +
-.. You should see a similar link as shown.
+.. A similar link is shown below.
 +
 image:images/lab4-devsecops75.png[300,400]
 +
@@ -520,7 +526,7 @@ image:images/lab4-devsecops77.png[300,700]
 +
 image:images/lab4-devsecops78.png[300,700]
 +
-.. Go back to your report repo location:
+.. Go back to the report repo location:
 +
 image:images/lab4-devsecops79.png[300,400]
 +
@@ -528,7 +534,7 @@ image:images/lab4-devsecops79.png[300,400]
 +
 image:images/lab4-devsecops80.png[200,400]
 +
-.. You will see the result of the performance test page similar to the image below.
+.. Please see the result of the performance test page similar to the image below.
 +
 image:images/lab4-devsecops81.png[400,700]
 
@@ -585,7 +591,7 @@ image:images/lab4-devsecops88.png[300,400]
 +
 image:images/lab4-devsecops89.png[300,600]
 +
-.. Click "Next" until you reach the enforcement tab
+.. Click "Next" until reaching the enforcement tab
 .. Enable the build time enforcement and save
 +
 image:images/lab4-devsecops90.png[300,300]
@@ -601,20 +607,20 @@ image:images/lab4-devsecops92.png[400,500]
 .. We will effectively update the image with this remediation suggestion.
 . Update the tekton task:
 . Delete the s2i-java-11 task
-.. From the OpenShift Administrator UI, make sure you are in the ocp-workshop project and then go to Pipelines > Tasks and delete the s2i-java-11 task.
+.. From the OpenShift Administrator UI, make sure the ocp-workshop project is selected before going to Pipelines > Tasks and delete the s2i-java-11 task.
 +
 image:images/lab4-devsecops93.png[300,700]
 +
 .. With the Tekton cli tkn task delete s2i-java-11
-. Apply the new update task from your command terminal:
+. Apply the new update task from the command terminal:
 +
 |===
 |kubectl apply -f ++https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml++ --namespace=ocp-workshop
 
 |===
 +
-. Re-run the pipeline, your deployment now succeeds. Congratulations to the developers!
-[Note] You can check the https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml[*labs-artifacts/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed. We have added a step to the build task, and we leverage buildah to remove the package managers from the image (search for "rpm" or "yum" in the file).
+. Re-run the pipeline, the deployment now succeeds. Congratulations to the developers!
+[Note] Please check the https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml[*labs-artifacts/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed. We have added a step to the build task, and we leverage buildah to remove the package managers from the image (search for "rpm" or "yum" in the file).
 +
 image:images/lab4-devsecops94.png[300,700]
 
@@ -633,7 +639,7 @@ In some situations, we may want to snooze the CVEs for a period of time. Here ar
 
 . Go to the ACS console via the `waffle icon` and click on the `Red Hat Advanced Clustered Security for Kubernetes` link.
 Click Vulnerability Management left menu and click on the CVEs button  on the top.
-. We can look for the CVEs to snooze and set up snooze by selecting the duration you need.
+. We can look for the CVEs to snooze and set up snooze by selecting the duration is needed.
 +
 image:images/lab4-devsecops96.png[300,700]
 
@@ -644,7 +650,7 @@ ACS can be integrated with several Notifiers for alerting if certain events happ
 
 image:images/lab4-devsecops97.png[300,500]
 
-These policy notifications can be enabled by each system policy enabled in our system, so you can create your own notification baseline in order to have only the proper information received in your systems. +
+These policy notifications can be enabled by each system policy enabled in our system, so we can create our own notification baseline in order to have only the proper information received in our systems. +
 Here are the steps to set up slack integration with ACS based on the official https://help.stackrox.com/docs/integrate-with-other-tools/integrate-with-slack/[Integrate with Slack] documentation in Stackrox.
 
 . Create a Slack App, enable Incoming Webhooks and get the Webhook URL
