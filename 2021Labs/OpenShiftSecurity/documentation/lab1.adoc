@@ -13,22 +13,22 @@ Almost all software you are running in your containers does not require root. Yo
 +
 [source]
 ----
-oc new-project myproject
+[localhost ~]$ oc new-project myproject
 ----
 
-. In the OpenShift console, ensure that the administrator perspective is selected on the top left hand side and navigate to *Home->Projects*, search for *myproject* and click on it.
+. In the OpenShift console, navigate to *Home->Projects*, search for *myproject* and click on it.
 +
 image:images/lab1.1-myproject.png[]
 
-. Then, go to the Workload tab and click on the tile with the title "Container Image".
+. Then, go to the Workload tab and click on *add other content*.
 +
 image:images/lab1.1-workloads.png[]
 
-. Make sure that *Image name from external registry* is selected and for the Image Name, type *docker.io/httpd*. 
+. Then, click on *Container Image* . Make sure that *Image name from external registry* is selected and for the Image Name, type *docker.io/httpd*. Press the magnifying glass.
 +
 image:images/lab1.1-image-external.png[]
 +
-NOTE: OpenShift will immediately validate the image and will recognise that the image exists.
+NOTE: Notice that this container image requires to be run as root on port 80.
 
 . Press *Create*.
 
