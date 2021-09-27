@@ -41,7 +41,7 @@ You can get the name of the pod from the previous oc get pods command.
 +
 [source]
 ----
-[localhost ~]$ oc logs httpd-f958ccb88-r5542
+oc logs httpd-f958ccb88-r5542
 ----
 
 . Notice that you get permission denied errors saying that you cannot bind to port 80.
@@ -52,7 +52,7 @@ image:images/lab1.1-noport80.png[1500,1500]
 +
 [source]
 ----
-[localhost ~]$ oc describe pod httpd-f958ccb88-r5542
+oc describe pod httpd-f958ccb88-r5542
 ----
 +
 image:images/lab1.1-describepod-error.png[]
