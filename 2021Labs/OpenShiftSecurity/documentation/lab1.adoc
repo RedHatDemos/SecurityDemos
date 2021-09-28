@@ -13,7 +13,7 @@ Almost all software you are running in your containers does not require root. Yo
 +
 [source]
 ----
-[localhost ~]$ oc new-project myproject
+oc new-project myproject
 ----
 
 . In the OpenShift console, navigate to *Home->Projects*, search for *myproject* and click on it.
