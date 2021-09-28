@@ -47,24 +47,24 @@ image:images/lab4-devsecops02.png[800,800]
 
 * SSH into the assigned VM similar to the below command:
 +
-|===
-| ssh lab-user@bastion.GUID.sandbox####.opentlc.com
-
-|===
+[source]
+----
+ ssh lab-user@bastion.GUID.sandbox####.opentlc.com
+----
 +
 * To check if the oc command line utility is available, open the terminal and run the following command:
 +
-|===
-| oc version
-
-|===
+[source]
+----
+ oc version
+----
 +
 * To get the console URL from command-line:
 +
-|===
-|[lab-user@bastion ~]$++oc login -u admin api.cluster-{GUID}.{GUID}.sandbox###.opentlc.com++:6443
-
-|===
+[source]
+----
+oc login -u admin api.cluster-{GUID}.{GUID}.sandbox###.opentlc.com++:6443
+----
 +
 API server information for ‘oc login’ can be found in the xref:beforeyoustart[Before You Start].
 +
@@ -123,9 +123,10 @@ The command line is a convenient way to start the pipeline while testing, and it
 +
 .. Run:
 +
-|===
-|oc create -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml[https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml] -n ocp-workshop
-|===
+[source]
+----
+oc create -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml[https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml] -n ocp-workshop
+----
 +
 ** Option 3: When new code is pushed to the git repo, it will also trigger the pipeline to start.
 This option may be the most popular from a developer perspective. The pipeline starts from a PR or a push into the git repo and the webhook automatically starts the pipeline.
@@ -425,9 +426,10 @@ image:images/lab4-devsecops43.png[300,300]
 .. The link redirects to the Argo CD login. If it is the first time logging in to Argo CD, please click `Advanced` → click `Proceed to openshift-gitops-server-openshift-gitops.apps…` link.
 .. In order to be able to login as an "admin" user, please first retrieve its password by running the command as shown below.
 +
-....
+[source]
+----
 oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d
-....
+----
 +
 .. Once logged in, the applications are listed on the Argo CD console as shown below.
 +
@@ -669,7 +671,8 @@ image:images/lab4-devsecops99.png[200,300]
 - Issue:
 Sometimes Code Analysis raises an error when mvn is running the maven install 'sonar:sonar':
 
-....
+[source]
+----
 [[1;31mERROR[m] Failed to execute goal+
 [32morg.apache.maven.plugins:maven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m on
 project [36mspring-petclinic[m: [1;31mCompilation failure[m
@@ -685,11 +688,12 @@ classpath.[m
 [[1;31mERROR[m] [1;31m[m
 [[1;31mERROR[m] -> [1m[Help 1][m
 [[1;31mERROR[m]
-....
+----
 
 - Resolution:
 Just rerun the pipeline and will succeed without changing anything additional. The results will succeed afterward:
-....
+[source]
+----
 [[1;34mINFO[m] Analyzed bundle 'petclinic' with 20 classes+
 [[1;34mINFO[m] Analyzed bundle 'petclinic' with 20 classes
 [[1;34mINFO[m]
@@ -706,7 +710,7 @@ Just rerun the pipeline and will succeed without changing anything additional. T
 [[1;34mINFO[m] Finished at: 2021-07-23T07:37:09Z
 [[1;34mINFO[m] Final Memory: 118M/1245M
 [[1;34mINFO[m] [1m------------------------------------------------------------------------[m
-....
+----
 
 ==== JUnit Tests Failures
 
@@ -716,7 +720,8 @@ Refer to the Code Analysis. Just rerun it. It will fix the error.
 
 
 After the zap proxy task is executed the upload to the report repo server fails due to wrong folder structure:
-....
+[source]
+----
 + ls -lhrt /zap/wrk
 total 76K
 
@@ -731,16 +736,17 @@ Uploading the report into the report server
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
 100   335  100    36  100   299   7200  59800 --:--:-- --:--:-- --:--:-- 67000
 {"message":"Internal Server Error"}
-....
+----
 
 Fix the zap-proxy task and replace the line 99, with the content of the following curl to upload properly
-|===
-|curl -u $(params.REPORTS_REPO_USERNAME):$(params.REPORTS_REPO_PASSWORD) -F path=$PIPELINERUN_NAME/$PIPELINERUN_NAME.html -F file=@/zap/wrk/$PIPELINERUN_NAME.html -X POST $(params.REPORTS_REPO_HOST)/upload; echo ""
-
-|===
+[source]
+----
+curl -u $(params.REPORTS_REPO_USERNAME):$(params.REPORTS_REPO_PASSWORD) -F path=$PIPELINERUN_NAME/$PIPELINERUN_NAME.html -F file=@/zap/wrk/$PIPELINERUN_NAME.html -X POST $(params.REPORTS_REPO_HOST)/upload; echo ""
+----
 
 After that rerun the pipeline and check that effectively the zap proxy report its uploaded to the reports server:
-....
+[source]
+----
 + curl -u reports:reports -F path=petclinic-build-dev-6f4569/petclinic-build-dev-6f4569.html -F file=@/zap/wrk/petclinic-build-dev-6f4569.html -X POST http://reports-repo:8080/upload
 % Total % Received % Xferd Average Speed Time Time Time Current
 Dload Upload Total Spent Left Speed
@@ -748,6 +754,6 @@ Dload Upload Total Spent Left Speed
 0 0 0 0 0 0 0 0 --:--:-- --:--:-- --:--:-- 0
 100 76435 100 89 100 76346 22250 18.2M --:File has been uploaded to petclinic-build-dev-6f4569/petclinic-build-dev-6f4569.html 🚀--:-- --:--:-- --:--:-- 18.2M
 + echo ''
-....
+----
 
 image:images/lab4-devsecops100.png[300,700]
