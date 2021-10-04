@@ -113,14 +113,14 @@ Using the OpenShift CLI, ensure that you are logged into the cluster and change 
 
 [source]
 ----
-$ oc project rbac-lab
+oc project rbac-lab
 ----
 
 Once in the project, list the running pods by typing *oc get pods*.
 
 [source]
 ----
-$ oc get pods
+oc get pods
 ----
 
 [source]
@@ -135,14 +135,14 @@ Next, start a remote shell session in the running pod.
 
 [source]
 ----
-$ oc rsh $(oc get pod -l=app=openshift-rbac -o jsonpath="{ .items[0].metadata.name }")
+oc rsh $(oc get pod -l=app=openshift-rbac -o jsonpath="{ .items[0].metadata.name }")
 ----
 
 Once a session has been established within the pod, list the contents of the `/var/run/secrets/kubernetes.io/serviceaccount` directory
 
 [source]
 ----
-sh-4.2$ ls -l /var/run/secrets/kubernetes.io/serviceaccount
+ls -l /var/run/secrets/kubernetes.io/serviceaccount
 ----
 
 [source]
@@ -165,14 +165,14 @@ The contents provided in this directory make it possible for applications to que
 
 [source]
 ----
-[sh-4.4] curl https://kubernetes.default.svc
+curl https://kubernetes.default.svc
 ----
 
 Executing the command will result in an error being displayed and indicates that the certificate for Kubernetes is not trusted. Fortunately, we have the CA for Kubernetes in our pod that we can specify. Execute the following command that refers to the CA file as described previously.
 
 [source]
 ----
-[sh-4.4] $ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt https://kubernetes.default.svc
+curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt https://kubernetes.default.svc
 ----
 
 [source]
@@ -196,7 +196,7 @@ Better. We are able to invoke the API, but we are receiving _Forbidden_ error. N
 
 [source]
 ----
-sh-4.2$ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" https://kubernetes.default.svc
+curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" https://kubernetes.default.svc
 ----
 
 [source]
@@ -241,7 +241,7 @@ Execute the following command to create a new `Role` called `pod-lister` that gr
 
 [source]
 ----
-$ oc create role pod-lister --verb=list --resource=pods
+oc create role pod-lister --verb=list --resource=pods
 ----
 
 [source]
@@ -253,7 +253,7 @@ We can view the contents of the `pod-lister` role by executing the following com
 
 [source]
 ----
-$ oc get role pod-lister -o yaml
+oc get role pod-lister -o yaml
 ----
 
 [source]
@@ -284,7 +284,7 @@ Execute the following command to create a new `RoleBinding` called `pod-listers`
 
 [source]
 ----
-$ oc create rolebinding pod-listers --role=pod-lister --serviceaccount=rbac-lab:default
+oc create rolebinding pod-listers --role=pod-lister --serviceaccount=rbac-lab:default
 ----
 
 The `--serviceacount` flag takes the form `<namespace>:<serviceaccount>`
@@ -293,7 +293,7 @@ View the contents of the `RoleBinding` by executing the following command:
 
 [source]
 ----
-$ oc get rolebinding pod-listers -o yaml
+oc get rolebinding pod-listers -o yaml
 ----
 
 [source]
@@ -328,7 +328,7 @@ Execute the following command to create a new _ClusterRole_ called `namespace-li
 
 [source]
 ----
-$ oc create clusterrole namespace-lister --verb=list --resource=namespace
+oc create clusterrole namespace-lister --verb=list --resource=namespace
 ----
 
 NOTE: If you receive an authorization error, be sure that you are logged into OpenShift using an account with elevated access.
@@ -337,7 +337,7 @@ Now, create a `ClusterRoleBinding` to associate the `pod-lister` _ClusterRole_ t
 
 [source]
 ----
-$ oc create clusterrolebinding namespace-listers --clusterrole=namespace-lister --serviceaccount=rbac-lab:default
+oc create clusterrolebinding namespace-listers --clusterrole=namespace-lister --serviceaccount=rbac-lab:default
 ----
 
 With the _ClusterRole_ and _ClusterRoleBinding_ created, return once again to the application in the web browser and refresh the page. The second query should now display a valid response.
@@ -369,7 +369,7 @@ Notice how the `apiGroups` field is empty. This indicates that the desired resou
 
 [source]
 ----
-$ oc api-resources
+oc api-resources
 ----
 
 [source]
@@ -403,7 +403,7 @@ The `--as` flag can be used to specify the user to impersonate. When combined wi
 
 [source]
 ----
-$ oc auth can-i list users
+oc auth can-i list users
 ----
 
 [source]
@@ -418,7 +418,7 @@ Now, use the User Impersonation capabilities to determine if the _default_ Servi
 
 [source]
 ----
-$ oc auth can-i list users --as=system:serviceaccount:rbac-lab:default
+oc auth can-i list users --as=system:serviceaccount:rbac-lab:default
 ----
 
 [source]
@@ -439,7 +439,7 @@ The first step is to determine the API group that users are part of. Use the `oc
 
 [source]
 ----
-$ oc api-resources | grep users
+oc api-resources | grep users
 ----
 
 [source]
@@ -453,7 +453,7 @@ Now that we know the API Group users are part of, we can create a ClusterRole ca
 
 [source]
 ----
-$ oc create clusterrole user-lister --verb=list --resource=users.user.openshift.io
+oc create clusterrole user-lister --verb=list --resource=users.user.openshift.io
 ----
 
 The combination of the resource name and the API Group is used in the `--resource` flag.
@@ -462,7 +462,7 @@ Finally, create a `ClusterRoleBinding` to grant access to the default Service Ac
 
 [source]
 ----
-$ oc create clusterrolebinding user-listers --clusterrole=user-lister --serviceaccount=rbac-lab:default
+oc create clusterrolebinding user-listers --clusterrole=user-lister --serviceaccount=rbac-lab:default
 ----
 
 While we could confirm that the application can now query for users, let's use User Impersonation to determine ahead of time whether the default Service Account has the appropriate rights.
@@ -471,7 +471,7 @@ Execute the following command to impersonate the default Service Account:
 
 [source]
 ----
-$ oc auth can-i list users --as=system:serviceaccount:rbac-lab:default
+oc auth can-i list users --as=system:serviceaccount:rbac-lab:default
 ----
 
 [source]
