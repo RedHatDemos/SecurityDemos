@@ -17,8 +17,10 @@
 
 === [.underline]#Lab Testers#:
 *Pedro Ibáñez Requena*, Principal Software Engineer, Red Hat^(R)^
+
 *Nicholas Schuetz*, Principal Specialist Solution Architect,Red Hat^(R)^
-*Mark Roberts*, Senior Specialist Solution Architect,Red Hat^(R)^  
+
+*Mark Roberts*, Senior Specialist Solution Architect,Red Hat^(R)^
 
 == Lab Overview:
 In this hands-on lab, we will cover the comprehensive container and Kubernetes security capabilities available in Red Hat OpenShift. You will gain experience with:
