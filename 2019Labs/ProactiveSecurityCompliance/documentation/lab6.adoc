@@ -1,8 +1,8 @@
-== Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
+== Lab 6: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline
 
 *Lab Length: Medium/Average*
 
-=== Goal of Lab 7
+=== Goal of Lab 6
 
 The goal of this lab is to learn how to automate and build security into the application and build a _secure software factory_ that orchestrates a combination of security tools including SonarQube, OWASP Zed Attack Proxy (ZAP), Red Hat Quay, Clair and the Open Security Content Automation Protocol (OpenSCAP) in a Continuous Integration / Continuous Delivery (CI/CD) pipeline (via Jenkins). We will also automatically detect security and compliance issues in a controlled way for automated security compliance at scale.
 
@@ -63,7 +63,7 @@ For the purposes of this lab, we will be examining a simple, all-in-one https://
 
 image:images/lab7-ecommerce-webapp.png[]
 
-=== Lab 7.1 Logging into the environment
+=== Lab 6.1 Logging into the environment
 
 . After following Lab 0 and choosing *TC9818 -AD - Implementing proactive security and compliance automation and DevSecOps* from the drop down, you will be presented with your user id and GUID.
 +
@@ -120,7 +120,7 @@ image:images/lab7.2-sonarqube.png[]
 +
 image:images/lab7.2-quay.png[]
 
-=== Lab 7.3 Explore the pipeline stages
+=== Lab 6.3 Explore the pipeline stages
 
 
 The following sections describe each of the stages in the CI/CD pipeline that we will be running during this lab.
@@ -168,7 +168,7 @@ Configures the OpenShift production project (i.e., userid-prod)
 ==== Promote to Prod?
 Similar to the previous _Promote to Stage?_ step, requiring manual intervention before promoting the application image to an even higher level environment.
 
-=== Lab 7.4 Exercise an initial run through the pipeline
+=== Lab 6.4 Exercise an initial run through the pipeline
 
 . Navigate back to the jenkins user interface https://jenkins-{USERID}.apps.{GUID}.example.opentlc.com
 +
@@ -259,7 +259,7 @@ image:images/lab7.4-quay-packages.png[]
 +
 . You can also view the deployed application at http://ecommerce-{USERID}.apps.{GUID}.example.opentlc.com/
 
-=== Lab 7.5 Update the base image and source code
+=== Lab 6.5 Update the base image and source code
 
 An old base image was used to build the application, we will update the base image to use a newer version. This will reduce the number of vulnerabilities that are detected. We will also update the source code to remove the vulnerabilities detected by SonarQube.
 

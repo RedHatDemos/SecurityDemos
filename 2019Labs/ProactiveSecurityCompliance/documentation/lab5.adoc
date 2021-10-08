@@ -1,8 +1,8 @@
-== Lab 6: Automated Security Hardening of a Hacked Web Application
+== Lab 5: Automated Security Hardening of a Hacked Web Application
 
 *Lab Length: Medium/Average*
 
-=== Goal of Lab 6
+=== Goal of Lab 5
 The goal of this lab is to learn how to use Red Hat Ansible Automation to automatically security harden a hacked WordPress web application. Specifically, you will first install a simple Wordpress web application with default credentials in an automated way using Red Hat Ansible Automation. Then, you will exploit this web application since it is left open with liberal permissions and no password set. Finally, you will automatically remediate the issue with Red Hat Ansible Automation.
 
 === Introduction
@@ -17,7 +17,7 @@ liberal permissions to make testing easier during development. When
 these changes make their way into production, a site is left vulnerable
 to attackers who are looking for these loopholes.
 
-=== Lab 6.0 Introducing the lab exercise setup
+=== Lab 5.0 Introducing the lab exercise setup
 
 In this lab exercise, we will demonstrate this vulnerability with some simple commands. After using a Red Hat Ansible playbook to install a base WordPress web site, you will run a small shell script from a specified system, which will take over a
 public facing site with cat memes. We will then use an Ansible playbook to search and remediate common vulnerabilities (in this case,
@@ -64,7 +64,7 @@ This lab exercise is configured to run against three servers in a group called *
 
 |=====================================================
 
-=== Lab 6.1 Automated Install of the WordPress LAMP Stack Web Application
+=== Lab 5.1 Automated Install of the WordPress LAMP Stack Web Application
 
 In this lab exercise, you will install the LAMP stack WordPress web application, in an automated fashion, using Red Hat Ansible Automation. Specifically, you will be doing this install using an Ansible role.
 
@@ -84,13 +84,13 @@ image:images/wordpressdeploy.png[1000,1000]
 +
 NOTE: Be careful when you type the website's URL. The website is HTTP not HTTPS (another security mistake purposely made for lab demonstration purposes).
 
-=== Lab 6.2 Hacking the Database of the WordPress LAMP Stack Web Application
+=== Lab 5.2 Hacking the Database of the WordPress LAMP Stack Web Application
 
 In this lab exercise, we are going to confirm that we can access the database of our WordPress LAMP Stack Web Application  insecurely. We'll then take advantage of the user accounts that already exist on the database system and lock out the legitimate user of the WordPress site so that they can no longer log in. You(the database hacker) will now have admin access to the site!
 
 First, let's see if we can get into the database.
 
-==== Lab 6.2.1 Accessing and Viewing the Database of the WordPress LAMP Stack Web Application
+==== Lab 5.2.1 Accessing and Viewing the Database of the WordPress LAMP Stack Web Application
 
 . Let's SSH into our *lampjump* system using its IP address (*192.168.0.102*). Remember that this system is our "jump box", representing a machine that a hacker would use to connect and run exploit scripts to hack your new web site. In order to SSH into our *lampjump* system, we have to first SSH into our lab's workstation box.
 
@@ -138,7 +138,7 @@ image:images/mysql1.png[1000,1000]
 Notice how we can easily see the user and the password that's stored in the database for this user. In addition, we can see the data that defines the access level. This tells you that we can easily access the site's database and make changes without any credentials. Now, let's take advantage of the admin account and change the admin password so that we can always log in as admin with our new password. Chances are, someone will realize they're locked out and eventually get back in. A more realistic example would actually be sneakier: we would create an ambiguous username
 that _looked_ official but was our secret access backdoor.
 
-==== Lab 6.2.2 Taking Advantage of the Admin Account by Changing the Admin Password
+==== Lab 5.2.2 Taking Advantage of the Admin Account by Changing the Admin Password
 
 In this lab exercise, let's give ourselves access to our WordPress web application by using the vulnerable database. It's as simple as updating the admin user's password. Even though we don't know what that admin password is, we have wide open database access so we can set the admin password to whatever we
 want!
@@ -167,7 +167,7 @@ The main thing we're pointing out here is the fact that this is a really scary e
 +
 image:images/mysql3.png[300,300]
 
-=== Lab 6.3 Exploiting the database vulnerability by importing a database payload into the website's database.
+=== Lab 5.3 Exploiting the database vulnerability by importing a database payload into the website's database.
 
 The previous lab exercises verified that the database was insecure and that one method of exploiting it is to change a login user for MySQL,
 specifically the login for the WordPress application.
@@ -225,7 +225,7 @@ When you reach the bottom of the cat_meme_takeover.sh exploit script type *q* to
 
 . You should see a new look to the website, informing you that the site has been hacked by cat memes.
 
-=== Lab 6.4 Automated Re-Install of the WordPress LAMP Stack Web Application to reset the servers to a stable baseline
+=== Lab 5.4 Automated Re-Install of the WordPress LAMP Stack Web Application to reset the servers to a stable baseline
 In this lab exercise, after discovering all the fun cat memes and realizing that our web site has been compromised, we want to quickly reset our servers and web site to a stable baseline. To do this, we will re-install our WordPress LAMP Stack Web Application in an automation fashion using Red Hat Ansible Automation.
 
 . Go to Red Hat Ansible Tower (https://tower-GUID.rhpds.opentlc.com) and log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace GUID with your lab provided GUID!
@@ -252,7 +252,7 @@ vulnerable due to that username which can be exploited. We will fix this issue i
 +
 image:images/cleanweb.png[1000,1000]
 
-=== Lab 6.5 Hardening the WordPress Database
+=== Lab 5.5 Hardening the WordPress Database
 
 In this lab exercise, we will lock down the database so it can't get exploited again by cat memes or anything else.
 
@@ -264,7 +264,7 @@ In this lab exercise, we will lock down the database so it can't get exploited a
 +
 image:images/cleanweb.png[1000,1000]
 
-=== Lab 6.6 Confirming that the WordPress database has been hardened and cannot be accessed insecurely
+=== Lab 5.6 Confirming that the WordPress database has been hardened and cannot be accessed insecurely
 
 By running the  *LAMP / WordPress Secure* job template in the previous step, we have locked down accounts with blank passwords and open access. Specifically, by running this job template, we successfully removed our MySQL user named *insecure* with no password set for his account. This user's access was set wide open before running this job template. However, this wide open access has been revoked by running our latest hardening playbook that is called by our *LAMP / WordPress Secure* job template.
 
