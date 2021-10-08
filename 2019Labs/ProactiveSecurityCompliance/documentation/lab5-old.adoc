@@ -1,0 +1,546 @@
+== Lab 5: Proactive Security and Automated Risk Management at scale with Predictive Analytics
+
+*Lab Length: Medium/Average*
+
+=== Goal of Lab 5
+The goal of this lab is to introduce you to the proactive security capabilities of Red Hat Insights. In this lab, we will focus only on the specific security features of Red Hat Insights.
+
+=== Introduction
+Red Hat Insights is designed to proactively evaluate the security, performance, and stability of your Red Hat systems by providing predictive analytics. Red Hat Insights helps move you from reactive to proactive systems management, delivers actionable intelligence, and increases visibility of infrastructure risks and the latest security threats. Operational analytics from Red Hat Insights empowers you to prevent downtime and avoid firefighting while responding faster to new risks.
+
+Red Hat Insights recommendations are tailored for the individual system where risk is detected. This allows you to be certain that actions identified by Red Hat Insights are validated and have a verified resolution for each detected risk, reducing false positives you may experience from critical risks identified by third-party security scanners. Red Hat Insights provides predictive analysis of security risks in your infrastructure based on a constantly evolving threat feed from Red Hat.
+
+Through analysis of Red Hat Insights metadata and curated knowledge based on over fifteen years of enterprise customer support, Red Hat is able to identify critical security vulnerabilities, statistically frequented risks, and known bad configurations. We scale this knowledge to our customers with Red Hat Insights reporting and alerts, allowing prediction of what will happen on a monitored system, why it will happen, and how to fix a problem before it can occur.
+
+Red Hat Insights functionality is integrated into Red Hat’s Customer Portal, Red Hat Satellite, Red Hat CloudForms, and Red Hat Ansible Tower.  Recommendations from Red Hat Insights are human-readable and in most cases can simply be copy and pasted into the terminal to resolve the issue. You may also automate remediation of hosts in your infrastructure with Red Hat Insights generated Ansible playbooks or with the Red Hat Ansible Tower integration.
+
+=== Lab 5.1 Configuring Red Hat Insights Clients
+Red Hat Insights clients have a configuration file (insights-client.conf) which can be modified for your needs. In this lab exercise, we will be configuring both the *ic1.summit.example.com* and *ic4.summit.example.com* clients.
+
+Note that there is also a Red Hat Insights client Ansible role in Ansible galaxy that will install, configure, and register a system to the Red Hat Insights service. We will not be using this Ansible role in this lab exercise, but for your reference, you can find this role in Ansible Galaxy link:https://galaxy.ansible.com/RedHatInsights/insights-client[here].
+
+==== Lab 5.1.1 Updating host *ic1.summit.example.com* to exclude files from being accessed by Red Hat Insights and running the Red Hat Insights collection on this host
+
+. If not already there, log into to the workstation host as *lab-user* from your desktop system replacing *GUID* with your lab's *GUID*. Then, become *root* on the workstation host.
++
+[source]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
+----
+
+. Log into the *ic1.summit.example.com*. Note that this client has already been registered to Red Hat Insights for you.
++
+[source]
+----
+[root@workstation-GUID ~]# ssh ic1.summit.example.com
+----
+
+. Go to the insights directory and look at the default configuration file.
++
+[source]
+----
+[root@ic1 ~]# cd /etc/insights-client/
+[root@ic1 insights-client]# cat insights-client.conf
+[insights-client]
+# Example options in this file are the defaults
+
+# Change log level, valid options DEBUG, INFO, WARNING, ERROR, CRITICAL. Default DEBUG
+#loglevel=DEBUG
+
+# Log each line executed
+#trace=False
+
+# Attempt to auto configure with Satellite server
+#auto_config=True
+
+# Change authentication method, valid options BASIC, CERT. Default BASIC
+#authmethod=BASIC
+
+# username to use when authmethod is BASIC
+#username=
+# password to use when authmethod is BASIC
+#password=
+
+#base_url=cert-api.access.redhat.com:443/r/insights
+
+# URL for your proxy.  Example: http://user:pass@192.168.100.50:8080
+#proxy=
+
+# Automatically update the dynamic configuration
+#auto_update=True
+
+# Obfuscate IP addresses
+#obfuscate=False
+
+# Obfuscate hostname
+#obfuscate_hostname=False
+
+# Disallow Insights from creating cron job
+#no_schedule=False
+
+# Display name for registration
+#display_name=
+[root@ic1 insights-client]#
+
+----
+
+. You can specify commands and files you don't want to access by creating a remove.conf file. First, notice that a remove.conf does not currently exist.
++
+[source]
+----
+[root@ic1 insights-client]# ls
+cert-api.access.redhat.com.pem  insights-client.conf  machine-id  redhattools.pub.gpg  rpm.egg  rpm.egg.asc
+----
+. Let's create the remove.conf file now. In this file, we are telling Red Hat Insights not to access the following files: /etc/hosts and /etc/resolv.conf. We are also telling Red Hat Insights to not access the netstat command. You can use keywords and patterns to hide information from Red Hat Insights. We have commented out the text that would allow you to hide the following keywords and patterns: passwords and super secret keywords. Let's create the remove.conf file and add this text below to this file using the vi text editor.
++
+[source]
+----
+[root@ic1 insights-client]# vi remove.conf
+----
++
+Add this text to the remove.conf file. Type *i* to insert text. Then, copy and paste the text below into the remove.conf file. Then press *Esc* and type *:wq!* to save and exit.
++
+[source,txt]
+----
+[remove]
+files=/etc/hosts,/etc/resolve.conf
+commands=netstat
+#patterns=password,username
+#keywords=super$ecret,ultra$ecret
+----
+. Now, let's change the file permissions to 0600. Note that 0660 file permissions will work on remove.conf and it should inherit the correct selinux types.
++
+[source]
+----
+[root@ic1 insights-client]# chmod 0660 remove.conf
+----
+. Let's take another look at our newly created remove.conf file with the correct file permissions.
++
+[source]
+[root@ic1 insights-client]# cat ./remove.conf
+[remove]
+files=/etc/hosts,/etc/resolve.conf
+commands=netstat
+#patterns=password,username
+#keywords=super,ultra
+
+. Now, let's run the Red Hat Insights collection on the ic1 client from the command line.
++
+NOTE: You will see warnings detailing information that will not be collected such as the /etc/hosts and /etc/resolv.conf files and the netstat command.
++
+[source]
+----
+[root@ic1 insights-client]# insights-client
+WARNING: Excluding data from files
+Starting to collect Insights data for ic1.summit.example.com
+WARNING: Skipping command /bin/netstat -neopa
+WARNING: Skipping file /etc/hosts
+Uploading Insights data.
+Successfully uploaded report from 4a61da2a-1f76-470f-8dae-358f3c15b7ca to account 6057187.
+----
+
+. Note that the --help option provides a significant amount of options to tailor the execution of Red Hat Insights based on your environment. Take a look by executing the command below.
+[source]
+----
+[root@ic1 insights-client]# insights-client --help
+usage: insights-client [-h] [--test-connection] [--analyze-image-id ID]
+                       [--verbose] [--analyze-container] [--net-debug]
+                       [--conf CONF] [--disable-schedule] [--group GROUP]
+                       [--silent] [--support] [--version] [--offline]
+                       [--status] [--analyze-file ANALYZE_FILE]
+                       [--force-reregister]
+                       [--analyze-mountpoint ANALYZE_MOUNTPOINT]
+                       [--keep-archive] [--to-stdout] [--enable-schedule]
+                       [--no-upload] [--display-name DISPLAY_NAME]
+                       [--validate] [--logging-file LOGGING_FILE]
+                       [--retry RETRIES] [--unregister] [--register] [--quiet]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --test-connection     Test connectivity to Red Hat
+  --analyze-image-id ID
+                        Analyze a docker image with the specified ID.
+  --analyze-container   Treat the current filesystem as a container and upload
+                        to the /images endpoint.
+  --conf CONF, -c CONF  Pass a custom config file
+  --disable-schedule    Disable automatic scheduling
+  --group GROUP         Group to add this system to during registration
+  --silent              Display no messages to stdout
+  --version             Display version
+  --offline             offline mode for OSP use
+  --analyze-file ANALYZE_FILE
+                        Analyze an archived filesystem at the specified path.
+  --analyze-mountpoint ANALYZE_MOUNTPOINT
+                        Analyze a filesystem at the specified mountpoint.
+  --to-stdout           print archive to stdout; sets --quiet and --no-upload
+  --enable-schedule     Enable automatic scheduling for collection to run
+  --display-name DISPLAY_NAME
+                        Set a display name for this system.
+  --validate            Validate remove.conf
+  --logging-file LOGGING_FILE
+                        Path to log file location
+  --retry RETRIES       Number of times to retry uploading. 180 seconds
+                        between tries
+  --unregister          Unregister system from the Red Hat Insights Service
+  --register            Register system to the Red Hat Insights Service
+  --quiet               Only display error messages to stdout
+
+Debug options:
+  --verbose             DEBUG output to stdout
+  --net-debug           Log the HTTP method and URL every time a network call
+                        is made.
+  --support             Create a support logfile for Red Hat Insights
+  --status              Check this machine's registration status with Red Hat
+                        Insights
+  --force-reregister    Forcefully reregister this machine to Red Hat. Use
+                        only as directed.
+  --keep-archive        Do not delete archive after upload
+  --no-upload           Do not upload the archive
+[root@ic1 insights-client]#
+
+----
+
+==== Lab 5.1.2 Installing the Red Hat Insights client and Registering host *ic4.summit.example.com* to Red Hat Insights
+. If not already there, log into to the workstation host as *lab-user* from your desktop system replacing *GUID* with your lab's *GUID*. Then, become *root* on the workstation host.
++
+[source]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
+----
+
+. Log into the *ic4.summit.example.com*.
++
+[source]
+----
+[root@workstation-GUID ~]# ssh ic4.summit.example.com
+----
+
+. Install the Red Hat Insights client on the ic4.summit.example.com host. Note that the Red Hat Insights client is already pre-installed on the *ic1.summit.example.com* host.
++
+NOTE: In older versions the package was called redhat-access-insights. Because of an older version of python, you will need to remove the python-chardet package.
++
+[source]
+----
+[root@ic4 ~]# yum -y remove python-chardet
+[root@ic4 ~]# yum install -y insights-client
+Loaded plugins: enabled_repos_upload, package_upload, product-id, subscription-manager
+rhel-7-server-extras-rpms                                                                                                                    | 2.0 kB  00:00:00
+rhel-7-server-insights-3-rpms                                                                                                                | 2.1 kB  00:00:00
+rhel-7-server-rpms                                                                                                                           | 2.0 kB  00:00:00
+rhel-7-server-satellite-tools-6.4-rpms                                                                                                       | 2.1 kB  00:00:00
+rhel-7-server-supplementary-rpms                                                                                                             | 2.0 kB  00:00:00
+Resolving Dependencies
+--> Running transaction check
+---> Package insights-client.noarch 0:3.0.3-9.el7_5 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+====================================================================================================================================================================
+ Package                                  Arch                            Version                                 Repository                                   Size
+====================================================================================================================================================================
+Installing:
+ insights-client                          noarch                          3.0.3-9.el7_5                           rhel-7-server-rpms                          244 k
+
+Transaction Summary
+====================================================================================================================================================================
+Install  1 Package
+
+Total download size: 244 k
+Installed size: 431 k
+Downloading packages:
+insights-client-3.0.3-9.el7_5.noarch.rpm                                                                                                     | 244 kB  00:00:00
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : insights-client-3.0.3-9.el7_5.noarch                                                                                                             1/1
+Uploading Package Profile
+  Verifying  : insights-client-3.0.3-9.el7_5.noarch                                                                                                             1/1
+
+Installed:
+  insights-client.noarch 0:3.0.3-9.el7_5
+
+Complete!
+Uploading Enabled Repositories Report
+Loaded plugins: product-id
+Loaded plugins: product-id
+Loaded plugins: product-id
+Loaded plugins: product-id
+Loaded plugins: product-id
+----
+. Now, register this host to Red Hat Insights with the *--display-name* parameter. This parameter allows you to set the displayed hostname to something other than the default for a system within Red Hat Insights. This is useful if you wish to obfuscate the hostnames that are used in analysis. Be aware that hostnames must resolve properly for Ansible playbooks and Red Hat Ansible Tower management to work for automated remediation. As a result, the display name should match a valid hostname, even if it isn't the publicly accessible DNS name.
++
+[source]
+----
+[root@ic4 ~]# insights-client --display-name=ic4.summit.example.com --register
+This host has already been registered.
+Automatic scheduling for Insights has been enabled.
+Starting to collect Insights data for ic4.summit.example.com
+Uploading Insights data.
+Successfully uploaded report from 41d3c62e-5c18-42ad-a1ff-65f7c37cc315 to account 6057187.
+----
++
+NOTE:
+If you see a traceback message during the insights-client --register, you will need to do a yum -y remove python-chardet and yum -y install insights-client again.
+
+=== Lab 5.2 Manually fixing the payload injection security issue
+Now that both our *ic1.summit.example.com* and *ic4.summit.example.com* hosts are configured and registered with Red Hat Insights, let's fix some security issues reported to us by Red Hat Insights.
+
+In this lab exercise, we will manually fix the specific *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* on the *ic1.summit.example.com* client without causing downtime.
+
+. On the Red Hat Satellite server (https://sat64-GUID.rhpds.opentlc.com) log in with *admin* as the user name and *r3dh4t1!* as the password (if not already logged in). Don't forget to replace the *GUID* with your provided *GUID*.
+
+. Navigate to *Insights → Overview*, where you could see all your registered systems, actions summary (highlighted by priority), as well as latest updates from Red Hat.
++
+image:images/insightsoverview.png[200,200]
+image:images/lab5.2-insightsoverview.png[1000,1000]
+
+. Next, click on *Insights → Inventory* to see all your clients that are registered to Red Hat Insights. In our case, the clients are: *ic1.summit.example.com*  and *ic4.summit.example.com*. Notice that in this view you can also see the number of issues that Red Hat Insights found on your clients as well.
++
+image:images/insightsinventory.png[200,200]
+image:images/lab5.2-inventory.png[1000,1000]
+
+. Click on the *ic1.summit.example.com* system. You will see the list of issues affecting it when clicking on the system name.
++
+image:images/lab5.2-ic1host.png[1000,1000]
+
+. Notice that your system shows up with multiple security vulnerabilities.
++
+NOTE: One of the security issues listed is the Meltdown and Spectre vulnerability. This is the security issue that says *Kernel vulnerable to side-channel attacks in modern microprocessors(CVE-2017-573/Spectre, CVE-2017-5754/Meltdown)*. To save time, we will NOT be fixing this particular security issue in this lab exercise since the fix for Meltdown and Spectre requires a kernel upgrade, which requires a reboot of the system.
++
+NOTE: Our objective is to fix the payload injection problem without causing downtime, and see that it no longer appears as a vulnerability in Red Hat Insights. Specifically, this payload injection problem causes the kernel to be vulnerable to man-in-the-middle via payload injection. A flaw was found in the implementation of the Linux kernel's handling of networking challenge ack link:https://tools.ietf.org/html/rfc5961[RFC 5961] where an attacker is able to determine the shared counter. This flaw allows an attacker located on different subnet to inject or take over a TCP connection between a server and client without needing to use a traditional man-in-the-middle (MITM) attack.
+
+. Use your browser’s search function to search for *payload injection*.
++
+image:images/lab5.2-CVE-2016-5696.png[1000,1000]
++
+NOTE: Reading the description for the vulnerability shows that the sysctl variable is set to a level that allows being exploited. We want to do the active mitigation by changing the sysctl variable and making it permanent on reboot. In this case, we do not want to update the kernel or reboot since we don’t want downtime.
+
+. If not already there, log into to the workstation host as *lab-user* from your desktop system replacing *GUID* with your lab's *GUID*. Then, become *root* on the workstation host.
++
+[source]
+----
+[localhost ~]$ ssh lab-user@workstation-GUID.rhpds.opentlc.com
+[lab-user@workstation-GUID ~]$ sudo -i
+----
+
+. Log in to the Red Hat Insights client machine *ic1.summit.example.com*.
++
+[source]
+----
+[root@workstation-GUID ~]# ssh ic1.summit.example.com
+----
+
+. Now, as *root*, perform the recommended active mitigation. Edit the */etc/sysctl.conf* file to add the mitigation configuration.
++
+[source]
+----
+[root@ic1 ~]# echo "net.ipv4.tcp_challenge_ack_limit = 2147483647" >> /etc/sysctl.conf
+----
+. Next, reload the kernel configuration.
++
+[source]
+----
+[root@ic1 ~]# sysctl -p
+net.ipv4.tcp_challenge_ack_limit = 100
+vm.legacy_va_layout = 0
+net.ipv4.tcp_challenge_ack_limit = 2147483647
+----
+
+. After applying the active mitigation, we want to have the system report any changes. Run the following command as root on ic1.summit.example.com:
++
+[source]
+----
+[root@ic1 ~]# insights-client
+WARNING: Excluding data from files
+Starting to collect Insights data for ic1.summit.example.com
+WARNING: Skipping command /bin/netstat -neopa
+WARNING: Skipping file /etc/hosts
+Uploading Insights data.
+Successfully uploaded report from 4a61da2a-1f76-470f-8dae-358f3c15b7ca to account 6057187.
+----
+
+. Wait until this step completes before moving to the next step.
+. From your Red Hat Satellite UI, click on *Insights → Inventory*.
++
+image:images/insightsinventory.png[200,200]
+. Click on your client system, *ic1.summit.example.com*. You will notice than the number of actions has decreased.
+
+. Use your browser’s search function to search for *payload injection*. You will notice that this payload injection issue is no longer listed due to fixing the vulnerability.
++
+image:images/lab5.2-payloadinjectionsearch-again.png[1000,1000]
+
+. Congratulations, you’re no longer impacted by the payload injection vulnerability!
+
+=== Lab 5.3 Automatically fixing the payload injection security issue using Red Hat Ansible Automation
+
+It is also possible to automate some of the issues with an Ansible Playbook that Red Hat Insights provides us. In the top left corner of every single issue reported by Red Hat Insights,  there is a blue Ansible logo if an Ansible playbook is available. If there is no Ansible playbook available, the Ansible logo is grey.
+
+For this part of the lab exercise, we will fix the payload injection vulnerability in an automated way using an Ansible playbook versus fixing it manually like we did in the previous exercise. We will execute these steps on the *ic4.summit.exmaple.com* client system.
+
+. First, we need to create a plan in which the issues that are found by Red Hat Insights will be solved using an Ansible Playbook provided by Red Hat Insights. In order to do this, from your Red Hat Satellite UI, click on *Insights → Planner*.
++
+image:images/lab5.3-planner.png[1000,1000]
+
+. Click on *Create a plan*.
++
+image:images/lab5.3-createplan.png[1000,1000]
+
+. Name the plan: *GUID* Payload Remediation. Replacing *GUID* with your lab's *GUID*, select *ic4.summit.example.com* for Specific System and choose the *Kernel vulnerable to man-in-the-middle via payload injection (CVE-2016-5696)* CVE and click on *Save*.
++
+NOTE: Since this is a shared Insights environment naming this with your GUID will make it easier to find when its time to select the plan for remediation.
++
+image:images/lab5.3-playbookplan.png[1000,1000]
+
+. As you can see, there are two ways to solve this issue: First option is by updating the kernel. The second option is to apply the needed changes to the */etc/sysctl.conf* file, add the mitigation configuration, and reload the kernel configuration.
+Red Hat Insights gives us the opportunity to choose the resolution that we want. In this lab exercise, we want to prevent unplanned downtime for this issue, so select *Set sysctl ip4 challenge ack limit* as your preferred choice and then click on the *Save* button.
++
+image:images/lab5.3-setlimit.png[1000,1000]
+
+. Once the plan is saved, the planner screen is shown where you can see the newly created plan, as well as the issues it resolves and the systems affected.
++
+image:images/lab5.3-plan.png[1000,1000]
+
+. Now that we have a plan built to resolve the Payload vulnerability for *ic4.summit.exampl.com*, we need to sync the Red Hat Insights information with Red Hat Ansible Tower.
+
+. Login with *admin* / *r3dh4t1!* to Red Hat Ansible Tower at https://tower-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
+
+. Click on *Templates* from the main menu at the left. Find the *Insights Facts Scan* job template and click the *rocket ship* to run this job. This Job template will scan the Ansible facts from the host(s) and gather relevant host information necessary to show the Red Hat Insights data for those hosts in Red Hat Ansible Tower.
++
+image:images/lab5.3-scanjob.png[1000,1000]
+
+. The Job Details output will pop up and you should let the job run to completion. At the end the Status should show Successful.
++
+image:images/lab5.3-scanoutput.png[1000,1000]
+
+. Navigate to *Inventories* and click on *Insights Inventory*.
++
+image:images/lab5.3-insightsinv.png[3000,3000]
+
+. Click *Hosts* and click on the host *ic4.summit.example.com*.
++
+image:images/lab5.3-insights-hosts.png[3000,3000]
+
+. Scroll down on the HOSTS page for *ic4.summit.example.com*. Click on the *Insights* option (the letter *i*) for this host. Here, you can see all of the risks and vulnerabilities associated with this host. This is the insight data that you scanned in a previous step.
++
+image:images/insightsdataic4.png[1000,1000]
+image:images/lab5.3-insights-issues.png[1000,1000]
+
++
+. Navigate to *Projects* from the main menu on the left and find the *Insights Planner Sync* project. Then, click the Sync button. This will sync the Red Hat Insights information with Red Hat Ansible Tower.
++
+image:images/lab5.3-insights-sync.png[1000,1000]
+. The sync should complete successfully. Now you're ready to remediate with Red Hat Ansible Tower.
++
+NOTE: Red Hat Ansible Tower can also identify Red Hat Insights issues on managed hosts. All of the above projects and plans can be synced and updated automatically with Red Hat Ansible Tower via the API or with scheduled runs.
+
+. Navigate to *Templates* and click on *+* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
++
+image:images/jobtemplatei.png[2000,2000]
+
+. For the name of the template use: *GUID* Payload Fix. Job Type should be *Run*. For Inventory select *Insights Inventory*. For Project select *Insights Planner Sync*. In the Playbook Dropdown Choose a playbook that you created with your unique GUID in the Insights Planner. For credential select *Insights Fix All Machine Credentials*. The final task is to click *Enable Privilege Escalation* under OPTIONS, and click *Save*.
++
+image:images/lab5.3-new_job.png[3000,3000]
+
+. Scroll down to where the Templates are listed below the New Template fields, or click Templates from the Main Tower menu. Find the template you created.
++
+image:images/lab5.3-new-template-created.png[3000,3000]
+
+. Run this job template by clicking the *rocket ship* for the template you created. This will launch the job and run the playbook you selected from the dropdown. If everything is successful, you will see a status of *Successful* in the DETAILS pane. The Red Hat Ansible Tower log will also show zero failures on the right in the PLAY RECAP at the bottom of the log.
++
+image:images/lab5.3-playbook_is_run.png[3000,3000]
+
+. Now navigate back to your Satellite UI at https://sat64-GUID.rhpds.opentlc.com and from the Satellite UI, click on *Insights → Inventory* you will notice that *ic4.summit.example.com* has one less issue, since we resolved the kernel vulnerability that we created the Plan and playbook for.
++
+image:images/lab5.3-results_in_satellite.png[3000,3000]
++
+NOTE: When the execution of the Ansible playbook is completed, the Red Hat Insights agent is also run as part of this Ansible playbook, so the latest state of the system is reporting into Red Hat Insights automatically.
+
+. Finally, navigate to *Insights -> Planner*. Notice here that under *Plans*, the number of Actions that are resolved are listed per plan.
++
+image:images/insightsplanner.png[300,300]
+image:images/planner.png[1000,1000]
+
+
+=== Lab 5.4 [BONUS LAB] Automatically fix all the issues on client systems using Red Hat Ansible Tower
+
+In this lab exercise, we will attempt to fix all the issues on the client systems, *ic1.summit.example.com* and *ic4.summit.example.com*.
+
+. Open your browser to the Red Hat Satellite server https://sat64-GUID.rhpds.opentlc.com (replacing *GUID* with your lab's *GUID*) and login as username *admin* and password *r3dh4t1!*, if not already logged in.
+
+. Click on *Red Hat Insights → Inventory*.
++
+image:images/lab5.4-Inventory-insights.png[300,300]
+
+. Select both *ic1.summit.example.com* and *ic4.summit.example.com* systems and note the number of actions each client needs to take in order to be resolved.
+
+. Click on *Actions*, on the top left corner, and then select *Create a new Plan / Playbook*.
++
+image:images/createplaybook.png[1000,1000]
+
+
+. Enter a plan name of *GUID Insights Fix ALL*, replacing *GUID* with your lab's *GUID*. Choose all *Actions*, do this by clicking on the box by the Action label at the top left. Then click *Save*.
++
+image:images/lab5.4-FixAllPlan.png[3000,3000]
+
+. You are given the option to choose between different ways to solve your issues. For this exercise in order to save some time, choose actions that do not require a reboot if possible.
++
+image:images/lab5.4-choose_resolution.png[800,800]
+
+. You should see all the issues this plan is going to solve as well as the affected systems.
++
+image:images/lab5.4-FixAll.png[3000,3000]
++
+NOTE: Now that we have a plan built to resolve most of the vulnerabilities for our two systems, we need to sync the Red Hat Insights information with Red Hat Ansible Tower.
+
+. Login with *admin* / *r3dh4t1!* to Red Hat Ansible Tower at https://tower-GUID.rhpds.opentlc.com replacing *GUID* with your lab's *GUID*.
+
+. Click on *Templates* from the main menu on the left. Find the *Insights Facts Scan* job template and click on the *rocket ship*.
++
+image:images/LAb5.4-Insights-Facts-scan.png[3000,3000]
+
+. The Job Details output will pop up and you should let the job run to completion. At the end the Status should show Successful.
++
+image:images/Lab5.4-Insights-Facts-Fix-All.png[3000,3000]
+
+. Navigate to *Projects* from the main menu at the left and find the *Insights Planner Sync* project. Click the Sync button.
++
+image:images/Lab5.4-Check-for-playbooks.png[3000,3000]
+
+. The sync should complete successfully, and now you're ready to remediate with Red Hat Ansible Tower.
+
+. Navigate to *Templates* and click on *+* and select the *Job Template* dropdown. We will create a job template to run one of the plans we created. You should have created the plan with your unique *GUID* from this lab.
++
+image:images/Lab5.4-Template-to-FixAll.png[4000,4000]
+
+. For the name of the template use: *GUID* Insights Fix ALL. Job Type should be *Run*. For Inventory select *Insights Inventory*. For Project select *Insights Planner Sync*. In the Playbook dropdown, choose a playbook that you created with your unique GUID in the Insights Planner, i.e. *GUID Insights Fix ALL*. For credential select *Insights Fix All Machine Credentials*. The final task is to click *Enable Privilege Escalation* under OPTIONS, and click *Save*.
++
+image:images/Lab5.4-FixAllTemplate.png[4000,4000]
+
+. Scroll down to where the Templates are listed or click Templates from the main Red Hat Ansible Tower menu on the left. Find the job template you created and click the *rocket ship*.
++
+image:images/Lab5.4-Run_fixall.png[4000,4000]
+
+. This will launch the job and run the playbook you selected from the dropdown. If everything is successful, you will see a status of *Successful* in the DETAILS pane. The Red Hat Ansible Tower log will also show zero failures on the right in the PLAY RECAP at the bottom of the log.
++
+NOTE: This job will take about 10 minutes to complete since it is fixing multiple issues found in your systems. The image below shows what a successful job looks like.
++
+image:images/Lab5.4-finalrun.png[4000,4000]
++
+NOTE: There are some actions that will not have Ansible playbook generation capability, so you may have to do those manually. However, you can knock out a majority of the vulnerabilities and security issues with Red Hat Insights Plans and Red Hat Ansible Tower. Just repeat the steps to create plans, sync them, and create and run the remediation template.
+
+. Now navigate back to your Satellite UI at https://sat64-GUID.rhpds.opentlc.com. From here, click on *Insights → Inventory* you will notice that *ic1.summit.example.com* and *ic4.summit.example.com* have less issues than before.
++
+image:images/Lab5.4-updated.png[4000,4000]
+
+. Finally, navigate to *Insights -> Planner*. Notice here that under *Plans*, the number of Actions that are resolved are listed per plan.
++
+image:images/insightsplanner.png[300,300]
+image:images/planner.png[1000,1000]
+
+<<top>>
+
+link:README.adoc#table-of-contents[ Table of Contents ] | link:lab6.adoc[Lab 6: Automated Security Hardening of a Hacked Web Application]
