@@ -41,5 +41,5 @@ Other than that, feel free to do the lab exercises in whatever order you'd like.
 * link:lab2.adoc[Lab 2: Enforcing Automated Compliance with Security Policies]
 * link:lab3.adoc[Lab 3: Automated Patching of Host Systems]
 * link:lab4.adoc[Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems]
-* link:lab6.adoc[Lab 6: Automated Security Hardening of a Hacked Web Application]
-* link:lab7.adoc[Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
+* link:lab5.adoc[Lab 5: Automated Security Hardening of a Hacked Web Application]
+* link:lab6.adoc[Lab 6: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
