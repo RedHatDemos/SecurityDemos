@@ -25,7 +25,7 @@ Within the context of security, two of the fundamental terms are Authentication 
 
 === OpenShift Authentication
 
-There are multiple forms that identifies a user in OpenShift including the following:
+There are multiple forms that identify a user in OpenShift including the following:
 
 * Regular users - Typical individuals that access the cluster
 * System users - For use by infrastructure related assets, such as _nodes_
