@@ -12,7 +12,7 @@ A number of tools have been installed and pre-configured to support the DevSecOp
 
 image:images/lab4-devsecops01.png[800,800]
 
-In our DevSecOps CI/CD pipeline we will be using several technologies such as:
+In our DevSecOps CI/CD pipeline, we will be using several technologies such as:
 
 - https://www.openshift.com/learn/topics/ci-cd[OpenShift Pipelines] based on https://tekton.dev[Tekton]
 - https://www.openshift.com/blog/announcing-openshift-gitops[OpenShift GitOps] based on https://argoproj.github.io/[ArgoCD]
@@ -52,7 +52,7 @@ image:images/lab4-devsecops02.png[800,800]
  ssh lab-user@bastion.GUID.sandbox####.opentlc.com
 ----
 +
-* To check if the oc command line utility is available, open the terminal and run the following command:
+* To check if the oc command-line utility is available, open the terminal and run the following command:
 +
 [source]
 ----
@@ -63,23 +63,25 @@ image:images/lab4-devsecops02.png[800,800]
 +
 [source]
 ----
-oc login -u admin api.cluster-{GUID}.{GUID}.sandbox###.opentlc.com++:6443
+oc login -u admin api.cluster-{GUID}.{GUID}.sandbox###.opentlc.com:6443
 ----
 +
 API server information for ‘oc login’ can be found in the xref:beforeyoustart[Before You Start].
 +
 * Alternatively, if we want to setup oc client on our laptop, perform the following steps:
 +
-** Login to the OpenShift console. OpenShift console admin user password information is provided by the instructor.
+** Log in to the OpenShift console. OpenShift console admin user password information is provided by the instructor.
 Select the question mark in the top right corner and select “Command Line Tools”
 +
 image:images/lab4-devsecops03.png[200,200]
 +
-** Download the oc command line tool for the operating system of your choice.
-** Move the oc command line tool to the system executables location for simplicity of access throughout the exercise.
+** Download the oc command-line tool for the operating system of your choice.
+** Move the oc command-line tool to the system executables location for simplicity of access throughout the exercise.
++
+For example, on Macbook, run the command
 +
 |===
-|For example, on Macbook, run the command mv <insert-download-path> /usr/local/bin ++/usr/local/bin/
+|mv <insert-download-path> /usr/local/bin /usr/local/bin/
 |===
 +
 * Internet access to the lab environment
@@ -93,7 +95,7 @@ In this lab, we will learn how to start the Tekton pipeline and how to use the t
 . There are three ways to start the pipeline:
 ** Option 1: Use Developer UI to start
 .. Browse to the OpenShift Console URL in the browser
-.. Login to the console using the provided credentials
+.. Log in to the console using the provided credentials
 .. If we are not already in the Developer Perspective, select Developer to switch to the developer console in the top left corner.
 +
 image:images/lab4-devsecops04.png[200,200]
@@ -110,7 +112,7 @@ image:images/lab4-devsecops06.png[400,700]
 +
 image:images/lab4-devsecops07.png[600,800]
 +
-.. Click “Action” → select “start”
+.. From the top right corner, click “Actions” → select “start”
 +
 image:images/lab4-devsecops08.png[200,700]
 +
@@ -119,16 +121,18 @@ image:images/lab4-devsecops08.png[200,700]
 .. Click start
 +
 ** Option 2: Command-line to start the pipeline
-The command line is a convenient way to start the pipeline while testing, and it is a way to simulate a PR or push to git and trigger the pipeline. It is for users who prefer the CLI to start the pipeline.
+The command-line is a convenient way to start the pipeline while testing, and it is a way to simulate a PR or push to git and trigger the pipeline. It is for users who prefer the CLI to start the pipeline.
 +
 .. Run:
 +
 [source]
-----
-oc create -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml[https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml] -n ocp-workshop
-----
+
+|===
+|oc create -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/pipeline-build-dev-run.yaml -n ocp-workshop
+
+|===
 +
-** Option 3: When new code is pushed to the git repo, it will also trigger the pipeline to start.
+** Option 3: When new code is pushed to the git repo, it will also trigger the pipeline to start. In this lab, git repo is Gogs. The steps below are for pushing code via the “Gogs” git repo.
 This option may be the most popular from a developer perspective. The pipeline starts from a PR or a push into the git repo and the webhook automatically starts the pipeline.
 +
 .. From the dev console, click `Search` on the left nav menu.
@@ -161,12 +165,12 @@ image:images/lab4-devsecops13.png[400,700]
 +
 image:images/lab4-devsecops14.png[400,700]
 +
-[Note] This is only for demo purposes. Usually the push to master is not recommended, and it’s a Pull Request / Merge Request from another branch (such as develop) that is used instead.
+[Note] This is only for demo purposes. Usually, the push to master is not recommended, and it’s a Pull Request / Merge Request from another branch (such as develop) that is used instead.
 +
-.. The pipeline will start automatically, so jump to step 6 to see the Pipeline Runs console in order to check the pipeline running.
+.. The pipeline will be triggered automatically, please skip to step 6 of this lab to see the Pipeline Runs console.
 +
 . Open the browser using the provided OpenShift console URL.
-. Login to the console using the provided credential.
+. Log in to the console using the provided credential.
 . Click to `Developer` to switch to the developer console.
 +
 image:images/lab4-devsecops04.png[200,200]
@@ -189,15 +193,16 @@ Please see the Pipeline Run as shown below when it starts.
 +
 image:images/lab4-devsecops18.png[500,700]
 +
-When the pipeline run completes, this is the view.
-+
-image:images/lab4-devsecops19.png[500,700]
-+
-[Note] Step “image-check” has failed in the pipeline run. This is due to an important severity vulnerability in the image being caught by a pipeline gate policy, stopping the deployment:
+The pipeline run will fail at step “image-check” in the pipeline run. This is due to an important severity vulnerability in the image being caught by a pipeline gate policy, stopping the deployment.
 +
 image:images/lab4-devsecops20.png[500,700]
 +
-The next module, lab 4.2 will walk through what’s happened and how to resolve it securely. +
+The vulnerability has to be fixed for the pipeline to complete successfully. We will do it in the next module. Here is what a successful run looks like.
++
+image:images/lab4-devsecops19.png[500,700]
++
+The next module, lab 4.2 will walk through what’s happened and how to resolve it securely.
++
 [Note] In addition to triggering a pipeline run manually, every push to the spring-petclinic git repository on the Gogs git server executes the pipeline.
 . Explore the pipeline! Once the pipeline is started, we can click on each detailed step to explore logs for each step. We’ll direct some of the explorations in the next few steps.
 .. *Source Clone* - app source code is pulled from the Git (Gogs) server installed in this lab.
@@ -261,14 +266,15 @@ image:images/lab4-devsecops32.png[300,700]
 Red Hat Advanced Cluster Security (ACS) for Kubernetes controls clusters and applications from a single console, with built-in security policies. +
 First-generation container security platforms focus on the container. ACS’s focus on Kubernetes helps DevOps and Security teams operationalize security, with a Kubernetes-native architecture that leverages Kube's declarative data and built-in controls for richer context, native enforcement, and continuous hardening. In addition, ACS focuses on Kubernetes helps DevOps and Security teams operationalize security, simplifying the process of protecting the cloud-native application stack.
 
-In this lab, we will learn how ACS integrates into the CI/CD process. ACS not only simplifies the process, but provides visibility to the security team in our organization.
+In this lab, we will learn how ACS integrates into the CI/CD process. ACS not only simplifies the process but provides visibility to the security team in our organization.
 Using https://docs.openshift.com/acs/cli/getting-started-cli.html[roxctl] and ACS API, we integrated several additional security steps into our DevSecOps pipeline:
 
 . The *image scan* step uses the ACS Scanner to scan the image generated and pushed in the last step.
 +
 image:images/lab4-devsecops33.png[300,700]
 +
-In the logs of this step, there is a direct link to the image scan in ACS.  +
+In the logs of this step, there is a direct link to the image scan in ACS.
++
 [Note] If we see a security certificate warning proceeding to that link, ignore it. +
 Copy and paste it into another tab in order to get more information about the scanned image. Enter the following information:
 +
@@ -287,7 +293,7 @@ This is a view of all of the components in this image. It lists relevant informa
 +
 image:images/lab4-devsecops34.png[500,700]
 +
-For example, if we click on the tomcat 9.0.31 component, we will see the details of the component as shown below. This page shows the risk priority, the CVE's information, location of the component and the version of the component to upgrade to in order to remediate the CVE.
+For example, if we click on the tomcat 9.0.31 component, we will see the details of the component as shown below. This page shows the risk priority, the CVE's information, the location of the component, and the version of the component to upgrade to in order to remediate the CVE.
 +
 image:images/lab4-devsecops35.png[500,700]
 +
@@ -399,7 +405,6 @@ image:images/lab4-devsecops53.png[300,700]
 +
 image:images/lab4-devsecops54.png[300,700]
 +
-.. We can now complete the pipeline build after adding the exception for the build image. In order to resolve CVE issues, developers should rebuild the application image based on the ACS reports from image check and deploy check pipeline steps.
 +
 image:images/lab4-devsecops55.png[300,700]
 +
@@ -423,8 +428,8 @@ image:images/lab4-devsecops57.png[300,700]
 +
 image:images/lab4-devsecops43.png[300,300]
 +
-.. The link redirects to the Argo CD login. If it is the first time logging in to Argo CD, please click `Advanced` → click `Proceed to openshift-gitops-server-openshift-gitops.apps…` link.
-.. In order to be able to login as an "admin" user, please first retrieve its password by running the command as shown below.
+.. The link redirects to the Argo CD login. If it is the first time logging in to Argo CD, please click `Advanced` → `Proceed to openshift-gitops-server-openshift-gitops.apps…` link.
+.. In order to be able to log in as an "admin" user, please first retrieve its password by running the command as shown below.
 +
 [source]
 ----
@@ -444,7 +449,7 @@ image:images/lab4-devsecops59.png[300,700]
 +
 image:images/lab4-devsecops102.png[900,700]
 +
-.. The details above shows the namespace where the application is deployed. Back to the OpenShift Dev console, click `Topology` on the left navigation menu under devsecops-dev project. Click the arrow to access the application URL.
+.. The details above show the namespace where the application is deployed. Back to the OpenShift Dev console, click `Topology` on the left navigation menu under devsecops-dev project. Click the arrow to access the application URL.
 +
 image:images/lab4-devsecops60.png[300,500]
 +
@@ -453,6 +458,7 @@ image:images/lab4-devsecops60.png[300,500]
 image:images/lab4-devsecops61.png[500,500]
 +
 .. Go back to the Argo CD console. Click `Applications` on the top left.
++
 [Note] The namespace for `stage-spring-petclinic` is set to devsecops-qa.
 +
 image:images/lab4-devsecops62.png[300,300]
@@ -485,11 +491,11 @@ image:images/lab4-devsecops68.png[300,700]
 +
 .. Click onto the step, the log is shown below.
 +
-This step authenticates into an ArgoCD instance and initiates synchronization process for 'dev-spring-petclinic' application from Git repo (gogs) to the target project in OCP cluster.
+This step authenticates into an ArgoCD instance and initiates the synchronization process for 'dev-spring-petclinic' application from Git repo (gogs) to the target project in the OCP cluster.
 +
 image:images/lab4-devsecops69.png[300,700]
 +
-. Click on the step *perf-test-clone*
+. Click on the pipeline the step *perf-test-clone*
 +
 The performance tests are cloned (*Performance Tests Clone*) into our pipeline workspace as shown below.
 +
@@ -550,7 +556,7 @@ We can enforce the different Security Policies in ACS, failing our CI pipelines 
 +
 image:images/lab4-devsecops43.png[300,300]
 +
-* Login using credential admin/stackrox to ACS console.
+* Log in using credential admin/stackrox to ACS console.
 +
 image:images/lab4-devsecops82.png[300,700]
 +
@@ -617,11 +623,12 @@ image:images/lab4-devsecops93.png[300,700]
 . Apply the new update task from the command terminal:
 +
 |===
-|kubectl apply -f ++https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml++ --namespace=ocp-workshop
+|kubectl apply -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml --namespace=ocp-workshop
 
 |===
 +
 . Re-run the pipeline, the deployment now succeeds. Congratulations to the developers!
++
 [Note] Please check the https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml[*labs-artifacts/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed. We have added a step to the build task, and we leverage buildah to remove the package managers from the image (search for "rpm" or "yum" in the file).
 +
 image:images/lab4-devsecops94.png[300,700]
