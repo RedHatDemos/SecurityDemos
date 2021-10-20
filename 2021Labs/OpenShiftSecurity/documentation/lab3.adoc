@@ -87,7 +87,7 @@ Login to OpenShift using the web console and from the _Administrator_ perspectiv
 
 image:images/lab3-1-projects.png[]
 
-By expanding _Workloads_ on the lefthand side, select *Deployment Configs is present* and confirm `openshift-rbac` is displayed.
+By expanding _Workloads_ on the lefthand side, select *Deployments* and confirm `openshift-rbac` is displayed.
 
 image:images/lab3.2-deploymentconfigs.png[]
 
