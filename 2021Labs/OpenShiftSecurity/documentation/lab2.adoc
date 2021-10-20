@@ -10,7 +10,7 @@ Network Policies are an easy way for Project Administrators to define exactly wh
 If a Pod is matched by selectors in one or more NetworkPolicy objects, then the Pod will accept only connections that are allowed by at least one of those NetworkPolicy objects. A Pod that is not selected by any NetworkPolicy objects is fully accessible.
 
 ==== objective
-The objective of the exercise below is to create multiple projects and to test the communication between them. You will introduce network policies that will block communication across projects. 
+The objective of the exercise below is to create multiple projects and to test the communication between them. You will introduce network policies that will block communication across projects.
 
 Project-c will have a hello-world application to which you will send requests.
 Projects-a, b and c will all have a client application. The client from project-c will always be able to communication with hello-world in project-c since they are in the same project. However, depending on the network policies in place at times you will be blocked from communicating from clients in projects a and b to the hello-world application in project c.
@@ -164,7 +164,7 @@ NOTE:  If you deleted both of these policies and have no Network Policies define
 === Lab 2.2 Creating Network Policies for network isolation
 . In the OpenShift web console, choose project, *proj-c*, and go to *Networking* -> *Network Policies*.
 
-. Next, delete the 2 default Network Policies (*allow-from-all-namespaces* and *allow-from-ingress-namespace*). Remember that if no Network Policies are defined, all traffic is allowed.
+. Next, delete the 2 default Network Policies (*allow-from-all-namespaces* and *allow-from-ingress-namespace*) if you see them. Remember that if no Network Policies are defined, all traffic is allowed.
 +
 image:images/lab2.2.2-deletenetworkpolicies.png[]
 
