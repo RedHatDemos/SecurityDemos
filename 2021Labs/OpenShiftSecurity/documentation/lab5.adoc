@@ -223,6 +223,9 @@ oc get routes -n image-management
 
 Copy the route url and paste it into your browser as follows: `{route_url}/nginxinc`. If you navigate down, you should see a signature created a few moments ago.  You can click it and download it if you want, but it is just binary content.
 
+NOTE: If you get a Application is not available error, ensure you are using http and not https. For this lab that endpoint is not listening on 443
+
+
 By this point the application should have deployed since we created the signature.  OpenShift will periodically retry pulling the image and once the signature is in the signature store the app should deploy.
 
 [source]
