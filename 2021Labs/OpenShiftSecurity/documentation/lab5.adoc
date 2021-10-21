@@ -26,7 +26,7 @@ This operator listens for a custom resource called a ImageSigningRequest.  This 
 
 ==== Lab exercise
 === Step 1 - Clone Git Repository
-Using the OpenShift CLI in the bastion, ensure that you are logged into the cluster as system:admin and execute the following steps.
+Using the OpenShift CLI in the bastion, ensure that you are logged into the cluster as admin and execute the following steps.
 
 [source]
 ----
