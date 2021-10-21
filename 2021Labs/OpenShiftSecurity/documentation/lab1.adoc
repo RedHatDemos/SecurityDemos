@@ -22,7 +22,7 @@ image:images/lab1.1-myproject.png[]
 
 . Then, go to the *Workloads* tab and click on the *Container Image* tile.
 +
-image:images/lab1.1-4.9-workloads[]
+image:images/lab1.1-4.7.33-workloads.png[]
 
 . Then, click on *Container Images* . Make sure that *Image name from external registry* is selected and for the Image and input *docker.io/httpd* in the field labeled "Enter an Image Name". 
 +
