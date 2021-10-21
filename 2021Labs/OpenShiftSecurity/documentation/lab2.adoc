@@ -38,7 +38,7 @@ oc label namespace proj-c name=proj-c
 +
 [source]
 ----
-oc get projects --show-labels
+oc get projects proj-a proj-b proj-c --show-labels
 ----
 +
 image:images/lab2.1-showlabels.png[]
