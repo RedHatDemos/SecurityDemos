@@ -16,7 +16,7 @@ Project-c will have a hello-world application to which you will send requests.
 Projects-a, b and c will all have a client application. The client from project-c will always be able to communication with hello-world in project-c since they are in the same project. However, depending on the network policies in place at times you will be blocked from communicating from clients in projects a and b to the hello-world application in project c.
 
 === Lab 2.1 Creating Projects and Labeling Namespaces
-. Using the OpenShift CLI in the bastion, ensure that you are logged into the cluster as system:admin and create 3 projects:
+. Using the OpenShift CLI in the bastion, ensure that you are logged into the cluster as admin and create 3 projects:
 +
 [source]
 ----
