@@ -26,12 +26,12 @@ This operator listens for a custom resource called a ImageSigningRequest.  This 
 
 ==== Lab exercise
 === Step 1 - Clone Git Repository
-Using the OpenShift CLI in the bastion, ensure that you are logged into the cluster as system:admin and execute the following steps.
+Using the OpenShift CLI in the bastion, ensure that you are logged into the cluster as admin and execute the following steps.
 
 [source]
 ----
 oc whoami
-#Should say: system:admin
+#Should say: admin
 git clone https://github.com/redhat-cop/image-scanning-signing-service.git
 cd image-scanning-signing-service
 ----
@@ -72,7 +72,7 @@ NOTE: This will take a few minutes to update the worker nodes in a cluster. Wait
 
 [source]
 ----
-watch oc get machineconfigpools
+oc get machineconfigpools -w
 # Ctrl+c to exit
 ----
 
@@ -223,12 +223,17 @@ oc get routes -n image-management
 
 Copy the route url and paste it into your browser as follows: `{route_url}/nginxinc`. If you navigate down, you should see a signature created a few moments ago.  You can click it and download it if you want, but it is just binary content.
 
+NOTE: If you get a Application is not available error, ensure you are using http and not https. For this lab that endpoint is not listening on 443
+
+
 By this point the application should have deployed since we created the signature.  OpenShift will periodically retry pulling the image and once the signature is in the signature store the app should deploy.
+
 [source]
 oc get pods
 
 NOTE: To follow the progress of the pods you can also run the previous command with the parameter -w
 
 The nginx pod should be running and ready. If it is not you can give it another minute or two, if you want to force a redeployment which will attempt to pull again run this:
+
 [source]
-oc rollout latest nginx
+oc rollout restart deployment/nginx
