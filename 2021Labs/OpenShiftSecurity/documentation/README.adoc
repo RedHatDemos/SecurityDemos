@@ -1,4 +1,4 @@
-= Implementing Multi-Layer Container and Kubernetes Security with OpenShift for Automated DevSecOps
+= Implementing Multi-Layer Container and Kubernetes Security for Automated DevSecOps
 
 === [.underline]#Lab Developers#:
 *Lucy Kerner*, Director, Security Global Strategy and Evangelism, Red Hat^(R)^
