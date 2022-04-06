@@ -13,7 +13,7 @@
 
 *Roberto Carratala Sanchez*, Senior Specialist Solution Architect, Red Hat^(R)^
 
-*Shanna Chan*, Senior Solutions Architect, Red Hat^(R)^
+*Shanna Chan*, Principal Specialist Solutions Architect, Red Hat^(R)^
 
 === [.underline]#Lab Testers#:
 *Pedro Ibáñez Requena*, Principal Software Engineer, Red Hat^(R)^
