@@ -311,7 +311,7 @@ image:images/lab4-devsecops37.png[300,700]
 image:images/lab4-devsecops38.png[400,700]
 +
 Feel free to continue to explore ACS before continuing to review the pipeline. Understanding security checks and tool capabilities are a key part of this lab and can help raise the knowledge of a secure software delivery pipeline.
-
++
 Now, go back to OpenShift Developer console.
 . The *Image Check* step of the pipeline
 +
@@ -321,9 +321,9 @@ image:images/lab4-devsecops39.png[400,700]
 +
 image:images/lab4-devsecops40.png[400,700]
 +
-  This step checks build-time and deploy-time violations of security policies defined in ACS for any deployment that uses this image. Due to security policy violations, this pipeline fails at this task because we set security policy enforcement in ACS.
+This step checks build-time and deploy-time violations of security policies defined in ACS for any deployment that uses this image. Due to security policy violations, this pipeline fails at this task because we set security policy enforcement in ACS.
 Scanning images is critical to prevent highly vulnerable containerized applications from deployment.
-+
+
 . *Deploy-check* shows the violation of the policies in the log. The log shows the violations, but it did not fail at this task because the deployment enforcement is not on in this example. We will explore more on the policy in the later lab.
 +
 image:images/lab4-devsecops41.png[400,700]
@@ -331,7 +331,8 @@ image:images/lab4-devsecops41.png[400,700]
 [Note] These 3 steps (*deploy-check, image-check, and image-scan*) are executed in parallel to save time in our DevSecOps pipeline.
 +
 . If *image-check* fails, go to the pipeline run and click `image-check`. The bottom of the log shows `Error: failed policies found: 1 policy violated that are failing the check.` The reason for the error is because ACS enforces the policy from building and deploying if a violation occurs. The pipeline integrates ACS via the roxctl in the Tekton task.
-. When an image violates the policies, the best practice is to fix the code and execute the pipeline until it passes the checks. The logs reported the list of violations and remediation. Developers can take the information from the `image-check` task’s log and make changes accordingly. When the fix is checked into Git, the pipeline will be triggered. We have prepared the xref:fiximage[bonus exercise for fixing the image]. If we would like to continue to test other tasks on the pipeline, we can add an exception to the policy to exclude the spring-petclinic.
++
+When an image violates the policies, the best practice is to fix the code and execute the pipeline until it passes the checks. The logs reported the list of violations and remediation. Developers can take the information from the `image-check` task’s log and make changes accordingly. When the fix is checked into Git, the pipeline will be triggered. We have prepared the xref:fiximage[bonus exercise for fixing the image]. If we would like to continue to test other tasks on the pipeline, we can add an exception to the policy to exclude the spring-petclinic.
 Adding an exception to a policy can be useful when developers need to fix the code, and the CI process needs to continue the testing.
 +
 [Note] Please be aware that fixing the code to pass the violation will be the recommended approach.
@@ -392,7 +393,7 @@ image:images/lab4.2-5-exclude-image.png[300,700]
 .. Click 'Next'
 .. Please review Policy before click 'Save'
 .. Now we need to update the newly created image exception policy 'Fixable Severity at least Important - with Exception'
-.. Click Policy on the left menu
+.. Click Policies on the left menu
 .. Search for 'Fixable Severity at least Important - with Exception' policy
 +
 image:images/lab4.2-5-exceptionPolicy.png[300,700]
@@ -413,11 +414,11 @@ image:images/lab4.2-5-editpolicy2.png[300,700]
 +
 .. Save the file
 .. Back to ACS console to the 'Fixable Severity at least Important - with Exception' Policy details page, Select Actions -> Delete policy
-.. Click Policy on the left menu
+.. Click Policies on the left menu
 .. Click `Import policy` on the top right corner
 .. Click `Upload` and select the JSON file that you edited.
 +
-image:images/lab4.2-5-importPolicy.png[300,700]
+image:images/lab4.2-5-importPolicy.png[200,500]
 +
 .. Click `Begin import`
 .. Select with 'Fixable Severity' under the Policies
