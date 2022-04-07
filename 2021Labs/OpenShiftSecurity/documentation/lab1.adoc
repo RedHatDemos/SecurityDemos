@@ -2,12 +2,12 @@
 
 
 === Goal of Lab 1
-The goal of this lab is to learn about the default security technologies in Red Hat OpenShift Container Platform. Specifically, you will see how OpenShift blocks 'rogue' containers with images from from Docker Hub from running as a privileged root user.
+The goal of this lab is to learn about the default security technologies in Red Hat OpenShift Container Platform. Specifically, you will see how OpenShift blocks 'rogue' containers with images from from Docker Hub from running as a privileged root user and how you can work around that restrictions for this specific container.
 
 === Introduction
 Almost all software you are running in your containers does not require 'root' level access. Your web applications, databases, load balancers, number crunchers, etc. do not need to be run as root ever. Building container images that do not require root at all and basing images off of non-privileged container images are needed for container security. However, the vast majority of container images in the world today, such as the community container images available on Docker Hub, require root. By default, no containers are allowed to run as root in Red Hat OpenShift Container Platform. An admin can override this, otherwise all user containers run without ever being root. This is particularly important in multi-tenant OpenShift Kubernetes clusters, where a single cluster may be serving multiple applications and multiple development teams. It is not always practical or even advisable for administrators to run separate clusters for each.
 
-=== Lab 1.1 Pull rogue container image from Docker Hub and observe how OpenShift locks down the container by default
+=== Lab 1.1 Pull 'rogue' container image from Docker Hub and observe how OpenShift locks down the container by default
 
 . Create a new project called *myproject* (or any other name that you prefer).
 +
@@ -24,20 +24,21 @@ image:images/lab1.1-myproject.png[]
 +
 image:images/lab1.1-workloads.png[]
 
-. Then, click on *Container Image* . Make sure that *Image name from external registry* is selected and for the Image Name, type *docker.io/httpd*. Press the magnifying glass.
+NOTE: It may be easier to use *Developer* perspective of OpenShift console to navigate to a project and click "+Add" button on the left hand side menu  to initiate that workflow. 
+. Then, click on *Container Images* . Make sure that *Image name from external registry* is selected and for the Image Name, type *docker.io/httpd*. Press the magnifying glass.
 +
 image:images/lab1.1-image-external.png[]
 +
-NOTE: Notice that this container image requires to be run as root on port 80.
+NOTE: Notice that this container image requires to be run as 'root' and listen on port 80.
 
-. Press *Create*.
+. Leave other values as defaults and press *Create*.
 
 . Now, go back to your terminal and go into the project you just created by typing *oc project myproject*. Then, take a look at your pods by typing *oc get pods*. Notice that one of your pods has a CrashLoopBackOff error.
 +
 image:images/lab1.1-crashloopbackofferror.png[]
 
 . Let's investigate further what is causing this error. Take a look at the log of the pod that is causing this error.
-You can get the name of the pod from the previous oc get pods command.
+You can get the name of the pod from the previous *oc get pods* command.
 +
 [source]
 ----
@@ -62,7 +63,9 @@ image:images/lab1.1-describepod-error.png[]
 +
 Notice that the output shows that the container failed after trying to start on port 80 and terminated due to a CrashLoopBackOff error. Also notice the default OpenShift Security Context Constraints (SCC) policy that is in place is 'restricted' (openshift.io/scc: restricted).
 
-. Now let's fix this issue. In order to allow containers to run with elevated SCC privileges, we will create a Service Acount (a special user account to run services) called 'privileged-sa':
+=== Lab 1.2 Work around the default container security restriction by using service accounts with SCC privileges
+
+. Now let's fix this issue. In order to allow containers to run with elevated SCC privileges, we will create a Service Account (a special user account to run services) called 'privileged-sa':
 +
 [source]
 ----
@@ -70,7 +73,7 @@ Notice that the output shows that the container failed after trying to start on 
 serviceaccount/privileged-sa created
 ----
 
-. Then, we will entitle that specific service account to run as any user id by running the folowing command to add an SCC context:
+. Then, we will entitle that Service Account (which is not used by default by any pods) to run as any userId by running the folowing command to add an SCC context:
 +
 [source]
 ----
@@ -78,15 +81,14 @@ serviceaccount/privileged-sa created
 clusterrole.rbac.authorization.k8s.io/system:openshift:scc:anyuid added: "privileged-sa"
 ----
 
-. Now we have a service account that can run pods/containers using any user ID. But how can can "plug" it into out application?
-There is a pretty straighforward command for that as well that "injects" that non-default service account into our application deployment:
+. Now we have a Service Account that can run pods/containers using any userId. But how can we "plug" it into out application to allow it to run with that privilege? There is a pretty straighforward OpenShift command for that as well that "injects" that non-default service account into our application deployment:
 +
 [source]
 ----
 [localhost ~]$ oc set serviceaccount  deployment httpd privileged-sa
 deployment.apps/httpd serviceaccount updated
 ----
-. We can verify that our deployment now is using that service account by running command:
+. That will make our 'httpd' pod use this Service Account and enable elevated privileges. We can verify that our Deployment now is using that Service Account by running command:
 +
 [source]
 ----
@@ -150,7 +152,9 @@ AH00558: httpd: Could not reliably determine the server's fully qualified domain
 ...
 ----
 
-So we have learned that by adding SCC privileges to a Service Account and using that Service Account to run a pod that requires elevated privileges, we can get it to run securely on OpenShift. Please keep in mind that best practice is to assign *minimal SCC privileges* that are required for pod security to such service accounts. 
+. So we have learned that by adding SCC privileges to a Service Account and using that Service Account to run a pod that requires elevated privileges, we can get it to run securely on OpenShift. Please keep in mind that *best practice is to assign minimal SCC privileges* that are required for pod security to such service accounts. 
+
+Per OpenShift Documentation (https://docs.openshift.com/container-platform/4.10/security/container_security/security-hosts-vms.html) the best practice is: most containers, except those managing or monitoring the host system itself, should run as a non-root user. Dropping the privilege level or creating containers with the least amount of privileges possible is recommended best practice for protecting your own OpenShift Container Platform clusters.  
 
 <<top>>
 
