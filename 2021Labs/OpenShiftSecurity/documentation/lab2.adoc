@@ -198,9 +198,9 @@ image:images/lab2.2-curlfail.png[]
 . Here you will create additional Network Policy that will allow access to pods running in *proj-c* from those running in different projects, selected by their labels. In the previous lab you created a Network Policy that denies access to all pods in *proj-c* from other projects. 
 . Now, similar to Lab 2.2, let's create a Network Policy that is based on the sample "ALLOW traffic from all Pods in a particular namespace". In the 'podSelector.matchLabels' section specify 'deployment:hello' to select the 'hello' pods and in the 'namespaceSelector.matchLabels' section specify 'name:proj-a' to indicate that you will allow traffic from apps deployed in that namespace (recall that we labeled it with 'name:proj-a'). Press *Create* to create that Network Policy
 +
-image:images/lab2.3-allow-traffic-rom-proj-a.png[]
+image:images/lab2.3-allow-traffic-from-proj-a.png[]
 
-. Now, navigate into *Networking* -> *Network Policies*. and notice that the *web-allow-production* Network Policy is there
+. Now, navigate into *Networking* -> *Network Policies*. and notice that the *web-allow-production* Network Policy is there:
 +
 image:images/lab2.3-policies-list.png[]
 
