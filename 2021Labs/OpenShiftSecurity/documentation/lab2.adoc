@@ -5,12 +5,13 @@
 The goal of this lab is to learn about how to implement network isolation between running containers in Red Hat OpenShift Container Platform using Software Defined Networking and Network Policies. First, we will create a few projects (K8s namespaces) and examine default out of the box network policies provided in OpenShift. Then, we will use Network Policies to restrict which appications/projects can talk to each other by restricting the network layer to provide that network isolation between running containers with Software Defined Networking and Network Policies.
 
 === Introduction
-[Network Policies] (https://kubernetes.io/docs/concepts/services-networking/network-policies/) are an easy way for Project Administrators to define exactly what ingress/egress traffic is allowed to any pod, from any other pod, including traffic from pods located in other projects. By default, all Pods in a project are accessible from all other Pods and network endpoints. To isolate one or more Pods in a project, you can create NetworkPolicy objects in that project to indicate the allowed incoming connections. Project administrators can create and delete NetworkPolicy objects within their own project.
+
+[Kubernetes](https://kubernetes.io/docs/concepts/services-networking/network-policies/ "Network Policies") are an easy way for Project Administrators to define exactly what ingress/egress traffic is allowed to any pod, from any other pod, including traffic from pods located in other projects. By default, all Pods in a project are accessible from all other Pods and network endpoints. To isolate one or more Pods in a project, you can create NetworkPolicy objects in that project to indicate the allowed incoming connections. Project administrators can create and delete NetworkPolicy objects within their own project.
 
 If a Pod is matched by selectors in one or more NetworkPolicy objects, then it will accept only connections that are allowed by at least one of those NetworkPolicy objects. A Pod that is not selected by any NetworkPolicy objects is fully accessible.
 
 === Lab 2.1 Creating Projects and Labeling Namespaces
-. As a cluster admin user, create 3 projects and label the namespaces.
+. As a cluster admin user, create 3 projects and label those namespaces.
 +
 [source]
 ----
@@ -154,7 +155,7 @@ image:images/lab2.1.10-webconsole2.png[]
 image:images/lab2.1.10-webconsole1.png[]
 
 
-. Notice that (in earlier versions of OpenShift) those two Network Policies get set up by default:
+. Notice that (in earlier versions of OpenShift) those two Network Policies are created by default:
 
 * *allow-from-all-namespaces*: This is why we can hit services in the project, *proj-c* from other projects (such as projects, *proj-a* and *proj-b*).
 * *allow-from-ingress-namespace*: This allows ingress from the router (outside in through the router).
@@ -170,13 +171,13 @@ NOTE:  In the recent versions of OpenShift 4.x those default Network Policies ar
 image:images/lab2.2.2-deletenetworkpolicies.png[]
 
 . Now, create a new Network Policy in project, *proj-c* that denies traffic from other namespaces. It should be
-the first example shown on the right in the Samples Network policies. Notice there are a lot of Sample Network Policies. Apply the first example *Limit access to the current namespace*. Click Try it. This creates the yaml. Next, press *create*.
+the first example shown on the right in the Sample Network policies. Notice there are a lot of Sample Network Policies. Apply the first example *Limit access to the current namespace*. Click Try it. This creates the yaml. Next, press *create*.
 +
 image:images/lab2.2-createnetworkpolicies1.png[]
-image:images/lab2.2-createnetworkpolicies2.png[]
+image:images/lab2.2-createnetworkpolicies2-new.png[]
 
 
-. Now, go into *Networking* -> *Network Policies*. and notice that the *deny-other-namespaces* network policy is defined.
+. Now, navigate into *Networking* -> *Network Policies*. and notice that the *deny-other-namespaces* network policy is defined.
 +
 image:images/lab2.2-denyothernamespaces.png[]
 
@@ -190,8 +191,38 @@ sh-5.0# curl -v hello.proj-c:8080
 +
 image:images/lab2.2-curlfail.png[]
 
+. Same kind of failure you would get if you try to access application running in *proj-c* from *proj-b* because the Network Policy blocks traffic from ALL namespaces
+
 === Lab 2.3 Creating Network Policies for selective network access
-. Here you will create additional Network Policies that will allow access to pods running in *proj-c* from those running in different projects, selected by their labels
+
+. Here you will create additional Network Policy that will allow access to pods running in *proj-c* from those running in different projects, selected by their labels. In the previous lab you created a Network Policy that denies access to all pods in *proj-c* from other projects. 
+. Now, similar to Lab 2.2, let's create a Network Policy that is based on the sample "ALLOW traffic from all Pods in a particular namespace". In the 'podSelector.matchLabels' section specify 'deployment:hello' to select the 'hello' pods and in the 'namespaceSelector.matchLabels' section specify 'name:proj-a' to indicate that you will allow traffic from apps deployed in that namespace (recall that we labeled it with 'name:proj-a'). Press *Create* to create that Network Policy
++
+image:images/lab2.3-allow-traffic-rom-proj-a.png[]
+
+. Now, navigate into *Networking* -> *Network Policies*. and notice that the *web-allow-production* Network Policy is there
++
+image:images/lab2.3-policies-list.png[]
+
+. Next, again try to curl the 'hello world' service in project *proj-c* from the client running in *proj-a*. Notice that the curl succeeds this time because ingress traffic is explicitely allowed from *proj-a* to our 'hello world' pod 
++
+[source]
+----
+[localhost ~]$ oc rsh ${POD}
+sh-5.0# curl -v hello.proj-c:8080
+----
++
+image:images/lab2.3-curl-from-proj-a-ok.png[]
+
+. Next, try to curl the 'hello world' service in project *proj-c* from the client running in *proj-b*. Notice that the curl still fails because the first Network Policy still blocks it and the second one is not applicable to pods in *proj-b*:
++
+[source]
+----
+[localhost ~]$ oc rsh ${POD}
+sh-5.0# curl -v hello.proj-c:8080
+----
++
+image:images/lab2.3-curl-from-proj-b-fails.png[]
 
 <<top>>
 
