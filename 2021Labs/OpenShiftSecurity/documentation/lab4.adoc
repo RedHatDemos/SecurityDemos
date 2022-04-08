@@ -391,65 +391,65 @@ image:images/lab4-devsecops46.png[100,200]
 +
 image:images/lab4-devsecops47.png[300,700]
 +
-[Note] Since we ran into a bug on the UI and we will not be able to add the build image exception to the policy via the ACS UI. The steps here is a workaround. In ACS v3.70, will be able to add build image without SHA via UI.
+[Note] Since we ran into a https://issues.redhat.com/browse/ROX-9938[bug] on the UI and we will not be able to add the build image exception to the policy via the ACS UI. The steps here is a workaround. In ACS v3.70, will be able to add build image without SHA via UI.
 +
-.. Click onto `Fixable Severity at least Important` to the policy details page. The Policy page allows edit, clone, export and disable policy under `Actions`. Click 'Clone policy' under `Actions`. Developers can use the information in the guidance to fix the image. The lifecycle stage information is where the policy enforcement takes place. Since the enabled policy is violated, it will not pass the build and deploy stages in the pipeline.
+* Click onto `Fixable Severity at least Important` to the policy details page. The Policy page allows edit, clone, export and disable policy under `Actions`. Click 'Clone policy' under `Actions`. Developers can use the information in the guidance to fix the image. The lifecycle stage information is where the policy enforcement takes place. Since the enabled policy is violated, it will not pass the build and deploy stages in the pipeline.
 +
 image:images/lab4-devsecops48.png[300,700]
 +
-.. Enter the clone policy name as `Fixable Severity at least Important - with Exception`
+* Enter the clone policy name as `Fixable Severity at least Important - with Exception`
 +
 image:images/lab4.2-5-clone-policy-name.png[300,700]
 +
-.. Click `Next`
-.. Click `Next` on the Policy behavior
-.. Click `Next` on Policy criteria
-.. Under Exclude images section, type the following to filter the options in in `Excluded Images (Build Lifecycle only)` list:
+* Click `Next`
+* Click `Next` on the Policy behavior
+* Click `Next` on Policy criteria
+* Under Exclude images section, type the following to filter the options in in `Excluded Images (Build Lifecycle only)` list:
 +
 |===
 |image-registry.openshift-image-registry.svc:5000/ocp-workshop/spring-petclinic
 |===
 +
-.. Select one of the spring-petclinic image.
+* Select one of the spring-petclinic image.
 +
 image:images/lab4.2-5-exclude-image.png[300,700]
 +
-.. Click `Next`
-.. Please review Policy before click `Save`
-.. Now we need to update the newly created image exception policy `Fixable Severity at least Important - with Exception`
-.. Click Policies on the left menu
-.. Search for `Fixable Severity at least Important - with Exception` policy
+* Click `Next`
+* Please review Policy before click `Save`
+* Now we need to update the newly created image exception policy `Fixable Severity at least Important - with Exception`
+* Click Policies on the left menu
+* Search for `Fixable Severity at least Important - with Exception` policy
 +
 image:images/lab4.2-5-exceptionPolicy.png[300,700]
 +
-.. Click onto the policy
-.. Click Actions -> Export policy to JSON
+* Click onto the policy
+* Click Actions -> Export policy to JSON
 +
 image:images/lab4.2-5-exportPolicy.png[300,700]
 +
-.. Save it as a selected local filesystem
-.. Open the JSON file using your favorite editor
+* Save it as a selected local filesystem
+* Open the JSON file using your favorite editor
 +
 image:images/lab4.2-5-editPolicy.png[300,700]
 +
-.. Remove the `@sha256:..`` and the rest of the SHA from the image name
+* Remove the `@sha256:..`` and the rest of the SHA from the image name
 +
 image:images/lab4.2-5-editpolicy2.png[300,700]
 +
-.. Save the file
-.. Back to ACS console to the `Fixable Severity at least Important - with Exception` Policy details page, Select `Actions` -> `Delete policy`
-.. Click `Policies` on the left menu
-.. Click `Import policy` on the top right corner
-.. Click `Upload` and select the JSON file that you edited.
+* Save the file
+* Back to ACS console to the `Fixable Severity at least Important - with Exception` Policy details page, Select `Actions` -> `Delete policy`
+* Click `Policies` on the left menu
+* Click `Import policy` on the top right corner
+* Click `Upload` and select the JSON file that you edited.
 +
 image:images/lab4.2-5-importPolicy.png[200,500]
 +
-.. Click `Begin import`
-.. Select with 'Fixable Severity' under the Policies
+* Click `Begin import`
+* Select with 'Fixable Severity' under the Policies
 +
 image:images/lab4.2-5-filterPolicy.png[300,700]
 +
-.. Click 3-dot icon at the end of the `Fixable Severity at least Important` policy -> select `Disable policy`
+* Click 3-dot icon at the end of the `Fixable Severity at least Important` policy -> select `Disable policy`
 +
 image:images/lab4.2-5-disablePolicy.png[300,700]
 +
@@ -631,14 +631,14 @@ image:images/lab4-devsecops84.png[300,700]
 For example, this Security Policy checks if an RH Package Manager (dnf, yum) is in the application Image and will FAIL the pipeline if it detects that the image built contains any RH Package Manager.
 * The policy details can be modified. Also, the lifecycle stages are defined by the policy and other properties. The enablement of the Policy option is where the user controls the CI to fail or pass.
 +
-image:images/lab4-devsecops85.png[500,500]
+image:images/lab4-devsecops85.png[300,700]
 +
 * Click `Actions` -> `Edit policy`
 * Click `Next` on `Policy details`
 * Select `Inform and enforce` under Response method
 * Select `Enforce on Build` for Build
 +
-image:images/lab4-devsecops87.png[300,300]
+image:images/lab4-devsecops87.png[300,700]
 +
 * Click `Next`, `Next`, `Next` and `Save`
 This step ensures that users  have total control of the pipelines. No image is pushed into the image registry or is deployed to the cluster that surpasses the defined Security Policies.
@@ -653,18 +653,19 @@ In this example, we will be enabling the enforcement of the `Red Hat Package Man
 . Add an exception to bypass the violation in the *Fixable Severity at least important* policy as we did in the previous section.
 . Enable enforcement of the *Red Hat Package Manager in Image* policy:
 .. Go to `Platform Configuration` → `Policies`
-.. Search for *Red Hat Package Manager in Image* policy
+.. Search for `Red Hat Package Manager in Image` policy
 +
 image:images/lab4-devsecops88.png[300,700]
 +
-.. Click onto the `*Red Hat Package Manager in Image*` policy
+.. Click onto the `Red Hat Package Manager in Image` policy
 .. Click `Actions` -> `Edit policy`
 .. Click `Next`
-.. Ensure the `Enforce on Build` under Build
+.. Select `Inform and enforce`
+.. Ensure select `Enforce on Build` in Build under `Configure enforcement behavior`
 +
 image:images/lab4-devsecops87.png[300,600]
 +
-.. Click "Next" until reaching `Review policy` page
+.. Click `Next` until reaching `Review policy` page
 .. Click `Save` (if any modification apply)
 .. Go to the OpenShift Dev UI, click Pipelines on the left → click `petclinic-build-dev` pipeline → click Actions on the top right corner → select `Start last run`
 +
@@ -672,7 +673,7 @@ image:images/lab4-devsecops91.png[300,700]
 +
 .. Check and confirm that it fails on the *image-check* step as the image has the "rpm" and "yum" package managers installed. Notice the suggestion from the *image-check* step:
 +
-image:images/lab4-devsecops92.png[400,500]
+image:images/lab4-devsecops92.png[300,700]
 +
 .. We will effectively update the image with this remediation suggestion.
 . Update the tekton task:
@@ -681,12 +682,18 @@ image:images/lab4-devsecops92.png[400,500]
 +
 image:images/lab4-devsecops93.png[300,700]
 +
-.. With the Tekton cli tkn task delete s2i-java-11
+.. With the Tekton cli
++
+|===
+|tkn task delete s2i-java-11
+|===
++
 . Apply the new update task from the command terminal:
 +
 |===
 |kubectl apply -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml --namespace=ocp-workshop
-
+|or,
+|oc apply -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml  -n ocp-workshop
 |===
 +
 . Re-run the pipeline, the deployment now succeeds. Congratulations to the developers!
@@ -724,14 +731,23 @@ image:images/lab4-devsecops97.png[300,500]
 These policy notifications can be enabled by each system policy enabled in our system, so we can create our own notification baseline in order to have only the proper information received in our systems. +
 Here are the steps to set up slack integration with ACS based on the official https://help.stackrox.com/docs/integrate-with-other-tools/integrate-with-slack/[Integrate with Slack] documentation in Stackrox.
 
-. Create a Slack App, enable Incoming Webhooks and get the Webhook URL
-. Configure the Stackrox Kubernetes Security Platform
+. Create a Slack App, enable Incoming Webhooks and get the Webhook URL using instruction https://docs.openshift.com/acs/3.69/integration/integrate-with-slack.html#configure-slack_integrate-with-slack[here]
 +
-image:images/lab4-devsecops98.png[300,500]
+image:images/lab4-slack.png[300,500]
 +
-. Enable the Notifications in the system policies: Platform Configuration -> System Policies -> Select Policy -> Actions -> Enable Slack Notifications
+. Select `Platform Configuration` -> `Integration`
 +
-image:images/lab4-devsecops99.png[200,300]
+image:images/lab4-devsecops98.png[100,300]
++
+. Click `Slack` and Click `New integration`
+. Enter Slack App information in the form below.
++
+image:images/lab4-slack-int.png[100,300]
++
+. Enable the Notifications in the system policies: Select `Platform Configuration` -> `Policies`
+. -> Select a Policy -> Click `Actions` -> `Edit policy`
++
+image:images/lab4-devsecops99.png[300,700]
 
 === Troubleshooting
 
