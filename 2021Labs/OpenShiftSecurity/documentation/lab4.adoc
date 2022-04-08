@@ -379,7 +379,7 @@ image:images/lab4-devsecops43.png[700,300]
 |Pass: stackrox
 |===
 +
-.. Click login, and see the ACS dashboard screen as shown below.
+.. Click login, and Re-run the pipeline as shown below.
 +
 image:images/lab4-devsecops44.png[300,700]
 +
@@ -697,6 +697,9 @@ image:images/lab4-devsecops93.png[300,700]
 |===
 +
 . Re-run the pipeline, the deployment now succeeds. Congratulations to the developers!
+. The pipeline run result will be similar to the one below.
++
+image:images/lab4-bonus-result.png[300,700]
 +
 [Note] Please check the https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml[*labs-artifacts/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed. We have added a step to the build task, and we leverage buildah to remove the package managers from the image (search for "rpm" or "yum" in the file).
 +
