@@ -676,8 +676,7 @@ image:images/lab4-devsecops91.png[300,700]
 image:images/lab4-devsecops92.png[300,700]
 +
 .. We will effectively update the image with this remediation suggestion.
-. Update the tekton task:
-. Delete the s2i-java-11 task
+. Instead of updating the `s2i-java-11` Tekton task, we are replacing the task.
 .. From the OpenShift Administrator UI, make sure the ocp-workshop project is selected before going to Pipelines > Tasks and delete the s2i-java-11 task.
 +
 image:images/lab4-devsecops93.png[300,700]
