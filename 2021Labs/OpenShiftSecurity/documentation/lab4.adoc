@@ -403,7 +403,7 @@ image:images/lab4.2-5-clone-policy-name.png[300,700]
 +
 * Click `Next`
 * Click `Next` on the Policy behavior
-* Click `Next` on Policy criteria
+* Click `Next` on Policy criteria  in order to get to the Policy scope section UI in order to exclude the image
 * Under Exclude images section, type the following to filter the options in in `Excluded Images (Build Lifecycle only)` list:
 +
 |===
