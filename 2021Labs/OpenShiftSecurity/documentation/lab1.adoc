@@ -76,6 +76,11 @@ image:images/lab1.1-describepod-error.png[]
 +
 Notice that the output shows that the container failed after trying to start on port 80 and terminated due to a CrashLoopBackOff error. Also notice the default OpenShift Security Context Constraints (SCC) policy that is in place is 'restricted' (openshift.io/scc: restricted).
 
+. Finally, investigate your pod yaml in the OpenShift console by navigating to the *YAML** view of your pod in the OpenShift console. Scroll down to the containers definition and notice how the SCC has dropped several capabilites and added a specifc runAsUser. These modifications have prevented your pod from scheduling because it was originally designed in an insecure state.
++
+image:images/lab1.1-scc-modify.png[]
+
+
 === Lab 1.2 Work around the default container security restriction by using service accounts with SCC privileges
 
 . Now let's fix this issue. In order to allow containers to run with elevated SCC privileges, we will create a Service Account (a special user account to run services) called 'privileged-sa':
@@ -169,10 +174,6 @@ AH00558: httpd: Could not reliably determine the server's fully qualified domain
 
 Per OpenShift Documentation (https://docs.openshift.com/container-platform/4.10/security/container_security/security-hosts-vms.html) the best practice is: most containers, except those managing or monitoring the host system itself, should run as a non-root user. Dropping the privilege level or creating containers with the least amount of privileges possible is recommended best practice for protecting your own OpenShift Container Platform clusters.  
 
-. Finally, investigate your pod yaml in the OpenShift console by navigating to the *YAML** view of your pod in the OpenShift console. Scroll down to the containers definition and notice how the SCC has dropped several capabilites and added a specifc runAsUser. These modifications have prevented your pod from scheduling because it was originally designed in an insecure state.
-+
-image:images/lab1.1-scc-modify.png[]
-+
 <<top>>
 
 link:README.adoc#table-of-contents[ Table of Contents ]
