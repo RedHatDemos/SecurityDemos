@@ -1,6 +1,6 @@
-== Lab 7: Instructor Preparation (Quay/Clair pre-lab configuration)
+== Lab 6: Instructor Preparation (Quay/Clair pre-lab configuration)
 
-link:README.adoc#table-of-contents[ Table of Contents ] 
+link:README.adoc#table-of-contents[ Table of Contents ]
 
 === Quay Configuration
 
@@ -53,11 +53,11 @@ image:images/lab7-prep-create-repo.png[]
 image:images/lab7-prep-security-scanner.png[]
 +
 . Scale down then scale back up the clair pod:
- 
+
        oc login -u admin https://master.{GUID}.example.opentlc.com
-       oc scale rc/clair --replicas=0 -n quay-enterprise  
+       oc scale rc/clair --replicas=0 -n quay-enterprise
        # Wait for the pod to scale down, then scale it back up
-       oc get pods -n quay-enterprise 
+       oc get pods -n quay-enterprise
        oc scale rc/clair --replicas=1 -n quay-enterprise
 
 . Go back to the `Security Scanner` configuration in quay, and click the `Create Key` link next to `Authentication Key`
@@ -78,7 +78,7 @@ image:images/lab7-prep-create-key.png[]
 +
       oc delete pod $(oc get pods -n quay-enterprise | grep quayecosystem-quay | awk '{print $1}') -n quay-enterprise
 +
-. Press ctrl+c if the previous command hangs. 
+. Press ctrl+c if the previous command hangs.
 +
 . Wait for the quay pod to start back up:
 +

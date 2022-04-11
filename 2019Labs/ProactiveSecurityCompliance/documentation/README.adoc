@@ -1,7 +1,7 @@
 = Implementing Proactive Security and Compliance Automation and DevSecOps
 
 === [.underline]#Presenters/Lab Developers#:
-*Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat
+*Lucy Kerner*, Director, Security Global Strategy and Evangelism, Red Hat^(R)^
 
 *Will Tome*, Senior Solutions Architect, Red Hat
 
@@ -20,15 +20,15 @@ This lab is geared towards systems administrators, cloud administrators and oper
 * How to perform automated audit scans to quickly detect and automatically remediate security and compliance issues in a controlled way to ensure compliance against regulatory or custom profiles and for automated configuration compliance.
 * How to implement infrastructure, security, and compliance as code.
 * How to implement consistent and automated patch and configuration management.
-* How to use Red Hat Satellite, OpenSCAP, Red Hat CloudForms, and Red Hat Ansible Automation to automatically apply and enforce security policies
-* How to use Red Hat Insights and Red Hat Ansible Automation to proactively identify and remediate security threats at scale with automated risk management.
+* How to use Red Hat Satellite, OpenSCAP, and Red Hat Ansible Automation to automatically apply and enforce security policies
+* How to use Red Hat Ansible Automation to proactively identify and remediate security threats at scale with automated risk management.
 * How to have centralized management of your hybrid infrastructure for continuous security and monitoring.
 * How to implement automated web application hardening.
 * How to build and automate security into your application by implementing DevSecOps at scale using Red Hat OpenShift Container Platform and several other tools, such as OWASP ZAP, SonarQube, Clair, and more to build a secure CI/CD application pipeline.
 
 
 == Lab Environment:
-Your entire lab environment is cloud hosted online and includes: Red Hat Ansible Automation, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat Insights, Red Hat Virtualization, Red Hat Openstack Platform, Red Hat CloudForms, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
+Your entire lab environment is cloud hosted online and includes: Red Hat Ansible Automation, Red Hat Openshift Container Platform, Red Hat Satellite, Red Hat Virtualization, Red Hat Openstack Platform, and a workstation system which will have a public IP you can SSH into. You can get to all the listed Red Hat products and all your VMs from the workstation system.
 
 You will each be given your own unique *GUID*, which you will use to access your own instance of these Red Hat products for your lab exercises.
 
@@ -41,6 +41,5 @@ Other than that, feel free to do the lab exercises in whatever order you'd like.
 * link:lab2.adoc[Lab 2: Enforcing Automated Compliance with Security Policies]
 * link:lab3.adoc[Lab 3: Automated Patching of Host Systems]
 * link:lab4.adoc[Lab 4: Additional Automated Security Hardening and Configuration Management of Host Systems]
-* link:lab5.adoc[Lab 5: Proactive Security and Automated Risk Management at Scale with Predictive Analytics]
-* link:lab6.adoc[Lab 6: Automated Security Hardening of a Hacked Web Application]
-* link:lab7.adoc[Lab 7: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
+* link:lab5.adoc[Lab 5: Automated Security Hardening of a Hacked Web Application]
+* link:lab6.adoc[Lab 6: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]

@@ -1,16 +1,26 @@
-= Implementing Multi-Layer Container and Kubernetes Security with OpenShift for Automated DevSecOps
+= Implementing Multi-Layer Container and Kubernetes Security for Automated DevSecOps
 
-=== [.underline]#Presenters/Lab Developers#:
-*Lucy Kerner*, Senior Principal Security Global Technical Evangelist & Strategist, Red Hat^(R)^
+=== [.underline]#Lab Developers#:
+*Lucy Kerner*, Director, Security Global Strategy and Evangelism, Red Hat^(R)^
 
 *Khary Mendez*, Senior Principal Consultant , Red Hat^(R)^
 
-*Andy Block*, Senior Principal Consultant, Red Hat^(R)^
+*Andy Block*, Distinguished Architect - Services, Red Hat^(R)^
 
 *Mike Surbey*, Specialist Solution Architect, Red Hat^(R)^
 
-*Justin Goldsmith*, Senior Architect, Red Hat^(R)^
+*Justin Goldsmith*, Principal Architect, Red Hat^(R)^
 
+*Roberto Carratala Sanchez*, Senior Specialist Solution Architect, Red Hat^(R)^
+
+*Shanna Chan*, Senior Solutions Architect, Red Hat^(R)^
+
+=== [.underline]#Lab Testers#:
+*Pedro Ibáñez Requena*, Principal Software Engineer, Red Hat^(R)^
+
+*Nicholas Schuetz*, Principal Specialist Solution Architect,Red Hat^(R)^
+
+*Mark Roberts*, Senior Specialist Solution Architect,Red Hat^(R)^
 
 == Lab Overview:
 In this hands-on lab, we will cover the comprehensive container and Kubernetes security capabilities available in Red Hat OpenShift. You will gain experience with:
@@ -32,5 +42,5 @@ This lab is geared towards systems administrators, cloud administrators and oper
 * link:lab1.adoc[Lab 1: OpenShift blocks rogue containers from running as privileged user]
 * link:lab2.adoc[Lab 2: Implementing network isolation between running containers using Network Policies]
 * link:lab3.adoc[Lab 3: OpenShift Role Based Access Control]
-* link:lab4.adoc[Lab 4: Implementing DevSecOps to Build and Automate Security into the Application in a Secure CI/CD Pipeline]
+* link:lab4.adoc[Lab 4: Implementing DevSecOps to Build and Automate Security into the Application Using Red Hat Advanced Cluster Security]
 * link:lab5.adoc[Lab 5: Image Signing using Image Signing Operator]

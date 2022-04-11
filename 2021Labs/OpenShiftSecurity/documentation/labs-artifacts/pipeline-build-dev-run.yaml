@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: petclinic-build-dev
+spec:
+  pipelineRef:
+    name: petclinic-build-dev
+  workspaces:
+  - name: workspace
+    persistentVolumeClaim:
+      claimName: petclinic-build-workspace
+  - name: maven-settings
+    configMap:
+      name: maven-settings

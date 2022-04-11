@@ -10,7 +10,14 @@ The goal of this lab is to learn about how to implement network isolation betwee
 
 If a Pod is matched by selectors in one or more NetworkPolicy objects, then it will accept only connections that are allowed by at least one of those NetworkPolicy objects. A Pod that is not selected by any NetworkPolicy objects is fully accessible.
 
+==== objective
+The objective of the exercise below is to create multiple projects and to test the communication between them. You will introduce network policies that will block communication across projects.
+
+Project-c will have a hello-world application to which you will send requests.
+Projects-a, b and c will all have a client application. The client from project-c will always be able to communication with hello-world in project-c since they are in the same project. However, depending on the network policies in place at times you will be blocked from communicating from clients in projects a and b to the hello-world application in project c.
+
 === Lab 2.1 Creating Projects and Labeling Namespaces
+
 . As a cluster admin user, create 3 projects and label those namespaces.
 +
 [source]
@@ -18,22 +25,23 @@ If a Pod is matched by selectors in one or more NetworkPolicy objects, then it w
 [localhost ~]$ oc new-project proj-a --display-name="Project A"
 [localhost ~]$ oc new-project proj-b --display-name="Project B"
 [localhost ~]$ oc new-project proj-c --display-name="Project C"
+
 ----
 
 . In order to create Network Policies and allow applications in one namespace to be accesssed by applications running in only certain other namespace, you have to label the namespaces so they can be identified in Network Policies (and this is why you have to be 'cluster-admin' level user):
 +
 [source]
 ----
-[localhost ~]$ oc label namespace proj-a name=proj-a
-[localhost ~]$ oc label namespace proj-b name=proj-b
-[localhost ~]$ oc label namespace proj-c name=proj-c
+oc label namespace proj-a name=proj-a
+oc label namespace proj-b name=proj-b
+oc label namespace proj-c name=proj-c
 ----
 
 . Now, let's look at the projects and labels we just created:
 +
 [source]
 ----
-[localhost ~]$ oc get projects --show-labels
+oc get projects proj-a proj-b proj-c --show-labels 
 ----
 +
 image:images/lab2.1-showlabels.png[]
@@ -44,8 +52,10 @@ image:images/lab2.1-showlabels.png[]
 +
 [source]
 ----
+
 [localhost ~]$ oc project proj-c
 [localhost ~]$ oc new-app quay.io/bkozdemb/hello --name="hello"
+
 ----
 This will create a new app, which is a 'hello world' container based on image stored in quay.io that’s built on the RHEL base python image. It runs a simple web server that prints 'hello'.
 
@@ -53,7 +63,7 @@ This will create a new app, which is a 'hello world' container based on image st
 +
 [source]
 ----
-[localhost ~]$ oc get pods
+oc get pods
 ----
 +
 image:images/lab2.1-ocgetpods.png[]
@@ -62,15 +72,16 @@ image:images/lab2.1-ocgetpods.png[]
 +
 [source]
 ----
+
 [localhost ~]$ oc run client --image=fedora --command -- tail -f /dev/null
 pod/client created
-----
+
 
 . Let's confirm that our client pod and hello world pod are now running.
 +
 [source]
 ----
-[localhost ~]$ oc get pods
+oc get pods
 ----
 +
 image:images/lab2.1-ocgetpods2.png[]
@@ -79,18 +90,20 @@ image:images/lab2.1-ocgetpods2.png[]
 +
 [source]
 ----
+
 [localhost ~]$ oc project proj-b
 [localhost ~]$ oc run client  --image=fedora --command -- tail -f /dev/null
 [localhost ~]$ oc project proj-a
 [localhost ~]$ oc run client  --image=fedora --command -- tail -f /dev/null
+
 ----
 
 . Notice that the projects , *proj-a* and *proj-b* just have client pods running.
 +
 [source]
 ----
-[localhost ~]$ oc get pods -n proj-a
-[localhost ~]$ oc get pods -n proj-b
+oc get pods -n proj-a
+oc get pods -n proj-b
 ----
 +
 image:images/lab2.1-ocgetpods3.png[]
@@ -99,7 +112,7 @@ image:images/lab2.1-ocgetpods3.png[]
 +
 [source]
 ----
-[localhost ~]$ oc get pods -n proj-c
+oc get pods -n proj-c
 ----
 +
 image:images/lab2.1-ocgetpods4.png[]
@@ -108,38 +121,45 @@ image:images/lab2.1-ocgetpods4.png[]
 +
 [source]
 ----
-[localhost ~]$ oc get pods --show-labels
+oc get pods --show-labels
 ----
 +
 image:images/lab2.1-showlabels2.png[]
 
+
 . Notice that the label that we’re using for Client pod is *run=client* which is created automatically by our previous 'oc run client' command.
 
 . Next, from a different project, *proj-a*, connect to the Client container and try to access the *hello.proj-c* service in project, *proj-c*. The default network policy allows a client pod in *proj-a* to access the microservice in *proj-c*.
+
 +
 [source]
 ----
-[localhost ~]$ oc project proj-a
-[localhost ~]$ POD=`oc get pods --selector=run=client --output=custom-columns=NAME:.metadata.name --no-headers`
+oc project proj-a
+POD=`oc get pods --selector=run=client --output=custom-columns=NAME:.metadata.name --no-headers`
 ----
 This command above simply assigns the pod name to the *POD* variable since some pods have random names by default so this command allows you to give a specific name to the pod.
 +
 [source]
 ----
-[localhost ~]$ echo $POD
+echo $POD
 ----
 +
 image:images/lab2.1-echopod.png[]
-This command returns  *client*, which is the pod name.
-Next, connect to the Client pod and curl the service in a different project, *proj-c*. Notice that this is allowed since it's open access by default. We use notation of *<service-name>.<project-name>:<port>*:
+
++
+This returns *client*, which is the pod name.
+Next, go into the pod and curl the service in project, *proj-c*. Notice that this is allowed since it's open access by default.
+
 +
 [source]
 ----
-[localhost ~]$ oc rsh ${POD}
-sh-5.0# curl -v hello.proj-c:8080
+oc rsh ${POD}
+#Inside the pod you have to execute:
+curl -v hello.proj-c:8080
 ----
 +
 image:images/lab2.1-curloutput1.png[]
+
 . What you have seen so far is how Network Policies work by default in OpenShift. 
 Now let's take a look at the default Network Policies in the OpenShift web console. URL of web console can be found by running command:
 +
@@ -150,12 +170,15 @@ https://console-openshift-console.apps.cluster-tx8sn.tx8sn.sandbox1590.opentlc.c
 ----
 
 . Log into the web console, then go to Projects and find the project, *proj-c*. Navigate into *proj-c*, then select *Networking* -> *Network Policies*.
+
 +
 image:images/lab2.1.10-webconsole2.png[]
 image:images/lab2.1.10-webconsole1.png[]
 
 
+
 . Notice that (in earlier versions of OpenShift) those two Network Policies are created by default:
+
 
 * *allow-from-all-namespaces*: This is why we can hit services in the project, *proj-c* from other projects (such as projects, *proj-a* and *proj-b*).
 * *allow-from-ingress-namespace*: This allows ingress from the router (outside in through the router).
@@ -166,7 +189,7 @@ NOTE:  In the recent versions of OpenShift 4.x those default Network Policies ar
 === Lab 2.2 Creating Network Policies for network isolation
 . In the OpenShift web console, choose project, *proj-c*, and go to *Networking* -> *Network Policies*.
 
-. Next, delete the 2 default Network Policies (*allow-from-all-namespaces* and *allow-from-ingress-namespace*). Remember that if no Network Policies are defined, all traffic is allowed.
+. Next, delete the 2 default Network Policies (*allow-from-all-namespaces* and *allow-from-ingress-namespace*) if you see them. Remember that if no Network Policies are defined, all traffic is allowed.
 +
 image:images/lab2.2.2-deletenetworkpolicies.png[]
 
@@ -185,11 +208,16 @@ image:images/lab2.2-denyothernamespaces.png[]
 +
 [source]
 ----
-[localhost ~]$ oc rsh ${POD}
-sh-5.0# curl -v hello.proj-c:8080
+oc rsh ${POD}
+#Inside the pod you have to execute:
+curl -v hello.proj-c:8080
 ----
 +
 image:images/lab2.2-curlfail.png[]
++
+Remember to exit the pod with the `exit` command.
+
+
 
 . Same kind of failure you would get if you try to access application running in *proj-c* from *proj-b* because the Network Policy blocks traffic from ALL namespaces
 
@@ -223,6 +251,7 @@ sh-5.0# curl -v hello.proj-c:8080
 ----
 +
 image:images/lab2.3-curl-from-proj-b-fails.png[]
+
 
 <<top>>
 
