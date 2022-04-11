@@ -2,7 +2,7 @@
 
 
 === Goal of Lab 1
-The goal of this lab is to learn about the default security technologies in Red Hat OpenShift Container Platform. Specifically, you will see how OpenShift blocks 'rogue' containers with images from from Docker Hub from running as a privileged root user and how you can work around that restrictions for this specific container.
+The goal of this Lab is to learn about the default security technologies in Red Hat OpenShift Container Platform. Specifically, you will see how OpenShift blocks 'rogue' containers with images from from Docker Hub from running as a privileged root user and how you can work around that restrictions for this specific container.
 
 === Introduction
 
@@ -158,7 +158,7 @@ Events:
   Normal  ScalingReplicaSet  2m41s  deployment-controller  Scaled down replica set httpd-6b8f7b7c98 to 0
 ----
 
-. We now see that Replica Set that controls pods instances has been regenerated and our HTTP server pod is running OK which we can check in its logs:
+. We now see that Replica Set that controls pods instances has been regenerated and our HTTP server pod is running OK which we can also check in its logs:
 +
 [source]
 ----
@@ -170,7 +170,9 @@ AH00558: httpd: Could not reliably determine the server's fully qualified domain
 ...
 ----
 
-. So we have learned that by adding SCC privileges to a Service Account and using that Service Account to run a pod that requires elevated privileges, we can get it to run securely on OpenShift. Please keep in mind that *best practice is to assign minimal SCC privileges* that are required for pod security to such service accounts. 
+=== Summary
+
+So you have learned that OpenShift by default blocks containers that need to run with elevated privileges. Also, by adding SCC privileges to a Service Account and using that Service Account to run a pod that requires elevated privileges, you can get it to run securely on OpenShift. Please keep in mind that best approach is to always assign minimal SCC privileges that are required for pod security to such service accounts. 
 
 Per OpenShift Documentation (https://docs.openshift.com/container-platform/4.10/security/container_security/security-hosts-vms.html) the best practice is for most containers, except those managing or monitoring the host system itself, to run as a non-root user. Dropping the privilege level or creating containers with the *least amount of privileges possible* is recommended best practice for protecting your own OpenShift Container Platform clusters.  
 
