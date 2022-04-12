@@ -28,19 +28,17 @@ image:images/lab1.1-myproject.png[]
 image:images/lab1.1-4.7.33-workloads.png[]
 
 
-NOTE: It may be easier to use *Developer* perspective of OpenShift console to navigate to a project and click "+Add" button on the left hand side menu  to initiate that workflow. 
+  NOTE: It may be easier to use *Developer* perspective of OpenShift console to navigate to a project and click "+Add" button on the left hand side menu  to initiate that workflow.
+  
 . Then, click on *Container Images* . Make sure that *Image name from external registry* is selected and for the Image Name, type *docker.io/httpd*. Press the magnifying glass.
-
 +
 image:images/lab1.1-4.7.33-image-external.png[]
-+
 
-NOTE: Notice that this container image requires to be run as 'root' and listen on port 80.
-
-
+  NOTE: Notice that this container image requires to be run as 'root' and listen on port 80.
+  
 . Leave other values as defaults and press *Create*.
 
-. Now, go back to your terminal and go into the project you just created by typing *oc project myproject*. Then, take a look at your pods by typing *oc get pods*. Notice that one of your pods has a CrashLoopBackOff error.
+. Now, go back to your terminal and navigate into the project you just created by typing *oc project myproject*. Then, take a look at your pods by typing *oc get pods*. Notice that one of your pods has a CrashLoopBackOff error.
 +
 image:images/lab1.1-crashloopbackofferror.png[]
 
@@ -55,13 +53,15 @@ POD=`oc get pods --selector app=httpd -o custom-columns=NAME:.metadata.name --no
 ----
 
 . Notice that you get permission denied errors saying that you cannot bind to port 80. This is because the proccess was not startup as root and was modified by the security context constraint to run as a specific user. 
+
 +
 image:images/lab1.1-noport80.png[1500,1500]
 
 . Also we can review failing container logs via OpenShift UI console, Log tab for that pod:
 +
 image:images/lab1.1-failingpod-log.png[]
-+
+
+
 . For a more detailed look, type 'oc describe pod ....' with the name of your pod.
 
 +
@@ -73,8 +73,8 @@ oc describe pod $pod
 ----
 +
 image:images/lab1.1-describepod-error.png[]
-+
-Notice that the output shows that the container failed after trying to start on port 80 and terminated due to a CrashLoopBackOff error. Also notice the default OpenShift Security Context Constraints (SCC) policy that is in place is 'restricted' (openshift.io/scc: restricted).
+
+. Notice that the output shows that the container failed after trying to start on port 80 and terminated due to a CrashLoopBackOff error. Also notice the default OpenShift Security Context Constraints (SCC) policy that is in place is 'restricted' (openshift.io/scc: restricted).
 
 . Finally, investigate your pod yaml in the OpenShift console by navigating to the *YAML** view of your pod in the OpenShift console. Scroll down to the containers definition and notice how the SCC has dropped several capabilites and added a specifc runAsUser. These modifications have prevented your pod from scheduling because it was originally designed in an insecure state.
 +
@@ -83,7 +83,7 @@ image:images/lab1.1-scc-modify.png[]
 
 === Lab 1.2 Work around the default container security restriction by using service accounts with SCC privileges
 
-. Now let's fix this issue. In order to allow containers to run with elevated SCC privileges, we will create a Service Account (a special user account to run services) called 'privileged-sa':
+. Now let's resolve this issue. In order to allow containers to run with elevated SCC privileges, we will create a Service Account (a special user account to run services) called 'privileged-sa':
 +
 [source]
 ----
