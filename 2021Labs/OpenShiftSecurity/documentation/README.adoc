@@ -22,6 +22,8 @@
 
 *Mark Roberts*, Senior Specialist Solution Architect,Red Hat^(R)^
 
+*Dan Zilberman*, Senior Specialist Solutions Architect,Red Hat^(R)^
+
 == Lab Overview:
 In this hands-on lab, we will cover the comprehensive container and Kubernetes security capabilities available in Red Hat OpenShift. You will gain experience with:
 
