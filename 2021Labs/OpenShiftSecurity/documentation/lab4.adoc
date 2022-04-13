@@ -437,7 +437,7 @@ image:images/lab4.2-5-editPolicy.png[300,700]
 image:images/lab4.2-5-editpolicy2.png[300,700]
 +
 * Save the file
-* Back to ACS console to the `Fixable Severity at least Important - with Exception` Policy details page, Select `Actions` -> `Delete policy`
+* Back to ACS console to the `Fixable Severity at least Important - with Exception` Policy details page, Click 3-dot icon and select `Delete policy`
 * Click `Policies` on the left menu
 * Click `Import policy` on the top right corner
 * Click `Upload` and select the JSON file that you edited.
@@ -445,7 +445,7 @@ image:images/lab4.2-5-editpolicy2.png[300,700]
 image:images/lab4.2-5-importPolicy.png[200,500]
 +
 * Click `Begin import`
-* Select with 'Fixable Severity' under the Policies
+* Search with 'Fixable Severity' under the Policies
 +
 image:images/lab4.2-5-filterPolicy.png[300,700]
 +
@@ -624,7 +624,7 @@ image:images/lab4-devsecops82.png[300,700]
 image:images/lab4-devsecops83.png[200,200]
 +
 Security Policies can be defined at the BUILD level (during the build/push of the image), or at the DEPLOYMENT level (preventing the deployment of the application).
-* Click on the Package manager policy
+* Click on the `Red Hat Package manager in Image` policy
 +
 image:images/lab4-devsecops84.png[300,700]
 +
