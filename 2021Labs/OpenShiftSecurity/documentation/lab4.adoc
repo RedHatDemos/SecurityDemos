@@ -296,14 +296,14 @@ image:images/lab4.2-image-scan-withlogs.png[500,700]
 In the logs of this step, there is a direct link to the image scan in ACS.
 +
 [Note] If we see a security certificate warning proceeding to that link, ignore it. +
-Copy and paste it into another tab in order to get more information about the scanned image. Enter the following information:
+Copy and paste URL into another tab in order to get more information about the scanned image - it would open ACS Centra login screen Enter the following information:
 +
 |===
 |User: admin
 |Pass: stackrox
 |===
 +
-The URL takes us to Vulnerability Management. Here is an overview of the vulnerabilities (CVEs) included in this image.
+The URL takes us to Vulnerability Management. Here is an overview of the vulnerabilities (CVEs) found in this image.
 +
 image:images/lab4-devsecops35.png[500,700]
 +
@@ -391,7 +391,7 @@ image:images/lab4-devsecops46.png[100,200]
 +
 image:images/lab4-devsecops47.png[300,700]
 +
-* Click onto `Fixable Severity at least Important` to the policy details page. The Policy page allows Edit, Clone, Export and Disable policy under `Actions`. Click 'Edit policy' under `Actions`. Developers can use the information in the guidance to fix the image. The lifecycle stage information is where the policy enforcement takes place. Since the enabled policy is violated, it will not pass the Build and Deploy stages in the pipeline.
+* Click onto `Fixable Severity at least Important` to open policy details page. The Policy page allows Edit, Clone, Export and Disable policy under `Actions`. Click 'Edit policy' under `Actions`. Developers can use the information in the guidance to fix the image. The lifecycle stage information is where the policy enforcement takes place. Since the enabled policy is violated, it will not pass the Build and Deploy stages in the pipeline.
 +
 image:images/lab4-devsecops48_new.png[300,700]
 +
@@ -423,13 +423,19 @@ image:images/lab4-devsecops52.png[300,700]
 +
 image:images/lab4-devsecops53.png[300,700]
 +
-.. Click onto the Pipeline Runs tab and click on the Pipeline Run we started - it should now complete successfully!
+.. Click onto the Pipeline Runs tab and select the one just started - it should now complete successfully
 +
 image:images/lab4-devsecops54.png[300,700]
 +
 image:images/lab4-devsecops55.png[300,700]
 +
-.. [Note] If we finish the xref:fiximage[bonus lab] to fix the source image vulnerability, go back to the Policy and remove the excluded image from there.
+
+.. [Notes]
+.. There still are warnings for other ACS Policy violations in the `image-scan` step, but they don't block the pipeline from completion
++
+image:images/lab4-devsecops55a.png[300,700]
++
+.. If we finish the xref:fiximage[bonus lab] to fix the source image vulnerability, go back to the Policy and remove the excluded image from there.
 .. Kubernetes kustomization files are updated in the *update deployment step* with the latest image [commit-sha] in the overlays for dev. This will ensure that our applications are deployed using the specific built image in this pipeline.
 +
 image:images/lab4-devsecops56.png[300,700]
@@ -573,7 +579,7 @@ We can enforce the different Security Policies in ACS, failing our CI pipelines 
 +
 image:images/lab4-devsecops43.png[300,300]
 +
-* Log in using credential admin/stackrox to ACS console.
+* Log in using credentials `admin/stackrox` to ACS console.
 +
 image:images/lab4-devsecops82.png[300,700]
 +
@@ -592,20 +598,20 @@ For example, this Security Policy checks if an RH Package Manager (dnf, yum) is 
 image:images/lab4-devsecops85.png[300,700]
 +
 * Click `Actions` -> `Edit policy`
-* Click `Next` on `Policy details`
+* Click `Next` on `Policy Details`
 * Select `Inform and enforce` under Response method
 * Select `Enforce on Build` for Build
 +
 image:images/lab4-devsecops87.png[300,700]
 +
-* Click `Next`, `Next`, `Next` and `Save`
+* Click `Next` 3 times and `Save`
 This step ensures that users  have total control of the pipelines. No image is pushed into the image registry or is deployed to the cluster that surpasses the defined Security Policies.
 
 
 [#fiximage]
-=== Bonus suggestion for Lab 4.2: Fixing the image
+=== Bonus suggestion for Lab 4.2: Fixing the source image
 
-To show a complete demo and show the transition from a `bad image` to an image that passes the build enforcement, we can update the Tekton task of the image build and fix the image.
+To show a complete demo and show the transition from a `bad image` to an image that passes the build enforcement, we can update the Pipeline task of the image build and fix the image.
 In this example, we will be enabling the enforcement of the `Red Hat Package Manager in Image` policy in ACS, which will fail our pipeline at the image-check as both yum and rpm package managers are present in our base image.
 
 . Add an exception to bypass the violation in the *Fixable Severity at least important* policy as we did in the previous section.
@@ -635,11 +641,11 @@ image:images/lab4-devsecops92.png[300,700]
 +
 .. We will effectively update the image with this remediation suggestion.
 . Instead of updating the `s2i-java-11` Tekton task, we are replacing the task.
-.. From the OpenShift Administrator UI, make sure the ocp-workshop project is selected before going to Pipelines > Tasks and delete the s2i-java-11 task.
+.. From the OpenShift Administrator UI, make sure the ocp-workshop project is selected before going to Pipelines -> Tasks and delete the s2i-java-11 task.
 +
 image:images/lab4-devsecops93.png[300,700]
 +
-.. With the Tekton cli
+.. From the Tekton cli
 +
 |===
 |tkn task delete s2i-java-11
@@ -653,7 +659,7 @@ image:images/lab4-devsecops93.png[300,700]
 |oc apply -f https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml  -n ocp-workshop
 |===
 +
-. Re-run the pipeline, the deployment now succeeds. Congratulations to the developers!
+. Re-run the pipeline - the deployment now succeeds. Congratulations to the developers!
 . The pipeline run result will be similar to the one below.
 +
 image:images/lab4-bonus-result.png[300,700]
