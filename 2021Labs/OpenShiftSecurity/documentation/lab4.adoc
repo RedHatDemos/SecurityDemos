@@ -372,14 +372,14 @@ Assuming that we will want to add an exception to bypass the policy for spring-p
 image:images/lab4-devsecops43.png[700,300]
 +
 .. We will be prompted to log in to the ACS console → click `Advanced` → `Proceed to central-stackrox.apps.cluster...` link to proceed.
-.. Enter the following information:
+.. Enter the following login credentials:
 +
 |===
 |User: admin
 |Pass: stackrox
 |===
 +
-.. Click login, and Re-run the pipeline as shown below.
+.. Click Login - you should land on the ACS page as shown below.
 +
 image:images/lab4-devsecops44.png[300,700]
 +
@@ -387,36 +387,35 @@ image:images/lab4-devsecops44.png[300,700]
 +
 image:images/lab4-devsecops46.png[100,200]
 +
-.. Under Policies, put the policy name *Fixable Severity at least Important* in the search field and hit enter. The policy will list as the result.
+.. Under Policies, put the policy name *Fixable Severity at least Important* in the search field and hit Enter. The policy will list as the result.
 +
 image:images/lab4-devsecops47.png[300,700]
 +
 * Click onto `Fixable Severity at least Important` to the policy details page. The Policy page allows Edit, Clone, Export and Disable policy under `Actions`. Click 'Edit policy' under `Actions`. Developers can use the information in the guidance to fix the image. The lifecycle stage information is where the policy enforcement takes place. Since the enabled policy is violated, it will not pass the Build and Deploy stages in the pipeline.
-(UPDATE)
 +
 image:images/lab4-devsecops48_new.png[300,700]
 +
 * Click `Next` on the Policy Details
 * Click `Next` on the Policy Behavior
 * Click `Next` on Policy Criteria  in order to get to the Policy Scope section UI to specify the image to be excluded from checking
-* Under Exclude images section, type the following to filter the options in the `Excluded Images (Build Lifecycle only)` list:
+* In the Exclude Images section, type the following to filter the options in the `Excluded Images (Build Lifecycle only)` list:
 +
 |===
 |image-registry.openshift-image-registry.svc:5000/ocp-workshop/spring-petclinic
 |===
 +
-* Select the `Create "image-registry.openshift-image-registry.svc:5000/ocp-workshop/spring-petclinic" option (UPDATE).
+* Select the `Create "image-registry.openshift-image-registry.svc:5000/ocp-workshop/spring-petclinic" option.
 +
 image:images/lab4.2-5-exclude-image_new.png[300,700]
 +
 * Click `Next`
 * Please review Policy Summary before clicking `Save`
 +
-.. Now, the `Fixable Severity` policies are shown below (UPDATE)
+.. Now, the updated `Fixable Severity at least Important` policy with excluded image is shown below:
 +
 image:images/lab4.2-5-2Policy_new.png[300,700]
 +
-.. Switch back to the OpenShift Developer console, and click pipeline on the nav under “ocp-workshop” project
+.. Switch back to the OpenShift Developer console, and select the failing Pipeline on the nav under “ocp-workshop” project
 +
 image:images/lab4-devsecops52.png[300,700]
 +
@@ -424,13 +423,13 @@ image:images/lab4-devsecops52.png[300,700]
 +
 image:images/lab4-devsecops53.png[300,700]
 +
-.. Click onto the Pipeline Runs tab and click on the Pipeline Run we started
+.. Click onto the Pipeline Runs tab and click on the Pipeline Run we started - it should now complete successfully!
 +
 image:images/lab4-devsecops54.png[300,700]
 +
 image:images/lab4-devsecops55.png[300,700]
 +
-.. If we finish the xref:fiximage[bonus lab] to fix the image, go back to the policy and remove the exception in the Policy.
+.. [Note] If we finish the xref:fiximage[bonus lab] to fix the source image vulnerability, go back to the Policy and remove the excluded image from there.
 .. Kubernetes kustomization files are updated in the *update deployment step* with the latest image [commit-sha] in the overlays for dev. This will ensure that our applications are deployed using the specific built image in this pipeline.
 +
 image:images/lab4-devsecops56.png[300,700]
@@ -438,7 +437,7 @@ image:images/lab4-devsecops56.png[300,700]
 
 === Lab 4.3 Continuous Delivery Using GitOps
 
-GitOps is a declarative way to implement continuous deployment for cloud-native applications. We can use GitOps to create repeatable processes for managing OpenShift Container Platform clusters and applications across multi-cluster Kubernetes environments. GitOps handles and automates complex deployments at a fast pace, saving time during deployment and release cycles. +
+GitOps is a declarative way to implement continuous deployment for Cloud-native applications. We can use GitOps to create repeatable processes for managing OpenShift Container Platform clusters and applications across multi-cluster Kubernetes environments. GitOps handles and automates complex deployments at a fast pace, saving time during deployment and release cycles. +
 The GitOps workflow pushes an application through development, testing, staging, and production. GitOps either deploys a new application or updates an existing one, so we only need to update the repository; GitOps automates everything else.
 
 Argo CD continuously monitors the configurations stored in the Git repository and uses Kustomize to overlay environment-specific configurations when deploying the application to DEV and STAGE environments.
