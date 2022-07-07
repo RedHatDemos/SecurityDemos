@@ -670,14 +670,14 @@ image:images/lab4-bonus-result.png[300,700]
 We have added a step to the build task, using `buildah` CLI tool to remove the problematic package managers from the image (search for "rpm" or "yum" in the file).
 +
 image:images/lab4-devsecops94.png[300,700]
-+
+
 === Bonus exercise: Defer CVEs of Mark as `False Positive`
 
 If we just want to `snooze`violation notifications for particular CVEs instead of fixing the image and/or adding exceptions to Policies for the build. ACS allows users to temporarily disable notifications for CVEs for a period of time.
 
 [Note] Snoozing CVEs will temporarily disable violations of those CVE for all policies that inlcude it.
 
-For this lab, we can snooze the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the *image-check* task log.
+For this lab, we can snooze the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the pipeline task log:
 
 
 image:images/lab4-devsecops95.png[300,700]
@@ -689,12 +689,12 @@ Click Vulnerability Management left menu and click on the CVEs button  on the to
 . We can look for the detected CVEs and request Deferral by selecting the duration needed (Until Fixable, 2 Weeks, 30 Days, 90 Days, Indefinite).
 +
 image:images/lab4-devsecops96_new.png[300,700]
+
+.. Submit a request for selected Deferral period or marking as `False positive` (exclusion of the CVE from notifications)
 +
-..Submit a request for selected Deferral period or marking as `False positive` (exclusion of the CVE from notifications)
-+
-image:images/lab4-devsecops96a.png[300,700]
-+
-..Upon approval by your Security lead (corresponding to designated role in ACS), notifications for selected CVE violation will be 'snoozed' for selected period of time or permanently, depending on request
+image:images/lab4-devsecops96a.png[200,500]
+
+.. Upon approval by your Security lead (corresponding to designated role in ACS), notifications for selected CVE violation will be 'snoozed' for selected period of time or permanently, depending on request
 
 === Bonus exercise: Notification
 
