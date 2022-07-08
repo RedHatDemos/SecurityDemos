@@ -630,7 +630,7 @@ image:images/lab4-devsecops87.png[300,600]
 +
 .. Click `Next` until reaching `Review policy` page
 .. Click `Save` (if any modification apply)
-.. Go to the OpenShift Dev UI, click Pipelines on the left → click `petclinic-build-dev` pipeline → click `Actions` on the top right corner → select `Start last run`
+.. Go to the OpenShift Dev UI, click Pipelines on the left → click `petclinic-build-dev` pipeline → click `Actions` on the top right corner → select `Start last run` to re-run pipeline with same parameters
 +
 image:images/lab4-devsecops91.png[300,700]
 +
@@ -640,7 +640,7 @@ image:images/lab4-devsecops92.png[300,700]
 +
 .. We will effectively update the image following this remediation suggestion.
 . Instead of updating the `s2i-java-11` Tekton pipeline task that actually builds the image, we are replacing it with a corrected version.
-.. From the OpenShift Administrator UI, make sure the ocp-workshop project is selected before going to Pipelines -> Tasks and delete the `s2i-java-11` task.
+.. From the OpenShift Administrator UI, make sure the `ocp-workshop` project is selected before going to Pipelines -> Tasks and delete the `s2i-java-11` task.
 +
 image:images/lab4-devsecops93.png[300,700]
 +
@@ -666,16 +666,17 @@ image:images/lab4-devsecops93.png[300,700]
 +
 image:images/lab4-bonus-result.png[300,700]
 +
-[Note] Please check the contents of https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml[*labs-artifacts/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed.
+[Note] Please examine the contents of https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml[*labs-artifacts/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed.
 We have added a step to the build task, using `buildah` CLI tool to remove the problematic package managers from the image (search for "rpm" or "yum" in the file).
 +
 image:images/lab4-devsecops94.png[300,700]
++
 
-=== Bonus exercise: Defer CVEs of Mark as `False Positive`
+=== Bonus Exercise: Defer CVEs or Mark as "False Positive"
 
-If we just want to `snooze`violation notifications for particular CVEs instead of fixing the image and/or adding exceptions to Policies for the build. ACS allows users to temporarily disable notifications for CVEs for a period of time.
+If we just want to `snooze` violation notifications for particular CVEs instead of fixing the image and/or adding exceptions to Policies for the build. ACS allows users to temporarily disable notifications for CVEs for a period of time.
 
-[Note] Snoozing CVEs will temporarily disable violations of those CVE for all policies that inlcude it.
+[Note] Snoozing CVEs will temporarily disable violations of those CVE for all policies that includedude it.
 
 For this lab, we can snooze the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the pipeline task log:
 
@@ -689,14 +690,14 @@ Click Vulnerability Management left menu and click on the CVEs button  on the to
 . We can look for the detected CVEs and request Deferral by selecting the duration needed (Until Fixable, 2 Weeks, 30 Days, 90 Days, Indefinite).
 +
 image:images/lab4-devsecops96_new.png[300,700]
-
++
 .. Submit a request for selected Deferral period or marking as `False positive` (exclusion of the CVE from notifications)
 +
 image:images/lab4-devsecops96a.png[200,500]
-
++
 .. Upon approval by your Security lead (corresponding to designated role in ACS), notifications for selected CVE violation will be 'snoozed' for selected period of time or permanently, depending on request
 
-=== Bonus exercise: Notification
+=== Bonus Exercise: Notifications
 
 ACS can be integrated with several Notifiers for alerting if certain security events happen in managed clusters. In our case, we integrate with Slack to receive notifications when some Policies are violated to have more useful information:
 
@@ -723,7 +724,7 @@ image:images/lab4-slack-int.png[100,300]
 +
 image:images/lab4-devsecops99.png[300,700]
 
-=== Troubleshooting
+=== Troubleshooting Tips
 
 ==== Code Analysis Failures
 
