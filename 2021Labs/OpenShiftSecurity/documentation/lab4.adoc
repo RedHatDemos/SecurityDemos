@@ -704,7 +704,7 @@ ACS can be integrated with several Notifiers for alerting if certain security ev
 image:images/lab4-devsecops97.png[300,500]
 
 These policy notifications can be configured for each system policy enabled in our ACS Central, so we can create our own notification baselines in order to have only the proper information received in our systems. +
-Here are the steps to set up slack integration with ACS based on the official https://help.stackrox.com/docs/integrate-with-other-tools/integrate-with-slack/[Integrate with Slack] documentation in ACS.
+Here are the steps to set up slack integration with ACS based on the official https://docs.openshift.com/acs/3.70/integration/integrate-with-slack.html/[Integrate with Slack] documentation in ACS.
 
 . Create a Slack App, enable Incoming Webhooks and get the Webhook URL using instruction https://docs.openshift.com/acs/3.70/integration/integrate-with-slack.html#configure-slack_integrate-with-slack[here]
 +
@@ -720,7 +720,9 @@ image:images/lab4-devsecops98.png[100,300]
 image:images/lab4-slack-int.png[100,300]
 +
 . Enable the Notifications in the system policies: Select `Platform Configuration` -> `Policies`
-. -> Select a Policy -> Click `Actions` -> `Edit policy`
+.. Select a Policy -> Click `Actions` -> `Edit policy`
+.. Select checkbox next to `Slack Notifier` in the Attach Notifiers section of Policy details screen, click `Next` a few times and Save policy.
+.. You should be getting notifications when this policy violation is triggered   
 +
 image:images/lab4-devsecops99.png[300,700]
 
