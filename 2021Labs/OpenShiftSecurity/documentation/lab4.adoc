@@ -676,14 +676,14 @@ image:images/lab4-devsecops94.png[300,700]
 
 If we just want to `snooze` violation notifications for particular CVEs instead of fixing a problematic image and/or adding exceptions to Policies for build/deploy stages. ACS allows users to temporarily disable notifications for CVEs for a period of time.
 
-[Note] Snoozing CVEs will temporarily disable violations of those CVE for all policies that include it.
+[Note] Deferring CVEs would disable violation notifications for those CVE for ALL policies that include it.
 
-For this lab, we can snooze the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the pipeline task log:
+For this lab, we can defer the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the pipeline task log:
 
 
 image:images/lab4-devsecops95.png[300,700]
 
-In some situations we may want to snooze the CVEs for a period of time. Here are the steps:
+Here are the steps to snooze the CVEs for a period of time:
 
 . Navigate to the ACS console via the `waffle icon` and click on the `Red Hat Advanced Clustered Security for Kubernetes` link.
 Click Vulnerability Management left menu and click on the CVEs button  on the top.
