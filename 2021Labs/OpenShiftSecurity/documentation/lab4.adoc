@@ -406,14 +406,14 @@ image:images/lab4-devsecops48_new.png[300,700]
 +
 * Select the `Create "image-registry.openshift-image-registry.svc:5000/ocp-workshop/spring-petclinic" option.
 +
-image:images/lab4.2-5-exclude-image_new.png[300,700]
+image:images/lab4.2-5-exclude-image_new.png[200,500]
 +
 * Click `Next`
 * Please review Policy Summary before clicking `Save`
 +
 .. Now, the updated `Fixable Severity at least Important` policy with excluded image is shown below:
 +
-image:images/lab4.2-5-2Policy_new.png[300,700]
+image:images/lab4.2-5-2Policy_new.png[200,500]
 +
 .. Switch back to the OpenShift Developer console, and select the failing Pipeline on the nav under “ocp-workshop” project
 +
