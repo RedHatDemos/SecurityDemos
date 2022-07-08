@@ -604,7 +604,7 @@ image:images/lab4-devsecops85.png[300,700]
 image:images/lab4-devsecops87.png[300,700]
 +
 * Click `Next` 3 times and `Save`
-This step ensures that users  have total control of the pipelines. No image is pushed into the image registry or is deployed to the cluster that surpasses the defined Security Policies.
+This policy enforcement ensures that DevOps team have total control of SDLC: no image is pushed into the image registry or is deployed to the cluster that surpasses the defined Security Policies.
 
 
 [#fiximage]
@@ -670,13 +670,13 @@ image:images/lab4-bonus-result.png[300,700]
 We have added a step to the build task, using `buildah` CLI tool to remove the problematic package managers from the image (search for "rpm" or "yum" in the file).
 +
 image:images/lab4-devsecops94.png[300,700]
-+
+
 
 === Bonus Exercise: Defer CVEs or Mark as "False Positive"
 
-If we just want to `snooze` violation notifications for particular CVEs instead of fixing the image and/or adding exceptions to Policies for the build. ACS allows users to temporarily disable notifications for CVEs for a period of time.
+If we just want to `snooze` violation notifications for particular CVEs instead of fixing a problematic image and/or adding exceptions to Policies for build/deploy stages. ACS allows users to temporarily disable notifications for CVEs for a period of time.
 
-[Note] Snoozing CVEs will temporarily disable violations of those CVE for all policies that includedude it.
+[Note] Snoozing CVEs will temporarily disable violations of those CVE for all policies that include it.
 
 For this lab, we can snooze the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the pipeline task log:
 
