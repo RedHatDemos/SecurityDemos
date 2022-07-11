@@ -612,7 +612,7 @@ This policy enforcement ensures that DevOps team has full control of SDLC: no im
 [#fiximage]
 === Bonus Exercise for Lab 4.2: Fixing the source image
 
-To show a complete DevSecOps demo and show the transition from a `bad image` to one that passes the Build policy security check, we can update the Pipeline task of the image build and fix the image source.
+To show a complete DevSecOps demo and show the transition from a "bad image" to one that passes the Build security policy check, we can update the Pipeline task of the image build and fix the image source.
 In this example, we will be enabling the `Red Hat Package Manager in Image` policy in ACS, which will initially fail our pipeline at the image-check as both yum and rpm package managers are present in our base image.
 
 . Add an exception to bypass the violation in the *Fixable Severity at least Important* policy as we did in the previous section.
@@ -673,7 +673,6 @@ We have added a step to the build task, using https://buildah.io/[buildah] CLI t
 +
 image:images/lab4-devsecops94.png[300,700]
 +
-
 === Bonus Exercise: Defer CVEs or Mark as "False Positive"
 
 If we just want to `snooze` violations for particular CVEs instead of fixing problematic images and/or adding exceptions to Policies for build/deploy stages (e.g. to be able to test a pipeline end-to-end). ACS allows users to temporarily disable CVEs violation for a period of time.
@@ -700,7 +699,6 @@ image:images/lab4-devsecops96a.png[200,500]
 +
 image:images/lab4-devsecops96b.png[200,500]
 +
-
 === Bonus Exercise: ACS Notifications
 
 ACS can be integrated with several Notifiers for alerting DevOps users when certain security events occur in managed clusters. In our Lab, we integrate with Slack to receive notifications when some Policies are violated to have more useful information:
