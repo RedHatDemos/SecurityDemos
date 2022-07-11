@@ -674,9 +674,10 @@ We have added a step to the build task, using https://buildah.io/[buildah] CLI t
 image:images/lab4-devsecops94.png[300,700]
 +
 
+
 === Bonus Exercise: Defer CVEs or Mark as "False Positive"
 
-If we just want to `snooze` violations for particular CVEs instead of fixing problematic images and/or adding exceptions to Policies for build/deploy stages (e.g. to be able to test a pipeline end-to-end). ACS allows users to temporarily disable CVEs violation for a period of time.
+If we just want to `snooze` policy violations for particular CVEs instead of fixing problematic images and/or adding exceptions for build/deploy stages (e.g. to be able to test a pipeline end-to-end). ACS allows users to temporarily disable CVEs violation for a period of time.
 
 [Note] Deferring CVEs would disable violation notifications for those CVE for ALL policies that include it.
 
@@ -684,7 +685,7 @@ For this lab, we can defer the CVEs that cause the image-check to fail and conti
 
 image:images/lab4-devsecops95.png[300,700]
 
-In some situations we may want to defer triggering of certain CVEs for a period of time. Here are the steps:
+In some situations, we may want to defer triggering of certain CVEs for a period of time. Here are the steps:
 
 . Navigate to the ACS console via the `waffle icon` and click on the `Red Hat Advanced Clustered Security for Kubernetes` link.
 Click Vulnerability Management left menu and click on the CVEs button  on the top.
@@ -700,6 +701,7 @@ image:images/lab4-devsecops96a.png[200,500]
 +
 image:images/lab4-devsecops96b.png[300,700]
 +
+
 
 === Bonus Exercise: ACS Notifications
 
