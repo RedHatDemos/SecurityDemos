@@ -112,15 +112,18 @@ image:images/lab4-devsecops06.png[400,700]
 +
 image:images/lab4-devsecops07.png[600,800]
 +
-.. From the top right corner, click “Actions” → select “start”
+.. From the top right corner, click “Actions” → “Start” - a "Start Pipeline" screen will pop up
 +
-image:images/lab4-devsecops08.png[200,700]
+image:images/lab4-devsecops08a.png[400,600]
 +
 .. Under “Workspaces”, select PVC and then choose the PVC petclinic-build-workspace as the shared storage path that the pipelines will use at runtime.
 .. Under “maven-settings” select Config Map and choose “maven-settings” as the Config Map
-.. Click start
 +
-** Option 2: Command-line to start the pipeline
+image:images/lab4-devsecops08b.png[400,600]
++
+.. Click `Start`
++
+** Option 2: Use Command line to start the pipeline
 The command-line is a convenient way to start the pipeline while testing, and it is a way to simulate a PR or push to git and trigger the pipeline. It is for users who prefer the CLI to start the pipeline.
 +
 .. Run:
@@ -135,12 +138,12 @@ The command-line is a convenient way to start the pipeline while testing, and it
 ** Option 3: When new code is pushed to the git repo, it will also trigger the pipeline to start. In this lab, git repo is Gogs. The steps below are for pushing code via the “Gogs” git repo.
 This option may be the most popular from a developer perspective. The pipeline starts from a PR or a push into the git repo and the webhook automatically starts the pipeline.
 +
-.. From the dev console, click `Search` on the left nav menu.
+.. From the Dev console, click `Search` on the left nav menu.
 .. Type 'route' and click `Route` from the list.
 +
 image:images/lab4-devsecops09.png[400,400]
 +
-.. Click the `Gogs` route to open the gogs URL:
+.. Click the `Gogs` route to open the Gogs repo URL:
 +
 image:images/lab4-devsecops10.png[400,600]
 +
@@ -165,7 +168,7 @@ image:images/lab4-devsecops13.png[400,700]
 +
 image:images/lab4-devsecops14.png[400,700]
 +
-[Note] This is only for demo purposes. Usually, the push to master is not recommended, and it’s a Pull Request / Merge Request from another branch (such as develop) that is used instead.
+[Note] This event based integration is only for demo purposes. Usually direct code push to master is not recommended, and it’s a Pull Request / Merge Request from another branch (such as develop) that is used instead.
 +
 .. The pipeline will be triggered automatically, please skip to step 6 of this lab to see the Pipeline Runs console.
 +
@@ -197,17 +200,17 @@ The pipeline run will fail at step “image-check” in the pipeline run. This i
 +
 image:images/lab4-devsecops20.png[500,700]
 +
-The vulnerability has to be fixed for the pipeline to complete successfully. We will do it in the next module. Here is what a successful run looks like.
+This vulnerability has to be fixed for the pipeline to complete successfully - we will do it in the next module. Here is what a successfully completed pipeline run looks like.
 +
 image:images/lab4-devsecops19.png[500,700]
 +
-The next module, lab 4.2 will walk through what’s happened and how to resolve it securely.
+The next module Lab 4.2 will walk through what’s happened and how to resolve it securely.
 +
-[Note] In addition to triggering a pipeline run manually, every push to the `spring-petclinic` Git repository on the Gogs server kick off the pipeline via configired Pipeline triggers.
-. Explore the pipeline! Once the pipeline is started, we can click on each detailed step to explore logs for each step. We’ll direct some of the explorations in the next few steps.
-.. *Source Clone* - app source code is pulled from the Git (Gogs) server installed in this lab.
+[Note] In addition to triggering a pipeline run manually, every push to the `spring-petclinic` Git repository on the Gogs server kicks it off via configured Pipeline triggers.
+. Explore the pipeline! Once the pipeline is started, we can click on each detailed step to explore its logs. We’ll direct some of the explorations in the next few steps.
+.. *Source Clone* - app source code is pulled from the Git (Gogs) server installed in this Lab.
 +
-[Note] Files persist between steps in the pipeline via workspace that is pre-defined in the pipeline.
+[Note] Files persist between steps in the pipeline via workspace (PVC) that is pre-defined in the pipeline.
 +
 image:images/lab4-devsecops24.png[400,700]
 +
@@ -216,7 +219,7 @@ image:images/lab4-devsecops24.png[400,700]
 +
 image:images/lab4-devsecops25.png[600,700]
 +
-... Click onto `gogsadmin` and there are 2 repositories for this lab.
+... Click onto `gogsadmin` - there are 2 repositories for this Lab.
 +
 The credentials for `gogsadmin` user are:
 +
@@ -253,27 +256,27 @@ image:images/lab4-devsecops29.png[300,700]
 +
 image:images/lab4-devsecops30.png[300,700]
 +
-. *Release-app* is where** **the application is packaged as a JAR and released to the Sonatype Nexus snapshot repository.
+. *Release-app* is where** **the application is packaged as a JAR archive and released to Sonatype Nexus snapshot repository.
 +
 image:images/lab4-devsecops31.png[300,700]
 +
-. *Build-image* step is when a container image is built in DEV environment using S2I, pushed to OpenShift internal registry, and tagged with `spring-petclinic:[branch]-[commit-sha]` and `spring-petclinic:latest`
+. *Build-image* step is when a container image is built in DEV/QA environments using S2I, pushed to OpenShift internal registry, and tagged with `spring-petclinic:[branch]-[commit-sha]` and `spring-petclinic:latest` tags.
 +
 image:images/lab4-devsecops32.png[300,700]
 
-=== Lab 4.2 DevSecOps steps using Advanced Cluster Security
+=== Lab 4.2 DevSecOps - Integration with Advanced Cluster Security
 
 Red Hat Advanced Cluster Security (ACS) for Kubernetes controls clusters and applications from a single console, with built-in security policies. +
-First-generation container security platforms focus on the container. ACS’s focus on Kubernetes helps DevOps and Security teams operationalize security, with a Kubernetes-native architecture that leverages Kube's declarative data and built-in controls for richer context, native enforcement, and continuous hardening. In addition, ACS focuses on Kubernetes helps DevOps and Security teams operationalize security, simplifying the process of protecting the cloud-native application stack.
+First-generation container security platforms focus on the container. ACS’s focus on Kubernetes helps DevOps and Security teams operationalize security, with a Kubernetes-native architecture that leverages K8s declarative data and built-in controls for richer context, native enforcement, and continuous hardening. In addition, ACS focuses on Kubernetes helps DevOps and Security teams operationalize security, simplifying the process of protecting the cloud-native application stack.
 
-In this lab, we will learn how ACS integrates into the CI/CD process. ACS not only simplifies the process but provides visibility to the security team in our organization.
+In this lab, we will learn how ACS integrates into the CI/CD process. ACS not only simplifies that process but provides visibility to the Security team in our organization.
 Using https://docs.openshift.com/acs/cli/getting-started-cli.html[roxctl] and ACS API, we integrated several additional security steps into our DevSecOps pipeline:
 
-. The *image scan* step uses the ACS Scanner to scan the image generated and pushed in the last step.
+. The *image scan* step uses the ACS Scanner to scan the image built and pushed into internal repository in the previous step.
 +
 image:images/lab4-devsecops33.png[300,700]
 +
-The error below in the log is caused by the `pretty` format is deprecated.
+The error below in the log is caused by the `pretty` output format parameter that is deprecated.
 +
 |===
 |ERROR:	invalid output format "pretty" used. You can only specify json or csv
@@ -284,7 +287,7 @@ To change the format you can do the steps below.
 .. Click `Pipelines` on the left menu
 .. Click onto the `petclinic-build-dev` pipeline
 .. Select `Actions` -> `Edit Pipeline`
-.. Click onto the `image-scan` task and use `csv` instead of `pretty`
+.. Click onto the `image-scan` task and use `csv` for output format instead of `pretty`
 +
 image:images/lab4.2-image-scan.png[500,700]
 +
@@ -293,10 +296,10 @@ image:images/lab4.2-image-scan.png[500,700]
 +
 image:images/lab4.2-image-scan-withlogs.png[500,700]
 +
-In the logs of this step, there is a direct link to the image scan in ACS.
+In the log of this step, there is a URL link to the image scan in ACS.
 +
 [Note] If we see a security certificate warning proceeding to that link, ignore it. +
-Copy and paste URL into another tab in order to get more information about the scanned image - it would open ACS Centra login screen Enter the following information:
+Copy and paste URL into another tab in order to get more information about the scanned image - it would open ACS Central login screen Enter the following information:
 +
 |===
 |User: admin
@@ -395,9 +398,9 @@ image:images/lab4-devsecops47.png[300,700]
 +
 image:images/lab4-devsecops48_new.png[300,700]
 +
-* Click `Next` on the Policy Details
-* Click `Next` on the Policy Behavior
-* Click `Next` on Policy Criteria  in order to get to the Policy Scope section UI to specify the image to be excluded from checking
+* Click `Next` on `Policy Details`
+* Click `Next` on `Policy Behavior`
+* Click `Next` on `Policy Criteria`  in order to get to the `Policy Scope` section to specify the image to be excluded from scanning
 * In the Exclude Images section, type the following to filter the options in the `Excluded Images (Build Lifecycle only)` list:
 +
 |===
@@ -440,12 +443,12 @@ image:images/lab4-devsecops55a.png[300,700]
 image:images/lab4-devsecops56.png[300,700]
 
 
-=== Lab 4.3 Continuous Delivery Using GitOps
+=== Lab 4.3 Continuous Application Delivery Using GitOps
 
 https://www.redhat.com/en/topics/devops/what-is-gitops[GitOps] is a declarative way to implement continuous deployment for Cloud-native applications. We can use GitOps to create repeatable processes for managing OpenShift Container Platform clusters and applications across multi-cluster Kubernetes environments. GitOps handles and automates complex deployments at a fast pace, saving time during deployment and release cycles. +
 The GitOps workflow pushes an application through development, testing, staging, and production. GitOps either deploys a new application or updates an existing one, so we only need to update the repository; GitOps automates everything else.
 
-Argo CD continuously monitors the configurations stored in the Git repository and uses Kustomize to overlay environment-specific configurations when deploying the application to DEV and STAGE environments.
+https://argo-cd.readthedocs.io/en/stable/[ArgoCD] continuously monitors the configurations stored in the Git repository and uses https://kustomize.io/[Kustomize] to overlay environment-specific configurations when deploying the application to DEV and STAGE environments.
 
 image:images/lab4-devsecops57.png[300,700]
 
@@ -505,13 +508,13 @@ image:images/lab4-devsecops66.png[300,300]
 +
 image:images/lab4-devsecops67.png[300,500]
 
-=== Lab 4.4 PostCI - Dynamic Application Security and Testing (DAST)
+=== Lab 4.4 Post CI - Dynamic Application Security and Testing (DAST)
 
-*Dynamic application security testing (DAST)* is designed to detect conditions indicative of a security vulnerability in an application in its running state. DAST has an important role in helping to identify vulnerabilities in an application during production. Running a DAST penetration test enables us to find those vulnerabilities before an attacker does.
+*Dynamic application security testing (DAST)* is designed to detect conditions indicative of a security vulnerability in an application in its running state. DAST has an important role in helping to identify vulnerabilities in applications during production. Running DAST penetration tests enables us to find those vulnerabilities before an attacker does!
 In this lab, ZAP is used to perform application security testing as an example. Performance tests and penetration tests start in parallel after the application is promoted from Dev to QA.
 
-. Our CI in Openshift Pipelines waits until the ArgoCD app is fully synced (*Wait Application step*) and our app and all the resources are deployed
-.. Go to the successful pipeline run, and go to the step *wait-application*
+. Our CI in Openshift Pipelines waits until the app is fully synced via ArgoCD (*Wait Application step*) and all related resources are deployed
+.. Go to the successful pipeline run, and examine the step *wait-application*
 +
 image:images/lab4-devsecops68.png[300,700]
 +
@@ -529,12 +532,12 @@ image:images/lab4-devsecops70.png[300,700]
 +
 . Click onto step *pentesting-test*
 +
-The pentesting is executed (*Pentesting Test*) using the web scanner https://www.zaproxy.org/[OWASP Zap Proxy] using a baseline to check the possible vulnerabilities. A Zap Proxy report is uploaded to the report server repository.
+The pentesting step (*Pentesting Test*) is executed by the web scanner https://www.zaproxy.org/[OWASP Zap Proxy] using a baseline to check the possible vulnerabilities. A Zap Proxy report is uploaded to the report server repository.
 See the result from the bottom of the log.
 +
 image:images/lab4-devsecops72.png[300,700]
 +
-. A performance report is uploaded to the report server repository.
+. A performance report is uploaded to the Report server repository.
 .. Click `Route` on the left navigation, click `reports-repo` route location.
 +
 image:images/lab4-devsecops73.png[300,700]
@@ -548,7 +551,7 @@ image:images/lab4-devsecops75.png[300,400]
 +
 image:images/lab4-devsecops76.png[300,700]
 +
-. In parallel, the performance tests are executed using the load test https://gatling.io/[Gatling]. Click “performance-test” from the pipeline run.
+. In parallel, the performance tests are executed using the load tests via https://gatling.io/[Gatling]. Click “performance-test” from the pipeline run.
 +
 image:images/lab4-devsecops77.png[300,700]
 +
@@ -569,7 +572,7 @@ image:images/lab4-devsecops80.png[200,400]
 image:images/lab4-devsecops81.png[400,700]
 
 
-=== Lab 4.5 Security Policies and CI Violations
+=== Lab 4.5 ACS Security Policies and CI Violations
 
 In this demo, we can control the security policies applied to our pipelines, scan the images, and analyze the different deployment templates used to deploy our applications. +
 We can enforce the different Security Policies in ACS, failing our CI pipelines if a violation of this policy appears in each step of our DevSecOps pipelines (steps “image-check”, “image-scan”, “deploy-check”).
@@ -582,17 +585,17 @@ image:images/lab4-devsecops43.png[300,300]
 +
 image:images/lab4-devsecops82.png[300,700]
 +
-* Click Platform Configuration → Policies
+* Click `Platform Configuration` → `Policies`
 +
 image:images/lab4-devsecops83.png[200,200]
 +
-Security Policies can be defined at the BUILD level (during the build/push of the image), or at the DEPLOYMENT level (preventing the deployment of the application).
+Security Policies can be defined at the BUILD (during the build/push of an image), or at the DEPLOYMENT level (controlling deployment of an application).
 * Click on the `Red Hat Package manager in Image` policy
 +
 image:images/lab4-devsecops84.png[300,700]
 +
-For example, this Security Policy checks if an RH Package Manager (dnf, yum) is in the application Image and will FAIL the pipeline if it detects that the image built contains any RH Package Manager.
-* The policy details can be modified. Also, the lifecycle stages are defined by the policy and other properties. The enablement of the Policy option is where the user controls the CI to fail or pass.
+For example, this Security Policy checks if an RH Package Manager (dnf, yum) present in an application Image and will FAIL the pipeline if it detects that an Image built contains any RH Package Manager.
+* The policy details can be modified. Also, the lifecycle stages are defined in the policy and other properties. The enablement of Policy options is where the user controls CI pass/fail conditions based on policy
 +
 image:images/lab4-devsecops85.png[300,700]
 +
@@ -604,16 +607,16 @@ image:images/lab4-devsecops85.png[300,700]
 image:images/lab4-devsecops87.png[300,700]
 +
 * Click `Next` 3 times and `Save`
-This policy enforcement ensures that DevOps team have total control of SDLC: no image is pushed into the image registry or is deployed to the cluster that surpasses the defined Security Policies.
+This policy enforcement ensures that DevOps team has full control of SDLC: no image is pushed into the Image registry or deployed to the cluster that fails to comply with defined Security Policies.
 
 
 [#fiximage]
-=== Bonus suggestion for Lab 4.2: Fixing the source image
+=== Bonus Exercise for Lab 4.2: Fixing the source image
 
-To show a complete DevSecOps demo and show the transition from a `bad image` to an image that passes the Build policy security check, we can update the Pipeline task of the image build and fix the image source.
+To show a complete DevSecOps demo and show the transition from a `bad image` to one that passes the Build policy security check, we can update the Pipeline task of the image build and fix the image source.
 In this example, we will be enabling the `Red Hat Package Manager in Image` policy in ACS, which will initially fail our pipeline at the image-check as both yum and rpm package managers are present in our base image.
 
-. Add an exception to bypass the violation in the *Fixable Severity at least important* policy as we did in the previous section.
+. Add an exception to bypass the violation in the *Fixable Severity at least Important* policy as we did in the previous section.
 . Enable enforcement of the *Red Hat Package Manager in Image* policy:
 .. Go to `Platform Configuration` → `Policies`
 .. Search for `Red Hat Package Manager in Image` policy
@@ -621,7 +624,7 @@ In this example, we will be enabling the `Red Hat Package Manager in Image` poli
 image:images/lab4-devsecops88.png[300,700]
 +
 .. Click onto the `Red Hat Package Manager in Image` policy
-.. Click `Actions` -> `Edit policy`
+.. Click `Actions` -> `Edit Policy`
 .. Click `Next`
 .. Select `Inform and enforce` in Response method
 .. Ensure selection of `Enforce on Build` in Build under `Configure enforcement behavior` section
@@ -644,7 +647,7 @@ image:images/lab4-devsecops92.png[300,700]
 +
 image:images/lab4-devsecops93.png[300,700]
 +
-.. Or from the Tekton cli
+.. Or from the pipeline Tekton cli
 +
 |===
 |tkn task delete s2i-java-11
@@ -667,37 +670,39 @@ image:images/lab4-devsecops93.png[300,700]
 image:images/lab4-bonus-result.png[300,700]
 +
 [Note] Please examine the contents of https://raw.githubusercontent.com/RedHatDemos/SecurityDemos/master/2021Labs/OpenShiftSecurity/documentation/labs-artifacts/s2ijava-mgr.yaml[*labs-artifacts/s2ijava-mgr.yaml]*** **file for more details on how the image was fixed.
-We have added a step to the build task, using `buildah` CLI tool to remove the problematic package managers from the image (search for "rpm" or "yum" in the file).
+We have added a step to the build task, using https://buildah.io/[buildah] CLI tool to remove the problematic package managers from the image (search for "rpm" or "yum" in the file).
 +
 image:images/lab4-devsecops94.png[300,700]
 
 
 === Bonus Exercise: Defer CVEs or Mark as "False Positive"
 
-If we just want to `snooze` violation notifications for particular CVEs instead of fixing a problematic image and/or adding exceptions to Policies for build/deploy stages. ACS allows users to temporarily disable notifications for CVEs for a period of time.
+If we just want to `snooze` violations for particular CVEs instead of fixing problematic images and/or adding exceptions to Policies for build/deploy stages (e.g. to be able to test a pipeline end-to-end). ACS allows users to temporarily disable CVEs violation for a period of time.
 
 [Note] Snoozing CVEs will temporarily disable violations of those CVE for all policies that include it.
 
 For this lab, we can snooze the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the pipeline task log:
 
-
 image:images/lab4-devsecops95.png[300,700]
 
-In some situations we may want to snooze the CVEs for a period of time. Here are the steps:
+In some situations we may want to defer triggering of certain CVEs for a period of time. Here are the steps:
 
 . Navigate to the ACS console via the `waffle icon` and click on the `Red Hat Advanced Clustered Security for Kubernetes` link.
 Click Vulnerability Management left menu and click on the CVEs button  on the top.
-. We can look for the detected CVEs and request Deferral by selecting the duration needed (Until Fixable, 2 Weeks, 30 Days, 90 Days, Indefinite).
+. Look for the detected CVEs and request Deferral by selecting the duration needed (Until Fixable, 2 Weeks, 30 Days, 90 Days, Indefinite).
 +
 image:images/lab4-devsecops96_new.png[300,700]
 +
-.. Submit a request for selected Deferral period or marking as `False positive` (exclusion of the CVE from notifications)
+.. Submit a request for selected Deferral period or marking as `False positive` (exclusion of specified CVEs from policy violations if determined as such)
 +
 image:images/lab4-devsecops96a.png[200,500]
 +
-.. Upon approval by your Security lead (corresponding to designated role in ACS), notifications for selected CVE violation will be 'snoozed' for selected period of time or permanently, depending on request
+.. Upon approval by your Security lead (via Risk Acceptance menu), policy violations for selected CVE  will be deferred for selected period of time or permanently, depending on request
++
+image:images/lab4-devsecops96b.png[200,500]
++
 
-=== Bonus Exercise: Notifications
+=== Bonus Exercise: ACS Notifications
 
 ACS can be integrated with several Notifiers for alerting if certain security events happen in managed clusters. In our case, we integrate with Slack to receive notifications when some Policies are violated to have more useful information:
 
@@ -722,11 +727,11 @@ image:images/lab4-slack-int.png[100,300]
 . Enable the Notifications in the system policies: Select `Platform Configuration` -> `Policies`
 .. Select a Policy -> Click `Actions` -> `Edit policy`
 .. Select checkbox next to `Slack Notifier` in the Attach Notifiers section of Policy details screen, click `Next` a few times and Save policy.
-.. You should be getting notifications when this policy violation is triggered   
+.. You should be getting notifications when this policy violation is triggered
 +
 image:images/lab4-devsecops99.png[300,700]
 
-=== Troubleshooting Tips
+=== Lab Troubleshooting Tips
 
 ==== Code Analysis Failures
 
