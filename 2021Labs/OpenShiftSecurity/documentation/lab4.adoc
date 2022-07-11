@@ -116,8 +116,7 @@ image:images/lab4-devsecops07.png[600,800]
 +
 image:images/lab4-devsecops08a.png[400,600]
 +
-.. Under “Workspaces”, select PVC and then choose the PVC petclinic-build-workspace as the shared storage path that the pipelines will use at runtime.
-.. Under “maven-settings” select Config Map and choose “maven-settings” as the Config Map
+.. Under “Workspaces”, select PVC and then choose the PVC petclinic-build-workspace as the shared storage path that the pipelines will use at runtime. Under “maven-settings” select Config Map and choose “maven-settings” as the Config Map
 +
 image:images/lab4-devsecops08b.png[400,600]
 +
@@ -488,7 +487,7 @@ image:images/lab4-devsecops61.png[500,500]
 +
 .. Go back to the Argo CD console. Click `Applications` on the top left.
 +
-[Note] The namespace for `stage-spring-petclinic` is set to devsecops-qa.
+[Note] The namespace for `stage-spring-petclinic` is set to `devsecops-qa`.
 +
 image:images/lab4-devsecops62.png[300,300]
 +
@@ -496,7 +495,7 @@ image:images/lab4-devsecops62.png[300,300]
 +
 image:images/lab4-devsecops63.png[300,700]
 +
-.. Click image:images/lab4-devsecops64.png[40,50] on the top menu to deploy the application to devsecops-qa and wait until “Synced” as shown below.
+.. Click image:images/lab4-devsecops64.png[40,50] on the top menu to deploy the application to `devsecops-qa` namespace and wait until “Synced” as shown below.
 +
 image:images/lab4-devsecops65.png[300,700]
 +
@@ -504,7 +503,7 @@ image:images/lab4-devsecops65.png[300,700]
 +
 image:images/lab4-devsecops66.png[300,300]
 +
-.. The application is now deployed to the devsecops-qa project as shown below.
+.. The application is now deployed to the `devsecops-qa` project as shown below:
 +
 image:images/lab4-devsecops67.png[300,500]
 
@@ -673,7 +672,7 @@ image:images/lab4-bonus-result.png[300,700]
 We have added a step to the build task, using https://buildah.io/[buildah] CLI tool to remove the problematic package managers from the image (search for "rpm" or "yum" in the file).
 +
 image:images/lab4-devsecops94.png[300,700]
-
++
 
 === Bonus Exercise: Defer CVEs or Mark as "False Positive"
 
@@ -704,7 +703,7 @@ image:images/lab4-devsecops96b.png[200,500]
 
 === Bonus Exercise: ACS Notifications
 
-ACS can be integrated with several Notifiers for alerting if certain security events happen in managed clusters. In our case, we integrate with Slack to receive notifications when some Policies are violated to have more useful information:
+ACS can be integrated with several Notifiers for alerting DevOps users when certain security events occur in managed clusters. In our Lab, we integrate with Slack to receive notifications when some Policies are violated to have more useful information:
 
 image:images/lab4-devsecops97.png[300,500]
 
