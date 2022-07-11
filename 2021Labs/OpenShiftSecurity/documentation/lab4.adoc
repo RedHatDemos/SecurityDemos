@@ -673,6 +673,7 @@ We have added a step to the build task, using https://buildah.io/[buildah] CLI t
 +
 image:images/lab4-devsecops94.png[300,700]
 +
+
 === Bonus Exercise: Defer CVEs or Mark as "False Positive"
 
 If we just want to `snooze` violations for particular CVEs instead of fixing problematic images and/or adding exceptions to Policies for build/deploy stages (e.g. to be able to test a pipeline end-to-end). ACS allows users to temporarily disable CVEs violation for a period of time.
@@ -697,11 +698,12 @@ image:images/lab4-devsecops96a.png[200,500]
 +
 .. Upon approval by your Security lead (via Risk Acceptance menu), policy violations for selected CVE  will be deferred for selected period of time or permanently, depending on request
 +
-image:images/lab4-devsecops96b.png[200,500]
+image:images/lab4-devsecops96b.png[300,700]
 +
+
 === Bonus Exercise: ACS Notifications
 
-ACS can be integrated with several Notifiers for alerting DevOps users when certain security events occur in managed clusters. In our Lab, we integrate with Slack to receive notifications when some Policies are violated to have more useful information:
+ACS Central can be integrated with several Notifiers for alerting DevOps users when certain security events occur in managed clusters. In our Lab, we integrate with Slack to receive notifications when some Policies are violated to have more useful information:
 
 image:images/lab4-devsecops97.png[300,500]
 
