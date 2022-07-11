@@ -6,8 +6,8 @@ The goal of this lab is to learn how to build a secure software factory that orc
 
 === Introduction
 
-The benefits of DevOps and Continuous Integration / Continuous Delivery (CI/CD) have been demonstrated with great success over the years. Organizations have always sought to do more with less. Security was treated as an add-on to the end of the software delivery process in many cases, and it often delayed software delivery. The industry recognized that this had to change. Organizations must continue to meet contractual and regulatory obligations as well as internal security standards, but need to accelerate software delivery to capitalize on opportunities. To enable organizations to meet these standards and deliver at the speed of DevOps security has faced the choice of becoming irrelevant or molding to modern software delivery practices. Security is critical to deliver software quickly and has become a metric of software quality, so there was a push to include “Sec” in “DevOps.” With the advent of DevSecOps, Shift Left is a practice intended to find and prevent defects early in the software delivery process. Security tools are integrated directly into the build process. As a result, the CI/CD process can move faster and reduce the length of time to delivery while still continuously improving the quality of each release. +
-This lab exercise will focus on some of the technologies used to implement automated security compliance controls within a typical CI/CD application pipeline. +
+The benefits of https://www.redhat.com/en/topics/devops/what-is-devsecops[DevOps] and https://www.redhat.com/en/topics/devops/what-cicd-pipeline[Continuous Integration / Continuous Delivery (CI/CD)] have been demonstrated with great success over the years. Organizations have always sought to do more with less. Security was treated as an add-on to the end of the software delivery process in many cases, and it often delayed software delivery. The industry recognized that this had to change. Organizations must continue to meet contractual and regulatory obligations as well as internal security standards, but need to accelerate software delivery to capitalize on opportunities. To enable organizations to meet these standards and deliver at the speed of DevOps security has faced the choice of becoming irrelevant or molding to modern software delivery practices. Security is critical to deliver software quickly and has become a metric of software quality, so there was a push to include “Sec” in “DevOps.” With the advent of DevSecOps, Shift Left is a practice intended to find and prevent defects early in the software delivery process. Security tools are integrated directly into the build process. As a result, the CI/CD process can move faster and reduce the length of time to delivery while still continuously improving the quality of each release. +
+This lab exercise will focus on some of technologies used to implement automated security compliance controls within a typical CI/CD application pipeline. +
 A number of tools have been installed and pre-configured to support the DevSecOps pipeline. Most of these tools are running containerized within the Red Hat OpenShift cluster. Here is the pipeline we will be stepping through during our lab:
 
 image:images/lab4-devsecops01.png[800,800]
@@ -168,7 +168,7 @@ image:images/lab4-devsecops13.png[400,700]
 +
 image:images/lab4-devsecops14.png[400,700]
 +
-[Note] This event based integration is only for demo purposes. Usually direct code push to master is not recommended, and it’s a Pull Request / Merge Request from another branch (such as develop) that is used instead.
+[Note] This event based integration is only for demo purposes. Usually direct code push to master is not recommended, and it’s a Pull / Merge Request from another branch (such as develop) that is used instead.
 +
 .. The pipeline will be triggered automatically, please skip to step 6 of this lab to see the Pipeline Runs console.
 +
@@ -409,14 +409,14 @@ image:images/lab4-devsecops48_new.png[300,700]
 +
 * Select the `Create "image-registry.openshift-image-registry.svc:5000/ocp-workshop/spring-petclinic" option.
 +
-image:images/lab4.2-5-exclude-image_new.png[300,700]
+image:images/lab4.2-5-exclude-image_new.png[200,500]
 +
 * Click `Next`
 * Please review Policy Summary before clicking `Save`
 +
 .. Now, the updated `Fixable Severity at least Important` policy with excluded image is shown below:
 +
-image:images/lab4.2-5-2Policy_new.png[300,700]
+image:images/lab4.2-5-2Policy_new.png[200,500]
 +
 .. Switch back to the OpenShift Developer console, and select the failing Pipeline on the nav under “ocp-workshop” project
 +
@@ -679,9 +679,9 @@ image:images/lab4-devsecops94.png[300,700]
 
 If we just want to `snooze` violations for particular CVEs instead of fixing problematic images and/or adding exceptions to Policies for build/deploy stages (e.g. to be able to test a pipeline end-to-end). ACS allows users to temporarily disable CVEs violation for a period of time.
 
-[Note] Snoozing CVEs will temporarily disable violations of those CVE for all policies that include it.
+[Note] Deferring CVEs would disable violation notifications for those CVE for ALL policies that include it.
 
-For this lab, we can snooze the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the pipeline task log:
+For this lab, we can defer the CVEs that cause the image-check to fail and continue to build the pipeline. We will see that *image-check* task is reporting some Fixable violations information from the pipeline task log:
 
 image:images/lab4-devsecops95.png[300,700]
 
